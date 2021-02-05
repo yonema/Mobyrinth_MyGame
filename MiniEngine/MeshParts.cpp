@@ -26,7 +26,9 @@ void MeshParts::InitFromTkmFile(
 	const char* psEntryPointFunc,
 	void* expandData,
 	int expandDataSize,
-	IShaderResource* expandShaderResourceView
+	IShaderResource* expandShaderResourceView,
+	void* expandData2,
+	int expandDataSize2
 )
 {
 	m_meshs.resize(tkmFile.GetNumMesh());
@@ -42,6 +44,11 @@ void MeshParts::InitFromTkmFile(
 	if (expandData) {
 		m_expandConstantBuffer.Init(expandDataSize, nullptr);
 		m_expandData = expandData;
+	}
+	if (expandData2)
+	{
+		m_expandConstantBuffer2.Init(expandDataSize2, nullptr);
+		m_expandData2 = expandData2;
 	}
 	m_expandShaderResourceView = expandShaderResourceView;
 	//ディスクリプタヒープを作成。
@@ -75,6 +82,9 @@ void MeshParts::CreateDescriptorHeaps()
 			descriptorHeap.RegistConstantBuffer(0, m_commonConstantBuffer);
 			if (m_expandConstantBuffer.IsValid()) {
 				descriptorHeap.RegistConstantBuffer(1, m_expandConstantBuffer);
+			}
+			if (m_expandConstantBuffer2.IsValid()) {
+				descriptorHeap.RegistConstantBuffer(2, m_expandConstantBuffer2);
 			}
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
@@ -180,6 +190,9 @@ void MeshParts::Draw(
 
 	if (m_expandData) {
 		m_expandConstantBuffer.CopyToVRAM(m_expandData);
+	}
+	if (m_expandData2) {
+		m_expandConstantBuffer2.CopyToVRAM(m_expandData2);
 	}
 	if (m_boneMatricesStructureBuffer.IsInited()) {
 		//ボーン行列を更新する。

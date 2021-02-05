@@ -25,7 +25,33 @@ struct ModelInitData {
 	IShaderResource* m_expandShaderResoruceView = nullptr;			//ユーザー拡張のシェーダーリソース。
 	Skeleton* m_skeleton = nullptr;									//スケルトン。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					//モデルの上方向。
+
+
+	void* m_expandConstantBuffer2 = nullptr;						//ユーザー拡張の定数バッファ。
+	int m_expandConstantBufferSize2 = 0;							//ユーザー拡張の定数バッファのサイズ。
 };
+
+
+//ディレクションライトの構造体
+struct DirectionLight
+{
+	//ディレクションライト
+	Vector3 dirLigDirection;
+	float pad;
+	Vector3 dirLigColor;
+	float pad2;
+	Vector3 eyePos;			//カメラの位置。
+	float specPow;				//スペキュラの絞り。
+	Vector3 ambinetLight;	//環境光。	
+};
+
+struct PointLight
+{
+	Vector3 ptPosition;		//位置。
+	float ptRange;			//影響範囲。
+	Vector3 ptColor;		//カラー。
+};
+
 
 /// <summary>
 /// モデルクラス。

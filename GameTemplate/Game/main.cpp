@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "system/system.h"
+#include "stage_kari.h"
 
 ///////////////////////////////////////////////////////////////////
 // ウィンドウプログラムのメイン関数。
@@ -17,6 +18,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
 	
+	NewGO<stage_kari>(0, "stage_kari");
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
