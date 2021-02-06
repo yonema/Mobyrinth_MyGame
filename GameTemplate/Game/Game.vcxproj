@@ -285,6 +285,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="background_kari.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player_kari.cpp" />
     <ClCompile Include="stage_kari.cpp" />
@@ -356,6 +357,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="background_kari.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Player_kari.h" />
     <ClInclude Include="stage_kari.h" />
     <ClInclude Include="stdafx.h" />

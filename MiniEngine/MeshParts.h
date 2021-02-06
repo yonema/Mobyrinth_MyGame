@@ -128,7 +128,6 @@ private:
 	Skeleton* m_skeleton = nullptr;								//スケルトン。
 	void* m_expandData = nullptr;						//ユーザー拡張データ。
 
-
 	ConstantBuffer m_expandConstantBuffer2;					//ユーザー拡張用の定数バッファ
 	void* m_expandData2 = nullptr;						//ユーザー拡張データ。
 

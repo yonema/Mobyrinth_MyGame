@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player_kari.h"
+#include "Light.h"
 
 void Player_kari::InitSkeleton()
 {
@@ -39,12 +40,18 @@ void Player_kari::InitModel()
 	m_pointLig.ptColor = { 1.0f,1.0f,0.0f };
 
 
-	initData.m_expandConstantBuffer = &m_directionLig;
-	initData.m_expandConstantBufferSize = sizeof(m_directionLig);
+	
+	//initData.m_expandConstantBuffer = &m_directionLig;
+	//initData.m_expandConstantBufferSize = sizeof(m_directionLig);
 
-	initData.m_expandConstantBuffer2 = &m_pointLig;
-	initData.m_expandConstantBufferSize2 = sizeof(m_pointLig);
+	//initData.m_expandConstantBuffer2 = &m_pointLig;
+	//initData.m_expandConstantBufferSize2 = sizeof(m_pointLig);
 
+	initData.m_expandConstantBuffer = &Light::GetInstance()->m_directionLight;
+	initData.m_expandConstantBufferSize = sizeof(Light::GetInstance()->m_directionLight);
+
+	initData.m_expandConstantBuffer2 = &Light::GetInstance()->m_pointLight;
+	initData.m_expandConstantBufferSize2 = sizeof(Light::GetInstance()->m_pointLight);
 
 
 	//作成した初期化データをもとにモデルを初期化する、
