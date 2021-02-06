@@ -89,6 +89,10 @@ public:
 	{
 		return m_isDead;
 	}
+	bool EqualName(const char* name)const
+	{
+		return strcmp(m_name.c_str(), name) == 0;
+	}
 public:
 
 	void RenderWrapper(RenderContext& renderContext)
@@ -113,8 +117,12 @@ public:
 			}
 		}
 	}
-
-		
+	void SetName(const char* name)
+	{
+		if (name != nullptr) {
+			m_name = name;
+		}
+	}
 	friend class CGameObjectManager;
 protected:
 	std::string m_name;								//ゲームオブジェクトの名前

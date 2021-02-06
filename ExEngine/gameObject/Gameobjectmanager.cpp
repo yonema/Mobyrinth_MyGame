@@ -23,7 +23,13 @@ void GameObjectManager::ExecuteUpdate()
 {	
 	//死亡フラグがついているゲームオブジェクトを破棄する。
 	for (auto& goList : m_gameObjectListArray) {
-		goList.remove_if([&](IGameObject* go) {	return go->IsDead();	 });
+		goList.remove_if([&](IGameObject* go) {	
+			if (go->IsDead()) {
+				delete go;
+				return true;
+			}
+			return false;	 
+		});
 	}
 
 	for (auto& goList : m_gameObjectListArray) {

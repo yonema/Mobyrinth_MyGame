@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  *@brief	CGameObjectのマネージャー。
  */
 
@@ -73,6 +73,7 @@ public:
 	T* NewGameObject(int prio, const char* objectName)
 	{
 		T* newObject = new T();
+		newObject->SetName(objectName);
 		m_gameObjectListArray.at(prio).push_back(newObject);
 		return newObject;
 	}
@@ -97,7 +98,7 @@ public:
 		
 		for (auto goList : m_gameObjectListArray) {
 			for (auto go : goList) {
-				if (strcmp( go->m_name.cstr(), objectName)  == 0 ) {
+				if (go->EqualName( objectName )) {
 					//見つけた。
 					T* p = dynamic_cast<T*>(go);
 					return p;
