@@ -131,4 +131,7 @@ private:
 	ConstantBuffer m_expandConstantBuffer2;					//ユーザー拡張用の定数バッファ
 	void* m_expandData2 = nullptr;						//ユーザー拡張データ。
 
+	ConstantBuffer m_lightConstantBuffer;					//ユーザー拡張用の定数バッファ
+	void* m_lightData = nullptr;						//ユーザー拡張データ。
+
 };
