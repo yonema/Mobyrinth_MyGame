@@ -2,6 +2,7 @@
 #include "LightData.h"
 #include "DirectionLight.h"
 
+class CDirectionLight;
 
 class CLightManager
 {
@@ -9,12 +10,13 @@ private:
 	static CLightManager* m_instance;	//シングルトンパターン
 	CLightManager();	//コンストラクタと
 	~CLightManager();	//デストラクタをprivateに隠す
-	//void Init();
+	void Init();
 	//void Release();
 
 	static const int Max_DirectionLight = 4;	//ディレクションライトの最大数
 	static const int Max_PointLight = 4;		//ポイントライトの最大数
 	static const int Max_SpotLight = 4;			//スポットライトの最大数
+
 public:
 	static void CreateInstance()
 	{
@@ -28,10 +30,11 @@ public:
 	{
 		return m_instance;
 	}
+	void ExecuteUpdate();
 	//ライトを追加
-	void AddLight(CLightBase* light);
+	bool AddLight(CDirectionLight* light);
 	//ライトを消去
-	void RemoveLight(const CLightBase* light);
+	void RemoveLight(CDirectionLight* light);
 
 	/// <summary>
 	/// アンビエントライトを取得
@@ -50,17 +53,44 @@ public:
 		m_lightParam.ambientLight = ambient;
 	}
 
+	//std::list<CDirectionLight*>* GetDirectionLights()
+	//{
+	//	return &m_directionLights;
+	//}
+	SLightParam* GetLightParam()
+	{
+		return &m_lightParam;
+	}
+	const int GetNumDirectionLight() const
+	{
+		return m_lightParam.numDirectionLight;
+	}
+	const int GetNumPointLight() const
+	{
+		return m_lightParam.numPointLight;
+	}
+	const float GetSpecPow() const
+	{
+		return m_lightParam.specPow;
+	}
+	SDirectionLight* GetDirectionLigData()
+	{
+		return m_directionLightsData;
+	}
 private:
-	struct SLightParam {
-		Vector3 eyePos;				//視線の位置。
-		int numDirectionLight;		//ディレクションライトの数。
-		Vector3 ambientLight;		//アンビエントライト。
-		int numPointLight;			//ポイントライトの数。
-		float specPow;				//スペキュラの絞り
-	};
-	SLightParam m_lightParam;
-	std::list<CDirectionLight*> m_directionLights;	//ディレクションライトのリスト
 
+	static SLightParam m_lightParam;
+	//std::list<SDirectionLight> m_lights;	//ディレクションライトの構造体
+	//std::list<CDirectionLight*> m_directionLights;	//ディレクションライトのリスト
+
+	//それぞれのディレクションライトのデータ
+	SDirectionLight m_directionLightsData[Max_DirectionLight];
+
+
+	//それぞれのディレクションライトの参照
+	CDirectionLight* m_directionLights[Max_DirectionLight] = { nullptr };
+
+	int m_currentNum = 0;
 
 };
 

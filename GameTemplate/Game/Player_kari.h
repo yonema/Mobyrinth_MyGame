@@ -1,4 +1,6 @@
 #pragma once
+#include "LightData.h"
+#include "DirectionLight.h"
 
 class Player_kari : public IGameObject
 {
@@ -37,9 +39,10 @@ private:	//データメンバ
 	Skeleton m_skeleton;	//スケルトン。
 	CharacterController m_charaCon;
 
-	//ディレクションライト
-	DirectionLight m_directionLig;
-	//ポイントライト
-	PointLight m_pointLig;
+	CDirectionLight* lig[3] = { nullptr };
+
+
+	int a = 0;
+
 };
 

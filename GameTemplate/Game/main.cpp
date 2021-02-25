@@ -2,6 +2,7 @@
 #include "system/system.h"
 #include "stage_kari.h"
 #include "Light.h"
+#include "LightManager.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -21,8 +22,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	PhysicsWorld::CreateInstance();
 	Light::CreateInstance();
 	
-	NewGO<stage_kari>(0, "stage_kari");
+	CLightManager::CreateInstance();
 
+	NewGO<stage_kari>(0, "stage_kari");
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
 	//////////////////////////////////////
@@ -41,13 +43,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		
 		GameObjectManager::GetInstance()->ExecuteUpdate();
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
-
+		CLightManager::GetInstance()->ExecuteUpdate();
 		//////////////////////////////////////
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////
 		g_engine->EndFrame();
 	}
 	Light::DeleteInstance();
+	CLightManager::DeleteInstance();
 	//ゲームオブジェクトマネージャーを削除。
 	GameObjectManager::DeleteInstance();
 	return 0;

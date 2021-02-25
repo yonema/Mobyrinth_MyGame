@@ -1,4 +1,6 @@
 #pragma once
+#include "level.h"
+class CLevel;
 class Player_kari;
 class background_kari;
 
@@ -13,5 +15,6 @@ public:
 private:	//データメンバ
 	Player_kari* m_Player_kari = nullptr;
 	background_kari* m_background_kari = nullptr;
+	CLevel m_level;
 };
 

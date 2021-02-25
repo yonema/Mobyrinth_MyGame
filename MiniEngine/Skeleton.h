@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tkFile/TksFile.h"
+#include "TklFile.h"
 
 /// <summary>
 /// ボーン。
@@ -177,6 +178,8 @@ public:
 	/// <returns>trueが返ってきたらロード成功。</returns>
 	bool Init(const char* tksFilePath);
 
+	bool InitLevel(const char* tklFilePath);
+
 	/// <summary>
 	/// 初期化済みか判定。
 	/// </summary>
@@ -190,6 +193,8 @@ public:
 	/// 読み込みが完了した後で呼び出してください。
 	/// </summary>
 	void BuildBoneMatrices();
+
+	void BuildBoneMatricesLevel();
 	/// <summary>
 	/// ボーンの名前からボーン番号を検索。
 	/// </summary>
@@ -229,6 +234,7 @@ public:
 	{
 		m_isPlayAnimation = true;
 	}
+
 public:
 		
 
@@ -250,6 +256,7 @@ public:
 
 private:
 	TksFile m_tksFile;										//TKSファイル。
+	TklFile m_tklFile;								//TKLファイル
 	static const int BONE_MAX = 512;				//ボーンの最大数。
 	using BonePtr = std::unique_ptr<Bone>;
 	std::vector<BonePtr>	m_bones;				//ボーンの配列。

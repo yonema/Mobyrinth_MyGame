@@ -1,7 +1,9 @@
 #pragma once
 #include "LightBase.h"
 #include "LightData.h"
-class CDirectionLight : public CLightBase
+#include "LightManager.h"
+
+class CDirectionLight : public IGameObject
 {
 private:
 	void Init();
@@ -9,7 +11,7 @@ public:
 	CDirectionLight();
 	~CDirectionLight();
 	//抽象クラスの純粋仮想関数のオーバーライド
-	bool StartSub() override final;
+	bool Start() override final;
 	//void Update() override final;
 
 	/// <summary>
@@ -21,10 +23,10 @@ public:
 	/// ディレクションライトの方向を取得
 	/// </summary>
 	/// <returns>ライトの方向</returns>
-	const Vector3& GetDirection() const
-	{
-		return m_light.dirLigDirection;
-	}
+	//const Vector3& GetDirection() const
+	//{
+	//	return m_light.dirLigDirection;
+	//}
 	/// <summary>
 	/// ディレクションライトの色の設定
 	/// </summary>
@@ -34,12 +36,28 @@ public:
 	/// 生データを取得
 	/// </summary>
 	/// <returns>生データの参照</returns>
-	SDirectionLight& GetRawData()
+	SDirectionLight* GetRawData()
 	{
 		return m_light;
 	};
+	void SetRawData(SDirectionLight* lig)
+	{
+		m_light = lig;
+	}
+	void SetControlNumber(const int num)
+	{
+		m_controlNumber = num;
+	}
+	const int GetControlNumver()const 
+	{
+		return m_controlNumber;
+	}
 
 private:
-	SDirectionLight m_light;	//ディレクションライトの構造体
+	SDirectionLight* m_light = nullptr;	//ディレクションライトの構造体
+	int m_controlNumber;
+	bool m_result;
+
+	
 };
 

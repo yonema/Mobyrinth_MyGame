@@ -1,10 +1,17 @@
 #pragma once
 #include "stdafx.h"
-
+struct SLightParam {
+	Vector3 eyePos;				//視線の位置。
+	int numDirectionLight;		//ディレクションライトの数。
+	Vector3 ambientLight;		//アンビエントライト。
+	int numPointLight;			//ポイントライトの数。
+	float specPow;				//スペキュラの絞り
+};
 struct SDirectionLight
 {
-	Vector4 dirLigColor;
-	Vector3 dirLigDirection;
+	Vector4 dirLigColor = { 0.0f,0.0f,0.0f,0.0f };
+	Vector3 dirLigDirection = { 0.0f,0.0f,0.0f };
+	float pad = 0.0f;
 	////ディレクションライト
 	//Vector3 dirLigDirection;
 	//float pad;

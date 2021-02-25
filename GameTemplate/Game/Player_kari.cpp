@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player_kari.h"
 #include "Light.h"
+#include "LightManager.h"
 
 void Player_kari::InitSkeleton()
 {
@@ -24,35 +25,12 @@ void Player_kari::InitModel()
 	//ユニティちゃんはアニメーションでYアップに変更されている。
 	initData.m_modelUpAxis = enModelUpAxisY;
 
-	//ディレクションライト
-	m_directionLig.dirLigDirection.x = 1.0f;
-	m_directionLig.dirLigDirection.y = -1.0f;
-	m_directionLig.dirLigDirection.z = -1.0f;
-	m_directionLig.dirLigDirection.Normalize();			//方向
-	m_directionLig.dirLigColor = { 1.0f,0.4f,0.4f };	//色
-	m_directionLig.eyePos = g_camera3D->GetPosition();	//視点
-	m_directionLig.specPow = 5.0f;						//スペキュラの絞り
-	m_directionLig.ambinetLight = { 0.6f,0.6f,0.6f };	//環境光
 
-	//ポイントライト
-	m_pointLig.ptPosition = { 10.0f,10.0f,0.0f };
-	m_pointLig.ptRange = 100.0f;
-	m_pointLig.ptColor = { 1.0f,1.0f,0.0f };
+	initData.m_expandConstantBuffer = CLightManager::GetInstance()->GetLightParam();
+	initData.m_expandConstantBufferSize = sizeof(*CLightManager::GetInstance()->GetLightParam());
 
-
-	
-	//initData.m_expandConstantBuffer = &m_directionLig;
-	//initData.m_expandConstantBufferSize = sizeof(m_directionLig);
-
-	//initData.m_expandConstantBuffer2 = &m_pointLig;
-	//initData.m_expandConstantBufferSize2 = sizeof(m_pointLig);
-
-	initData.m_expandConstantBuffer = &Light::GetInstance()->m_directionLight;
-	initData.m_expandConstantBufferSize = sizeof(Light::GetInstance()->m_directionLight);
-
-	initData.m_expandConstantBuffer2 = &Light::GetInstance()->m_pointLight;
-	initData.m_expandConstantBufferSize2 = sizeof(Light::GetInstance()->m_pointLight);
-
+	initData.m_expandConstantBuffer2 = CLightManager::GetInstance()->GetDirectionLigData();
+	initData.m_expandConstantBufferSize2 = sizeof(*CLightManager::GetInstance()->GetDirectionLigData()) * 4;
 
 	//作成した初期化データをもとにモデルを初期化する、
 	m_model.Init(initData);
@@ -98,8 +76,46 @@ void Player_kari::Update()
 	m_charaCon.Execute(moveSpeed, 1.0f);
 	m_model.UpdateWorldMatrix(m_charaCon.GetPosition(), g_quatIdentity, g_vec3One);
 
-	m_pointLig.ptPosition.x += g_pad[0]->GetRStickXF() * -1.0f;
-	m_pointLig.ptPosition.z += g_pad[0]->GetRStickYF() * -1.0f;
+	if (g_pad[0]->IsTrigger(enButtonB))
+	{
+		DeleteGO(FindGO<CDirectionLight>("directionLight1"));
+		
+	}
+
+	if (g_pad[0]->IsTrigger(enButtonA))
+	{
+		float f = 0.0f;
+		switch (a)
+		{
+		case 0:
+			f = 0.6f;
+			break;
+		case 1:
+			f = 0.8f;
+			break;
+		case 2:
+			f = 1.0f;
+			break;
+		case 3:
+			f = 1.0f;
+			break;
+		case 4:
+			f = 1.0f;
+			break;
+		}
+
+		if (a < 3)
+		{
+			lig[a] = NewGO<CDirectionLight>(0);
+			lig[a]->SetDirection({ -f,0.0f,0.0f });
+			lig[a]->SetColor({ f,0.0f,0.0f,0.0f });
+		}
+		a++;
+	}
+
+
+
+
 }
 void Player_kari::Render(RenderContext& rc)
 {

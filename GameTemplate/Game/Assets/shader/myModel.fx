@@ -2,7 +2,9 @@
  * @brief	シンプルなモデルシェーダー。
  */
 
-
+static const int Max_DirectionLight = 4;	//ディレクションライトの最大数
+static const int Max_PointLight = 4;		//ポイントライトの最大数
+static const int Max_SpotLight = 4;			//スポットライトの最大数
 ////////////////////////////////////////////////
 // 定数バッファ。
 ////////////////////////////////////////////////
@@ -13,22 +15,46 @@ cbuffer ModelCb : register(b0){
 	float4x4 mProj;
 };
 
-//ディレクションライト用の定数バッファ
-cbuffer LightCb : register(b1)
+////ディレクションライト用の定数バッファ
+//cbuffer LightCb : register(b1)
+//{
+//	float3 dirLigDirection[Max_DirectionLight];	//ディレクションライトの方向
+//	float4 dirLigColor[Max_DirectionLight];		//ディレクションライトの色
+//	float3 eyePos;								//視点
+//	float specPow;								//スペキュラの絞り
+//	float3 ambientLight;						//環境光。
+//}
+//
+////ポイントライト用の定数バッファ
+//cbuffer PointLightCb : register(b2)
+//{
+//	float3 ptPosition;	//位置。
+//	float ptRange;		//影響範囲。
+//	float4 ptColor;		//カラー。
+//}
+
+struct SDirectionLight
 {
-	float3 dirLigDirection;			//ディレクションライトの方向
-	float4 dirLigColor;				//ディレクションライトの色
-	float3 eyePos;					//視点
-	float specPow;					//スペキュラの絞り
-	float3 ambientLight;			//環境光。
+	float4 dirLigColor;
+	float3 dirLigDirection;
+	float pad;
+};
+
+//LightManager用の定数バッファ
+cbuffer LightManagerCb : register(b1)
+{
+	float3 eyePos;			//視点
+	int numDirectionLight;	//ディレクションライトの数。
+	float3 ambientLight;	//アンビエントライト。
+	int numPointLight;		//ポイントライトの数。
+	float specPow;			//スペキュラの絞り
 }
 
-//ポイントライト用の定数バッファ
-cbuffer PointLightCb : register(b2)
+cbuffer DirectionLightCb : register(b2)
 {
-	float3 ptPosition;	//位置。
-	float ptRange;		//影響範囲。
-	float4 ptColor;		//カラー。
+	//float4 dirLigColor[Max_DirectionLight];		//カラー。
+	//float3 dirLigDirection[Max_DirectionLight];	//位置。
+	SDirectionLight directionLight[Max_DirectionLight];
 }
 
 ////////////////////////////////////////////////
@@ -66,8 +92,8 @@ sampler g_sampler : register(s0);	//サンプラステート。
 ///////////////////////////////////////////
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
 float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
-float3 CalcLigFromDirectionLight(SPSIn psIn);
-float3 CalcLigFromPointLight(SPSIn psIn);
+float3 CalcLigFromDirectionLight(SPSIn psIn, int n);
+float3 CalcLigFromPointLight(SPSIn psIn, int n);
 
 ////////////////////////////////////////////////
 // 関数定義。
@@ -142,10 +168,20 @@ SPSIn VSSkinMain( SVSIn vsIn )
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
 	//ディレクションライトによるライティングを計算する。
-	float3 directionLig = CalcLigFromDirectionLight(psIn);
+	float3 directionLig = {0.0f,0.0f,0.0f};
 
+	for (int i = 0; i < numDirectionLight; i++)
+	{
+		directionLig += CalcLigFromDirectionLight(psIn, i);
+	}
+	//directionLig += CalcLigFromDirectionLight(psIn, 1);
 	//ポイントライトによるライティングを計算する。
-	float3 pointLig = CalcLigFromPointLight(psIn);
+	float3 pointLig = { 0.0f,0.0f,0.0f };
+
+	for (int i = 0; i < numPointLight; i++)
+	{
+		pointLig += CalcLigFromPointLight(psIn, i);
+	}
 
 	//各種ライトの反射光を足し算して最終的な反射光を求める。
 	float3 finalLig = directionLig + ambientLight/* + hemiLight*/ + pointLig;
@@ -161,7 +197,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 /// <summary>
 /// ランバート拡散反射光を計算する。
 /// </summary>
-float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal)
+float3 CalcLambertDiffuse(float3 lightDirection, float4 lightColor, float3 normal)
 {
 	//ピクセルの法線とライトの方向の内積を計算する。
 	float t = dot(normal, lightDirection) * -1.0f;
@@ -194,12 +230,14 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
 /// ディレクションライトによる反射光を計算。
 /// </summary
 /// <param name="psIn">ピクセルシェーダーからの入力。</param>
-float3 CalcLigFromDirectionLight(SPSIn psIn)
+float3 CalcLigFromDirectionLight(SPSIn psIn, int n)
 {
 	//ディレクションライトによるランバート拡散反射光を計算する。
-	float3 diffDirection = CalcLambertDiffuse(dirLigDirection, dirLigColor, psIn.normal);
+	float3 diffDirection= CalcLambertDiffuse
+	(directionLight[n].dirLigDirection, directionLight[n].dirLigColor, psIn.normal);
 	//ディレクションライトによるフォン鏡面反射光を計算する。
-	float3 specDirection = CalcPhongSpecular(dirLigDirection, dirLigColor, psIn.worldPos, psIn.normal);
+	float3 specDirection= CalcPhongSpecular
+	(directionLight[n].dirLigDirection, directionLight[n].dirLigColor, psIn.worldPos, psIn.normal);
 	return diffDirection + specDirection;
 }
 
@@ -211,43 +249,45 @@ float3 CalcLigFromDirectionLight(SPSIn psIn)
 /// ポイントライトによる反射光を計算
 /// </summary>
 /// <param name="psIn">ピクセルシェーダーに渡されている引数</param>
-float3 CalcLigFromPointLight(SPSIn psIn)
+float3 CalcLigFromPointLight(SPSIn psIn, int n)
 {
-	//step-7 このサーフェイスに入射しているポイントライトの光の向きを計算する。
-	float3 ligDir = psIn.worldPos - ptPosition;
-	//正規化して大きさ１のベクトルにする。
-	ligDir = normalize(ligDir);
+	////step-7 このサーフェイスに入射しているポイントライトの光の向きを計算する。
+	//float3 ligDir = psIn.worldPos - ptPosition;
+	////正規化して大きさ１のベクトルにする。
+	//ligDir = normalize(ligDir);
 
-	//step-7 減衰なしのランバート拡散反射光を計算する。
-	float3 diffPoint = CalcLambertDiffuse(
-		ligDir, 		//ライトの方向
-		ptColor,	 	//ライトのカラー
-		psIn.normal		//サーフェイスの法線
-	);
-	//step-9 減衰なしのフォン鏡面反射光を計算する。
-	float3 specPoint = CalcPhongSpecular(
-		ligDir, 			//ライトの方向。
-		ptColor,		 	//ライトのカラー。
-		psIn.worldPos, 		//サーフェイズのワールド座標。
-		psIn.normal			//サーフェイズの法線。
-	);
+	////step-7 減衰なしのランバート拡散反射光を計算する。
+	//float3 diffPoint = CalcLambertDiffuse(
+	//	ligDir, 		//ライトの方向
+	//	ptColor,	 	//ライトのカラー
+	//	psIn.normal		//サーフェイスの法線
+	//);
+	////step-9 減衰なしのフォン鏡面反射光を計算する。
+	//float3 specPoint = CalcPhongSpecular(
+	//	ligDir, 			//ライトの方向。
+	//	ptColor,		 	//ライトのカラー。
+	//	psIn.worldPos, 		//サーフェイズのワールド座標。
+	//	psIn.normal			//サーフェイズの法線。
+	//);
 
-	//step-10 距離による影響率を計算する。
-	//ポイントライトとの距離を計算する。
-	float3 distance = length(psIn.worldPos - ptPosition);
+	////step-10 距離による影響率を計算する。
+	////ポイントライトとの距離を計算する。
+	//float3 distance = length(psIn.worldPos - ptPosition);
 
-	//影響率は距離に比例して小さくなっていく。
-	float affect = 1.0f - 1.0f / ptRange * distance;
-	//影響力がマイナスにならないように補正をかける。
-	if (affect < 0.0f) {
-		affect = 0.0f;
-	}
-	//影響の仕方を指数関数的にする。今回のサンプルでは3乗している。
-	affect = pow(affect, 3.0f);
+	////影響率は距離に比例して小さくなっていく。
+	//float affect = 1.0f - 1.0f / ptRange * distance;
+	////影響力がマイナスにならないように補正をかける。
+	//if (affect < 0.0f) {
+	//	affect = 0.0f;
+	//}
+	////影響の仕方を指数関数的にする。今回のサンプルでは3乗している。
+	//affect = pow(affect, 3.0f);
 
-	//step-11 拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める。
-	diffPoint *= affect;
-	specPoint *= affect;
+	////step-11 拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める。
+	//diffPoint *= affect;
+	//specPoint *= affect;
 
-	return diffPoint + specPoint;
+	//return diffPoint + specPoint;
+
+	return 0;
 }

@@ -4,6 +4,7 @@
 #include "DirectionLight.h"
 
 CLightManager* CLightManager::m_instance = nullptr;
+SLightParam CLightManager::m_lightParam;
 
 CLightManager::CLightManager()
 {
@@ -11,7 +12,7 @@ CLightManager::CLightManager()
 		//インスタンスがすでに作られている。
 		std::abort();
 	}
-	//Init();
+	Init();
 	m_instance = this;
 }
 
@@ -21,69 +22,74 @@ CLightManager::~CLightManager()
 	m_instance = nullptr;
 }
 
-//void CLightManager::Init()
-//{
-//
-//}
+void CLightManager::Init()
+{
+	m_lightParam.eyePos = { 0.0f,0.0f,0.0f };
+	m_lightParam.numDirectionLight = 0;
+	m_lightParam.ambientLight = { 0.6f,0.6f,0.6f };
+	m_lightParam.numPointLight = 0;
+	m_lightParam.specPow = 5.0f;
+}
 //void CLightManager::Release()
 //{
 //
 //}
-void CLightManager::AddLight(CLightBase* light)
+
+
+void CLightManager::ExecuteUpdate()
 {
-	//if (m_pointLights.size() >= MAX_POINT_LIGHT) {
-	//	TK_WARNING("m_pointLights.size() is full!!");
-	//	return;
-	//}
-	if (m_directionLights.size() >= Max_DirectionLight) {
+	m_lightParam.eyePos = g_camera3D->GetPosition();
+	//m_lightParam.numDirectionLight = m_directionLights.size();
+}
+bool CLightManager::AddLight(CDirectionLight* light)
+{
+
+	//ディレクションライトの数がMAXより多かったら作られない
+	if (m_lightParam.numDirectionLight >= Max_DirectionLight) {
 		//TK_WARNING("m_directionLights.size() is full!!");
-		return;
+		return false;
 	}
 
-	//ライトの振り分け。
-	const std::type_info& typeInfo = typeid(*light);
-	//if (typeInfo == typeid(CPointLight)) {
-	//	//登録済みか調べる。
-	//	auto findIt = std::find(m_pointLights.begin(), m_pointLights.end(), light);
-	//	if (findIt == m_pointLights.end()) {
-	//		//新規登録。
-	//		m_pointLights.push_back(reinterpret_cast<CPointLight*>(light));
-	//	}
-	//	else {
-	//		//既に登録されてるよ。
-	//		TK_LOG("This light was already added");
-	//		return;
-	//	}
-	//}
-	/*else*/ if (typeInfo == typeid(CDirectionLight)) {
-		//登録済みか調べる。
-		auto findIt = std::find(m_directionLights.begin(), m_directionLights.end(), light);
-		if (findIt == m_directionLights.end()) {
-			//新規登録。
-			m_directionLights.push_back(reinterpret_cast<CDirectionLight*>(light));
-		}
-		else {
-			//既に登録されてるよ。
-			//TK_LOG("This light was already added");
-			return;
-		}
-	}
+		//Managerにディレクションライトの参照を渡す
+		m_directionLights[m_lightParam.numDirectionLight]
+			= light;
+		//Managerのディレクションライトの初期方向を設定
+		m_directionLightsData[m_lightParam.numDirectionLight].dirLigDirection
+			= { 0.0f,0.0f,0.0f };
+		m_directionLightsData[m_lightParam.numDirectionLight].dirLigColor
+			= { 0.0f,0.0f,0.0f,1.0f };
+		//LightにManagerのディレクションライトの参照を渡す
+		light->SetRawData(&m_directionLightsData[m_lightParam.numDirectionLight]);
+		//LightにManagerの管理番号を渡す。
+		light->SetControlNumber(m_lightParam.numDirectionLight);
+		
+		//現在のライトの数を増やす
+		m_lightParam.numDirectionLight++;
+	
+		return true;
 }
 
 
-void CLightManager::RemoveLight(const CLightBase* light)
+void CLightManager::RemoveLight(CDirectionLight* light)
 {
-	const std::type_info& typeInfo = typeid(*light);
-/*	if (typeInfo == typeid(CPointLight)) {
-		m_pointLights.erase(
-			std::remove(m_pointLights.begin(), m_pointLights.end(), light),
-			m_pointLights.end()
-		);
-	}
-	else*/ if (typeInfo == typeid(CDirectionLight)) {
-		m_directionLights.erase(
-			std::remove(m_directionLights.begin(), m_directionLights.end(), light),
-			m_directionLights.end()
-		);
-	}
+
+
+		const int targetLigNumBuff = dynamic_cast<CDirectionLight*>(light)->GetControlNumver();
+
+		for (int i = targetLigNumBuff; i + 1 < m_lightParam.numDirectionLight; i++)
+		{
+			//Managerのディレクションライトを、Lightの管理番号とその一つ上の番号と交換
+			std::swap<SDirectionLight>(m_directionLightsData[i], m_directionLightsData[i + 1]);
+			//Lightのポジションの参照を交換
+			std::swap<CDirectionLight*>(m_directionLights[i], m_directionLights[i + 1]);
+		}
+
+		for (int i = targetLigNumBuff; i + 1 < m_lightParam.numDirectionLight; i++)
+		{
+			m_directionLights[i]->SetRawData(&m_directionLightsData[i]);
+		}
+
+		m_lightParam.numDirectionLight--;
+
+	
 }

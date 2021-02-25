@@ -4,12 +4,12 @@
 
 CLightBase::CLightBase()
 {
-	CLightManager::GetInstance()->AddLight(this);
+	//CLightManager::GetInstance()->AddLight(this);
 	StartSub();
 }
 
 CLightBase::~CLightBase()
 {
-	CLightManager::GetInstance()->RemoveLight(this);
+	//CLightManager::GetInstance()->RemoveLight(this);
 	OnDestroySub();
 }
