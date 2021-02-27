@@ -7,26 +7,20 @@
 /// <summary>
 /// フォント
 /// </summary>
-class Font{
+class Font {
 public:
-	Font();
-	~Font();
-	/*!
-	* @brief	フォントを設定。
-	* @details	デフォルトフォントから変更したい場合は
-	*  DirectX::SpriteFontを使用して、フォントをロードして差し替えを行ってください。
-	*/
-	void SetFont(DirectX::SpriteFont* font)
-	{
-		m_spriteFont = font;
-	}
-	/*!
-		* @brief	描画開始。
-		*/
+	/// <summary>
+	/// 描画開始
+	/// </summary>
+	/// <param name="rc">レンダリングコンテキスト。</param>
 	void Begin(RenderContext& rc);
 	/*!
 		* @brief	描画終了。
 		*/
+		/// <summary>
+		/// 描画終了
+		/// </summary>
+		/// <param name="rc">レンダリングコンテキスト</param>
 	void End(RenderContext& rc);
 	/*!
 		* @brief	描画。
@@ -62,8 +56,8 @@ public:
 		m_shadowColor = shadowColor;
 	}
 private:
-	DirectX::SpriteBatch*	m_spriteBatch = nullptr;	//スプライトバッチ。
-	DirectX::SpriteFont*	m_spriteFont = nullptr;		//スプライトフォント。
+	DirectX::SpriteBatch* m_spriteBatch = nullptr;	//スプライトバッチ。
+	DirectX::SpriteFont* m_spriteFont = nullptr;		//スプライトフォント。
 	bool m_isDrawShadow = false;						//影を書く？
 	float m_shadowOffset = 0.0f;						//影を書くときのピクセルのオフセット量。
 	Vector4 m_shadowColor;								//影の色。

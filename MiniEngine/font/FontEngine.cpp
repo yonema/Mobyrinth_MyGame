@@ -6,8 +6,8 @@ using namespace DirectX;
 
 FontEngine::~FontEngine()
 {
-	if (m_textureDescriptorHeap != nullptr) {
-		m_textureDescriptorHeap->Release();
+	if (m_srvDescriptorHeap != nullptr) {
+		m_srvDescriptorHeap->Release();
 	}
 }
 void FontEngine::Init()
@@ -20,16 +20,20 @@ void FontEngine::Init()
 	srvHeapDesc.NumDescriptors = 1;
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	auto hr = d3dDevice->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_textureDescriptorHeap));
-	
+	auto hr = d3dDevice->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_srvDescriptorHeap));
+
 	ResourceUploadBatch re(d3dDevice);
 	re.Begin();
 	//SpriteBatchのパイプラインステートを作成する。
 	RenderTargetState renderTargetState;
-	
-	m_spriteBatchPipelineStateDescription = make_unique< SpriteBatchPipelineStateDescription>(
-		renderTargetState
-	);
+	renderTargetState.rtvFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	renderTargetState.numRenderTargets = 1;
+	renderTargetState.dsvFormat = DXGI_FORMAT_D32_FLOAT;
+	renderTargetState.sampleMask = UINT_MAX;
+	renderTargetState.sampleDesc.Count = 1;
+
+	SpriteBatchPipelineStateDescription sprBatchDesc(renderTargetState);
+
 	D3D12_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
@@ -37,18 +41,18 @@ void FontEngine::Init()
 	viewport.Height = g_graphicsEngine->GetFrameBufferHeight();
 	//Spriteバッチを作成。
 	m_spriteBatch = make_unique<SpriteBatch>(
-		d3dDevice, 
+		d3dDevice,
 		re,
-		*m_spriteBatchPipelineStateDescription,
+		sprBatchDesc,
 		&viewport);
 	//SpriteFontを作成。
-	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = m_textureDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = m_textureDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = m_srvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = m_srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	m_spriteFont = make_unique<SpriteFont>(
-		d3dDevice, 
+		d3dDevice,
 		re,
-		L"Assets/font/myfile.spritefont", 
-		cpuHandle, 
+		L"Assets/font/myfile.spritefont",
+		cpuHandle,
 		gpuHandle);
 
 	re.End(g_graphicsEngine->GetCommandQueue());
@@ -63,7 +67,7 @@ void FontEngine::BeginDraw(RenderContext& rc)
 		SpriteSortMode_Deferred,
 		g_matIdentity
 	);
-	commandList->SetDescriptorHeaps(1, &m_textureDescriptorHeap);
+	commandList->SetDescriptorHeaps(1, &m_srvDescriptorHeap);
 }
 void FontEngine::EndDraw(RenderContext& rc)
 {

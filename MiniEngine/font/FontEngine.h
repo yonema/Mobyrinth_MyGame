@@ -5,9 +5,17 @@
 /// </summary>
 /// <remarks>
 /// DirectXTKのフォント表示処理の初期化～解放を行うクラス。
+/// BeginDrawでフォントの描画開始、Drawで描画リクエスト、Endでリクエストを一括処理。
+/// フォントの描画はまとめて行うほど高速になります。
 /// </remarks>
+/// <example>
+/// Font font;
+/// font.BeginDraw( renderContext );
+/// font.Draw("Hello world", pos, color, rot, scale, pivot);
+/// font.EndDraw( renderContext );
+/// </example>
 class FontEngine {
-	
+
 public:
 	/// <summary>
 	/// デストラクタ。
@@ -44,7 +52,5 @@ public:
 private:
 	std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;	//スプライトバッチ。
 	std::unique_ptr<DirectX::SpriteFont>	m_spriteFont;	//スプライトフォント。
-	std::unique_ptr< DirectX::ResourceUploadBatch> m_spriteResourceUploadBatch;
-	std::unique_ptr< DirectX::SpriteBatchPipelineStateDescription> m_spriteBatchPipelineStateDescription;
-	ID3D12DescriptorHeap* m_textureDescriptorHeap = nullptr;	//ディスクリプタヒープ。
+	ID3D12DescriptorHeap* m_srvDescriptorHeap = nullptr;	//SRVのディスクリプタヒープ。
 };

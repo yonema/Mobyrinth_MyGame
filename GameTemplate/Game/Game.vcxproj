@@ -252,6 +252,7 @@
     <ClCompile Include="..\..\MiniEngine\Camera.cpp" />
     <ClCompile Include="..\..\MiniEngine\ConstantBuffer.cpp" />
     <ClCompile Include="..\..\MiniEngine\DescriptorHeap.cpp" />
+    <ClCompile Include="..\..\MiniEngine\font\Font.cpp" />
     <ClCompile Include="..\..\MiniEngine\font\FontEngine.cpp" />
     <ClCompile Include="..\..\MiniEngine\GPUBuffer.cpp" />
     <ClCompile Include="..\..\MiniEngine\GraphicsEngine.cpp" />
@@ -292,6 +293,7 @@
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChip.cpp" />
+    <ClCompile Include="ModelRender.cpp" />
     <ClCompile Include="Player_kari.cpp" />
     <ClCompile Include="stage_kari.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -370,6 +372,7 @@
     <ClInclude Include="LightData.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="MapChip.h" />
+    <ClInclude Include="ModelRender.h" />
     <ClInclude Include="Player_kari.h" />
     <ClInclude Include="stage_kari.h" />
     <ClInclude Include="stdafx.h" />

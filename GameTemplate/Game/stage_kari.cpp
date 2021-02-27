@@ -25,7 +25,7 @@ bool stage_kari::Start()
 	//m_background_kari = NewGO<background_kari>(0);
 
 
-	m_level.Init("Assets/level/level_kari01.tkl", [&](LevelObjectData& objData)
+	m_level.Init("Assets/level/yuka2.tkl", [&](LevelObjectData& objData)
 		{
 			if (objData.EqualObjectName(L"unityChan") == true)
 			{
@@ -40,7 +40,7 @@ bool stage_kari::Start()
 		
 		});
 
-	g_camera3D->SetPosition({ 0.0f,0.0f,600.0f });
+	g_camera3D->SetPosition({ 0.0f,0.0f,500.0f });
 	g_camera3D->SetTarget({ 0.0f,0.0f,0.0f });
 
 	return true;
@@ -52,9 +52,29 @@ stage_kari::~stage_kari()
 }
 void stage_kari::Update()
 {
-
 }
 void stage_kari::Render(RenderContext& rc)
 {
 	m_level.Draw(rc);
+	//フォント
+	Font font;
+	wchar_t text[256];
+	wsprintf(text, L"バンドリ！%d", m_numText);
+	font.Begin(rc);
+
+	font.Draw(text,					//表示したいテキスト
+		{ 0.0f,0.0f },				//ポジション
+		{ 1.0f,1.0f,1.0f,1.0f },	//カラー
+		0.0f,						//回転
+		1.0f,						//拡大
+		{ 0.5f,0.5f }				//ピボット
+	);
+
+	font.End(rc);
+
+	m_numText++;
+	if (m_numText >= 100)
+	{
+		m_numText = 0;
+	}
 }
