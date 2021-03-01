@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "stage_kari.h"
-#include "Light.h"
 #include "LightManager.h"
 
 
@@ -20,7 +19,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームオブジェクトマネージャーのインスタンスを作成する。
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
-	Light::CreateInstance();
 	
 	CLightManager::CreateInstance();
 
@@ -49,7 +47,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//////////////////////////////////////
 		g_engine->EndFrame();
 	}
-	Light::DeleteInstance();
 	CLightManager::DeleteInstance();
 	//ゲームオブジェクトマネージャーを削除。
 	GameObjectManager::DeleteInstance();

@@ -1,29 +1,25 @@
 #pragma once
 #include "physics/PhysicsStaticObject.h"
+#include "ModelRender.h"
+
+
 struct LevelObjectData;
-
-
-
 class CMapChip
 {
-public:
-	CMapChip(const LevelObjectData& objData/*, CMapChipRender* mapChipRender*/);
+public://メンバ関数
+	/// <summary>
+	/// マップチップの作成
+	/// レベルのデータをもとに
+	/// モデルの表示と静的物理オブジェクトの初期化
+	/// </summary>
+	/// <param name="objData">レベルのオブジェクトのデータ</param>
+	CMapChip(const LevelObjectData& objData);
 	~CMapChip()
 	{
 	}
-	//prefab::CSkinModelRender* GetSkinModelRender()
-	//{
-	//	if (m_mapChipRender == nullptr) {
-	//		return nullptr;
-	//	}
-	//	return m_mapChipRender->GetSkinModelRender();
-	//}
-	void Draw(RenderContext& rc)
-	{
-		m_model.Draw(rc);
-	}
-private:
+
+private://データメンバ
 	PhysicsStaticObject m_physicsStaticObject;			//!<静的物理オブジェクト。
-	Model m_model;
+	CModelRender* m_modelRender = nullptr;				//モデルレンダラー
 };
 

@@ -3,7 +3,9 @@
 #include "Skeleton.h"
 #include "TklFile.h"
 
-
+/// <summary>
+/// レベルのデータ構造体
+/// </summary>
 struct LevelObjectData {
 	Vector3 position;		//<座標。
 	Quaternion rotation;	//!<回転。
@@ -37,8 +39,9 @@ struct LevelObjectData {
 class CLevel
 {
 private:
+	//マップチップのユニークポインタ
 	using CMapChipPtr = std::unique_ptr<CMapChip>;
-public:
+public://メンバ関数
 	/*!
 	 * @brief	レベルを初期化。
 	 *@param[in]	levelDataFilePath		tklファイルのファイルパス。
@@ -51,19 +54,9 @@ public:
 	 * 例えば、フック関数の中で、渡されたオブジェクトデータの名前のモデルを描画するクラスのインスタンスを
 	 * 生成したときに、falseを返してしまうと、同じモデルが二つ描画されることになります。
 	 */
-	void Init(/*const wchar_t**/const char* filePath, std::function<bool(LevelObjectData& objData)> hookFunc);
+	void Init(const char* filePath, std::function<bool(LevelObjectData& objData)> hookFunc);
 
-
-	void Draw(RenderContext& rc)
-	{
-		std::vector< CMapChipPtr>::iterator it = m_mapChipPtrs.begin();
-		for (; it != m_mapChipPtrs.end(); it++)
-		{
-			it->get()->Draw(rc);
-		}
-	};
-
-private:
+private://データメンバ
 	std::vector<CMapChipPtr> m_mapChipPtrs;			//マップチップの可変長配列。
 	TklFile m_tklFile;								//Levelを読み込むクラス
 };

@@ -3,14 +3,12 @@
 
 
 void CLevel::Init(
-	/*const wchar_t* filePath*/const char* filePath,
+	const char* filePath,
 	std::function<bool(LevelObjectData& objData)> hookFunc
 )
 {
 	//スケルトンをロードする。
 	Skeleton skeleton;
-	//skeleton.Load(filePath);
-	//skeleton.Init(filePath);
 	skeleton.InitLevel(filePath);
 
 	//構築構築。
@@ -40,22 +38,9 @@ void CLevel::Init(
 				isHook = hookFunc(objData);
 			}
 			if (isHook == false) {
-				//マップチップレンダラーを作成する。
-				//CreateMapChipRenderOrAddRenderObject(objData);
 				m_mapChipPtrs.push_back(std::make_unique<CMapChip>(objData));
 			}
 		}
 	}
-	//マップチップレンダラーを初期化する。
-	//for (auto& mapChipRender : m_mapChipRenderPtrs) {
-	//	mapChipRender.second->InitAfterAddAllRenderObjects();
-	//	mapChipRender.second->QueryRenderObjDatas([&](const LevelObjectData& objData) {
-	//		//フックされなかったので、マップチップを作成する。
-	//		auto mapChip = std::make_unique<CMapChip>(objData, mapChipRender.second);
-	//		m_mapChipPtrs.push_back(std::move(mapChip));
-	//		});
-	//}
-
-
 
 }

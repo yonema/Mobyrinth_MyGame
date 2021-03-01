@@ -53,4 +53,10 @@ void GameObjectManager::ExecuteRender(RenderContext& rc)
 			go->RenderWrapper(rc);
 		}
 	}
+
+	for (auto& goList : m_gameObjectListArray) {
+		for (auto& go : goList) {
+			go->PostRenderWrapper(rc);
+		}
+	}
 }

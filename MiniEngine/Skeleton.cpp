@@ -47,10 +47,10 @@ void Skeleton::UpdateBoneWorldMatrix(Bone& bone, const Matrix& parentMatrix)
 bool Skeleton::Init(const char* tksFilePath)
 {
 	//tksファイルをロードする。
-	m_tksFile.Load(tksFilePath);
+	bool loaded = m_tksFile.Load(tksFilePath);
 	//ボーン行列を構築する。
 	BuildBoneMatrices();
-	return true;
+	return loaded;
 }
 bool Skeleton::InitLevel(const char* tklFilePath)
 {
@@ -130,13 +130,13 @@ void Skeleton::BuildBoneMatrices()
 }
 void Skeleton::BuildBoneMatricesLevel()
 {
-	m_tklFile.QueryBone([&](TklFile::SBone& tksBone) {
+	m_tklFile.QueryBone([&](TklFile::SBone& tklBone) {
 		//バインドポーズ。
 		Matrix bindPoseMatrix;
-		memcpy(bindPoseMatrix.m[0], &tksBone.bindPose[0], sizeof(tksBone.bindPose[0]));
-		memcpy(bindPoseMatrix.m[1], &tksBone.bindPose[1], sizeof(tksBone.bindPose[1]));
-		memcpy(bindPoseMatrix.m[2], &tksBone.bindPose[2], sizeof(tksBone.bindPose[2]));
-		memcpy(bindPoseMatrix.m[3], &tksBone.bindPose[3], sizeof(tksBone.bindPose[3]));
+		memcpy(bindPoseMatrix.m[0], &tklBone.bindPose[0], sizeof(tklBone.bindPose[0]));
+		memcpy(bindPoseMatrix.m[1], &tklBone.bindPose[1], sizeof(tklBone.bindPose[1]));
+		memcpy(bindPoseMatrix.m[2], &tklBone.bindPose[2], sizeof(tklBone.bindPose[2]));
+		memcpy(bindPoseMatrix.m[3], &tklBone.bindPose[3], sizeof(tklBone.bindPose[3]));
 		bindPoseMatrix.m[0][3] = 0.0f;
 		bindPoseMatrix.m[1][3] = 0.0f;
 		bindPoseMatrix.m[2][3] = 0.0f;
@@ -144,23 +144,23 @@ void Skeleton::BuildBoneMatricesLevel()
 
 		//バインドポーズの逆行列。
 		Matrix invBindPoseMatrix;
-		memcpy(invBindPoseMatrix.m[0], &tksBone.invBindPose[0], sizeof(tksBone.invBindPose[0]));
-		memcpy(invBindPoseMatrix.m[1], &tksBone.invBindPose[1], sizeof(tksBone.invBindPose[1]));
-		memcpy(invBindPoseMatrix.m[2], &tksBone.invBindPose[2], sizeof(tksBone.invBindPose[2]));
-		memcpy(invBindPoseMatrix.m[3], &tksBone.invBindPose[3], sizeof(tksBone.invBindPose[3]));
+		memcpy(invBindPoseMatrix.m[0], &tklBone.invBindPose[0], sizeof(tklBone.invBindPose[0]));
+		memcpy(invBindPoseMatrix.m[1], &tklBone.invBindPose[1], sizeof(tklBone.invBindPose[1]));
+		memcpy(invBindPoseMatrix.m[2], &tklBone.invBindPose[2], sizeof(tklBone.invBindPose[2]));
+		memcpy(invBindPoseMatrix.m[3], &tklBone.invBindPose[3], sizeof(tklBone.invBindPose[3]));
 		invBindPoseMatrix.m[0][3] = 0.0f;
 		invBindPoseMatrix.m[1][3] = 0.0f;
 		invBindPoseMatrix.m[2][3] = 0.0f;
 		invBindPoseMatrix.m[3][3] = 1.0f;
 
 		wchar_t boneName[256];
-		mbstowcs(boneName, tksBone.name.get(), 256);
+		mbstowcs(boneName, tklBone.name.get(), 256);
 		BonePtr bone = std::make_unique<Bone>(
 			boneName,
 			bindPoseMatrix,
 			invBindPoseMatrix,
-			tksBone.parentNo,
-			tksBone.no
+			tklBone.parentNo,
+			tklBone.no
 			);
 #if BUILD_LEVEL != BUILD_LEVEL_MASTER
 		//ボーンのバリデーションチェック。

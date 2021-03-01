@@ -178,6 +178,11 @@ public:
 	/// <returns>trueが返ってきたらロード成功。</returns>
 	bool Init(const char* tksFilePath);
 
+	/// <summary>
+	/// レベル用の初期化。
+	/// </summary>
+	/// <param name="tklFilePath">tksファイルのファイルパス</param>
+	/// <returns>trueが返ってきたらロード成功。</returns>
 	bool InitLevel(const char* tklFilePath);
 
 	/// <summary>
@@ -194,6 +199,10 @@ public:
 	/// </summary>
 	void BuildBoneMatrices();
 
+	/// <summary>
+	/// レベル用のボーン行列の構築。
+	/// 読み込みが完了した後で呼び出してください。
+	/// </summary>
 	void BuildBoneMatricesLevel();
 	/// <summary>
 	/// ボーンの名前からボーン番号を検索。

@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "LightManager.h"
-#include "LightBase.h"
 #include "DirectionLight.h"
 
+//staticなデータメンバの初期化
 CLightManager* CLightManager::m_instance = nullptr;
 SLightParam CLightManager::m_lightParam;
 
@@ -12,34 +12,31 @@ CLightManager::CLightManager()
 		//インスタンスがすでに作られている。
 		std::abort();
 	}
-	Init();
-	m_instance = this;
+	Init();	//初期化処理
 }
 
 CLightManager::~CLightManager()
 {
-	//Release()
+	//nullptrを入れておく
 	m_instance = nullptr;
 }
 
 void CLightManager::Init()
 {
+	//ライトの共通のパラメータの初期値を設定
 	m_lightParam.eyePos = { 0.0f,0.0f,0.0f };
 	m_lightParam.numDirectionLight = 0;
 	m_lightParam.ambientLight = { 0.6f,0.6f,0.6f };
 	m_lightParam.numPointLight = 0;
 	m_lightParam.specPow = 5.0f;
 }
-//void CLightManager::Release()
-//{
-//
-//}
+
 
 
 void CLightManager::ExecuteUpdate()
 {
+	//視点をカメラの位置にする
 	m_lightParam.eyePos = g_camera3D->GetPosition();
-	//m_lightParam.numDirectionLight = m_directionLights.size();
 }
 bool CLightManager::AddLight(CDirectionLight* light)
 {
@@ -72,24 +69,27 @@ bool CLightManager::AddLight(CDirectionLight* light)
 
 void CLightManager::RemoveLight(CDirectionLight* light)
 {
+	//消すライトの管理番号を取得
+	const int targetLigNumBuff = light->GetControlNumver();
+		
+	//iの一つ先がディレクションライトの数より小さいとき継続
+	for (int i = targetLigNumBuff; i + 1 < m_lightParam.numDirectionLight; i++)
+	{
+		//Managerの、ディレクションライトを交換
+		//交換相手は、Lightの管理番号とその一つ上の番号
+		std::swap<SDirectionLight>(m_directionLightsData[i], m_directionLightsData[i + 1]);
+		//Managerの、Lightの参照を交換
+		std::swap<CDirectionLight*>(m_directionLights[i], m_directionLights[i + 1]);
+	}
+
+	//iの一つ先がディレクションライトの数より小さいとき継続
+	for (int i = targetLigNumBuff; i + 1 < m_lightParam.numDirectionLight; i++)
+	{
+		//Lightのディレクションライトの構造体の
+		m_directionLights[i]->SetRawData(&m_directionLightsData[i]);
+	}
+
+	m_lightParam.numDirectionLight--;
 
 
-		const int targetLigNumBuff = dynamic_cast<CDirectionLight*>(light)->GetControlNumver();
-
-		for (int i = targetLigNumBuff; i + 1 < m_lightParam.numDirectionLight; i++)
-		{
-			//Managerのディレクションライトを、Lightの管理番号とその一つ上の番号と交換
-			std::swap<SDirectionLight>(m_directionLightsData[i], m_directionLightsData[i + 1]);
-			//Lightのポジションの参照を交換
-			std::swap<CDirectionLight*>(m_directionLights[i], m_directionLights[i + 1]);
-		}
-
-		for (int i = targetLigNumBuff; i + 1 < m_lightParam.numDirectionLight; i++)
-		{
-			m_directionLights[i]->SetRawData(&m_directionLightsData[i]);
-		}
-
-		m_lightParam.numDirectionLight--;
-
-	
 }

@@ -43,6 +43,11 @@ public:
 	{
 		(void)renderContext;
 	}
+
+	virtual void PostRender(RenderContext& renderContext)
+	{
+		(void)renderContext;
+	}
 	
 public:
 	/*!
@@ -99,6 +104,12 @@ public:
 	{
 		if (m_isActive && m_isStart && !m_isDead ) {
 			Render(renderContext);
+		}
+	}
+	void PostRenderWrapper(RenderContext& renderContext)
+	{
+		if (m_isActive && m_isStart && !m_isDead) {
+			PostRender(renderContext);
 		}
 	}
 	

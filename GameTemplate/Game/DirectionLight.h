@@ -1,5 +1,4 @@
 #pragma once
-#include "LightBase.h"
 #include "LightData.h"
 #include "LightManager.h"
 

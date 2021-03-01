@@ -17,7 +17,7 @@ enum EnModelUpAxis {
 struct ModelInitData {
 	const char* m_tkmFilePath = nullptr;							//tkmファイルパス。
 	const char* m_vsEntryPointFunc = "VSMain";						//頂点シェーダーのエントリーポイント。
-	const char* m_vsSkinEntryPointFunc = "VSMain";					//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
+	const char* m_vsSkinEntryPointFunc = "VSSkinMain";					//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
 	const char* m_psEntryPointFunc = "PSMain";						//ピクセルシェーダーのエントリーポイント。
 	const char* m_fxFilePath = nullptr;								//.fxファイルのファイルパス。
 	void* m_expandConstantBuffer = nullptr;							//ユーザー拡張の定数バッファ。
@@ -29,27 +29,6 @@ struct ModelInitData {
 
 	void* m_expandConstantBuffer2 = nullptr;						//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize2 = 0;							//ユーザー拡張の定数バッファのサイズ。
-};
-
-
-//ディレクションライトの構造体
-struct DirectionLight
-{
-	//ディレクションライト
-	Vector3 dirLigDirection;
-	float pad;
-	Vector3 dirLigColor;
-	float pad2;
-	Vector3 eyePos;			//カメラの位置。
-	float specPow;				//スペキュラの絞り。
-	Vector3 ambinetLight;	//環境光。	
-};
-
-struct PointLight
-{
-	Vector3 ptPosition;		//位置。
-	float ptRange;			//影響範囲。
-	Vector3 ptColor;		//カラー。
 };
 
 
