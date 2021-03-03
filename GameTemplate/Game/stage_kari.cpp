@@ -3,6 +3,7 @@
 #include "Player_kari.h"
 #include "background_kari.h"
 #include "DirectionLight.h"
+class GameCamera;
 
 bool stage_kari::Start()
 {
@@ -10,25 +11,69 @@ bool stage_kari::Start()
 	d1->SetDirection({ 1.0f,1.0f,-1.0f });
 	d1->SetColor({ 0.1f,0.1f,0.1f,1.0f });
 
+	//プレイヤーのポインタ
+	Player_kari* pPlayer;
 
+	//ウェイポイントの「場所」を格納するマップ
+	std::map<int, Vector3> posMap;
+	//ウェイポイントの「回転」を格納するマップ
+	std::map<int, Quaternion> rotMap;
+	//ウェイポイントの数
+	std::size_t vecSize = 0;
+
+
+
+	//レベルの読み込み
 	m_level.Init("Assets/level/stage_kari01.tkl", [&](LevelObjectData& objData)
 		{
 			if (objData.EqualObjectName(L"player_kari") == true)
 			{
-				Player_kari* pJimen_kari;
-				pJimen_kari = NewGO<Player_kari>(0);
-				pJimen_kari->SetPosition(objData.position);
+				pPlayer = NewGO<Player_kari>(0, "player");
+				pPlayer->SetPosition
+				({ objData.position.x, objData.position.y + 50.0f, objData.position.z });
 				return true;
 			}
-			
+			else if (objData.EqualObjectName(L"Mobius") == true)
+			{
+				CModelRender* model;
+				model = NewGO<CModelRender>(0);
+				model->Init("Assets/modelData/Mobius.tkm");
+				model->SetPosition(objData.position);
+				model->SetRotation(objData.rotation);
+				return true;
+			}
+			//オブジェクトネームに"waypoint"があったら
+			else if (std::wcsstr(objData.name, L"waypoint") != NULL)
+			{
+				//番号（"0"）の文字列があるアドレスを返す
+				std::wstring buff = std::wcsstr(objData.name, L"0");
+				//wstringをintに変換
+				int num = _wtoi(buff.c_str());
+				//マップに入れる
+				posMap.insert(std::make_pair(num, objData.position));
+				rotMap.insert(std::make_pair(num, objData.rotation));
+				//ウェイポイントを加算
+				vecSize++;
+
+				CModelRender* model;
+				model = NewGO<CModelRender>(0);
+				model->Init("Assets/modelData/yuka.tkm");
+				model->SetPosition(objData.position);
+				model->SetRotation(objData.rotation);
+				return true;
+			}
+
 			return false;
 		
 		});
 
-	g_camera3D->SetPosition({ 0.0f,1800.0f,1000.0f });
-	g_camera3D->SetTarget({ 0.0f,1800.0f,0.0f });
-	g_camera3D->SetNear(0.5f);
-	g_camera3D->SetFar(50000.0f);
+	//ウェイポイントをプレイヤーに設定する
+	pPlayer->InitWayPointPos(vecSize, posMap);
+	pPlayer->InitWayPointRot(vecSize, rotMap);
+
+	NewGO<GameCamera>(0);
+
+
 	return true;
 }
 stage_kari::~stage_kari()

@@ -2,6 +2,8 @@
 #include "level.h"
 #include "font/Font.h"
 #include "ModelRender.h"
+#include "GameCamera.h"
+
 class CLevel;
 class Player_kari;
 class background_kari;
