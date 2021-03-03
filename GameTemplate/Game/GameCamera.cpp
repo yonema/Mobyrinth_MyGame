@@ -35,4 +35,7 @@ void GameCamera::Update()
 	{
 		m_pPlayer = FindGO<Player_kari>("player");
 	}
+
+
+	return;
 }

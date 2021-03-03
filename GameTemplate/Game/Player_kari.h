@@ -26,8 +26,20 @@ public://publicなメンバ関数
 	void InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap);
 	void InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap);
 
+	const Quaternion& GetLeftWayPointRot() const
+	{
+		return m_wayPointRot[m_lpIndex];
+	}
+	const Quaternion& GetRightWayPointRot() const
+	{
+		return m_wayPointRot[m_rpIndex];
+	}
+
 private://privateなメンバ関数
 
+	/// <summary>
+	/// ウェイポイントの更新処理
+	/// </summary>
 	void CheckWayPoint();
 	/// <summary>
 	/// 移動処理
@@ -53,22 +65,30 @@ private:	//データメンバ
 	};
 
 	AnimationClip m_animationClips[enAnimClip_Num];	//アニメーションクリップ。
-	CharacterController m_charaCon;		//キャラクターコントローラー
 
 	Vector3 m_moveSpeed = g_vec3Zero;		//キャラクターの移動スピード
 	Vector3 m_position = g_vec3Zero;		//キャラクターの座標
 	Quaternion m_rotation = g_quatIdentity;	//キャラクターの回転
+	enum EnLeftOrRight
+	{
+		enLeft,		//左
+		enRight,	//右
+	};
+	int m_leftOrRight = enLeft;		//キャラクターの左右の向き
 
+	float m_padLStickXF = 0.0f;		//パッドの左スティックのX軸の入力情報
 
-	CModelRender* m_modelRender = nullptr;
+	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
 
-
-	std::vector<Vector3> m_wayPointPos;
-	std::vector<Quaternion> m_wayPointRot;
-	int m_lpIndex = 0;
-	int m_rpIndex = m_lpIndex + 1;
-	int m_wayPointState = 0;
-	int m_maxWayPointState = 0;
+	/// <summary>
+	/// ウェイポイント関連のデータメンバ
+	/// </summary>
+	std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
+	std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
+	int m_rpIndex = 0;				//右のウェイポイントのインデックス
+	int m_lpIndex = m_rpIndex + 1;	//左のウェイポイントのインデックス
+	int m_wayPointState = 0;		//自身がどのウェイポイントにいるか表すステート
+	int m_maxWayPointState = 0;		//ウェイポイントステートの最大の値
 
 };
 

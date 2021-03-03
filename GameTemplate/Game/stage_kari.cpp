@@ -30,7 +30,7 @@ bool stage_kari::Start()
 			{
 				pPlayer = NewGO<Player_kari>(0, "player");
 				pPlayer->SetPosition
-				({ objData.position.x, objData.position.y + 50.0f, objData.position.z });
+				({ objData.position.x, objData.position.y, objData.position.z });
 				return true;
 			}
 			else if (objData.EqualObjectName(L"Mobius") == true)
@@ -52,7 +52,7 @@ bool stage_kari::Start()
 				//マップに入れる
 				posMap.insert(std::make_pair(num, objData.position));
 				rotMap.insert(std::make_pair(num, objData.rotation));
-				//ウェイポイントを加算
+				//ウェイポイントの数を加算
 				vecSize++;
 
 				CModelRender* model;
@@ -115,11 +115,11 @@ void stage_kari::PostRender(RenderContext& rc)
 	//フォント
 	Font font;
 	wchar_t text[256];
-	wsprintf(text, L"バンドリ！%d", m_numText);
+	wsprintf(text, L"バンドリ！%02d", m_numText);
 	font.Begin(rc);
 
 	font.Draw(text,				//表示したいテキスト
-		{ 0.0f,0.0f },		//ポジション
+		{ -640.0f,350.0f },		//ポジション
 		{ 1.0f,1.0f,1.0f,1.0f },	//カラー
 		0.0f,						//回転
 		1.0f,						//拡大
