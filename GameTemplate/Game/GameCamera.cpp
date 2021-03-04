@@ -28,8 +28,16 @@ void GameCamera::Update()
 {
 	if (m_pPlayer)
 	{
-		g_camera3D->SetPosition(m_pPlayer->GetPosition() + m_toCameraPos);
+		m_toCameraPos = { 0.0f,0.0f,1000.0f };
+
 		g_camera3D->SetTarget(m_pPlayer->GetPosition());
+
+		Quaternion qRot = m_pPlayer->GetFinalWPRot();
+		qRot.Apply(m_toCameraPos);
+		g_camera3D->SetPosition(m_pPlayer->GetPosition() + m_toCameraPos);
+		Vector3 vecUp = g_vec3AxisY;
+		qRot.Apply(vecUp);
+		g_camera3D->SetUp(vecUp);
 	}
 	else
 	{

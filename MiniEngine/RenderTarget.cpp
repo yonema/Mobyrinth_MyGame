@@ -2,6 +2,21 @@
 #include "RenderTarget.h"
 #include "GraphicsEngine.h"
 
+RenderTarget::~RenderTarget()
+{
+	if (m_renderTargetTextureDx12) {
+		m_renderTargetTextureDx12->Release();
+	}
+	if (m_depthStencilTexture) {
+		m_depthStencilTexture->Release();
+	}
+	if (m_rtvHeap) {
+		m_rtvHeap->Release();
+	}
+	if (m_dsvHeap) {
+		m_dsvHeap->Release();
+	}
+}
 bool RenderTarget::Create(
 	int w,
 	int h,
@@ -17,7 +32,7 @@ bool RenderTarget::Create(
 	m_height = h;
 	//レンダリングターゲットとなるテクスチャを作成する。
 	if (!CreateRenderTargetTexture(*g_graphicsEngine, d3dDevice, w, h, mipLevel, arraySize, colorFormat, clearColor)) {
-	//	TK_ASSERT(false, "レンダリングターゲットとなるテクスチャの作成に失敗しました。");
+		//	TK_ASSERT(false, "レンダリングターゲットとなるテクスチャの作成に失敗しました。");
 		MessageBoxA(nullptr, "レンダリングターゲットとなるテクスチャの作成に失敗しました。", "エラー", MB_OK);
 		return false;
 	}
@@ -36,13 +51,13 @@ bool RenderTarget::Create(
 	//ディスクリプタを作成する。
 	CreateDescriptor(d3dDevice);
 	if (clearColor) {
-		memcpy(m_rtvClearColor, clearColor, sizeof(clearColor));
+		memcpy(m_rtvClearColor, clearColor, sizeof(m_rtvClearColor));
 	}
 	return true;
 }
 bool RenderTarget::CreateDescriptorHeap(GraphicsEngine& ge, ID3D12Device5*& d3dDevice)
 {
-		
+
 	//RTV用のディスクリプタヒープを作成する。
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.NumDescriptors = GraphicsEngine::FRAME_BUFFER_COUNT;

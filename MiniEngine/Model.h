@@ -95,6 +95,11 @@ public:
 	{
 		return m_tkmFile;
 	}
+
+
+	bool InIntersectLine(const Vector3& start, const Vector3& end);
+
+
 private:
 
 	Matrix m_world;														//ワールド行列。

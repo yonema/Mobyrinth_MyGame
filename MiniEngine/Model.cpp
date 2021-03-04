@@ -82,3 +82,66 @@ void Model::Draw(RenderContext& rc)
 		g_camera3D->GetProjectionMatrix()
 	);
 }
+
+
+bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
+{
+	const auto& meshParts = m_tkmFile.GetMeshParts();
+
+	for (const auto& mesh : meshParts)
+	{
+
+		//まずは16ビット版から。
+		for (const auto& indexBuffer : mesh.indexBuffer16Array) {
+			//mesh.vertexBuffer[0].pos;
+			//インデックスの数からポリゴンの数を計算する。
+			int numPolygon = indexBuffer.indices.size() / 3;
+			for (int polygonNo = 0; polygonNo < numPolygon; polygonNo++) {
+				Vector3 vertPos[3];
+
+				vertPos[0] = mesh.vertexBuffer[polygonNo * 3 + 0].pos;
+				vertPos[1] = mesh.vertexBuffer[polygonNo * 3 + 1].pos;
+				vertPos[2] = mesh.vertexBuffer[polygonNo * 3 + 2].pos;//外積使うよ
+
+				//法線は三頂点の外積で法線を出す。
+
+
+				///
+				///
+				/// 手順
+				/// 1、三角形を含む無限平面と線分の交差判定
+				/// 2、交差している座標の計算
+				/// 3、2で求めた座標が三角形の中にあるかどうか判定
+
+
+
+
+			}
+
+		}
+
+		//次は32ビット版
+		/*for (const auto& indexBuffer : mesh.indexBuffer32Array) {
+			//インデックスの数からポリゴンの数を計算する。
+			int numPolygon = indexBuffer.indices.size() / 3;
+			for (int polygonNo = 0; polygonNo < numPolygon; polygonNo++) {
+				Vector3 vertPos[3];
+
+				vertPos[0] = mesh.vertexBuffer[polygonNo * 3 + 0].pos;
+				vertPos[1] = mesh.vertexBuffer[polygonNo * 3 + 1].pos;
+				vertPos[2] = mesh.vertexBuffer[polygonNo * 3 + 2].pos;
+
+
+
+			}
+		}*/
+
+
+	}
+
+
+
+
+	return true;
+}
+

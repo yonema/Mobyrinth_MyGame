@@ -26,13 +26,9 @@ public://publicなメンバ関数
 	void InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap);
 	void InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap);
 
-	const Quaternion& GetLeftWayPointRot() const
+	const Quaternion GetFinalWPRot()const
 	{
-		return m_wayPointRot[m_lpIndex];
-	}
-	const Quaternion& GetRightWayPointRot() const
-	{
-		return m_wayPointRot[m_rpIndex];
+		return m_finalWPRot;
 	}
 
 private://privateなメンバ関数
@@ -89,6 +85,7 @@ private:	//データメンバ
 	int m_lpIndex = m_rpIndex + 1;	//左のウェイポイントのインデックス
 	int m_wayPointState = 0;		//自身がどのウェイポイントにいるか表すステート
 	int m_maxWayPointState = 0;		//ウェイポイントステートの最大の値
+	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
 
 };
 

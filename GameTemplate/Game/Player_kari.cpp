@@ -145,8 +145,8 @@ void Player_kari::Rotation()
 
 	float ComplementRate = lpToPlayerLen.Length() / lpToRpLen.Length();
 
-	Quaternion wayPointRot;
-	wayPointRot.Slerp(ComplementRate, m_wayPointRot[m_lpIndex], m_wayPointRot[m_rpIndex]);
+
+	m_finalWPRot.Slerp(ComplementRate, m_wayPointRot[m_lpIndex], m_wayPointRot[m_rpIndex]);
 
 	if (m_leftOrRight == enLeft)
 	{
@@ -156,7 +156,7 @@ void Player_kari::Rotation()
 	{
 		m_rotation.SetRotationDegY(-90.0f);
 	}
-	m_rotation.Multiply(wayPointRot);
+	m_rotation.Multiply(m_finalWPRot);
 
 	return;
 }
