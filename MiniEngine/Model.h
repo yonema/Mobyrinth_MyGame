@@ -98,7 +98,10 @@ public:
 
 
 	bool InIntersectLine(const Vector3& start, const Vector3& end);
-
+	const Vector3& GetIntersectPos() const
+	{
+		return m_intersectPos;
+	}
 
 private:
 
@@ -107,4 +110,6 @@ private:
 	Skeleton m_skeleton;												//スケルトン。
 	MeshParts m_meshParts;											//メッシュパーツ。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
+
+	Vector3 m_intersectPos = g_vec3Zero;
 };

@@ -16,6 +16,13 @@ bool Player_kari::Start()
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 
+	m_mobius = FindGO<Mobius>("Mobius");
+
+
+	m_dbgModel = NewGO<CModelRender>(0);
+	m_dbgModel->Init("Assets/modelData/yuka.tkm");
+	m_dbgModel2 = NewGO<CModelRender>(0);
+	m_dbgModel2->Init("Assets/modelData/yuka.tkm");
 
 	return true;
 }
@@ -134,20 +141,52 @@ void Player_kari::Move()
 	}
 
 
+	return;
+}
+
+void Player_kari::GetOnStage()
+{
+	Vector3 addPos = g_vec3AxisY;
+	m_finalWPRot.Apply(addPos);
+	addPos.Scale(-200.0f);
+
+	if (m_mobius)
+	{
+		if (m_mobius->GetModel()->InIntersectLine(m_position, m_position + addPos))
+		{
+			m_position = m_mobius->GetModel()->GetIntersectPos();
+			m_dbgHit = true;
+		}
+		else
+			m_dbgHit = false;
+	}
+	else
+	{
+		m_mobius = FindGO<Mobius>("Mobius");
+	}
+	m_dbgModel2->SetPosition(m_mobius->GetModel()->GetIntersectPos());
+
+	m_dbgModel->SetPosition(m_position + addPos);
 
 	return;
+
 }
 
 void Player_kari::Rotation()
 {
+	//左のウェイポイントから右のウェイポイントへのベクトル
 	Vector3 lpToRpLen = m_wayPointPos[m_rpIndex] - m_wayPointPos[m_lpIndex];
+
+	//左のウェイポイントからプレイヤーへのベクトル
 	Vector3 lpToPlayerLen = m_position - m_wayPointPos[m_lpIndex];
 
+	//補完率
 	float ComplementRate = lpToPlayerLen.Length() / lpToRpLen.Length();
 
-
+	//球面線形補完
 	m_finalWPRot.Slerp(ComplementRate, m_wayPointRot[m_lpIndex], m_wayPointRot[m_rpIndex]);
 
+	//キャラクターの左右の向きに合わせて回転
 	if (m_leftOrRight == enLeft)
 	{
 		m_rotation.SetRotationDegY(90.0f);
@@ -179,6 +218,8 @@ void Player_kari::Update()
 	Rotation();
 
 	m_position += m_moveSpeed * 1.0 / 60.0f;
+	GetOnStage();
+
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 }
@@ -246,6 +287,17 @@ void Player_kari::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
+
+	swprintf(text, L"Hit%d", m_dbgHit);
+	m_font.Draw(text,
+		{ 110.0f, 150.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+		0.0f,
+		1.0f,
+		{ 0.0f,0.0f }
+	);
+
+
 
 
 	//描画終了

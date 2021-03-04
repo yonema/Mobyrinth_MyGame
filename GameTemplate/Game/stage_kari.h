@@ -3,6 +3,7 @@
 #include "font/Font.h"
 #include "ModelRender.h"
 #include "GameCamera.h"
+#include "Mobius.h"
 
 class CLevel;
 class Player_kari;

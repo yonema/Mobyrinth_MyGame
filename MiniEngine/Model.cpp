@@ -88,31 +88,117 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 {
 	const auto& meshParts = m_tkmFile.GetMeshParts();
 
+	bool isHit = false;
+	float dist = FLT_MAX;
+
 	for (const auto& mesh : meshParts)
 	{
 
 		//まずは16ビット版から。
 		for (const auto& indexBuffer : mesh.indexBuffer16Array) {
-			//mesh.vertexBuffer[0].pos;
 			//インデックスの数からポリゴンの数を計算する。
 			int numPolygon = indexBuffer.indices.size() / 3;
 			for (int polygonNo = 0; polygonNo < numPolygon; polygonNo++) {
 				Vector3 vertPos[3];
+				//ポリゴンを構成する頂点番号をインデックスバッファから取得する。
+				int vertexNo_0 = indexBuffer.indices[polygonNo * 3 + 0];
+				int vertexNo_1 = indexBuffer.indices[polygonNo * 3 + 1];
+				int vertexNo_2 = indexBuffer.indices[polygonNo * 3 + 2];
 
-				vertPos[0] = mesh.vertexBuffer[polygonNo * 3 + 0].pos;
-				vertPos[1] = mesh.vertexBuffer[polygonNo * 3 + 1].pos;
-				vertPos[2] = mesh.vertexBuffer[polygonNo * 3 + 2].pos;//外積使うよ
+				vertPos[0] = mesh.vertexBuffer[vertexNo_0].pos;
+				vertPos[1] = mesh.vertexBuffer[vertexNo_1].pos;
+				vertPos[2] = mesh.vertexBuffer[vertexNo_2].pos;
 
-				//法線は三頂点の外積で法線を出す。
 
+				Vector3 normalVec;	//頂点の法線ベクトル
+				{
+					//法線は三頂点の外積で法線を出す。
+					Vector3 vert0to1 = vertPos[1] - vertPos[0];	//頂点0から1へのベクトル
+					Vector3 vert0to2 = vertPos[2] - vertPos[0];	//頂点0から2へのベクトル
+					normalVec.Cross(vert0to1, vert0to2);	//外積で直交するベクトルを出す
+					normalVec.Normalize();	//正規化しておく
+				}
 
 				///
 				///
 				/// 手順
 				/// 1、三角形を含む無限平面と線分の交差判定
 				/// 2、交差している座標の計算
+				/// 3、2で求めた座標が三角形の中にあるかどうか判定//外積使うよ
+
+
+				//1、三角形を含む無限平面と線分の交差判定
+				Vector3 VtoS = start - vertPos[0];	//頂点から線分の始点へのベクトル
+				VtoS.Normalize();	//一応正規化しておく
+				Vector3 VtoE = end - vertPos[0];	//頂点から線分の終点へのベクトル
+				VtoE.Normalize();	//一応正規化しておく
+
+				float VtoSdotN = normalVec.Dot(VtoS);	//vertVtoSと法線の内積
+				float VtoEdotN = normalVec.Dot(VtoE);	//vertVtoEと法線の内積
+				
+				if (VtoSdotN * VtoEdotN >= 0)
+				{
+					//無限平面と交差していないのでスキップ
+					continue;
+				}
+
+				//2、交差している座標の計算
+
+				Vector3 addToStart;	//線ベクトルの始点に加算するベクトル
+				addToStart = end - start;	//線分のベクトルを入れる
+
+				float f = VtoSdotN / (VtoSdotN - VtoEdotN);
+				//addToStart *= VtoSdotN / (VtoSdotN - VtoEdotN);	//割合を計算する
+				addToStart *= f;
+				//交点の座標を計算する
+				const Vector3 intersectPos = start + addToStart;	//交点の座標
+
+
 				/// 3、2で求めた座標が三角形の中にあるかどうか判定
 
+				Vector3 V0toV1 = vertPos[1] - vertPos[0];	//頂点0から頂点1へのベクトル
+				Vector3 V0toI = intersectPos - vertPos[0];	//頂点0から交点へのベクトル
+				Vector3 cross1;	//外積1
+				cross1.Cross(V0toV1, V0toI);
+				cross1.Normalize();
+				
+				Vector3 V1toV2 = vertPos[2] - vertPos[1];	//頂点1から頂点2へのベクトル
+				Vector3 V1toI = intersectPos - vertPos[1];	//頂点1から交点へのベクトル
+				Vector3 cross2;	//外積2
+				cross2.Cross(V1toV2, V1toI);
+				cross2.Normalize();
+
+
+				Vector3 V2toV0 = vertPos[0] - vertPos[2];	//頂点2から頂点0へのベクトル
+				Vector3 V2toI = intersectPos - vertPos[2];	//頂点2から交点へのベクトル
+				Vector3 cross3;	//外積3
+				cross3.Cross(V2toV0, V2toI);
+				cross3.Normalize();
+
+
+				Vector3 vec1 = cross1 - cross2;
+				Vector3 vec2 = cross1 - cross3;
+				//if(vec1.x < FLT_EPSILON && vec1.y < FLT_EPSILON && vec1.z < FLT_EPSILON &&
+				//	vec2.x < FLT_EPSILON && vec2.y < FLT_EPSILON && vec2.z < FLT_EPSILON)
+				//if (cross1.x == cross2.x && cross1.y == cross2.y && cross1.z == cross2.z &&
+				//	cross1.x == cross3.x && cross1.y == cross3.y && cross1.z == cross3.z)
+				if (std::abs(vec1.x) < 0.1f && std::abs(vec2.x) < 0.1f)
+				{
+					//交点の座標が三角形の中にあるから、ヒット！
+					isHit = true;
+					float distTmp = addToStart.Length();
+					if (distTmp < dist)
+					{
+						m_intersectPos = intersectPos;
+						dist = distTmp;
+					}
+				}
+				else
+				{
+					//交点の座標が三角形の中にないから、スキップ
+					m_intersectPos = intersectPos;
+					continue;
+				}
 
 
 
@@ -142,6 +228,6 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 
 
 
-	return true;
+	return isHit;
 }
 

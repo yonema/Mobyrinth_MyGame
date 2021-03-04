@@ -35,11 +35,15 @@ bool stage_kari::Start()
 			}
 			else if (objData.EqualObjectName(L"Mobius") == true)
 			{
-				CModelRender* model;
-				model = NewGO<CModelRender>(0);
-				model->Init("Assets/modelData/Mobius.tkm");
-				model->SetPosition(objData.position);
-				model->SetRotation(objData.rotation);
+				//CModelRender* model;
+				//model = NewGO<CModelRender>(0);
+				//model->Init("Assets/modelData/Mobius.tkm");
+				//model->SetPosition(objData.position);
+				//model->SetRotation(objData.rotation);
+				Mobius* mobius;
+				mobius = NewGO<Mobius>(0, "Mobius");
+				mobius->SetPosition(objData.position);
+				mobius->SetRotation(objData.rotation);
 				return true;
 			}
 			//オブジェクトネームに"waypoint"があったら

@@ -2,6 +2,7 @@
 #include "LightData.h"
 #include "DirectionLight.h"
 #include "ModelRender.h"
+#include "Mobius.h"
 
 class Player_kari : public IGameObject
 {
@@ -9,23 +10,49 @@ public://publicなメンバ関数
 	bool Start() override final;
 	~Player_kari();
 	void Update() override final;
+	/// <summary>
+	/// プレイヤーの座標を設定
+	/// </summary>
+	/// <param name="pos">場所</param>
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
 	}
+	/// <summary>
+	/// プレイヤーの回転を設定
+	/// </summary>
+	/// <param name="rot">回転</param>
 	void SetRotation(const Quaternion& rot)
 	{
 		m_rotation = rot;
 	}
+	/// <summary>
+	/// プレイヤーの座標を取得
+	/// </summary>
+	/// <returns>場所</returns>
 	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
 
-
+	/// <summary>
+	/// ウェイポイントの「場所」を初期化
+	/// </summary>
+	/// <param name="vecSize">ウェイポイントのサイズ</param>
+	/// <param name="posMap">場所のマップ</param>
 	void InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap);
+	/// <summary>
+	/// ウェイポイントの「回転」を初期化
+	/// </summary>
+	/// <param name="vecSize">ウェイポイントのサイズ</param>
+	/// <param name="rotMap">回転のマップ</param>
 	void InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap);
 
+
+	/// <summary>
+	/// 補完済みの最終的なウェイポイントの回転を取得
+	/// </summary>
+	/// <returns>補完済みの最終的なウェイポイントの回転</returns>
 	const Quaternion GetFinalWPRot()const
 	{
 		return m_finalWPRot;
@@ -42,6 +69,10 @@ private://privateなメンバ関数
 	/// </summary>
 	void Move();
 	/// <summary>
+	/// ステージに乗る
+	/// </summary>
+	void GetOnStage();
+	/// <summary>
 	/// モデルの回転処理
 	/// </summary>
 	void Rotation();
@@ -49,6 +80,10 @@ private://privateなメンバ関数
 public://デバック用
 	void PostRender(RenderContext& rc)override final;
 	Font m_font;
+	CModelRender* m_dbgModel = nullptr;
+	CModelRender* m_dbgModel2 = nullptr;
+
+	bool m_dbgHit = false;
 
 private:	//データメンバ
 	/// <summary>
@@ -70,7 +105,7 @@ private:	//データメンバ
 		enLeft,		//左
 		enRight,	//右
 	};
-	int m_leftOrRight = enLeft;		//キャラクターの左右の向き
+	int m_leftOrRight = enRight;	//キャラクターの左右の向き
 
 	float m_padLStickXF = 0.0f;		//パッドの左スティックのX軸の入力情報
 
@@ -86,6 +121,8 @@ private:	//データメンバ
 	int m_wayPointState = 0;		//自身がどのウェイポイントにいるか表すステート
 	int m_maxWayPointState = 0;		//ウェイポイントステートの最大の値
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
+
+	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
 };
 
