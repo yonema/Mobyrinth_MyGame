@@ -4,11 +4,6 @@
 #include "background_kari.h"
 #include "DirectionLight.h"
 class GameCamera;
-//米地真央でやんす。
-
-// TODO(塚野): どうしてpushできないんですか？
-
-//(∩´∀｀)∩＜岡田壮平出ますかぁ？
 
 bool stage_kari::Start()
 {
