@@ -4,7 +4,6 @@
 #include "background_kari.h"
 #include "DirectionLight.h"
 class GameCamera;
-//ブランチテスト用
 
 bool stage_kari::Start()
 {
