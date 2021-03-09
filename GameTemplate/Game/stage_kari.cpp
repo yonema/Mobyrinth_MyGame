@@ -6,6 +6,8 @@
 class GameCamera;
 //米地真央でやんす。
 
+// TODO(塚野): どうしてpushできないんですか？
+
 
 bool stage_kari::Start()
 {
