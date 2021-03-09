@@ -43,7 +43,7 @@ void GameCamera::Update()
 		m_toCameraPos = { 0.0f,0.0f,1000.0f };
 
 
-		Quaternion qRot = m_pPlayer->GetFinalWPRot();
+		const Quaternion qRot = (m_pPlayer->GetFinalWPRot());
 		qRot.Apply(m_toCameraPos);
 		Vector3 vecUp = g_vec3AxisY;
 		qRot.Apply(vecUp);

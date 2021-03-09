@@ -4,6 +4,7 @@
 #include "ModelRender.h"
 #include "GameCamera.h"
 #include "Mobius.h"
+#include "LOmizu_kori.h"
 
 class CLevel;
 class Player_kari;

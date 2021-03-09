@@ -46,6 +46,28 @@ bool stage_kari::Start()
 				mobius->SetRotation(objData.rotation);
 				return true;
 			}
+			else if (objData.EqualObjectName(L"mizu") == true)
+			{
+				LOmizu_kori* lObject;
+				lObject = NewGO<LOmizu_kori>(0);
+				lObject->SetPosition(objData.position);
+				Quaternion qRot;
+				qRot.SetRotationDegX(90.0f);
+				lObject->SetRotation(qRot);
+				lObject->SetFrontOrBack(LOmizu_kori::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"koori") == true)
+			{
+				LOmizu_kori* lObject;
+				lObject = NewGO<LOmizu_kori>(0);
+				lObject->SetPosition(objData.position);
+				Quaternion qRot;
+				qRot.SetRotationDegX(90.0f);
+				lObject->SetRotation(qRot);
+				lObject->SetFrontOrBack(LOmizu_kori::enBack);
+				return true;
+			}
 			//オブジェクトネームに"waypoint"があったら
 			else if (std::wcsstr(objData.name, L"waypoint") != NULL)
 			{

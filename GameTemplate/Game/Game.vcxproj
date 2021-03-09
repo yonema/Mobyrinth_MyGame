@@ -291,7 +291,9 @@
     <ClCompile Include="DirectionLight.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelObjectBase.cpp" />
     <ClCompile Include="LightManager.cpp" />
+    <ClCompile Include="LOmizu_kori.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="Mobius.cpp" />
@@ -369,8 +371,10 @@
     <ClInclude Include="DirectionLight.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelObjectBase.h" />
     <ClInclude Include="LightData.h" />
     <ClInclude Include="LightManager.h" />
+    <ClInclude Include="LOmizu_kori.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="Mobius.h" />
     <ClInclude Include="ModelRender.h" />

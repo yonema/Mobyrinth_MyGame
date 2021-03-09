@@ -103,6 +103,19 @@ public:
 		return m_intersectPos;
 	}
 
+	const float getDbg()const
+	{
+		return m_dbg;
+	}
+	const Vector3 getDbgV1()const
+	{
+		return m_dbgV1;
+	}
+	const Vector3 getDbgV2()const
+	{
+		return m_dbgV2;
+	}
+
 private:
 
 	Matrix m_world;														//ワールド行列。
@@ -112,4 +125,9 @@ private:
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
 
 	Vector3 m_intersectPos = g_vec3Zero;
+	Vector3 m_lastStart = g_vec3Zero;
+	float m_dbg = 0.0f;
+	Vector3 m_dbgV1 = g_vec3Zero;
+	Vector3 m_dbgV2 = g_vec3Zero;
+
 };

@@ -218,7 +218,7 @@ void Player_kari::Update()
 	Rotation();
 
 	m_position += m_moveSpeed * 1.0 / 60.0f;
-	GetOnStage();
+	//GetOnStage();
 
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
@@ -296,7 +296,14 @@ void Player_kari::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
-
+	swprintf(text, L"rate%05f", m_mobius->GetModel()->getDbg());
+	m_font.Draw(text,
+		{ 110.0f, 130.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+		0.0f,
+		1.0f,
+		{ 0.0f,0.0f }
+	);
 
 
 

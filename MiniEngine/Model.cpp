@@ -86,6 +86,8 @@ void Model::Draw(RenderContext& rc)
 
 bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 {
+
+
 	const auto& meshParts = m_tkmFile.GetMeshParts();
 
 	bool isHit = false;
@@ -111,14 +113,18 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 
 
 				Vector3 normalVec;	//頂点の法線ベクトル
+				Vector3 rNormalVec;
 				{
 					//法線は三頂点の外積で法線を出す。
 					Vector3 vert0to1 = vertPos[1] - vertPos[0];	//頂点0から1へのベクトル
 					Vector3 vert0to2 = vertPos[2] - vertPos[0];	//頂点0から2へのベクトル
 					normalVec.Cross(vert0to1, vert0to2);	//外積で直交するベクトルを出す
 					normalVec.Normalize();	//正規化しておく
+					rNormalVec.Cross(vert0to2, vert0to1);
+					rNormalVec.Normalize();
 				}
-
+				m_dbgV1 = normalVec;
+				m_dbgV2 = rNormalVec;
 				///
 				///
 				/// 手順
@@ -133,8 +139,8 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 				Vector3 VtoE = end - vertPos[0];	//頂点から線分の終点へのベクトル
 				VtoE.Normalize();	//一応正規化しておく
 
-				float VtoSdotN = normalVec.Dot(VtoS);	//vertVtoSと法線の内積
-				float VtoEdotN = normalVec.Dot(VtoE);	//vertVtoEと法線の内積
+				float VtoSdotN = Dot(normalVec, VtoS);	//vertVtoSと法線の内積
+				float VtoEdotN = Dot(normalVec, VtoE);	//vertVtoEと法線の内積
 				
 				if (VtoSdotN * VtoEdotN >= 0)
 				{
@@ -147,7 +153,14 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 				Vector3 addToStart;	//線ベクトルの始点に加算するベクトル
 				addToStart = end - start;	//線分のベクトルを入れる
 
-				float f = VtoSdotN / (VtoSdotN - VtoEdotN);
+				Vector3 VtoS2 = start - vertPos[0];	//頂点から線分の始点へのベクトル
+				Vector3 VtoE2 = end - vertPos[0];	//頂点から線分の終点へのベクトル
+				float VtoSdotN2 = Dot(normalVec, VtoS2);	//vertVtoSと法線の内積
+				float VtoEdotN2 = Dot(rNormalVec, VtoE2);	//vertVtoEと法線の内積
+
+
+				float f = VtoSdotN2 / (VtoSdotN2 + VtoEdotN2);
+				m_dbg = f;
 				//addToStart *= VtoSdotN / (VtoSdotN - VtoEdotN);	//割合を計算する
 				addToStart *= f;
 				//交点の座標を計算する
@@ -175,6 +188,14 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 				cross3.Cross(V2toV0, V2toI);
 				cross3.Normalize();
 
+				float res1 = Dot(cross1, cross2);
+				float res2 = Dot(cross1, cross3);
+				float fres1 = std::abs(res1 - 1.0f);
+				float fres2 = std::abs(res2 - 1.0f);
+				if (fres1 < FLT_EPSILON && fres2 < FLT_EPSILON)
+				{
+					int a = 1;
+				}
 
 				Vector3 vec1 = cross1 - cross2;
 				Vector3 vec2 = cross1 - cross3;
@@ -182,7 +203,8 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 				//	vec2.x < FLT_EPSILON && vec2.y < FLT_EPSILON && vec2.z < FLT_EPSILON)
 				//if (cross1.x == cross2.x && cross1.y == cross2.y && cross1.z == cross2.z &&
 				//	cross1.x == cross3.x && cross1.y == cross3.y && cross1.z == cross3.z)
-				if (std::abs(vec1.x) < 0.1f && std::abs(vec2.x) < 0.1f)
+				//if (std::abs(vec1.x) < 0.1f && std::abs(vec2.x) < 0.1f)
+				if (fres1 < FLT_EPSILON && std::abs(res2 - 1.0f) < FLT_EPSILON)
 				{
 					//交点の座標が三角形の中にあるから、ヒット！
 					isHit = true;
