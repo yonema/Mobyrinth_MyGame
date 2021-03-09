@@ -8,6 +8,7 @@ class GameCamera;
 
 // TODO(塚野): どうしてpushできないんですか？
 
+//(∩´∀｀)∩＜岡田壮平出ますかぁ？
 
 bool stage_kari::Start()
 {
