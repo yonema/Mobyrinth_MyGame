@@ -1,0 +1,24 @@
+●main.cpp
+・wWinMain関数
+//ゲームの初期化。
+InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
+→ウィンドウやエンジンの初期化を行う。
+
+//////////////////////////////////////
+// ここから初期化を行うコードを記述する。
+//////////////////////////////////////
+
+//ゲームオブジェクトマネージャーのインスタンスを作成する。
+GameObjectManager::CreateInstance();
+→GameObjectManagerクラスのオブジェクトを動的確保する。
+（NewGOとかするやつだと思う）
+PhysicsWorld::CreateInstance();
+→PhysicsWorldクラスのオブジェクトを動的確保する。
+（重力の設定をしたり、剛体の登録、破棄をするクラスっぽい）
+CLightManager::CreateInstance();
+→CLightManagerクラスのオブジェクトを動的確保する。
+（ライトの処理などをするクラスっぽい）
+
+
+
+
