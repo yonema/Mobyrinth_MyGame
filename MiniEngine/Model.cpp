@@ -111,6 +111,9 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 				vertPos[1] = mesh.vertexBuffer[vertexNo_1].pos;
 				vertPos[2] = mesh.vertexBuffer[vertexNo_2].pos;
 
+				m_world.Apply(vertPos[0]);
+				m_world.Apply(vertPos[1]);
+				m_world.Apply(vertPos[2]);
 
 				Vector3 normalVec;	//頂点の法線ベクトル
 				Vector3 rNormalVec;
@@ -190,21 +193,9 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 
 				float res1 = Dot(cross1, cross2);
 				float res2 = Dot(cross1, cross3);
-				float fres1 = std::abs(res1 - 1.0f);
-				float fres2 = std::abs(res2 - 1.0f);
-				if (fres1 < FLT_EPSILON && fres2 < FLT_EPSILON)
-				{
-					int a = 1;
-				}
 
-				Vector3 vec1 = cross1 - cross2;
-				Vector3 vec2 = cross1 - cross3;
-				//if(vec1.x < FLT_EPSILON && vec1.y < FLT_EPSILON && vec1.z < FLT_EPSILON &&
-				//	vec2.x < FLT_EPSILON && vec2.y < FLT_EPSILON && vec2.z < FLT_EPSILON)
-				//if (cross1.x == cross2.x && cross1.y == cross2.y && cross1.z == cross2.z &&
-				//	cross1.x == cross3.x && cross1.y == cross3.y && cross1.z == cross3.z)
-				//if (std::abs(vec1.x) < 0.1f && std::abs(vec2.x) < 0.1f)
-				if (fres1 < FLT_EPSILON && std::abs(res2 - 1.0f) < FLT_EPSILON)
+				
+				if(( res1 > 0.0f && res2 > 0.0f ))
 				{
 					//交点の座標が三角形の中にあるから、ヒット！
 					isHit = true;
@@ -215,12 +206,12 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 						dist = distTmp;
 					}
 				}
-				else
+				/*else
 				{
 					//交点の座標が三角形の中にないから、スキップ
 					m_intersectPos = intersectPos;
 					continue;
-				}
+				}*/
 
 
 

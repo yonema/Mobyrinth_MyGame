@@ -2,6 +2,7 @@
 #include "system/system.h"
 #include "stage_kari.h"
 #include "LightManager.h"
+#include "LevelObjectManager.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -21,8 +22,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	PhysicsWorld::CreateInstance();
 	
 	CLightManager::CreateInstance();
+	CLevelObjectManager::CreateInstance();
 
 	NewGO<stage_kari>(0, "stage_kari");
+	//ModelInitData modelInitData;
+	//modelInitData.m_tkmFilePath = "Assets/modelData/test.tkm";
+	//modelInitData.m_fxFilePath = "Assets/shader/myModel.fx";
+	//Model model;
+	//model.Init(modelInitData);
+	//model.UpdateWorldMatrix(g_vec3Zero, g_quatIdentity, g_vec3One);
+	//model.InIntersectLine({ 0, 100.0f, 0.0f }, { 0.0f, -50.0f, 0.0f });
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
 	//////////////////////////////////////
@@ -42,6 +51,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		GameObjectManager::GetInstance()->ExecuteUpdate();
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 		CLightManager::GetInstance()->ExecuteUpdate();
+		CLevelObjectManager::GetInstance()->ExecuteUpdate();
 		//////////////////////////////////////
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////
@@ -50,6 +60,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CLightManager::DeleteInstance();
 	//ゲームオブジェクトマネージャーを削除。
 	GameObjectManager::DeleteInstance();
+	CLevelObjectManager::DeleteInstance();
 	return 0;
 }
 

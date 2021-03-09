@@ -5,6 +5,7 @@
 #include "GameCamera.h"
 #include "Mobius.h"
 #include "LOmizu_kori.h"
+#include "LevelObjectManager.h"
 
 class CLevel;
 class Player_kari;

@@ -15,7 +15,7 @@ bool Player_kari::Start()
 	("Assets/modelData/unityChan.tkm",m_animationClips,enAnimClip_Num, enModelUpAxisY);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
-
+	m_onWayPosition = m_position;
 	m_mobius = FindGO<Mobius>("Mobius");
 
 
@@ -23,6 +23,8 @@ bool Player_kari::Start()
 	m_dbgModel->Init("Assets/modelData/yuka.tkm");
 	m_dbgModel2 = NewGO<CModelRender>(0);
 	m_dbgModel2->Init("Assets/modelData/yuka.tkm");
+	m_dbgModel3 = NewGO<CModelRender>(0);
+	m_dbgModel3->Init("Assets/modelData/yuka.tkm");
 
 	return true;
 }
@@ -58,23 +60,30 @@ void Player_kari::CheckWayPoint()
 
 
 	//2.m_wayPointStateの更新。
-	//左右のウェイポイントとの距離で更新する。
 
-	//ウェイポイントとの当たり判定の距離
-	const float hitLen = 10.0f;
+	Vector3 LpToRpVec = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
+	LpToRpVec.Normalize();
+	Vector3 LpToPlayerVec = m_onWayPosition - (*m_wayPointPos)[m_lpIndex];
+	LpToPlayerVec.Normalize();
+	Vector3 RpToPlayerVec = m_onWayPosition - (*m_wayPointPos)[m_rpIndex];
+	RpToPlayerVec.Normalize();
 
-	//左のウェイポイントへのベクトル
-	Vector3 toLpVec = m_wayPointPos[m_lpIndex] - m_position;
+	float LpDotPlayer = Dot(LpToRpVec, LpToPlayerVec);
+	float RpDotPlayer = Dot(LpToRpVec, RpToPlayerVec);
+	m_dbgDot1 = LpDotPlayer;
+	m_dbgDot2 = RpDotPlayer;
 
-	//右のウェイポイントへのベクトル
-	Vector3 toRpVec = m_wayPointPos[m_rpIndex] - m_position;
+
 
 	//左右のウェイポイントとの距離を調べる
-	if (toLpVec.Length() <= hitLen && m_padLStickXF < 0.0f)
+
+	if (LpDotPlayer > 0.0f && RpDotPlayer < 0.0f)
 	{
-		//左のウェイポイントとの距離が当たり判定以下、かつ、
-		//左に移動の入力があったら、
-		//m_wayPointStateを加算して左に進める。
+		//今のウェイポイントの間にいる
+	}
+	else if (LpDotPlayer <= 0.0f && m_padLStickXF < 0.0f)
+	{
+		//今のウェイポイントの間から、左側に出ていった
 		m_wayPointState += 1;
 		if (m_wayPointState > m_maxWayPointState)
 		{
@@ -82,12 +91,10 @@ void Player_kari::CheckWayPoint()
 			//一周したということだから、スタートの0にする
 			m_wayPointState = 0;
 		}
-
 	}
-	else if (toRpVec.Length() <= hitLen && m_padLStickXF > 0.0f)
+	else if (RpDotPlayer >= 0.0f && m_padLStickXF > 0.0f)
 	{
-		//右のウェイポイントとの距離が当たり判定以下、かつ、
-		//右に移動の入力があったら、
+		//今のウェイポイントの間から、右側から出ていった
 		//m_wayPointStateを減算して右に進める。
 		m_wayPointState -= 1;
 		if (m_wayPointState < 0)
@@ -97,6 +104,46 @@ void Player_kari::CheckWayPoint()
 			m_wayPointState = m_maxWayPointState;
 		}
 	}
+
+	////左右のウェイポイントとの距離で更新する。
+
+	////ウェイポイントとの当たり判定の距離
+	//const float hitLen = 5.0f;
+
+	////左のウェイポイントへのベクトル
+	//Vector3 toLpVec = (*m_wayPointPos)[m_lpIndex] - m_onWayPosition;
+
+	////右のウェイポイントへのベクトル
+	//Vector3 toRpVec = (*m_wayPointPos)[m_rpIndex] - m_onWayPosition;
+
+	////左右のウェイポイントとの距離を調べる
+	//if (toLpVec.Length() <= hitLen && m_padLStickXF < 0.0f)
+	//{
+	//	//左のウェイポイントとの距離が当たり判定以下、かつ、
+	//	//左に移動の入力があったら、
+	//	//m_wayPointStateを加算して左に進める。
+	//	m_wayPointState += 1;
+	//	if (m_wayPointState > m_maxWayPointState)
+	//	{
+	//		//m_wayPointStateがMAXより大きかったら
+	//		//一周したということだから、スタートの0にする
+	//		m_wayPointState = 0;
+	//	}
+
+	//}
+	//else if (toRpVec.Length() <= hitLen && m_padLStickXF > 0.0f)
+	//{
+	//	//右のウェイポイントとの距離が当たり判定以下、かつ、
+	//	//右に移動の入力があったら、
+	//	//m_wayPointStateを減算して右に進める。
+	//	m_wayPointState -= 1;
+	//	if (m_wayPointState < 0)
+	//	{
+	//		//m_wayPointStateが0より小さかったら
+	//		//一周したということだから、MAXの値にする
+	//		m_wayPointState = m_maxWayPointState;
+	//	}
+	//}
 
 	return;
 
@@ -111,10 +158,10 @@ void Player_kari::Move()
 	//1.左右への移動する方向を計算する。
 
 	//左へ移動する方向
-	Vector3 moveToLeft = m_wayPointPos[m_lpIndex] - m_position;
+	Vector3 moveToLeft = (*m_wayPointPos)[m_lpIndex] - m_onWayPosition;
 	moveToLeft.Normalize();
 	//右へ移動する方向
-	Vector3 moveToRight = m_wayPointPos[m_rpIndex] - m_position;
+	Vector3 moveToRight = (*m_wayPointPos)[m_rpIndex] - m_onWayPosition;
 	moveToRight.Normalize();
 
 
@@ -148,11 +195,11 @@ void Player_kari::GetOnStage()
 {
 	Vector3 addPos = g_vec3AxisY;
 	m_finalWPRot.Apply(addPos);
-	addPos.Scale(-200.0f);
+	addPos.Scale(-150.0f);
 
 	if (m_mobius)
 	{
-		if (m_mobius->GetModel()->InIntersectLine(m_position, m_position + addPos))
+		if (m_mobius->GetModel()->InIntersectLine(m_onWayPosition - addPos, m_onWayPosition + addPos))
 		{
 			m_position = m_mobius->GetModel()->GetIntersectPos();
 			m_dbgHit = true;
@@ -164,10 +211,13 @@ void Player_kari::GetOnStage()
 	{
 		m_mobius = FindGO<Mobius>("Mobius");
 	}
-	m_dbgModel2->SetPosition(m_mobius->GetModel()->GetIntersectPos());
+	auto hitPos = m_mobius->GetModel()->GetIntersectPos();
+	m_dbgModel->SetPosition(m_onWayPosition - addPos);
+	m_dbgModel2->SetPosition(m_onWayPosition + addPos);
+	m_dbgModel3->SetPosition(hitPos);
 
-	m_dbgModel->SetPosition(m_position + addPos);
 
+	//m_modelRender->SetPosition(hitPos);
 	return;
 
 }
@@ -175,16 +225,16 @@ void Player_kari::GetOnStage()
 void Player_kari::Rotation()
 {
 	//左のウェイポイントから右のウェイポイントへのベクトル
-	Vector3 lpToRpLen = m_wayPointPos[m_rpIndex] - m_wayPointPos[m_lpIndex];
+	Vector3 lpToRpLen = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
 
 	//左のウェイポイントからプレイヤーへのベクトル
-	Vector3 lpToPlayerLen = m_position - m_wayPointPos[m_lpIndex];
+	Vector3 lpToPlayerLen = m_onWayPosition - (*m_wayPointPos)[m_lpIndex];
 
 	//補完率
 	float ComplementRate = lpToPlayerLen.Length() / lpToRpLen.Length();
 
 	//球面線形補完
-	m_finalWPRot.Slerp(ComplementRate, m_wayPointRot[m_lpIndex], m_wayPointRot[m_rpIndex]);
+	m_finalWPRot.Slerp(ComplementRate, (*m_wayPointRot)[m_lpIndex], (*m_wayPointRot)[m_rpIndex]);
 
 	//キャラクターの左右の向きに合わせて回転
 	if (m_leftOrRight == enLeft)
@@ -217,39 +267,46 @@ void Player_kari::Update()
 	//モデルの回転処理
 	Rotation();
 
-	m_position += m_moveSpeed * 1.0 / 60.0f;
-	//GetOnStage();
+	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
+	GetOnStage();
 
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 }
 
-void Player_kari::InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap)
+
+
+void Player_kari::SetWayPointPos
+(const std::size_t vecSize, std::vector<Vector3>*const posMap)
 {
 	//vectorのサイズの確保
-	m_wayPointPos.resize(vecSize);
+	//m_wayPointPos->resize(vecSize);
 	//ウェイポイントステートの最大の値を設定
 	m_maxWayPointState = vecSize - 1;
 	//m_wayPointPosにウェイポイントの「場所」を格納する
-	std::map<int, Vector3>::iterator it = posMap.begin();
-	for (int index = 0; it != posMap.end(); index++, it++)
-	{
-		m_wayPointPos[index] = it->second;
-	}
+	m_wayPointPos = posMap;
+	//std::vector<Vector3>::iterator it = posMap->begin();
+	//for (int index = 0; it != posMap->end(); index++, it++)
+	//{
+	//	m_wayPointPos[index] = &it;
+	//}
 }
-void Player_kari::InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap)
+void Player_kari::SetWayPointRot
+(const std::size_t vecSize, std::vector<Quaternion>* rotMap)
 {
 	//vectorのサイズの確保
-	m_wayPointRot.resize(vecSize);
+	//m_wayPointRot->resize(vecSize);
 	//ウェイポイントステートの最大の値を設定
 	m_maxWayPointState = vecSize - 1;
 	//m_wayPointRotにウェイポイントの「回転」を格納する
-	std::map<int, Quaternion>::iterator it = rotMap.begin();
-	for (int index = 0; it != rotMap.end(); index++, it++)
-	{
-		m_wayPointRot[index] = it->second;
-	}
+	m_wayPointRot = rotMap;
+	//std::map<int, Quaternion>::iterator it = rotMap->begin();
+	//for (int index = 0; it != rotMap->end(); index++, it++)
+	//{
+	//	m_wayPointRot[index] = &it->second;
+	//}
 }
+
 
 void Player_kari::PostRender(RenderContext& rc)
 {
@@ -271,14 +328,6 @@ void Player_kari::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
-	swprintf(text, L"[%02d]", m_rpIndex);
-	m_font.Draw(text,
-		{ 10.0f,50.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		0.0f,
-		1.0f,
-		{ 0.0f,0.0f }
-	);
 	swprintf(text, L"[%02d]", m_lpIndex);
 	m_font.Draw(text,
 		{ -110.0f, 50.0f },
@@ -287,6 +336,31 @@ void Player_kari::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
+	swprintf(text, L"[%02d]", m_rpIndex);
+	m_font.Draw(text,
+		{ 10.0f,50.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+		0.0f,
+		1.0f,
+		{ 0.0f,0.0f }
+	);
+
+		swprintf(text, L"[%02d]", m_dbgNum1);
+		m_font.Draw(text,
+			{ -110.0f, -60.0f },
+			{ 1.0f,0.0f,0.0f,1.0f },
+			0.0f,
+			1.0f,
+			{ 0.0f,0.0f }
+		);
+		swprintf(text, L"[%02d]", m_dbgNum2);
+		m_font.Draw(text,
+			{ 10.0f, -60.0f },
+			{ 1.0f,0.0f,0.0f,1.0f },
+			0.0f,
+			1.0f,
+			{ 0.0f,0.0f }
+		);
 
 	swprintf(text, L"Hit%d", m_dbgHit);
 	m_font.Draw(text,
@@ -298,14 +372,29 @@ void Player_kari::PostRender(RenderContext& rc)
 	);
 	swprintf(text, L"rate%05f", m_mobius->GetModel()->getDbg());
 	m_font.Draw(text,
-		{ 110.0f, 130.0f },
+		{ 110.0f, 120.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },
 		0.0f,
 		1.0f,
 		{ 0.0f,0.0f }
 	);
 
-
+	swprintf(text, L"左側%02.2f", m_dbgDot1);
+	m_font.Draw(text,
+		{ -310.0f, 150.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+		0.0f,
+		1.0f,
+		{ 0.0f,0.0f }
+	);
+	swprintf(text, L"右側%02.2f", m_dbgDot2);
+	m_font.Draw(text,
+		{ -310.0f, 120.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+		0.0f,
+		1.0f,
+		{ 0.0f,0.0f }
+	);
 
 	//描画終了
 	m_font.End(rc);

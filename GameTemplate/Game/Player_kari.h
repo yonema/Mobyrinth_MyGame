@@ -40,13 +40,17 @@ public://publicなメンバ関数
 	/// </summary>
 	/// <param name="vecSize">ウェイポイントのサイズ</param>
 	/// <param name="posMap">場所のマップ</param>
-	void InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap);
+	//void InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap);
 	/// <summary>
 	/// ウェイポイントの「回転」を初期化
 	/// </summary>
 	/// <param name="vecSize">ウェイポイントのサイズ</param>
 	/// <param name="rotMap">回転のマップ</param>
-	void InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap);
+	//void InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap);
+
+	void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>*const posMap);
+	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
+
 
 
 	/// <summary>
@@ -82,8 +86,15 @@ public://デバック用
 	Font m_font;
 	CModelRender* m_dbgModel = nullptr;
 	CModelRender* m_dbgModel2 = nullptr;
+	CModelRender* m_dbgModel3 = nullptr;
+
 
 	bool m_dbgHit = false;
+	int m_dbgNum1 = 0;
+	int m_dbgNum2 = 0;
+	float m_dbgDot1 = 0.0f;
+	float m_dbgDot2 = 0.0f;
+
 
 private:	//データメンバ
 	/// <summary>
@@ -99,6 +110,7 @@ private:	//データメンバ
 
 	Vector3 m_moveSpeed = g_vec3Zero;		//キャラクターの移動スピード
 	Vector3 m_position = g_vec3Zero;		//キャラクターの座標
+	Vector3 m_onWayPosition = g_vec3Zero;		//道の上の座標
 	Quaternion m_rotation = g_quatIdentity;	//キャラクターの回転
 	enum EnLeftOrRight
 	{
@@ -114,8 +126,10 @@ private:	//データメンバ
 	/// <summary>
 	/// ウェイポイント関連のデータメンバ
 	/// </summary>
-	std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
-	std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
+	//std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
+	//std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
+	std::vector<Vector3>* m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
+	std::vector<Quaternion>* m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
 	int m_rpIndex = 0;				//右のウェイポイントのインデックス
 	int m_lpIndex = m_rpIndex + 1;	//左のウェイポイントのインデックス
 	int m_wayPointState = 0;		//自身がどのウェイポイントにいるか表すステート
