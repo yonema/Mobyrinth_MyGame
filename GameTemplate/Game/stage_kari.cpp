@@ -4,8 +4,6 @@
 #include "background_kari.h"
 #include "DirectionLight.h"
 class GameCamera;
-//•Ä’n^‰›‚Å‚â‚ñ‚·B
-
 
 bool stage_kari::Start()
 {
