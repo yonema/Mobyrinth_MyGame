@@ -18,7 +18,52 @@ PhysicsWorld::CreateInstance();
 CLightManager::CreateInstance();
 →CLightManagerクラスのオブジェクトを動的確保する。
 （ライトの処理などをするクラスっぽい）
+NewGO<stage_kari>(0, "stage_kari");
+→stage_kariクラスのオブジェクトを作成
 
+//////////////////////////////////////
+// 初期化を行うコードを書くのはここまで！！！
+//////////////////////////////////////
+auto& renderContext = g_graphicsEngine->GetRenderContext();
+→グラフィックエンジンのレンダリングコンテキストを取得してるっぽい
+
+// ここからゲームループ。
+while (DispatchWindowMessage())
+→ウィンドウメッセージをディスパッチ(falseが帰ってきたら終了)
+{
+	//レンダリング開始。
+	g_engine->BeginFrame();
+	→レンダリングの処理を行う。
+
+
+	//////////////////////////////////////
+	//ここから絵を描くコードを記述する。
+	//////////////////////////////////////
+	
+	GameObjectManager::GetInstance()->ExecuteUpdate();
+	GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+	CLightManager::GetInstance()->ExecuteUpdate();
+	//////////////////////////////////////
+	//絵を描くコードを書くのはここまで！！！
+	//////////////////////////////////////
+	→表示処理関連のことをここでしているっぽい
+
+	g_engine->EndFrame();
+	→ここでレンダリングの最終処理をしているっぽい
+	（画面に表示する処理はここっぽい）
+}
+
+///ここから下は放置でよいと思う。
+
+CLightManager::DeleteInstance();
+//ゲームオブジェクトマネージャーを削除。
+GameObjectManager::DeleteInstance();
+return 0;
+
+
+●処理の追加について
+オブジェクトごとの処理を追加する際については、
+tkEngineと同じ作り方で大丈夫だと思う。(クラスを作成する感じ)
 
 
 
