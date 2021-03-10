@@ -112,6 +112,8 @@ private:	//データメンバ
 	Vector3 m_position = g_vec3Zero;		//キャラクターの座標
 	Vector3 m_onWayPosition = g_vec3Zero;		//道の上の座標
 	Quaternion m_rotation = g_quatIdentity;	//キャラクターの回転
+
+
 	enum EnLeftOrRight
 	{
 		enLeft,		//左
