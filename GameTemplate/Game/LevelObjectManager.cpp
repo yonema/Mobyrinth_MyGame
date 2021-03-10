@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "LevelObjectManager.h"
+#include "LevelObjectBase.h"
+
+
 CLevelObjectManager* CLevelObjectManager::m_instance = nullptr;
 
 CLevelObjectManager::CLevelObjectManager()
@@ -53,5 +56,23 @@ void CLevelObjectManager::ExecuteUpdate()
 	else
 	{
 		m_player = FindGO<Player_kari>("player");
+	}
+}
+
+void CLevelObjectManager::AddObject(CLevelObjectBase* object)
+{
+	m_levelObjects.push_back(object);
+}
+void CLevelObjectManager::RemoveObject(CLevelObjectBase* object)
+{
+	//àÍìxÇ…àÍå¬ÇµÇ©è¡ÇπÇ»Ç¢ÇÊ
+	std::vector<CLevelObjectBase*>::iterator itr;
+	for (itr = m_levelObjects.begin(); itr != m_levelObjects.end(); itr++)
+	{
+		if ((*itr)->GetIsDead())
+		{
+			m_levelObjects.erase(itr);
+			break;
+		}
 	}
 }
