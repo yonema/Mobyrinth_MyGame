@@ -1,15 +1,27 @@
-●クラス
-・Mobius
+★クラス
+●Mobius
 メビウス（ステージ）のモデル表示処理などをするクラス。
 メビウス（ステージ）に関する処理はここに書く。
-・Player_kari
+・void SetPosition(const Vector3& pos)
+引数で渡された値をm_positionに代入する。
+
+・void SetRotation(const Quaternion& rot)
+引数で渡された値をm_rotationに代入する。
+
+・Model* GetModel()
+メビウスのモデル情報を返り値に持つ関数？
+
+●Player_kari
 プレイヤーのモデル表示や移動処理などを行うクラス。
 プレイヤーに関する処理はここに書く。
-・stage_kari
+・void Update() override final;
+毎フレーム処理を行う関数
+
+●stage_kari
 表示処理をしているクラス？
 詳しくは分からない。
-・CMapChip
+●CMapChip
 モデルデータの情報保持などをしていると思われるクラス。
-・CModelRender
+●CModelRender
 モデルの表示処理のあれこれをするクラス。
 表示処理をする際、このクラスにお世話になると思われる。
