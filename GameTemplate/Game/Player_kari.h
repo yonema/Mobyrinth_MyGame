@@ -47,11 +47,11 @@ public://publicなメンバ関数
 	/// <param name="vecSize">ウェイポイントのサイズ</param>
 	/// <param name="rotMap">回転のマップ</param>
 	//void InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap);
-
+	
 	void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>*const posMap);
 	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
 
-
+	
 
 	/// <summary>
 	/// 補完済みの最終的なウェイポイントの回転を取得
@@ -73,7 +73,7 @@ private://privateなメンバ関数
 	/// </summary>
 	void Move();
 	/// <summary>
-	/// ステージに乗る
+	/// ステージに乗る処理
 	/// </summary>
 	void GetOnStage();
 	/// <summary>

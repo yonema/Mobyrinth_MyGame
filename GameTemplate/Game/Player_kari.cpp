@@ -18,7 +18,7 @@ bool Player_kari::Start()
 	m_onWayPosition = m_position;
 	m_mobius = FindGO<Mobius>("Mobius");
 
-
+	//デバッグ用
 	m_dbgModel = NewGO<CModelRender>(0);
 	m_dbgModel->Init("Assets/modelData/yuka.tkm");
 	m_dbgModel2 = NewGO<CModelRender>(0);
@@ -61,6 +61,12 @@ void Player_kari::CheckWayPoint()
 
 	//2.m_wayPointStateの更新。
 
+	/// <summary>
+	/// LpToRpVec: プレイヤーの左側と右側のウェイポイントの正規化ベクトル
+	/// LpToPlayerVec: プレイヤーの位置と左側のウェイポイントの正規化ベクトル
+	/// RpToPlayerVec: プレイヤーの位置と右側のウェイポイントの正規化ベクトル
+	/// (コメント: kbc23)
+	/// </summary>
 	Vector3 LpToRpVec = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
 	LpToRpVec.Normalize();
 	Vector3 LpToPlayerVec = m_position - (*m_wayPointPos)[m_lpIndex];
@@ -68,6 +74,7 @@ void Player_kari::CheckWayPoint()
 	Vector3 RpToPlayerVec = m_position - (*m_wayPointPos)[m_rpIndex];
 	RpToPlayerVec.Normalize();
 
+	
 	float LpDotPlayer = Dot(LpToRpVec, LpToPlayerVec);
 	float RpDotPlayer = Dot(LpToRpVec, RpToPlayerVec);
 	m_dbgDot1 = LpDotPlayer;
@@ -119,6 +126,11 @@ void Player_kari::Move()
 
 	//1.左右への移動する方向を計算する。
 
+	/// <summary>
+	/// moveToLeft: プレイヤーのステージ上の位置と左側のウェイポイントの正規化ベクトル
+	/// moveToRight: プレイヤーのステージ上の位置と右側のウェイポイントの正規化ベクトル
+	/// (コメント: kbc23)
+	/// </summary>
 	//左へ移動する方向
 	Vector3 moveToLeft = (*m_wayPointPos)[m_lpIndex] - m_onWayPosition;
 	moveToLeft.Normalize();
@@ -133,7 +145,7 @@ void Player_kari::Move()
 	//重力や、加速度、抵抗を実装するときは別のやり方で
 	m_moveSpeed = g_vec3Zero;
 
-	//移動する長さ
+	//移動する長さ (移動スピード)
 	const float moveLen = 1000.0f;
 
 	if (m_padLStickXF < 0.0f)
@@ -173,7 +185,9 @@ void Player_kari::GetOnStage()
 	{
 		m_mobius = FindGO<Mobius>("Mobius");
 	}
+
 	auto hitPos = m_mobius->GetModel()->GetIntersectPos();
+	//デバッグ用
 	m_dbgModel->SetPosition(m_onWayPosition - addPos);
 	m_dbgModel2->SetPosition(m_onWayPosition + addPos);
 	m_dbgModel3->SetPosition(hitPos);
@@ -229,14 +243,17 @@ void Player_kari::Update()
 	//モデルの回転処理
 	Rotation();
 
-	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
+	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f; //移動速度の処理だと思われる。(コメント: kbc23)
+	//ステージに乗る処理
 	GetOnStage();
 
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 }
 
-
+////////////////////////////////////////////////////////////
+//ウェイポイントの初期設定をPlayer_kariクラスに渡す処理
+////////////////////////////////////////////////////////////
 
 void Player_kari::SetWayPointPos
 (const std::size_t vecSize, std::vector<Vector3>*const posMap)
@@ -269,6 +286,9 @@ void Player_kari::SetWayPointRot
 	//}
 }
 
+////////////////////////////////////////////////////////////
+//デバッグ用
+////////////////////////////////////////////////////////////
 
 void Player_kari::PostRender(RenderContext& rc)
 {
