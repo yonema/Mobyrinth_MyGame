@@ -63,9 +63,9 @@ void Player_kari::CheckWayPoint()
 
 	Vector3 LpToRpVec = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
 	LpToRpVec.Normalize();
-	Vector3 LpToPlayerVec = m_onWayPosition - (*m_wayPointPos)[m_lpIndex];
+	Vector3 LpToPlayerVec = m_position - (*m_wayPointPos)[m_lpIndex];
 	LpToPlayerVec.Normalize();
-	Vector3 RpToPlayerVec = m_onWayPosition - (*m_wayPointPos)[m_rpIndex];
+	Vector3 RpToPlayerVec = m_position - (*m_wayPointPos)[m_rpIndex];
 	RpToPlayerVec.Normalize();
 
 	float LpDotPlayer = Dot(LpToRpVec, LpToPlayerVec);
@@ -76,12 +76,12 @@ void Player_kari::CheckWayPoint()
 
 
 	//左右のウェイポイントとの距離を調べる
-
-	if (LpDotPlayer > 0.0f && RpDotPlayer < 0.0f)
+	float f = 0.35f;
+	if (LpDotPlayer > f && RpDotPlayer < -f)
 	{
 		//今のウェイポイントの間にいる
 	}
-	else if (LpDotPlayer <= 0.0f && m_padLStickXF < 0.0f)
+	else if (LpDotPlayer <= f && m_padLStickXF < 0.0f)
 	{
 		//今のウェイポイントの間から、左側に出ていった
 		m_wayPointState += 1;
@@ -92,7 +92,7 @@ void Player_kari::CheckWayPoint()
 			m_wayPointState = 0;
 		}
 	}
-	else if (RpDotPlayer >= 0.0f && m_padLStickXF > 0.0f)
+	else if (RpDotPlayer >= -f && m_padLStickXF > 0.0f)
 	{
 		//今のウェイポイントの間から、右側から出ていった
 		//m_wayPointStateを減算して右に進める。
@@ -105,45 +105,7 @@ void Player_kari::CheckWayPoint()
 		}
 	}
 
-	////左右のウェイポイントとの距離で更新する。
 
-	////ウェイポイントとの当たり判定の距離
-	//const float hitLen = 5.0f;
-
-	////左のウェイポイントへのベクトル
-	//Vector3 toLpVec = (*m_wayPointPos)[m_lpIndex] - m_onWayPosition;
-
-	////右のウェイポイントへのベクトル
-	//Vector3 toRpVec = (*m_wayPointPos)[m_rpIndex] - m_onWayPosition;
-
-	////左右のウェイポイントとの距離を調べる
-	//if (toLpVec.Length() <= hitLen && m_padLStickXF < 0.0f)
-	//{
-	//	//左のウェイポイントとの距離が当たり判定以下、かつ、
-	//	//左に移動の入力があったら、
-	//	//m_wayPointStateを加算して左に進める。
-	//	m_wayPointState += 1;
-	//	if (m_wayPointState > m_maxWayPointState)
-	//	{
-	//		//m_wayPointStateがMAXより大きかったら
-	//		//一周したということだから、スタートの0にする
-	//		m_wayPointState = 0;
-	//	}
-
-	//}
-	//else if (toRpVec.Length() <= hitLen && m_padLStickXF > 0.0f)
-	//{
-	//	//右のウェイポイントとの距離が当たり判定以下、かつ、
-	//	//右に移動の入力があったら、
-	//	//m_wayPointStateを減算して右に進める。
-	//	m_wayPointState -= 1;
-	//	if (m_wayPointState < 0)
-	//	{
-	//		//m_wayPointStateが0より小さかったら
-	//		//一周したということだから、MAXの値にする
-	//		m_wayPointState = m_maxWayPointState;
-	//	}
-	//}
 
 	return;
 
@@ -172,7 +134,7 @@ void Player_kari::Move()
 	m_moveSpeed = g_vec3Zero;
 
 	//移動する長さ
-	const float moveLen = 500.0f;
+	const float moveLen = 1000.0f;
 
 	if (m_padLStickXF < 0.0f)
 	{
