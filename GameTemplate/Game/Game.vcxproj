@@ -292,6 +292,7 @@
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelObjectBase.cpp" />
+    <ClCompile Include="LevelObjectManager.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LOmizu_kori.cpp" />
     <ClCompile Include="main.cpp" />
@@ -372,6 +373,7 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelObjectBase.h" />
+    <ClInclude Include="LevelObjectManager.h" />
     <ClInclude Include="LightData.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LOmizu_kori.h" />

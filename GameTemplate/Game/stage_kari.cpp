@@ -42,7 +42,9 @@ bool stage_kari::Start()
 				//model->SetRotation(objData.rotation);
 				Mobius* mobius;
 				mobius = NewGO<Mobius>(0, "Mobius");
-				mobius->SetPosition(objData.position);
+				Vector3 pos = objData.position;
+				//pos.y += 1500.0f;
+				mobius->SetPosition(pos);
 				mobius->SetRotation(objData.rotation);
 				return true;
 			}
@@ -93,9 +95,14 @@ bool stage_kari::Start()
 		
 		});
 
+	CLevelObjectManager::GetInstance()->InitWayPointPos(vecSize, posMap);
+	CLevelObjectManager::GetInstance()->InitWayPointRot(vecSize, rotMap);
+
 	//ウェイポイントをプレイヤーに設定する
-	pPlayer->InitWayPointPos(vecSize, posMap);
-	pPlayer->InitWayPointRot(vecSize, rotMap);
+	pPlayer->SetWayPointPos
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
+	pPlayer->SetWayPointRot
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
 
 	NewGO<GameCamera>(0);
 
