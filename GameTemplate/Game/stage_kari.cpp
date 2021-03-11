@@ -53,9 +53,6 @@ bool stage_kari::Start()
 				LOmizu_kori* lObject;
 				lObject = NewGO<LOmizu_kori>(0);
 				lObject->SetPosition(objData.position);
-				Quaternion qRot;
-				qRot.SetRotationDegX(90.0f);
-				lObject->SetRotation(qRot);
 				lObject->SetFrontOrBack(LOmizu_kori::enFront);
 				return true;
 			}
@@ -64,9 +61,6 @@ bool stage_kari::Start()
 				LOmizu_kori* lObject;
 				lObject = NewGO<LOmizu_kori>(0);
 				lObject->SetPosition(objData.position);
-				Quaternion qRot;
-				qRot.SetRotationDegX(90.0f);
-				lObject->SetRotation(qRot);
 				lObject->SetFrontOrBack(LOmizu_kori::enBack);
 				return true;
 			}

@@ -30,7 +30,7 @@ public://publicなメンバ関数
 	/// プレイヤーの座標を取得
 	/// </summary>
 	/// <returns>場所</returns>
-	const Vector3& GetPosition()const
+	const Vector3 GetPosition()const
 	{
 		return m_position;
 	}
@@ -51,8 +51,6 @@ public://publicなメンバ関数
 	void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>*const posMap);
 	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
 
-	
-
 	/// <summary>
 	/// 補完済みの最終的なウェイポイントの回転を取得
 	/// </summary>
@@ -60,6 +58,15 @@ public://publicなメンバ関数
 	const Quaternion GetFinalWPRot()const
 	{
 		return m_finalWPRot;
+	}
+
+	void SetHoldObject(const bool holdFlag)
+	{
+		m_holdObject = holdFlag;
+	}
+	const bool GetHoldObject()const
+	{
+		return m_holdObject;
 	}
 
 private://privateなメンバ関数
@@ -112,6 +119,7 @@ private:	//データメンバ
 	Vector3 m_position = g_vec3Zero;		//キャラクターの座標
 	Vector3 m_onWayPosition = g_vec3Zero;		//道の上の座標
 	Quaternion m_rotation = g_quatIdentity;	//キャラクターの回転
+	bool m_holdObject = false;
 
 
 	enum EnLeftOrRight
