@@ -7,7 +7,7 @@
 #include "ROmizu_kori.h"
 #include "LevelObjectManager.h"
 #include "OObigFire.h"
-
+#include "RObird_fish.h"
 class CLevel;
 class Player_kari;
 class background_kari;

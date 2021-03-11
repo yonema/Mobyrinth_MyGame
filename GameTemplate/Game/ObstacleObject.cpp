@@ -7,7 +7,7 @@ bool CObstacleObject::Init(const char* filePath, int objectType)
 	m_modelRender->Init(filePath);
 	SetObjectType(objectType);
 
-	return StartSub();
+	return true;
 }
 
 CObstacleObject::~CObstacleObject()
@@ -27,6 +27,9 @@ bool CObstacleObject::PureVirtualStart()
 
 void CObstacleObject::Update()
 {
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+	m_modelRender->SetScale(m_scale);
 
 	return;
 }

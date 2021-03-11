@@ -16,8 +16,16 @@ public:
 	bool PureVirtualStart()override final;
 	virtual bool StartSub() { return true; };
 	void Update()override final;
+	virtual void UpdateSub() {};
 	virtual ~CReversibleObject();
+	void Reverse();
 	void SetFrontOrBack(const bool frontOrBack);
+	virtual void SetFrontOrBackSub() {};
+	const bool GetFrontOrBack()
+	{
+		return m_frontOrBack;
+	}
+	void SetBothModelActiveFlag(const bool activeFlag);
 
 public:
 	enum EnFrontAndBack
@@ -28,6 +36,7 @@ public:
 	};
 private:
 	bool m_frontOrBack = enFront;
+	bool m_bothModelactiveFlag = true;
 	CModelRender* m_modelRender[enFrontAndBackNum] = { nullptr };
 	int m_reversibleType[enFrontAndBackNum] = { enEnpty };
 	enum EnObjectState

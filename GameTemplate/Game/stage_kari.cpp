@@ -24,7 +24,7 @@ bool stage_kari::Start()
 
 
 	//ÉåÉxÉãÇÃì«Ç›çûÇ›
-	m_level.Init("Assets/level/stage_kari01.tkl", [&](LevelObjectData& objData)
+	m_level.Init("Assets/level/stage_kari02.tkl", [&](LevelObjectData& objData)
 		{
 			if (objData.EqualObjectName(L"player_kari") == true)
 			{
@@ -61,7 +61,23 @@ bool stage_kari::Start()
 				ROmizu_kori* rObject;
 				rObject = NewGO<ROmizu_kori>(0);
 				rObject->SetPosition(objData.position);
-				rObject->SetFrontOrBack(ROmizu_kori::enBack);
+				rObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"bird") == true)
+			{
+				RObird_fish* lObject;
+				lObject = NewGO<RObird_fish>(0);
+				lObject->SetPosition(objData.position);
+				lObject->SetFrontOrBack(CReversibleObject::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"fish") == true)
+			{
+				RObird_fish* lObject;
+				lObject = NewGO<RObird_fish>(0);
+				lObject->SetPosition(objData.position);
+				lObject->SetFrontOrBack(CReversibleObject::enBack);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"bigFire") == true)

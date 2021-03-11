@@ -121,7 +121,7 @@ public:
 	}
 	void StartWrapper()
 	{
-		if (m_isActive && !m_isStart && !m_isDead ) {
+		if (/*m_isActive && */!m_isStart && !m_isDead ) {
 			if (Start()) {
 				//‰Šú‰»ˆ—Š®—¹B
 				m_isStart = true;

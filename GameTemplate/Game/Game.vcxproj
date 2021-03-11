@@ -297,6 +297,7 @@
     <ClCompile Include="LevelObjectManager.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="ObstacleObject.cpp" />
+    <ClCompile Include="RObird_fish.cpp" />
     <ClCompile Include="ROmizu_kori.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChip.cpp" />
@@ -382,6 +383,7 @@
     <ClInclude Include="LightData.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="ObstacleObject.h" />
+    <ClInclude Include="RObird_fish.h" />
     <ClInclude Include="ROmizu_kori.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="Mobius.h" />

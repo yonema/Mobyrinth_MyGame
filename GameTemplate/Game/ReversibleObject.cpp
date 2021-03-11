@@ -15,27 +15,55 @@ bool CReversibleObject::Init
 	m_modelRender[enBack]->Init(filePath_back);
 	m_reversibleType[enFront] = type_front;
 	m_reversibleType[enBack] = type_back;
-	SetObjectType(m_reversibleType[enFront]);
+	SetObjectType(m_reversibleType[m_frontOrBack]);
+	SetFrontOrBack(m_frontOrBack);
 	return true;
 }
 bool CReversibleObject::PureVirtualStart()
 {
-	
-	SetFrontOrBack(m_frontOrBack);
 	CheckWayPoint();
 
 	return StartSub();
 }
 
+void CReversibleObject::Reverse()
+{
+	SetFrontOrBack(!m_frontOrBack);
+}
 void CReversibleObject::SetFrontOrBack(bool frontOrBack)
 {
 	m_frontOrBack = frontOrBack;
-	SetObjectType(m_reversibleType[m_frontOrBack]);
-	if (m_modelRender[m_frontOrBack])
-		m_modelRender[m_frontOrBack]->Activate();
-	if (m_modelRender[!m_frontOrBack])
-		m_modelRender[!m_frontOrBack]->Deactivate();
+	if (m_bothModelactiveFlag)
+	{
+		SetObjectType(m_reversibleType[m_frontOrBack]);
+		if (m_modelRender[m_frontOrBack])
+			m_modelRender[m_frontOrBack]->Activate();
+		if (m_modelRender[!m_frontOrBack])
+			m_modelRender[!m_frontOrBack]->Deactivate();
+	}
+	else
+	{
+		SetFrontOrBackSub();
+	}
+}
+void CReversibleObject::SetBothModelActiveFlag(const bool activeFlag)
+{
+	m_bothModelactiveFlag = activeFlag;
 
+
+	if (m_bothModelactiveFlag)
+	{
+		if (m_modelRender[m_frontOrBack])
+			m_modelRender[m_frontOrBack]->Activate();
+		if (m_modelRender[!m_frontOrBack])
+			m_modelRender[!m_frontOrBack]->Deactivate();
+	}
+	else
+	{
+		m_modelRender[enFront]->Deactivate();
+		m_modelRender[enBack]->Deactivate();
+	}
+	
 }
 
 void CReversibleObject::Update()
@@ -60,9 +88,10 @@ void CReversibleObject::Update()
 	{
 		m_modelRender[i]->SetPosition(m_position);
 		m_modelRender[i]->SetRotation(m_rotation);
+		m_modelRender[i]->SetScale(m_scale);
 	}
 
-
+	UpdateSub();
 
 	return;
 }
@@ -93,7 +122,7 @@ void CReversibleObject::CheckPlayer()
 	Vector3 toPlayer = m_pPlayer->GetPosition() - m_position;
 
 
-	const float hitLen = 150.0f;
+	const float hitLen = 100.0f;
 	if (toPlayer.Length() <= hitLen)
 	{
 		if (g_pad[0]->IsTrigger(enButtonA))
@@ -129,7 +158,7 @@ void CReversibleObject::Thrown()
 	Vector3 dir = g_vec3Up;
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
 	qRot.Apply(dir);
-	dir.Scale(-9.0f);
+	dir.Scale(-7.0f);
 	m_position += dir;
 	m_rotation.SetRotationDegX(180.0f * m_throwCounter / 24);
 	m_rotation.Multiply(qRot);
@@ -144,7 +173,7 @@ void CReversibleObject::Thrown()
 	}
 	else if (m_throwCounter == 12)
 	{
-		SetFrontOrBack(!m_frontOrBack);
+		Reverse();
 	}
 }
 

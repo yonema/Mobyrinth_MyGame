@@ -11,17 +11,35 @@ bool ROmizu_kori::StartSub()
 
 void ROmizu_kori::QuerySub()
 {
-	QueryLOs<ROmizu_kori>(enIce, [&](ROmizu_kori* mizu_kori) -> bool
-		{
-			if (mizu_kori == this)
-				return true;
+	const float hitLen = 100.0f;
 
-			Vector3 diff = m_position - mizu_kori->GetPosition();
-			if (diff.Length() <= 100.0f)
+	if (GetObjectType() == enWater)
+	{
+		QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
 			{
-				DeleteGO(mizu_kori);
+				Vector3 diff = m_position - bigFire->GetPosition();
+				if (diff.Length() <= hitLen)
+				{
+					bigFire->Damage();
+					DeleteGO(this);
+				}
+				return true;
 			}
-			return true;
-		}
 		);
+	}
+	else if (GetObjectType() == enIce)
+	{
+		QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
+			{
+
+				Vector3 diff = m_position - bigFire->GetPosition();
+				if (diff.Length() <= hitLen)
+				{
+					bigFire->Damage();
+					DeleteGO(this);
+				}
+				return true;
+			}
+		);
+	}
 }

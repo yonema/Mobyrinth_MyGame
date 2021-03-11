@@ -29,6 +29,10 @@ public:
 	{
 		return m_objectType;
 	}
+	void SetScale(const Vector3& scale)
+	{
+		m_scale = scale;
+	}
 	const bool GetIsDead()const
 	{
 		return m_isDead;
@@ -47,6 +51,10 @@ public:
 		//反転オブジェクト
 		enWater,
 		enIce,
+		enBird,
+		enFish,
+		enGrilledChicken,
+		enGrilledFish,
 
 		//障害オブジェクト
 		enBigFire,
@@ -58,6 +66,7 @@ private:
 protected:
 	Vector3 m_position = g_vec3Zero;
 	Quaternion m_rotation = g_quatIdentity;
+	Vector3 m_scale = g_vec3One;
 	Player_kari* m_pPlayer = nullptr;
 
 };
