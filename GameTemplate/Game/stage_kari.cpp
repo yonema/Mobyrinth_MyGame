@@ -50,18 +50,25 @@ bool stage_kari::Start()
 			}
 			else if (objData.EqualObjectName(L"mizu") == true)
 			{
-				LOmizu_kori* lObject;
-				lObject = NewGO<LOmizu_kori>(0);
+				ROmizu_kori* lObject;
+				lObject = NewGO<ROmizu_kori>(0);
 				lObject->SetPosition(objData.position);
-				lObject->SetFrontOrBack(LOmizu_kori::enFront);
+				lObject->SetFrontOrBack(ROmizu_kori::enFront);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"koori") == true)
 			{
-				LOmizu_kori* lObject;
-				lObject = NewGO<LOmizu_kori>(0);
-				lObject->SetPosition(objData.position);
-				lObject->SetFrontOrBack(LOmizu_kori::enBack);
+				ROmizu_kori* rObject;
+				rObject = NewGO<ROmizu_kori>(0);
+				rObject->SetPosition(objData.position);
+				rObject->SetFrontOrBack(ROmizu_kori::enBack);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"bigFire") == true)
+			{
+				OObigFire* OObject;
+				OObject = NewGO<OObigFire>(0);
+				OObject->SetPosition(objData.position);
 				return true;
 			}
 			//オブジェクトネームに"waypoint"があったら

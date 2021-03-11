@@ -288,13 +288,16 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="OObigFire.cpp" />
+    <ClCompile Include="ReversibleObject.cpp" />
     <ClCompile Include="DirectionLight.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelObjectBase.cpp" />
     <ClCompile Include="LevelObjectManager.cpp" />
     <ClCompile Include="LightManager.cpp" />
-    <ClCompile Include="LOmizu_kori.cpp" />
+    <ClCompile Include="ObstacleObject.cpp" />
+    <ClCompile Include="ROmizu_kori.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="Mobius.cpp" />
@@ -369,6 +372,8 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="OObigFire.h" />
+    <ClInclude Include="ReversibleObject.h" />
     <ClInclude Include="DirectionLight.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Level.h" />
@@ -376,7 +381,8 @@
     <ClInclude Include="LevelObjectManager.h" />
     <ClInclude Include="LightData.h" />
     <ClInclude Include="LightManager.h" />
-    <ClInclude Include="LOmizu_kori.h" />
+    <ClInclude Include="ObstacleObject.h" />
+    <ClInclude Include="ROmizu_kori.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="Mobius.h" />
     <ClInclude Include="ModelRender.h" />

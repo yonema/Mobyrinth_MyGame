@@ -1,7 +1,7 @@
 #pragma once
 #include "Player_kari.h"
 
-class CLevelObjectBase;
+class ILevelObjectBase;
 
 class CLevelObjectManager
 {
@@ -39,6 +39,7 @@ public:
 		return m_instance;
 	}
 
+
 public:
 	/// <summary>
 	/// ゲームループで読んでほしい
@@ -48,10 +49,6 @@ public:
 
 	Player_kari* GetPlayer()const
 	{
-		int a = 1;
-
-		int b = 1;
-
 		return m_player;
 	}
 
@@ -77,15 +74,38 @@ public:
 		return &m_wayPointRot;
 	}
 
-	void AddObject(CLevelObjectBase* object);
-	void RemoveObject(CLevelObjectBase* object);
+	void AddObject(ILevelObjectBase* object);
+	void RemoveObject(ILevelObjectBase* object);
+
+
+	template<class T>
+	void QueryLevelObjects(const int objectType, std::function<bool(T* lo)> func)
+	{
+		int a = 1;
+		for (auto lo : m_levelObjects) {
+				if (lo->GetObjectType() == objectType) {
+					//見つけた。
+					T* p = dynamic_cast<T*>(lo);
+					if (func(p) == false) {
+						//クエリ中断。
+						return;
+					}
+				}
+		}
+	}
 private:
 	Player_kari* m_player = nullptr;
 	std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
 	std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
 	int m_vecSize = 0;		//ウェイポイントステートの最大の値
 
-	std::vector<CLevelObjectBase*> m_levelObjects;
+	std::vector<ILevelObjectBase*> m_levelObjects;
 
 };
 
+
+template<class T>
+static inline void QueryLOs(const int objectType, std::function<bool(T* lo)> func)
+{
+	return CLevelObjectManager::GetInstance()->QueryLevelObjects(objectType, func);
+}

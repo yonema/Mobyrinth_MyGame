@@ -59,14 +59,14 @@ void CLevelObjectManager::ExecuteUpdate()
 	}
 }
 
-void CLevelObjectManager::AddObject(CLevelObjectBase* object)
+void CLevelObjectManager::AddObject(ILevelObjectBase* object)
 {
 	m_levelObjects.push_back(object);
 }
-void CLevelObjectManager::RemoveObject(CLevelObjectBase* object)
+void CLevelObjectManager::RemoveObject(ILevelObjectBase* object)
 {
 	//àÍìxÇ…àÍå¬ÇµÇ©è¡ÇπÇ»Ç¢ÇÊ
-	std::vector<CLevelObjectBase*>::iterator itr;
+	std::vector<ILevelObjectBase*>::iterator itr;
 	for (itr = m_levelObjects.begin(); itr != m_levelObjects.end(); itr++)
 	{
 		if ((*itr)->GetIsDead())

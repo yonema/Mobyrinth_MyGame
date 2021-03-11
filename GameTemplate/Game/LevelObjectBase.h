@@ -3,21 +3,12 @@
 #include "LevelObjectManager.h"
 #include "Player_kari.h"
 
-class CLevelObjectBase : public IGameObject
+class ILevelObjectBase : public IGameObject
 {
-protected:
-	bool Init
-	(const char* filePath_front, const int type_front,
-		const char* filePath_back, const int type_back);
-	void CheckPlayer();
-	void HeldPlayer();
-	void Thrown();
 public:
 	bool Start()override final;
-	virtual bool StartSub() = 0 {};
-	void Update()override final;
-	virtual ~CLevelObjectBase();
-	void SetFrontOrBack(const bool frontOrBack);
+	virtual bool PureVirtualStart() = 0 {};
+	virtual ~ILevelObjectBase();
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
@@ -26,44 +17,48 @@ public:
 	{
 		m_rotation = rot;
 	}
-	void CheckWayPoint();
+	void SetObjectType(int objectType)
+	{
+		m_objectType = objectType;
+	}
+	const Vector3 GetPosition()const
+	{
+		return m_position;
+	}
+	const int GetObjectType()const
+	{
+		return m_objectType;
+	}
 	const bool GetIsDead()const
 	{
 		return m_isDead;
 	};
-	
-
-	
-public:
-	enum EnFrontAndBack
+	void Delete()
 	{
-		enFront,
-		enBack,
-		enFrontAndBackNum,
-	};
+		m_isDead = true;
+	}
+protected:
+	void CheckWayPoint();
+public:
 	enum EnObjectType
 	{
 		enEnpty,
+
+		//反転オブジェクト
 		enWater,
 		enIce,
-		enObjectTypeNum,
+
+		//障害オブジェクト
+		enBigFire,
+
 	};
 private:
-	bool m_frontOrBack = enFront;
-	CModelRender* m_modelRender[enFrontAndBackNum] = { nullptr };
-	Vector3 m_position = g_vec3Zero ;
-	Quaternion m_rotation = g_quatIdentity;
-	int m_objectType[enFrontAndBackNum] = { enEnpty };
-	Player_kari* m_pPlayer = nullptr;
-	enum EnObjectState
-	{
-		enCheckPlayer,
-		enHeldPlayer,
-		enThrown,
-	};
-	int m_objectState = enCheckPlayer;
-	int m_throwCounter = 0;
-
+	int m_objectType = enEnpty;
 	bool m_isDead = false;
+protected:
+	Vector3 m_position = g_vec3Zero;
+	Quaternion m_rotation = g_quatIdentity;
+	Player_kari* m_pPlayer = nullptr;
+
 };
 
