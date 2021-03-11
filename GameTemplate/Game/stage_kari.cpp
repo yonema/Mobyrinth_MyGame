@@ -35,11 +35,6 @@ bool stage_kari::Start()
 			}
 			else if (objData.EqualObjectName(L"Mobius") == true)
 			{
-				//CModelRender* model;
-				//model = NewGO<CModelRender>(0);
-				//model->Init("Assets/modelData/Mobius.tkm");
-				//model->SetPosition(objData.position);
-				//model->SetRotation(objData.rotation);
 				Mobius* mobius;
 				mobius = NewGO<Mobius>(0, "Mobius");
 				Vector3 pos = objData.position;
@@ -87,6 +82,37 @@ bool stage_kari::Start()
 				OObject->SetPosition(objData.position);
 				return true;
 			}
+			else if (objData.EqualObjectName(L"wall") == true)
+			{
+				OOwall* OObject;
+				OObject = NewGO<OOwall>(0);
+				OObject->SetPosition(objData.position);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"goal") == true)
+			{
+				OOgoal* OObject;
+				OObject = NewGO<OOgoal>(0);
+				OObject->SetPosition(objData.position);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"kadou") == true)
+			{
+				ROrunning_stop* lObject;
+				lObject = NewGO<ROrunning_stop>(0);
+				lObject->SetPosition(objData.position);
+				lObject->SetFrontOrBack(CReversibleObject::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"teishi") == true)
+			{
+				ROrunning_stop* lObject;
+				lObject = NewGO<ROrunning_stop>(0);
+				lObject->SetPosition(objData.position);
+				lObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+
 			//オブジェクトネームに"waypoint"があったら
 			else if (std::wcsstr(objData.name, L"waypoint") != NULL)
 			{

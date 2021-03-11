@@ -289,6 +289,8 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="OObigFire.cpp" />
+    <ClCompile Include="OOgoal.cpp" />
+    <ClCompile Include="OOwall.cpp" />
     <ClCompile Include="ReversibleObject.cpp" />
     <ClCompile Include="DirectionLight.cpp" />
     <ClCompile Include="GameCamera.cpp" />
@@ -304,6 +306,7 @@
     <ClCompile Include="Mobius.cpp" />
     <ClCompile Include="ModelRender.cpp" />
     <ClCompile Include="Player_kari.cpp" />
+    <ClCompile Include="ROrunning_stop.cpp" />
     <ClCompile Include="stage_kari.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -374,6 +377,8 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="OObigFire.h" />
+    <ClInclude Include="OOgoal.h" />
+    <ClInclude Include="OOwall.h" />
     <ClInclude Include="ReversibleObject.h" />
     <ClInclude Include="DirectionLight.h" />
     <ClInclude Include="GameCamera.h" />
@@ -389,6 +394,7 @@
     <ClInclude Include="Mobius.h" />
     <ClInclude Include="ModelRender.h" />
     <ClInclude Include="Player_kari.h" />
+    <ClInclude Include="ROrunning_stop.h" />
     <ClInclude Include="stage_kari.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />

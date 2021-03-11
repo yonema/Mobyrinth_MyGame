@@ -68,6 +68,10 @@ public://publicなメンバ関数
 	{
 		return m_holdObject;
 	}
+	const Vector3 GetUpVec()const
+	{
+		return m_upVec;
+	}
 
 private://privateなメンバ関数
 
@@ -97,8 +101,6 @@ public://デバック用
 
 
 	bool m_dbgHit = false;
-	int m_dbgNum1 = 0;
-	int m_dbgNum2 = 0;
 	float m_dbgDot1 = 0.0f;
 	float m_dbgDot2 = 0.0f;
 
@@ -120,6 +122,7 @@ private:	//データメンバ
 	Vector3 m_onWayPosition = g_vec3Zero;		//道の上の座標
 	Quaternion m_rotation = g_quatIdentity;	//キャラクターの回転
 	bool m_holdObject = false;
+	Vector3 m_upVec = g_vec3Up;
 
 
 	enum EnLeftOrRight

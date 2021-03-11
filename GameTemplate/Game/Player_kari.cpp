@@ -155,13 +155,12 @@ void Player_kari::Move()
 
 void Player_kari::GetOnStage()
 {
-	Vector3 addPos = g_vec3AxisY;
-	m_finalWPRot.Apply(addPos);
-	addPos.Scale(-150.0f);
-
+	m_upVec = g_vec3AxisY;
+	m_finalWPRot.Apply(m_upVec);
+	m_upVec.Scale(150.0f);
 	if (m_mobius)
 	{
-		if (m_mobius->GetModel()->InIntersectLine(m_onWayPosition - addPos, m_onWayPosition + addPos))
+		if (m_mobius->GetModel()->InIntersectLine(m_onWayPosition + m_upVec, m_onWayPosition - m_upVec))
 		{
 			m_position = m_mobius->GetModel()->GetIntersectPos();
 			m_dbgHit = true;
@@ -174,10 +173,10 @@ void Player_kari::GetOnStage()
 		m_mobius = FindGO<Mobius>("Mobius");
 	}
 	auto hitPos = m_mobius->GetModel()->GetIntersectPos();
-	m_dbgModel->SetPosition(m_onWayPosition - addPos);
-	m_dbgModel2->SetPosition(m_onWayPosition + addPos);
+	m_dbgModel->SetPosition(m_onWayPosition + m_upVec);
+	m_dbgModel2->SetPosition(m_onWayPosition - m_upVec);
 	m_dbgModel3->SetPosition(hitPos);
-
+	
 
 	//m_modelRender->SetPosition(hitPos);
 	return;
@@ -306,23 +305,6 @@ void Player_kari::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
-
-		swprintf(text, L"[%02d]", m_dbgNum1);
-		m_font.Draw(text,
-			{ -110.0f, -60.0f },
-			{ 1.0f,0.0f,0.0f,1.0f },
-			0.0f,
-			1.0f,
-			{ 0.0f,0.0f }
-		);
-		swprintf(text, L"[%02d]", m_dbgNum2);
-		m_font.Draw(text,
-			{ 10.0f, -60.0f },
-			{ 1.0f,0.0f,0.0f,1.0f },
-			0.0f,
-			1.0f,
-			{ 0.0f,0.0f }
-		);
 
 	swprintf(text, L"Hit%d", m_dbgHit);
 	m_font.Draw(text,

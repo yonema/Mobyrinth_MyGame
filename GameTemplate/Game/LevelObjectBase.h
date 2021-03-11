@@ -55,9 +55,13 @@ public:
 		enFish,
 		enGrilledChicken,
 		enGrilledFish,
+		enRunning,
+		enStop,
 
 		//障害オブジェクト
 		enBigFire,
+		enWall,
+		enGoal,
 
 	};
 private:

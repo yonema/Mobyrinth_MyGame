@@ -27,9 +27,15 @@ bool CObstacleObject::PureVirtualStart()
 
 void CObstacleObject::Update()
 {
+	if (!m_pPlayer)
+	{
+		m_pPlayer = CLevelObjectManager::GetInstance()->GetPlayer();
+	}
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->SetScale(m_scale);
+
+	UpdateSub();
 
 	return;
 }

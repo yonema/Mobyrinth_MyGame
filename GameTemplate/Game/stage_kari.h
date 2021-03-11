@@ -8,6 +8,10 @@
 #include "LevelObjectManager.h"
 #include "OObigFire.h"
 #include "RObird_fish.h"
+#include "ROrunning_stop.h"
+#include "OOwall.h"
+#include "OOgoal.h"
+
 class CLevel;
 class Player_kari;
 class background_kari;
