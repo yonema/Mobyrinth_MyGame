@@ -71,6 +71,8 @@ public:
 		enAxe,
 		enPickaxe,
 		enKeymold,
+		enKey,
+		enROPadlock,
 
 		//障害オブジェクト
 		enBigFire,

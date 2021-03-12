@@ -20,7 +20,11 @@ void ROwire_string::QuerySub()
 			{
 				if (IsHitObject(*this, *keymold, hitDot))
 				{
-					//NewGO<>(0, );
+
+					ROkey_padlock* RObjrct;
+					RObjrct = NewGO<ROkey_padlock>(0, "key_padlock");
+					RObjrct->SetPosition(m_position);
+					RObjrct->SetFrontOrBack(ROkey_padlock::enFront);
 					DeleteGO(this);
 				}
 				return true;

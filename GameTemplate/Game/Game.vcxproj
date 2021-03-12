@@ -305,6 +305,7 @@
     <ClCompile Include="ROaxe_pickaxe.cpp" />
     <ClCompile Include="RObird_fish.cpp" />
     <ClCompile Include="ROkeymold_empty.cpp" />
+    <ClCompile Include="ROkey_padlock.cpp" />
     <ClCompile Include="ROmizu_kori.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChip.cpp" />
@@ -316,6 +317,7 @@
     <ClCompile Include="ROwire_string.cpp" />
     <ClCompile Include="stage_kari.cpp" />
     <ClCompile Include="stage_proto01.cpp" />
+    <ClCompile Include="stage_proto02.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -402,6 +404,7 @@
     <ClInclude Include="ROaxe_pickaxe.h" />
     <ClInclude Include="RObird_fish.h" />
     <ClInclude Include="ROkeymold_empty.h" />
+    <ClInclude Include="ROkey_padlock.h" />
     <ClInclude Include="ROmizu_kori.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="Mobius.h" />
@@ -412,6 +415,7 @@
     <ClInclude Include="ROwire_string.h" />
     <ClInclude Include="stage_kari.h" />
     <ClInclude Include="stage_proto01.h" />
+    <ClInclude Include="stage_proto02.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="TklFile.h" />

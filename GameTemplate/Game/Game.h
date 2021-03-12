@@ -1,6 +1,7 @@
 #pragma once
 #include "stage_kari.h"
 #include "stage_proto01.h"
+#include "stage_proto02.h"
 
 class Game : public IGameObject
 {

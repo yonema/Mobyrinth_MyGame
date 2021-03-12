@@ -28,25 +28,34 @@ void ROnail_bar::QuerySub()
 	}
 	else if (GetObjectType() == enBar)
 	{
-		QueryLOs<OObox>(enBox, [&](OObox* box) -> bool
-			{
-				if (IsHitObject(*this, *box, hitDot))
-				{
-					DeleteGO(box);
-					DeleteGO(this);
-				}
-				return true;
-			}
-		);
 		QueryLOs<OOpadlock>(enPadlock, [&](OOpadlock* padlock) -> bool
 			{
 				if (IsHitObject(*this, *padlock, hitDot))
 				{
-					DeleteGO(padlock);
-					DeleteGO(this);
+					if (m_actionFlag)
+					{
+						DeleteGO(padlock);
+						DeleteGO(this);
+						m_actionFlag = false;
+					}
 				}
 				return true;
 			}
 		);
+		QueryLOs<OObox>(enBox, [&](OObox* box) -> bool
+			{
+				if (IsHitObject(*this, *box, hitDot))
+				{
+					if (m_actionFlag)
+					{
+						DeleteGO(box);
+						DeleteGO(this);
+						m_actionFlag = false;
+					}
+				}
+				return true;
+			}
+		);
+
 	}
 }

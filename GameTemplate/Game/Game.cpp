@@ -5,8 +5,8 @@
 bool Game::Start()
 {
 	//NewGO<stage_proto01>(0, "stage_proto01");
-	NewGO<stage_kari>(0, "stage_kari");
-
+	//NewGO<stage_kari>(0, "stage_kari");
+	NewGO<stage_proto02>(0, "stage_proto02");
 	return true;
 }
 

@@ -8,5 +8,7 @@ class ROnail_bar : public CReversibleObject
 public:
 	bool StartSub() override final;
 	void QuerySub()override final;
+private:
+	bool m_actionFlag = true;
 };
 

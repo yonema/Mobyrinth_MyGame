@@ -7,5 +7,7 @@ class ROaxe_pickaxe : public CReversibleObject
 public:
 	bool StartSub() override final;
 	void QuerySub()override final;
+private:
+	bool m_actionFlag = true;
 };
 
