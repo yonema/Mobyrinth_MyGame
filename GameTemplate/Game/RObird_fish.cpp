@@ -23,14 +23,13 @@ bool RObird_fish::StartSub()
 
 void RObird_fish::QuerySub()
 {
-	const float hitLen = 100.0f;
+	const float hitDot = 0.005f;
 
 	if (GetObjectType() == enBird)
 	{
 		QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
 			{
-				Vector3 diff = m_position - bigFire->GetPosition();
-				if (diff.Length() <= hitLen)
+				if (IsHitObject(*this, *bigFire, hitDot))
 				{
 					SetBothModelActiveFlag(false);
 					m_otherModelRender[GetFrontOrBack()]->Activate();
@@ -43,9 +42,7 @@ void RObird_fish::QuerySub()
 	{
 		QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
 			{
-
-				Vector3 diff = m_position - bigFire->GetPosition();
-				if (diff.Length() <= hitLen)
+				if (IsHitObject(*this, *bigFire, hitDot))
 				{
 					SetBothModelActiveFlag(false);
 					m_otherModelRender[GetFrontOrBack()]->Activate();

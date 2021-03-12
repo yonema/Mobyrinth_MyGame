@@ -68,6 +68,14 @@ void CReversibleObject::SetBothModelActiveFlag(const bool activeFlag)
 
 void CReversibleObject::Update()
 {
+	if (!m_pPlayer)
+	{
+		m_pPlayer = CLevelObjectManager::GetInstance()->GetPlayer();
+		if (!m_pPlayer)
+			return;
+	}
+
+
 	switch (m_objectState)
 	{
 	case enCheckPlayer:
@@ -111,19 +119,7 @@ CReversibleObject::~CReversibleObject()
 void CReversibleObject::CheckPlayer()
 {
 
-	if (!m_pPlayer)
-	{
-		m_pPlayer = CLevelObjectManager::GetInstance()->GetPlayer();
-		if (!m_pPlayer)
-		{
-			return;
-		}
-	}
-	Vector3 toPlayer = m_pPlayer->GetPosition() - m_position;
-
-
-	const float hitLen = 100.0f;
-	if (toPlayer.Length() <= hitLen)
+	if (IsHitPlayer())
 	{
 		if (g_pad[0]->IsTrigger(enButtonA))
 		{

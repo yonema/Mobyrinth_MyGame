@@ -9,6 +9,5 @@ public:
 private:
 	Font m_font;
 	bool m_goalFlag = false;
-	float m_dbg = 0.0f;
 };
 

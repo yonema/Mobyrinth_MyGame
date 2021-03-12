@@ -191,7 +191,7 @@ void stage_kari::PostRender(RenderContext& rc)
 	//フォント
 	Font font;
 	wchar_t text[256];
-	wsprintf(text, L"バンドリ！%02d", m_numText);
+	wsprintf(text, L"フレーム数%02d", m_numText);
 	font.Begin(rc);
 
 	font.Draw(text,				//表示したいテキスト

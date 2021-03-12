@@ -11,19 +11,14 @@ bool OOgoal::StartSub()
 
 void OOgoal::UpdateSub()
 {
-	if (!m_pPlayer)
-		return;
-	Vector3 up = g_vec3Up;
-	m_rotation.Apply(up);
-	up.Normalize();
-	Vector3 playerUp = m_pPlayer->GetUpVec();
-	playerUp.Normalize();
-	const float dotLen = 0.0001;
-	if (std::abs(Dot(up, playerUp) - 1.0f) <= dotLen)
+	if (IsHitPlayer(0.0001))
 	{
 		m_goalFlag = true;
 	}
-	m_dbg = std::abs(Dot(up, playerUp) - 1.0f);
+	else
+	{
+		m_goalFlag = false;
+	}
 }
 
 void OOgoal::PostRender(RenderContext& rc)
@@ -46,15 +41,6 @@ void OOgoal::PostRender(RenderContext& rc)
 		);
 	}
 
-
-	swprintf(text, L"ゴール内積:%01.3f", m_dbg);
-	font.Draw(text,				//表示したいテキスト
-		{ 0.0f,-100.0f },		//ポジション
-		{ 1.0f,1.0f,1.0f,1.0f },	//カラー
-		0.0f,						//回転
-		1.0f,						//拡大
-		{ 0.0f,0.0f }				//ピボット
-	);
 
 	font.End(rc);
 }

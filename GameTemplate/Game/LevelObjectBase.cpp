@@ -87,4 +87,55 @@ void ILevelObjectBase::CheckWayPoint()
 }
 
 
+bool ILevelObjectBase::IsHitPlayer(const float hitDot)
+{
+	if (!m_pPlayer)
+		return false;
 
+
+	Vector3 myUp = g_vec3Up;
+	m_rotation.Apply(myUp);
+	myUp.Normalize();
+	
+	Vector3 playerUp = m_pPlayer->GetUpVec();
+	playerUp.Normalize();
+
+	if (std::abs(Dot(myUp, playerUp) - 1.0f) <= hitDot)
+	{
+		//“–‚½‚Á‚½
+		return true;
+	}
+	else
+	{
+		//“–‚½‚Á‚Ä‚È‚¢
+		return false;
+	}
+
+}
+bool ILevelObjectBase::IsHitObject
+(const ILevelObjectBase& lhs, const ILevelObjectBase& rhs, const float hitDot)
+{
+	Quaternion qRot;
+
+	Vector3 lhsUp = g_vec3Up;
+	qRot = lhs.GetRotation();
+	qRot.Apply(lhsUp);
+	lhsUp.Normalize();
+
+	Vector3 rhsUp = g_vec3Up;
+	qRot = rhs.GetRotation();
+	qRot.Apply(rhsUp);
+	rhsUp.Normalize();
+
+	if (std::abs(Dot(lhsUp, rhsUp) - 1.0f) <= hitDot)
+	{
+		//“–‚½‚Á‚½
+		return true;
+	}
+	else
+	{
+		//“–‚½‚Á‚Ä‚È‚¢
+		return false;
+	}
+
+}

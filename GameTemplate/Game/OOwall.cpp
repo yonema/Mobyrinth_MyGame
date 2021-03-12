@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "OOwall.h"
+#include "ROrunning_stop.h"
+
 
 bool OOwall::StartSub()
 {

@@ -17,6 +17,10 @@ public:
 	{
 		m_rotation = rot;
 	}
+	const Quaternion GetRotation()const
+	{
+		return m_rotation;
+	}
 	void SetObjectType(int objectType)
 	{
 		m_objectType = objectType;
@@ -41,6 +45,9 @@ public:
 	{
 		m_isDead = true;
 	}
+	bool IsHitObject
+	(const ILevelObjectBase& lhs, const ILevelObjectBase& rhs, const float hitDot = 0.001);
+	bool IsHitPlayer(const float hitDot = 0.001);
 protected:
 	void CheckWayPoint();
 public:
