@@ -1,11 +1,8 @@
 #include "stdafx.h"
-#include "stage_kari.h"
-#include "Player_kari.h"
-#include "background_kari.h"
-#include "DirectionLight.h"
-class GameCamera;
+#include "stage_proto01.h"
 
-bool stage_kari::Start()
+
+bool stage_proto01::Start()
 {
 	CDirectionLight* d1 = NewGO<CDirectionLight>(0, "directionLight1");
 	d1->SetDirection({ 1.0f,1.0f,-1.0f });
@@ -24,7 +21,7 @@ bool stage_kari::Start()
 
 
 	//ÉåÉxÉãÇÃì«Ç›çûÇ›
-	m_level.Init("Assets/level/stage_kari02.tkl", [&](LevelObjectData& objData)
+	m_level.Init("Assets/level/stage_proto01.tkl", [&](LevelObjectData& objData)
 		{
 			if (objData.EqualObjectName(L"player_kari") == true)
 			{
@@ -46,7 +43,7 @@ bool stage_kari::Start()
 			else if (objData.EqualObjectName(L"mizu") == true)
 			{
 				ROmizu_kori* lObject;
-				lObject = NewGO<ROmizu_kori>(0);
+				lObject = NewGO<ROmizu_kori>(0, "mizu_koori");
 				lObject->SetPosition(objData.position);
 				lObject->SetFrontOrBack(ROmizu_kori::enFront);
 				return true;
@@ -54,7 +51,7 @@ bool stage_kari::Start()
 			else if (objData.EqualObjectName(L"koori") == true)
 			{
 				ROmizu_kori* rObject;
-				rObject = NewGO<ROmizu_kori>(0);
+				rObject = NewGO<ROmizu_kori>(0, "mizu_koori");
 				rObject->SetPosition(objData.position);
 				rObject->SetFrontOrBack(CReversibleObject::enBack);
 				return true;
@@ -62,7 +59,7 @@ bool stage_kari::Start()
 			else if (objData.EqualObjectName(L"bird") == true)
 			{
 				RObird_fish* lObject;
-				lObject = NewGO<RObird_fish>(0);
+				lObject = NewGO<RObird_fish>(0, "bird_fish");
 				lObject->SetPosition(objData.position);
 				lObject->SetFrontOrBack(CReversibleObject::enFront);
 				return true;
@@ -70,7 +67,7 @@ bool stage_kari::Start()
 			else if (objData.EqualObjectName(L"fish") == true)
 			{
 				RObird_fish* lObject;
-				lObject = NewGO<RObird_fish>(0);
+				lObject = NewGO<RObird_fish>(0, "bird_fish");
 				lObject->SetPosition(objData.position);
 				lObject->SetFrontOrBack(CReversibleObject::enBack);
 				return true;
@@ -78,28 +75,28 @@ bool stage_kari::Start()
 			else if (objData.EqualObjectName(L"bigFire") == true)
 			{
 				OObigFire* OObject;
-				OObject = NewGO<OObigFire>(0);
+				OObject = NewGO<OObigFire>(0, "bigFire");
 				OObject->SetPosition(objData.position);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"wall") == true)
 			{
 				OOwall* OObject;
-				OObject = NewGO<OOwall>(0);
+				OObject = NewGO<OOwall>(0, "wall");
 				OObject->SetPosition(objData.position);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"goal") == true)
 			{
 				OOgoal* OObject;
-				OObject = NewGO<OOgoal>(0);
+				OObject = NewGO<OOgoal>(0, "goal");
 				OObject->SetPosition(objData.position);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"kadou") == true)
 			{
 				ROrunning_stop* lObject;
-				lObject = NewGO<ROrunning_stop>(0);
+				lObject = NewGO<ROrunning_stop>(0, "kadou_teishi");
 				lObject->SetPosition(objData.position);
 				lObject->SetFrontOrBack(CReversibleObject::enFront);
 				return true;
@@ -107,7 +104,7 @@ bool stage_kari::Start()
 			else if (objData.EqualObjectName(L"teishi") == true)
 			{
 				ROrunning_stop* lObject;
-				lObject = NewGO<ROrunning_stop>(0);
+				lObject = NewGO<ROrunning_stop>(0, "kadou_teishi");
 				lObject->SetPosition(objData.position);
 				lObject->SetFrontOrBack(CReversibleObject::enBack);
 				return true;
@@ -127,7 +124,7 @@ bool stage_kari::Start()
 				vecSize++;
 
 				CModelRender* model;
-				model = NewGO<CModelRender>(0);
+				model = NewGO<CModelRender>(0, "waypoint");
 				model->Init("Assets/modelData/yuka.tkm");
 				model->SetPosition(objData.position);
 				model->SetRotation(objData.rotation);
@@ -135,7 +132,7 @@ bool stage_kari::Start()
 			}
 
 			return false;
-		
+
 		});
 
 	CLevelObjectManager::GetInstance()->InitWayPointPos(vecSize, posMap);
@@ -152,12 +149,61 @@ bool stage_kari::Start()
 
 	return true;
 }
-stage_kari::~stage_kari()
+stage_proto01::~stage_proto01()
 {
-	//DeleteGO(m_Player_kari);
-	//DeleteGO(m_background_kari);
-}
-void stage_kari::Update()
-{
+	QueryGOs<Player_kari>("player", [&](Player_kari* player)->bool
+		{
+			DeleteGO(FindGO<Player_kari>("player"));
+			return true;
+		}
+	);
+	QueryGOs<Mobius>("Mobius", [&](Mobius* player)->bool
+		{
+			DeleteGO(FindGO<Mobius>("Mobius"));
+			return true;
+		}
+	);
+	QueryGOs<ROmizu_kori>("mizu_koori", [&](ROmizu_kori* player)->bool
+		{
+			DeleteGO(FindGO<ROmizu_kori>("mizu_koori"));
+			return true;
+		}
+	);
+	QueryGOs<RObird_fish>("bird_fish", [&](RObird_fish* player)->bool
+		{
+			DeleteGO(FindGO<RObird_fish>("bird_fish"));
+			return true;
+		}
+	);
+	QueryGOs<OObigFire>("bigFire", [&](OObigFire* player)->bool
+		{
+			DeleteGO(FindGO<OObigFire>("bigFire"));
+			return true;
+		}
+	);
+	QueryGOs<OOwall>("wall", [&](OOwall* player)->bool
+		{
+			DeleteGO(FindGO<OOwall>("wall"));
+			return true;
+		}
+	);
+	QueryGOs<OOgoal>("goal", [&](OOgoal* player)->bool
+		{
+			DeleteGO(FindGO<OOgoal>("goal"));
+			return true;
+		}
+	);
+	QueryGOs<ROrunning_stop>("kadou_teishi", [&](ROrunning_stop* player)->bool
+		{
+			DeleteGO(FindGO<ROrunning_stop>("kadou_teishi"));
+			return true;
+		}
+	);
+	QueryGOs<CModelRender>("waypoint", [&](CModelRender* player)->bool
+		{
+			DeleteGO(FindGO<CModelRender>("waypoint"));
+			return true;
+		}
+	);
 }
 

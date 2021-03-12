@@ -48,5 +48,7 @@ private:
 	};
 	int m_objectState = enCheckPlayer;
 	int m_throwCounter = 0;
+
+	Quaternion m_throwRot = g_quatIdentity;
 };
 

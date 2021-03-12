@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "system/system.h"
-#include "stage_kari.h"
+#include "Game.h"
 #include "LightManager.h"
 #include "LevelObjectManager.h"
 
@@ -24,7 +24,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CLightManager::CreateInstance();
 	CLevelObjectManager::CreateInstance();
 
-	NewGO<stage_kari>(0, "stage_kari");
+	NewGO<Game>(0, "Game");
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

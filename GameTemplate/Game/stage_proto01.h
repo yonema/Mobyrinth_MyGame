@@ -11,24 +11,13 @@
 #include "ROrunning_stop.h"
 #include "OOwall.h"
 #include "OOgoal.h"
-
-class CLevel;
-class Player_kari;
-class background_kari;
-
-class stage_kari : public IGameObject
+class stage_proto01 : public IGameObject
 {
 public:
 	bool Start() override final;
-	~stage_kari();
-	void Update() override final;
-
-private:	//データメンバ
-	Player_kari* m_Player_kari = nullptr;
-	background_kari* m_background_kari = nullptr;
+	~stage_proto01();
+private:
 	CLevel m_level;
-
 	CModelRender* m_modelRender = nullptr;
-
 };
 

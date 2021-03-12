@@ -46,7 +46,6 @@ void ROrunning_stop::QuerySub()
 				if (IsHitObject(*this, *wall, hitDot))
 				{
 					wall->Stop();
-					wall->Running();
 					m_pWall = wall;
 					if (wall->GetRun_stop())
 					{

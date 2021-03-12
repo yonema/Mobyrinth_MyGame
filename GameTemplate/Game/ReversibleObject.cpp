@@ -146,23 +146,23 @@ void CReversibleObject::HeldPlayer()
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
 		m_objectState = enThrown;
+		m_throwRot = m_pPlayer->GetFinalWPRot();
 	}
 }
 
 void CReversibleObject::Thrown()
 {
-	Vector3 dir = g_vec3Up;
-	Quaternion qRot = m_pPlayer->GetFinalWPRot();
-	qRot.Apply(dir);
-	dir.Scale(-7.0f);
+	Vector3 dir = g_vec3Down;
+	m_throwRot.Apply(dir);
+	dir.Scale(7.0f);
 	m_position += dir;
 	m_rotation.SetRotationDegX(180.0f * m_throwCounter / 24);
-	m_rotation.Multiply(qRot);
+	m_rotation.Multiply(m_throwRot);
 	m_throwCounter++;
 	if (m_throwCounter >= 24)
 	{
 		m_rotation.SetRotationDegX(180.0f);
-		m_rotation.Multiply(qRot);
+		m_rotation.Multiply(m_throwRot);
 		m_objectState = enQuery;
 		m_pPlayer->SetHoldObject(false);
 		m_throwCounter = 0;

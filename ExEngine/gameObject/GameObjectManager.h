@@ -114,7 +114,7 @@ public:
 	{
 		for (auto goList : m_gameObjectListArray) {
 			for (auto go : goList) {
-				if (strcmp(go->m_name.cstr(), objectName) == 0) {
+				if (go->EqualName(objectName)) {
 					//見つけた。
 					T* p = dynamic_cast<T*>(go);
 					if (func(p) == false) {

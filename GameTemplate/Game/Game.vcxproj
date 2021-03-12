@@ -288,6 +288,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="OObigFire.cpp" />
     <ClCompile Include="OOgoal.cpp" />
     <ClCompile Include="OOwall.cpp" />
@@ -308,6 +309,7 @@
     <ClCompile Include="Player_kari.cpp" />
     <ClCompile Include="ROrunning_stop.cpp" />
     <ClCompile Include="stage_kari.cpp" />
+    <ClCompile Include="stage_proto01.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -376,6 +378,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="OObigFire.h" />
     <ClInclude Include="OOgoal.h" />
     <ClInclude Include="OOwall.h" />
@@ -396,6 +399,7 @@
     <ClInclude Include="Player_kari.h" />
     <ClInclude Include="ROrunning_stop.h" />
     <ClInclude Include="stage_kari.h" />
+    <ClInclude Include="stage_proto01.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="TklFile.h" />
