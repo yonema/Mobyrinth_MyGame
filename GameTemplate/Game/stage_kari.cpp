@@ -113,6 +113,77 @@ bool stage_kari::Start()
 				return true;
 			}
 
+			else if (objData.EqualObjectName(L"wire") == true)
+			{
+				ROwire_string* lObject;
+				lObject = NewGO<ROwire_string>(0);
+				lObject->SetPosition(objData.position);
+				lObject->SetFrontOrBack(CReversibleObject::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"string") == true)
+			{
+				ROwire_string* lObject;
+				lObject = NewGO<ROwire_string>(0);
+				lObject->SetPosition(objData.position);
+				lObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"nail") == true)
+			{
+			ROnail_bar* lObject;
+			lObject = NewGO<ROnail_bar>(0);
+			lObject->SetPosition(objData.position);
+			lObject->SetFrontOrBack(CReversibleObject::enFront);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"bar") == true)
+			{
+			ROnail_bar* lObject;
+			lObject = NewGO<ROnail_bar>(0);
+			lObject->SetPosition(objData.position);
+			lObject->SetFrontOrBack(CReversibleObject::enBack);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"axe") == true)
+			{
+			ROaxe_pickaxe* lObject;
+			lObject = NewGO<ROaxe_pickaxe>(0);
+			lObject->SetPosition(objData.position);
+			lObject->SetFrontOrBack(CReversibleObject::enFront);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"pickaxe") == true)
+			{
+			ROaxe_pickaxe* lObject;
+			lObject = NewGO<ROaxe_pickaxe>(0);
+			lObject->SetPosition(objData.position);
+			lObject->SetFrontOrBack(CReversibleObject::enBack);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"padlock") == true)
+			{
+			OOpadlock* OObject;
+			OObject = NewGO<OOpadlock>(0);
+			OObject->SetPosition(objData.position);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"box") == true)
+			{
+			OObox* OObject;
+			OObject = NewGO<OObox>(0);
+			OObject->SetPosition(objData.position);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"key mold") == true)
+			{
+			ROkeymold_empty* lObject;
+			lObject = NewGO<ROkeymold_empty>(0);
+			lObject->SetPosition(objData.position);
+			lObject->SetFrontOrBack(CReversibleObject::enFront);
+			return true;
+			}
+
 			//オブジェクトネームに"waypoint"があったら
 			else if (std::wcsstr(objData.name, L"waypoint") != NULL)
 			{

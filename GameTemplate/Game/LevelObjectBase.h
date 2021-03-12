@@ -64,12 +64,20 @@ public:
 		enGrilledFish,
 		enRunning,
 		enStop,
+		enWire,
+		enString,
+		enNail,
+		enBar,
+		enAxe,
+		enPickaxe,
+		enKeymold,
 
 		//障害オブジェクト
 		enBigFire,
 		enWall,
 		enGoal,
-
+		enPadlock,
+		enBox,
 	};
 private:
 	int m_objectType = enEnpty;

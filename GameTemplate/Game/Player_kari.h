@@ -72,6 +72,18 @@ public://public‚Èƒƒ“ƒoŠÖ”
 	{
 		return m_upVec;
 	}
+	const int GetLeftPointIndex()const
+	{
+		return m_lpIndex;
+	}
+	const int GetRightPointIndex()const
+	{
+		return m_rpIndex;
+	}
+	const Vector3 GerWayPointPos(const int index)
+	{
+		return (*m_wayPointPos)[index];
+	}
 
 private://private‚Èƒƒ“ƒoŠÖ”
 

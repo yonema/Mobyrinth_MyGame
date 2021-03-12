@@ -4,12 +4,16 @@
 
 bool Game::Start()
 {
-	NewGO<stage_proto01>(0, "stage_proto01");
+	//NewGO<stage_proto01>(0, "stage_proto01");
+	NewGO<stage_kari>(0, "stage_kari");
+
+	return true;
 }
 
 Game::~Game()
 {
-	DeleteGO(FindGO<stage_proto01>("stage_proto01"));
+	//DeleteGO(FindGO<stage_proto01>("stage_proto01"));
+	DeleteGO(FindGO<stage_kari>("stage_kari"));
 }
 
 void Game::PostRender(RenderContext& rc)

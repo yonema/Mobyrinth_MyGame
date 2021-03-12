@@ -12,6 +12,14 @@
 #include "OOwall.h"
 #include "OOgoal.h"
 
+#include "ROwire_string.h"
+#include "ROnail_bar.h"
+#include "ROaxe_pickaxe.h"
+#include "OOpadlock.h"
+#include "OObox.h"
+#include "ROkeymold_empty.h"
+
+
 class CLevel;
 class Player_kari;
 class background_kari;

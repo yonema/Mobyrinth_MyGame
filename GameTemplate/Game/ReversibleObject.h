@@ -9,7 +9,10 @@ protected:
 private:
 	void CheckPlayer();
 	void HeldPlayer();
-	void Thrown();
+	void Cancel();
+	void CalcTargetPos();
+	void ThrownSide();
+	void ThrownDown();
 	void Query();
 	virtual void QuerySub() {};
 public:
@@ -43,7 +46,9 @@ private:
 	{
 		enCheckPlayer,
 		enHeldPlayer,
-		enThrown,
+		enCancel,
+		enThrownSide,
+		enThrownDown,
 		enQuery,
 	};
 	int m_objectState = enCheckPlayer;

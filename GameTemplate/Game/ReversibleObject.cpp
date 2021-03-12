@@ -84,8 +84,14 @@ void CReversibleObject::Update()
 	case enHeldPlayer:
 		HeldPlayer();
 		break;
-	case enThrown:
-		Thrown();
+	case enCancel:
+		Cancel();
+		break;
+	case enThrownSide:
+		ThrownSide();
+		break;
+	case enThrownDown:
+		ThrownDown();
 		break;
 	case enQuery:
 		Query();
@@ -114,8 +120,6 @@ CReversibleObject::~CReversibleObject()
 
 }
 
-
-
 void CReversibleObject::CheckPlayer()
 {
 
@@ -134,23 +138,59 @@ void CReversibleObject::CheckPlayer()
 
 void CReversibleObject::HeldPlayer()
 {
-	Vector3 pos = m_pPlayer->GetPosition();
+	//Vector3 pos = m_pPlayer->GetPosition();
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
 	Vector3 up = g_vec3Up;
-	up.Scale(100.0f);
 	qRot.Apply(up);
-	pos += up;
-	m_position = pos;
+	up.Scale(100.0f);
+	//pos += up;
+	m_position = m_pPlayer->GetPosition() + up;
 	m_rotation = qRot;
 
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		m_objectState = enThrown;
-		m_throwRot = m_pPlayer->GetFinalWPRot();
+		if (m_objectState != enThrownDown)
+		{
+			m_throwRot = m_pPlayer->GetFinalWPRot();
+		}
+		m_objectState = enThrownDown;
+	}
+	else if (g_pad[0]->IsTrigger(enButtonB))
+	{
+		m_objectState = enCancel;
+	}
+	else if (g_pad[0]->IsTrigger(enButtonX))
+	{
+		if (m_objectState != enThrownSide)
+		{
+			CalcTargetPos();
+		}
+		m_objectState = enThrownSide;
 	}
 }
 
-void CReversibleObject::Thrown()
+void CReversibleObject::Cancel()
+{
+	Quaternion qRot = m_pPlayer->GetFinalWPRot();
+	Vector3 up = g_vec3Up;
+	qRot.Apply(up);
+	up.Scale(20.0f);
+
+	m_position = m_pPlayer->GetPosition() + up;
+	m_pPlayer->SetHoldObject(false);
+	m_objectState = enQuery;
+}
+
+void CReversibleObject::ThrownSide()
+{
+	m_objectState = enCheckPlayer;
+	m_pPlayer->SetHoldObject(false);
+}
+void CReversibleObject::CalcTargetPos()
+{
+	m_pPlayer->GetLeftPointIndex();
+}
+void CReversibleObject::ThrownDown()
 {
 	Vector3 dir = g_vec3Down;
 	m_throwRot.Apply(dir);

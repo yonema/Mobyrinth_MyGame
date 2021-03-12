@@ -51,6 +51,7 @@ void Player_kari::CheckWayPoint()
 	//m_wayPointStateをもとにウェイポイントを設定する。
 	m_rpIndex = m_wayPointState;	//右のウェイポイントはとm_wayPointStateは同じ値
 	m_lpIndex = m_rpIndex + 1;		//左のウェイポイントは右のウェイポイントの1つ上の値
+
 	if (m_lpIndex > m_maxWayPointState)
 	{
 		//左のウェイポイントがMAXより大きかったら
@@ -72,7 +73,6 @@ void Player_kari::CheckWayPoint()
 	float RpDotPlayer = Dot(LpToRpVec, RpToPlayerVec);
 	m_dbgDot1 = LpDotPlayer;
 	m_dbgDot2 = RpDotPlayer;
-
 
 
 	//左右のウェイポイントとの距離を調べる
