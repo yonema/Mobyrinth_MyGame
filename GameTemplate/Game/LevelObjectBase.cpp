@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "LevelObjectBase.h"
-
+int ILevelObjectBase::objectNumber = 0;
 bool ILevelObjectBase::Start()
 {
 	CheckWayPoint();
 	m_pPlayer = CLevelObjectManager::GetInstance()->GetPlayer();
 	CLevelObjectManager::GetInstance()->AddObject(this);
-	
+	m_objectNumber = objectNumber++;
 	return PureVirtualStart();
 }
 

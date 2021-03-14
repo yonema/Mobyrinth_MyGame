@@ -20,6 +20,13 @@ bool RObird_fish::StartSub()
 	}
 	return true;
 }
+RObird_fish::~RObird_fish()
+{
+	for (int i = 0; i < enFrontAndBackNum; i++)
+	{
+		DeleteGO(m_otherModelRender[i]);
+	}
+}
 
 void RObird_fish::QuerySub()
 {

@@ -182,9 +182,9 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			//goal
 			else if (objData.EqualObjectName(L"goal") == true)
 			{
-				OOgoal* OObject;
-				OObject = NewGO<OOgoal>(0, "goal");
-				OObject->SetPosition(objData.position);
+				//ゴールはメンバ変数で保持しておく。
+				m_goal = NewGO<OOgoal>(0, "goal");
+				m_goal->SetPosition(objData.position);
 				return true;
 			}
 			//bigFire
@@ -254,7 +254,8 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		});
 
 
-
+	//プレイヤーをマネージャーに登録
+	CLevelObjectManager::GetInstance()->SetPlayer(pPlayer);
 	//ロードしたレベルにあったウェイポイントをマネージャーに登録する
 	CLevelObjectManager::GetInstance()->InitWayPointPos(vecSize, posMap);
 	CLevelObjectManager::GetInstance()->InitWayPointRot(vecSize, rotMap);
@@ -347,6 +348,12 @@ IStageBase::~IStageBase()
 			return true;
 		}
 	);
+	QueryGOs<OOwall>("wall", [&](OOwall* OObject)->bool
+		{
+			DeleteGO(OObject);
+			return true;
+		}
+	);
 	QueryGOs<OOpadlock>("bigPadlock", [&](OOpadlock* OObject)->bool
 		{
 			DeleteGO(OObject);
@@ -371,17 +378,55 @@ IStageBase::~IStageBase()
 	);
 }
 
+
+void IStageBase::Update()
+{
+	if (m_goal)
+	{
+		if (m_goal->GetIsGoal())
+		{
+			Goal();
+		}
+	}
+
+	return;
+}
 void IStageBase::UpdateOnlyPaused()
 {
 	if (m_pause->GetRetryFlag())
 	{
-		RetryStage();
-		Release();
+		Retry();
 	}
 	else if (m_pause->GetQuitFlag())
 	{
-		NewGO<Title>(0, "Title");
-		Release();
+		Quit();
 	}
 }
 
+void IStageBase::Clear()
+{
+	NewGO<Title>(0, "Title");
+	Release();
+}
+
+void IStageBase::Retry()
+{
+	RetryStage();
+	Release();
+}
+
+void IStageBase::Quit()
+{
+	NewGO<Title>(0, "Title");
+	Release();
+}
+
+void IStageBase::Goal()
+{
+	m_goalCounter++;
+
+	if (m_goalCounter >= 180)
+	{
+		Clear();
+	}
+}

@@ -38,8 +38,15 @@ class IStageBase : public IGameObject
 public:
 	bool Start()override final;
 	~IStageBase();
+	void Update()override final;
 	void UpdateOnlyPaused()override final;
 
+private:
+	void Clear();
+	void Retry();
+	void Quit();
+
+	void Goal();
 protected:
 	/// <summary>
 	/// ƒŒƒxƒ‹‚Ìƒ[ƒh
@@ -60,5 +67,7 @@ private:
 	CLevel m_level;
 	CDirectionLight* m_stageDirectionLight = nullptr;
 	CPause* m_pause = nullptr;
+	OOgoal* m_goal = nullptr;
+	int m_goalCounter = 0;
 };
 

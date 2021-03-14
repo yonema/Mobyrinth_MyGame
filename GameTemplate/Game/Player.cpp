@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "LightManager.h"
-
+#include "LevelObjectManager.h"
 
 
 bool Player::Start()
@@ -224,6 +224,7 @@ void Player::Rotation()
 
 void Player::Update()
 {
+
 	//ゲームパッドの左スティックのX軸の入力情報を取得
 	m_padLStickXF = g_pad[0]->GetLStickXF();
 	//左右の向きを設定
@@ -244,6 +245,7 @@ void Player::Update()
 
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+
 }
 
 

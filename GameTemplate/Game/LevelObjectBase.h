@@ -90,5 +90,8 @@ protected:
 	Vector3 m_scale = g_vec3One;
 	Player* m_pPlayer = nullptr;
 
+private:
+	int m_objectNumber = 0;
+	static int objectNumber;
 };
 

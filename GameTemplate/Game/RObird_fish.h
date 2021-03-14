@@ -6,6 +6,7 @@ class RObird_fish : public CReversibleObject
 {
 public:
 	bool StartSub() override final;
+	~RObird_fish();
 	void QuerySub()override final;
 	void UpdateSub()override final;
 	void SetFrontOrBackSub()override final;

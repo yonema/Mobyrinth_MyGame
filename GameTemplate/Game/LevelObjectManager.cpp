@@ -47,17 +47,6 @@ void CLevelObjectManager::InitWayPointRot(const std::size_t vecSize, std::map<in
 	}
 }
 
-void CLevelObjectManager::ExecuteUpdate()
-{
-	if (m_player)
-	{
-
-	}
-	else
-	{
-		m_player = FindGO<Player>("Player");
-	}
-}
 
 void CLevelObjectManager::AddObject(ILevelObjectBase* object)
 {

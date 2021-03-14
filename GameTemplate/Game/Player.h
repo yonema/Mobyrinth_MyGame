@@ -3,6 +3,7 @@
 #include "DirectionLight.h"
 #include "ModelRender.h"
 #include "Mobius.h"
+class ILevelObjectBase;
 
 class Player : public IGameObject
 {
@@ -162,6 +163,7 @@ private:	//データメンバ
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
 
 	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
+
 
 };
 

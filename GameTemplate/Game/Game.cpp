@@ -3,9 +3,7 @@
 
 bool Game::Start()
 {
-	//NewGO<stage_kari>(0, "stage_kari");
-	//NewGO<stage_proto01>(0, "stage_proto01");
-	//NewGO<stage_proto02>(0, "stage_proto02");
+
 
 	m_spriteRender = NewGO<CSpriteRender>(0);
 	m_spriteRender->Init("Assets/Image/sample.dds", 256.0f, 256.0f);
@@ -49,4 +47,14 @@ void Game::PostRender(RenderContext& rc)
 	{
 		m_numText = 0;
 	}
+}
+
+void Game::Update()
+{
+	m_lb = CLevelObjectManager::GetInstance()->GetLevelObjects();
+
+
+	int a = 4;
+
+	return;
 }

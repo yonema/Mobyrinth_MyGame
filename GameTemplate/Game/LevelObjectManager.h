@@ -41,15 +41,14 @@ public:
 
 
 public:
-	/// <summary>
-	/// ゲームループで読んでほしい
-	/// アップデート関数関数
-	/// </summary>
-	void ExecuteUpdate();
 
 	Player* GetPlayer()const
 	{
 		return m_player;
+	}
+	void SetPlayer(Player* player)
+	{
+		m_player = player;
 	}
 
 	/// <summary>
@@ -92,6 +91,13 @@ public:
 					}
 				}
 		}
+	}
+
+
+
+	std::vector<ILevelObjectBase*> GetLevelObjects()
+	{
+		return m_levelObjects;
 	}
 private:
 	Player* m_player = nullptr;
