@@ -3,7 +3,6 @@
 #include "DirectionLight.h"
 #include "ModelRender.h"
 #include "Mobius.h"
-#include "Pause.h"
 
 class Player : public IGameObject
 {
@@ -164,6 +163,5 @@ private:	//データメンバ
 
 	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
-	CPause* m_pause = nullptr;
 };
 

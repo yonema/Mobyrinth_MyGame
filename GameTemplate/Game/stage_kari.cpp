@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "stage_kari.h"
 
-bool stage_kari::Start()
+bool stage_kari::StartSub()
 {
-	m_stageMode.LoadLevel("Assets/level/stage_kari02.tkl");
+	LoadLevel("Assets/level/stage_kari02.tkl");
 
 	return true;
 }

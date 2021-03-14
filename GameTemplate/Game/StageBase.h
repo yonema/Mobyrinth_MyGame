@@ -4,6 +4,9 @@
 #include "DirectionLight.h"
 #include "GameCamera.h"
 
+//ポーズ画面用
+#include "Pause.h"
+
 //レベルのロードで必要
 #include "Level.h"
 #include "LevelObjectManager.h"
@@ -30,11 +33,14 @@
 
 
 
-class CStageMode
+class IStageBase : public IGameObject
 {
 public:
-	CStageMode();
-	~CStageMode();
+	bool Start()override final;
+	~IStageBase();
+	void UpdateOnlyPaused()override final;
+
+protected:
 	/// <summary>
 	/// レベルのロード
 	/// </summary>
@@ -44,8 +50,15 @@ public:
 	{
 		return m_stageDirectionLight;
 	}
+	virtual bool StartSub() = 0 { return true; };
+	virtual void RetryStage() = 0 {};
+	void Release()
+	{
+		DeleteGO(this);
+	}
 private:
 	CLevel m_level;
 	CDirectionLight* m_stageDirectionLight = nullptr;
+	CPause* m_pause = nullptr;
 };
 

@@ -1,19 +1,25 @@
 #include "stdafx.h"
-#include "StageMode.h"
+#include "StageBase.h"
+#include "Title.h"
 
-CStageMode::CStageMode()
+bool IStageBase::Start()
 {
 	//ディレクションライトの作成
-	m_stageDirectionLight = NewGO<CDirectionLight>(0, "DirectionLight");
+	m_stageDirectionLight = NewGO<CDirectionLight>(0);
 	m_stageDirectionLight->SetDirection({ 1.0f,1.0f,-1.0f });
 	m_stageDirectionLight->SetColor({ 0.1f,0.1f,0.1f,1.0f });
 
 	//ゲームカメラの作成
 	NewGO<GameCamera>(0, "GameCamera");
 
+	//ポーズ画面用クラスの作成
+	m_pause = NewGO<CPause>(0);
+
+	return StartSub();
+
 }
 
-void CStageMode::LoadLevel(const char* tklFilePath)
+void IStageBase::LoadLevel(const char* tklFilePath)
 {
 
 	//ウェイポイントの「場所」を格納するマップ
@@ -263,11 +269,12 @@ void CStageMode::LoadLevel(const char* tklFilePath)
 	return;
 }
 
-CStageMode::~CStageMode()
+IStageBase::~IStageBase()
 {
 	//単体のオブジェクトを消去
 	DeleteGO(m_stageDirectionLight);
 	DeleteGO(FindGO<GameCamera>("GameCamera"));
+	DeleteGO(m_pause);
 
 	//レベルでロードしたオブジェクトを消去
 
@@ -364,5 +371,17 @@ CStageMode::~CStageMode()
 	);
 }
 
-
+void IStageBase::UpdateOnlyPaused()
+{
+	if (m_pause->GetRetryFlag())
+	{
+		RetryStage();
+		Release();
+	}
+	else if (m_pause->GetQuitFlag())
+	{
+		NewGO<Title>(0, "Title");
+		Release();
+	}
+}
 

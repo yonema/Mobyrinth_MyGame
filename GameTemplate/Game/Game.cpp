@@ -5,20 +5,24 @@ bool Game::Start()
 {
 	//NewGO<stage_kari>(0, "stage_kari");
 	//NewGO<stage_proto01>(0, "stage_proto01");
-	NewGO<stage_proto02>(0, "stage_proto02");
+	//NewGO<stage_proto02>(0, "stage_proto02");
 
 	m_spriteRender = NewGO<CSpriteRender>(0);
 	m_spriteRender->Init("Assets/Image/sample.dds", 256.0f, 256.0f);
 	//m_spriteRender->SetPosition({ 0.0f,0.0f,0.0f });
-
+	NewGO<Title>(0, "Title");
 
 	return true;
 }
 
 Game::~Game()
 {
-	//DeleteGO(FindGO<stage_proto01>("stage_proto01"));
-	//DeleteGO(FindGO<stage_kari>("stage_kari"));
+	//オブジェクトがないかもしれないからクエリしてあったら消す。
+	QueryGOs<Title>("Title", [&](Title* title)->bool
+		{
+			DeleteGO(title);
+			return true;
+		});
 }
 
 void Game::PostRender(RenderContext& rc)

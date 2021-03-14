@@ -1,15 +1,17 @@
 #pragma once
-#include "StageMode.h"
+#include "StageBase.h"
 
 
-class stage_kari : public IGameObject
+class stage_kari : public IStageBase
 {
 public:
-	bool Start() override final;
+	bool StartSub() override final;
 	~stage_kari();
+	void RetryStage()override final
+	{
+		NewGO<stage_kari>(0);
+	}
 
 private:	//データメンバ
-	CStageMode m_stageMode;
-
 };
 

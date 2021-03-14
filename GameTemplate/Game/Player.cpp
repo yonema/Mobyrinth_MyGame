@@ -19,6 +19,8 @@ bool Player::Start()
 	m_mobius = FindGO<Mobius>("Mobius");
 
 
+	//デバック用
+	//後で消す
 	m_dbgModel = NewGO<CModelRender>(0);
 	m_dbgModel->Init("Assets/modelData/yuka.tkm");
 	m_dbgModel2 = NewGO<CModelRender>(0);
@@ -27,7 +29,6 @@ bool Player::Start()
 	m_dbgModel3->Init("Assets/modelData/yuka.tkm");
 
 
-	m_pause = NewGO<CPause>(0);
 
 	return true;
 }
@@ -35,6 +36,13 @@ bool Player::Start()
 Player::~Player()
 {
 	DeleteGO(m_modelRender);
+
+	//デバック用
+	//後で消す
+	DeleteGO(m_dbgModel);
+	DeleteGO(m_dbgModel2);
+	DeleteGO(m_dbgModel3);
+
 }
 
 

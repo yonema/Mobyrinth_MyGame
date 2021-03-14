@@ -30,6 +30,7 @@ bool CPause::Start()
 
 	for (int i = 0; i < enPauseStateNum; i++)
 	{
+		m_fontRender[i]->SetPostRenderFlag(true);
 		m_fontRender[i]->Deactivate();
 	}
 
@@ -39,6 +40,7 @@ bool CPause::Start()
 			{ -200.0f,145.0f },
 			{ 0.0f,0.0f,0.0f,1.0f }
 	);
+	m_arrowFR->SetPostRenderFlag(true);
 	m_arrowFR->Deactivate();
 
 	return true;
@@ -46,6 +48,7 @@ bool CPause::Start()
 
 CPause::~CPause()
 {
+	UnPause();
 	for (int i = 0; i < enPauseStateNum; i++)
 	{
 		DeleteGO(m_fontRender[i]);
@@ -144,8 +147,10 @@ void CPause::Decision()
 			UnPause();
 			break;
 		case enRetry:
+			m_retryFlag = true;
 			break;
 		case enQuit:
+			m_quitFlag = true;
 			break;
 		default:
 			break;

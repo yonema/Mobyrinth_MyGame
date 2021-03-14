@@ -2,9 +2,9 @@
 #include "stage_proto01.h"
 
 
-bool stage_proto01::Start()
+bool stage_proto01::StartSub()
 {
-	m_stageMode.LoadLevel("Assets/level/stage_proto01.tkl");
+	LoadLevel("Assets/level/stage_proto01.tkl");
 
 	return true;
 }

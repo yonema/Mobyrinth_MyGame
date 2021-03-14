@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "stage_proto02.h"
 
-bool stage_proto02::Start()
+bool stage_proto02::StartSub()
 {
-	m_stageMode.LoadLevel("Assets/level/stage_proto02.tkl");
+	LoadLevel("Assets/level/stage_proto02.tkl");
 
 	return true;
 }
