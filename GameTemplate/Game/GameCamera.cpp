@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "GameCamera.h"
-class Player_kari;
+class Player;
 
 bool GameCamera::Start()
 {
 	//プレイヤーを探す
-	m_pPlayer = FindGO<Player_kari>("player");
+	m_pPlayer = FindGO<Player>("Player");
 	//注視点から視点へのベクトルを設定する
 	m_toCameraPos = { 0.0f,0.0f,1000.0f };
 
@@ -58,7 +58,7 @@ void GameCamera::Update()
 	{
 		//プレイヤーが見つかっていなかったら
 		//プレイヤーを探す
-		m_pPlayer = FindGO<Player_kari>("player");
+		m_pPlayer = FindGO<Player>("Player");
 	}
 
 

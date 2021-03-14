@@ -55,7 +55,7 @@ void CLevelObjectManager::ExecuteUpdate()
 	}
 	else
 	{
-		m_player = FindGO<Player_kari>("player");
+		m_player = FindGO<Player>("Player");
 	}
 }
 

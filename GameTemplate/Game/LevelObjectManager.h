@@ -1,5 +1,5 @@
 #pragma once
-#include "Player_kari.h"
+#include "Player.h"
 
 class ILevelObjectBase;
 
@@ -47,7 +47,7 @@ public:
 	/// </summary>
 	void ExecuteUpdate();
 
-	Player_kari* GetPlayer()const
+	Player* GetPlayer()const
 	{
 		return m_player;
 	}
@@ -94,7 +94,7 @@ public:
 		}
 	}
 private:
-	Player_kari* m_player = nullptr;
+	Player* m_player = nullptr;
 	std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
 	std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
 	int m_vecSize = 0;		//ウェイポイントステートの最大の値

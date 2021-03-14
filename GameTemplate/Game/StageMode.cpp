@@ -1,0 +1,368 @@
+#include "stdafx.h"
+#include "StageMode.h"
+
+CStageMode::CStageMode()
+{
+	//ディレクションライトの作成
+	m_stageDirectionLight = NewGO<CDirectionLight>(0, "DirectionLight");
+	m_stageDirectionLight->SetDirection({ 1.0f,1.0f,-1.0f });
+	m_stageDirectionLight->SetColor({ 0.1f,0.1f,0.1f,1.0f });
+
+	//ゲームカメラの作成
+	NewGO<GameCamera>(0, "GameCamera");
+
+}
+
+void CStageMode::LoadLevel(const char* tklFilePath)
+{
+
+	//ウェイポイントの「場所」を格納するマップ
+	std::map<int, Vector3> posMap;
+	//ウェイポイントの「回転」を格納するマップ
+	std::map<int, Quaternion> rotMap;
+	//ウェイポイントの数
+	std::size_t vecSize = 0;
+
+	//プレイヤーのポインタ
+	Player* pPlayer;
+
+	//レベルをロードする
+	m_level.Init(tklFilePath, [&](LevelObjectData& objData)
+		{//ロードするレベル一つ一つにクエリを行う
+
+			///
+			///
+			/// 「基本オブジェクト」
+			
+			//オブジェクトネームが"player_kari"と同じだったら
+			if (objData.EqualObjectName(L"player_kari") == true)
+			{
+				//プレイヤーを作成する
+				pPlayer = NewGO<Player>(0, "Player");
+				//プレイヤーのポジションをロードしたオブジェクトと同じポジションにする
+				pPlayer->SetPosition(objData.position);
+				//フックしたため、trueを返す。
+				return true;
+			}
+			else if (objData.EqualObjectName(L"Mobius") == true)
+			{
+				Mobius* mobius;
+				mobius = NewGO<Mobius>(0, "Mobius");
+				mobius->SetPosition(objData.position);
+				mobius->SetRotation(objData.rotation);
+				return true;
+			}
+
+			///
+			///
+			/// 「反転オブジェクト」ReversibleObject
+
+			//mizu_kori
+			else if (objData.EqualObjectName(L"mizu") == true)
+			{
+				ROmizu_kori* RObject;
+				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(ROmizu_kori::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"koori") == true)
+			{
+				ROmizu_kori* RObject;
+				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+			//bird_fish
+			else if (objData.EqualObjectName(L"bird") == true)
+			{
+				RObird_fish* RObject;
+				RObject = NewGO<RObird_fish>(0, "bird_fish");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"fish") == true)
+			{
+				RObird_fish* RObject;
+				RObject = NewGO<RObird_fish>(0, "bird_fish");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+			//running_stop
+			else if (objData.EqualObjectName(L"kadou") == true)
+			{
+				ROrunning_stop* RObject;
+				RObject = NewGO<ROrunning_stop>(0, "running_stop");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"teishi") == true)
+			{
+				ROrunning_stop* RObject;
+				RObject = NewGO<ROrunning_stop>(0, "running_stop");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+			//wire_string
+			else if (objData.EqualObjectName(L"wire") == true)
+			{
+				ROwire_string* RObject;
+				RObject = NewGO<ROwire_string>(0, "wire_string");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"string") == true)
+			{
+				ROwire_string* RObject;
+				RObject = NewGO<ROwire_string>(0, "wire_string");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+			//nail_bar
+			else if (objData.EqualObjectName(L"nail") == true)
+			{
+				ROnail_bar* RObject;
+				RObject = NewGO<ROnail_bar>(0, "nail_bar");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"bar") == true)
+			{
+				ROnail_bar* RObject;
+				RObject = NewGO<ROnail_bar>(0, "nail_bar");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+			//axe_pickaxe
+			else if (objData.EqualObjectName(L"axe") == true)
+			{
+				ROaxe_pickaxe* RObject;
+				RObject = NewGO<ROaxe_pickaxe>(0, "axe_pickaxe");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"pickaxe") == true)
+			{
+				ROaxe_pickaxe* RObject;
+				RObject = NewGO<ROaxe_pickaxe>(0, "axe_pickaxe");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+			//keymold_empty
+			else if (objData.EqualObjectName(L"key mold") == true)
+			{
+				ROkeymold_empty* RObject;
+				RObject = NewGO<ROkeymold_empty>(0, "keymold_empty");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				return true;
+			}
+
+			///
+			///
+			/// 「障害オブジェクト」ObstacleObject
+
+			//goal
+			else if (objData.EqualObjectName(L"goal") == true)
+			{
+				OOgoal* OObject;
+				OObject = NewGO<OOgoal>(0, "goal");
+				OObject->SetPosition(objData.position);
+				return true;
+			}
+			//bigFire
+			else if (objData.EqualObjectName(L"bigFire") == true)
+			{
+				OObigFire* OObject;
+				OObject = NewGO<OObigFire>(0, "bigFire");
+				OObject->SetPosition(objData.position);
+				return true;
+			}
+			//wall
+			else if (objData.EqualObjectName(L"wall") == true)
+			{
+				OOwall* OObject;
+				OObject = NewGO<OOwall>(0, "wall");
+				OObject->SetPosition(objData.position);
+				return true;
+			}
+			//bigPadlock
+			else if (objData.EqualObjectName(L"padlock") == true)
+			{
+				OOpadlock* OObject;
+				OObject = NewGO<OOpadlock>(0, "bigPadlock");
+				OObject->SetPosition(objData.position);
+				return true;
+			}
+			//box
+			else if (objData.EqualObjectName(L"box") == true)
+			{
+				OObox* OObject;
+				OObject = NewGO<OObox>(0, "box");
+				OObject->SetPosition(objData.position);
+				return true;
+			}
+
+
+			///
+			///
+			/// 「ウェイポイント」
+
+			//オブジェクトネームに"waypoint"があったら
+			else if (std::wcsstr(objData.name, L"waypoint") != NULL)
+			{
+				//番号（"0"）の文字列があるアドレスを返す
+				std::wstring buff = std::wcsstr(objData.name, L"0");
+				//wstringをintに変換
+				int num = _wtoi(buff.c_str());
+				//マップに入れる
+				posMap.insert(std::make_pair(num, objData.position));
+				rotMap.insert(std::make_pair(num, objData.rotation));
+				//ウェイポイントの数を加算
+				vecSize++;
+
+
+				//デバック用
+				//後で消す
+				CModelRender* dbgModel;
+				dbgModel = NewGO<CModelRender>(0, "waypoint");
+				dbgModel->Init("Assets/modelData/yuka.tkm");
+				dbgModel->SetPosition(objData.position);
+				dbgModel->SetRotation(objData.rotation);
+
+
+				return true;
+			}
+			return false;
+		});
+
+
+
+	//ロードしたレベルにあったウェイポイントをマネージャーに登録する
+	CLevelObjectManager::GetInstance()->InitWayPointPos(vecSize, posMap);
+	CLevelObjectManager::GetInstance()->InitWayPointRot(vecSize, rotMap);
+
+	//ウェイポイントをプレイヤーに設定する
+	pPlayer->SetWayPointPos
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
+	pPlayer->SetWayPointRot
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
+
+
+	return;
+}
+
+CStageMode::~CStageMode()
+{
+	//単体のオブジェクトを消去
+	DeleteGO(m_stageDirectionLight);
+	DeleteGO(FindGO<GameCamera>("GameCamera"));
+
+	//レベルでロードしたオブジェクトを消去
+
+	//「基本オブジェクト」
+	QueryGOs<Player>("Player", [&](Player* player)->bool
+		{
+			DeleteGO(player);
+			return true;
+		}
+	);
+	QueryGOs<Mobius>("Mobius", [&](Mobius* mobius)->bool
+		{
+			DeleteGO(mobius);
+			return true;
+		}
+	);
+	//「反転オブジェクト」ReversibleObject
+	QueryGOs<ROmizu_kori>("mizu_kori", [&](ROmizu_kori* RObject)->bool
+		{
+			DeleteGO(RObject);
+			return true;
+		}
+	);
+	QueryGOs<RObird_fish>("bird_fish", [&](RObird_fish* RObject)->bool
+		{
+			DeleteGO(RObject);
+			return true;
+		}
+	);
+	QueryGOs<ROrunning_stop>("running_stop", [&](ROrunning_stop* RObject)->bool
+		{
+			DeleteGO(RObject);
+			return true;
+		}
+	);
+	QueryGOs<ROwire_string>("wire_string", [&](ROwire_string* RObject)->bool
+		{
+			DeleteGO(RObject);
+			return true;
+		}
+	);
+	QueryGOs<ROnail_bar>("nail_bar", [&](ROnail_bar* RObject)->bool
+		{
+			DeleteGO(RObject);
+			return true;
+		}
+	);
+	QueryGOs<ROaxe_pickaxe>("axe_pickaxe", [&](ROaxe_pickaxe* RObject)->bool
+		{
+			DeleteGO(RObject);
+			return true;
+		}
+	);
+	QueryGOs<ROkeymold_empty>("keymold_empty", [&](ROkeymold_empty* RObject)->bool
+		{
+			DeleteGO(RObject);
+			return true;
+		}
+	);
+	//「障害オブジェクト」ObstacleObject
+	QueryGOs<OOgoal>("goal", [&](OOgoal* OObject)->bool
+		{
+			DeleteGO(OObject);
+			return true;
+		}
+	);
+	QueryGOs<OObigFire>("bigFire", [&](OObigFire* OObject)->bool
+		{
+			DeleteGO(OObject);
+			return true;
+		}
+	);
+	QueryGOs<OOpadlock>("bigPadlock", [&](OOpadlock* OObject)->bool
+		{
+			DeleteGO(OObject);
+			return true;
+		}
+	);
+	QueryGOs<OObox>("box", [&](OObox* OObject)->bool
+		{
+			DeleteGO(OObject);
+			return true;
+		}
+	);
+
+
+	//デバック用
+	//後で消す
+	QueryGOs<CModelRender>("waypoint", [&](CModelRender* waypoint)->bool
+		{
+			DeleteGO(waypoint);
+			return true;
+		}
+	);
+}
+
+
+

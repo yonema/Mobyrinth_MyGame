@@ -1,7 +1,7 @@
 #pragma once
 #include "ModelRender.h"
 #include "LevelObjectManager.h"
-#include "Player_kari.h"
+#include "Player.h"
 
 class ILevelObjectBase : public IGameObject
 {
@@ -72,13 +72,13 @@ public:
 		enPickaxe,
 		enKeymold,
 		enKey,
-		enROPadlock,
+		enPadlock,
 
 		//障害オブジェクト
 		enBigFire,
 		enWall,
 		enGoal,
-		enPadlock,
+		enBigPadlock,
 		enBox,
 	};
 private:
@@ -88,7 +88,7 @@ protected:
 	Vector3 m_position = g_vec3Zero;
 	Quaternion m_rotation = g_quatIdentity;
 	Vector3 m_scale = g_vec3One;
-	Player_kari* m_pPlayer = nullptr;
+	Player* m_pPlayer = nullptr;
 
 };
 

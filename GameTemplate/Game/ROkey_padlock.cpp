@@ -5,7 +5,7 @@
 bool ROkey_padlock::StartSub()
 {
 	Init("Assets/modelData/kagi.tkm", enKey,
-		"Assets/modelData/nankinjyo.tkm", enROPadlock);
+		"Assets/modelData/nankinjyo.tkm", enPadlock);
 
 	return true;
 }
@@ -16,7 +16,7 @@ void ROkey_padlock::QuerySub()
 
 	if (GetObjectType() == enKey)
 	{
-		QueryLOs<OOpadlock>(enPadlock, [&](OOpadlock* padlock) -> bool
+		QueryLOs<OOpadlock>(enBigPadlock, [&](OOpadlock* padlock) -> bool
 			{
 				if (IsHitObject(*this, *padlock, hitDot))
 				{

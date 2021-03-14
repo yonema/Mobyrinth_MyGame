@@ -45,6 +45,27 @@
     <Filter Include="MiniEngine\font">
       <UniqueIdentifier>{6a714e75-93da-4ee0-954f-20392a9a30dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode">
+      <UniqueIdentifier>{c0b047fd-ea88-456a-83e5-1c13e88766cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\LevelObject">
+      <UniqueIdentifier>{803ad4e5-a67a-48fb-ad9a-4417acf153ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\LevelObject\ObstacleObject">
+      <UniqueIdentifier>{11305c0a-f5ee-4394-b31e-2b6b3e3ce537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\LevelObject\ReversibleObject">
+      <UniqueIdentifier>{880cc0ee-ef73-4fd1-939b-f65d6873a5d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Light">
+      <UniqueIdentifier>{2efa8f18-1b64-413d-beb1-ddf66048d976}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\stage">
+      <UniqueIdentifier>{601d5414-83e1-4d04-8dcd-a30e3f7ea3c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\TKLevel">
+      <UniqueIdentifier>{032f7f6e-e194-4a13-9f89-d31220cffb6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -194,27 +215,6 @@
     <ClCompile Include="..\..\MiniEngine\font\FontEngine.cpp">
       <Filter>MiniEngine\font</Filter>
     </ClCompile>
-    <ClCompile Include="Player_kari.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="stage_kari.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="LightManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectionLight.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="MapChip.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="TklFile.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="ModelRender.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -227,64 +227,97 @@
     <ClCompile Include="Mobius.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="LevelObjectBase.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelObjectManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ROmizu_kori.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ObstacleObject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ReversibleObject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="OObigFire.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="RObird_fish.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ROrunning_stop.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="OOwall.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="OOgoal.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="stage_proto01.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ROwire_string.cpp">
+    <ClCompile Include="SpriteRender.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ROnail_bar.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Level.cpp">
+      <Filter>MyCode\TKLevel</Filter>
     </ClCompile>
-    <ClCompile Include="ROaxe_pickaxe.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="MapChip.cpp">
+      <Filter>MyCode\TKLevel</Filter>
     </ClCompile>
-    <ClCompile Include="OOpadlock.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="LevelObjectBase.cpp">
+      <Filter>MyCode\LevelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelObjectManager.cpp">
+      <Filter>MyCode\LevelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstacleObject.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="OObigFire.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
     <ClCompile Include="OObox.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
-    <ClCompile Include="ROkeymold_empty.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="OOgoal.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="OOpadlock.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="OOwall.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ReversibleObject.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ROaxe_pickaxe.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RObird_fish.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
     <ClCompile Include="ROkey_padlock.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ROkeymold_empty.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ROmizu_kori.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ROnail_bar.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ROrunning_stop.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ROwire_string.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionLight.cpp">
+      <Filter>MyCode\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>MyCode\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="stage_kari.cpp">
+      <Filter>MyCode\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="stage_proto01.cpp">
+      <Filter>MyCode\stage</Filter>
     </ClCompile>
     <ClCompile Include="stage_proto02.cpp">
+      <Filter>MyCode\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="TklFile.cpp">
+      <Filter>MyCode\TKLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Pause.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="FontRender.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="StageMode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -460,32 +493,8 @@
     <ClInclude Include="..\..\MiniEngine\font\Font.h">
       <Filter>MiniEngine\font</Filter>
     </ClInclude>
-    <ClInclude Include="Player_kari.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="stage_kari.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="LightManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="LightData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectionLight.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="MapChip.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ExEngine\gameObject\IGameobject.h">
       <Filter>ExEngine\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="TklFile.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="ModelRender.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -496,64 +505,100 @@
     <ClInclude Include="Mobius.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="LevelObjectBase.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelObjectManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ROmizu_kori.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ObstacleObject.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ReversibleObject.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="OObigFire.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="RObird_fish.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ROrunning_stop.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="OOwall.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="OOgoal.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="stage_proto01.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ROwire_string.h">
+    <ClInclude Include="SpriteRender.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ROnail_bar.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Level.h">
+      <Filter>MyCode\TKLevel</Filter>
     </ClInclude>
-    <ClInclude Include="ROaxe_pickaxe.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="MapChip.h">
+      <Filter>MyCode\TKLevel</Filter>
     </ClInclude>
-    <ClInclude Include="OOpadlock.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="LevelObjectBase.h">
+      <Filter>MyCode\LevelObject</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelObjectManager.h">
+      <Filter>MyCode\LevelObject</Filter>
+    </ClInclude>
+    <ClInclude Include="LightData.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionLight.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstacleObject.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="OObigFire.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
     <ClInclude Include="OObox.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
-    <ClInclude Include="ROkeymold_empty.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="OOgoal.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="OOpadlock.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="OOwall.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ReversibleObject.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ROaxe_pickaxe.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RObird_fish.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
     <ClInclude Include="ROkey_padlock.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ROkeymold_empty.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ROmizu_kori.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ROnail_bar.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ROrunning_stop.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ROwire_string.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="stage_kari.h">
+      <Filter>MyCode\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="stage_proto01.h">
+      <Filter>MyCode\stage</Filter>
     </ClInclude>
     <ClInclude Include="stage_proto02.h">
+      <Filter>MyCode\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="TklFile.h">
+      <Filter>MyCode\TKLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="FontRender.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="StageMode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

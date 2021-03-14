@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "Player_kari.h"
+#include "Player.h"
 #include "LightManager.h"
 
 
 
-bool Player_kari::Start()
+bool Player::Start()
 {
 	m_animationClips[enAnimClip_Idle].Load("Assets/animData/idle.tka");
 	m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
@@ -26,16 +26,19 @@ bool Player_kari::Start()
 	m_dbgModel3 = NewGO<CModelRender>(0);
 	m_dbgModel3->Init("Assets/modelData/yuka.tkm");
 
+
+	m_pause = NewGO<CPause>(0);
+
 	return true;
 }
 
-Player_kari::~Player_kari()
+Player::~Player()
 {
 	DeleteGO(m_modelRender);
 }
 
 
-void Player_kari::CheckWayPoint()
+void Player::CheckWayPoint()
 {
 	///
 	///
@@ -111,7 +114,7 @@ void Player_kari::CheckWayPoint()
 
 }
 
-void Player_kari::Move()
+void Player::Move()
 {
 	//移動する向きは毎フレーム計算した方がいいのかな？
 	//それとも、m_wayPointStateの切り替の時にした方がいいのかな？
@@ -153,7 +156,7 @@ void Player_kari::Move()
 	return;
 }
 
-void Player_kari::GetOnStage()
+void Player::GetOnStage()
 {
 	m_upVec = g_vec3AxisY;
 	m_finalWPRot.Apply(m_upVec);
@@ -183,7 +186,7 @@ void Player_kari::GetOnStage()
 
 }
 
-void Player_kari::Rotation()
+void Player::Rotation()
 {
 	//左のウェイポイントから右のウェイポイントへのベクトル
 	Vector3 lpToRpLen = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
@@ -211,7 +214,7 @@ void Player_kari::Rotation()
 	return;
 }
 
-void Player_kari::Update()
+void Player::Update()
 {
 	//ゲームパッドの左スティックのX軸の入力情報を取得
 	m_padLStickXF = g_pad[0]->GetLStickXF();
@@ -237,7 +240,7 @@ void Player_kari::Update()
 
 
 
-void Player_kari::SetWayPointPos
+void Player::SetWayPointPos
 (const std::size_t vecSize, std::vector<Vector3>*const posMap)
 {
 	//vectorのサイズの確保
@@ -252,7 +255,7 @@ void Player_kari::SetWayPointPos
 	//	m_wayPointPos[index] = &it;
 	//}
 }
-void Player_kari::SetWayPointRot
+void Player::SetWayPointRot
 (const std::size_t vecSize, std::vector<Quaternion>* rotMap)
 {
 	//vectorのサイズの確保
@@ -269,7 +272,7 @@ void Player_kari::SetWayPointRot
 }
 
 
-void Player_kari::PostRender(RenderContext& rc)
+void Player::PostRender(RenderContext& rc)
 {
 	//テキスト用意
 	wchar_t text[256];

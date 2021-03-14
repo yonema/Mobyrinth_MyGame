@@ -143,5 +143,38 @@ protected:
 	bool m_isNewFromGameObjectManager;	//GameObjectManagerでnewされた。
 	bool m_isRegist = false;							//GameObjectManagerに登録されている？
 	bool m_isActive = true;							//Activeフラグ。
+
+	//追加
+private:
+	static bool m_gamePaused;				//ゲームがポーズ中。Updateが呼ばれない。
+public:
+	static void SetGamePaused(const bool paused)
+	{
+		m_gamePaused = paused;
+	}
+	static const bool GetGamePaused()
+	{
+		return m_gamePaused;
+	}
+	/// <summary>
+	/// ポーズ中でも呼ばれるUpdate（更新）
+	/// </summary>
+	virtual void UpdateWhenPaused() {};
+	/// <summary>
+	/// ポーズ中にだけ呼ばれるUpdate（更新）
+	/// </summary>
+	virtual void UpdateOnlyPaused() {};
 	
+	void UpdateWhenPausedWrapper()
+	{
+		if (m_isActive && m_isStart && !m_isDead) {
+			UpdateWhenPaused();
+		}
+	}
+	void UpdateOnlyPausedWrapper()
+	{
+		if (m_isActive && m_isStart && !m_isDead) {
+			UpdateOnlyPaused();
+		}
+	}
 };

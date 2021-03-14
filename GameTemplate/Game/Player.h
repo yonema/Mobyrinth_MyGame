@@ -3,12 +3,13 @@
 #include "DirectionLight.h"
 #include "ModelRender.h"
 #include "Mobius.h"
+#include "Pause.h"
 
-class Player_kari : public IGameObject
+class Player : public IGameObject
 {
 public://publicなメンバ関数
 	bool Start() override final;
-	~Player_kari();
+	~Player();
 	void Update() override final;
 	/// <summary>
 	/// プレイヤーの座標を設定
@@ -163,5 +164,6 @@ private:	//データメンバ
 
 	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
+	CPause* m_pause = nullptr;
 };
 
