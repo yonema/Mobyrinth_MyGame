@@ -58,10 +58,15 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				mobius->SetRotation(objData.rotation);
 				return true;
 			}
+		
 
 			///
 			///
 			/// 「反転オブジェクト」ReversibleObject
+			 
+			////////////////////////////////////////////////////////////
+			// 反転オブジェクトを作成時、ここに追加
+			////////////////////////////////////////////////////////////
 
 			//mizu_kori
 			else if (objData.EqualObjectName(L"mizu") == true)
@@ -69,7 +74,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROmizu_kori* RObject;
 				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(ROmizu_kori::enFront);
+				RObject->SetFrontOrBack(CReversibleObject::enFront);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"koori") == true)
@@ -178,6 +183,10 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			///
 			///
 			/// 「障害オブジェクト」ObstacleObject
+			
+			////////////////////////////////////////////////////////////
+			// 障害オブジェクトを作成時、ここに追加
+			////////////////////////////////////////////////////////////
 
 			//goal
 			else if (objData.EqualObjectName(L"goal") == true)
@@ -278,6 +287,10 @@ IStageBase::~IStageBase()
 	DeleteGO(m_pause);
 
 	//レベルでロードしたオブジェクトを消去
+
+	////////////////////////////////////////////////////////////
+	// 新しいオブジェクトを作成時、ここでDeleteGOすること
+	////////////////////////////////////////////////////////////
 
 	//「基本オブジェクト」
 	QueryGOs<Player>("Player", [&](Player* player)->bool

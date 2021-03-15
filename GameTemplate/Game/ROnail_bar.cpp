@@ -28,7 +28,7 @@ void ROnail_bar::QuerySub()
 	}
 	else if (GetObjectType() == enBar)
 	{
-		QueryLOs<OOpadlock>(enBigPadlock, [&](OOpadlock* padlock) -> bool
+		QueryLOs<OOpadlock>(enNotHavePadlock, [&](OOpadlock* padlock) -> bool
 			{
 				if (IsHitObject(*this, *padlock, hitDot))
 				{

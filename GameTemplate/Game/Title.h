@@ -29,6 +29,10 @@ private:
 	int m_state = enTitleScreen;
 	CFontRender* m_titleFR = nullptr;
 	CFontRender* m_pushAButtonFR = nullptr;
+	/// <summary>
+	/// ステージの番号
+	/// 新しいステージを作った場合、ここに番号を追加
+	/// </summary>
 	enum EnStageList
 	{
 		enStage_kari,

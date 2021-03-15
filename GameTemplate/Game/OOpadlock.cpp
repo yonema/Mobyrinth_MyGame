@@ -3,7 +3,7 @@
 
 bool OOpadlock::StartSub()
 {
-	Init("Assets/modelData/padlock.tkm", enBigPadlock);
+	Init("Assets/modelData/padlock.tkm", enNotHavePadlock);
 
 	//m_scale = { 2.0f,2.0f,2.0f };
 
