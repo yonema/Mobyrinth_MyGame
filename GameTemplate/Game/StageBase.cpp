@@ -348,6 +348,12 @@ IStageBase::~IStageBase()
 			return true;
 		}
 	);
+	QueryGOs<ROkey_padlock>("key_padlock", [&](ROkey_padlock* RObject)->bool
+		{
+			DeleteGO(RObject);
+			return true;
+		}
+	);
 	//「障害オブジェクト」ObstacleObject
 	QueryGOs<OOgoal>("goal", [&](OOgoal* OObject)->bool
 		{
@@ -379,6 +385,7 @@ IStageBase::~IStageBase()
 			return true;
 		}
 	);
+
 
 
 	//デバック用

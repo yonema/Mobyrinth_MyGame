@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Title.h"
 
+
+
 bool Title::Start()
 {
 	m_titleFR = NewGO<CFontRender>(0);
