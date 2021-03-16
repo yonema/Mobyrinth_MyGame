@@ -12,11 +12,14 @@ CSpriteRender::~CSpriteRender()
 }
 void CSpriteRender::Init(const char* texFilePath, float w, float h)
 {
-	m_initData.m_ddsFilePath[0] = texFilePath;
-	m_initData.m_width = w;
-	m_initData.m_height = h;
-	m_initData.m_fxFilePath = "Assets/shader/sprite.fx";
-	m_sprite.Init(m_initData);
+	SpriteInitData initData;
+	initData.m_ddsFilePath[0] = texFilePath;
+	initData.m_width = w;
+	initData.m_height = h;
+	initData.m_fxFilePath = "Assets/shader/sprite.fx";
+	initData.m_psEntryPoinFunc = "PSMain";
+	initData.m_vsEntryPointFunc = "VSMain";
+	m_sprite.Init(initData);
 
 	return;
 }

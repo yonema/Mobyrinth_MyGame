@@ -18,7 +18,27 @@ COBB::COBB()
 void COBB::Init(SInitOBBData& initData)
 {
 	m_position = initData.position;
-	//m_normalDirection[enLocalX] = 
+	m_directionLength[enLocalX] = initData.width / 2;
+	m_directionLength[enLocalY] = initData.length / 2;
+	m_directionLength[enLocalZ] = initData.height / 2;
 
+	Rotating(initData.rotation);
 
+	//m_normalDirection[enLocalX] = initData.
+}
+void COBB::Positioning(const Vector3& pos)
+{
+
+}
+
+void COBB::Rotating(const Quaternion& rot)
+{
+	m_normalDirection[enLocalX] = g_vec3Right;
+	m_normalDirection[enLocalY] = g_vec3Up;
+	m_normalDirection[enLocalZ] = g_vec3Front;
+	rot.Apply(m_normalDirection[enLocalX]);
+	rot.Apply(m_normalDirection[enLocalY]);
+	rot.Apply(m_normalDirection[enLocalZ]);
+
+	return;
 }
