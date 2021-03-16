@@ -17,5 +17,8 @@ COBB::COBB()
 
 void COBB::Init(SInitOBBData& initData)
 {
-	
+	m_position = initData.position;
+	//m_normalDirection[enLocalX] = 
+
+
 }
