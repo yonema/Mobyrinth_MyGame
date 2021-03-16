@@ -86,6 +86,11 @@ void CPause::UpdateOnlyPaused()
 }
 void CPause::ToPause()
 {
+	if (m_canPause == false) 
+	{
+		return;
+	}
+
 	m_isPaused = true;
 	SetGamePaused(m_isPaused);
 	for (int i = 0; i < enPauseStateNum; i++)
@@ -93,6 +98,7 @@ void CPause::ToPause()
 		m_fontRender[i]->Activate();
 	}
 	m_arrowFR->Activate();
+
 }
 void CPause::UnPause()
 {

@@ -399,6 +399,8 @@ void IStageBase::Update()
 		if (m_goal->GetIsGoal())
 		{
 			Goal();
+
+			m_pause->SetCanPause(false);
 		}
 	}
 
