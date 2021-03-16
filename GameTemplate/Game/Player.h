@@ -4,6 +4,8 @@
 #include "ModelRender.h"
 #include "Mobius.h"
 class ILevelObjectBase;
+#include "OBB.h"
+
 
 class Player : public IGameObject
 {
@@ -116,7 +118,9 @@ public://デバック用
 	bool m_dbgHit = false;
 	float m_dbgDot1 = 0.0f;
 	float m_dbgDot2 = 0.0f;
-
+	COBB m_obb;
+	static const int m_obbNum = 8;
+	CModelRender* m_dbgObbModel[m_obbNum] = { nullptr };
 
 private:	//データメンバ
 	/// <summary>

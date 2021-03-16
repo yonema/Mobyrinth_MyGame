@@ -28,8 +28,14 @@ bool Player::Start()
 	m_dbgModel3 = NewGO<CModelRender>(0);
 	m_dbgModel3->Init("Assets/modelData/yuka.tkm");
 
+	SInitOBBData initData;
+	m_obb.Init(initData);
 
-
+	for (int i = 0; i < m_obbNum; i++)
+	{
+		m_dbgObbModel[i] = NewGO<CModelRender>(0);
+		m_dbgObbModel[i]->Init("Assets/modelData/yuka.tkm");
+	}
 	return true;
 }
 
@@ -238,8 +244,46 @@ void Player::Update()
 		m_leftOrRight = enLeft;		//左向き
 	else if (m_padLStickXF > 0.0f)
 		m_leftOrRight = enRight;	//右向き
+	m_obb.SetRotation(m_finalWPRot);
+	m_obb.SetPosition(m_position);
+	Vector3 vert[m_obbNum];
+	Vector3 addVec[m_obbNum];
+	for (int i = 0; i < m_obbNum; i++)
+	{
+		vert[i] = m_obb.GetPosition();
+		addVec[i] = g_vec3Zero;
+	} 
+	addVec[0] -= m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[0] += m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[0] -= m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[1] -= m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[1] += m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[1] += m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[2] -= m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[2] -= m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[2] -= m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[3] -= m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[3] -= m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[3] += m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[4] += m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[4] += m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[4] -= m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[5] += m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[5] += m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[5] += m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[6] += m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[6] -= m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[6] -= m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[7] += m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[7] -= m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[7] += m_obb.GetNormalDirection(COBB::enLocalZ);
 
-
+	for (int i = 0; i < m_obbNum; i++)
+	{
+		addVec[i].Scale(200.0f);
+		vert[i] += addVec[i];
+		m_dbgObbModel[i]->SetPosition(vert[i]);
+	}
 
 	//ウェイポイントの更新処理
 	CheckWayPoint();
