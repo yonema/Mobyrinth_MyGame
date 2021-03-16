@@ -1,0 +1,29 @@
+・ヘッダーファイル
+class クラス名 : public IStageBase
+{
+public:
+	bool StartSub() override final;
+	~stage_kari();
+	void RetryStage()override final
+	{
+		NewGO<クラス名>(0);
+	}
+
+private:	//データメンバ
+};
+
+
+・ソースファイル
+#include "stdafx.h"
+#include "stage_kari.h"
+
+bool ファイル名::StartSub()
+{
+	LoadLevel("tklファイル名");
+
+	return true;
+}
+ファイル名::~ファイル名()
+{
+
+}

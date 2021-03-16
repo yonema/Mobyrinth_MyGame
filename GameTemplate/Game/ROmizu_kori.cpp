@@ -11,7 +11,7 @@ bool ROmizu_kori::StartSub()
 
 void ROmizu_kori::QuerySub()
 {
-	const float hitDot = 0.005f;
+	const float hitDot = 0.005f; //オブジェクトが触れたかを判定する変数
 
 	if (GetObjectType() == enWater)
 	{

@@ -16,7 +16,7 @@ void ROkey_padlock::QuerySub()
 
 	if (GetObjectType() == enKey)
 	{
-		QueryLOs<OOpadlock>(enBigPadlock, [&](OOpadlock* padlock) -> bool
+		QueryLOs<OOpadlock>(enNotHavePadlock, [&](OOpadlock* padlock) -> bool
 			{
 				if (IsHitObject(*this, *padlock, hitDot))
 				{

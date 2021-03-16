@@ -51,6 +51,10 @@ public:
 protected:
 	void CheckWayPoint();
 public:
+	/// <summary>
+	/// オブジェクトの番号
+	/// オブジェクトを増やしたらここで番号を増やすこと
+	/// </summary>
 	enum EnObjectType
 	{
 		enEnpty,
@@ -78,7 +82,7 @@ public:
 		enBigFire,
 		enWall,
 		enGoal,
-		enBigPadlock,
+		enNotHavePadlock,
 		enBox,
 	};
 private:
