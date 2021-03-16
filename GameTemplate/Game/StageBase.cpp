@@ -317,6 +317,12 @@ IStageBase::~IStageBase()
 			return true;
 		}
 	);
+	QueryGOs<StartDirecting>("StartDirecting", [&](StartDirecting* startDirecting)-> bool
+		{
+			DeleteGO(startDirecting);
+			return true;
+		}
+	);
 	//「反転オブジェクト」ReversibleObject
 	QueryGOs<ROmizu_kori>("mizu_kori", [&](ROmizu_kori* RObject)->bool
 		{

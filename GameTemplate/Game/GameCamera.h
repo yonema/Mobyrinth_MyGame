@@ -10,13 +10,13 @@ public:
 
 private:
 	/// <summary>
-	/// ゲーム中のカメラ
-	/// </summary>
-	void InGameCamera();
-	/// <summary>
 	/// ステージ開始時のカメラ
 	/// </summary>
 	void StartDirectingCamera();
+	/// <summary>
+	/// ゲーム中のカメラ
+	/// </summary>
+	void InGameCamera();
 
 private:
 	Player* m_pPlayer = nullptr;	//プレイヤーのポインタ
