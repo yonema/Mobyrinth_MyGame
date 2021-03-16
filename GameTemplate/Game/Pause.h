@@ -10,7 +10,13 @@ class CPause : public IGameObject
 public:
 	bool Start()override final;
 	~CPause();
+	/// <summary>
+	/// ポーズ中でも呼ばれるUpdate（更新）
+	/// </summary>
 	void UpdateWhenPaused()override final;
+	/// <summary>
+	/// ポーズ中にだけ呼ばれるUpdate（更新）
+	/// </summary>
 	void UpdateOnlyPaused()override final;
 
 public:
@@ -21,6 +27,10 @@ public:
 	const bool GetQuitFlag()const
 	{
 		return m_quitFlag;
+	}
+	void SetCanPause(const bool b)
+	{
+		m_canPause = b;
 	}
 
 private:
@@ -46,6 +56,6 @@ private:
 
 	bool m_retryFlag = false;
 	bool m_quitFlag = false;
-
+	bool m_canPause = true;
 };
 

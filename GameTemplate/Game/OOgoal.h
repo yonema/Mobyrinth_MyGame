@@ -14,6 +14,6 @@ public:
 	}
 private:
 	CFontRender* m_fontRender = nullptr;
-	bool m_isGoal = false;
+	bool m_isGoal = false; //ƒS[ƒ‹”»’è
 };
 

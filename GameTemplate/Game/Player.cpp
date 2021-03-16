@@ -145,7 +145,13 @@ void Player::Move()
 	m_moveSpeed = g_vec3Zero;
 
 	//移動する長さ
-	const float moveLen = 1000.0f;
+	float moveLen = 1000.0f;
+
+	//ゲームパッドのR1ボタンの入力情報を取得(ダッシュ状態)
+	if (g_pad[0]->IsPress(enButtonRB1) == true) {
+		moveLen = 3000.0f;
+	}
+
 
 	if (m_padLStickXF < 0.0f)
 	{
@@ -232,6 +238,8 @@ void Player::Update()
 		m_leftOrRight = enLeft;		//左向き
 	else if (m_padLStickXF > 0.0f)
 		m_leftOrRight = enRight;	//右向き
+
+
 
 	//ウェイポイントの更新処理
 	CheckWayPoint();
