@@ -9,6 +9,9 @@ bool IStageBase::Start()
 	m_stageDirectionLight->SetDirection({ 1.0f,1.0f,-1.0f });
 	m_stageDirectionLight->SetColor({ 0.1f,0.1f,0.1f,1.0f });
 
+	//ステージ開始時の演出の作成
+	m_startDirecting = NewGO<StartDirecting>(0, "StartDirecting");
+
 	//ゲームカメラの作成
 	NewGO<GameCamera>(0, "GameCamera");
 
@@ -273,6 +276,15 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	pPlayer->SetWayPointPos
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
 	pPlayer->SetWayPointRot
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
+
+
+	//ステージ開始時の演出時のカメラの注視点の座標を設定する
+	m_startDirecting->SetPosition(pPlayer->GetPosition());
+	//ウェイポイントをステージ開始時の演出に設定する
+	m_startDirecting->SetWayPointPos
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
+	m_startDirecting->SetWayPointRot
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
 
 

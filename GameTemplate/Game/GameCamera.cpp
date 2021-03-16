@@ -30,10 +30,23 @@ bool GameCamera::Start()
 	g_camera3D->SetNear(0.5f);
 	g_camera3D->SetFar(50000.0f);
 
+	//ステージ開始時の演出を探す
+	m_startDirecting = FindGO<StartDirecting>("StartDirecting");
+
 	return true;
 }
 
 void GameCamera::Update()
+{
+	if (m_startDirecting->GetStartDirecting() == true) {
+		StartDirectingCamera();
+	}
+	else {
+		InGameCamera();
+	}
+}
+
+void GameCamera::InGameCamera()
 {
 	if (m_pPlayer)
 	{
@@ -63,4 +76,21 @@ void GameCamera::Update()
 
 
 	return;
+}
+
+void GameCamera::StartDirectingCamera()
+{
+	if (m_pPlayer) {
+		//注視点から視点へのベクトルを設定する
+		m_toCameraPos = { 0.0f,0.0f,1000.0f };
+
+		g_camera3D->SetTarget(m_startDirecting->GetPosition());
+
+		g_camera3D->SetPosition(m_startDirecting->GetPosition() + m_toCameraPos);
+	}
+	else {
+		//ステージ開始時の演出が見つかっていなかったら
+		//ステージ開始時の演出を探す
+		m_startDirecting = FindGO<StartDirecting>("StartDirecting");
+	}
 }
