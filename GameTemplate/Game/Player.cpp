@@ -19,8 +19,8 @@ bool Player::Start()
 	m_mobius = FindGO<Mobius>("Mobius");
 
 
-	//ƒfƒoƒbƒN—p
-	//Œã‚ÅÁ‚·
+	//ãƒ‡ãƒãƒƒã‚¯ç”¨
+	//å¾Œã§æ¶ˆã™
 	m_dbgModel = NewGO<CModelRender>(0);
 	m_dbgModel->Init("Assets/modelData/yuka.tkm");
 	m_dbgModel2 = NewGO<CModelRender>(0);
@@ -28,7 +28,17 @@ bool Player::Start()
 	m_dbgModel3 = NewGO<CModelRender>(0);
 	m_dbgModel3->Init("Assets/modelData/yuka.tkm");
 
+
 	Init();
+
+	SInitOBBData initData;
+	m_obb.Init(initData);
+
+	for (int i = 0; i < m_obbNum; i++)
+	{
+		m_dbgObbModel[i] = NewGO<CModelRender>(0);
+		m_dbgObbModel[i]->Init("Assets/modelData/yuka.tkm");
+	}
 
 	return true;
 }
@@ -37,8 +47,8 @@ Player::~Player()
 {
 	DeleteGO(m_modelRender);
 
-	//ƒfƒoƒbƒN—p
-	//Œã‚ÅÁ‚·
+	//ãƒ‡ãƒãƒƒã‚¯ç”¨
+	//å¾Œã§æ¶ˆã™
 	DeleteGO(m_dbgModel);
 	DeleteGO(m_dbgModel2);
 	DeleteGO(m_dbgModel3);
@@ -47,14 +57,14 @@ Player::~Player()
 
 void Player::Init()
 {
-	//ƒQ[ƒ€ƒpƒbƒh‚Ì¶ƒXƒeƒBƒbƒN‚ÌX²‚Ì“ü—Íî•ñ‚ğæ“¾
+	//ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ã®å·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®Xè»¸ã®å…¥åŠ›æƒ…å ±ã‚’å–å¾—
 	m_padLStickXF = 0.0f;
 
-	//ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌXVˆ—
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®æ›´æ–°å‡¦ç†
 	CheckWayPoint();
-	//ˆÚ“®ˆ—
+	//ç§»å‹•å‡¦ç†
 	Move();
-	//ƒ‚ƒfƒ‹‚Ì‰ñ“]ˆ—
+	//ãƒ¢ãƒ‡ãƒ«ã®å›è»¢å‡¦ç†
 	Rotation();
 
 	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
@@ -68,28 +78,28 @@ void Player::CheckWayPoint()
 {
 	///
 	///
-	/// m_wayPointState‚Í¶ü‚è‚Å0‚©‚ç‘‚¦‚Ä‚¢‚­B
-	/// m_wayPointState‚ª0‚ÌAm_lpIndex‚Í0,m_rpIndex‚Í1‚É‚È‚éB
-	/// ‚Â‚Ü‚èAm_lpIndex‚Íí‚Ém_wayPointState‚Æ“¯‚¶’l‚É‚È‚èA
-	/// m_rpIndex‚Ím_wayPointState‚É1‰ÁZ‚µ‚½’l‚É‚È‚éB
-	/// ‚»‚µ‚Äm_maxWayPointState‚Ím_wayPointState‚ÌÅ‘å”‚ğ•\‚·B
-	/// m_maxWayPointState‚ª31‚¾‚Á‚½‚çm_wayPointState‚Í31‚Ü‚Å‘¶İ‚·‚éB
+	/// m_wayPointStateã¯å·¦å‘¨ã‚Šã§0ã‹ã‚‰å¢—ãˆã¦ã„ãã€‚
+	/// m_wayPointStateãŒ0ã®æ™‚ã€m_lpIndexã¯0,m_rpIndexã¯1ã«ãªã‚‹ã€‚
+	/// ã¤ã¾ã‚Šã€m_lpIndexã¯å¸¸ã«m_wayPointStateã¨åŒã˜å€¤ã«ãªã‚Šã€
+	/// m_rpIndexã¯m_wayPointStateã«1åŠ ç®—ã—ãŸå€¤ã«ãªã‚‹ã€‚
+	/// ãã—ã¦m_maxWayPointStateã¯m_wayPointStateã®æœ€å¤§æ•°ã‚’è¡¨ã™ã€‚
+	/// m_maxWayPointStateãŒ31ã ã£ãŸã‚‰m_wayPointStateã¯31ã¾ã§å­˜åœ¨ã™ã‚‹ã€‚
 	
 
-	//1.ƒvƒŒƒCƒ„[©g‚Ì¶‰E‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ğİ’è‚·‚é
-	//m_wayPointState‚ğ‚à‚Æ‚ÉƒEƒFƒCƒ|ƒCƒ“ƒg‚ğİ’è‚·‚éB
-	m_rpIndex = m_wayPointState;	//‰E‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚Í‚Æm_wayPointState‚Í“¯‚¶’l
-	m_lpIndex = m_rpIndex + 1;		//¶‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚Í‰E‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì1‚Âã‚Ì’l
+	//1.ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼è‡ªèº«ã®å·¦å³ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚’è¨­å®šã™ã‚‹
+	//m_wayPointStateã‚’ã‚‚ã¨ã«ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚’è¨­å®šã™ã‚‹ã€‚
+	m_rpIndex = m_wayPointState;	//å³ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã¯ã¨m_wayPointStateã¯åŒã˜å€¤
+	m_lpIndex = m_rpIndex + 1;		//å·¦ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã¯å³ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®1ã¤ä¸Šã®å€¤
 
 	if (m_lpIndex > m_maxWayPointState)
 	{
-		//¶‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ªMAX‚æ‚è‘å‚«‚©‚Á‚½‚ç
-		//ˆêü‚µ‚½‚Æ‚¢‚¤‚±‚Æ‚¾‚©‚çAƒXƒ^[ƒg‚Ì0‚É‚·‚é
+		//å·¦ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆãŒMAXã‚ˆã‚Šå¤§ãã‹ã£ãŸã‚‰
+		//ä¸€å‘¨ã—ãŸã¨ã„ã†ã“ã¨ã ã‹ã‚‰ã€ã‚¹ã‚¿ãƒ¼ãƒˆã®0ã«ã™ã‚‹
 		m_lpIndex = 0;
 	}
 
 
-	//2.m_wayPointState‚ÌXVB
+	//2.m_wayPointStateã®æ›´æ–°ã€‚
 
 	Vector3 LpToRpVec = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
 	LpToRpVec.Normalize();
@@ -104,32 +114,32 @@ void Player::CheckWayPoint()
 	m_dbgDot2 = RpDotPlayer;
 
 
-	//¶‰E‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚Æ‚Ì‹——£‚ğ’²‚×‚é
+	//å·¦å³ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã¨ã®è·é›¢ã‚’èª¿ã¹ã‚‹
 	float f = 0.35f;
 	if (LpDotPlayer > f && RpDotPlayer < -f)
 	{
-		//¡‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌŠÔ‚É‚¢‚é
+		//ä»Šã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®é–“ã«ã„ã‚‹
 	}
 	else if (LpDotPlayer <= f && m_padLStickXF < 0.0f)
 	{
-		//¡‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌŠÔ‚©‚çA¶‘¤‚Éo‚Ä‚¢‚Á‚½
+		//ä»Šã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®é–“ã‹ã‚‰ã€å·¦å´ã«å‡ºã¦ã„ã£ãŸ
 		m_wayPointState += 1;
 		if (m_wayPointState > m_maxWayPointState)
 		{
-			//m_wayPointState‚ªMAX‚æ‚è‘å‚«‚©‚Á‚½‚ç
-			//ˆêü‚µ‚½‚Æ‚¢‚¤‚±‚Æ‚¾‚©‚çAƒXƒ^[ƒg‚Ì0‚É‚·‚é
+			//m_wayPointStateãŒMAXã‚ˆã‚Šå¤§ãã‹ã£ãŸã‚‰
+			//ä¸€å‘¨ã—ãŸã¨ã„ã†ã“ã¨ã ã‹ã‚‰ã€ã‚¹ã‚¿ãƒ¼ãƒˆã®0ã«ã™ã‚‹
 			m_wayPointState = 0;
 		}
 	}
 	else if (RpDotPlayer >= -f && m_padLStickXF > 0.0f)
 	{
-		//¡‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌŠÔ‚©‚çA‰E‘¤‚©‚ço‚Ä‚¢‚Á‚½
-		//m_wayPointState‚ğŒ¸Z‚µ‚Ä‰E‚Éi‚ß‚éB
+		//ä»Šã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®é–“ã‹ã‚‰ã€å³å´ã‹ã‚‰å‡ºã¦ã„ã£ãŸ
+		//m_wayPointStateã‚’æ¸›ç®—ã—ã¦å³ã«é€²ã‚ã‚‹ã€‚
 		m_wayPointState -= 1;
 		if (m_wayPointState < 0)
 		{
-			//m_wayPointState‚ª0‚æ‚è¬‚³‚©‚Á‚½‚ç
-			//ˆêü‚µ‚½‚Æ‚¢‚¤‚±‚Æ‚¾‚©‚çAMAX‚Ì’l‚É‚·‚é
+			//m_wayPointStateãŒ0ã‚ˆã‚Šå°ã•ã‹ã£ãŸã‚‰
+			//ä¸€å‘¨ã—ãŸã¨ã„ã†ã“ã¨ã ã‹ã‚‰ã€MAXã®å€¤ã«ã™ã‚‹
 			m_wayPointState = m_maxWayPointState;
 		}
 	}
@@ -142,30 +152,30 @@ void Player::CheckWayPoint()
 
 void Player::Move()
 {
-	//ˆÚ“®‚·‚éŒü‚«‚Í–ˆƒtƒŒ[ƒ€ŒvZ‚µ‚½•û‚ª‚¢‚¢‚Ì‚©‚ÈH
-	//‚»‚ê‚Æ‚àAm_wayPointState‚ÌØ‚è‘Ö‚Ì‚É‚µ‚½•û‚ª‚¢‚¢‚Ì‚©‚ÈH
-	//‚¢‚âA¡‚Ì‚â‚è•û‚¾‚Æ–ˆƒtƒŒ[ƒ€‚â‚ç‚È‚­‚Ä‚Í‚¢‚¯‚È‚¢‹C‚ª‚·‚é
+	//ç§»å‹•ã™ã‚‹å‘ãã¯æ¯ãƒ•ãƒ¬ãƒ¼ãƒ è¨ˆç®—ã—ãŸæ–¹ãŒã„ã„ã®ã‹ãªï¼Ÿ
+	//ãã‚Œã¨ã‚‚ã€m_wayPointStateã®åˆ‡ã‚Šæ›¿ã®æ™‚ã«ã—ãŸæ–¹ãŒã„ã„ã®ã‹ãªï¼Ÿ
+	//ã„ã‚„ã€ä»Šã®ã‚„ã‚Šæ–¹ã ã¨æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã‚„ã‚‰ãªãã¦ã¯ã„ã‘ãªã„æ°—ãŒã™ã‚‹
 
-	//1.¶‰E‚Ö‚ÌˆÚ“®‚·‚é•ûŒü‚ğŒvZ‚·‚éB
+	//1.å·¦å³ã¸ã®ç§»å‹•ã™ã‚‹æ–¹å‘ã‚’è¨ˆç®—ã™ã‚‹ã€‚
 
-	//¶‚ÖˆÚ“®‚·‚é•ûŒü
+	//å·¦ã¸ç§»å‹•ã™ã‚‹æ–¹å‘
 	Vector3 moveToLeft = (*m_wayPointPos)[m_lpIndex] - m_onWayPosition;
 	moveToLeft.Normalize();
-	//‰E‚ÖˆÚ“®‚·‚é•ûŒü
+	//å³ã¸ç§»å‹•ã™ã‚‹æ–¹å‘
 	Vector3 moveToRight = (*m_wayPointPos)[m_rpIndex] - m_onWayPosition;
 	moveToRight.Normalize();
 
 
-	//2.ˆÚ“®ˆ—
+	//2.ç§»å‹•å‡¦ç†
 
-	//‚Æ‚è‚ ‚¦‚¸‚Ìˆ—
-	//d—Í‚âA‰Á‘¬“xA’ïR‚ğÀ‘•‚·‚é‚Æ‚«‚Í•Ê‚Ì‚â‚è•û‚Å
+	//ã¨ã‚Šã‚ãˆãšã®å‡¦ç†
+	//é‡åŠ›ã‚„ã€åŠ é€Ÿåº¦ã€æŠµæŠ—ã‚’å®Ÿè£…ã™ã‚‹ã¨ãã¯åˆ¥ã®ã‚„ã‚Šæ–¹ã§
 	m_moveSpeed = g_vec3Zero;
 
-	//ˆÚ“®‚·‚é’·‚³
+	//ç§»å‹•ã™ã‚‹é•·ã•
 	float moveLen = 1000.0f;
 
-	//ƒQ[ƒ€ƒpƒbƒh‚ÌR1ƒ{ƒ^ƒ“‚Ì“ü—Íî•ñ‚ğæ“¾(ƒ_ƒbƒVƒ…ó‘Ô)
+	//ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ã®R1ãƒœã‚¿ãƒ³ã®å…¥åŠ›æƒ…å ±ã‚’å–å¾—(ãƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹)
 	if (g_pad[0]->IsPress(enButtonRB1) == true) {
 		moveLen = 3000.0f;
 	}
@@ -173,14 +183,14 @@ void Player::Move()
 
 	if (m_padLStickXF < 0.0f)
 	{
-		//¶‚Ö‚ÌˆÚ“®‚Ì“ü—Í‚ª‚ ‚Á‚½‚ç
-		//¶‚Ö‚ÌˆÚ“®‚ÌŒvZ‚·‚é
+		//å·¦ã¸ã®ç§»å‹•ã®å…¥åŠ›ãŒã‚ã£ãŸã‚‰
+		//å·¦ã¸ã®ç§»å‹•ã®è¨ˆç®—ã™ã‚‹
 		m_moveSpeed += moveToLeft * m_padLStickXF * -moveLen;
 	}
 	else if (m_padLStickXF > 0.0f)
 	{
-		//‰E‚Ö‚ÌˆÚ“®‚Ì“ü—Í‚ª‚ ‚Á‚½‚ç
-		//‰E‚Ö‚ÌˆÚ“®‚ÌŒvZ‚ğ‚·‚é
+		//å³ã¸ã®ç§»å‹•ã®å…¥åŠ›ãŒã‚ã£ãŸã‚‰
+		//å³ã¸ã®ç§»å‹•ã®è¨ˆç®—ã‚’ã™ã‚‹
 		m_moveSpeed += moveToRight * m_padLStickXF * moveLen;
 	}
 
@@ -220,19 +230,19 @@ void Player::GetOnStage()
 
 void Player::Rotation()
 {
-	//¶‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚©‚ç‰E‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚Ö‚ÌƒxƒNƒgƒ‹
+	//å·¦ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‹ã‚‰å³ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã¸ã®ãƒ™ã‚¯ãƒˆãƒ«
 	Vector3 lpToRpLen = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
 
-	//¶‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚©‚çƒvƒŒƒCƒ„[‚Ö‚ÌƒxƒNƒgƒ‹
+	//å·¦ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®ãƒ™ã‚¯ãƒˆãƒ«
 	Vector3 lpToPlayerLen = m_onWayPosition - (*m_wayPointPos)[m_lpIndex];
 
-	//•âŠ®—¦
+	//è£œå®Œç‡
 	float ComplementRate = lpToPlayerLen.Length() / lpToRpLen.Length();
 
-	//‹…–ÊüŒ`•âŠ®
+	//çƒé¢ç·šå½¢è£œå®Œ
 	m_finalWPRot.Slerp(ComplementRate, (*m_wayPointRot)[m_lpIndex], (*m_wayPointRot)[m_rpIndex]);
 
-	//ƒLƒƒƒ‰ƒNƒ^[‚Ì¶‰E‚ÌŒü‚«‚É‡‚í‚¹‚Ä‰ñ“]
+	//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®å·¦å³ã®å‘ãã«åˆã‚ã›ã¦å›è»¢
 	if (m_leftOrRight == enLeft)
 	{
 		m_rotation.SetRotationDegY(90.0f);
@@ -253,21 +263,59 @@ void Player::Update()
 	}
 
 
-	//ƒQ[ƒ€ƒpƒbƒh‚Ì¶ƒXƒeƒBƒbƒN‚ÌX²‚Ì“ü—Íî•ñ‚ğæ“¾
+	//ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ã®å·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®Xè»¸ã®å…¥åŠ›æƒ…å ±ã‚’å–å¾—
 	m_padLStickXF = g_pad[0]->GetLStickXF();
-	//¶‰E‚ÌŒü‚«‚ğİ’è
+	//å·¦å³ã®å‘ãã‚’è¨­å®š
 	if (m_padLStickXF < 0.0f)
-		m_leftOrRight = enLeft;		//¶Œü‚«
+		m_leftOrRight = enLeft;		//å·¦å‘ã
 	else if (m_padLStickXF > 0.0f)
-		m_leftOrRight = enRight;	//‰EŒü‚«
+		m_leftOrRight = enRight;	//å³å‘ã
+	m_obb.SetRotation(m_finalWPRot);
+	m_obb.SetPosition(m_position);
+	Vector3 vert[m_obbNum];
+	Vector3 addVec[m_obbNum];
+	for (int i = 0; i < m_obbNum; i++)
+	{
+		vert[i] = m_obb.GetPosition();
+		addVec[i] = g_vec3Zero;
+	} 
+	addVec[0] -= m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[0] += m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[0] -= m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[1] -= m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[1] += m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[1] += m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[2] -= m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[2] -= m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[2] -= m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[3] -= m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[3] -= m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[3] += m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[4] += m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[4] += m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[4] -= m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[5] += m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[5] += m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[5] += m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[6] += m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[6] -= m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[6] -= m_obb.GetNormalDirection(COBB::enLocalZ);
+	addVec[7] += m_obb.GetNormalDirection(COBB::enLocalX);
+	addVec[7] -= m_obb.GetNormalDirection(COBB::enLocalY);
+	addVec[7] += m_obb.GetNormalDirection(COBB::enLocalZ);
 
+	for (int i = 0; i < m_obbNum; i++)
+	{
+		addVec[i].Scale(200.0f);
+		vert[i] += addVec[i];
+		m_dbgObbModel[i]->SetPosition(vert[i]);
+	}
 
-
-	//ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌXVˆ—
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®æ›´æ–°å‡¦ç†
 	CheckWayPoint();
-	//ˆÚ“®ˆ—
+	//ç§»å‹•å‡¦ç†
 	Move();
-	//ƒ‚ƒfƒ‹‚Ì‰ñ“]ˆ—
+	//ãƒ¢ãƒ‡ãƒ«ã®å›è»¢å‡¦ç†
 	Rotation();
 
 	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
@@ -283,11 +331,11 @@ void Player::Update()
 void Player::SetWayPointPos
 (const std::size_t vecSize, std::vector<Vector3>*const posMap)
 {
-	//vector‚ÌƒTƒCƒY‚ÌŠm•Û
+	//vectorã®ã‚µã‚¤ã‚ºã®ç¢ºä¿
 	//m_wayPointPos->resize(vecSize);
-	//ƒEƒFƒCƒ|ƒCƒ“ƒgƒXƒe[ƒg‚ÌÅ‘å‚Ì’l‚ğİ’è
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚¹ãƒ†ãƒ¼ãƒˆã®æœ€å¤§ã®å€¤ã‚’è¨­å®š
 	m_maxWayPointState = vecSize - 1;
-	//m_wayPointPos‚ÉƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌuêŠv‚ğŠi”[‚·‚é
+	//m_wayPointPosã«ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã€Œå ´æ‰€ã€ã‚’æ ¼ç´ã™ã‚‹
 	m_wayPointPos = posMap;
 	//std::vector<Vector3>::iterator it = posMap->begin();
 	//for (int index = 0; it != posMap->end(); index++, it++)
@@ -298,11 +346,11 @@ void Player::SetWayPointPos
 void Player::SetWayPointRot
 (const std::size_t vecSize, std::vector<Quaternion>* rotMap)
 {
-	//vector‚ÌƒTƒCƒY‚ÌŠm•Û
+	//vectorã®ã‚µã‚¤ã‚ºã®ç¢ºä¿
 	//m_wayPointRot->resize(vecSize);
-	//ƒEƒFƒCƒ|ƒCƒ“ƒgƒXƒe[ƒg‚ÌÅ‘å‚Ì’l‚ğİ’è
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚¹ãƒ†ãƒ¼ãƒˆã®æœ€å¤§ã®å€¤ã‚’è¨­å®š
 	m_maxWayPointState = vecSize - 1;
-	//m_wayPointRot‚ÉƒEƒFƒCƒ|ƒCƒ“ƒg‚Ìu‰ñ“]v‚ğŠi”[‚·‚é
+	//m_wayPointRotã«ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã€Œå›è»¢ã€ã‚’æ ¼ç´ã™ã‚‹
 	m_wayPointRot = rotMap;
 	//std::map<int, Quaternion>::iterator it = rotMap->begin();
 	//for (int index = 0; it != rotMap->end(); index++, it++)
@@ -314,17 +362,17 @@ void Player::SetWayPointRot
 
 void Player::PostRender(RenderContext& rc)
 {
-	//ƒeƒLƒXƒg—pˆÓ
+	//ãƒ†ã‚­ã‚¹ãƒˆç”¨æ„
 	wchar_t text[256];
 
 
 
 
-	//•`‰æŠJn
+	//æç”»é–‹å§‹
 	m_font.Begin(rc);
 
 	swprintf(text, L"wayPointState:%02d", m_wayPointState);
-	//•`‰æ
+	//æç”»
 	m_font.Draw(text,
 		{ -600.0f, 300.0f },
 		{ 0.0f,0.0f,0.0f,1.0f },
@@ -366,7 +414,7 @@ void Player::PostRender(RenderContext& rc)
 		{ 0.0f,0.0f }
 	);
 
-	swprintf(text, L"¶‘¤%02.2f", m_dbgDot1);
+	swprintf(text, L"å·¦å´%02.2f", m_dbgDot1);
 	m_font.Draw(text,
 		{ -310.0f, 150.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },
@@ -374,7 +422,7 @@ void Player::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
-	swprintf(text, L"‰E‘¤%02.2f", m_dbgDot2);
+	swprintf(text, L"å³å´%02.2f", m_dbgDot2);
 	m_font.Draw(text,
 		{ -310.0f, 120.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },
@@ -383,6 +431,6 @@ void Player::PostRender(RenderContext& rc)
 		{ 0.0f,0.0f }
 	);
 
-	//•`‰æI—¹
+	//æç”»çµ‚äº†
 	m_font.End(rc);
 }

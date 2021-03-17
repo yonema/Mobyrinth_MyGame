@@ -1,10 +1,6 @@
 #pragma once
 #include "FontRender.h"
 
-template <class StageClass>
-std::function<void(StageClass* stage)> NewStage;
-
-
 class CPause : public IGameObject
 {
 public:

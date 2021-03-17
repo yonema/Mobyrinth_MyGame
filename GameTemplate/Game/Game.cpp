@@ -6,7 +6,7 @@ bool Game::Start()
 
 
 	m_spriteRender = NewGO<CSpriteRender>(0);
-	m_spriteRender->Init("Assets/Image/sample.dds", 256.0f, 256.0f);
+	m_spriteRender->Init("Assets/modelData/box.dds", 256.0f, 256.0f);
 	//m_spriteRender->SetPosition({ 0.0f,0.0f,0.0f });
 	NewGO<Title>(0, "Title");
 
