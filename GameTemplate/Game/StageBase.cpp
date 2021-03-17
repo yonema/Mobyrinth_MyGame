@@ -16,7 +16,7 @@ bool IStageBase::Start()
 	NewGO<GameCamera>(0, "GameCamera");
 
 	//ポーズ画面用クラスの作成
-	m_pause = NewGO<CPause>(0);
+	m_pause = NewGO<CPause>(0, "Pause");
 
 	return StartSub();
 

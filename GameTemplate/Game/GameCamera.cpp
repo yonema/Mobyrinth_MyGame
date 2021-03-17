@@ -33,6 +33,14 @@ bool GameCamera::Start()
 	//ステージ開始時の演出を探す
 	m_startDirecting = FindGO<StartDirecting>("StartDirecting");
 
+	//カメラの上方向の修正
+	//const Quaternion qRot = (m_pPlayer->GetFinalWPRot());
+	//qRot.Apply(m_toCameraPos);
+	Vector3 vecUp = g_vec3AxisY;
+	//qRot.Apply(vecUp);
+
+	g_camera3D->SetUp(vecUp);
+
 	return true;
 }
 
@@ -49,19 +57,33 @@ void GameCamera::Update()
 void GameCamera::StartDirectingCamera()
 {
 	if (m_startDirecting) {
-		//注視点から視点へのベクトルを設定する
-		m_toCameraPos = { 0.0f,0.0f,2000.0f };
+		if (m_startDirectingZoomInCamera == false) {
+			//注視点から視点へのベクトルを設定する
+			m_toCameraPos = { 0.0f,0.0f,2000.0f };
 
-		//const Quaternion qRot = (m_startDirecting->GetFinalWPRot());
-		//qRot.Apply(m_toCameraPos);
-		//Vector3 vecUp = g_vec3AxisY;
-		//qRot.Apply(vecUp);
+			//const Quaternion qRot = (m_startDirecting->GetFinalWPRot());
+			//qRot.Apply(m_toCameraPos);
+			//Vector3 vecUp = g_vec3AxisY;
+			//qRot.Apply(vecUp);
 
-		g_camera3D->SetTarget(m_startDirecting->GetPosition());
+			g_camera3D->SetTarget(m_startDirecting->GetPosition());
 
-		g_camera3D->SetPosition(m_startDirecting->GetPosition() + m_toCameraPos);
+			g_camera3D->SetPosition(m_startDirecting->GetPosition() + m_toCameraPos);
 
-		//g_camera3D->SetUp(vecUp);
+			//g_camera3D->SetUp(vecUp);
+
+		}
+		else {
+			Vector3 differenceCameraPos = { 0.0f,0.0f,1000.0f / m_startDirecting->GetStartDirectingTime() };
+			//Vector3 cameraPos1 = { 0.0f,0.0f,2000.0f };
+			//Vector3 cameraPos2= { 0.0f,0.0f,1000.0f };
+
+			m_toCameraPos = m_toCameraPos - differenceCameraPos;
+
+			g_camera3D->SetTarget(m_startDirecting->GetPosition());
+
+			g_camera3D->SetPosition(m_startDirecting->GetPosition() + m_toCameraPos);
+		}
 	}
 	else {
 		//ステージ開始時の演出が見つかっていなかったら
