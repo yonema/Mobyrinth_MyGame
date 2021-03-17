@@ -1,7 +1,6 @@
 #pragma once
 #include "StageBase.h"
 
-
 class stage_kari : public IStageBase
 {
 public:

@@ -3,11 +3,11 @@
 struct SInitOBBData
 {
 	Vector3 position = g_vec3Zero;
-	const float width = 1.0f;	//Xの辺の長さ
-	const float length = 1.0f;	//Yの辺の長さ
-	const float height = 1.0f;	//Zの辺の長さ
-	const Quaternion rotation = g_quatIdentity;
-	Vector2 pivot = { 0.5f,0.5f };
+	float width = 1.0f;	//Xの辺の長さ
+	float height = 1.0f;	//Yの辺の長さ
+	float length = 1.0f;	//Zの辺の長さ
+	Quaternion rotation = g_quatIdentity;
+	Vector3 pivot = { 0.5f, 0.5f, 0.5f };
 };
 
 class COBB
@@ -22,11 +22,19 @@ public:
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
+		CalcCenterPosition();
+	}
+	void SetPivot(const Vector3& pivot)
+	{
+		m_pivot = pivot;
+		CalcCenterPosition();
 	}
 	void SetRotation(const Quaternion& rot)
 	{
 		Rotating(rot);
 	}
+
+	Vector3* GetBoxVertex();
 
 	const Vector3 GetCenterPosition()const
 	{
@@ -43,7 +51,7 @@ public:
 	}
 private:
 	void Rotating(const Quaternion& rot);
-	void Positioning(const Vector3& pos);
+	void CalcCenterPosition();
 public:
 	//オブジェクトのローカルな軸
 	enum ENLocalAxis
@@ -55,6 +63,7 @@ public:
 	};
 private:
 	Vector3 m_position;
+	Vector3 m_pivot;
 	Vector3 m_centerPosition;
 	//各軸の単位方向ベクトル
 	Vector3 m_normalDirection[enLocalAxisNum];

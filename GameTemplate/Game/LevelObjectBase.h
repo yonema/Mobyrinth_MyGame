@@ -2,6 +2,7 @@
 #include "ModelRender.h"
 #include "LevelObjectManager.h"
 #include "Player.h"
+#include "OBB.h"
 
 class ILevelObjectBase : public IGameObject
 {

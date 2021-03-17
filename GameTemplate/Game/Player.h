@@ -121,6 +121,10 @@ public://デバック用
 	COBB m_obb;
 	static const int m_obbNum = 8;
 	CModelRender* m_dbgObbModel[m_obbNum] = { nullptr };
+	COBB m_obb2;
+	CModelRender* m_dbgObbCenter = nullptr;
+	CModelRender* m_dbgObbModel2[m_obbNum] = { nullptr };
+	bool m_dbgOBBHit = false;
 
 private:	//データメンバ
 	/// <summary>

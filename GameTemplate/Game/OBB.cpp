@@ -18,28 +18,106 @@ COBB::COBB()
 
 void COBB::Init(SInitOBBData& initData)
 {
+
+	//各軸の方向ベクトルの長さを設定
+	m_directionLength[enLocalX] = initData.width / 2;
+	m_directionLength[enLocalY] = initData.height / 2;
+	m_directionLength[enLocalZ] = initData.length / 2;
+
+
+	//ポジションを設定
 	m_position = initData.position;
 
-	//後でpivotに合わせたセンターポジションにできるようにしよう。
-	m_centerPosition = m_position;
+	//ピボットを設定
+	m_pivot = initData.pivot;
 
-	m_directionLength[enLocalX] = initData.width / 2;
-	m_directionLength[enLocalY] = initData.length / 2;
-	m_directionLength[enLocalZ] = initData.height / 2;
+	//センターポジションを計算する
+	CalcCenterPosition();
 
+
+	//回転を設定
 	Rotating(initData.rotation);
 
 }
-void COBB::Positioning(const Vector3& pos)
-{
 
+Vector3* COBB::GetBoxVertex()
+{
+	const int vertNum = 8;
+	Vector3 boxVertex[vertNum];
+	for (int i = 0; i < vertNum; i++)
+	{
+		boxVertex[i] = m_centerPosition;
+	}
+
+	boxVertex[0] -= m_normalDirection[enLocalX] * m_directionLength[enLocalX];
+	boxVertex[0] += m_normalDirection[enLocalY] * m_directionLength[enLocalY];
+	boxVertex[0] -= m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
+	boxVertex[1] -= m_normalDirection[enLocalX] * m_directionLength[enLocalX];
+	boxVertex[1] += m_normalDirection[enLocalY] * m_directionLength[enLocalY];
+	boxVertex[1] += m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
+	boxVertex[2] -= m_normalDirection[enLocalX] * m_directionLength[enLocalX];
+	boxVertex[2] -= m_normalDirection[enLocalY] * m_directionLength[enLocalY];
+	boxVertex[2] -= m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
+	boxVertex[3] -= m_normalDirection[enLocalX] * m_directionLength[enLocalX];
+	boxVertex[3] -= m_normalDirection[enLocalY] * m_directionLength[enLocalY];
+	boxVertex[3] += m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
+	boxVertex[4] += m_normalDirection[enLocalX] * m_directionLength[enLocalX];
+	boxVertex[4] += m_normalDirection[enLocalY] * m_directionLength[enLocalY];
+	boxVertex[4] -= m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
+	boxVertex[5] += m_normalDirection[enLocalX] * m_directionLength[enLocalX];
+	boxVertex[5] += m_normalDirection[enLocalY] * m_directionLength[enLocalY];
+	boxVertex[5] += m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
+	boxVertex[6] += m_normalDirection[enLocalX] * m_directionLength[enLocalX];
+	boxVertex[6] -= m_normalDirection[enLocalY] * m_directionLength[enLocalY];
+	boxVertex[6] -= m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
+	boxVertex[7] += m_normalDirection[enLocalX] * m_directionLength[enLocalX];
+	boxVertex[7] -= m_normalDirection[enLocalY] * m_directionLength[enLocalY];
+	boxVertex[7] += m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
+
+	return boxVertex;
+}
+
+
+
+void COBB::CalcCenterPosition()
+{
+	//ピボットをもとにセンターポジションを計算する
+
+
+	Vector3 localVecX = m_normalDirection[enLocalX] * m_directionLength[enLocalX];
+	Vector3 localVecY = m_normalDirection[enLocalY] * m_directionLength[enLocalY];
+	Vector3 localVecZ = m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
+
+
+	//OBBの左下手前の座標を入れる
+	Vector3 centerPos = m_position;	//センターポジションを計算する
+	centerPos -= localVecX;
+	centerPos += localVecY;
+	centerPos -= localVecZ;
+
+	//左下手前の座標からセンターポジションへのベクトル
+	Vector3 addVec;
+	//X座標のピボットにセンターポジションを合わせる。
+	addVec = localVecX * 2.0f * m_pivot.x;
+	centerPos += addVec;
+	//Y座標のピボットにセンターポジションを合わせる。
+	addVec = localVecY * 2.0f * m_pivot.y;
+	centerPos -= addVec;
+	//Z座標のピボットにセンターポジションを合わせる。
+	addVec = localVecZ * 2.0f * m_pivot.z;
+	centerPos += addVec;
+
+	//センターポジションを設定する。
+	m_centerPosition = centerPos;
 }
 
 void COBB::Rotating(const Quaternion& rot)
 {
+	//各軸の単位方向ベクトルを初期化してから
 	m_normalDirection[enLocalX] = g_vec3Right;
 	m_normalDirection[enLocalY] = g_vec3Up;
 	m_normalDirection[enLocalZ] = g_vec3Front;
+	//クォータニオンで回す
 	rot.Apply(m_normalDirection[enLocalX]);
 	rot.Apply(m_normalDirection[enLocalY]);
 	rot.Apply(m_normalDirection[enLocalZ]);
@@ -211,11 +289,11 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 	//2.分離軸にOBBを射影する。
 	//obb1の射影線分
 	obb1ProjectionLen =
-		CalcProjectionLen(SeparationAxis, obb1NDir[COBB::enLocalY], obb1NDir[COBB::enLocalZ]);
+		CalcProjectionLen(SeparationAxis, obb1DirVec[COBB::enLocalY], obb1DirVec[COBB::enLocalZ]);
 
 	//obb2の射影線分
 	obb2ProjectionLen =
-		CalcProjectionLen(SeparationAxis, obb2NDir[COBB::enLocalY], obb2NDir[COBB::enLocalZ]);
+		CalcProjectionLen(SeparationAxis, obb2DirVec[COBB::enLocalY], obb2DirVec[COBB::enLocalZ]);
 
 	//3.二つのOBBの射影線分が重なっているかの判定。
 
@@ -234,10 +312,10 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 	//2.分離軸にOBBを射影する。
 	//obb1の射影線分
 	obb1ProjectionLen =
-		CalcProjectionLen(SeparationAxis, obb1NDir[COBB::enLocalY], obb1NDir[COBB::enLocalZ]);
+		CalcProjectionLen(SeparationAxis, obb1DirVec[COBB::enLocalY], obb1DirVec[COBB::enLocalZ]);
 	//obb2の射影線分
 	obb2ProjectionLen =
-		CalcProjectionLen(SeparationAxis, obb2NDir[COBB::enLocalX], obb2NDir[COBB::enLocalZ]);
+		CalcProjectionLen(SeparationAxis, obb2DirVec[COBB::enLocalX], obb2DirVec[COBB::enLocalZ]);
 	//3.二つのOBBの射影線分が重なっているかの判定。
 	//中心点間の距離を計算
 	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
@@ -246,17 +324,17 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 		return false;	//衝突していない
 
 	//3
-	//〇分離軸：XY
+	//〇分離軸：XZ
 
 	//1.OBBの分離軸を探す。
-	SeparationAxis = Cross(obb1NDir[COBB::enLocalX], obb2NDir[COBB::enLocalX]);
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalX], obb2NDir[COBB::enLocalZ]);
 	//2.分離軸にOBBを射影する。
 	//obb1の射影線分
 	obb1ProjectionLen =
-		CalcProjectionLen(SeparationAxis, obb1NDir[COBB::enLocalY], obb1NDir[COBB::enLocalZ]);
+		CalcProjectionLen(SeparationAxis, obb1DirVec[COBB::enLocalY], obb1DirVec[COBB::enLocalZ]);
 	//obb2の射影線分
 	obb2ProjectionLen =
-		CalcProjectionLen(SeparationAxis, obb2NDir[COBB::enLocalY], obb2NDir[COBB::enLocalZ]);
+		CalcProjectionLen(SeparationAxis, obb2DirVec[COBB::enLocalX], obb2DirVec[COBB::enLocalY]);
 	//3.二つのOBBの射影線分が重なっているかの判定。
 	//中心点間の距離を計算
 	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
@@ -265,18 +343,18 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 		return false;	//衝突していない
 
 
-	//3
-	//〇分離軸：XY
+	//4
+	//〇分離軸：YX
 
 	//1.OBBの分離軸を探す。
-	SeparationAxis = Cross(obb1NDir[COBB::enLocalX], obb2NDir[COBB::enLocalX]);
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalY], obb2NDir[COBB::enLocalX]);
 	//2.分離軸にOBBを射影する。
 	//obb1の射影線分
 	obb1ProjectionLen =
-		CalcProjectionLen(SeparationAxis, obb1NDir[COBB::enLocalY], obb1NDir[COBB::enLocalZ]);
+		CalcProjectionLen(SeparationAxis, obb1DirVec[COBB::enLocalX], obb1DirVec[COBB::enLocalZ]);
 	//obb2の射影線分
 	obb2ProjectionLen =
-		CalcProjectionLen(SeparationAxis, obb2NDir[COBB::enLocalY], obb2NDir[COBB::enLocalZ]);
+		CalcProjectionLen(SeparationAxis, obb2DirVec[COBB::enLocalY], obb2DirVec[COBB::enLocalZ]);
 	//3.二つのOBBの射影線分が重なっているかの判定。
 	//中心点間の距離を計算
 	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
@@ -284,6 +362,106 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
 		return false;	//衝突していない
 
+	//5
+	//〇分離軸：YY
+
+	//1.OBBの分離軸を探す。
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalY], obb2NDir[COBB::enLocalY]);
+	//2.分離軸にOBBを射影する。
+	//obb1の射影線分
+	obb1ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb1DirVec[COBB::enLocalX], obb1DirVec[COBB::enLocalZ]);
+	//obb2の射影線分
+	obb2ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb2DirVec[COBB::enLocalX], obb2DirVec[COBB::enLocalZ]);
+	//3.二つのOBBの射影線分が重なっているかの判定。
+	//中心点間の距離を計算
+	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
+	//衝突判定
+	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
+		return false;	//衝突していない
+
+	//6
+	//〇分離軸：YZ
+
+	//1.OBBの分離軸を探す。
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalY], obb2NDir[COBB::enLocalZ]);
+	//2.分離軸にOBBを射影する。
+	//obb1の射影線分
+	obb1ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb1DirVec[COBB::enLocalX], obb1DirVec[COBB::enLocalZ]);
+	//obb2の射影線分
+	obb2ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb2DirVec[COBB::enLocalX], obb2DirVec[COBB::enLocalY]);
+	//3.二つのOBBの射影線分が重なっているかの判定。
+	//中心点間の距離を計算
+	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
+	//衝突判定
+	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
+		return false;	//衝突していない
+
+	//7
+	//〇分離軸：ZX
+
+	//1.OBBの分離軸を探す。
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalZ], obb2NDir[COBB::enLocalX]);
+	//2.分離軸にOBBを射影する。
+	//obb1の射影線分
+	obb1ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb1DirVec[COBB::enLocalX], obb1DirVec[COBB::enLocalY]);
+	//obb2の射影線分
+	obb2ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb2DirVec[COBB::enLocalY], obb2DirVec[COBB::enLocalZ]);
+	//3.二つのOBBの射影線分が重なっているかの判定。
+	//中心点間の距離を計算
+	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
+	//衝突判定
+	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
+		return false;	//衝突していない
+
+	//8
+	//〇分離軸：ZY
+
+	//1.OBBの分離軸を探す。
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalZ], obb2NDir[COBB::enLocalY]);
+	//2.分離軸にOBBを射影する。
+	//obb1の射影線分
+	obb1ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb1DirVec[COBB::enLocalX], obb1DirVec[COBB::enLocalY]);
+	//obb2の射影線分
+	obb2ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb2DirVec[COBB::enLocalX], obb2DirVec[COBB::enLocalZ]);
+	//3.二つのOBBの射影線分が重なっているかの判定。
+	//中心点間の距離を計算
+	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
+	//衝突判定
+	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
+		return false;	//衝突していない
+
+	//9
+	//〇分離軸：ZZ
+
+	//1.OBBの分離軸を探す。
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalZ], obb2NDir[COBB::enLocalZ]);
+	//2.分離軸にOBBを射影する。
+	//obb1の射影線分
+	obb1ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb1DirVec[COBB::enLocalX], obb1DirVec[COBB::enLocalY]);
+	//obb2の射影線分
+	obb2ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb2DirVec[COBB::enLocalX], obb2DirVec[COBB::enLocalY]);
+	//3.二つのOBBの射影線分が重なっているかの判定。
+	//中心点間の距離を計算
+	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
+	//衝突判定
+	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
+		return false;	//衝突していない
+
+
+
+	//分離平面が存在しないので
+	
+	return true;		//衝突している
 
 }
 
