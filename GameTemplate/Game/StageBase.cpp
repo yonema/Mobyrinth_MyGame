@@ -9,11 +9,14 @@ bool IStageBase::Start()
 	m_stageDirectionLight->SetDirection({ 1.0f,1.0f,-1.0f });
 	m_stageDirectionLight->SetColor({ 0.1f,0.1f,0.1f,1.0f });
 
+	//ステージ開始時の演出の作成
+	m_startDirecting = NewGO<StartDirecting>(0, "StartDirecting");
+
 	//ゲームカメラの作成
 	NewGO<GameCamera>(0, "GameCamera");
 
 	//ポーズ画面用クラスの作成
-	m_pause = NewGO<CPause>(0);
+	m_pause = NewGO<CPause>(0, "Pause");
 
 	return StartSub();
 
@@ -276,6 +279,15 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
 
 
+	//ステージ開始時の演出時のカメラの注視点の座標を設定する
+	m_startDirecting->SetPosition(pPlayer->GetPosition());
+	//ウェイポイントをステージ開始時の演出に設定する
+	m_startDirecting->SetWayPointPos
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
+	m_startDirecting->SetWayPointRot
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
+
+
 	return;
 }
 
@@ -302,6 +314,12 @@ IStageBase::~IStageBase()
 	QueryGOs<Mobius>("Mobius", [&](Mobius* mobius)->bool
 		{
 			DeleteGO(mobius);
+			return true;
+		}
+	);
+	QueryGOs<StartDirecting>("StartDirecting", [&](StartDirecting* startDirecting)-> bool
+		{
+			DeleteGO(startDirecting);
 			return true;
 		}
 	);

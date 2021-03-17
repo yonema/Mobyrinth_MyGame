@@ -52,6 +52,6 @@ private:
 
 	bool m_retryFlag = false;
 	bool m_quitFlag = false;
-	bool m_canPause = true;
+	bool m_canPause = false;
 };
 

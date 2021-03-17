@@ -323,6 +323,7 @@
     <ClCompile Include="stage_proto01.cpp" />
     <ClCompile Include="stage_proto02.cpp" />
     <ClCompile Include="StageBase.cpp" />
+    <ClCompile Include="StartDirecting.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -427,6 +428,7 @@
     <ClInclude Include="stage_proto01.h" />
     <ClInclude Include="stage_proto02.h" />
     <ClInclude Include="StageBase.h" />
+    <ClInclude Include="StartDirecting.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />

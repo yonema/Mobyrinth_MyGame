@@ -47,6 +47,7 @@ private:
 	void Quit();
 
 	void Goal();
+
 protected:
 	/// <summary>
 	/// ƒŒƒxƒ‹‚Ìƒ[ƒh
@@ -69,5 +70,7 @@ private:
 	CPause* m_pause = nullptr;
 	OOgoal* m_goal = nullptr;
 	int m_goalCounter = 0;
+
+	StartDirecting* m_startDirecting = nullptr;
 };
 
