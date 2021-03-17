@@ -127,9 +127,11 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 	//obb2の射影線分
 	float obb2ProjectionLen;
 
+	//〇分離軸：obb1のX,Y,Z
 
 	//分離軸にobb1の方向ベクトルを使って、
 	//X,Y,Zを順番に精査していく。
+	//全部で3回
 	for (int axis = 0; axis < COBB::enLocalAxisNum; axis++)
 	{
 		//1.OBBの分離軸を探す。
@@ -159,8 +161,11 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 
 	}
 
+	//〇分離軸：obbのX,Y,Z
+
 	//分離軸にobb2の方向ベクトルを使って、
 	//X,Y,Zを順番に精査していく。
+	//全部で3回
 	for (int axis = 0; axis < COBB::enLocalAxisNum; axis++)
 	{
 		//1.OBBの分離軸を探す。
@@ -193,13 +198,92 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 
 
 	//4.3次元のOBBの場合「双方の方向ベクトルに垂直な分離軸」でも判定する。
+	//3*3=9 全部で9回
 
+	//1
+	//〇分離軸：XX
+
+	//1.OBBの分離軸を探す。
+	//双方の方向ベクトルに垂直な分離軸を探す。
+	//それぞれの方向ベクトルの外積で求める。
 	SeparationAxis = Cross(obb1NDir[COBB::enLocalX], obb2NDir[COBB::enLocalX]);
+
+	//2.分離軸にOBBを射影する。
+	//obb1の射影線分
 	obb1ProjectionLen =
 		CalcProjectionLen(SeparationAxis, obb1NDir[COBB::enLocalY], obb1NDir[COBB::enLocalZ]);
+
+	//obb2の射影線分
 	obb2ProjectionLen =
 		CalcProjectionLen(SeparationAxis, obb2NDir[COBB::enLocalY], obb2NDir[COBB::enLocalZ]);
+
+	//3.二つのOBBの射影線分が重なっているかの判定。
+
+	//中心点間の距離を計算
 	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
+
+	//衝突判定
+	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
+		return false;	//衝突していない
+
+	//2
+	//〇分離軸：XY
+
+	//1.OBBの分離軸を探す。
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalX], obb2NDir[COBB::enLocalY]);
+	//2.分離軸にOBBを射影する。
+	//obb1の射影線分
+	obb1ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb1NDir[COBB::enLocalY], obb1NDir[COBB::enLocalZ]);
+	//obb2の射影線分
+	obb2ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb2NDir[COBB::enLocalX], obb2NDir[COBB::enLocalZ]);
+	//3.二つのOBBの射影線分が重なっているかの判定。
+	//中心点間の距離を計算
+	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
+	//衝突判定
+	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
+		return false;	//衝突していない
+
+	//3
+	//〇分離軸：XY
+
+	//1.OBBの分離軸を探す。
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalX], obb2NDir[COBB::enLocalX]);
+	//2.分離軸にOBBを射影する。
+	//obb1の射影線分
+	obb1ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb1NDir[COBB::enLocalY], obb1NDir[COBB::enLocalZ]);
+	//obb2の射影線分
+	obb2ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb2NDir[COBB::enLocalY], obb2NDir[COBB::enLocalZ]);
+	//3.二つのOBBの射影線分が重なっているかの判定。
+	//中心点間の距離を計算
+	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
+	//衝突判定
+	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
+		return false;	//衝突していない
+
+
+	//3
+	//〇分離軸：XY
+
+	//1.OBBの分離軸を探す。
+	SeparationAxis = Cross(obb1NDir[COBB::enLocalX], obb2NDir[COBB::enLocalX]);
+	//2.分離軸にOBBを射影する。
+	//obb1の射影線分
+	obb1ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb1NDir[COBB::enLocalY], obb1NDir[COBB::enLocalZ]);
+	//obb2の射影線分
+	obb2ProjectionLen =
+		CalcProjectionLen(SeparationAxis, obb2NDir[COBB::enLocalY], obb2NDir[COBB::enLocalZ]);
+	//3.二つのOBBの射影線分が重なっているかの判定。
+	//中心点間の距離を計算
+	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
+	//衝突判定
+	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
+		return false;	//衝突していない
+
 
 }
 

@@ -48,6 +48,10 @@ Player::~Player()
 	DeleteGO(m_dbgModel);
 	DeleteGO(m_dbgModel2);
 	DeleteGO(m_dbgModel3);
+	for (int i = 0; i < m_obbNum; i++)
+	{
+		DeleteGO(m_dbgObbModel[i]);
+	}
 
 }
 

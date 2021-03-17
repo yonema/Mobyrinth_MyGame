@@ -305,87 +305,11 @@ IStageBase::~IStageBase()
 			return true;
 		}
 	);
-	//「反転オブジェクト」ReversibleObject
-	QueryGOs<ROmizu_kori>("mizu_kori", [&](ROmizu_kori* RObject)->bool
-		{
-			DeleteGO(RObject);
-			return true;
-		}
-	);
-	QueryGOs<RObird_fish>("bird_fish", [&](RObird_fish* RObject)->bool
-		{
-			DeleteGO(RObject);
-			return true;
-		}
-	);
-	QueryGOs<ROrunning_stop>("running_stop", [&](ROrunning_stop* RObject)->bool
-		{
-			DeleteGO(RObject);
-			return true;
-		}
-	);
-	QueryGOs<ROwire_string>("wire_string", [&](ROwire_string* RObject)->bool
-		{
-			DeleteGO(RObject);
-			return true;
-		}
-	);
-	QueryGOs<ROnail_bar>("nail_bar", [&](ROnail_bar* RObject)->bool
-		{
-			DeleteGO(RObject);
-			return true;
-		}
-	);
-	QueryGOs<ROaxe_pickaxe>("axe_pickaxe", [&](ROaxe_pickaxe* RObject)->bool
-		{
-			DeleteGO(RObject);
-			return true;
-		}
-	);
-	QueryGOs<ROkeymold_empty>("keymold_empty", [&](ROkeymold_empty* RObject)->bool
-		{
-			DeleteGO(RObject);
-			return true;
-		}
-	);
-	QueryGOs<ROkey_padlock>("key_padlock", [&](ROkey_padlock* RObject)->bool
-		{
-			DeleteGO(RObject);
-			return true;
-		}
-	);
-	//「障害オブジェクト」ObstacleObject
-	QueryGOs<OOgoal>("goal", [&](OOgoal* OObject)->bool
-		{
-			DeleteGO(OObject);
-			return true;
-		}
-	);
-	QueryGOs<OObigFire>("bigFire", [&](OObigFire* OObject)->bool
-		{
-			DeleteGO(OObject);
-			return true;
-		}
-	);
-	QueryGOs<OOwall>("wall", [&](OOwall* OObject)->bool
-		{
-			DeleteGO(OObject);
-			return true;
-		}
-	);
-	QueryGOs<OOpadlock>("bigPadlock", [&](OOpadlock* OObject)->bool
-		{
-			DeleteGO(OObject);
-			return true;
-		}
-	);
-	QueryGOs<OObox>("box", [&](OObox* OObject)->bool
-		{
-			DeleteGO(OObject);
-			return true;
-		}
-	);
 
+	//レベルオブジェクト
+	//（ReversibleObject、ObstacleObjectのこと）
+	//を全部消去
+	CLevelObjectManager::GetInstance()->AllDeleteLOs();
 
 
 	//デバック用

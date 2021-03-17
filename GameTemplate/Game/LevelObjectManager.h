@@ -93,8 +93,15 @@ public:
 		}
 	}
 
+	/// <summary>
+	/// レベルオブジェクトをすべて消去する
+	/// </summary>
+	void AllDeleteLOs();
 
 
+
+	//デバック用
+	//後で消す
 	std::vector<ILevelObjectBase*> GetLevelObjects()
 	{
 		return m_levelObjects;
@@ -105,7 +112,7 @@ private:
 	std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
 	int m_vecSize = 0;		//ウェイポイントステートの最大の値
 
-	std::vector<ILevelObjectBase*> m_levelObjects;
+	std::vector<ILevelObjectBase*> m_levelObjects;	//インスタンスしたレベルオブジェクトの配列
 
 };
 
