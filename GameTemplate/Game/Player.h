@@ -91,6 +91,10 @@ public://publicなメンバ関数
 		return (*m_wayPointPos)[index];
 	}
 
+	COBB& GetOBB()
+	{
+		return m_obb;
+	}
 private://privateなメンバ関数
 
 	/// <summary>
@@ -125,13 +129,9 @@ public://デバック用
 	bool m_dbgHit = false;
 	float m_dbgDot1 = 0.0f;
 	float m_dbgDot2 = 0.0f;
-	COBB m_obb;
 	static const int m_obbNum = 8;
 	CModelRender* m_dbgObbModel[m_obbNum] = { nullptr };
-	COBB m_obb2;
-	CModelRender* m_dbgObbCenter = nullptr;
-	CModelRender* m_dbgObbModel2[m_obbNum] = { nullptr };
-	bool m_dbgOBBHit = false;
+
 
 private:	//データメンバ
 	/// <summary>
@@ -180,5 +180,8 @@ private:	//データメンバ
 	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
 	bool m_operationFlag = false; //操作できるかのフラグ
+	COBB m_obb;
+
+
 };
 

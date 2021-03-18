@@ -1,19 +1,68 @@
 #include "stdafx.h"
 #include "LevelObjectBase.h"
+//デバック用
+//後で消す
 int ILevelObjectBase::objectNumber = 0;
+
+//スタート関数
 bool ILevelObjectBase::Start()
 {
+	//近くのウェイポイントを探して、イイ感じに回転する
 	CheckWayPoint();
+	//プレイヤーの参照を保持する
 	m_pPlayer = CLevelObjectManager::GetInstance()->GetPlayer();
+
+	//LevelObjectManagerにオブジェクトが追加されたことを報告
 	CLevelObjectManager::GetInstance()->AddObject(this);
+
+	//OBBを初期化する
+	InitOBB();
+
+	//デバック用
+	//後で消す。
 	m_objectNumber = objectNumber++;
+
+	Vector3* vertPos = m_obb.GetBoxVertex();
+	for (int i = 0; i < m_dbgOBBNum; i++)
+	{
+		m_dbgOBBVert[i] = NewGO<CModelRender>(0);
+		m_dbgOBBVert[i]->Init("Assets/modelData/dbgBox.tkm");
+		m_dbgOBBVert[i]->SetPosition(vertPos[i]);
+	}
+
+	//デバック用ここまで
+
+	//オーバーライドしてほしい関数PureVirtualStart()
 	return PureVirtualStart();
+
 }
 
 ILevelObjectBase::~ILevelObjectBase()
 {
+	//デバック用
+	//後で消す
+	for (int i = 0; i < m_dbgOBBNum; i++)
+	{
+		DeleteGO(m_dbgOBBVert[i]);
+	}
 	CLevelObjectManager::GetInstance()->RemoveObject(this);
 }
+
+void ILevelObjectBase::InitOBB()
+{
+	//OBBの初期化データ
+	SInitOBBData initData;
+	initData.position = m_position;
+	initData.width = 100.0f;
+	initData.height = 100.0f;
+	initData.length = 100.0f;
+	initData.pivot = { 0.5f,0.0f,0.5f };
+	initData.rotation = m_rotation;
+
+	//OBBの初期化
+	m_obb.Init(initData);
+}
+
 
 void ILevelObjectBase::CheckWayPoint()
 {
@@ -87,55 +136,40 @@ void ILevelObjectBase::CheckWayPoint()
 }
 
 
-bool ILevelObjectBase::IsHitPlayer(const float hitDot)
+bool ILevelObjectBase::IsHitPlayer()
 {
+	//プレイヤーが見つかっていなかったら何もせずにreturn
 	if (!m_pPlayer)
 		return false;
 
+	//OBB同士の当たり判定をして、
+	//その結果を戻す
+	return CollisionOBBs(m_pPlayer->GetOBB(), m_obb);
 
-	Vector3 myUp = g_vec3Up;
-	m_rotation.Apply(myUp);
-	myUp.Normalize();
-	
-	Vector3 playerUp = m_pPlayer->GetUpVec();
-	playerUp.Normalize();
-
-	if (std::abs(Dot(myUp, playerUp) - 1.0f) <= hitDot)
-	{
-		//当たった
-		return true;
-	}
-	else
-	{
-		//当たってない
-		return false;
-	}
 
 }
 bool ILevelObjectBase::IsHitObject
-(const ILevelObjectBase& lhs, const ILevelObjectBase& rhs, const float hitDot)
+(ILevelObjectBase& lhs, ILevelObjectBase& rhs)
 {
-	Quaternion qRot;
+	//OBB同士の当たり判定をして、
+	//その結果を戻す
+	return CollisionOBBs(lhs.GetOBB(), rhs.GetOBB());
+}
 
-	Vector3 lhsUp = g_vec3Up;
-	qRot = lhs.GetRotation();
-	qRot.Apply(lhsUp);
-	lhsUp.Normalize();
+void ILevelObjectBase::Update()
+{
+	PureVirtualUpdate();
 
-	Vector3 rhsUp = g_vec3Up;
-	qRot = rhs.GetRotation();
-	qRot.Apply(rhsUp);
-	rhsUp.Normalize();
+	m_obb.SetPosition(m_position);
+	m_obb.SetRotation(m_rotation);
 
-	if (std::abs(Dot(lhsUp, rhsUp) - 1.0f) <= hitDot)
+	//デバック用
+	//後で消す
+	Vector3* vertPos = m_obb.GetBoxVertex();
+	for (int i = 0; i < m_dbgOBBNum; i++)
 	{
-		//当たった
-		return true;
+		m_dbgOBBVert[i]->SetPosition(vertPos[i]);
+		m_dbgOBBVert[i]->SetRotation(m_rotation);
 	}
-	else
-	{
-		//当たってない
-		return false;
-	}
-
+	//デバック用ここまで
 }

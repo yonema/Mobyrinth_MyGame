@@ -3,16 +3,17 @@
 
 /// <summary>
 ///	リバーシブルオブジェクト（反転オブジェクト）
+/// 反転オブジェクトを作るときはこのクラスを継承してね！
 /// </summary>
 class CReversibleObject : public ILevelObjectBase
 {
 public:		//自動で呼ばれるメンバ関数
 	bool PureVirtualStart()override final;	//スタート関数
 	virtual ~CReversibleObject();			//デストラクタ
-	void Update()override final;			//アップデート関数
+	void PureVirtualUpdate()override final;			//アップデート関数
 
 
-public:		//publicなオーバーライドしてほしい関数
+public:		//publicなオーバーライドしてほしいメンバ関数
 	virtual bool StartSub() { return true; };	//スタート関数
 	virtual void UpdateSub() {};				//アップデート関数
 	/// <summary>
@@ -24,7 +25,7 @@ public:		//publicなオーバーライドしてほしい関数
 	virtual void SetFrontOrBackSub() {};
 
 
-private:	//privateなオーバーライドしてほしい関数
+private:	//privateなオーバーライドしてほしいメンバ関数
 	/// <summary>
 	/// クエリしてほしいタイミングで呼ばれる関数。
 	/// ここでQueryLOsを呼んでオブジェクト同士の反応を書く。

@@ -9,7 +9,7 @@ protected:
 public:
 	bool PureVirtualStart()override final;
 	virtual bool StartSub() { return true; };
-	void Update()override final;
+	void PureVirtualUpdate()override final;
 	virtual void UpdateSub() {};
 	virtual ~CObstacleObject();
 private:
