@@ -2,6 +2,15 @@
 #include "ModelRender.h"
 #include "LightManager.h"
 
+
+/// <summary>
+/// デフォルトの初期化処理関数
+/// 最初に呼んで！
+/// </summary>
+/// <param name="filePath">tkmのファイルパス</param>
+/// <param name="animationClips">アニメーションクリップ</param>
+/// <param name="numAnimationClips">アニメーションクリップの総数</param>
+/// <param name="modelUpAxis">モデルのUP軸</param>
 void CModelRender::Init(
 	const char* filePath,
 	AnimationClip* animationClips,
@@ -18,6 +27,16 @@ void CModelRender::Init(
 	//初期化完了
 	m_isInited = true;
 }
+
+
+/// <summary>
+/// カスタム用の初期化関数
+/// 最初に呼んで！
+/// デフォルトのModelInitDataとは違う内容で初期化するときに使う
+/// </summary>
+/// <param name="initData">初期化用のデータ</param>
+/// <param name="animationClips">アニメーションクリップ</param>
+/// <param name="numAnimationClips">アニメーションクリップの総数</param>
 void CModelRender::Init(
 	ModelInitData initData,
 	AnimationClip* animationClips ,
@@ -34,6 +53,14 @@ void CModelRender::Init(
 	m_isInited = true;
 }
 
+
+/// <summary>
+/// スケルトンを初期化。
+/// tkmファイルパスをtksファイルパスに変換する
+/// </summary>
+/// <param name="filePath">tkmファイルパス</param>
+/// <returns>初期化が成功したか？</returns>
+bool InitSkeleton(const char* filePath);
 bool CModelRender::InitSkeleton(const char* filePath)
 {
 	//tkmファイルをtksファイルに変換する
@@ -57,6 +84,13 @@ bool CModelRender::InitSkeleton(const char* filePath)
 		return false;
 	}
 }
+
+
+/// <summary>
+/// モデルを初期化。
+/// </summary>
+/// <param name="filePath">tkmファイルパス</param>
+/// <param name="modelUpAxis">モデルのUP軸</param>
 void CModelRender::InitModel(const char* filePath, EnModelUpAxis modelUpAxis)
 {
 	//初期化データを作成する
@@ -90,6 +124,13 @@ void CModelRender::InitModel(const char* filePath, EnModelUpAxis modelUpAxis)
 	//作成した初期化データをもとにモデルを初期化する、
 	m_model.Init(initData);
 }
+
+
+/// <summary>
+/// アニメーションを初期化。
+/// </summary>
+/// <param name="animationClips">アニメーションクリップ</param>
+/// <param name="numAnimationClips">アニメーションクリップの総数</param>
 void CModelRender::InitAnimation(AnimationClip* animationClips, int numAnimationClips)
 {
 	//アニメーションクリップが登録されているか
@@ -105,6 +146,9 @@ void CModelRender::InitAnimation(AnimationClip* animationClips, int numAnimation
 		numAnimationClips	//アニメーションの数。
 	);
 }
+
+
+//アップデート関数
 void CModelRender::Update()
 {
 	//初期化されているか？
@@ -123,6 +167,8 @@ void CModelRender::Update()
 
 }
 
+
+//描画用関数
 void CModelRender::Render(RenderContext& rc)
 {
 	//初期化されているか？

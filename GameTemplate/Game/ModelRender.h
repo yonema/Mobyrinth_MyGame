@@ -1,8 +1,15 @@
 #pragma once
+
+/// <summary>
+/// モデル描画クラス
+/// </summary>
 class CModelRender : public IGameObject
 {
-public://publicなメンバ関数
+public:		//自動で呼ばれるメンバ関数
+	void Update() override final;					//アップデート関数
+	void Render(RenderContext& rc) override final;	//描画用関数
 
+public:		//ここのメンバ関数を主に使う。
 	/// <summary>
 	/// デフォルトの初期化処理関数
 	/// 最初に呼んで！
@@ -30,38 +37,10 @@ public://publicなメンバ関数
 		int numAnimationClips = 0
 	);
 
-	void Update() override final;
-	void Render(RenderContext& rc) override final;
-private://privateなメンバ関数
-
 	/// <summary>
-	/// スケルトンを初期化。
-	/// tkmファイルパスをtksファイルパスに変換する
+	/// 場所を設定
 	/// </summary>
-	/// <param name="filePath">tkmファイルパス</param>
-	/// <returns>初期化が成功したか？</returns>
-	bool InitSkeleton(const char* filePath);
-
-	/// <summary>
-	/// モデルを初期化。
-	/// </summary>
-	/// <param name="filePath">tkmファイルパス</param>
-	/// <param name="modelUpAxis">モデルのUP軸</param>
-	void InitModel(const char* filePath, EnModelUpAxis modelUpAxis);
-
-	/// <summary>
-	/// アニメーションを初期化。
-	/// </summary>
-	/// <param name="animationClips">アニメーションクリップ</param>
-	/// <param name="numAnimationClips">アニメーションクリップの総数</param>
-	void InitAnimation(AnimationClip* animationClips, int numAnimationClips);
-
-public://publicなメンバ関数
-
-	/// <summary>
-	/// 位置を設定
-	/// </summary>
-	/// <param name="pos">位置</param>
+	/// <param name="pos">場所</param>
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
@@ -95,10 +74,35 @@ public://publicなメンバ関数
 		m_animationPtr->Play(animNo, interpolateTime);
 	}
 
+	//モデルの参照を返す
 	Model& GetModel()
 	{
 		return m_model;
 	}
+private:	//privateなメンバ関数
+
+	/// <summary>
+	/// スケルトンを初期化。
+	/// tkmファイルパスをtksファイルパスに変換する
+	/// </summary>
+	/// <param name="filePath">tkmファイルパス</param>
+	/// <returns>初期化が成功したか？</returns>
+	bool InitSkeleton(const char* filePath);
+
+	/// <summary>
+	/// モデルを初期化。
+	/// </summary>
+	/// <param name="filePath">tkmファイルパス</param>
+	/// <param name="modelUpAxis">モデルのUP軸</param>
+	void InitModel(const char* filePath, EnModelUpAxis modelUpAxis);
+
+	/// <summary>
+	/// アニメーションを初期化。
+	/// </summary>
+	/// <param name="animationClips">アニメーションクリップ</param>
+	/// <param name="numAnimationClips">アニメーションクリップの総数</param>
+	void InitAnimation(AnimationClip* animationClips, int numAnimationClips);
+
 
 private://データメンバ
 	Model m_model;								//モデル表示処理
@@ -110,7 +114,5 @@ private://データメンバ
 	Vector3 m_scale = g_vec3One;				//拡大
 
 	bool m_isInited = false;					//初期化済み？
-
-
 };
 

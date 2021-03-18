@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "OBB.h"
 
+//コンストラクタ
 COBB::COBB()
 {
+	//各データメンバに初期値を入れる
 	m_position = g_vec3Zero;
 	m_centerPosition = g_vec3Zero;
 	m_normalDirection[enLocalX] = g_vec3Right;
@@ -16,9 +18,13 @@ COBB::COBB()
 
 }
 
+/// <summary>
+/// 初期化関数。
+/// 最初に呼んでね。
+/// </summary>
+/// <param name="initData">COBBの初期化用の構造体</param>
 void COBB::Init(SInitOBBData& initData)
 {
-
 	//各軸の方向ベクトルの長さを設定
 	m_directionLength[enLocalX] = initData.width / 2;
 	m_directionLength[enLocalY] = initData.height / 2;
@@ -31,24 +37,33 @@ void COBB::Init(SInitOBBData& initData)
 	//ピボットを設定
 	m_pivot = initData.pivot;
 
-	//センターポジションを計算する
-	CalcCenterPosition();
-
-
 	//回転を設定
 	Rotating(initData.rotation);
 
+	//センターポジションを計算する
+	CalcCenterPosition();
 }
 
+/// <summary>
+/// ボックスの8つの頂点の座標を取得する。
+/// （注意）配列の先頭アドレスを戻しているけど、
+/// 配列の要素数は8だよ。
+/// </summary>
+/// <returns>頂点の配列の先頭アドレス</returns>
 Vector3* COBB::GetBoxVertex()
 {
+	//ボックスの頂点の数
 	const int vertNum = 8;
+	//ボックスの頂点の場所
 	Vector3 boxVertex[vertNum];
+	//ボックスの頂点にまずセンターポジションを入れる
 	for (int i = 0; i < vertNum; i++)
 	{
 		boxVertex[i] = m_centerPosition;
 	}
 
+	//各頂点をセンターポジションから方向ベクトル（大きさ付き）分動かして、
+	//頂点の場所まで移動させる。
 	boxVertex[0] -= m_normalDirection[enLocalX] * m_directionLength[enLocalX];
 	boxVertex[0] += m_normalDirection[enLocalY] * m_directionLength[enLocalY];
 	boxVertex[0] -= m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
@@ -74,16 +89,21 @@ Vector3* COBB::GetBoxVertex()
 	boxVertex[7] -= m_normalDirection[enLocalY] * m_directionLength[enLocalY];
 	boxVertex[7] += m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
 
+
+	//頂点の配列の先頭アドレスを戻す
 	return boxVertex;
 }
 
 
-
+/// <summary>
+/// センターポジションの取得
+/// </summary>
+/// <returns>センターポジション</returns>
 void COBB::CalcCenterPosition()
 {
 	//ピボットをもとにセンターポジションを計算する
 
-
+	//方向ベクトル（大きさ付き）
 	Vector3 localVecX = m_normalDirection[enLocalX] * m_directionLength[enLocalX];
 	Vector3 localVecY = m_normalDirection[enLocalY] * m_directionLength[enLocalY];
 	Vector3 localVecZ = m_normalDirection[enLocalZ] * m_directionLength[enLocalZ];
@@ -97,6 +117,7 @@ void COBB::CalcCenterPosition()
 
 	//左下手前の座標からセンターポジションへのベクトル
 	Vector3 addVec;
+
 	//X座標のピボットにセンターポジションを合わせる。
 	addVec = localVecX * 2.0f * m_pivot.x;
 	centerPos += addVec;
@@ -111,6 +132,10 @@ void COBB::CalcCenterPosition()
 	m_centerPosition = centerPos;
 }
 
+/// <summary>
+/// 単位方向ベクトルを回す関数
+/// </summary>
+/// <param name="rot">回転</param>
 void COBB::Rotating(const Quaternion& rot)
 {
 	//各軸の単位方向ベクトルを初期化してから
@@ -126,8 +151,16 @@ void COBB::Rotating(const Quaternion& rot)
 }
 
 
+//クラス外
+//クラスのメンバ関数ではない関数
 
-
+/// <summary>
+/// OBB同士の当たり判定
+/// 当たったらtrueを戻す
+/// </summary>
+/// <param name="obb1">片方のOBB</param>
+/// <param name="obb2">もう片方のOBB</param>
+/// <returns>当たったかどうか</returns>
 const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 {
 	///
@@ -466,6 +499,14 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 }
 
 
+/// <summary>
+/// 射影線分を計算する関数
+/// </summary>
+/// <param name="sepAxis">射影される分離軸（正規化済みを渡すこと）</param>
+/// <param name="dirVec_X">射影する方向ベクトルX（大きさ付きを渡すこと）</param>
+/// <param name="dirVec_Y">射影する方向ベクトルY（大きさ付きを渡すこと）</param>
+/// <param name="dirVec_Z">射影する方向ベクトルZ（大きさ付きを渡すこと）(Zはなくても良い)</param>
+/// <returns>射影線分</returns>
 const float CalcProjectionLen(
 	const Vector3& sepAxis,
 	const Vector3& dirVec_X,
@@ -473,9 +514,13 @@ const float CalcProjectionLen(
 	const Vector3& dirVec_Z
 )
 {
-	float proj1 = std::abs(Dot(sepAxis, dirVec_X));
-	float proj2 = std::abs(Dot(sepAxis, dirVec_Y));
-	float proj3 = std::abs(Dot(sepAxis, dirVec_Z));
+	//方向ベクトルXの射影線分
+	float projX = std::abs(Dot(sepAxis, dirVec_X));
+	//方向ベクトルYの射影線分
+	float projY = std::abs(Dot(sepAxis, dirVec_Y));
+	//方向ベクトルZの射影線分
+	float projZ = std::abs(Dot(sepAxis, dirVec_Z));
 
-	return proj1 + proj2 + proj3;
+	//X,Y,Zの射影線分の合計を戻す。
+	return projX + projY + projZ;
 }

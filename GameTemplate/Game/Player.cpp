@@ -53,10 +53,10 @@ bool Player::Start()
 	for (int i = 0; i < m_obbNum; i++)
 	{
 		m_dbgObbModel[i] = NewGO<CModelRender>(0);
-		m_dbgObbModel[i]->Init("Assets/modelData/yuka.tkm");
+		m_dbgObbModel[i]->Init("Assets/modelData/dbgBox.tkm");
 		m_dbgObbModel[i]->SetPosition(vertPos[i]);
 		m_dbgObbModel2[i] = NewGO<CModelRender>(0);
-		m_dbgObbModel2[i]->Init("Assets/modelData/yuka.tkm");
+		m_dbgObbModel2[i]->Init("Assets/modelData/dbgBox.tkm");
 		m_dbgObbModel2[i]->SetPosition(vertPos2[i]);
 
 	}
@@ -304,8 +304,8 @@ void Player::Update()
 		m_leftOrRight = enRight;	//右向き
 
 
-	//�f�o�b�N�p
-	//��ŏ��
+	//デバック用
+	//後で消す
 	m_obb.SetRotation(m_finalWPRot);
 	m_obb.SetPosition(m_position);
 	Vector3* boxVertex = m_obb.GetBoxVertex();
@@ -326,7 +326,7 @@ void Player::Update()
 	m_dbgOBBHit = CollisionOBBs(m_obb, m_obb2);
 
 
-	//�����܂ŁA�f�o�b�N�p
+	//デバックここまで
 
 
 
@@ -392,7 +392,7 @@ void Player::PostRender(RenderContext& rc)
 	m_font.Begin(rc);
 
 
-	//�E�F�C�|�C���g�̃X�e�[�g
+	//ウェイポイントステートの表示
 	swprintf(text, L"wayPointState:%02d", m_wayPointState);
 	//描画
 	m_font.Draw(text,
@@ -403,8 +403,8 @@ void Player::PostRender(RenderContext& rc)
 		{ 0.0f,0.0f }
 	);
 
-	//�v���C���[�̍��E�̃E�F�C�|�C���g
-	//���̃E�F�C�|�C���g
+	//プレイヤーの左右のウェイポイントの表示
+	//左側のウェイポイント
 	swprintf(text, L"[%02d]", m_lpIndex);
 	m_font.Draw(text,
 		{ -110.0f, 50.0f },
@@ -413,7 +413,7 @@ void Player::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
-	//�E�̃E�F�C�|�C���g
+	//右側のウェイポイント
 	swprintf(text, L"[%02d]", m_rpIndex);
 	m_font.Draw(text,
 		{ 10.0f,50.0f },
@@ -423,7 +423,7 @@ void Player::PostRender(RenderContext& rc)
 		{ 0.0f,0.0f }
 	);
 
-	//�X�e�[�W�Ƃ̓����蔻��
+	//ステージとの当たり判定
 	swprintf(text, L"Hit%d", m_dbgHit);
 	m_font.Draw(text,
 		{ 110.0f, 150.0f },
@@ -432,7 +432,7 @@ void Player::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
-	//�X�e�[�W�ɗ����߂̕⊮��
+	//ステージとプレイヤーのポジションとの補完率
 	swprintf(text, L"rate%05f", m_mobius->GetModel()->getDbg());
 	m_font.Draw(text,
 		{ 110.0f, 120.0f },
@@ -443,8 +443,8 @@ void Player::PostRender(RenderContext& rc)
 	);
 
 
-	//�E�F�C�|�C���g�؂�ւ��̂��߂̓��
-	swprintf(text, L"����%02.2f", m_dbgDot1);
+	//ウェイポイントの切り替え
+	swprintf(text, L"右側%02.2f", m_dbgDot1);
 	m_font.Draw(text,
 		{ -310.0f, 150.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },
@@ -452,7 +452,7 @@ void Player::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
-	swprintf(text, L"右側%02.2f", m_dbgDot2);
+	swprintf(text, L"左側%02.2f", m_dbgDot2);
 	m_font.Draw(text,
 		{ -310.0f, 120.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },
@@ -462,7 +462,7 @@ void Player::PostRender(RenderContext& rc)
 	);
 
 
-	//OBB�̓����蔻��
+	//OBBとの当たり判定
 	swprintf(text, L"OBBHit%d", m_dbgOBBHit);
 	m_font.Draw(text,
 		{ -100.0f, 200.0f },
