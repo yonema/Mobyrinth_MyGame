@@ -32,13 +32,39 @@ bool Player::Start()
 	Init();
 
 	SInitOBBData initData;
+	initData.width = 150.0f;
+	initData.length = 200.0f;
+	initData.height = 300.0f;
+	initData.position = m_position;
+	initData.rotation = m_rotation;
+	initData.pivot = { 0.5f,0.0f,0.5f };
 	m_obb.Init(initData);
 
+	initData.width = 100.0f;
+	initData.length = 300.0f;
+	initData.height = 400.0f;
+	initData.position = { 0.0f,1800.0f,0.0f };
+	initData.rotation = g_quatIdentity;
+	initData.pivot = { 1.0f,0.75f,0.25f };
+	m_obb2.Init(initData);
+
+	Vector3* vertPos = m_obb.GetBoxVertex();
+	Vector3* vertPos2 = m_obb2.GetBoxVertex();
 	for (int i = 0; i < m_obbNum; i++)
 	{
 		m_dbgObbModel[i] = NewGO<CModelRender>(0);
 		m_dbgObbModel[i]->Init("Assets/modelData/yuka.tkm");
+		m_dbgObbModel[i]->SetPosition(vertPos[i]);
+		m_dbgObbModel2[i] = NewGO<CModelRender>(0);
+		m_dbgObbModel2[i]->Init("Assets/modelData/yuka.tkm");
+		m_dbgObbModel2[i]->SetPosition(vertPos2[i]);
+
 	}
+
+
+	m_dbgObbCenter = NewGO<CModelRender>(0);
+	m_dbgObbCenter->Init("Assets/modelData/yuka.tkm");
+	m_dbgObbCenter->SetPosition({ 0.0f, 1800.0f, 0.0f });
 
 	return true;
 }
@@ -52,6 +78,12 @@ Player::~Player()
 	DeleteGO(m_dbgModel);
 	DeleteGO(m_dbgModel2);
 	DeleteGO(m_dbgModel3);
+	for (int i = 0; i < m_obbNum; i++)
+	{
+		DeleteGO(m_dbgObbModel[i]);
+		DeleteGO(m_dbgObbModel2[i]);
+	}
+	DeleteGO(m_dbgObbCenter);
 
 }
 
@@ -270,46 +302,34 @@ void Player::Update()
 		m_leftOrRight = enLeft;		//左向き
 	else if (m_padLStickXF > 0.0f)
 		m_leftOrRight = enRight;	//右向き
+
+
+	//�f�o�b�N�p
+	//��ŏ��
 	m_obb.SetRotation(m_finalWPRot);
 	m_obb.SetPosition(m_position);
-	Vector3 vert[m_obbNum];
-	Vector3 addVec[m_obbNum];
+	Vector3* boxVertex = m_obb.GetBoxVertex();
 	for (int i = 0; i < m_obbNum; i++)
 	{
-		vert[i] = m_obb.GetPosition();
-		addVec[i] = g_vec3Zero;
-	} 
-	addVec[0] -= m_obb.GetNormalDirection(COBB::enLocalX);
-	addVec[0] += m_obb.GetNormalDirection(COBB::enLocalY);
-	addVec[0] -= m_obb.GetNormalDirection(COBB::enLocalZ);
-	addVec[1] -= m_obb.GetNormalDirection(COBB::enLocalX);
-	addVec[1] += m_obb.GetNormalDirection(COBB::enLocalY);
-	addVec[1] += m_obb.GetNormalDirection(COBB::enLocalZ);
-	addVec[2] -= m_obb.GetNormalDirection(COBB::enLocalX);
-	addVec[2] -= m_obb.GetNormalDirection(COBB::enLocalY);
-	addVec[2] -= m_obb.GetNormalDirection(COBB::enLocalZ);
-	addVec[3] -= m_obb.GetNormalDirection(COBB::enLocalX);
-	addVec[3] -= m_obb.GetNormalDirection(COBB::enLocalY);
-	addVec[3] += m_obb.GetNormalDirection(COBB::enLocalZ);
-	addVec[4] += m_obb.GetNormalDirection(COBB::enLocalX);
-	addVec[4] += m_obb.GetNormalDirection(COBB::enLocalY);
-	addVec[4] -= m_obb.GetNormalDirection(COBB::enLocalZ);
-	addVec[5] += m_obb.GetNormalDirection(COBB::enLocalX);
-	addVec[5] += m_obb.GetNormalDirection(COBB::enLocalY);
-	addVec[5] += m_obb.GetNormalDirection(COBB::enLocalZ);
-	addVec[6] += m_obb.GetNormalDirection(COBB::enLocalX);
-	addVec[6] -= m_obb.GetNormalDirection(COBB::enLocalY);
-	addVec[6] -= m_obb.GetNormalDirection(COBB::enLocalZ);
-	addVec[7] += m_obb.GetNormalDirection(COBB::enLocalX);
-	addVec[7] -= m_obb.GetNormalDirection(COBB::enLocalY);
-	addVec[7] += m_obb.GetNormalDirection(COBB::enLocalZ);
-
-	for (int i = 0; i < m_obbNum; i++)
-	{
-		addVec[i].Scale(200.0f);
-		vert[i] += addVec[i];
-		m_dbgObbModel[i]->SetPosition(vert[i]);
+		m_dbgObbModel[i]->SetPosition(boxVertex[i]);
 	}
+
+	m_obb2.SetPosition({ 0.0f,1800.0f,0.0f });
+	Vector3* boxVertex2 = m_obb2.GetBoxVertex();
+	for (int i = 0; i < m_obbNum; i++)
+	{
+		m_dbgObbModel2[i]->SetPosition(boxVertex2[i]);
+	}
+	m_dbgObbCenter->SetPosition({ 0.0f,1800.0f,0.0f });
+
+
+	m_dbgOBBHit = CollisionOBBs(m_obb, m_obb2);
+
+
+	//�����܂ŁA�f�o�b�N�p
+
+
+
 
 	//ウェイポイントの更新処理
 	CheckWayPoint();
@@ -371,6 +391,8 @@ void Player::PostRender(RenderContext& rc)
 	//描画開始
 	m_font.Begin(rc);
 
+
+	//�E�F�C�|�C���g�̃X�e�[�g
 	swprintf(text, L"wayPointState:%02d", m_wayPointState);
 	//描画
 	m_font.Draw(text,
@@ -380,6 +402,9 @@ void Player::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
+
+	//�v���C���[�̍��E�̃E�F�C�|�C���g
+	//���̃E�F�C�|�C���g
 	swprintf(text, L"[%02d]", m_lpIndex);
 	m_font.Draw(text,
 		{ -110.0f, 50.0f },
@@ -388,6 +413,7 @@ void Player::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
+	//�E�̃E�F�C�|�C���g
 	swprintf(text, L"[%02d]", m_rpIndex);
 	m_font.Draw(text,
 		{ 10.0f,50.0f },
@@ -397,6 +423,7 @@ void Player::PostRender(RenderContext& rc)
 		{ 0.0f,0.0f }
 	);
 
+	//�X�e�[�W�Ƃ̓����蔻��
 	swprintf(text, L"Hit%d", m_dbgHit);
 	m_font.Draw(text,
 		{ 110.0f, 150.0f },
@@ -405,6 +432,7 @@ void Player::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
+	//�X�e�[�W�ɗ����߂̕⊮��
 	swprintf(text, L"rate%05f", m_mobius->GetModel()->getDbg());
 	m_font.Draw(text,
 		{ 110.0f, 120.0f },
@@ -414,7 +442,9 @@ void Player::PostRender(RenderContext& rc)
 		{ 0.0f,0.0f }
 	);
 
-	swprintf(text, L"左側%02.2f", m_dbgDot1);
+
+	//�E�F�C�|�C���g�؂�ւ��̂��߂̓��
+	swprintf(text, L"����%02.2f", m_dbgDot1);
 	m_font.Draw(text,
 		{ -310.0f, 150.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },
@@ -431,6 +461,18 @@ void Player::PostRender(RenderContext& rc)
 		{ 0.0f,0.0f }
 	);
 
+
+	//OBB�̓����蔻��
+	swprintf(text, L"OBBHit%d", m_dbgOBBHit);
+	m_font.Draw(text,
+		{ -100.0f, 200.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+		0.0f,
+		1.0f,
+		{ 0.0f,0.0f }
+	);
+
 	//描画終了
+
 	m_font.End(rc);
 }

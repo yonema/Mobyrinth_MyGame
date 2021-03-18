@@ -14,6 +14,18 @@ public:
 	{
 		m_position = pos;
 	}
+	void SetRotation(const Quaternion& rot)
+	{
+		m_rotation = rot;
+	}
+	void SetScale(const Vector3& scale)
+	{
+		m_scale = scale;
+	}
+	void SetPivot(const Vector2& pivot)
+	{
+		m_pivot = pivot;
+	}
 private:
 	Sprite m_sprite;
 	SpriteInitData m_initData;
