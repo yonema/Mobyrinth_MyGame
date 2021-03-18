@@ -91,6 +91,9 @@ private:
 	int m_leftOrRight = enRight;	//キャラクターの左右の向き
 
 private:
+	//////////////////////////////
+	// 名前を！変えろ！
+	//////////////////////////////
 	bool check = false;
 	int count = 0;
 	Vector3 m_startPosition = g_vec3Zero; //演出に使用する注視点座標の開始位置

@@ -39,19 +39,16 @@ public://publicなメンバ関数
 	}
 
 	/// <summary>
-	/// ウェイポイントの「場所」を初期化
+	/// ウェイポイントの「場所」を取得
 	/// </summary>
 	/// <param name="vecSize">ウェイポイントのサイズ</param>
-	/// <param name="posMap">場所のマップ</param>
-	//void InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap);
-	/// <summary>
-	/// ウェイポイントの「回転」を初期化
-	/// </summary>
-	/// <param name="vecSize">ウェイポイントのサイズ</param>
-	/// <param name="rotMap">回転のマップ</param>
-	//void InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap);
-
+	/// <param name="posMap">場所のベクター</param>
 	void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>*const posMap);
+	/// <summary>
+	/// ウェイポイントの「回転」を取得
+	/// </summary>
+	/// <param name="vecSize">ウェイポイントのサイズ</param>
+	/// <param name="rotMap">回転のベクター</param>
 	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
 
 	/// <summary>
@@ -89,6 +86,10 @@ public://publicなメンバ関数
 	const Vector3 GerWayPointPos(const int index)
 	{
 		return (*m_wayPointPos)[index];
+	}
+	const int GetEnLeftOrRight()const
+	{
+		return m_leftOrRight;
 	}
 
 private://privateなメンバ関数

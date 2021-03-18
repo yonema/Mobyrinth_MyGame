@@ -51,6 +51,7 @@ public:
 		m_player = player;
 	}
 
+
 	/// <summary>
 	/// ウェイポイントの「場所」を初期化
 	/// </summary>
@@ -71,6 +72,10 @@ public:
 	std::vector<Quaternion>* GetWayPointRot()
 	{
 		return &m_wayPointRot;
+	}
+	int GetVecSize()const
+	{
+		return m_vecSize;
 	}
 
 	void AddObject(ILevelObjectBase* object);
