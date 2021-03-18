@@ -1,21 +1,27 @@
 #pragma once
 #include "Title.h"
 
-#include "SpriteRender.h"
-
+/// <summary>
+/// ゲームクラス
+/// </summary>
 class Game : public IGameObject
 {
-public:
-	bool Start()override final;
-	~Game();
-	void PostRender(RenderContext& rc)override final;
+public:		//自動で呼ばれるメンバ関数
+	bool Start()override final;							//スタート関数
+	~Game();											//デストラクタ
 
-	void Update()override final;
-private:
-	int m_numText = 0;
-	CSpriteRender* m_spriteRender = nullptr;
+	//デバック用
+	//後で消す
+	void PostRender(RenderContext& rc)override final;	//一番上に描画する関数
+	void Update()override final;						//アップデート関数
 
-	std::vector<ILevelObjectBase*> m_lb;
+
+private:	//データメンバ
+	int m_frameNum = 0;						//フレーム数
+
+	//デバック用
+	//後で消す
+	std::vector<ILevelObjectBase*> m_lb;	//ILevelObjectBaseの情報を受け取る。
 
 };
 
