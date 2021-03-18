@@ -11,13 +11,12 @@ bool ROmizu_kori::StartSub()
 
 void ROmizu_kori::QuerySub()
 {
-	const float hitDot = 0.005f; //オブジェクトが触れたかを判定する変数
 
 	if (GetObjectType() == enWater)
 	{
 		QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
 			{
-				if (IsHitObject(*this, *bigFire, hitDot))
+				if (IsHitObject(*this, *bigFire))
 				{
 					bigFire->Damage();
 					DeleteGO(this);
@@ -30,7 +29,7 @@ void ROmizu_kori::QuerySub()
 	{
 		QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
 			{
-				if (IsHitObject(*this, *bigFire, hitDot))
+				if (IsHitObject(*this, *bigFire))
 				{
 					bigFire->Damage();
 					DeleteGO(this);

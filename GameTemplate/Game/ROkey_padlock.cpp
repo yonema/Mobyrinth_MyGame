@@ -12,13 +12,12 @@ bool ROkey_padlock::StartSub()
 
 void ROkey_padlock::QuerySub()
 {
-	const float hitDot = 0.005f;
 
 	if (GetObjectType() == enKey)
 	{
 		QueryLOs<OOpadlock>(enNotHavePadlock, [&](OOpadlock* padlock) -> bool
 			{
-				if (IsHitObject(*this, *padlock, hitDot))
+				if (IsHitObject(*this, *padlock))
 				{
 					DeleteGO(padlock);
 					DeleteGO(this);

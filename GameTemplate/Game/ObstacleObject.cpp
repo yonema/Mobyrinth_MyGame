@@ -25,7 +25,7 @@ bool CObstacleObject::PureVirtualStart()
 	return StartSub();
 }
 
-void CObstacleObject::Update()
+void CObstacleObject::PureVirtualUpdate()
 {
 	if (!m_pPlayer)
 	{

@@ -81,6 +81,15 @@ public:		//ここのメンバ関数を主に使う
 		CalcCenterPosition();
 	}
 
+	void SetDirectionLength(const Vector3& directionLength)
+	{
+		m_directionLength[enLocalX] = directionLength.x / 2;
+		m_directionLength[enLocalY] = directionLength.y / 2;
+		m_directionLength[enLocalZ] = directionLength.z / 2;
+		//センターポジションを計算する
+		CalcCenterPosition();
+	}
+
 	/// <summary>
 	/// ボックスの8つの頂点の座標を取得する。
 	/// （注意）配列の先頭アドレスを戻しているけど、

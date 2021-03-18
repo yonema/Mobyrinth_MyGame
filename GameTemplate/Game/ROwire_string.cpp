@@ -12,13 +12,12 @@ bool ROwire_string::StartSub()
 
 void ROwire_string::QuerySub()
 {
-	const float hitDot = 0.005f;
 
 	if (GetObjectType() == enWire)
 	{
 		QueryLOs<ROkeymold_empty>(enKeymold, [&](ROkeymold_empty* keymold) -> bool
 			{
-				if (IsHitObject(*this, *keymold, hitDot))
+				if (IsHitObject(*this, *keymold))
 				{
 
 					ROkey_padlock* RObjrct;

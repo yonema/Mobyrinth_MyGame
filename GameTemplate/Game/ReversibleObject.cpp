@@ -124,7 +124,7 @@ void CReversibleObject::SetBothModelActiveFlag(const bool activeFlag)
 }
 
 //アップデート関数
-void CReversibleObject::Update()
+void CReversibleObject::PureVirtualUpdate()
 {
 	//プレイヤーが見つかっていなかったら
 	if (!m_pPlayer)
@@ -185,6 +185,7 @@ void CReversibleObject::Update()
 /// </summary>
 void CReversibleObject::CheckPlayer()
 {
+
 	//プレイヤーとの当たり判定
 	if (IsHitPlayer())
 	{
@@ -344,7 +345,7 @@ void CReversibleObject::ThrownDown()
 		m_objectState = enQuery;
 	}
 	//投げている時のカウンターが最大値の半分まで来たら
-	else if (m_throwCounter == m_throwCounter / 2)
+	else if (m_throwCounter == maxThrowCounter / 2)
 	{
 		//反転させる
 		Reverse();

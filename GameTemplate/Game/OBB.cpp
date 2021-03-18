@@ -267,6 +267,7 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 		IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
 
 		//衝突判定
+		//二つのOBBの射影線分が、中心点間の距離より短いかどうか
 		if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
 			return false;	//衝突していない
 
@@ -280,7 +281,7 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 	for (int axis = 0; axis < COBB::enLocalAxisNum; axis++)
 	{
 		//1.OBBの分離軸を探す。
-		//分離軸にobb1のX,Y,Zをそれぞれを選ぶ
+		//分離軸にobb2のX,Y,Zをそれぞれを選ぶ
 		SeparationAxis = obb2NDir[axis];
 
 		//2.分離軸にOBBを射影する。
@@ -293,7 +294,7 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 				obb1DirVec[COBB::enLocalZ]);
 
 		//obb2の射影線分
-		float obb2ProjectionLen = obb1.GetDirectionLength(axis);
+		float obb2ProjectionLen = obb2.GetDirectionLength(axis);
 
 
 		//3.二つのOBBの射影線分が重なっているかの判定。
@@ -302,6 +303,7 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 		IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
 
 		//衝突判定
+		//二つのOBBの射影線分が、中心点間の距離より短いかどうか
 		if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
 			return false;	//衝突していない
 
@@ -334,6 +336,7 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 	IntervalLen = std::abs(Dot(obb2ToObb1Vec, SeparationAxis));
 
 	//衝突判定
+	//二つのOBBの射影線分が、中心点間の距離より短いかどうか
 	if (IntervalLen > obb1ProjectionLen + obb2ProjectionLen)
 		return false;	//衝突していない
 

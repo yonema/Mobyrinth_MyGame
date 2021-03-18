@@ -11,13 +11,12 @@ bool ROaxe_pickaxe::StartSub()
 
 void ROaxe_pickaxe::QuerySub()
 {
-	const float hitDot = 0.005f;
 
 	if (GetObjectType() == enAxe)
 	{
 		QueryLOs<OObox>(enBox, [&](OObox* box) -> bool
 			{
-				if (IsHitObject(*this, *box, hitDot))
+				if (IsHitObject(*this, *box))
 				{
 					DeleteGO(box);
 					DeleteGO(this);

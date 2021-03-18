@@ -32,39 +32,24 @@ bool Player::Start()
 	Init();
 
 	SInitOBBData initData;
-	initData.width = 150.0f;
+	initData.width = 50.0f;
 	initData.length = 200.0f;
-	initData.height = 300.0f;
+	initData.height = 100.0f;
 	initData.position = m_position;
 	initData.rotation = m_rotation;
 	initData.pivot = { 0.5f,0.0f,0.5f };
 	m_obb.Init(initData);
 
-	initData.width = 100.0f;
-	initData.length = 300.0f;
-	initData.height = 400.0f;
-	initData.position = { 0.0f,1800.0f,0.0f };
-	initData.rotation = g_quatIdentity;
-	initData.pivot = { 1.0f,0.75f,0.25f };
-	m_obb2.Init(initData);
+
 
 	Vector3* vertPos = m_obb.GetBoxVertex();
-	Vector3* vertPos2 = m_obb2.GetBoxVertex();
 	for (int i = 0; i < m_obbNum; i++)
 	{
 		m_dbgObbModel[i] = NewGO<CModelRender>(0);
 		m_dbgObbModel[i]->Init("Assets/modelData/dbgBox.tkm");
 		m_dbgObbModel[i]->SetPosition(vertPos[i]);
-		m_dbgObbModel2[i] = NewGO<CModelRender>(0);
-		m_dbgObbModel2[i]->Init("Assets/modelData/dbgBox.tkm");
-		m_dbgObbModel2[i]->SetPosition(vertPos2[i]);
-
 	}
 
-
-	m_dbgObbCenter = NewGO<CModelRender>(0);
-	m_dbgObbCenter->Init("Assets/modelData/yuka.tkm");
-	m_dbgObbCenter->SetPosition({ 0.0f, 1800.0f, 0.0f });
 
 	return true;
 }
@@ -81,9 +66,7 @@ Player::~Player()
 	for (int i = 0; i < m_obbNum; i++)
 	{
 		DeleteGO(m_dbgObbModel[i]);
-		DeleteGO(m_dbgObbModel2[i]);
 	}
-	DeleteGO(m_dbgObbCenter);
 
 }
 
@@ -312,18 +295,10 @@ void Player::Update()
 	for (int i = 0; i < m_obbNum; i++)
 	{
 		m_dbgObbModel[i]->SetPosition(boxVertex[i]);
+		m_dbgObbModel[i]->SetRotation(m_rotation);
 	}
 
-	m_obb2.SetPosition({ 0.0f,1800.0f,0.0f });
-	Vector3* boxVertex2 = m_obb2.GetBoxVertex();
-	for (int i = 0; i < m_obbNum; i++)
-	{
-		m_dbgObbModel2[i]->SetPosition(boxVertex2[i]);
-	}
-	m_dbgObbCenter->SetPosition({ 0.0f,1800.0f,0.0f });
 
-
-	m_dbgOBBHit = CollisionOBBs(m_obb, m_obb2);
 
 
 	//デバックここまで
@@ -461,16 +436,6 @@ void Player::PostRender(RenderContext& rc)
 		{ 0.0f,0.0f }
 	);
 
-
-	//OBBとの当たり判定
-	swprintf(text, L"OBBHit%d", m_dbgOBBHit);
-	m_font.Draw(text,
-		{ -100.0f, 200.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		0.0f,
-		1.0f,
-		{ 0.0f,0.0f }
-	);
 
 	//描画終了
 
