@@ -4,16 +4,19 @@
 
 bool IStageBase::Start()
 {
-	//ƒfƒBƒŒƒNƒVƒ‡ƒ“ƒ‰ƒCƒg‚Ìì¬
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ãƒ©ã‚¤ãƒˆã®ä½œæˆ
 	m_stageDirectionLight = NewGO<CDirectionLight>(0);
 	m_stageDirectionLight->SetDirection({ 1.0f,1.0f,-1.0f });
 	m_stageDirectionLight->SetColor({ 0.1f,0.1f,0.1f,1.0f });
 
-	//ƒQ[ƒ€ƒJƒƒ‰‚Ìì¬
+	//ã‚¹ãƒ†ãƒ¼ã‚¸é–‹å§‹æ™‚ã®æ¼”å‡ºã®ä½œæˆ
+	m_startDirecting = NewGO<StartDirecting>(0, "StartDirecting");
+
+	//ã‚²ãƒ¼ãƒ ã‚«ãƒ¡ãƒ©ã®ä½œæˆ
 	NewGO<GameCamera>(0, "GameCamera");
 
-	//ƒ|[ƒY‰æ–Ê—pƒNƒ‰ƒX‚Ìì¬
-	m_pause = NewGO<CPause>(0);
+	//ãƒãƒ¼ã‚ºç”»é¢ç”¨ã‚¯ãƒ©ã‚¹ã®ä½œæˆ
+	m_pause = NewGO<CPause>(0, "Pause");
 
 	return StartSub();
 
@@ -22,32 +25,32 @@ bool IStageBase::Start()
 void IStageBase::LoadLevel(const char* tklFilePath)
 {
 
-	//ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌuêŠv‚ğŠi”[‚·‚éƒ}ƒbƒv
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã€Œå ´æ‰€ã€ã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ—
 	std::map<int, Vector3> posMap;
-	//ƒEƒFƒCƒ|ƒCƒ“ƒg‚Ìu‰ñ“]v‚ğŠi”[‚·‚éƒ}ƒbƒv
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã€Œå›è»¢ã€ã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ—
 	std::map<int, Quaternion> rotMap;
-	//ƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì”
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®æ•°
 	std::size_t vecSize = 0;
 
-	//ƒvƒŒƒCƒ„[‚Ìƒ|ƒCƒ“ƒ^
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒã‚¤ãƒ³ã‚¿
 	Player* pPlayer;
 
-	//ƒŒƒxƒ‹‚ğƒ[ƒh‚·‚é
+	//ãƒ¬ãƒ™ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
 	m_level.Init(tklFilePath, [&](LevelObjectData& objData)
-		{//ƒ[ƒh‚·‚éƒŒƒxƒ‹ˆê‚Âˆê‚Â‚ÉƒNƒGƒŠ‚ğs‚¤
+		{//ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ¬ãƒ™ãƒ«ä¸€ã¤ä¸€ã¤ã«ã‚¯ã‚¨ãƒªã‚’è¡Œã†
 
 			///
 			///
-			/// uŠî–{ƒIƒuƒWƒFƒNƒgv
+			/// ã€ŒåŸºæœ¬ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€
 			
-			//ƒIƒuƒWƒFƒNƒgƒl[ƒ€‚ª"player_kari"‚Æ“¯‚¶‚¾‚Á‚½‚ç
+			//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼ãƒ ãŒ"player_kari"ã¨åŒã˜ã ã£ãŸã‚‰
 			if (objData.EqualObjectName(L"player_kari") == true)
 			{
-				//ƒvƒŒƒCƒ„[‚ğì¬‚·‚é
+				//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä½œæˆã™ã‚‹
 				pPlayer = NewGO<Player>(0, "Player");
-				//ƒvƒŒƒCƒ„[‚Ìƒ|ƒWƒVƒ‡ƒ“‚ğƒ[ƒh‚µ‚½ƒIƒuƒWƒFƒNƒg‚Æ“¯‚¶ƒ|ƒWƒVƒ‡ƒ“‚É‚·‚é
+				//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨åŒã˜ãƒã‚¸ã‚·ãƒ§ãƒ³ã«ã™ã‚‹
 				pPlayer->SetPosition(objData.position);
-				//ƒtƒbƒN‚µ‚½‚½‚ßAtrue‚ğ•Ô‚·B
+				//ãƒ•ãƒƒã‚¯ã—ãŸãŸã‚ã€trueã‚’è¿”ã™ã€‚
 				return true;
 			}
 			else if (objData.EqualObjectName(L"Mobius") == true)
@@ -62,10 +65,10 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 			///
 			///
-			/// u”½“]ƒIƒuƒWƒFƒNƒgvReversibleObject
+			/// ã€Œåè»¢ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€ReversibleObject
 			 
 			////////////////////////////////////////////////////////////
-			// ”½“]ƒIƒuƒWƒFƒNƒg‚ğì¬A‚±‚±‚É’Ç‰Á
+			// åè»¢ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆæ™‚ã€ã“ã“ã«è¿½åŠ 
 			////////////////////////////////////////////////////////////
 
 			//mizu_kori
@@ -182,16 +185,16 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 			///
 			///
-			/// uáŠQƒIƒuƒWƒFƒNƒgvObstacleObject
+			/// ã€Œéšœå®³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€ObstacleObject
 			
 			////////////////////////////////////////////////////////////
-			// áŠQƒIƒuƒWƒFƒNƒg‚ğì¬A‚±‚±‚É’Ç‰Á
+			// éšœå®³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆæ™‚ã€ã“ã“ã«è¿½åŠ 
 			////////////////////////////////////////////////////////////
 
 			//goal
 			else if (objData.EqualObjectName(L"goal") == true)
 			{
-				//ƒS[ƒ‹‚Íƒƒ“ƒo•Ï”‚Å•Û‚µ‚Ä‚¨‚­B
+				//ã‚´ãƒ¼ãƒ«ã¯ãƒ¡ãƒ³ãƒå¤‰æ•°ã§ä¿æŒã—ã¦ãŠãã€‚
 				m_goal = NewGO<OOgoal>(0, "goal");
 				m_goal->SetPosition(objData.position);
 				return true;
@@ -232,24 +235,24 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 			///
 			///
-			/// uƒEƒFƒCƒ|ƒCƒ“ƒgv
+			/// ã€Œã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã€
 
-			//ƒIƒuƒWƒFƒNƒgƒl[ƒ€‚É"waypoint"‚ª‚ ‚Á‚½‚ç
+			//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼ãƒ ã«"waypoint"ãŒã‚ã£ãŸã‚‰
 			else if (std::wcsstr(objData.name, L"waypoint") != NULL)
 			{
-				//”Ô†i"0"j‚Ì•¶š—ñ‚ª‚ ‚éƒAƒhƒŒƒX‚ğ•Ô‚·
+				//ç•ªå·ï¼ˆ"0"ï¼‰ã®æ–‡å­—åˆ—ãŒã‚ã‚‹ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¿”ã™
 				std::wstring buff = std::wcsstr(objData.name, L"0");
-				//wstring‚ğint‚É•ÏŠ·
+				//wstringã‚’intã«å¤‰æ›
 				int num = _wtoi(buff.c_str());
-				//ƒ}ƒbƒv‚É“ü‚ê‚é
+				//ãƒãƒƒãƒ—ã«å…¥ã‚Œã‚‹
 				posMap.insert(std::make_pair(num, objData.position));
 				rotMap.insert(std::make_pair(num, objData.rotation));
-				//ƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì”‚ğ‰ÁZ
+				//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®æ•°ã‚’åŠ ç®—
 				vecSize++;
 
 
-				//ƒfƒoƒbƒN—p
-				//Œã‚ÅÁ‚·
+				//ãƒ‡ãƒãƒƒã‚¯ç”¨
+				//å¾Œã§æ¶ˆã™
 				CModelRender* dbgModel;
 				dbgModel = NewGO<CModelRender>(0, "waypoint");
 				dbgModel->Init("Assets/modelData/yuka.tkm");
@@ -263,16 +266,25 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		});
 
 
-	//ƒvƒŒƒCƒ„[‚ğƒ}ƒl[ƒWƒƒ[‚É“o˜^
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã«ç™»éŒ²
 	CLevelObjectManager::GetInstance()->SetPlayer(pPlayer);
-	//ƒ[ƒh‚µ‚½ƒŒƒxƒ‹‚É‚ ‚Á‚½ƒEƒFƒCƒ|ƒCƒ“ƒg‚ğƒ}ƒl[ƒWƒƒ[‚É“o˜^‚·‚é
+	//ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ¬ãƒ™ãƒ«ã«ã‚ã£ãŸã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚’ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã«ç™»éŒ²ã™ã‚‹
 	CLevelObjectManager::GetInstance()->InitWayPointPos(vecSize, posMap);
 	CLevelObjectManager::GetInstance()->InitWayPointRot(vecSize, rotMap);
 
-	//ƒEƒFƒCƒ|ƒCƒ“ƒg‚ğƒvƒŒƒCƒ„[‚Éİ’è‚·‚é
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«è¨­å®šã™ã‚‹
 	pPlayer->SetWayPointPos
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
 	pPlayer->SetWayPointRot
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
+
+
+	//ã‚¹ãƒ†ãƒ¼ã‚¸é–‹å§‹æ™‚ã®æ¼”å‡ºæ™‚ã®ã‚«ãƒ¡ãƒ©ã®æ³¨è¦–ç‚¹ã®åº§æ¨™ã‚’è¨­å®šã™ã‚‹
+	m_startDirecting->SetPosition(pPlayer->GetPosition());
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚’ã‚¹ãƒ†ãƒ¼ã‚¸é–‹å§‹æ™‚ã®æ¼”å‡ºã«è¨­å®šã™ã‚‹
+	m_startDirecting->SetWayPointPos
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
+	m_startDirecting->SetWayPointRot
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
 
 
@@ -281,18 +293,18 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 IStageBase::~IStageBase()
 {
-	//’P‘Ì‚ÌƒIƒuƒWƒFƒNƒg‚ğÁ‹
+	//å˜ä½“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¶ˆå»
 	DeleteGO(m_stageDirectionLight);
 	DeleteGO(FindGO<GameCamera>("GameCamera"));
 	DeleteGO(m_pause);
 
-	//ƒŒƒxƒ‹‚Åƒ[ƒh‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğÁ‹
+	//ãƒ¬ãƒ™ãƒ«ã§ãƒ­ãƒ¼ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¶ˆå»
 
 	////////////////////////////////////////////////////////////
-	// V‚µ‚¢ƒIƒuƒWƒFƒNƒg‚ğì¬A‚±‚±‚ÅDeleteGO‚·‚é‚±‚Æ
+	// æ–°ã—ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆæ™‚ã€ã“ã“ã§DeleteGOã™ã‚‹ã“ã¨
 	////////////////////////////////////////////////////////////
 
-	//uŠî–{ƒIƒuƒWƒFƒNƒgv
+	//ã€ŒåŸºæœ¬ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€
 	QueryGOs<Player>("Player", [&](Player* player)->bool
 		{
 			DeleteGO(player);
@@ -306,14 +318,15 @@ IStageBase::~IStageBase()
 		}
 	);
 
-	//ƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg
-	//iReversibleObjectAObstacleObject‚Ì‚±‚Æj
-	//‚ğ‘S•”Á‹
+
+	//ãƒ¬ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	//ï¼ˆReversibleObjectã€ObstacleObjectã®ã“ã¨ï¼‰
+	//ã‚’å…¨éƒ¨æ¶ˆå»
 	CLevelObjectManager::GetInstance()->AllDeleteLOs();
 
 
-	//ƒfƒoƒbƒN—p
-	//Œã‚ÅÁ‚·
+	//ãƒ‡ãƒãƒƒã‚¯ç”¨
+	//å¾Œã§æ¶ˆã™
 	QueryGOs<CModelRender>("waypoint", [&](CModelRender* waypoint)->bool
 		{
 			DeleteGO(waypoint);

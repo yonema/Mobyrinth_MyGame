@@ -67,6 +67,9 @@ public://publicなメンバ関数
 	{
 		m_holdObject = holdFlag;
 	}
+	void SetOperationFlag(const bool b) {
+		m_operationFlag = b;
+	}
 	const bool GetHoldObject()const
 	{
 		return m_holdObject;
@@ -90,6 +93,10 @@ public://publicなメンバ関数
 
 private://privateなメンバ関数
 
+	/// <summary>
+	/// プレイヤーの初期設定
+	/// </summary>
+	void Init();
 	/// <summary>
 	/// ウェイポイントの更新処理
 	/// </summary>
@@ -172,6 +179,6 @@ private:	//データメンバ
 
 	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
-
+	bool m_operationFlag = false; //操作できるかのフラグ
 };
 
