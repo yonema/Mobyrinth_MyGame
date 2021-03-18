@@ -1,5 +1,6 @@
 #pragma once
 #include "FontRender.h"
+#include "SpriteRender.h"
 
 //ステージ
 #include "stage_kari.h"
@@ -45,5 +46,7 @@ private:
 	int m_stageState = enStage_kari;
 
 	bool m_buttonFlag = true;
+
+	CSpriteRender* m_title = nullptr;
 };
 
