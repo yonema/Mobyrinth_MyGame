@@ -2,32 +2,42 @@
 #include "Title.h"
 
 
-//ƒXƒ^[ƒgŠÖ”
+//ã‚¹ã‚¿ãƒ¼ãƒˆé–¢æ•°
 bool Title::Start()
 {
-	//ƒtƒHƒ“ƒgƒŒƒ“ƒ_ƒ‰[‚Ì¶¬‚Æ‰Šú‰»
+
+	//èƒŒæ™¯
+	m_stageTitle = NewGO<stage_title>(0, "stage_title");
+	m_stageTitle->SetStartUpStartDirecting(false);
+	m_stageTitle->SetTitlePlayer(true);
+
+//ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã®ç”Ÿæˆã¨åˆæœŸåŒ–
 	m_titleFR = NewGO<CFontRender>(0);
-	m_titleFR->Init(L"ƒƒrƒŠƒ“ƒX",
+	m_titleFR->Init(L"ãƒ¡ãƒ“ãƒªãƒ³ã‚¹",
 		{ -200.0f,300.0f },
 		{ 0.5f,0.5f,1.0f,1.0f },
 		0.0f,
 		3.0f
 	);
 	m_pushAButtonFR = NewGO<CFontRender>(0);
-	m_pushAButtonFR->Init(L"Aƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‚ËB",
+	m_pushAButtonFR->Init(L"Aãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ã­ã€‚",
 		{ -150.0f,0.0f },
 		{ 1.0f,0.0f,0.0f,1.0f }
 	);
-	m_title = NewGO<CSpriteRender>(0);
-	m_title->Init("Assets/sprite/Title.dds", 1400.0f, 600.0f);
 
-	//ƒtƒHƒ“ƒg‚Ì”z’u
-	const float leftSide = -100.0f;		//¶’[
-	const float UpSide = 300.0f;		//ã’[
-	const float DownSide = -300.0f;		//‰º’[
-	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//ƒtƒHƒ“ƒg‚Ì”z’u‚Ì•
 
-	//ƒtƒHƒ“ƒgƒŒƒ“ƒ_ƒ‰[‚Ì¶¬‚Æ‰Šú‰»
+	//m_title = NewGO<CSpriteRender>(1);
+	//m_title->Init("Assets/sprite/Title.dds", 700.0f, 300.0f);
+	//m_title->SetPosition({ -200.0f,150.0f,0.0f });
+
+
+	//ãƒ•ã‚©ãƒ³ãƒˆã®é…ç½®
+	const float leftSide = -100.0f;		//å·¦ç«¯
+	const float UpSide = 300.0f;		//ä¸Šç«¯
+	const float DownSide = -300.0f;		//ä¸‹ç«¯
+	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//ãƒ•ã‚©ãƒ³ãƒˆã®é…ç½®ã®å¹…
+
+	//ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã®ç”Ÿæˆã¨åˆæœŸåŒ–
 	for (int i = 0; i < enStageNum; i++)
 	{
 		m_stageName[i] = NewGO<CFontRender>(0);
@@ -42,7 +52,7 @@ bool Title::Start()
 		{ leftSide ,UpSide + BetweenLine * enStageProto02 }
 	);
 
-	//Å‰‚ÍƒXƒe[ƒW–¼‚Í•\¦‚µ‚È‚¢‚©‚çA–³Œø‰»‚µ‚Ä”ñ•\¦‚É‚·‚é
+	//æœ€åˆã¯ã‚¹ãƒ†ãƒ¼ã‚¸åã¯è¡¨ç¤ºã—ãªã„ã‹ã‚‰ã€ç„¡åŠ¹åŒ–ã—ã¦éè¡¨ç¤ºã«ã™ã‚‹
 	for (int i = 0; i < enStageNum; i++)
 	{
 		m_stageName[i]->Deactivate();
@@ -54,16 +64,16 @@ bool Title::Start()
 	m_arrow->Deactivate();
 
 
-	//ƒXƒvƒ‰ƒCƒg‚ÌƒŒƒxƒ‹‚ğ‰Šú‰»
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ãƒ¬ãƒ™ãƒ«ã‚’åˆæœŸåŒ–
 	m_level2D.Init("Assets/level2D/test2d.casl", [&](Level2DObjectData& objdata)
 		{
-			//–¼‘O‚ªˆê’v‚ÅƒtƒbƒN‚·‚é
+			//åå‰ãŒä¸€è‡´ã§ãƒ•ãƒƒã‚¯ã™ã‚‹
 			if (objdata.EqualObjectName("title"))
 			{
-				//ƒtƒbƒN‚µ‚½‚çtrue‚ğ–ß‚·
+				//ãƒ•ãƒƒã‚¯ã—ãŸã‚‰trueã‚’æˆ»ã™
 				return true;
 			}
-			//‚»‚Ì‚Ü‚Ü•\¦‚·‚é‚©‚çfalse‚ğ–ß‚·
+			//ãã®ã¾ã¾è¡¨ç¤ºã™ã‚‹ã‹ã‚‰falseã‚’æˆ»ã™
 			return false;
 		});
 
@@ -71,9 +81,11 @@ bool Title::Start()
 	return true;
 }
 
-//ƒfƒXƒgƒ‰ƒNƒ^
+//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 Title::~Title()
 {
+	DeleteGO(m_stageTitle);
+
 	DeleteGO(m_titleFR);
 	DeleteGO(m_pushAButtonFR);
 	for (int i = 0; i < enStageNum; i++)
@@ -84,18 +96,18 @@ Title::~Title()
 
 }
 
-//ƒAƒbƒvƒf[ƒgŠÖ”
+//ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆé–¢æ•°
 void Title::Update()
 {
-	//Œ»İ‚ÌƒXƒe[ƒW‚ÌƒXƒe[ƒgió‘Ôj‚Åˆ—‚ğU‚è•ª‚¯‚é
+	//ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚¹ãƒ†ãƒ¼ãƒˆï¼ˆçŠ¶æ…‹ï¼‰ã§å‡¦ç†ã‚’æŒ¯ã‚Šåˆ†ã‘ã‚‹
 	switch (m_stageState)
 	{
 	case enTitleScreen:
-		//ƒ^ƒCƒgƒ‹‰æ–Ê
+		//ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢
 		TitleScreen();
 		break;
 	case enStageSelect:
-		//ƒXƒe[ƒWƒZƒŒƒNƒg
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆ
 		StageSelect();
 		break;
 	default:
@@ -104,29 +116,29 @@ void Title::Update()
 }
 
 
-//ƒ^ƒCƒgƒ‹‰æ–Ê
+//ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢
 void Title::TitleScreen()
 {
-	//ƒ{ƒ^ƒ“‚Ì“ü—Í‚ğ’²‚×‚é
+	//ãƒœã‚¿ãƒ³ã®å…¥åŠ›ã‚’èª¿ã¹ã‚‹
 	if (g_pad[0]->GetLStickYF() == 0.0f && !g_pad[0]->IsPressAnyKey())
 	{
-		//‰½‚à“ü—Í‚ª‚È‚¢ó‘Ô
-		//ƒ{ƒ^ƒ“‚ğ‰Ÿ‚·‚±‚Æ‚ª‚Å‚«‚é‚æ‚¤‚É‚·‚éi˜A‘±“ü—Í–h~—pj
+		//ä½•ã‚‚å…¥åŠ›ãŒãªã„çŠ¶æ…‹
+		//ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã“ã¨ãŒã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ï¼ˆé€£ç¶šå…¥åŠ›é˜²æ­¢ç”¨ï¼‰
 		m_buttonFlag = true;
 	}
 	else if (g_pad[0]->IsTrigger(enButtonA) && m_buttonFlag)
 	{
-		//Aƒ{ƒ^ƒ“‚ğ“ü—Í
-		//ƒ{ƒ^ƒ“‚ğ‰Ÿ‚·‚±‚Æ‚ª‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚éi˜A‘±“ü—Í–h~—pj
+		//Aãƒœã‚¿ãƒ³ã‚’å…¥åŠ›
+		//ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã“ã¨ãŒã§ããªã„ã‚ˆã†ã«ã™ã‚‹ï¼ˆé€£ç¶šå…¥åŠ›é˜²æ­¢ç”¨ï¼‰
 		m_buttonFlag = false;
-		//ƒXƒe[ƒW‚ÌƒXƒe[ƒgió‘Ôj‚ğƒXƒe[ƒWƒZƒŒƒNƒg‚ÉˆÚs‚·‚éB
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚¹ãƒ†ãƒ¼ãƒˆï¼ˆçŠ¶æ…‹ï¼‰ã‚’ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆã«ç§»è¡Œã™ã‚‹ã€‚
 		m_stageState = enStageSelect;
 
-		//ƒ^ƒCƒgƒ‹‰æ–Ê—p‚ÌƒtƒHƒ“ƒgƒŒƒ“ƒ_ƒ‰[‚ğ–³Œø‰»‚µ‚Ä”ñ•\¦‚É‚·‚é
+		//ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ç”¨ã®ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚’ç„¡åŠ¹åŒ–ã—ã¦éè¡¨ç¤ºã«ã™ã‚‹
 		m_titleFR->Deactivate();
 		m_pushAButtonFR->Deactivate();
 
-		//ƒXƒe[ƒWƒZƒŒƒNƒg—p‚ÌƒtƒHƒ“ƒgƒŒƒ“ƒ_ƒ‰[‚ğ—LŒø‰»‚µ‚Ä•\¦‚Å‚«‚é‚æ‚¤‚É‚·‚é
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆç”¨ã®ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚’æœ‰åŠ¹åŒ–ã—ã¦è¡¨ç¤ºã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
 		for (int i = 0; i < enStageNum; i++)
 		{
 			m_stageName[i]->Activate();
@@ -136,25 +148,25 @@ void Title::TitleScreen()
 
 }
 
-//ƒXƒe[ƒWƒZƒŒƒNƒg
+//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆ
 void Title::StageSelect()
 {
-	//ƒ{ƒ^ƒ“‚Ì“ü—Í‚ğ’²‚×‚é
+	//ãƒœã‚¿ãƒ³ã®å…¥åŠ›ã‚’èª¿ã¹ã‚‹
 	if (g_pad[0]->GetLStickYF() == 0.0f && !g_pad[0]->IsPressAnyKey())
 	{
-		//‰½‚à“ü—Í‚ª‚È‚¢ó‘Ô
-		//ƒ{ƒ^ƒ“‚ğ‰Ÿ‚·‚±‚Æ‚ª‚Å‚«‚é‚æ‚¤‚É‚·‚éi˜A‘±“ü—Í–h~—pj
+		//ä½•ã‚‚å…¥åŠ›ãŒãªã„çŠ¶æ…‹
+		//ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã“ã¨ãŒã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ï¼ˆé€£ç¶šå…¥åŠ›é˜²æ­¢ç”¨ï¼‰
 		m_buttonFlag = true;
 	}
 	if (g_pad[0]->GetLStickYF() < 0.0f && m_buttonFlag)
 	{
-		//‰º‚ğ“ü—Í
-		//ƒ{ƒ^ƒ“‚ğ‰Ÿ‚·‚±‚Æ‚ª‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚éi˜A‘±“ü—Í–h~—pj
+		//ä¸‹ã‚’å…¥åŠ›
+		//ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã“ã¨ãŒã§ããªã„ã‚ˆã†ã«ã™ã‚‹ï¼ˆé€£ç¶šå…¥åŠ›é˜²æ­¢ç”¨ï¼‰
 		m_buttonFlag = false;
 
-		//ƒXƒe[ƒWƒZƒŒƒNƒg‚ÌƒXƒe[ƒg‚ğ‰ÁZ‚·‚é
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆã®ã‚¹ãƒ†ãƒ¼ãƒˆã‚’åŠ ç®—ã™ã‚‹
 		m_stageSelectState++;
-		//ƒXƒe[ƒg‚ªÅ‘å‚Ì’l‚É‚È‚Á‚½‚çA‚»‚ê‚æ‚è‘å‚«‚­‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
+		//ã‚¹ãƒ†ãƒ¼ãƒˆãŒæœ€å¤§ã®å€¤ã«ãªã£ãŸã‚‰ã€ãã‚Œã‚ˆã‚Šå¤§ãããªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
 		if (m_stageSelectState > enStageProto02)
 		{
 			m_stageSelectState = enStageProto02;
@@ -162,13 +174,13 @@ void Title::StageSelect()
 	}
 	else if (g_pad[0]->GetLStickYF() > 0.0f && m_buttonFlag)
 	{
-		//ã‚ğ“ü—Í
-		//ƒ{ƒ^ƒ“‚ğ‰Ÿ‚·‚±‚Æ‚ª‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚éi˜A‘±“ü—Í–h~—pj
+		//ä¸Šã‚’å…¥åŠ›
+		//ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã“ã¨ãŒã§ããªã„ã‚ˆã†ã«ã™ã‚‹ï¼ˆé€£ç¶šå…¥åŠ›é˜²æ­¢ç”¨ï¼‰
 		m_buttonFlag = false;
 
-		//ƒXƒe[ƒWƒZƒŒƒNƒg‚ÌƒXƒe[ƒg‚ğŒ¸Z‚·‚é
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆã®ã‚¹ãƒ†ãƒ¼ãƒˆã‚’æ¸›ç®—ã™ã‚‹
 		m_stageSelectState--;
-		//ƒXƒe[ƒg‚ªÅ¬‚Ì’l‚É‚È‚Á‚½‚çA‚»‚ê‚æ‚è¬‚³‚­‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
+		//ã‚¹ãƒ†ãƒ¼ãƒˆãŒæœ€å°ã®å€¤ã«ãªã£ãŸã‚‰ã€ãã‚Œã‚ˆã‚Šå°ã•ããªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
 		if (m_stageSelectState <= enStage_kari)
 		{
 			m_stageSelectState = enStage_kari;
@@ -176,14 +188,14 @@ void Title::StageSelect()
 	}
 	else if (g_pad[0]->IsTrigger(enButtonA) && m_buttonFlag)
 	{
-		//Aƒ{ƒ^ƒ“‚ğ“ü—Í
-		//ƒ{ƒ^ƒ“‚ğ‰Ÿ‚·‚±‚Æ‚ª‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚éi˜A‘±“ü—Í–h~—pj
+		//Aãƒœã‚¿ãƒ³ã‚’å…¥åŠ›
+		//ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã“ã¨ãŒã§ããªã„ã‚ˆã†ã«ã™ã‚‹ï¼ˆé€£ç¶šå…¥åŠ›é˜²æ­¢ç”¨ï¼‰
 		m_buttonFlag = false;
 
 		////////////////////////////////////////////////////////////
-		//ƒXƒe[ƒW‚ğV‚µ‚­ì¬‚µ‚½ê‡A‚±‚±‚ÅNewGO‚ğs‚¤B
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’æ–°ã—ãä½œæˆã—ãŸå ´åˆã€ã“ã“ã§NewGOã‚’è¡Œã†ã€‚
 		////////////////////////////////////////////////////////////
-		//ƒXƒe[ƒWƒZƒŒƒNƒg‚ÌƒXƒe[ƒg‚É‚æ‚Á‚Ä¶¬‚·‚éƒXƒe[ƒW‚ğU‚è•ª‚¯‚é
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆã®ã‚¹ãƒ†ãƒ¼ãƒˆã«ã‚ˆã£ã¦ç”Ÿæˆã™ã‚‹ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’æŒ¯ã‚Šåˆ†ã‘ã‚‹
 		switch (m_stageSelectState)
 		{
 		case enStage_kari:
@@ -198,21 +210,21 @@ void Title::StageSelect()
 		default:
 			break;
 		}
-		//©g‚ÌƒIƒuƒWƒFƒNƒg‚ğ”jŠü‚·‚é
+		//è‡ªèº«ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç ´æ£„ã™ã‚‹
 		Release();
 	}
 	else if (g_pad[0]->IsTrigger(enButtonB) && m_buttonFlag)
 	{
-		//Bƒ{ƒ^ƒ“‚ğ“ü—Í
-		//ƒ{ƒ^ƒ“‚ğ‰Ÿ‚·‚±‚Æ‚ª‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚éi˜A‘±“ü—Í–h~—pj
+		//Bãƒœã‚¿ãƒ³ã‚’å…¥åŠ›
+		//ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã“ã¨ãŒã§ããªã„ã‚ˆã†ã«ã™ã‚‹ï¼ˆé€£ç¶šå…¥åŠ›é˜²æ­¢ç”¨ï¼‰
 		m_buttonFlag = false;
 
-		//ƒXƒe[ƒW‚ÌƒXƒe[ƒg‚ğƒ^ƒCƒgƒ‹‰æ–Ê‚É‚·‚é
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚¹ãƒ†ãƒ¼ãƒˆã‚’ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã«ã™ã‚‹
 		m_stageState = enTitleScreen;
-		//ƒ^ƒCƒgƒ‹‰æ–Ê—p‚ÌƒtƒHƒ“ƒgƒŒƒ“ƒ_ƒ‰[‚ğ—LŒø‰»‚µ‚Ä•\¦‚Å‚«‚é‚æ‚¤‚É‚·‚é
+		//ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ç”¨ã®ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚’æœ‰åŠ¹åŒ–ã—ã¦è¡¨ç¤ºã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
 		m_titleFR->Activate();
 		m_pushAButtonFR->Activate();
-		//ƒXƒe[ƒWƒZƒŒƒNƒg‚ÌƒtƒHƒ“ƒgƒŒƒ“ƒ_ƒ‰[‚ğ–³Œø‰»‚µ‚Ä•\¦‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚é
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆã®ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚’ç„¡åŠ¹åŒ–ã—ã¦è¡¨ç¤ºã§ããªã„ã‚ˆã†ã«ã™ã‚‹
 		for (int i = 0; i < enStageNum; i++)
 		{
 			m_stageName[i]->Deactivate();
@@ -221,11 +233,11 @@ void Title::StageSelect()
 	}
 
 
-	//ƒtƒHƒ“ƒg‚Ì”z’u
-	const float leftSide = -100.0f;		//¶’[
-	const float UpSide = 300.0f;		//ã’[
-	const float DownSide = -300.0f;		//‰º’[
-	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//ƒtƒHƒ“ƒg‚Ì”z’u‚Ì•
-	//ƒJ[ƒ\ƒ‹—p‚ÌƒtƒHƒ“ƒgƒŒƒ“ƒ_ƒ‰[‚ÌêŠ‚ğİ’è‚·‚é
+	//ãƒ•ã‚©ãƒ³ãƒˆã®é…ç½®
+	const float leftSide = -100.0f;		//å·¦ç«¯
+	const float UpSide = 300.0f;		//ä¸Šç«¯
+	const float DownSide = -300.0f;		//ä¸‹ç«¯
+	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//ãƒ•ã‚©ãƒ³ãƒˆã®é…ç½®ã®å¹…
+	//ã‚«ãƒ¼ã‚½ãƒ«ç”¨ã®ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã®å ´æ‰€ã‚’è¨­å®šã™ã‚‹
 	m_arrow->SetPosition({ leftSide - 50.0f , UpSide + BetweenLine * m_stageSelectState - 5.0f });
 }

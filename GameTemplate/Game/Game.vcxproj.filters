@@ -326,6 +326,7 @@
     <ClCompile Include="StartDirecting.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+
     <ClCompile Include="FontRender.cpp">
       <Filter>MyCode\Graphic</Filter>
     </ClCompile>
@@ -343,6 +344,10 @@
     </ClCompile>
     <ClCompile Include="Level2D.cpp">
       <Filter>MyCode\Level2D</Filter>
+
+    <ClCompile Include="stage_title.cpp">
+      <Filter>MyCode\stage</Filter>
+
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -625,6 +630,7 @@
     <ClInclude Include="StartDirecting.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+
     <ClInclude Include="FontRender.h">
       <Filter>MyCode\Graphic</Filter>
     </ClInclude>
@@ -642,6 +648,10 @@
     </ClInclude>
     <ClInclude Include="Level2D.h">
       <Filter>MyCode\Level2D</Filter>
+
+    <ClInclude Include="stage_title.h">
+      <Filter>MyCode\stage</Filter>
+
     </ClInclude>
   </ItemGroup>
 </Project>

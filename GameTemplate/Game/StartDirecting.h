@@ -30,10 +30,10 @@ private:
 	/// </summary>
 	void Rotation();
 
-public:	//インライン関数
+public:	//Get、Set関数
 	const bool GetStartDirecting()const
 	{
-		return m_startDirecting;
+		return m_checkStartDirecting;
 	}
 
 	const Vector3 GetPosition()const
@@ -60,10 +60,13 @@ public:	//インライン関数
 	{
 		m_position = pos;
 	}
+	void SetCheckStartDirecting(bool b)
+	{
+		m_checkStartDirecting = b;
+	}
 
 
 private:
-	bool m_startDirecting = true; //ステージ開始時の演出をしているかどうか。
 	Vector3 m_position = g_vec3Zero; //演出に使用する注視点座標
 	Vector3 m_moveSpeed = g_vec3Zero;
 	Vector3 m_onWayPosition = g_vec3Zero;		//道の上の座標
@@ -91,11 +94,9 @@ private:
 	int m_leftOrRight = enRight;	//キャラクターの左右の向き
 
 private:
-	//////////////////////////////
-	// 名前を！変えろ！
-	//////////////////////////////
-	bool check = false;
-	int count = 0;
+	bool m_checkStartDirecting = true; //ステージ開始時の演出をしているかどうか。
+	bool checkZoomIn = false; //カメラのズーム処理のフラグ
+	int countZoomIn = 0; //カメラのズーム中のカウント
 	Vector3 m_startPosition = g_vec3Zero; //演出に使用する注視点座標の開始位置
 
 	const int startDirectingTime = 120; //カメラが寄る演出の時間

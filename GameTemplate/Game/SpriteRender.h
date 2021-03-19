@@ -1,88 +1,88 @@
 #pragma once
 
 /// <summary>
-/// ƒXƒvƒ‰ƒCƒg•`‰æƒNƒ‰ƒX
+/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»ã‚¯ãƒ©ã‚¹
 /// </summary>
 class CSpriteRender : public IGameObject
 {
-public:		//©“®‚Å‚æ‚Î‚ê‚éƒƒ“ƒoŠÖ”
-	bool Start()override final;								//ƒXƒ^[ƒgŠÖ”
-	~CSpriteRender();										//ƒfƒXƒgƒ‰ƒNƒ^
-	void Update()override final;							//ƒAƒbƒvƒf[ƒgŠÖ”
-	void Render(RenderContext& rc)override final;			//•`‰æ—pŠÖ”
-	void PostRender(RenderContext& rc)override final;		//ˆê”Ôã‚É•`‰æ‚·‚éŠÖ”
+public:		//è‡ªå‹•ã§ã‚ˆã°ã‚Œã‚‹ãƒ¡ãƒ³ãƒé–¢æ•°
+	bool Start()override final;								//ã‚¹ã‚¿ãƒ¼ãƒˆé–¢æ•°
+	~CSpriteRender();										//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	void Update()override final;							//ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆé–¢æ•°
+	void Render(RenderContext& rc)override final;			//æç”»ç”¨é–¢æ•°
+	void PostRender(RenderContext& rc)override final;		//ä¸€ç•ªä¸Šã«æç”»ã™ã‚‹é–¢æ•°
 
-public:		//‚±‚±‚Ìƒƒ“ƒoŠÖ”‚ğå‚Ég‚¤
+public:		//ã“ã“ã®ãƒ¡ãƒ³ãƒé–¢æ•°ã‚’ä¸»ã«ä½¿ã†
 
 	/// <summary>
-	/// ‰Šú‰»—pŠÖ”
-	/// Å‰‚ÉŒÄ‚ñ‚Å‚ËB
+	/// åˆæœŸåŒ–ç”¨é–¢æ•°
+	/// æœ€åˆã«å‘¼ã‚“ã§ã­ã€‚
 	/// </summary>
-	/// <param name="texFilePath">ddsƒtƒ@ƒCƒ‹ƒpƒX</param>
-	/// <param name="w">ƒXƒvƒ‰ƒCƒg‚Ì‰¡•</param>
-	/// <param name="h">ƒXƒvƒ‰ƒCƒg‚Ìc•</param>
-	/// <param name="pivot">ƒsƒ{ƒbƒgiŠî“_j</param>
+	/// <param name="texFilePath">ddsãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹</param>
+	/// <param name="w">ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æ¨ªå¹…</param>
+	/// <param name="h">ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç¸¦å¹…</param>
+	/// <param name="pivot">ãƒ”ãƒœãƒƒãƒˆï¼ˆåŸºç‚¹ï¼‰</param>
 	void Init(const char* texFilePath, float w, float h, const Vector2& pivot = { 0.5f,0.5f });
 
 	/// <summary>
-	/// êŠ‚ğİ’è‚·‚éB{0.0f,0.0f}‚ª’†‰›
+	/// å ´æ‰€ã‚’è¨­å®šã™ã‚‹ã€‚{0.0f,0.0f}ãŒä¸­å¤®
 	/// </summary>
-	/// <param name="pos">êŠ</param>
+	/// <param name="pos">å ´æ‰€</param>
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
 	}
 
 	/// <summary>
-	/// ‰ñ“]‚ğİ’è‚·‚é
+	/// å›è»¢ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	/// <param name="rotation">‰ñ“]</param>
+	/// <param name="rotation">å›è»¢</param>
 	void SetRotation(const Quaternion& rot)
 	{
 		m_rotation = rot;
 	}
 
 	/// <summary>
-	/// Šg‘å‚ğİ’è‚·‚é
+	/// æ‹¡å¤§ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	/// <param name="scale">Šg‘å</param>
+	/// <param name="scale">æ‹¡å¤§</param>
 	void SetScale(const Vector3& scale)
 	{
 		m_scale = scale;
 	}
 
 	/// <summary>
-	/// ƒsƒ{ƒbƒgiŠî“_j‚ğİ’è‚·‚é
-	/// {0.0f,0.0f}‚ª¶‰º
-	/// {0.5f,0.5f}‚ª’†‰›
-	/// {1.0f,1.0f}‚ª‰Eã
+	/// ãƒ”ãƒœãƒƒãƒˆï¼ˆåŸºç‚¹ï¼‰ã‚’è¨­å®šã™ã‚‹
+	/// {0.0f,0.0f}ãŒå·¦ä¸‹
+	/// {0.5f,0.5f}ãŒä¸­å¤®
+	/// {1.0f,1.0f}ãŒå³ä¸Š
 	/// </summary>
-	/// <param name="pivot">ƒsƒ{ƒbƒgiŠî“_j</param>
+	/// <param name="pivot">ãƒ”ãƒœãƒƒãƒˆï¼ˆåŸºç‚¹ï¼‰</param>
 	void SetPivot(const Vector2& pivot)
 	{
 		m_pivot = pivot;
 	}
 
 	/// <summary>
-	/// PostRender‚Å•`‰æ‚·‚é‚©‚Ç‚¤‚©İ’è‚·‚éŠÖ”
-	/// ˆø”‚Étrue‚ğ“ü‚ê‚é‚ÆPostRender‚Å•`‰æ‚³‚ê‚é‚æ‚¤‚É‚È‚èA
-	/// ˆê”Ôã‚É•`‰æ‚³‚ê‚é‚æ‚¤‚É‚È‚éB
+	/// PostRenderã§æç”»ã™ã‚‹ã‹ã©ã†ã‹è¨­å®šã™ã‚‹é–¢æ•°
+	/// å¼•æ•°ã«trueã‚’å…¥ã‚Œã‚‹ã¨PostRenderã§æç”»ã•ã‚Œã‚‹ã‚ˆã†ã«ãªã‚Šã€
+	/// ä¸€ç•ªä¸Šã«æç”»ã•ã‚Œã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚
 	/// </summary>
-	/// <param name="flag">PostRender‚Å•`‰æ‚·‚é‚©H</param>
+	/// <param name="flag">PostRenderã§æç”»ã™ã‚‹ã‹ï¼Ÿ</param>
 	void SetPostRenderFlag(const bool flag)
 	{
 		m_postRenderFlag = flag;
 	}
 
-private:	//ƒf[ƒ^ƒƒ“ƒo
-	Sprite m_sprite;							//ƒXƒvƒ‰ƒCƒgƒNƒ‰ƒX
-	SpriteInitData m_initData;					//ƒXƒvƒ‰ƒCƒg‚Ì‰Šú‰»ƒf[ƒ^B\‘¢‘ÌB
+private:	//ãƒ‡ãƒ¼ã‚¿ãƒ¡ãƒ³ãƒ
+	Sprite m_sprite;							//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚¯ãƒ©ã‚¹
+	SpriteInitData m_initData;					//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿ã€‚æ§‹é€ ä½“ã€‚
 	
-	Vector3 m_position = { 100.0f,0.0f,0.0f };	//êŠ
-	Quaternion m_rotation = g_quatIdentity;		//‰ñ“]
-	Vector3 m_scale = g_vec3One;				//Šg‘å
-	Vector2 m_pivot = { 0.5f,0.5f };			//ƒsƒ{ƒbƒgiŠî“_j
+	Vector3 m_position = { 100.0f,0.0f,0.0f };	//å ´æ‰€
+	Quaternion m_rotation = g_quatIdentity;		//å›è»¢
+	Vector3 m_scale = g_vec3One;				//æ‹¡å¤§
+	Vector2 m_pivot = { 0.5f,0.5f };			//ãƒ”ãƒœãƒƒãƒˆï¼ˆåŸºç‚¹ï¼‰
 	
-	bool m_postRenderFlag = false;				//PostRender‚Å•`‰æ‚·‚é‚©‚Ç‚¤‚©H
+	bool m_postRenderFlag = false;				//PostRenderã§æç”»ã™ã‚‹ã‹ã©ã†ã‹ï¼Ÿ
 };
 

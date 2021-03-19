@@ -3,65 +3,77 @@
 #include "SpriteRender.h"
 #include "Level2D.h"
 
-//ƒXƒe[ƒW
+//èƒŒæ™¯
+#include "stage_title.h"
+#include "Mobius.h"
+#include "Player.h"
+
+//ã‚¹ãƒ†ãƒ¼ã‚¸
 #include "stage_kari.h"
 #include "stage_proto01.h"
 #include "stage_proto02.h"
 
 /// <summary>
-/// ƒ^ƒCƒgƒ‹ƒNƒ‰ƒX
+/// ã‚¿ã‚¤ãƒˆãƒ«ã‚¯ãƒ©ã‚¹
 /// </summary>
 class Title : public IGameObject
 {
-public:		//©“®‚ÅŒÄ‚Î‚ê‚éƒƒ“ƒoŠÖ”
-	bool Start()override final;		//ƒXƒ^[ƒgŠÖ”
-	~Title();						//ƒfƒXƒgƒ‰ƒNƒ^
-	void Update()override final;	//ƒAƒbƒvƒf[ƒgŠÖ”
+public:		//è‡ªå‹•ã§å‘¼ã°ã‚Œã‚‹ãƒ¡ãƒ³ãƒé–¢æ•°
+	bool Start()override final;		//ã‚¹ã‚¿ãƒ¼ãƒˆé–¢æ•°
+	~Title();						//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	void Update()override final;	//ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆé–¢æ•°
 
-private:	//private‚Èƒƒ“ƒoŠÖ”
+private:	//privateãªãƒ¡ãƒ³ãƒé–¢æ•°
 
-	void TitleScreen();	//ƒ^ƒCƒgƒ‹‰æ–Ê
-	void StageSelect();	//ƒXƒe[ƒWƒZƒŒƒNƒg
-	void Release()		//©g‚ÌƒIƒuƒWƒFƒNƒg‚ğ”jŠü‚·‚éŠÖ”
+	void TitleScreen();	//ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢
+	void StageSelect();	//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆ
+	void Release()		//è‡ªèº«ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç ´æ£„ã™ã‚‹é–¢æ•°
 	{
 		DeleteGO(this);
 	}
 
-private:	//ƒf[ƒ^ƒƒ“ƒo
+private:	//ãƒ‡ãƒ¼ã‚¿ãƒ¡ãƒ³ãƒ
 
 	/// <summary>
-	/// ƒXƒe[ƒW‚ÌƒXƒe[ƒgió‘Ôj
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚¹ãƒ†ãƒ¼ãƒˆï¼ˆçŠ¶æ…‹ï¼‰
 	/// </summary>
 	enum EnState
 	{
-		enTitleScreen,	//ƒ^ƒCƒgƒ‹‰æ–Ê‚Ìó‘Ô
-		enStageSelect,	//ƒXƒe[ƒWƒZƒŒƒNƒg‚Ìó‘Ô
+		enTitleScreen,	//ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã®çŠ¶æ…‹
+		enStageSelect,	//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆã®çŠ¶æ…‹
 	};
-	int m_stageState = enTitleScreen;	//Œ»İ‚ÌƒXƒe[ƒW‚ÌƒXƒe[ƒgió‘Ôj
+	int m_stageState = enTitleScreen;	//ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚¹ãƒ†ãƒ¼ãƒˆï¼ˆçŠ¶æ…‹ï¼‰
 
 	/// <summary>
-	/// ƒXƒe[ƒW‚Ì”Ô†
-	/// V‚µ‚¢ƒXƒe[ƒW‚ğì‚Á‚½ê‡A‚±‚±‚É”Ô†‚ğ’Ç‰Á
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç•ªå·
+	/// æ–°ã—ã„ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’ä½œã£ãŸå ´åˆã€ã“ã“ã«ç•ªå·ã‚’è¿½åŠ 
 	/// </summary>
 	enum EnStageList
 	{
+		enTitle,
 		enStage_kari,
 		enStageProto01,
 		enStageProto02,
 		enStageNum,
 	};
 
-	int m_stageSelectState = enStage_kari;	//Œ»İ‚ÌƒXƒe[ƒWƒZƒŒƒNƒg‚ÌƒXƒe[ƒg
+	int m_stageSelectState = enStage_kari;	//ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆã®ã‚¹ãƒ†ãƒ¼ãƒˆ
 
-	CFontRender* m_titleFR = nullptr;					//ƒtƒHƒ“ƒgƒŒƒ“ƒ_[
-	CFontRender* m_pushAButtonFR = nullptr;				//ƒtƒHƒ“ƒgƒŒƒ“ƒ_[
-	CFontRender* m_stageName[enStageNum] = { nullptr };	//ƒtƒHƒ“ƒgƒŒƒ“ƒ_[
-	CFontRender* m_arrow = nullptr;						//ƒtƒHƒ“ƒgƒŒƒ“ƒ_[
-	bool m_buttonFlag = true;							//ƒ{ƒ^ƒ“‚ğ‰Ÿ‚·‚±‚Æ‚ª‚Å‚«‚é‚©H
-														//i˜A‘±“ü—Í–h~—pj
-	CLevel2D m_level2D;									//ƒXƒvƒ‰ƒCƒg—p‚ÌƒŒƒxƒ‹ƒNƒ‰ƒX
+	CFontRender* m_titleFR = nullptr;					//ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ¼
+	CFontRender* m_pushAButtonFR = nullptr;				//ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ¼
+	CFontRender* m_stageName[enStageNum] = { nullptr };	//ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ¼
+	CFontRender* m_arrow = nullptr;						//ãƒ•ã‚©ãƒ³ãƒˆãƒ¬ãƒ³ãƒ€ãƒ¼
+	bool m_buttonFlag = true;							//ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã“ã¨ãŒã§ãã‚‹ã‹ï¼Ÿ
+														//ï¼ˆé€£ç¶šå…¥åŠ›é˜²æ­¢ç”¨ï¼‰
+	CLevel2D m_level2D;									//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”¨ã®ãƒ¬ãƒ™ãƒ«ã‚¯ãƒ©ã‚¹
 	std::list<CSpriteRender*> m_spriteRenders;
 	CSpriteRender* m_title = nullptr;
-	
+
+private: //èƒŒæ™¯
+	Mobius* m_mobius = nullptr;
+	Player* m_player = nullptr;
+
+	stage_title* m_stageTitle = nullptr;
+
 };
 
