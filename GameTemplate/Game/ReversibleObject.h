@@ -51,15 +51,8 @@ protected:	//ここのメンバ関数を主に使う
 	(const char* filePath_front, const int type_front,
 		const char* filePath_back, const int type_back);
 
-private:
-	virtual void QuerySub() {};
-
 public:
-	bool PureVirtualStart()override final;
-	virtual bool StartSub() { return true; };
-	void Update()override final;
-	virtual void UpdateSub() {};
-	virtual ~CReversibleObject();
+	//void Update()override final;
 
 public:		//ここのメンバ関数を主に使う	
 	/// <summary>
@@ -173,7 +166,6 @@ private:	//データメンバ
 	};
 	int m_objectState = enCheckPlayer;			//現在のオブジェクトのステート（状態）
 
-	Quaternion m_throwRot = g_quatIdentity;
 	
 	//キャラクターの左右の向きを調べるのに使用
 	enum EnPlayerLeftOrRight
