@@ -19,8 +19,9 @@ bool Title::Start()
 		{ 1.0f,0.0f,0.0f,1.0f }
 	);
 
-	m_title = NewGO<CSpriteRender>(0);
-	m_title->Init("Assets/sprite/Title.dds", 1400.0f, 600.0f);
+	m_title = NewGO<CSpriteRender>(1);
+	m_title->Init("Assets/sprite/Title.dds", 700.0f, 300.0f);
+	m_title->SetPosition({ -200.0f,150.0f,0.0f });
 
 
 	const float leftSide = -100.0f;
