@@ -1,31 +1,39 @@
 #include "stdafx.h"
 #include "Pause.h"
 
-
+//スタート関数
 bool CPause::Start()
 {
+	//フォントレンダラーを生成
 	for (int i = 0; i < enPauseStateNum; i++)
 	{
 		m_fontRender[i] = NewGO<CFontRender>(0);
 	}
+
+	//フォントの左端の場所
+	const float leftSidePos = -150.0f;
+
+	//フォントレンダラーの初期化。テキストをセットする。
+	//「Pause」をテキストにセット
 	m_fontRender[enPause]
 		->Init(L"Pause",
-		{ -150.0f, 300.0f },
+		{ leftSidePos, 300.0f },
 		{ 1.0f,1.0f,1.0f,1.0f },
 		0.0f,
 		2.0f
 	);
+	//「Pause」をテキストにセット
 	m_fontRender[enContinue]
 		->Init(L"Continue",
-		{ -150.0f, 150.0f }
+		{ leftSidePos, 150.0f }
 	);	
 	m_fontRender[enRetry]
 		->Init(L"Retry",
-		{ -150.0f, 0.0f }
+		{ leftSidePos, 0.0f }
 	);
 	m_fontRender[enQuit]
 		->Init(L"Quit",
-		{ -150.0f, -150.0f }
+		{ leftSidePos, -150.0f }
 	);
 
 	for (int i = 0; i < enPauseStateNum; i++)

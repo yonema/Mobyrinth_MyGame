@@ -11,7 +11,6 @@ bool ROnail_bar::StartSub()
 
 void ROnail_bar::QuerySub()
 {
-	const float hitDot = 0.005f;
 
 	if (GetObjectType() == enNail)
 	{
@@ -30,7 +29,7 @@ void ROnail_bar::QuerySub()
 	{
 		QueryLOs<OOpadlock>(enNotHavePadlock, [&](OOpadlock* padlock) -> bool
 			{
-				if (IsHitObject(*this, *padlock, hitDot))
+				if (IsHitObject(*this, *padlock))
 				{
 					if (m_actionFlag)
 					{
@@ -44,7 +43,7 @@ void ROnail_bar::QuerySub()
 		);
 		QueryLOs<OObox>(enBox, [&](OObox* box) -> bool
 			{
-				if (IsHitObject(*this, *box, hitDot))
+				if (IsHitObject(*this, *box))
 				{
 					if (m_actionFlag)
 					{

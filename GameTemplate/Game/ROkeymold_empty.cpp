@@ -11,7 +11,6 @@ bool ROkeymold_empty::StartSub()
 
 void ROkeymold_empty::QuerySub()
 {
-	const float hitDot = 0.005f;
 
 	if (GetObjectType() == enKeymold)
 	{

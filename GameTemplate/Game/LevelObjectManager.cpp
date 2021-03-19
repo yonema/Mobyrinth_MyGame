@@ -65,3 +65,12 @@ void CLevelObjectManager::RemoveObject(ILevelObjectBase* object)
 		}
 	}
 }
+
+
+void CLevelObjectManager::AllDeleteLOs()
+{
+	for (int i = 0; i < m_levelObjects.size(); i++)
+	{
+		DeleteGO(m_levelObjects[i]);
+	}
+}

@@ -11,13 +11,12 @@ bool ROrunning_stop::StartSub()
 
 void ROrunning_stop::QuerySub()
 {
-	const float hitDot = 0.005f;
 
 	if (GetObjectType() == enRunning)
 	{
 		QueryLOs<OOwall>(enWall, [&](OOwall* wall) -> bool
 			{
-				if (IsHitObject(*this, *wall, hitDot))
+				if (IsHitObject(*this, *wall))
 				{
 					wall->Running();
 					m_pWall = wall;
@@ -43,7 +42,7 @@ void ROrunning_stop::QuerySub()
 	{
 		QueryLOs<OOwall>(enWall, [&](OOwall* wall) -> bool
 			{
-				if (IsHitObject(*this, *wall, hitDot))
+				if (IsHitObject(*this, *wall))
 				{
 					wall->Stop();
 					m_pWall = wall;

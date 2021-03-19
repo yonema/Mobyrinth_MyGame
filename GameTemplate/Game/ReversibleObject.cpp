@@ -3,42 +3,91 @@
 
 
 
+//スタート関数
+bool CReversibleObject::PureVirtualStart()
+{
+	//モデルの回転を、現在の場所とイイ感じに合わせる
+	CheckWayPoint();
+
+	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
+	return StartSub();
+}
+
+//デストラクタ
+CReversibleObject::~CReversibleObject()
+{
+	//LevelObjectManagerにこのオブジェクトは消すよ！って伝える。
+	Delete();
+
+	//表と裏のモデルを消去
+	for (int i = 0; i < enFrontAndBackNum; i++)
+	{
+		DeleteGO(m_modelRender[i]);
+	}
+
+}
+
+
+/// <summary>
+/// 初期化関数
+/// 最初に読んでね。trueを戻してね。
+/// 表のモデルとそのタイプ、裏のモデルとそのタイプ
+/// を設定する。
+/// タイプ一覧はLevelObjectBase.hを参照
+/// </summary>
+/// <param name="filePath_front">表のモデルのtkmファイルパス</param>
+/// <param name="type_front">表のタイプ</param>
+/// <param name="filePath_back">裏のモデルのtkmファイルパス</param>
+/// <param name="type_back">裏のタイプ</param>
+/// <returns>true戻してね</returns>
 bool CReversibleObject::Init
 (const char* filePath_front, const int type_front,
 	const char* filePath_back, const int type_back)
 {
+	//表と裏の分、モデルレンダラーを生成
 	for (int i = 0; i < enFrontAndBackNum; i++)
 	{
 		m_modelRender[i] = NewGO<CModelRender>(0);
 	}
+	//モデルレンダラーを初期化
 	m_modelRender[enFront]->Init(filePath_front);
 	m_modelRender[enBack]->Init(filePath_back);
+	//タイプを設定
 	m_reversibleType[enFront] = type_front;
 	m_reversibleType[enBack] = type_back;
+	//今が表の状態か裏の状態か設定する
 	SetObjectType(m_reversibleType[m_frontOrBack]);
 	SetFrontOrBack(m_frontOrBack);
 
 	return true;
 }
-bool CReversibleObject::PureVirtualStart()
-{
-	CheckWayPoint();
 
-	return StartSub();
-}
 
+/// <summary>
+/// 反転させる
+/// </summary>
 void CReversibleObject::Reverse()
 {
+	//現在の表か裏の、逆の設定にする
 	SetFrontOrBack(!m_frontOrBack);
 }
+
+/// <summary>
+/// 表か裏かを設定するする
+/// </summary>
+/// <param name="frontOrBack">enFrontかenBackを入れる</param>
 void CReversibleObject::SetFrontOrBack(bool frontOrBack)
 {
+	//表か裏を設定する
 	m_frontOrBack = frontOrBack;
 	if (m_bothModelactiveFlag)
 	{
+		//タイプを設定する
 		SetObjectType(m_reversibleType[m_frontOrBack]);
+		//現在の表か裏を有効化して
 		if (m_modelRender[m_frontOrBack])
 			m_modelRender[m_frontOrBack]->Activate();
+		//他方を無効化する
 		if (m_modelRender[!m_frontOrBack])
 			m_modelRender[!m_frontOrBack]->Deactivate();
 	}
@@ -47,6 +96,13 @@ void CReversibleObject::SetFrontOrBack(bool frontOrBack)
 		SetFrontOrBackSub();
 	}
 }
+
+/// <summary>
+/// 表と裏の両方のモデルの有効化フラグを設定する。
+/// trueを入れた場合、現在の表か裏どちらかを有効化し、他方を無効化する。
+/// falseを入れた場合、両方を無効化する
+/// </summary>
+/// <param name="activeFlag">有効化フラグ</param>
 void CReversibleObject::SetBothModelActiveFlag(const bool activeFlag)
 {
 	m_bothModelactiveFlag = activeFlag;
@@ -67,38 +123,47 @@ void CReversibleObject::SetBothModelActiveFlag(const bool activeFlag)
 	
 }
 
-void CReversibleObject::Update()
+//アップデート関数
+void CReversibleObject::PureVirtualUpdate()
 {
+	//プレイヤーが見つかっていなかったら
 	if (!m_pPlayer)
 	{
+		//プレイヤーを探す
 		m_pPlayer = CLevelObjectManager::GetInstance()->GetPlayer();
+
+		//それでも見つからなかったら何もずにreturn
 		if (!m_pPlayer)
 			return;
 	}
 
-
+	/// <summary>
+	/// ステート（状態）アップデートを割り振る
+	/// </summary>
 	switch (m_objectState)
 	{
-	case enCheckPlayer:
+	case enCheckPlayer:	//プレイヤーに持たれるかどうか調べる
 		CheckPlayer();
 		break;
-	case enHeldPlayer:
+	case enHeldPlayer:	//プレイヤーに持たれている状態
 		HeldPlayer();
 		break;
-	case enThrownDown:
+	case enThrownDown: //持っているオブジェクトを下に投げる関数
 		ThrownDown();
 		break;
-	case enCancel:
+	case enCancel: //持っているオブジェクトをその場に置く
 		Cancel();
 		break;
-	case enThrownSide:
+	case enThrownSide:	//持っているオブジェクトを横に投げる関数
 		ThrownSide();
 		break;
-	case enQuery:
+	case enQuery: //クエリしてほしいタイミング
 		Query();
 		break;
 	}
 
+
+	//モデルレンダラーの更新
 	for (int i = 0; i < enFrontAndBackNum; i++)
 	{
 		m_modelRender[i]->SetPosition(m_position);
@@ -106,103 +171,151 @@ void CReversibleObject::Update()
 		m_modelRender[i]->SetScale(m_scale);
 	}
 
+
+	//オーバーライドしてほしい関数UpdateSub()
 	UpdateSub();
 
 	return;
 }
 
-CReversibleObject::~CReversibleObject()
-{
-	Delete();
-	for (int i = 0; i < enFrontAndBackNum; i++)
-	{
-		DeleteGO(m_modelRender[i]);
-	}
 
-}
-
+/// <summary>
+/// プレイヤーに持たれるかどうか調べる関数
+/// 持たれたらHeldPlayerへステート（状態）移行
+/// </summary>
 void CReversibleObject::CheckPlayer()
 {
 
+	//プレイヤーとの当たり判定
 	if (IsHitPlayer())
 	{
+		//Aボタンを押したら
 		if (g_pad[0]->IsTrigger(enButtonA))
 		{
+			//プレイヤーが別のオブジェクトを持っていなかったら
 			if (!m_pPlayer->GetHoldObject())
 			{
+				//ステートをプレイヤーに持たれている状態へ
 				m_objectState = enHeldPlayer;
+				//プレイヤーをオブジェクトを持ってる状態にする
 				m_pPlayer->SetHoldObject(true);
 			}
 		}
 	}
 }
 
+
+/// <summary>
+/// プレイヤーに持たれている状態の関数。
+/// プレイヤーに持たれている場所に移動する処理。
+/// enCancelか、enThrownDownか、enThrownSideへ
+/// ステート（状態）を移行
+/// </summary>
 void CReversibleObject::HeldPlayer()
 {
-	//Vector3 pos = m_pPlayer->GetPosition();
+	//プレイヤーの回転を保持
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
+	//上方向ベクトルを保持
 	Vector3 up = g_vec3Up;
+	//上方向のベクトルをプレイヤーの回転で回す
 	qRot.Apply(up);
+	//ベクトルを伸ばす
 	up.Scale(100.0f);
-	//pos += up;
+
+	//モデルの場所をプレイヤーの上にする
 	m_position = m_pPlayer->GetPosition() + up;
+	//モデルの回転をプレイヤーと同じにする
 	m_rotation = qRot;
 
-	//�I�u�W�F�N�g�𗠑��ɓ����āA�I�u�W�F�N�g�̐����𔽓]������B
+  
+	//オブジェクトを裏側に投げて、オブジェクトの性質を反転させる。
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		if (m_objectState != enThrownDown)
-		{
-			m_throwRot = m_pPlayer->GetFinalWPRot();
-		}
+		//プレイヤーの回転を保持する
+		m_throwRot = m_pPlayer->GetFinalWPRot();
+
+		//ステートを下に投げる状態へ
 		m_objectState = enThrownDown;
 	}
-	//�I�u�W�F�N�g���v���C���[�̑����ɒu���B
+	//オブジェクトをプレイヤーの足元に置く。
 	else if (g_pad[0]->IsTrigger(enButtonB))
 	{
+		//ステートをキャンセル状態へ
 		m_objectState = enCancel;
 	}
+	//オブジェクトを横に投げる処理
 	else if (g_pad[0]->IsTrigger(enButtonX))
 	{
 		if (m_objectState != enThrownSide)
 		{
 			//CalcTargetPos();
 			m_throwRot = m_pPlayer->GetFinalWPRot();
-			//������ʒu���v���C���[�̏�����ɐݒ�
+			//投げる位置をプレイヤーの少し上に設定
 			Vector3 dir = { 0.0f,10.0f,0.0f };
 			m_throwRot.Apply(dir);
 			dir.Scale(7.0f);
 			m_position += dir;
-			//�v���C���[�̍��E�̌����𒲂ׂ�
+			//プレイヤーの左右の向きを調べる
 			m_playerLeftOrRight = m_pPlayer->GetEnLeftOrRight();
 		}
+		//ステートを横に投げる状態へ
 		m_objectState = enThrownSide;
 	}
 }
 
+/// <summary>
+/// 持っているオブジェクトを下に投げる関数
+/// enQueryへステート（状態）を移行
+/// </summary>
 void CReversibleObject::ThrownDown()
 {
+	//下方向のベクトルを保持する
 	Vector3 dir = g_vec3Down;
+	//プレイヤーの回転で下方向のべクトルを回す
 	m_throwRot.Apply(dir);
+	//ベクトルを伸ばす
 	dir.Scale(7.0f);
+
+	//モデルの場所を下に下げる
 	m_position += dir;
+	//モデルの回転を、逆さ向きに向かってちょっとずつ回す
 	m_rotation.SetRotationDegX(180.0f * m_throwCounter / 24);
 	m_rotation.Multiply(m_throwRot);
+
+	//投げている時のカウンターの最大値
+	const int maxThrowCounter = 24;
+
+	//投げている時のカウンターを進める
 	m_throwCounter++;
+
+	//投げている時のカウンターが最大値まで来たら
 	if (m_throwCounter >= 24)
 	{
+		//モデルの回転を完全に逆さ向きに回す。
 		m_rotation.SetRotationDegX(180.0f);
 		m_rotation.Multiply(m_throwRot);
-		m_objectState = enQuery;
+
+		//プレイヤーがオブジェクトを持っていない状態にする
 		m_pPlayer->SetHoldObject(false);
+
+		//投げている時のカウンターを0に戻す
 		m_throwCounter = 0;
+
+		//ステートをクエリへ移行する
+		m_objectState = enQuery;
 	}
-	else if (m_throwCounter == 12)
+	//投げている時のカウンターが最大値の半分まで来たら
+	else if (m_throwCounter == maxThrowCounter / 2)
 	{
+		//反転させる
 		Reverse();
 	}
 }
 
+/// <summary>
+/// 持っているオブジェクトをその場に置く関数
+/// enQueryへステート（状態）を移行
+/// </summary>
 void CReversibleObject::Cancel()
 {
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
@@ -217,15 +330,15 @@ void CReversibleObject::Cancel()
 
 void CReversibleObject::ThrownSide()
 {
-	//�������ɓ�����
+	//左方向に投げる
 	if (m_playerLeftOrRight == enLeft) {
-		//�I�u�W�F�N�g���������Ɉړ�����x�N�g���̍쐬
+		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Right;
 		m_throwRot.Apply(dir);
 		dir.Scale(5.0f);
 		m_position += dir;
 
-		//�����I������I�u�W�F�N�g���n�ʂƗǂ������̋����ɂȂ�悤�ɒ�������B
+		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
 		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
 		m_throwRot.Apply(dir2);
 		dir2.Scale(5.0f);
@@ -245,16 +358,16 @@ void CReversibleObject::ThrownSide()
 			m_throwCounter = 0;
 		}
 	}
-	//�E�����ɓ�����
+	//右方向に投げる
 	else
 	{
-		//�I�u�W�F�N�g���������Ɉړ�����x�N�g���̍쐬
+		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Left;
 		m_throwRot.Apply(dir);
 		dir.Scale(5.0f);
 		m_position += dir;
 
-		//�����I������I�u�W�F�N�g���n�ʂƗǂ������̋����ɂȂ�悤�ɒ�������B
+		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
 		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
 		m_throwRot.Apply(dir2);
 		dir2.Scale(5.0f);
@@ -277,15 +390,25 @@ void CReversibleObject::ThrownSide()
 	
 }
 
-
+/// <summary>
+/// オブジェクトを横に投げる際の、投げる先を計算する関数
+/// </summary>
 void CReversibleObject::CalcTargetPos()
 {
 	m_pPlayer->GetLeftPointIndex();
 }
 
 
+/// <summary>
+/// クエリしてほしいタイミングで呼ばれる関数
+/// オーバーライドしてほしい関数、QuerySub()はここで呼ばれる。
+/// enCheckPlayerへステート（状態）を移行
+/// </summary>
 void CReversibleObject::Query()
 {
+	//オーバーライドしてほしい関数QuerySub()
 	QuerySub();
+
+	//ステートをプレイヤーに持たれるかどうか調べる状態に移行する
 	m_objectState = enCheckPlayer;
 }

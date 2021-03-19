@@ -86,8 +86,6 @@ void Model::Draw(RenderContext& rc)
 
 bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 {
-
-
 	const auto& meshParts = m_tkmFile.GetMeshParts();
 
 	bool isHit = false;
@@ -206,13 +204,8 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 						dist = distTmp;
 					}
 				}
-				/*else
-				{
-					//交点の座標が三角形の中にないから、スキップ
-					m_intersectPos = intersectPos;
-					continue;
-				}*/
 
+					//交点の座標が三角形の中にないから、スキップ
 
 
 			}

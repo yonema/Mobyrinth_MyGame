@@ -5,7 +5,10 @@ bool OOpadlock::StartSub()
 {
 	Init("Assets/modelData/padlock.tkm", enNotHavePadlock);
 
-	//m_scale = { 2.0f,2.0f,2.0f };
+	//OBBÇÃÉTÉCÉYÇê›íË
+	Vector3 obbSize;
+	obbSize = { 300.0f,300.0f,300.0f };
+	GetOBB().SetDirectionLength(obbSize);
 
 	return true;
 }

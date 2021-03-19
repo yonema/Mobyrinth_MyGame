@@ -7,6 +7,11 @@ bool OOwall::StartSub()
 {
 	Init("Assets/modelData/wall.tkm", enWall);
 
+	//OBBÇÃÉTÉCÉYÇê›íË
+	Vector3 obbSize;
+	obbSize = { 400.0f,1000.0f,100.0f };
+	GetOBB().SetDirectionLength(obbSize);
+
 	return true;
 }
 

@@ -26,7 +26,7 @@ OOgoal::~OOgoal()
 
 void OOgoal::UpdateSub()
 {
-	if (IsHitPlayer(0.0001))
+	if (IsHitPlayer())
 	{
 		m_isGoal = true;
 		m_fontRender->Activate();
