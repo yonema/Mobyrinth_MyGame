@@ -288,7 +288,10 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="CaslFile.cpp" />
+    <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="FontRender.cpp" />
+    <ClCompile Include="MapChip2D.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
@@ -393,7 +396,10 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="Level2D.h" />
     <ClInclude Include="FontRender.h" />
+    <ClInclude Include="MapChip2D.h" />
     <ClInclude Include="OBB.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="SpriteRender.h" />

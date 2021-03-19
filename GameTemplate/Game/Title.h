@@ -1,35 +1,44 @@
 #pragma once
 #include "FontRender.h"
 #include "SpriteRender.h"
+#include "Level2D.h"
 
 //ステージ
 #include "stage_kari.h"
 #include "stage_proto01.h"
 #include "stage_proto02.h"
 
-
+/// <summary>
+/// タイトルクラス
+/// </summary>
 class Title : public IGameObject
 {
-public:
-	bool Start()override final;
-	~Title();
-	void Update()override final;
-private:
-	void TitleScreen();
-	void StageSelect();
-	void Release()
+public:		//自動で呼ばれるメンバ関数
+	bool Start()override final;		//スタート関数
+	~Title();						//デストラクタ
+	void Update()override final;	//アップデート関数
+
+private:	//privateなメンバ関数
+
+	void TitleScreen();	//タイトル画面
+	void StageSelect();	//ステージセレクト
+	void Release()		//自身のオブジェクトを破棄する関数
 	{
 		DeleteGO(this);
 	}
-private:
+
+private:	//データメンバ
+
+	/// <summary>
+	/// ステージのステート（状態）
+	/// </summary>
 	enum EnState
 	{
-		enTitleScreen,
-		enStageSelect,
+		enTitleScreen,	//タイトル画面の状態
+		enStageSelect,	//ステージセレクトの状態
 	};
-	int m_state = enTitleScreen;
-	CFontRender* m_titleFR = nullptr;
-	CFontRender* m_pushAButtonFR = nullptr;
+	int m_stageState = enTitleScreen;	//現在のステージのステート（状態）
+
 	/// <summary>
 	/// ステージの番号
 	/// 新しいステージを作った場合、ここに番号を追加
@@ -41,12 +50,18 @@ private:
 		enStageProto02,
 		enStageNum,
 	};
-	CFontRender* m_stageName[enStageNum] = { nullptr };
-	CFontRender* m_arrow = nullptr;
-	int m_stageState = enStage_kari;
 
-	bool m_buttonFlag = true;
+	int m_stageSelectState = enStage_kari;	//現在のステージセレクトのステート
 
+	CFontRender* m_titleFR = nullptr;					//フォントレンダー
+	CFontRender* m_pushAButtonFR = nullptr;				//フォントレンダー
+	CFontRender* m_stageName[enStageNum] = { nullptr };	//フォントレンダー
+	CFontRender* m_arrow = nullptr;						//フォントレンダー
+	bool m_buttonFlag = true;							//ボタンを押すことができるか？
+														//（連続入力防止用）
+	CLevel2D m_level2D;									//スプライト用のレベルクラス
+	std::list<CSpriteRender*> m_spriteRenders;
 	CSpriteRender* m_title = nullptr;
+	
 };
 

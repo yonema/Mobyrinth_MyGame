@@ -14,9 +14,7 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="objData">レベルのオブジェクトのデータ</param>
 	CMapChip(const LevelObjectData& objData);
-	~CMapChip()
-	{
-	}
+	~CMapChip();
 
 private://データメンバ
 	PhysicsStaticObject m_physicsStaticObject;			//!<静的物理オブジェクト。

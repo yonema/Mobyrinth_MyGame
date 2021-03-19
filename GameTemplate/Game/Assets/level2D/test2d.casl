@@ -1,0 +1,5 @@
+4
+8,utc_all2,45,../../GameTemplate/Game/Resource/utc_all2.DDS,0.0,0.0,2048,2048,10,0.1,0.1,12,utc_all2.dds
+3,box,40,../../GameTemplate/Game/Resource/box.dds,-512.5,232.5,256,256,10,1.0,1.0,7,box.dds
+4,fish,41,../../GameTemplate/Game/Resource/fish.dds,512.5,-232.5,256,256,10,1.0,1.0,8,fish.dds
+4,gole,41,../../GameTemplate/Game/Resource/gole.jpg,512.5,232.5,256,256,10,1.0,1.0,8,gole.dds
