@@ -66,11 +66,11 @@
     <Filter Include="MyCode\TKLevel">
       <UniqueIdentifier>{032f7f6e-e194-4a13-9f89-d31220cffb6a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\Graphic">
-      <UniqueIdentifier>{c99093ba-c71e-4b53-8cbc-95f3bf26e931}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyCode\Level2D">
-      <UniqueIdentifier>{9cd91f5c-fb80-4f86-ae05-10fbec182988}</UniqueIdentifier>
+      <UniqueIdentifier>{437ce050-c931-40a7-87d8-6bc3bc3e9b83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\graphic">
+      <UniqueIdentifier>{793b83cd-d84c-45cd-afdb-ba9fb86b617f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -326,28 +326,26 @@
     <ClCompile Include="StartDirecting.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-
-    <ClCompile Include="FontRender.cpp">
-      <Filter>MyCode\Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteRender.cpp">
-      <Filter>MyCode\Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelRender.cpp">
-      <Filter>MyCode\Graphic</Filter>
+    <ClCompile Include="stage_title.cpp">
+      <Filter>MyCode\stage</Filter>
     </ClCompile>
     <ClCompile Include="CaslFile.cpp">
+      <Filter>MyCode\Level2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Level2D.cpp">
       <Filter>MyCode\Level2D</Filter>
     </ClCompile>
     <ClCompile Include="MapChip2D.cpp">
       <Filter>MyCode\Level2D</Filter>
     </ClCompile>
-    <ClCompile Include="Level2D.cpp">
-      <Filter>MyCode\Level2D</Filter>
-
-    <ClCompile Include="stage_title.cpp">
-      <Filter>MyCode\stage</Filter>
-
+    <ClCompile Include="FontRender.cpp">
+      <Filter>MyCode\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelRender.cpp">
+      <Filter>MyCode\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRender.cpp">
+      <Filter>MyCode\graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -630,28 +628,26 @@
     <ClInclude Include="StartDirecting.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-
-    <ClInclude Include="FontRender.h">
-      <Filter>MyCode\Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelRender.h">
-      <Filter>MyCode\Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteRender.h">
-      <Filter>MyCode\Graphic</Filter>
+    <ClInclude Include="stage_title.h">
+      <Filter>MyCode\stage</Filter>
     </ClInclude>
     <ClInclude Include="CaslFile.h">
+      <Filter>MyCode\Level2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Level2D.h">
       <Filter>MyCode\Level2D</Filter>
     </ClInclude>
     <ClInclude Include="MapChip2D.h">
       <Filter>MyCode\Level2D</Filter>
     </ClInclude>
-    <ClInclude Include="Level2D.h">
-      <Filter>MyCode\Level2D</Filter>
-
-    <ClInclude Include="stage_title.h">
-      <Filter>MyCode\stage</Filter>
-
+    <ClInclude Include="SpriteRender.h">
+      <Filter>MyCode\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelRender.h">
+      <Filter>MyCode\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="FontRender.h">
+      <Filter>MyCode\graphic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
