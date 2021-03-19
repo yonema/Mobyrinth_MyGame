@@ -10,9 +10,10 @@ class ILevelObjectBase;
 class Player : public IGameObject
 {
 public://publicなメンバ関数
-	bool Start() override final;
-	~Player();
-	void Update() override final;
+	bool Start() override final;	//スタート関数
+	~Player();						//デストラクタ
+	void Update() override final;	//アップデート関数
+
 	/// <summary>
 	/// プレイヤーの座標を設定
 	/// </summary>
@@ -21,6 +22,7 @@ public://publicなメンバ関数
 	{
 		m_position = pos;
 	}
+
 	/// <summary>
 	/// プレイヤーの回転を設定
 	/// </summary>
@@ -29,6 +31,7 @@ public://publicなメンバ関数
 	{
 		m_rotation = rot;
 	}
+
 	/// <summary>
 	/// プレイヤーの座標を取得
 	/// </summary>
@@ -44,6 +47,7 @@ public://publicなメンバ関数
 	/// <param name="vecSize">ウェイポイントのサイズ</param>
 	/// <param name="posMap">場所のベクター</param>
 	void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>*const posMap);
+
 	/// <summary>
 	/// ウェイポイントの「回転」を取得
 	/// </summary>
@@ -59,11 +63,27 @@ public://publicなメンバ関数
 	{
 		return m_finalWPRot;
 	}
-
+	
+	/// <summary>
+	/// プレイヤーがオブジェクトを持っているかどうかを設定する
+	/// 持っている場合はtrueを渡す
+	/// </summary>
+	/// <param name="holdFlag">オブジェクトを持っているか？</param>
 	void SetHoldObject(const bool holdFlag)
 	{
 		m_holdObject = holdFlag;
 	}
+
+	/// <summary>
+	/// プレイヤーがオブジェクトを持っているかどうかを調べる
+	/// 持っている場合はtrueが戻ってくる
+	/// </summary>
+	/// <returns>オブジェクトを持っているか</returns>
+	const bool GetHoldObject()const
+	{
+		return m_holdObject;
+	}
+
 	void SetOperationFlag(const bool b)
 	{
 		m_operationFlag = b;
@@ -72,35 +92,64 @@ public://publicなメンバ関数
 	{
 		m_titleMove = b;
 	}
-	const bool GetHoldObject()const
-	{
-		return m_holdObject;
-	}
+
+
+	/// <summary>
+	/// プレイヤーの現在のUpベクトルを得る
+	/// </summary>
+	/// <returns>Upベクトル</returns>
 	const Vector3 GetUpVec()const
 	{
 		return m_upVec;
 	}
+
+	/// <summary>
+	/// 現在のプレイヤーの左側のウェイポイントの番号を得る
+	/// </summary>
+	/// <returns>左側のウェイポイントの番号</returns>
 	const int GetLeftPointIndex()const
 	{
 		return m_lpIndex;
 	}
+
+	/// <summary>
+	/// 現在のプレイヤーの右側のウェイポイントの番号を得る
+	/// </summary>
+	/// <returns>右側のウェイポイントの番号</returns>
 	const int GetRightPointIndex()const
 	{
 		return m_rpIndex;
 	}
+
+	/// <summary>
+	/// 引数で渡された番号のウェイポイントの場所を戻す
+	/// </summary>
+	/// <param name="index">ウェイポイントの番号</param>
+	/// <returns>ウェイポイントの場所</returns>
 	const Vector3 GerWayPointPos(const int index)
 	{
 		return (*m_wayPointPos)[index];
 	}
+
+	/// <summary>
+	/// キャラクターが左と右どちらを向いているか調べる
+	/// </summary>
+	/// <returns>enLeft（0）かenRight（1）</returns>
 	const int GetEnLeftOrRight()const
 	{
 		return m_leftOrRight;
 	}
 
+	/// <summary>
+	/// OBBの参照を戻す
+	/// </summary>
+	/// <returns>OBBの参照</returns>
 	COBB& GetOBB()
 	{
 		return m_obb;
 	}
+
+
 private://privateなメンバ関数
 
 	void TitleMove();
@@ -110,18 +159,22 @@ private://privateなメンバ関数
 	/// プレイヤーの初期設定
 	/// </summary>
 	void Init();
+
 	/// <summary>
 	/// ウェイポイントの更新処理
 	/// </summary>
 	void CheckWayPoint();
+
 	/// <summary>
 	/// 移動処理
 	/// </summary>
 	void Move();
+
 	/// <summary>
 	/// ステージに乗る
 	/// </summary>
 	void GetOnStage();
+
 	/// <summary>
 	/// モデルの回転処理
 	/// </summary>
@@ -129,20 +182,21 @@ private://privateなメンバ関数
 
 public://デバック用
 	void PostRender(RenderContext& rc)override final;
-	Font m_font;
-	CModelRender* m_dbgModel = nullptr;
-	CModelRender* m_dbgModel2 = nullptr;
-	CModelRender* m_dbgModel3 = nullptr;
+	Font m_font;	//フォントを表示するためのクラス
+	CModelRender* m_dbgModel = nullptr;		//プレイヤーとステージとの当たり判定を
+	CModelRender* m_dbgModel2 = nullptr;	//取るためのレイの視点と終点とステージとの
+	CModelRender* m_dbgModel3 = nullptr;	//交差点を見るためのモデル
+	bool m_dbgHit = false;					//上のレイが当たっているか表示するための変数
 
+	float m_dbgDot1 = 0.0f;			//左側のウェイポイントとプレイヤーの内積を入れる
+	float m_dbgDot2 = 0.0f;			//右側のウェイポイントとプレイヤーの内積を入れる
 
-	bool m_dbgHit = false;
-	float m_dbgDot1 = 0.0f;
-	float m_dbgDot2 = 0.0f;
-	static const int m_obbNum = 8;
-	CModelRender* m_dbgObbModel[m_obbNum] = { nullptr };
+	static const int m_obbNum = 8;							//OBBの頂点の数
+	CModelRender* m_dbgObbModel[m_obbNum] = { nullptr };	//OBBの頂点を見るためのモデル
 
 
 private:	//データメンバ
+
 	/// <summary>
 	/// アニメーションクリップ。
 	/// </summary>
@@ -154,22 +208,24 @@ private:	//データメンバ
 
 	AnimationClip m_animationClips[enAnimClip_Num];	//アニメーションクリップ。
 
-	Vector3 m_moveSpeed = g_vec3Zero;		//キャラクターの移動スピード
-	Vector3 m_position = g_vec3Zero;		//キャラクターの座標
-	Vector3 m_onWayPosition = g_vec3Zero;		//道の上の座標
-	Quaternion m_rotation = g_quatIdentity;	//キャラクターの回転
-	bool m_holdObject = false;
-	Vector3 m_upVec = g_vec3Up;
-
-
+	Vector3 m_moveSpeed = g_vec3Zero;				//キャラクターの移動スピード
+	Vector3 m_position = g_vec3Zero;				//キャラクターの座標
+	Vector3 m_onWayPosition = g_vec3Zero;			//道の上の座標
+	Quaternion m_rotation = g_quatIdentity;			//キャラクターの回転
+	Vector3 m_upVec = g_vec3Up;						//プレイヤーのUpベクトル
+	bool m_holdObject = false;						//オブジェクトを持っているか？
+	
+	/// <summary>
+	/// プレイヤーが右を向いているか左を向いているか
+	/// </summary>
 	enum EnLeftOrRight
 	{
 		enLeft,		//左
 		enRight,	//右
 	};
-	int m_leftOrRight = enRight;	//キャラクターの左右の向き
+	int m_leftOrRight = enRight;			//キャラクターの左右の向き
 
-	float m_padLStickXF = 0.0f;		//パッドの左スティックのX軸の入力情報
+	float m_padLStickXF = 0.0f;				//パッドの左スティックのX軸の入力情報
 
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
 
