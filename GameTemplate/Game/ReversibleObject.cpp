@@ -335,26 +335,26 @@ void CReversibleObject::ThrownSide()
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Right;
 		m_throwRot.Apply(dir);
-		dir.Scale(5.0f);
+		dir.Scale(7.0f);
 		m_position += dir;
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
 		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
 		m_throwRot.Apply(dir2);
-		dir2.Scale(5.0f);
+		dir2.Scale(7.0f);
 		m_position += dir2;
 
 		//
-		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / 60);
+		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / 35);
 		m_rotation.Multiply(m_throwRot);
 		m_throwCounter++;
 		m_pPlayer->SetHoldObject(false);
 
-		if (m_throwCounter >= 60)
+		if (m_throwCounter >= 35)
 		{
 			m_rotation.SetRotationDegZ(0.0f);
 			m_rotation.Multiply(m_throwRot);
-			m_objectState = enCheckPlayer;
+			m_objectState = enQuery;
 			m_throwCounter = 0;
 		}
 	}
@@ -364,22 +364,22 @@ void CReversibleObject::ThrownSide()
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Left;
 		m_throwRot.Apply(dir);
-		dir.Scale(5.0f);
+		dir.Scale(7.0f);
 		m_position += dir;
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
 		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
 		m_throwRot.Apply(dir2);
-		dir2.Scale(5.0f);
+		dir2.Scale(7.0f);
 		m_position += dir2;
 
 		//
-		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / 60);
+		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / 35);
 		m_rotation.Multiply(m_throwRot);
 		m_throwCounter++;
 		m_pPlayer->SetHoldObject(false);
 
-		if (m_throwCounter >= 60)
+		if (m_throwCounter >= 35)
 		{
 			m_rotation.SetRotationDegZ(0.0f);
 			m_rotation.Multiply(m_throwRot);
