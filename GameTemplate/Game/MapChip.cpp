@@ -24,3 +24,9 @@ CMapChip::CMapChip(const LevelObjectData& objData)
 	m_physicsStaticObject.CreateFromModel
 	(m_modelRender->GetModel(), m_modelRender->GetModel().GetWorldMatrix());
 }
+
+CMapChip::~CMapChip()
+{
+	if (m_modelRender)
+		DeleteGO(m_modelRender);
+}
