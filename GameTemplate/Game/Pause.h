@@ -9,10 +9,13 @@ class CPause : public IGameObject
 public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;		//スタート関数
 	~CPause();						//デストラクタ
+
 	/// <summary>
 	/// ポーズ中でも呼ばれるアップデート関数
+	/// ポーズ中でなくても常に呼ばれる
 	/// </summary>
 	void UpdateWhenPaused()override final;
+
 	/// <summary>
 	/// ポーズ中にだけ呼ばれるアップデート関数
 	/// </summary>
@@ -54,18 +57,22 @@ private:	//privateなメンバ関数
 	/// ポーズ状態にする関数
 	/// </summary>
 	void ToPause();
+
 	/// <summary>
 	/// ポーズ状態から解除する関数
 	/// </summary>
 	void UnPause();
+
 	/// <summary>
 	///	ポーズ中にカーソル選択させる関数
 	/// </summary>
 	void Choose();
+
 	/// <summary>
 	/// 選択したカーソルで決定する関数
 	/// </summary>
 	void Decision();
+
 private:	//データメンバ
 
 	/// <summary>
@@ -87,7 +94,7 @@ private:	//データメンバ
 
 	int m_pauseState = enContinue;		//現在のポーズ中のステート（状態）
 	bool m_isPaused = false;			//ポーズ中かどうか？
-	bool m_buttonFlag = true;			//ボタンを入力できるかどうか？
+	bool m_buttonFlag = true;			//ボタンを入力できるかどうか？（連続入力防止用）
 	bool m_retryFlag = false;			//リトライが選択されているか？
 	bool m_quitFlag = false;			//終了が選択されているか？
 	bool m_canPause = false;			//ポーズできるか？

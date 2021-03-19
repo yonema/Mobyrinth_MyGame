@@ -102,7 +102,7 @@ public:		//ここのメンバ関数を主に使う。
 	/// 引数にtrueを入れるとPostRenderで描画されるようになり、
 	/// 一番上に描画されるようになる。
 	/// </summary>
-	/// <param name="flag"></param>
+	/// <param name="flag">PostRenderで描画するか？</param>
 	void SetPostRenderFlag(const bool flag)
 	{
 		m_postRenderFlag = flag;
