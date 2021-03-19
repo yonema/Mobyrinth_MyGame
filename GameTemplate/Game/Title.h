@@ -2,6 +2,10 @@
 #include "FontRender.h"
 #include "SpriteRender.h"
 
+//îwåi
+#include "Mobius.h"
+#include "Player.h"
+
 //ÉXÉeÅ[ÉW
 #include "stage_kari.h"
 #include "stage_proto01.h"
@@ -48,5 +52,9 @@ private:
 	bool m_buttonFlag = true;
 
 	CSpriteRender* m_title = nullptr;
+
+private: //îwåi
+	Mobius* m_mobius = nullptr;
+	Player* player = nullptr;
 };
 
