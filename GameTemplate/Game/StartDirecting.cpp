@@ -27,12 +27,12 @@ void StartDirecting::Update()
 	
 	//wayポイント[16]まで動かす。
 
-	if (m_startDirecting == false) {
+	if (m_checkStartDirecting == false) {
 		return;
 	}
 
 	if (g_pad[0]->IsTrigger(enButtonA) == true) {
-		m_startDirecting = false;
+		m_checkStartDirecting = false;
 		//プレイヤーの操作フラグをtrueにする。
 		Player* player = FindGO<Player>("Player");
 		player->SetOperationFlag(true);
@@ -41,7 +41,7 @@ void StartDirecting::Update()
 		pause->SetCanPause(true);
 	}
 
-	if (check == false) {
+	if (checkZoomIn == false) {
 
 		//カメラの移動力
 		m_padLStickXF = 1.0f;
@@ -57,11 +57,11 @@ void StartDirecting::Update()
 		GetOnStage();
 	}
 	else {
-		if (count < startDirectingTime) {
-			++count;
+		if (countZoomIn < startDirectingTime) {
+			++countZoomIn;
 		}
 		else {
-			m_startDirecting = false;
+			m_checkStartDirecting = false;
 			//プレイヤーの操作フラグをtrueにする。
 			Player* player = FindGO<Player>("Player");
 			player->SetOperationFlag(true);
@@ -141,7 +141,7 @@ void StartDirecting::CheckWayPoint()
 
 		//カメラの移動を止める位置に来たかの確認
 		if (m_wayPointState == 15) {
-			check = true;
+			checkZoomIn = true;
 			//カメラの寄る処理のフラグをtrueにする。
 			GameCamera* gameCamera = FindGO<GameCamera>("GameCamera");
 			gameCamera->StartDirectingZoomInCamera(true);

@@ -273,6 +273,34 @@ void Player::Rotation()
 
 void Player::Update()
 {
+	if (m_titleMove == true) {
+		TitleMove();
+	}
+	else {
+		GameMove();
+	}
+}
+
+void Player::TitleMove()
+{
+	m_padLStickXF = 1.0f;
+
+	//ウェイポイントの更新処理
+	CheckWayPoint();
+	//移動処理
+	Move();
+	//モデルの回転処理
+	Rotation();
+
+	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
+	GetOnStage();
+
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+}
+
+void Player::GameMove()
+{
 	if (m_operationFlag == false) {
 		return;
 	}
@@ -318,10 +346,7 @@ void Player::Update()
 
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
-
 }
-
-
 
 void Player::SetWayPointPos
 (const std::size_t vecSize, std::vector<Vector3>*const posMap)

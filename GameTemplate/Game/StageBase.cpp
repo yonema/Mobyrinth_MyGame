@@ -11,6 +11,9 @@ bool IStageBase::Start()
 
 	//ステージ開始時の演出の作成
 	m_startDirecting = NewGO<StartDirecting>(0, "StartDirecting");
+	if (m_startUpStartDirecting == false) {
+		m_startDirecting->SetCheckStartDirecting(false);
+	}
 
 	//ゲームカメラの作成
 	NewGO<GameCamera>(0, "GameCamera");
@@ -50,6 +53,8 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				pPlayer = NewGO<Player>(0, "Player");
 				//プレイヤーのポジションをロードしたオブジェクトと同じポジションにする
 				pPlayer->SetPosition(objData.position);
+				//タイトル画面かどうかの確認
+				pPlayer->SetTitleMove(m_titlePlayer);
 				//フックしたため、trueを返す。
 				return true;
 			}
@@ -297,6 +302,7 @@ IStageBase::~IStageBase()
 	DeleteGO(m_stageDirectionLight);
 	DeleteGO(FindGO<GameCamera>("GameCamera"));
 	DeleteGO(m_pause);
+	DeleteGO(m_startDirecting);
 
 	//レベルでロードしたオブジェクトを消去
 

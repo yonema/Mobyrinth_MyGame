@@ -2,6 +2,11 @@
 #include "FontRender.h"
 #include "SpriteRender.h"
 
+//îwåi
+#include "stage_title.h"
+#include "Mobius.h"
+#include "Player.h"
+
 //ÉXÉeÅ[ÉW
 #include "stage_kari.h"
 #include "stage_proto01.h"
@@ -36,6 +41,7 @@ private:
 	/// </summary>
 	enum EnStageList
 	{
+		enTitle,
 		enStage_kari,
 		enStageProto01,
 		enStageProto02,
@@ -48,5 +54,11 @@ private:
 	bool m_buttonFlag = true;
 
 	CSpriteRender* m_title = nullptr;
+
+private: //îwåi
+	Mobius* m_mobius = nullptr;
+	Player* m_player = nullptr;
+
+	stage_title* m_stageTitle = nullptr;
 };
 
