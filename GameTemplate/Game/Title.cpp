@@ -5,6 +5,12 @@
 
 bool Title::Start()
 {
+	//îwåi
+	m_stageTitle = NewGO<stage_title>(0, "stage_title");
+	m_stageTitle->SetStartUpStartDirecting(false);
+	m_stageTitle->SetTitlePlayer(true);
+
+
 	m_titleFR = NewGO<CFontRender>(0);
 	m_titleFR->Init(L"ÉÅÉrÉäÉìÉX",
 		{ -200.0f,300.0f },
@@ -19,9 +25,9 @@ bool Title::Start()
 		{ 1.0f,0.0f,0.0f,1.0f }
 	);
 
-	m_title = NewGO<CSpriteRender>(1);
-	m_title->Init("Assets/sprite/Title.dds", 700.0f, 300.0f);
-	m_title->SetPosition({ -200.0f,150.0f,0.0f });
+	//m_title = NewGO<CSpriteRender>(1);
+	//m_title->Init("Assets/sprite/Title.dds", 700.0f, 300.0f);
+	//m_title->SetPosition({ -200.0f,150.0f,0.0f });
 
 
 	const float leftSide = -100.0f;
@@ -57,6 +63,8 @@ bool Title::Start()
 
 Title::~Title()
 {
+	DeleteGO(m_stageTitle);
+
 	DeleteGO(m_titleFR);
 	DeleteGO(m_pushAButtonFR);
 	for (int i = 0; i < enStageNum; i++)

@@ -48,6 +48,16 @@ private:
 
 	void Goal();
 
+public: //インライン関数
+	void SetStartUpStartDirecting(const bool b)
+	{
+		m_startUpStartDirecting = b;
+	}
+	void SetTitlePlayer(const bool b)
+	{
+		m_titlePlayer = b;
+	}
+
 protected:
 	/// <summary>
 	/// レベルのロード
@@ -72,5 +82,7 @@ private:
 	int m_goalCounter = 0;
 
 	StartDirecting* m_startDirecting = nullptr;
+	bool m_startUpStartDirecting = true;
+	bool m_titlePlayer = false;
 };
 

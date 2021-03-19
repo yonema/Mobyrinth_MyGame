@@ -3,6 +3,7 @@
 #include "SpriteRender.h"
 
 //îwåi
+#include "stage_title.h"
 #include "Mobius.h"
 #include "Player.h"
 
@@ -40,6 +41,7 @@ private:
 	/// </summary>
 	enum EnStageList
 	{
+		enTitle,
 		enStage_kari,
 		enStageProto01,
 		enStageProto02,
@@ -55,6 +57,8 @@ private:
 
 private: //îwåi
 	Mobius* m_mobius = nullptr;
-	Player* player = nullptr;
+	Player* m_player = nullptr;
+
+	stage_title* m_stageTitle = nullptr;
 };
 

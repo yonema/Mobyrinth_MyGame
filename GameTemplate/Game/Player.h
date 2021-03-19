@@ -64,8 +64,13 @@ public://publicなメンバ関数
 	{
 		m_holdObject = holdFlag;
 	}
-	void SetOperationFlag(const bool b) {
+	void SetOperationFlag(const bool b)
+	{
 		m_operationFlag = b;
+	}
+	void SetTitleMove(const bool b)
+	{
+		m_titleMove = b;
 	}
 	const bool GetHoldObject()const
 	{
@@ -97,6 +102,9 @@ public://publicなメンバ関数
 		return m_obb;
 	}
 private://privateなメンバ関数
+
+	void TitleMove();
+	void GameMove();
 
 	/// <summary>
 	/// プレイヤーの初期設定
@@ -181,8 +189,9 @@ private:	//データメンバ
 	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
 	bool m_operationFlag = false; //操作できるかのフラグ
-	COBB m_obb;
+	bool m_titleMove = false;
 
+	COBB m_obb;
 
 };
 
