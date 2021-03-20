@@ -48,16 +48,17 @@ void COBB::Init(SInitOBBData& initData)
 /// ボックスの8つの頂点の座標を取得する。
 /// （注意）配列の先頭アドレスを戻しているけど、
 /// 配列の要素数は8だよ。
+/// 使うときは念のためGetBoxVertexNum()で
+/// 頂点数持ってきてね。
 /// </summary>
 /// <returns>頂点の配列の先頭アドレス</returns>
 Vector3* COBB::GetBoxVertex()
 {
-	//ボックスの頂点の数
-	const int vertNum = 8;
+
 	//ボックスの頂点の場所
-	Vector3 boxVertex[vertNum];
+	Vector3 boxVertex[m_boxVertexNum];
 	//ボックスの頂点にまずセンターポジションを入れる
-	for (int i = 0; i < vertNum; i++)
+	for (int i = 0; i < m_boxVertexNum; i++)
 	{
 		boxVertex[i] = m_centerPosition;
 	}
