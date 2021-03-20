@@ -3,10 +3,14 @@
 #include "DirectionLight.h"
 #include "ModelRender.h"
 #include "Mobius.h"
-class ILevelObjectBase;
 #include "OBB.h"
 
+class ILevelObjectBase;
 
+
+/// <summary>
+/// プレイヤーが操作するキャラクターのクラス
+/// </summary>
 class Player : public IGameObject
 {
 public://publicなメンバ関数
@@ -228,26 +232,25 @@ private:	//データメンバ
 	float m_padLStickXF = 0.0f;				//パッドの左スティックのX軸の入力情報
 
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
+	COBB m_obb;								//OBBの当たり判定
+	Mobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
 
 	/// <summary>
 	/// ウェイポイント関連のデータメンバ
 	/// </summary>
-	//std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
-	//std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
 	std::vector<Vector3>* m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
-	std::vector<Quaternion>* m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
-	int m_rpIndex = 0;				//右のウェイポイントのインデックス
-	int m_lpIndex = m_rpIndex + 1;	//左のウェイポイントのインデックス
-	int m_wayPointState = 0;		//自身がどのウェイポイントにいるか表すステート
-	int m_maxWayPointState = 0;		//ウェイポイントステートの最大の値
+	std::vector<Quaternion>* m_wayPointRot;		//ウェイポイントの「回転」のコンテナ
+	int m_rpIndex = 0;							//右のウェイポイントのインデックス
+	int m_lpIndex = m_rpIndex + 1;				//左のウェイポイントのインデックス
+	int m_wayPointState = 0;					//自身がどのウェイポイントにいるか表すステート
+	int m_maxWayPointState = 0;					//ウェイポイントステートの最大の値
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
 
-	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
 	bool m_operationFlag = false; //操作できるかのフラグ
 	bool m_titleMove = false;
 
-	COBB m_obb;
+	
 
 };
 
