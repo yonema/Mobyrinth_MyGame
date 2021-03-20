@@ -3,10 +3,14 @@
 #include "DirectionLight.h"
 #include "ModelRender.h"
 #include "Mobius.h"
-class ILevelObjectBase;
 #include "OBB.h"
 
+class ILevelObjectBase;
 
+
+/// <summary>
+/// プレイヤーが操作するキャラクターのクラス
+/// </summary>
 class Player : public IGameObject
 {
 public://publicなメンバ関数
@@ -180,21 +184,6 @@ private://privateなメンバ関数
 	/// </summary>
 	void Rotation();
 
-public://デバック用
-	void PostRender(RenderContext& rc)override final;
-	Font m_font;	//フォントを表示するためのクラス
-	CModelRender* m_dbgModel = nullptr;		//プレイヤーとステージとの当たり判定を
-	CModelRender* m_dbgModel2 = nullptr;	//取るためのレイの視点と終点とステージとの
-	CModelRender* m_dbgModel3 = nullptr;	//交差点を見るためのモデル
-	bool m_dbgHit = false;					//上のレイが当たっているか表示するための変数
-
-	float m_dbgDot1 = 0.0f;			//左側のウェイポイントとプレイヤーの内積を入れる
-	float m_dbgDot2 = 0.0f;			//右側のウェイポイントとプレイヤーの内積を入れる
-
-	static const int m_obbNum = 8;							//OBBの頂点の数
-	CModelRender* m_dbgObbModel[m_obbNum] = { nullptr };	//OBBの頂点を見るためのモデル
-
-
 private:	//データメンバ
 
 	/// <summary>
@@ -228,26 +217,36 @@ private:	//データメンバ
 	float m_padLStickXF = 0.0f;				//パッドの左スティックのX軸の入力情報
 
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
+	COBB m_obb;								//OBBの当たり判定
+	Mobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
 
 	/// <summary>
 	/// ウェイポイント関連のデータメンバ
 	/// </summary>
-	//std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
-	//std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
 	std::vector<Vector3>* m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
-	std::vector<Quaternion>* m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
-	int m_rpIndex = 0;				//右のウェイポイントのインデックス
-	int m_lpIndex = m_rpIndex + 1;	//左のウェイポイントのインデックス
-	int m_wayPointState = 0;		//自身がどのウェイポイントにいるか表すステート
-	int m_maxWayPointState = 0;		//ウェイポイントステートの最大の値
+	std::vector<Quaternion>* m_wayPointRot;		//ウェイポイントの「回転」のコンテナ
+	int m_rpIndex = 0;							//右のウェイポイントのインデックス
+	int m_lpIndex = m_rpIndex + 1;				//左のウェイポイントのインデックス
+	int m_wayPointState = 0;					//自身がどのウェイポイントにいるか表すステート
+	int m_maxWayPointState = 0;					//ウェイポイントステートの最大の値
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
 
-	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
 	bool m_operationFlag = false; //操作できるかのフラグ
 	bool m_titleMove = false;
 
-	COBB m_obb;
+public://デバック用
+	void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため
+	Font m_font;							//フォントを表示するためのクラス
+	CModelRender* m_dbgModel = nullptr;		//プレイヤーとステージとの当たり判定を
+	CModelRender* m_dbgModel2 = nullptr;	//取るためのレイの視点と終点とステージとの
+	CModelRender* m_dbgModel3 = nullptr;	//交差点を見るためのモデル
+	bool m_dbgHit = false;					//上のレイが当たっているか表示するための変数
+
+	float m_dbgDot1 = 0.0f;			//左側のウェイポイントとプレイヤーの内積を入れる
+	float m_dbgDot2 = 0.0f;			//右側のウェイポイントとプレイヤーの内積を入れる
+
+	CModelRender* m_dbgObbModel[8] = { nullptr };	//OBBの頂点を見るためのモデル
 
 };
 

@@ -3,59 +3,86 @@
 #include "LightManager.h"
 #include "LevelObjectManager.h"
 
-
+//スタート関数
 bool Player::Start()
 {
+	//アニメーションクリップの初期化
+	//Idleのアニメーションクリップをロードする
 	m_animationClips[enAnimClip_Idle].Load("Assets/animData/idle.tka");
+	//ループ再生をtrueにする
 	m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
+	//Runのアニメーションクリップをロードする
 	m_animationClips[enAnimClip_Run].Load("Assets/animData/walk.tka");
+	//ループ再生をtrueにする
 	m_animationClips[enAnimClip_Run].SetLoopFlag(true);
+
+	//モデルレンダラーを生成する
 	m_modelRender = NewGO<CModelRender>(0);
+	//モデルレンダラーの初期化をする
+	//この時にアニメーションクリップを一緒に引数に渡しておく
 	m_modelRender->Init
 	("Assets/modelData/unityChan.tkm",m_animationClips,enAnimClip_Num, enModelUpAxisY);
+	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+	//ウェイポイント上の座標にキャラの座標を入れておく
 	m_onWayPosition = m_position;
+
+	//ステージのメビウスの輪の参照を得る
 	m_mobius = FindGO<Mobius>("Mobius");
+
+
+
+
+	//初期化処理
+	Init();
+
+	//OBB初期化
+	//OBBの初期化用データ構造体
+	SInitOBBData initData;
+	//なんかいい感じのOBBの大きさにする
+	initData.width = 50.0f;
+	initData.length = 200.0f;
+	initData.height = 100.0f;
+	//Playerの場所と回転を入れる
+	initData.position = m_position;
+	initData.rotation = m_rotation;
+	//ピボットは底面の中央
+	initData.pivot = { 0.5f,0.0f,0.5f };
+	//OBBを初期化する
+	m_obb.Init(initData);
 
 
 	//デバック用
 	//後で消す
+
+	//レイの視点と終点と交差点を見るためのデバック用モデルの生成
 	m_dbgModel = NewGO<CModelRender>(0);
 	m_dbgModel->Init("Assets/modelData/yuka.tkm");
 	m_dbgModel2 = NewGO<CModelRender>(0);
 	m_dbgModel2->Init("Assets/modelData/yuka.tkm");
 	m_dbgModel3 = NewGO<CModelRender>(0);
 	m_dbgModel3->Init("Assets/modelData/yuka.tkm");
-
-
-	Init();
-
-	SInitOBBData initData;
-	initData.width = 50.0f;
-	initData.length = 200.0f;
-	initData.height = 100.0f;
-	initData.position = m_position;
-	initData.rotation = m_rotation;
-	initData.pivot = { 0.5f,0.0f,0.5f };
-	m_obb.Init(initData);
-
-
-
+	
+	//OBBの頂点の座標の配列の先頭アドレスを取得
 	Vector3* vertPos = m_obb.GetBoxVertex();
-	for (int i = 0; i < m_obbNum; i++)
+	//OBBの頂点の数だけ繰り返す
+	for (int i = 0; i < m_obb.GetBoxVertexNum(); i++)
 	{
+		//OBBの頂点の座標を見るためのモデルの生成
 		m_dbgObbModel[i] = NewGO<CModelRender>(0);
 		m_dbgObbModel[i]->Init("Assets/modelData/dbgBox.tkm");
 		m_dbgObbModel[i]->SetPosition(vertPos[i]);
 	}
-
+	//デバック用ここまで
 
 	return true;
 }
 
+//デストラクタ
 Player::~Player()
 {
+	//プレイヤーのモデルレンダラーの破棄
 	DeleteGO(m_modelRender);
 
 	//デバック用
@@ -63,13 +90,17 @@ Player::~Player()
 	DeleteGO(m_dbgModel);
 	DeleteGO(m_dbgModel2);
 	DeleteGO(m_dbgModel3);
-	for (int i = 0; i < m_obbNum; i++)
+	for (int i = 0; i < m_obb.GetBoxVertexNum(); i++)
 	{
 		DeleteGO(m_dbgObbModel[i]);
 	}
+	//デバック用ここまで
 
 }
 
+/// <summary>
+/// プレイヤーの初期設定
+/// </summary>
 void Player::Init()
 {
 	//ゲームパッドの左スティックのX軸の入力情報を取得
@@ -82,13 +113,21 @@ void Player::Init()
 	//モデルの回転処理
 	Rotation();
 
+	//道の上の座標を移動させる
 	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
+
+	//ステージ（メビウスの輪）の上に乗る処理
 	GetOnStage();
 
+	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 }
 
+
+/// <summary>
+/// ウェイポイントの更新処理
+/// </summary>
 void Player::CheckWayPoint()
 {
 	///
@@ -116,14 +155,19 @@ void Player::CheckWayPoint()
 
 	//2.m_wayPointStateの更新。
 
+	//左のウェイポイントから右のウェイポイントへのベクトル
 	Vector3 LpToRpVec = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
 	LpToRpVec.Normalize();
+	//左のウェイポイントからプレイヤーへのベクトル
 	Vector3 LpToPlayerVec = m_position - (*m_wayPointPos)[m_lpIndex];
 	LpToPlayerVec.Normalize();
+	//右のウェイポイントからプレイヤーへのベクトル
 	Vector3 RpToPlayerVec = m_position - (*m_wayPointPos)[m_rpIndex];
 	RpToPlayerVec.Normalize();
 
+	//左側の内積
 	float LpDotPlayer = Dot(LpToRpVec, LpToPlayerVec);
+	//右側の内積
 	float RpDotPlayer = Dot(LpToRpVec, RpToPlayerVec);
 	m_dbgDot1 = LpDotPlayer;
 	m_dbgDot2 = RpDotPlayer;
@@ -159,12 +203,14 @@ void Player::CheckWayPoint()
 		}
 	}
 
-
-
 	return;
 
 }
 
+
+/// <summary>
+/// 移動処理
+/// </summary>
 void Player::Move()
 {
 	//移動する向きは毎フレーム計算した方がいいのかな？
@@ -213,36 +259,66 @@ void Player::Move()
 	return;
 }
 
+
+/// <summary>
+/// ステージに乗る
+/// </summary>
 void Player::GetOnStage()
 {
+	//プレイヤーのUpベクトルにYUpベクトルを入れる
 	m_upVec = g_vec3AxisY;
+	//Yupを補完済みの回転で回す
 	m_finalWPRot.Apply(m_upVec);
+	//Upベクトルをイイ感じに伸ばす。
+	//伸ばした先がレイの始点となる
 	m_upVec.Scale(150.0f);
+
+
 	if (m_mobius)
 	{
-		if (m_mobius->GetModel()->InIntersectLine(m_onWayPosition + m_upVec, m_onWayPosition - m_upVec))
+		//メビウスの輪が見つかっていたら
+		//メビウスの輪のモデルのポリゴンと、レイの当たり判定を取る
+		if (m_mobius->GetModel()
+			->InIntersectLine(m_onWayPosition + m_upVec, m_onWayPosition - m_upVec))
 		{
+			//ポリゴンとレイの交差点をを取ってきてモデルの座標に入れる
 			m_position = m_mobius->GetModel()->GetIntersectPos();
+			//デバック用
+			//後で消す
 			m_dbgHit = true;
 		}
 		else
+		{
+			//デバック用
+			//後で消す
 			m_dbgHit = false;
+		}
 	}
 	else
 	{
+		//メビウスの輪（ステージ）が見つかっていなかったら
+		//探してreturnする
 		m_mobius = FindGO<Mobius>("Mobius");
+		return;
 	}
+
+
+	//デバック用
+	//後で消す
+	//レイの始点と終点と交差点を場所を入れる
 	auto hitPos = m_mobius->GetModel()->GetIntersectPos();
 	m_dbgModel->SetPosition(m_onWayPosition + m_upVec);
 	m_dbgModel2->SetPosition(m_onWayPosition - m_upVec);
 	m_dbgModel3->SetPosition(hitPos);
-	
+	//デバック用ここまで
 
-	//m_modelRender->SetPosition(hitPos);
 	return;
 
 }
 
+/// <summary>
+/// モデルの回転処理
+/// </summary>
 void Player::Rotation()
 {
 	//左のウェイポイントから右のウェイポイントへのベクトル
@@ -271,6 +347,7 @@ void Player::Rotation()
 	return;
 }
 
+//アップデート関数
 void Player::Update()
 {
 	if (m_titleMove == true) {
@@ -315,25 +392,6 @@ void Player::GameMove()
 		m_leftOrRight = enRight;	//右向き
 
 
-	//デバック用
-	//後で消す
-	m_obb.SetRotation(m_finalWPRot);
-	m_obb.SetPosition(m_position);
-	Vector3* boxVertex = m_obb.GetBoxVertex();
-	for (int i = 0; i < m_obbNum; i++)
-	{
-		m_dbgObbModel[i]->SetPosition(boxVertex[i]);
-		m_dbgObbModel[i]->SetRotation(m_rotation);
-	}
-
-
-
-
-	//デバックここまで
-
-
-
-
 	//ウェイポイントの更新処理
 	CheckWayPoint();
 	//移動処理
@@ -341,56 +399,74 @@ void Player::GameMove()
 	//モデルの回転処理
 	Rotation();
 
+	//道の上の座標を移動させる
 	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
+
+	//ステージ（メビウスの輪）の上に乗る処理
 	GetOnStage();
 
+	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+	//OBBの場所と回転を設定
+	m_obb.SetRotation(m_finalWPRot);
+	m_obb.SetPosition(m_position);
+
+
+
+	//デバック用
+	//後で消す
+
+	//OBBの頂点の座標の配列の先頭アドレスを取得
+	Vector3* boxVertex = m_obb.GetBoxVertex();
+	//OBBの頂点の数だけ繰り返す
+	for (int i = 0; i < m_obb.GetBoxVertexNum(); i++)
+	{
+		//OBBの頂点を見るためのモデルの場所を設定
+		m_dbgObbModel[i]->SetPosition(boxVertex[i]);
+		m_dbgObbModel[i]->SetRotation(m_rotation);
+	}
+	//デバックここまで
 }
 
+
+/// <summary>
+/// ウェイポイントの「場所」を取得
+/// </summary>
+/// <param name="vecSize">ウェイポイントのサイズ</param>
+/// <param name="posMap">場所のベクター</param>
 void Player::SetWayPointPos
 (const std::size_t vecSize, std::vector<Vector3>*const posMap)
 {
-	//vectorのサイズの確保
-	//m_wayPointPos->resize(vecSize);
 	//ウェイポイントステートの最大の値を設定
 	m_maxWayPointState = vecSize - 1;
 	//m_wayPointPosにウェイポイントの「場所」を格納する
 	m_wayPointPos = posMap;
-	//std::vector<Vector3>::iterator it = posMap->begin();
-	//for (int index = 0; it != posMap->end(); index++, it++)
-	//{
-	//	m_wayPointPos[index] = &it;
-	//}
 }
+
+/// <summary>
+/// ウェイポイントの「回転」を取得
+/// </summary>
+/// <param name="vecSize">ウェイポイントのサイズ</param>
+/// <param name="rotMap">回転のベクター</para
 void Player::SetWayPointRot
 (const std::size_t vecSize, std::vector<Quaternion>* rotMap)
 {
-	//vectorのサイズの確保
-	//m_wayPointRot->resize(vecSize);
 	//ウェイポイントステートの最大の値を設定
 	m_maxWayPointState = vecSize - 1;
 	//m_wayPointRotにウェイポイントの「回転」を格納する
 	m_wayPointRot = rotMap;
-	//std::map<int, Quaternion>::iterator it = rotMap->begin();
-	//for (int index = 0; it != rotMap->end(); index++, it++)
-	//{
-	//	m_wayPointRot[index] = &it->second;
-	//}
 }
 
 
+//デバック用のフォントを表示するため
 void Player::PostRender(RenderContext& rc)
 {
 	//テキスト用意
 	wchar_t text[256];
 
-
-
-
 	//描画開始
 	m_font.Begin(rc);
-
 
 	//ウェイポイントステートの表示
 	swprintf(text, L"wayPointState:%02d", m_wayPointState);
@@ -463,6 +539,5 @@ void Player::PostRender(RenderContext& rc)
 
 
 	//描画終了
-
 	m_font.End(rc);
 }

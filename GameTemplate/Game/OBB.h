@@ -94,10 +94,20 @@ public:		//ここのメンバ関数を主に使う
 	/// ボックスの8つの頂点の座標を取得する。
 	/// （注意）配列の先頭アドレスを戻しているけど、
 	/// 配列の要素数は8だよ。
+	/// 使うときは念のためGetBoxVertexNum()で
+	/// 頂点数持ってきてね。
 	/// </summary>
 	/// <returns>頂点の配列の先頭アドレス</returns>
 	Vector3* GetBoxVertex();
 
+	/// <summary>
+	/// ボックスの頂点の数を得る
+	/// </summary>
+	/// <returns>ボックスの頂点の数（8）</returns>
+	const int GetBoxVertexNum()const
+	{
+		return m_boxVertexNum;
+	}
 
 	/// <summary>
 	/// 引数で指定したローカル軸の単位方向ベクトルの取得
@@ -146,6 +156,7 @@ private:	//データメンバ
 	Vector3 m_normalDirection[enLocalAxisNum];	//各軸の単位方向ベクトル
 	float m_directionLength[enLocalAxisNum];	//各軸の方向ベクトルの長さ
 
+	static const int m_boxVertexNum = 8;		//ボックスの頂点の数
 };
 
 //クラス外
