@@ -96,7 +96,7 @@ bool Title::Start()
 	//BGMのサウンドソースを生成する
 	m_bgmSS = NewGO<CSoundSource>(0);
 	//BGMのサウンドソースを、waveファイルを指定して初期化する。
-	m_bgmSS->Init(L"Assets/sound/03 HelloUnityjs[4824].wav");
+	m_bgmSS->Init(L"Assets/sound/03 HelloUnityjs[convert].wav");
 	//BGMをループ再生をオンで再生する。
 	m_bgmSS->Play(true);
 
