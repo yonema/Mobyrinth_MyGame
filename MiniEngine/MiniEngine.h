@@ -63,6 +63,21 @@
 #include "Model.h"
 #include "HID/GamePad.h"
 
+
+//追加
+#include <xaudio2fx.h>
+#include <xaudio2.h>
+#include <x3daudio.h>
+
+
+
+
+//追加ここまで
+
+
+
+
+
 const UINT FRAME_BUFFER_W = 1280;				//フレームバッファの幅。
 const UINT FRAME_BUFFER_H = 720;				//フレームバッファの高さ。
 static const int MAX_BONE = 512;	//!<ボーンの最大数。

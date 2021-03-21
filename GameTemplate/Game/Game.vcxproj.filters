@@ -72,6 +72,9 @@
     <Filter Include="MyCode\graphic">
       <UniqueIdentifier>{793b83cd-d84c-45cd-afdb-ba9fb86b617f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Sound">
+      <UniqueIdentifier>{a720ccce-87f3-4786-8ae6-fcc86e49d91b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -346,6 +349,18 @@
     </ClCompile>
     <ClCompile Include="SpriteRender.cpp">
       <Filter>MyCode\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveFile.cpp">
+      <Filter>MyCode\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveFileBank.cpp">
+      <Filter>MyCode\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSource.cpp">
+      <Filter>MyCode\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEngine.cpp">
+      <Filter>MyCode\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -648,6 +663,24 @@
     </ClInclude>
     <ClInclude Include="FontRender.h">
       <Filter>MyCode\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveFile.h">
+      <Filter>MyCode\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Noncopyable.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveFileBank.h">
+      <Filter>MyCode\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSource.h">
+      <Filter>MyCode\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEngine.h">
+      <Filter>MyCode\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

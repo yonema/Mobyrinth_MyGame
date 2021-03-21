@@ -11,8 +11,9 @@ bool Title::Start()
 	m_stageTitle->SetStartUpStartDirecting(false);
 	m_stageTitle->SetTitlePlayer(true);
 
-//フォントレンダラーの生成と初期化
+	//フォントレンダラーの生成と初期化
 	m_titleFR = NewGO<CFontRender>(0);
+	m_titleFR->SetPostRenderFlag(true);
 	m_titleFR->Init(L"メビリンス",
 		{ -200.0f,300.0f },
 		{ 0.5f,0.5f,1.0f,1.0f },
@@ -20,6 +21,7 @@ bool Title::Start()
 		3.0f
 	);
 	m_pushAButtonFR = NewGO<CFontRender>(0);
+	m_pushAButtonFR->SetPostRenderFlag(true);
 	m_pushAButtonFR->Init(L"Aボタンを押してね。",
 		{ -150.0f,0.0f },
 		{ 1.0f,0.0f,0.0f,1.0f }
@@ -41,6 +43,7 @@ bool Title::Start()
 	for (int i = 0; i < enStageNum; i++)
 	{
 		m_stageName[i] = NewGO<CFontRender>(0);
+		m_stageName[i]->SetPostRenderFlag(true);
 	}
 	m_stageName[enStage_kari]->Init(L"stage_kari",
 		{ leftSide ,UpSide + BetweenLine * enStage_kari }
@@ -78,6 +81,34 @@ bool Title::Start()
 		});
 
 
+
+	//デバック用
+	//後で消す
+
+	//サウンドソースを生成する
+	m_soundSource = NewGO<CSoundSource>(0);
+	//サウンドソースを、waveファイルを指定して初期化する。
+	m_soundSource->Init(L"Assets/sound/univ1195.wav");
+	//これによっていちいちNewGOとInit()を呼ぶ工程を省くことができる。
+	m_soundSource->SetStopFlag(true);
+
+
+	//BGMのサウンドソースを生成する
+	m_bgmSS = NewGO<CSoundSource>(0);
+	//BGMのサウンドソースを、waveファイルを指定して初期化する。
+	m_bgmSS->Init(L"Assets/sound/03 HelloUnityjs[convert].wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmSS->Play(true);
+
+	//BGMのボリュームを設定する
+	//「HelloUnity.js」を聞きたかったら
+	//ここをコメントアウトするか
+	//0.0f以外を入れてね
+	m_bgmSS->SetVolume(0.0f);
+
+	//デバック用ここまで
+
+
 	return true;
 }
 
@@ -94,6 +125,12 @@ Title::~Title()
 	}
 	DeleteGO(m_arrow);
 
+	//デバック用
+	//後で消す
+
+	DeleteGO(m_soundSource);
+	DeleteGO(m_bgmSS);
+	//デバック用ここまで
 }
 
 //アップデート関数
@@ -113,6 +150,25 @@ void Title::Update()
 	default:
 		break;
 	}
+
+	//デバック用
+	//後で消す
+
+	if (g_pad[0]->IsTrigger(enButtonStart))
+	{
+		//ワンショット再生
+
+		////サウンドソースを生成する
+		//m_soundSource = NewGO<CSoundSource>(0);
+		////サウンドソースを、waveファイルを指定して初期化する。
+		//m_soundSource->Init(L"Assets/sound/univ1195.wav");
+
+		//サウンドを再生する
+		m_soundSource->Play(true);
+	}
+
+	//デバック用ここまで
+
 }
 
 
