@@ -117,7 +117,7 @@ void Player::Init()
 	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
 
 	//ステージ（メビウスの輪）の上に乗る処理
-	GetOnStage();
+	//GetOnStage();
 
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);

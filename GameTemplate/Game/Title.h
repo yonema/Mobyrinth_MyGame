@@ -2,6 +2,7 @@
 #include "FontRender.h"
 #include "SpriteRender.h"
 #include "Level2D.h"
+#include "SoundSource.h"
 
 //背景
 #include "stage_title.h"
@@ -75,5 +76,12 @@ private: //背景
 
 	stage_title* m_stageTitle = nullptr;
 
+
+	//デバック用
+	//後で消す
+	CSoundSource* m_soundSource = nullptr;				//サウンドソースクラス
+	CSoundSource* m_bgmSS = nullptr;					//BGMのサウンドソース
+
+	//デバック用ここまで
 };
 

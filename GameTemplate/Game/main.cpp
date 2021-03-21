@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "LightManager.h"
 #include "LevelObjectManager.h"
+#include "SoundEngine.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -23,6 +24,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	
 	CLightManager::CreateInstance();
 	CLevelObjectManager::CreateInstance();
+	CSoundEngine::CreateInstance();
 
 	NewGO<Game>(0, "Game");
 
@@ -44,7 +46,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		GameObjectManager::GetInstance()->ExecuteUpdate();
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 		CLightManager::GetInstance()->ExecuteUpdate();
-
+		CSoundEngine::GetInstance()->Update();
 		//////////////////////////////////////
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////
@@ -54,6 +56,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームオブジェクトマネージャーを削除。
 	GameObjectManager::DeleteInstance();
 	CLevelObjectManager::DeleteInstance();
+	CSoundEngine::DeleteInstance();
+
+
 	return 0;
 }
 
