@@ -2,9 +2,10 @@
 #include "LevelObjectManager.h"
 #include "LevelObjectBase.h"
 
-
+//インスタンスの初期化
 CLevelObjectManager* CLevelObjectManager::m_instance = nullptr;
 
+//コンストラクタ
 CLevelObjectManager::CLevelObjectManager()
 {
 	if (m_instance != nullptr) {
@@ -13,13 +14,18 @@ CLevelObjectManager::CLevelObjectManager()
 	}
 }
 
+//デストラクタ
 CLevelObjectManager::~CLevelObjectManager()
 {
 	//nullptrを入れておく
 	m_instance = nullptr;
 }
 
-
+/// <summary>
+/// ウェイポイントの「場所」を初期化
+/// </summary>
+/// <param name="vecSize">ウェイポイントのサイズ</param>
+/// <param name="posMap">場所のマップ</param>
 void CLevelObjectManager::InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap)
 {
 	//vectorのサイズの確保
@@ -33,6 +39,13 @@ void CLevelObjectManager::InitWayPointPos(const std::size_t vecSize, std::map<in
 		m_wayPointPos[index] = it->second;
 	}
 }
+
+
+/// <summary>
+/// ウェイポイントの「回転」を初期化
+/// </summary>
+/// <param name="vecSize">ウェイポイントのサイズ</param>
+/// <param name="rotMap">回転のマップ</param>
 void CLevelObjectManager::InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap)
 {
 	//vectorのサイズの確保
@@ -47,11 +60,19 @@ void CLevelObjectManager::InitWayPointRot(const std::size_t vecSize, std::map<in
 	}
 }
 
-
+/// <summary>
+/// 自身（LevelObjectManager）にオブジェクトを追加する
+/// </summary>
+/// <param name="object">追加するオブジェクト</param>
 void CLevelObjectManager::AddObject(ILevelObjectBase* object)
 {
 	m_levelObjects.push_back(object);
 }
+
+/// <summary>
+/// 自身（LevelObjectManager）からオブジェクトを破棄する
+/// </summary>
+/// <param name="object">破棄するオブジェクト</param>
 void CLevelObjectManager::RemoveObject(ILevelObjectBase* object)
 {
 	//一度に一個しか消せないよ
@@ -66,7 +87,9 @@ void CLevelObjectManager::RemoveObject(ILevelObjectBase* object)
 	}
 }
 
-
+/// <summary>
+/// レベルオブジェクトをすべて消去する
+/// </summary>
 void CLevelObjectManager::AllDeleteLOs()
 {
 	for (int i = 0; i < m_levelObjects.size(); i++)

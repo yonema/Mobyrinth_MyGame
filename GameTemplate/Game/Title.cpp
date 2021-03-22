@@ -89,7 +89,10 @@ bool Title::Start()
 	m_soundSource = NewGO<CSoundSource>(0);
 	//サウンドソースを、waveファイルを指定して初期化する。
 	m_soundSource->Init(L"Assets/sound/univ1195.wav");
+
+	//↓やっぱりこの仕様直す。
 	//これによっていちいちNewGOとInit()を呼ぶ工程を省くことができる。
+	//ちなみに、Play(true)でループ再生で再生した場合
 	m_soundSource->SetStopFlag(true);
 
 
