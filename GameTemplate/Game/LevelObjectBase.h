@@ -132,11 +132,18 @@ public:		//ここのメンバ関数を主に使う
 	}
 
 
-	bool IsHitObject
-	(ILevelObjectBase& lhs, ILevelObjectBase& rhs);
+
+	/// <summary>
+	/// 自身とプレイヤーの当たり判定
+	/// </summary>
+	/// <returns>trueが戻ってきたら当たっている</returns>
 	bool IsHitPlayer();
 
 private:	//privateなメンバ関数
+
+	/// <summary>
+	/// OBBの初期化関数
+	/// </summary>
 	void InitOBB();
 
 public:		//publicなデータメンバ
@@ -174,24 +181,38 @@ public:		//publicなデータメンバ
 		enNotHavePadlock,
 		enBox,
 	};
-protected:
+protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
 	Vector3 m_position = g_vec3Zero;		//場所
 	Quaternion m_rotation = g_quatIdentity;	//回転
 	Vector3 m_scale = g_vec3One;			//拡大
 	Player* m_pPlayer = nullptr;			//プレイヤーのポインタ
-private:
+
+private:	//データメンバ
 	int m_objectType = enEnpty;				//タイプ
 	bool m_isDead = false;					//死んでいるか？
-	COBB m_obb;
+	COBB m_obb;								//OBBの当たり判定
 
 	//デバック用
 	//後で消す
 private:
-	int m_objectNumber = 0;
-	static int objectNumber;
+	int m_objectNumber = 0;		//何番目に作られたオブジェクトか保持する
+	static int objectNumber;	//何番目に作られたオブジェクトかカウントする
 
-	static const int m_dbgOBBNum = 8;
-	CModelRender* m_dbgOBBVert[m_dbgOBBNum];
+	static const int m_dbgOBBNum = 8;			//OBBの頂点の数
+	CModelRender* m_dbgOBBVert[m_dbgOBBNum];	//OBBの頂点を見るためのモデルレンダラー
 	//デバック用ここまで
 };
 
+
+
+//ここからクラス外関数
+
+
+/// <summary>
+/// OBB同士の当たり判定
+/// </summary>
+/// <param name="lhs">レベルオブジェクト1</param>
+/// <param name="rhs">レベルオブジェクト2</param>
+/// <returns>trueが戻ってきたら当たっている</returns>
+bool IsHitObject
+(ILevelObjectBase& lhs, ILevelObjectBase& rhs);

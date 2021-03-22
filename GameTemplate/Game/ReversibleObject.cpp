@@ -105,11 +105,13 @@ void CReversibleObject::SetFrontOrBack(bool frontOrBack)
 /// <param name="activeFlag">有効化フラグ</param>
 void CReversibleObject::SetBothModelActiveFlag(const bool activeFlag)
 {
+	//表裏両方の有効化フラグを設定する
 	m_bothModelactiveFlag = activeFlag;
 
 
 	if (m_bothModelactiveFlag)
 	{
+		//現在の表か裏どちらかを有効化する
 		if (m_modelRender[m_frontOrBack])
 			m_modelRender[m_frontOrBack]->Activate();
 		if (m_modelRender[!m_frontOrBack])
@@ -117,6 +119,7 @@ void CReversibleObject::SetBothModelActiveFlag(const bool activeFlag)
 	}
 	else
 	{
+		//両方を無効化する
 		m_modelRender[enFront]->Deactivate();
 		m_modelRender[enBack]->Deactivate();
 	}
@@ -166,6 +169,7 @@ void CReversibleObject::PureVirtualUpdate()
 	//モデルレンダラーの更新
 	for (int i = 0; i < enFrontAndBackNum; i++)
 	{
+		//モデルレンダラーの場所と回転と拡大
 		m_modelRender[i]->SetPosition(m_position);
 		m_modelRender[i]->SetRotation(m_rotation);
 		m_modelRender[i]->SetScale(m_scale);
@@ -318,16 +322,28 @@ void CReversibleObject::ThrownDown()
 /// </summary>
 void CReversibleObject::Cancel()
 {
+	//プレイヤーの現在の回転を持ってくる
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
+	//UpベクトルにYUpベクトルを入れる
 	Vector3 up = g_vec3Up;
+	//Upベクトルを回す
 	qRot.Apply(up);
+	//Upベクトルを上に伸ばす
 	up.Scale(20.0f);
 
+	//プレイヤーの場所のちょっと上に場所を設定する
 	m_position = m_pPlayer->GetPosition() + up;
+	//プレイヤーがオブジェクトを持っていないようにする
 	m_pPlayer->SetHoldObject(false);
+
+	//ステートをクエリへ移行する
 	m_objectState = enQuery;
 }
 
+/// <summary>
+/// 持っているオブジェクトを横に投げる関数
+/// enQueryへステート（状態）を移行
+/// </summary>
 void CReversibleObject::ThrownSide()
 {
 	//左方向に投げる
