@@ -3,7 +3,7 @@
 
 bool stage_proto02::StartSub()
 {
-	LoadLevel("Assets/level/stage_proto02.tkl");
+	LoadLevel("Assets/level/stage_proto02_2.tkl");
 
 	return true;
 }
