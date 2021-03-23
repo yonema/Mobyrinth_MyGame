@@ -85,29 +85,25 @@ bool Title::Start()
 	//デバック用
 	//後で消す
 
-	//サウンドソースを生成する
-	m_soundSource = NewGO<CSoundSource>(0);
-	//サウンドソースを、waveファイルを指定して初期化する。
-	m_soundSource->Init(L"Assets/sound/univ1195.wav");
-
-	//↓やっぱりこの仕様直す。
-	//これによっていちいちNewGOとInit()を呼ぶ工程を省くことができる。
-	//ちなみに、Play(true)でループ再生で再生した場合
-	m_soundSource->SetStopFlag(true);
+	//サウンドキューを生成する
+	m_soundCue = NewGO<CSoundCue>(0);
+	//サウンドキューを、waveファイルを指定して初期化する。
+	m_soundCue->Init(L"Assets/sound/univ1195.wav");
 
 
-	//BGMのサウンドソースを生成する
-	m_bgmSS = NewGO<CSoundSource>(0);
-	//BGMのサウンドソースを、waveファイルを指定して初期化する。
-	m_bgmSS->Init(L"Assets/sound/03 HelloUnityjs[convert].wav");
+
+	//BGMのサウンドキューを生成する
+	m_bgmSC = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmSC->Init(L"Assets/sound/03 HelloUnityjs[convert].wav");
 	//BGMをループ再生をオンで再生する。
-	m_bgmSS->Play(true);
+	m_bgmSC->Play(true);
 
 	//BGMのボリュームを設定する
 	//「HelloUnity.js」を聞きたかったら
 	//ここをコメントアウトするか
 	//0.0f以外を入れてね
-	m_bgmSS->SetVolume(0.0f);
+	//m_bgmSC->SetVolume(0.0f);
 
 	//デバック用ここまで
 
@@ -131,8 +127,8 @@ Title::~Title()
 	//デバック用
 	//後で消す
 
-	DeleteGO(m_soundSource);
-	DeleteGO(m_bgmSS);
+	DeleteGO(m_soundCue);
+	DeleteGO(m_bgmSC);
 	//デバック用ここまで
 }
 
@@ -159,15 +155,46 @@ void Title::Update()
 
 	if (g_pad[0]->IsTrigger(enButtonStart))
 	{
+		//スタートボタンを入力
+
 		//ワンショット再生
-
-		////サウンドソースを生成する
-		//m_soundSource = NewGO<CSoundSource>(0);
-		////サウンドソースを、waveファイルを指定して初期化する。
-		//m_soundSource->Init(L"Assets/sound/univ1195.wav");
-
 		//サウンドを再生する
-		m_soundSource->Play(true);
+		m_soundCue->Play(false);
+	}
+	else if (g_pad[0]->IsTrigger(enButtonX))
+	{
+		//Xボタンを入力
+		if (m_bgmSC->IsPlaying())
+		{
+			//再生中なら
+			//停止する
+			m_bgmSC->Stop();
+		}
+		else
+		{
+			//再生中でないなら
+			//最初から再生する
+			m_bgmSC->Play(true);
+		}
+	}
+	else if (g_pad[0]->IsTrigger(enButtonY))
+	{
+		//Yボタンを入力
+
+		//停止の検知はIsPlaying()だが、
+		//一時停止の検知はIsPaused()でやる
+		if (m_bgmSC->IsPaused())
+		{
+			//一時停止中なら
+			//途中から再生する
+			m_bgmSC->Play(true);
+		}
+		else
+		{
+			//一時停止中でないなら
+			//一時停止する
+			m_bgmSC->Pause();
+		}
 	}
 
 	//デバック用ここまで
