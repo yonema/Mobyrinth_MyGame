@@ -21,7 +21,8 @@ CSpriteRender::~CSpriteRender()
 /// <param name="w">スプライトの横幅</param>
 /// <param name="h">スプライトの縦幅</param>
 /// <param name="pivot">ピボット（基点）</param>
-void CSpriteRender::Init(const char* texFilePath, float w, float h, const Vector2& pivot)
+void CSpriteRender::Init(const char* texFilePath, float w, float h, const Vector2& pivot,
+	AlphaBlendMode alphaBlendMode)
 {
 	//スプライトの初期化用データ
 	SpriteInitData initData;
@@ -31,6 +32,7 @@ void CSpriteRender::Init(const char* texFilePath, float w, float h, const Vector
 	initData.m_fxFilePath = "Assets/shader/sprite.fx";
 	initData.m_psEntryPoinFunc = "PSMain";
 	initData.m_vsEntryPointFunc = "VSMain";
+	initData.m_alphaBlendMode = alphaBlendMode;
 
 	//スプライトの初期化
 	m_sprite.Init(initData);
