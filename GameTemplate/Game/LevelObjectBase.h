@@ -175,12 +175,17 @@ public:		//publicなデータメンバ
 		enPadlock,
 
 		//障害オブジェクト
+		enObsatcle,
+
 		enBigFire,
 		enWall,
 		enGoal,
 		enNotHavePadlock,
 		enBox,
+
+		enEnd
 	};
+
 protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
 	Vector3 m_position = g_vec3Zero;		//場所
 	Quaternion m_rotation = g_quatIdentity;	//回転

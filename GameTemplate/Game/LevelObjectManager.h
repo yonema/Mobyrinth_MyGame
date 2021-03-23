@@ -151,6 +151,16 @@ public:		//ここのメンバ関数を主に使う
 	}
 
 	/// <summary>
+	/// オブジェクトをすべて検索して
+	/// 自分自身以外で重なっているものを探す。
+	/// </summary>
+	/// <param name="thisObject">自分自身の情報</param>
+	/// <param name="objectType">自分自身の名前</param>
+	/// <returns></returns>
+	bool QueryLevelAllObjects(ILevelObjectBase& thisObject, const int objectType);
+
+
+	/// <summary>
 	/// レベルオブジェクトをすべて消去する
 	/// </summary>
 	void AllDeleteLOs();
@@ -188,4 +198,9 @@ static inline void QueryLOs(const int objectType, std::function<bool(T* lo)> fun
 	//LevelObjectManagerの参照を持ってきて、
 	//クエリのメンバ関数を引っ張ってくる。
 	return CLevelObjectManager::GetInstance()->QueryLevelObjects(objectType, func);
+}
+
+static inline bool QueryAllLOs(ILevelObjectBase& thisObject, const int objectType)
+{
+	return CLevelObjectManager::GetInstance()->QueryLevelAllObjects(thisObject, objectType);
 }

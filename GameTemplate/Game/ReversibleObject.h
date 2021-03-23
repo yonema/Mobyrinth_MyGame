@@ -121,14 +121,23 @@ private:	//privateなメンバ関数
 	/// <summary>
 	/// クエリしてほしいタイミングで呼ばれる関数
 	/// オーバーライドしてほしい関数、QuerySub()はここで呼ばれる。
-	/// enCheckPlayerへステート（状態）を移行
+	/// enOverlapへステート（状態）を移行
 	/// </summary>
 	void Query();
 
 	/// <summary>
 	/// オブジェクトを横に投げる際の、投げる先を計算する関数
 	/// </summary>
-	void CalcTargetPos();
+	//void CalcTargetPos();
+
+	/// <summary>
+	/// 反転オブジェクトが障害オブジェクトの中に埋まっているかの確認
+	/// </summary>
+	void CheckObjectsOverlap();
+
+	void OverlapThrownDown();
+
+	void OverlapThrownSide();
 
 public:		//publicなデータメンバ
 
@@ -159,12 +168,17 @@ private:	//データメンバ
 	{
 		enCheckPlayer,	//プレイヤーに持たれるかどうか調べる
 		enHeldPlayer,	//プレイヤーに持たれている状態
+		enThrownDown,	//持っているオブジェクトを下に投げる関数
 		enCancel,		//持っているオブジェクトをその場に置く
 		enThrownSide,	//持っているオブジェクトを横に投げる関数
-		enThrownDown,	//持っているオブジェクトを下に投げる関数
 		enQuery,		//クエリしてほしいタイミング
+
+		enOverlap,		//障害オブジェクトに重ねっているかの確認
+		enOverlapThrownDown,
+		enOverlapThrownSide
 	};
 	int m_objectState = enCheckPlayer;			//現在のオブジェクトのステート（状態）
+	int m_objectAction = enCheckPlayer;			//オブジェクトに行ったアクションを保存
 
 	
 	//キャラクターの左右の向きを調べるのに使用
@@ -174,5 +188,9 @@ private:	//データメンバ
 		enRight,	//右
 	};
 	int m_playerLeftOrRight = enRight;	//キャラクターの左右の向き
+
+	bool checkOverlap = false;
+
+	Vector3 test = { 0.0f,0.0f,0.0f };
 };
 

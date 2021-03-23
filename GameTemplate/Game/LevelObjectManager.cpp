@@ -97,3 +97,18 @@ void CLevelObjectManager::AllDeleteLOs()
 		DeleteGO(m_levelObjects[i]);
 	}
 }
+
+
+bool CLevelObjectManager::QueryLevelAllObjects(ILevelObjectBase& thisObject, const int objectType)
+{
+	for (auto lo : m_levelObjects) {
+		//自分自身じゃないとき
+		if (lo->GetObjectType() != objectType) {
+			//重なっているオブジェクトがある。
+			if (IsHitObject(thisObject, *lo)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
