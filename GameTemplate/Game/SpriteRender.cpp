@@ -34,6 +34,8 @@ void CSpriteRender::Init(const char* texFilePath, float w, float h, const Vector
 	initData.m_vsEntryPointFunc = "VSMain";
 	initData.m_alphaBlendMode = alphaBlendMode;
 
+	m_pivot = pivot;
+
 	//スプライトの初期化
 	m_sprite.Init(initData);
 

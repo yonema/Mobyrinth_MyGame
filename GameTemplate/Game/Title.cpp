@@ -29,7 +29,7 @@ bool Title::Start()
 
 
 	m_title = NewGO<CSpriteRender>(1);
-	m_title->Init("Assets/sprite/Title.dds", 700.0f, 300.0f, {0.5f,0.5f}, AlphaBlendMode_Trans);
+	m_title->Init("Assets/sprite/Title.dds", 700.0f, 300.0f, {0.0f,0.0f}, AlphaBlendMode_Trans);
 	m_title->SetPosition({ -200.0f,150.0f,0.0f });
 
 
