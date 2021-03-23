@@ -48,13 +48,13 @@ namespace {
 		{ enButtonDown		, VK_NUMPAD2,	'2' 		},
 		{ enButtonLeft		, VK_NUMPAD4,	'4' 		},
 		{ enButtonRight		, VK_NUMPAD6,	'6' 		},
-		{ enButtonA			, 'J',			0xFFFFFFFF	},
-		{ enButtonB			, 'K',			0xFFFFFFFF	},
+		{ enButtonA			, 'Z',			0xFFFFFFFF	}, //元はJ
+		{ enButtonB			, 'X',			0xFFFFFFFF	}, //元はK
 		{ enButtonY			, 'I',			0xFFFFFFFF	},
-		{ enButtonX			, 'L',			0xFFFFFFFF	},
+		{ enButtonX			, 'C',			0xFFFFFFFF	}, //元はL
 		{ enButtonSelect	, VK_SPACE,		0xFFFFFFFF	},
-		{ enButtonStart		, VK_RETURN,	0xFFFFFFFF	},
-		{ enButtonRB1		, '7',			0xFFFFFFFF	},
+		{ enButtonStart		, VK_ESCAPE,	0xFFFFFFFF	},
+		{ enButtonRB1		, VK_SHIFT,		0xFFFFFFFF	}, //元は7
 		{ enButtonRB2		, '8',			0xFFFFFFFF	},
 		{ enButtonRB3		, '9',			0xFFFFFFFF	},
 		{ enButtonLB1		, 'B',			0xFFFFFFFF	},
@@ -196,14 +196,14 @@ void GamePad::Update()
 		m_rStickX = 0.0f;
 		m_rStickY = 0.0f;
 
-		if (GetAsyncKeyState(VK_LEFT)) {
+		if (GetAsyncKeyState('A')) { //元はVK_LEFT
 			m_rStickX = -1.0f;
-		}else if (GetAsyncKeyState(VK_RIGHT)) {
+		}else if (GetAsyncKeyState('D')) { //元はVK_RIGHT
 			m_rStickX = 1.0f;
 		}
-		if (GetAsyncKeyState(VK_UP)) {
+		if (GetAsyncKeyState('W')) { //元はVK_UP
 			m_rStickY = 1.0f;
-		}else if (GetAsyncKeyState(VK_DOWN)) {
+		}else if (GetAsyncKeyState('S')) { //元はVK_DOWN
 			m_rStickY = -1.0f;
 		}
 		//スティックの入力量を正規化。
@@ -213,16 +213,16 @@ void GamePad::Update()
 			m_rStickY /= t;
 		}
 
-		if (GetAsyncKeyState('A')) {
+		if (GetAsyncKeyState(VK_LEFT)) { //元はA
 			m_lStickX = -1.0f;
 		}
-		else if (GetAsyncKeyState('D')) {
+		else if (GetAsyncKeyState(VK_RIGHT)) { //元はD
 			m_lStickX = 1.0f;
 		}
-		if (GetAsyncKeyState('W')) {
+		if (GetAsyncKeyState(VK_UP)) { //元はW
 			m_lStickY = 1.0f;
 		}
-		else if (GetAsyncKeyState('S')) {
+		else if (GetAsyncKeyState(VK_DOWN)) { //元はS
 			m_lStickY = -1.0f;
 		}
 		//スティックの入力量を正規化。
