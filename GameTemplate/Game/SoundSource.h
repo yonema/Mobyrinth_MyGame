@@ -227,23 +227,6 @@ public:
 		return &m_dspSettings;
 	}
 
-	//追加
-
-	/// <summary>
-	/// ループ再生フラグが立っている状態で、ストップフラグが立っていると
-	/// 最後まで再生したらStop()が呼ばれ、再生が止まるようになる。
-	/// これがあることによって、ワンショット再生をするときに、
-	/// いちいちNewGOしてからInit()する、という工程をしなくて済むようになる。
-	/// 一応Flyweightパターンが実装されているから、実行時間はそんなに
-	/// 変わらないけど見た目上の問題と、最初の一回目の再生の軽さのため。
-	/// 
-	/// 欠点としては同じ音を重ねて鳴らすときにちょっと面倒になる。
-	/// </summary>
-	/// <param name="stopFlag">ストップフラグ</param>
-	void SetStopFlag(const bool stopFlag)
-	{
-		m_stopFlag = stopFlag;
-	}
 
 private:	//privateなメンバ関数
 	void InitCommon();
@@ -293,17 +276,4 @@ private:	//データメンバ
 	bool m_isSetPositionFirst = true;					//!<一番最初のsetPosition?
 	bool m_isAvailable = false;							//!<インスタンスが利用可能？
 
-	//追加
-	
-	/// <summary>
-	/// ループ再生フラグが立っている状態で、このm_stopFlagが立っていると
-	/// 最後まで再生したらStop()が呼ばれ、再生が止まるようになる。
-	/// これがあることによって、ワンショット再生をするときに、
-	/// いちいちNewGOしてからInit()する、という工程をしなくて済むようになる。
-	/// 一応Flyweightパターンが実装されているから、実行時間はそんなに
-	/// 変わらないけど見た目上の問題と、最初の一回目の再生の軽さのため。
-	/// 
-	/// 欠点としては同じ音を重ねて鳴らすときにちょっと面倒になる。
-	/// </summary>
-	bool m_stopFlag = false;
 };

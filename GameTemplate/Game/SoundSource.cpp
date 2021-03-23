@@ -253,9 +253,6 @@ void CSoundSource::UpdateOnMemory()
 		m_isPlaying = false;
 		if (m_isLoop) {
 			//ÉãÅ[ÉvÅB
-			if (m_stopFlag)
-				Stop();
-			else
 				Play(m_isLoop);
 		}
 		else {

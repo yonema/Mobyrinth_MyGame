@@ -22,7 +22,9 @@ public:		//ここのメンバ関数を主に使う
 	/// <param name="w">スプライトの横幅</param>
 	/// <param name="h">スプライトの縦幅</param>
 	/// <param name="pivot">ピボット（基点）</param>
-	void Init(const char* texFilePath, float w, float h, const Vector2& pivot = { 0.5f,0.5f });
+	/// <param name="alphaBlendMode">アルファブレンディングモード</param>
+	void Init(const char* texFilePath, float w, float h, const Vector2& pivot = { 0.5f,0.5f },
+		AlphaBlendMode alphaBlendMode = AlphaBlendMode_None);
 
 	/// <summary>
 	/// 場所を設定する。{0.0f,0.0f}が中央
