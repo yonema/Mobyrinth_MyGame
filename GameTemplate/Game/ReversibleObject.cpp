@@ -295,7 +295,7 @@ void CReversibleObject::ThrownDown()
 	dir.Scale(7.0f);
 
 	test = dir;
-	test.y = test.y + 2.0f;
+	test.Scale(0.9f);
 
 	//モデルの場所を下に下げる
 	m_position += dir;
@@ -451,9 +451,13 @@ void CReversibleObject::Query()
 
 void CReversibleObject::CheckObjectsOverlap()
 {
-	checkOverlap = QueryAllLOs(*this, GetObjectType());
+	if (m_flagCheckOverlap == false) {
+		return;
+	}
 
-	if (checkOverlap == true) {
+	m_checkOverlap = QueryAllLOs(*this, GetObjectType());
+
+	if (m_checkOverlap == true) {
 		switch (m_objectAction)
 		{
 		case enThrownDown:

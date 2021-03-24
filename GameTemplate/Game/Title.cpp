@@ -11,27 +11,7 @@ bool Title::Start()
 	m_stageTitle->SetStartUpStartDirecting(false);
 	m_stageTitle->SetTitlePlayer(true);
 
-	//フォントレンダラーの生成と初期化
-	m_titleFR = NewGO<CFontRender>(0);
-	m_titleFR->SetPostRenderFlag(true);
-	m_titleFR->Init(L"メビリンス",
-		{ -200.0f,300.0f },
-		{ 0.5f,0.5f,1.0f,1.0f },
-		0.0f,
-		3.0f
-	);
-	m_pushAButtonFR = NewGO<CFontRender>(0);
-	m_pushAButtonFR->SetPostRenderFlag(true);
-	m_pushAButtonFR->Init(L"Aボタンを押してね。",
-		{ -150.0f,0.0f },
-		{ 1.0f,0.0f,0.0f,1.0f }
-	);
 
-
-	m_title = NewGO<CSpriteRender>(1);
-	m_title->Init("Assets/sprite/Title.dds", 700.0f, 300.0f, {0.0f,0.0f}, AlphaBlendMode_Trans);
-	m_title->SetPosition({ -200.0f,150.0f,0.0f });
-	//m_title->SetScale({ 0.1f,0.1f,0.1f });
 
 
 	//フォントの配置
@@ -68,12 +48,28 @@ bool Title::Start()
 	m_arrow->Deactivate();
 
 
-	//スプライトのレベルを初期化
-	m_level2D.Init("Assets/level2D/test2d.casl", [&](Level2DObjectData& objdata)
+
+
+	//タイトル画面の表示
+	m_level2D.Init("Assets/level2D/Title.casl", [&](Level2DObjectData& objdata)
 		{
 			//名前が一致でフックする
-			if (objdata.EqualObjectName("title"))
+			if (objdata.EqualObjectName("Title"))
 			{
+				m_title = NewGO<CSpriteRender>(1);
+				m_title->Init("Assets/level2D/Title.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_title->SetScale(objdata.scale);
+				m_title->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//名前が一致でフックする
+			if (objdata.EqualObjectName("Press_A_Button"))
+			{
+				m_pressAButton = NewGO<CSpriteRender>(1);
+				m_pressAButton->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_pressAButton->SetScale(objdata.scale);
+				m_pressAButton->SetPosition(objdata.position);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -117,15 +113,15 @@ Title::~Title()
 {
 	DeleteGO(m_stageTitle);
 
-	DeleteGO(m_titleFR);
-	DeleteGO(m_pushAButtonFR);
 	for (int i = 0; i < enStageNum; i++)
 	{
 		DeleteGO(m_stageName[i]);
 	}
 	DeleteGO(m_arrow);
 
+	//画像データ
 	DeleteGO(m_title);
+	DeleteGO(m_pressAButton);
 
 	//デバック用
 	//後で消す
@@ -224,8 +220,8 @@ void Title::TitleScreen()
 		m_stageState = enStageSelect;
 
 		//タイトル画面用のフォントレンダラーを無効化して非表示にする
-		m_titleFR->Deactivate();
-		m_pushAButtonFR->Deactivate();
+
+
 
 		//ステージセレクト用のフォントレンダラーを有効化して表示できるようにする
 		for (int i = 0; i < enStageNum; i++)
@@ -311,8 +307,10 @@ void Title::StageSelect()
 		//ステージのステートをタイトル画面にする
 		m_stageState = enTitleScreen;
 		//タイトル画面用のフォントレンダラーを有効化して表示できるようにする
-		m_titleFR->Activate();
-		m_pushAButtonFR->Activate();
+
+
+
+
 		//ステージセレクトのフォントレンダラーを無効化して表示できないようにする
 		for (int i = 0; i < enStageNum; i++)
 		{

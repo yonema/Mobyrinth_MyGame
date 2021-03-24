@@ -66,6 +66,15 @@ public:		//ここのメンバ関数を主に使う
 	/// <param name="frontOrBack">enFrontかenBackを入れる</param>
 	void SetFrontOrBack(const bool frontOrBack);
 
+	/// <summary>
+	/// オブジェクトが重なっているかを確認する処理を動かすか確認するフラグの値を変更
+	/// </summary>
+	/// <param name="b">trueかfalseを入れる</param>
+	void SetFlagCheckOverlap(const bool b)
+	{
+		m_flagCheckOverlap = b;
+	}
+
 
 	/// <summary>
 	///	表か裏かを取得する
@@ -189,8 +198,10 @@ private:	//データメンバ
 	};
 	int m_playerLeftOrRight = enRight;	//キャラクターの左右の向き
 
-	bool checkOverlap = false;
+	bool m_checkOverlap = false;
 
 	Vector3 test = { 0.0f,0.0f,0.0f };
+
+	bool m_flagCheckOverlap = true;
 };
 

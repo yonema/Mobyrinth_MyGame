@@ -30,9 +30,11 @@ void ROrunning_stop::QuerySub()
 					else
 					{
 						//中身がなかったら、
-						//そのまま自信を入れる
+						//そのまま自身を入れる
 						wall->SetRun_stop(this);
 					}
+					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
+					SetFlagCheckOverlap(false);
 				}
 				return true;
 			}
@@ -56,9 +58,11 @@ void ROrunning_stop::QuerySub()
 					else
 					{
 						//中身がなかったら、
-						//そのまま自信を入れる
+						//そのまま自身を入れる
 						wall->SetRun_stop(this);
 					}
+					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
+					SetFlagCheckOverlap(false);
 				}
 				return true;
 			}
