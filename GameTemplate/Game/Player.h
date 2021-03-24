@@ -4,6 +4,7 @@
 #include "ModelRender.h"
 #include "Mobius.h"
 #include "OBB.h"
+#include "MyCharacterController.h"
 
 class ILevelObjectBase;
 
@@ -40,7 +41,7 @@ public://publicなメンバ関数
 	/// プレイヤーの座標を取得
 	/// </summary>
 	/// <returns>場所</returns>
-	const Vector3 GetPosition()const
+	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
@@ -63,7 +64,7 @@ public://publicなメンバ関数
 	/// 補完済みの最終的なウェイポイントの回転を取得
 	/// </summary>
 	/// <returns>補完済みの最終的なウェイポイントの回転</returns>
-	const Quaternion GetFinalWPRot()const
+	const Quaternion& GetFinalWPRot()const
 	{
 		return m_finalWPRot;
 	}
@@ -102,7 +103,7 @@ public://publicなメンバ関数
 	/// プレイヤーの現在のUpベクトルを得る
 	/// </summary>
 	/// <returns>Upベクトル</returns>
-	const Vector3 GetUpVec()const
+	const Vector3& GetUpVec()const
 	{
 		return m_upVec;
 	}
@@ -130,7 +131,7 @@ public://publicなメンバ関数
 	/// </summary>
 	/// <param name="index">ウェイポイントの番号</param>
 	/// <returns>ウェイポイントの場所</returns>
-	const Vector3 GerWayPointPos(const int index)
+	const Vector3& GerWayPointPos(const int index)
 	{
 		return (*m_wayPointPos)[index];
 	}
@@ -150,7 +151,7 @@ public://publicなメンバ関数
 	/// <returns>OBBの参照</returns>
 	COBB& GetOBB()
 	{
-		return m_obb;
+		return m_myCharaCon.GetOBB();
 	}
 
 
@@ -217,7 +218,8 @@ private:	//データメンバ
 	float m_padLStickXF = 0.0f;				//パッドの左スティックのX軸の入力情報
 
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
-	COBB m_obb;								//OBBの当たり判定
+	CMyCharacterController m_myCharaCon;	//myキャラクターコントローラー
+	//COBB m_obb;								//OBBの当たり判定
 	Mobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
 
 	/// <summary>

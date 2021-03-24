@@ -292,7 +292,9 @@
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="MapChip2D.cpp" />
+    <ClCompile Include="MyCharacterController.cpp" />
     <ClCompile Include="OBB.cpp" />
+    <ClCompile Include="OBBWorld.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
@@ -406,8 +408,10 @@
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="Level2D.h" />
     <ClInclude Include="MapChip2D.h" />
+    <ClInclude Include="MyCharacterController.h" />
     <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="OBB.h" />
+    <ClInclude Include="OBBWorld.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />

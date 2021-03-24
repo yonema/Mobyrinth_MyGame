@@ -32,8 +32,6 @@ bool Player::Start()
 	m_mobius = FindGO<Mobius>("Mobius");
 
 
-
-
 	//初期化処理
 	Init();
 
@@ -50,7 +48,7 @@ bool Player::Start()
 	//ピボットは底面の中央
 	initData.pivot = { 0.5f,0.0f,0.5f };
 	//OBBを初期化する
-	m_obb.Init(initData);
+	m_myCharaCon.Init(initData);
 
 
 	//デバック用
@@ -65,9 +63,9 @@ bool Player::Start()
 	m_dbgModel3->Init("Assets/modelData/yuka.tkm");
 	
 	//OBBの頂点の座標の配列の先頭アドレスを取得
-	Vector3* vertPos = m_obb.GetBoxVertex();
+	Vector3* vertPos = m_myCharaCon.GetOBB().GetBoxVertex();
 	//OBBの頂点の数だけ繰り返す
-	for (int i = 0; i < m_obb.GetBoxVertexNum(); i++)
+	for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
 	{
 		//OBBの頂点の座標を見るためのモデルの生成
 		m_dbgObbModel[i] = NewGO<CModelRender>(0);
@@ -90,7 +88,7 @@ Player::~Player()
 	DeleteGO(m_dbgModel);
 	DeleteGO(m_dbgModel2);
 	DeleteGO(m_dbgModel3);
-	for (int i = 0; i < m_obb.GetBoxVertexNum(); i++)
+	for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
 	{
 		DeleteGO(m_dbgObbModel[i]);
 	}
@@ -400,8 +398,8 @@ void Player::GameMove()
 	Rotation();
 
 	//道の上の座標を移動させる
-	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
-
+	m_onWayPosition = m_myCharaCon.Execute(m_moveSpeed, 1.0 / 60.0f);
+	//m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
 	//ステージ（メビウスの輪）の上に乗る処理
 	GetOnStage();
 
@@ -409,8 +407,8 @@ void Player::GameMove()
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	//OBBの場所と回転を設定
-	m_obb.SetRotation(m_finalWPRot);
-	m_obb.SetPosition(m_position);
+	m_myCharaCon.SetRotation(m_finalWPRot);
+	//m_myCharaCon.GetOBB().SetPosition(m_position);
 
 
 
@@ -418,9 +416,9 @@ void Player::GameMove()
 	//後で消す
 
 	//OBBの頂点の座標の配列の先頭アドレスを取得
-	Vector3* boxVertex = m_obb.GetBoxVertex();
+	Vector3* boxVertex = m_myCharaCon.GetOBB().GetBoxVertex();
 	//OBBの頂点の数だけ繰り返す
-	for (int i = 0; i < m_obb.GetBoxVertexNum(); i++)
+	for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
 	{
 		//OBBの頂点を見るためのモデルの場所を設定
 		m_dbgObbModel[i]->SetPosition(boxVertex[i]);

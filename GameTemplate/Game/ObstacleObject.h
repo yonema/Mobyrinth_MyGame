@@ -1,6 +1,8 @@
 #pragma once
 #include "LevelObjectBase.h"
 #include "ModelRender.h"
+#include "OBBWorld.h"
+
 
 /// <summary>
 /// オブステークルオブジェクト（障害オブジェクト）（読み方あってる？）
