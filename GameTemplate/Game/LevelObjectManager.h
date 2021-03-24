@@ -12,8 +12,8 @@ class ILevelObjectBase;
 class CLevelObjectManager
 {
 private:	//自動で呼ばれるメンバ関数
-	CLevelObjectManager();		//コンストラクタ
-	~CLevelObjectManager();		//デストラクタ
+	CLevelObjectManager();		//コンストラクタをprivateに隠す
+	~CLevelObjectManager();		//デストラクタをprivateに隠す
 
 private:	//staticなデータメンバ
 	static CLevelObjectManager* m_instance;	//自身の唯一のインスタンスを持つ変数

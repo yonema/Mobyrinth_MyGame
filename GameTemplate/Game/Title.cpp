@@ -13,6 +13,7 @@ bool Title::Start()
 
 
 
+
 	//フォントの配置
 	const float leftSide = -100.0f;		//左端
 	const float UpSide = 300.0f;		//上端

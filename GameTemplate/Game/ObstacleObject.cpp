@@ -4,6 +4,10 @@
 //スタート関数
 bool CObstacleObject::PureVirtualStart()
 {
+	//OBBWorldに自身のOBBを登録する
+	//これによってPlayerが通れなくなる
+	COBBWorld::GetInstance()->AddOBB(&GetOBB());
+
 	//モデルの回転を、現在の場所とイイ感じに合わせる
 	CheckWayPoint();
 
@@ -17,6 +21,9 @@ CObstacleObject::~CObstacleObject()
 {
 	//LevelObjectManagerにこのオブジェクトは消すよ！って伝える。
 	Delete();
+
+	//OBBWorldに自身のOBBの登録を消去させる
+	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
 
 	//モデルの消去
 	DeleteGO(m_modelRender);

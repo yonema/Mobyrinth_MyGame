@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "OBB.h"
 
+
 //コンストラクタ
 COBB::COBB()
 {
@@ -19,11 +20,37 @@ COBB::COBB()
 }
 
 /// <summary>
+/// OBBのインデックスバッファの
+/// 構造体のコンストラクタ
+/// ここでベクターを初期化する
+/// </summary>
+SOBBIndexBuffer::SOBBIndexBuffer()
+{
+	//インデックスバッファのサイズ
+	const int indexSize = 12;
+	//インデックスバッファの初期化
+	m_indexBuffer.resize(indexSize);
+	m_indexBuffer[0] = { 0, 1, 2 };
+	m_indexBuffer[1] = { 3, 2, 1 };
+	m_indexBuffer[2] = { 0, 4, 1 };
+	m_indexBuffer[3] = { 5, 1, 4 };
+	m_indexBuffer[4] = { 5, 4, 7 };
+	m_indexBuffer[5] = { 6, 7, 4 };
+	m_indexBuffer[6] = { 6, 7, 2 };
+	m_indexBuffer[7] = { 3, 2, 7 };
+	m_indexBuffer[8] = { 1, 5, 3 };
+	m_indexBuffer[9] = { 7, 3, 5 };
+	m_indexBuffer[10] = { 4, 0, 6 };
+	m_indexBuffer[11] = { 2, 6, 0 };
+}
+
+
+/// <summary>
 /// 初期化関数。
 /// 最初に呼んでね。
 /// </summary>
 /// <param name="initData">COBBの初期化用の構造体</param>
-void COBB::Init(SInitOBBData& initData)
+void COBB::Init(const SInitOBBData& initData)
 {
 	//各軸の方向ベクトルの長さを設定
 	m_directionLength[enLocalX] = initData.width / 2;
@@ -162,7 +189,7 @@ void COBB::Rotating(const Quaternion& rot)
 /// <param name="obb1">片方のOBB</param>
 /// <param name="obb2">もう片方のOBB</param>
 /// <returns>当たったかどうか</returns>
-const bool CollisionOBBs(COBB& obb1, COBB& obb2)
+const bool CollisionOBBs(const COBB& obb1, const COBB& obb2)
 {
 	///
 	///
@@ -186,7 +213,6 @@ const bool CollisionOBBs(COBB& obb1, COBB& obb2)
 	///		・他方のOBBのそれぞれの単位方向ベクトル	：3本
 	///		・双方の方向ベクトルに垂直な分離軸		：3*3=9本
 	/// 
-
 
 
 	//obb1の単位方向ベクトル（正規化済み）

@@ -365,6 +365,12 @@
     <ClCompile Include="SoundCue.cpp">
       <Filter>MyCode\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="OBBWorld.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCharacterController.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -687,6 +693,12 @@
     </ClInclude>
     <ClInclude Include="SoundCue.h">
       <Filter>MyCode\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="OBBWorld.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCharacterController.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

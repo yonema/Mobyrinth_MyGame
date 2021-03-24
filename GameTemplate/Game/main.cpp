@@ -4,6 +4,7 @@
 #include "LightManager.h"
 #include "LevelObjectManager.h"
 #include "SoundEngine.h"
+#include "OBBWorld.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -25,6 +26,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CLightManager::CreateInstance();
 	CLevelObjectManager::CreateInstance();
 	CSoundEngine::CreateInstance();
+	COBBWorld::CreateInstance();
 
 	NewGO<Game>(0, "Game");
 
@@ -57,6 +59,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GameObjectManager::DeleteInstance();
 	CLevelObjectManager::DeleteInstance();
 	CSoundEngine::DeleteInstance();
+	COBBWorld::DeleteInstance();
 
 
 	return 0;
