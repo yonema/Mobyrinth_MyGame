@@ -16,6 +16,9 @@ bool OOgoal::StartSub()
 	m_fontRender->SetPostRenderFlag(true);
 	m_fontRender->Deactivate();
 
+	//OBBWorld‚ÉŽ©g‚ÌOBB‚Ì“o˜^‚ðÁ‹Ž‚³‚¹‚é
+	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
+
 	return true;
 }
 

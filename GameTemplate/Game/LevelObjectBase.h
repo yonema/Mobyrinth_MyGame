@@ -44,7 +44,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 場所を取得する
 	/// </summary>
 	/// <returns>場所</returns>
-	const Vector3 GetPosition()const
+	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
@@ -62,7 +62,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 回転を取得する
 	/// </summary>
 	/// <returns>回転</returns>
-	const Quaternion GetRotation()const
+	const Quaternion& GetRotation()const
 	{
 		return m_rotation;
 	}
@@ -80,7 +80,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 拡大を取得
 	/// </summary>
 	/// <returns>拡大</returns>
-	const Vector3 GetScale()const 
+	const Vector3& GetScale()const 
 	{
 		return m_scale;
 	}
