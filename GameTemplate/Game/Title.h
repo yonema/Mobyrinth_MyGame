@@ -68,13 +68,16 @@ private:	//データメンバ
 														//（連続入力防止用）
 	CLevel2D m_level2D;									//スプライト用のレベルクラス
 	std::list<CSpriteRender*> m_spriteRenders;
-	CSpriteRender* m_title = nullptr;
 
 private: //背景
 	Mobius* m_mobius = nullptr;
 	Player* m_player = nullptr;
 
 	stage_title* m_stageTitle = nullptr;
+
+private: //画像データ
+	CSpriteRender* m_title = nullptr;
+	CSpriteRender* m_pressAButton = nullptr;
 
 
 	//デバック用

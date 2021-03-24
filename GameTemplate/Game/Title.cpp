@@ -28,9 +28,9 @@ bool Title::Start()
 	);
 
 
-	m_title = NewGO<CSpriteRender>(1);
-	m_title->Init("Assets/sprite/Title.dds", 700.0f, 300.0f, {0.0f,0.0f}, AlphaBlendMode_Trans);
-	m_title->SetPosition({ -200.0f,150.0f,0.0f });
+	//m_title = NewGO<CSpriteRender>(1);
+	//m_title->Init("Assets/sprite/Title.dds", 700.0f, 300.0f, {0.0f,0.0f}, AlphaBlendMode_Trans);
+	//m_title->SetPosition({ -200.0f,150.0f,0.0f });
 
 
 	//フォントの配置
@@ -67,12 +67,39 @@ bool Title::Start()
 	m_arrow->Deactivate();
 
 
-	//スプライトのレベルを初期化
-	m_level2D.Init("Assets/level2D/test2d.casl", [&](Level2DObjectData& objdata)
+	////スプライトのレベルを初期化
+	//m_level2D.Init("Assets/level2D/test2d.casl", [&](Level2DObjectData& objdata)
+	//	{
+	//		//名前が一致でフックする
+	//		if (objdata.EqualObjectName("title"))
+	//		{
+	//			//フックしたらtrueを戻す
+	//			return true;
+	//		}
+	//		//そのまま表示するからfalseを戻す
+	//		return false;
+	//	});
+
+	//タイトル画面の表示
+	m_level2D.Init("Assets/level2D/Title.casl", [&](Level2DObjectData& objdata)
 		{
 			//名前が一致でフックする
-			if (objdata.EqualObjectName("title"))
+			if (objdata.EqualObjectName("Title"))
 			{
+				m_title = NewGO<CSpriteRender>(1);
+				m_title->Init("Assets/level2D/Title.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_title->SetScale(objdata.scale);
+				m_title->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//名前が一致でフックする
+			if (objdata.EqualObjectName("Press_A_Button"))
+			{
+				m_pressAButton = NewGO<CSpriteRender>(1);
+				m_pressAButton->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_pressAButton->SetScale(objdata.scale);
+				m_pressAButton->SetPosition(objdata.position);
 				//フックしたらtrueを戻す
 				return true;
 			}
