@@ -175,7 +175,7 @@ public:
 	/*!
 	* @brief	‰¹Œ¹‚ÌˆÚ“®‘¬“x‚ğæ“¾B
 	*/
-	Vector3 GetVelocity() const
+	const Vector3& GetVelocity() const
 	{
 		return m_velocity;
 	}

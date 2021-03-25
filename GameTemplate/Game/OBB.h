@@ -11,6 +11,27 @@ struct SInitOBBData
 	Vector3 pivot = { 0.5f, 0.5f, 0.5f };	//ピボット（基点）
 };
 
+//int型が三つ入る構造体
+struct int3
+{
+	int x = 0;
+	int y = 0;
+	int z = 0;
+};
+
+//OBBのインデックスバッファの構造体
+struct SOBBIndexBuffer
+{
+	//OBBのインデックスバッファのベクター
+	std::vector<int3> m_indexBuffer;
+	
+	/// <summary>
+	/// コンストラクタ
+	/// ここでベクターを初期化する
+	/// </summary>
+	SOBBIndexBuffer();
+};
+
 
 /// <summary>
 /// OBBクラス（Oriented Bounding Box）
@@ -28,7 +49,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 最初に呼んでね。
 	/// </summary>
 	/// <param name="initData">COBBの初期化用の構造体</param>
-	void Init(SInitOBBData& initData);
+	void Init(const SInitOBBData& initData);
 
 	/// <summary>
 	/// 場所の設定
@@ -45,7 +66,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 場所の取得
 	/// </summary>
 	/// <returns>場所</returns>
-	const Vector3 GetPosition()const
+	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
@@ -54,7 +75,7 @@ public:		//ここのメンバ関数を主に使う
 	/// センターポジションの取得
 	/// </summary>
 	/// <returns>センターポジション</returns>
-	const Vector3 GetCenterPosition()const
+	const Vector3& GetCenterPosition()const
 	{
 		return m_centerPosition;
 	}
@@ -114,7 +135,7 @@ public:		//ここのメンバ関数を主に使う
 	/// </summary>
 	/// <param name="localAxis">戻したい単位方向ベクトルのローカル軸</param>
 	/// <returns>単位方向ベクトル</returns>
-	const Vector3 GetNormalDirection(const int localAxis)const
+	const Vector3& GetNormalDirection(const int localAxis)const
 	{
 		return m_normalDirection[localAxis];
 	}
@@ -128,17 +149,21 @@ public:		//ここのメンバ関数を主に使う
 		return m_directionLength[localAxis];
 	}
 
+
 private:	//privateなメンバ関数
 	/// <summary>
 	/// 単位方向ベクトルを回す関数
 	/// </summary>
 	/// <param name="rot">回転</param>
 	void Rotating(const Quaternion& rot);
+
 	/// <summary>
 	/// ピボットとポジションをもとに、
 	/// センターポジションを計算する。
 	/// </summary>
 	void CalcCenterPosition();
+
+
 public:		//publicなデータメンバ
 	//オブジェクトのローカルな軸
 	enum ENLocalAxis
@@ -156,6 +181,8 @@ private:	//データメンバ
 	Vector3 m_normalDirection[enLocalAxisNum];	//各軸の単位方向ベクトル
 	float m_directionLength[enLocalAxisNum];	//各軸の方向ベクトルの長さ
 
+
+private:	//staticなデータメンバ
 	static const int m_boxVertexNum = 8;		//ボックスの頂点の数
 };
 
@@ -170,7 +197,7 @@ private:	//データメンバ
 /// <param name="obb1">片方のOBB</param>
 /// <param name="obb2">もう片方のOBB</param>
 /// <returns>当たったかどうか</returns>
-const bool CollisionOBBs(COBB& obb1, COBB& obb2);
+const bool CollisionOBBs(const COBB& obb1, const COBB& obb2);
 
 /// <summary>
 /// 射影線分を計算する関数
