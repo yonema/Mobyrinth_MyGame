@@ -1,0 +1,5 @@
+4
+6,cursor,43,../../GameTemplate/Game/Resource/cursor.png,318.75,170.0,1024,512,10,0.22211475023210964,0.22211475023210964,10,cursor.dds
+15,Press_A_Button1,51,../../GameTemplate/Game/Resource/Press_A_Button.png,18.75,173.75,1024,512,10,0.6707207489603577,0.6707207489603577,18,Press_A_Button.dds
+15,Press_A_Button2,51,../../GameTemplate/Game/Resource/Press_A_Button.png,16.25,-5.0,1024,512,10,0.6536446438646928,0.6536446438646928,18,Press_A_Button.dds
+15,Press_A_Button3,51,../../GameTemplate/Game/Resource/Press_A_Button.png,20.0,-192.5,1024,512,10,0.6279588382277869,0.6279588382277869,18,Press_A_Button.dds

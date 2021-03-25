@@ -51,7 +51,6 @@ private:	//データメンバ
 	/// </summary>
 	enum EnStageList
 	{
-		enTitle,
 		enStage_kari,
 		enStageProto01,
 		enStageProto02,
@@ -60,11 +59,12 @@ private:	//データメンバ
 
 	int m_stageSelectState = enStage_kari;	//現在のステージセレクトのステート
 
-	CFontRender* m_stageName[enStageNum] = { nullptr };	//フォントレンダー
+	//CFontRender* m_stageName[enStageNum] = { nullptr };	//フォントレンダー
 	CFontRender* m_arrow = nullptr;						//フォントレンダー
 	bool m_buttonFlag = true;							//ボタンを押すことができるか？
 														//（連続入力防止用）
 	CLevel2D m_level2D;									//スプライト用のレベルクラス
+	//CLevel2D m_title2D;
 	std::list<CSpriteRender*> m_spriteRenders;
 
 private: //背景
@@ -76,6 +76,8 @@ private: //背景
 private: //画像データ
 	CSpriteRender* m_title = nullptr;
 	CSpriteRender* m_pressAButton = nullptr;
+	CSpriteRender* m_cursor = nullptr;
+	CSpriteRender* m_stageName[enStageNum] = { nullptr };
 
 
 	//デバック用

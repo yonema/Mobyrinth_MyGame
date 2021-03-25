@@ -19,8 +19,57 @@ bool Title::Start()
 	const float DownSide = -300.0f;		//下端
 	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
 
+
+	m_level2D.Init("Assets/level2D/Stage_selection.casl", [&](Level2DObjectData& objdata)
+		{
+			//名前が一致でフックする
+			//カーソル
+			if (objdata.EqualObjectName("cursor"))
+			{
+				m_cursor = NewGO<CSpriteRender>(1);
+				m_cursor->Init("Assets/level2D/cursor.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_cursor->SetScale(objdata.scale);
+				m_cursor->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//stage_kari
+			if (objdata.EqualObjectName("Press_A_Button1"))
+			{
+				m_stageName[enStage_kari] = NewGO<CSpriteRender>(1);
+				m_stageName[enStage_kari]->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_stageName[enStage_kari]->SetScale(objdata.scale);
+				m_stageName[enStage_kari]->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//stage_proto01
+			if (objdata.EqualObjectName("Press_A_Button2"))
+			{
+				m_stageName[enStageProto01] = NewGO<CSpriteRender>(1);
+				m_stageName[enStageProto01]->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_stageName[enStageProto01]->SetScale(objdata.scale);
+				m_stageName[enStageProto01]->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//stage_proto02
+			if (objdata.EqualObjectName("Press_A_Button3"))
+			{
+				m_stageName[enStageProto02] = NewGO<CSpriteRender>(1);
+				m_stageName[enStageProto02]->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_stageName[enStageProto02]->SetScale(objdata.scale);
+				m_stageName[enStageProto02]->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			
+
+			//そのまま表示するからfalseを戻す
+			return false;
+		});
 	//フォントレンダラーの生成と初期化
-	for (int i = 0; i < enStageNum; i++)
+	/*for (int i = 0; i < enStageNum; i++)
 	{
 		m_stageName[i] = NewGO<CFontRender>(0);
 		m_stageName[i]->SetPostRenderFlag(true);
@@ -33,18 +82,20 @@ bool Title::Start()
 	);
 	m_stageName[enStageProto02]->Init(L"stage_proto02",
 		{ leftSide ,UpSide + BetweenLine * enStageProto02 }
-	);
+	);*/
 
 	//最初はステージ名は表示しないから、無効化して非表示にする
 	for (int i = 0; i < enStageNum; i++)
 	{
 		m_stageName[i]->Deactivate();
 	}
-	m_arrow = NewGO<CFontRender>(0);
-	m_arrow->Init(L"->",
-		{ leftSide - 50.0f,UpSide - 5.0f }
-	);
-	m_arrow->Deactivate();
+	//m_arrow = NewGO<CFontRender>(0);
+	//m_arrow->Init(L"->",
+	//	{ leftSide - 50.0f,UpSide - 5.0f }
+	//);
+	//m_arrow->Deactivate();
+
+	m_cursor->Deactivate();
 
 
 
@@ -116,11 +167,12 @@ Title::~Title()
 	{
 		DeleteGO(m_stageName[i]);
 	}
-	DeleteGO(m_arrow);
+	//DeleteGO(m_arrow);
 
 	//画像データ
 	DeleteGO(m_title);
 	DeleteGO(m_pressAButton);
+	DeleteGO(m_cursor);
 
 	//デバック用
 	//後で消す
@@ -218,16 +270,18 @@ void Title::TitleScreen()
 		//ステージのステート（状態）をステージセレクトに移行する。
 		m_stageState = enStageSelect;
 
-		//タイトル画面用のフォントレンダラーを無効化して非表示にする
+		//タイトル画面用のスプライトレンダラーを無効化して非表示にする
+		m_title->Deactivate();
+		m_pressAButton->Deactivate();
 
 
-
-		//ステージセレクト用のフォントレンダラーを有効化して表示できるようにする
+		//ステージセレクト用のスプライトレンダラーを有効化して表示できるようにする
 		for (int i = 0; i < enStageNum; i++)
 		{
 			m_stageName[i]->Activate();
 		}
-		m_arrow->Activate();
+		//m_arrow->Activate();
+		m_cursor->Activate();
 	}
 
 }
@@ -315,7 +369,8 @@ void Title::StageSelect()
 		{
 			m_stageName[i]->Deactivate();
 		}
-		m_arrow->Deactivate();
+		//m_arrow->Deactivate();
+		m_cursor->Deactivate();
 	}
 
 
@@ -325,5 +380,5 @@ void Title::StageSelect()
 	const float DownSide = -300.0f;		//下端
 	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
 	//カーソル用のフォントレンダラーの場所を設定する
-	m_arrow->SetPosition({ leftSide - 50.0f , UpSide + BetweenLine * m_stageSelectState - 5.0f });
+	//m_arrow->SetPosition({ leftSide - 50.0f , UpSide + BetweenLine * m_stageSelectState - 5.0f });
 }
