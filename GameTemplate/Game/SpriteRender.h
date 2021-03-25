@@ -51,6 +51,9 @@ public:		//ここのメンバ関数を主に使う
 	void SetScale(const Vector3& scale)
 	{
 		m_scale = scale;
+		//座標系の関係で左右反転するから
+		//xの拡大を反転させる
+		m_scale.x *= -1.0f;
 	}
 
 	/// <summary>
@@ -82,7 +85,9 @@ private:	//データメンバ
 	
 	Vector3 m_position = { 100.0f,0.0f,0.0f };	//場所
 	Quaternion m_rotation = g_quatIdentity;		//回転
-	Vector3 m_scale = g_vec3One;				//拡大
+	//座標系の関係で左右反転するから
+	//xの拡大を反転させる
+	Vector3 m_scale = { -1.0f,1.0f,1.0f };		//拡大
 	Vector2 m_pivot = { 0.5f,0.5f };			//ピボット（基点）
 	
 	bool m_postRenderFlag = false;				//PostRenderで描画するかどうか？

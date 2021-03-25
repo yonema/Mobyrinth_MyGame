@@ -1,18 +1,30 @@
 #include "stdafx.h"
 #include "OBBWorld.h"
 
+//唯一のインスタンスの初期化
 COBBWorld* COBBWorld::m_instance = nullptr;
 
+/// <summary>
+/// OBBをOBBWorldに登録する関数
+/// </summary>
+/// <param name="obb">登録するOBB</param>
 void COBBWorld::AddOBB(COBB* obb)
 {
+	//引数のOBBを登録する
 	m_worldOBBs.push_back(obb);
 }
 
+/// <summary>
+/// OBBWorldに登録してあるOBBを解除する関数
+/// </summary>
+/// <param name="obb">登録するOBB</param>
 void COBBWorld::RemoveOBB(COBB* obb)
 {
+	//登録してあるOBB達を全部調べる
 	std::vector<COBB*>::iterator itr;
 	for (itr = m_worldOBBs.begin(); itr != m_worldOBBs.end(); itr++)
 	{
+		//引数のOBBと一致するOBBの登録を解除する
 		if ((*itr) == obb)
 		{
 			m_worldOBBs.erase(itr);
@@ -21,35 +33,64 @@ void COBBWorld::RemoveOBB(COBB* obb)
 	}
 }
 
-COBB* COBBWorld::HitAllOBB(const COBB& myOBB, COBB* hitOBB)
+/// <summary>
+/// OBBWorldに登録してあるすべてのOBBを調べて、
+/// 第一引数のOBBと衝突している一番近いOBBをを
+/// 戻す。
+/// どのOBBとも衝突していなかったら、nullptrが
+/// 戻って来る。
+/// </summary>
+/// <param name="myOBB">自身のOBB</param>
+/// <returns>衝突しているOBBか、nullptr</returns>
+COBB* COBBWorld::HitAllOBB(const COBB& myOBB)
 {
+	//一番近いOBBを探すための距離を入れる変数
 	float dist = FLT_MAX;
-	bool isHit = false;
-	hitOBB = nullptr;
+
+	//衝突したOBBを保持しておくOBBのポインタ
 	COBB* pOBB = nullptr;
+
+	//OBBWorldに登録してあるOBBを一つずつ取り出して、調べる
 	for (auto OBB : m_worldOBBs)
 	{
+		//引数で渡された自身のOBBと、OBBWorldから取り出したOBBとの
+		//衝突判定
 		if (CollisionOBBs(myOBB, *OBB))
 		{
+			//衝突している
 
+			//自身のOBBと、衝突したOBBとの間のベクトル
 			Vector3 lenVec = myOBB.GetPosition() - OBB->GetPosition();
+			//自身のOBBと、衝突したOBBとの間の距離
 			float len = lenVec.Length();
+
+			//距離が一番近いOBBを衝突したOBBとして保持しておく
 			if (len <= dist)
 			{
-				isHit = true;
-				dist = len;
-				hitOBB = OBB;
+				//OBBを保持して
 				pOBB = OBB;
+				//一番近い距離も更新する
+				dist = len;
 			}
 		}
 	}
 
+	//衝突したOBBがある場合は、衝突した一番近いOBBのポインタを、
+	//衝突したOBBがない場合は、nullptrを戻す
 	return pOBB;
 }
 
 
 
-
+/// <summary>
+/// とりあえず作ったけど、使わない予定。
+/// テストもしてない
+/// 一応、OBBとレイの交差点を求める関数
+/// </summary>
+/// <param name="start">レイの始点</param>
+/// <param name="end">レイの終点</param>
+/// <param name="pos">交差した際の交差点の座標</param>
+/// <returns>交差したか？</returns>
 bool COBBWorld::InIntersectLine(const Vector3& start, const Vector3& end, Vector3* pos)
 {
 	bool isHit = false;
