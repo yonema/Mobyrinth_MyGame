@@ -518,7 +518,7 @@ void Player::PostRender(RenderContext& rc)
 
 
 	//ウェイポイントの切り替え
-	swprintf(text, L"右側%02.2f", m_dbgDot1);
+	swprintf(text, L"Right:%02.2f", m_dbgDot1);
 	m_font.Draw(text,
 		{ -310.0f, 150.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },
@@ -526,7 +526,7 @@ void Player::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
-	swprintf(text, L"左側%02.2f", m_dbgDot2);
+	swprintf(text, L"Left:%02.2f", m_dbgDot2);
 	m_font.Draw(text,
 		{ -310.0f, 120.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },

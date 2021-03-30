@@ -153,6 +153,8 @@ bool Title::Start()
 	//0.0f以外を入れてね
 	m_bgmSC->SetVolume(0.0f);
 
+
+
 	//デバック用ここまで
 
 

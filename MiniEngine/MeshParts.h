@@ -49,6 +49,7 @@ public:
 		void* expandData,
 		int expandDataSize,
 		IShaderResource* expandShaderResourceView,
+		DXGI_FORMAT colorBufferFormat,
 		void* expandData2 = nullptr,
 		int expandDataSize2 = 0
 	);
@@ -102,7 +103,9 @@ private:
 		const wchar_t* fxFilePath,
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntryPointFunc,
-		const char* psEntryPointFunc );
+		const char* psEntryPointFunc,
+		DXGI_FORMAT colorBufferFormat
+	);
 
 	
 private:

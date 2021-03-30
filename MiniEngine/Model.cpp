@@ -38,6 +38,7 @@ void Model::Init(const ModelInitData& initData)
 		initData.m_expandConstantBuffer,
 		initData.m_expandConstantBufferSize,
 		initData.m_expandShaderResoruceView,
+		initData.m_colorBufferFormat,
 		initData.m_expandConstantBuffer2,
 		initData.m_expandConstantBufferSize2
 	);

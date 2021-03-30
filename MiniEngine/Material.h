@@ -15,7 +15,8 @@ public:
 		const wchar_t* fxFilePath,
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntriyPointFunc,
-		const char* psEntryPointFunc);
+		const char* psEntryPointFunc,
+		DXGI_FORMAT colorBufferFormat);
 	/// <summary>
 	/// レンダリングを開始するときに呼び出す関数。
 	/// </summary>
@@ -75,7 +76,7 @@ private:
 	/// <summary>
 	/// パイプラインステートの初期化。
 	/// </summary>
-	void InitPipelineState();
+	void InitPipelineState(DXGI_FORMAT colorBufferFormat);
 	/// <summary>
 	/// シェーダーの初期化。
 	/// </summary>
