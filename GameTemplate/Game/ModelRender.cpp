@@ -98,7 +98,7 @@ void CModelRender::InitModel(const char* filePath, EnModelUpAxis modelUpAxis)
 	//tkmファイルのファイルパスを指定する。
 	initData.m_tkmFilePath = filePath;
 	//シェーダーファイルのファイルパスを指定する。
-	initData.m_fxFilePath = "Assets/shader/myModel.fx";
+	initData.m_fxFilePath = "Assets/shader/PBR.fx";
 	//スケルトンを指定する。
 	if (m_skeletonPtr)	//スケルトンが初期化されていたら
 		initData.m_skeleton = m_skeletonPtr.get();

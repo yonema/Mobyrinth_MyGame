@@ -5,6 +5,7 @@
 #include "LevelObjectManager.h"
 #include "SoundEngine.h"
 #include "OBBWorld.h"
+#include "PostEffect.h"
 
 
 ///////////////////////////////////////////////////////////////////

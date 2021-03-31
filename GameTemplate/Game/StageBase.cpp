@@ -6,8 +6,8 @@ bool IStageBase::Start()
 {
 	//ディレクションライトの作成
 	m_stageDirectionLight = NewGO<CDirectionLight>(0);
-	m_stageDirectionLight->SetDirection({ 1.0f,1.0f,-1.0f });
-	m_stageDirectionLight->SetColor({ 0.1f,0.1f,0.1f,1.0f });
+	m_stageDirectionLight->SetDirection({ 1.0f,-1.0f,-1.0f });
+	m_stageDirectionLight->SetColor({ 1.0f,0.1f,0.1f,1.0f });
 
 	//ステージ開始時の演出の作成
 	m_startDirecting = NewGO<StartDirecting>(0, "StartDirecting");

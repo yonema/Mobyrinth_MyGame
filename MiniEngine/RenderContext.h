@@ -64,6 +64,15 @@ public:
 	void SetViewport(D3D12_VIEWPORT& viewport)
 	{
 		m_commandList->RSSetViewports(1, &viewport);
+		m_currentViewport = viewport;
+	}
+	/// <summary>
+	/// ビューポートを取得。
+	/// </summary>
+	/// <returns></returns>
+	D3D12_VIEWPORT GetViewport() const
+	{
+		return m_currentViewport;
 	}
 	/// <summary>
 	/// シザリング矩形を設定
@@ -172,11 +181,37 @@ public:
 		m_commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 	}
 	/// <summary>
+	/// 複数枚のレンダリングターゲットを設定する。
+	/// </summary>
+	/// <remarks>
+	/// MRTを利用したレンダリングを行いたい場合に利用してください。
+	/// </remarks>
+	/// <param name="numRT">レンダリングターゲットの数</param>
+	/// <param name="renderTarget">レンダリングターゲットの配列。</param>
+	void SetRenderTargets(UINT numRT, RenderTarget* renderTargets[]);
+
+	/// <summary>
+	/// レンダリングターゲットをスロット0に設定する。
+	/// </summary>
+	/// <remarks>
+	/// 本関数はビューポートの設定を行いません。
+	/// ユーザー側で適切なビューポートを指定する必要があります。
+	/// </remarks>
+	/// <param name="renderTarget">レンダリングターゲット</param>
+	void SetRenderTarget(RenderTarget& renderTarget)
+	{
+		RenderTarget* rtArray[] = { &renderTarget };
+		SetRenderTargets(1, rtArray);
+	}
+	/// <summary>
 	/// レンダリングターゲットとビューポートを同時に設定する。
 	/// </summary>
-	/// <param name="numRT"></param>
-	/// <param name="renderTarget"></param>
-	void SetRenderTargets(UINT numRT, RenderTarget* renderTargets[]);
+	/// <remarks>
+	/// この関数を利用するとレンダリングターゲットと同じ幅と高さのビューポートが設定されます。
+	/// </remarks>
+	/// <param name="renderTarget">レンダリングターゲット</param>
+	void SetRenderTargetAndViewport(RenderTarget& renderTarget);
+
 	/// <summary>
 	/// レンダリングターゲットビューのクリア。
 	/// </summary>
@@ -189,6 +224,15 @@ public:
 	void ClearRenderTargetView(D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle, const float* clearColor)
 	{
 		m_commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	}
+	/// <summary>
+	/// レンダリングターゲットのクリア。
+	/// </summary>
+	/// <param name="renderTarget"></param>
+	void ClearRenderTargetView(RenderTarget& renderTarget)
+	{
+		RenderTarget* rtArray[] = { &renderTarget };
+		ClearRenderTargetViews(1, rtArray);
 	}
 	
 	/// <summary>
@@ -353,6 +397,7 @@ private:
 	enum { MAX_CONSTANT_BUFFER = 8 };	//定数バッファの最大数。足りなくなったら増やしてね。
 	enum { MAX_SHADER_RESOURCE = 16 };	//シェーダーリソースの最大数。足りなくなったら増やしてね。
 
+	D3D12_VIEWPORT m_currentViewport;				//現在のビューポート。
 	ID3D12GraphicsCommandList4* m_commandList;	//コマンドリスト。
 	ID3D12DescriptorHeap* m_descriptorHeaps[MAX_DESCRIPTOR_HEAP];			//ディスクリプタヒープの配列。
 	ConstantBuffer* m_constantBuffers[MAX_CONSTANT_BUFFER] = { nullptr };	//定数バッファの配列。

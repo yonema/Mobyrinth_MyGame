@@ -199,6 +199,11 @@ public:
 	{
 		return m_fontEngine;
 	}
+
+	ID3D12Resource* GetRenderTarget()
+	{
+		return m_renderTargets[m_frameIndex];
+	}
 private:
 	/// <summary>
 	/// D3Dデバイスの作成。
