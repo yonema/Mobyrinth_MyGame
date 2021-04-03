@@ -25,6 +25,11 @@ public:
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
+
+	//追加
+public:
+	void DrawPostEffect();
+	void DrawFrameBuffer();
 	
 };
 

@@ -13,6 +13,10 @@
 #include "Camera.h"
 #include "NullTextureMaps.h"
 #include "font/FontEngine.h"
+#include "RenderTarget.h"
+#include "Sprite.h"
+#include "PostEffect.h"
+
 
 /// <summary>
 /// DirectX12に依存するグラフィックスエンジン
@@ -314,6 +318,30 @@ private:
 	NullTextureMaps m_nullTextureMaps;			//ヌルテクスチャマップ。
 	FontEngine m_fontEngine;					//フォントエンジン。
 	std::unique_ptr<DirectX::GraphicsMemory> m_directXTKGfxMemroy;	//DirectXTKのグラフィックメモリシステム。
+
+	public:
+		Sprite m_copyToFrameBufferSprite;
+	//追加
+private:
+	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット
+	//mainRenderTargetのテクスチャをフレームバッファーに貼り付けるためのスプライト
+	
+	CPostEffect m_postEffect;			//ポストエフェクト
+public:
+	/// <summary>
+	/// メインレンダリングターゲットの取得。
+	/// </summary>
+	/// <returns></returns>
+	RenderTarget& GetMainRenderTarget()
+	{
+		return m_mainRenderTarget;
+	}
+	void PostEffectRender();
+	void CopyToFrameBuffer();
+private:
+	bool InitMainRenderTarget();
+	void InitCopyToFrameBufferSprite();
+	void UseMainRenderTarget();
 };
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。

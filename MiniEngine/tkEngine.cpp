@@ -35,3 +35,13 @@ void TkEngine::EndFrame()
 {
 	m_graphicsEngine->EndRender();
 }
+
+void TkEngine::DrawPostEffect()
+{
+	m_graphicsEngine->PostEffectRender();
+}
+
+void TkEngine::DrawFrameBuffer()
+{
+	m_graphicsEngine->CopyToFrameBuffer();
+}

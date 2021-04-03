@@ -6,14 +6,19 @@ class CBloom
 public:
 	CBloom();
 	~CBloom();
+public:
+	void Init();
+	void Draw(RenderContext& renderContext);
+	void DrawToMainRenderTarget(RenderContext& renderContext);
 private:
 	void InitluminanceRenderTarget();
-	void InitRenderTargetTextrue();
 	void InitluminanceSprite();
+	void InitGaussianBlur();
 private:
-	RenderTarget luminanceRenderTarget;	//輝度抽出用のレンダリングターゲット
-	Texture m_renderTargetTextrue;
+	RenderTarget m_luminanceRenderTarget;	//輝度抽出用のレンダリングターゲット
 	Sprite m_luminanceSprite;
-	CGaussianBlur gaussianBlur[4];
+	CGaussianBlur m_gaussianBlur[4];
+	Sprite m_finalSprite;
+
 };
 

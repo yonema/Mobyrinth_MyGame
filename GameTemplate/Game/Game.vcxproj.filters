@@ -744,5 +744,8 @@
     <FxCompile Include="Assets\shader\PBR.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\PostEffect.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
