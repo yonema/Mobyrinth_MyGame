@@ -381,5 +381,5 @@ void Title::StageSelect()
 	const float DownSide = -300.0f;		//下端
 	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
 	//カーソル用のフォントレンダラーの場所を設定する
-	//m_arrow->SetPosition({ leftSide - 50.0f , UpSide + BetweenLine * m_stageSelectState - 5.0f });
+	m_arrow->SetPosition({ leftSide - 50.0f , UpSide + BetweenLine * m_stageSelectState - 5.0f });
 }
