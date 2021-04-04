@@ -6,7 +6,7 @@ bool OObox::StartSub()
 	Init("Assets/modelData/box.tkm", enBox);
 	//OBBÇÃÉTÉCÉYÇê›íË
 	Vector3 obbSize;
-	obbSize = { 200.0f,200.0f,200.0f };
+	obbSize = { 300.0f,300.0f,300.0f };
 	GetOBB().SetDirectionLength(obbSize);
 
 	return true;

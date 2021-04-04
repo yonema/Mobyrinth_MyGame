@@ -1,12 +1,25 @@
 #include "stdafx.h"
 #include "MyCharacterController.h"
 
-
+/// <summary>
+/// 初期化用関数
+/// </summary>
+/// <param name="initOBBData">OBBの初期化用データ構造体</param>
 void CMyCharacterController::Init(const SInitOBBData& initOBBData)
 {
+	//OBBを初期化する
 	m_obb.Init(initOBBData);
 }
 
+/// <summary>
+/// 実行関数。
+/// 動くスピードとデルタタイムを渡すと、
+/// OBBWorldに登録してあるOBBとの衝突解決をした
+/// 移動後の座標を戻す。
+/// </summary>
+/// <param name="moveSpeed">動くスピード</param>
+/// <param name="deltaTime">デルタタイム</param>
+/// <returns>移動後の座標</returns>
 const Vector3& CMyCharacterController::Execute(const Vector3& moveSpeed, const float deltaTime)
 {
 	//移動前の座標
@@ -15,7 +28,11 @@ const Vector3& CMyCharacterController::Execute(const Vector3& moveSpeed, const f
 	//仮の移動後の座標
 	Vector3 nextPosition = oldPosition;
 
-	if (moveSpeed.Length() <= 0.001f)
+	//移動していない時は、
+	//衝突を気にしないで移動後の座標を戻す。
+	//これがoldPositionだとなぜかうまくいかなかった。
+	//ナゾ。。。
+	if (moveSpeed.Length() <= FLT_EPSILON)
 		return nextPosition;
 
 	//移動するベクトル
@@ -26,51 +43,48 @@ const Vector3& CMyCharacterController::Execute(const Vector3& moveSpeed, const f
 	//仮の移動後の座標を移動させる。
 	nextPosition += addPos;
 
-
-
 	//OBBを仮の移動先に移動させる
 	m_obb.SetPosition(nextPosition);
-
-
-
 
 	//当たったときのOBBを入れておくポインタ
 	COBB* hitOBB = nullptr;
 
 	//COOWorldに登録してあるOBBから一番近い衝突しているOBBを探す
-	hitOBB = COBBWorld::GetInstance()->HitAllOBB(m_obb, hitOBB);
+	//衝突したOBBがない場合はnullptrが戻ってくる
+	hitOBB = COBBWorld::GetInstance()->HitAllOBB(m_obb);
 
+	//衝突しているOBBが存在した
 	if (hitOBB)
 	{
-
-		//衝突しているOBBが存在した
-
 		//移動するベクトルの単位ベクトル
 		Vector3 addNorm = addPos;
 		addNorm.Normalize();	//正規化する
 
-		Vector3 myOBBNormX = m_obb.GetNormalDirection(COBB::enLocalX);
-
-
+		//衝突したOBBのローカルなX軸の単位方向ベクトル
+		//壁の法線ベクトルとして使う
 		Vector3 hitOBBNormX = hitOBB->GetNormalDirection(COBB::enLocalX);
 
-		//移動するベクトルと、戻りベクトルの向きを比べる
+		//移動するベクトルと、壁の法線ベクトルの向きを比較する
 		float dot = Dot(addNorm, hitOBBNormX);
 
 		//同じ向きなら
 		if (dot > 0.0f)
 		{
 			//反対向きにする
-			myOBBNormX.Scale(-1.0f);
 			hitOBBNormX.Scale(-1.0f);
 		}
 
-		//当たったOBBの当たった側の壁の座標
+		//当たったOBBの当たった側の壁の座標を計算する
+		//まずは当たったOBBの座標を入れる
 		Vector3 hitPos = hitOBB->GetPosition();
+		//当たった側の壁の法線ベクトルに、長さを掛けて
+		//当たった側の壁の座標を求める
 		hitPos += hitOBBNormX * hitOBB->GetDirectionLength(COBB::enLocalX);
 
+		//自身のOBBと壁の間の長さを、壁の法線ベクトルに射影する
 		float between = Dot(m_obb.GetPosition() - hitPos, hitOBBNormX);
 
+		//自身のOBBを壁の法線ベクトルに射影する
 		float myObbLen =
 		CalcProjectionLen(hitOBBNormX,
 			m_obb.GetNormalDirection(COBB::enLocalX) * m_obb.GetDirectionLength(COBB::enLocalX),
@@ -78,12 +92,15 @@ const Vector3& CMyCharacterController::Execute(const Vector3& moveSpeed, const f
 			m_obb.GetNormalDirection(COBB::enLocalZ) * m_obb.GetDirectionLength(COBB::enLocalZ)
 			);
 
-
+		//重なった分戻す長さ
 		float backLen = myObbLen - between;
 
+		//重なった分戻すベクトル
 		Vector3 backVec = hitOBBNormX * backLen;
 
+		//移動先の座標をかさなった分戻す。
 		nextPosition += backVec;
+
 		//OBBを移動させる
 		m_obb.SetPosition(nextPosition);
 	}
