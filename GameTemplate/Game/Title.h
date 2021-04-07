@@ -60,7 +60,7 @@ private:	//データメンバ
 	int m_stageSelectState = enStage_kari;	//現在のステージセレクトのステート
 
 	//CFontRender* m_stageName[enStageNum] = { nullptr };	//フォントレンダー
-	CFontRender* m_arrow = nullptr;						//フォントレンダー
+	//CFontRender* m_arrow = nullptr;						//フォントレンダー
 	bool m_buttonFlag = true;							//ボタンを押すことができるか？
 														//（連続入力防止用）
 	CLevel2D m_level2D;									//スプライト用のレベルクラス
@@ -83,7 +83,7 @@ private: //画像データ
 	//デバック用
 	//後で消す
 	CSoundCue* m_soundCue = nullptr;				//サウンドキュークラス
-	CSoundCue* m_bgmSC = nullptr;					//BGMのサウンドキュー
+	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
 
 	//デバック用ここまで
 };

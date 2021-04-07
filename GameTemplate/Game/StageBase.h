@@ -3,6 +3,7 @@
 //基本的に必要
 #include "DirectionLight.h"
 #include "GameCamera.h"
+#include "SoundCue.h"
 
 //ポーズ画面用
 #include "Pause.h"
@@ -84,5 +85,7 @@ private:
 	StartDirecting* m_startDirecting = nullptr;
 	bool m_startUpStartDirecting = true;
 	bool m_titlePlayer = false;
+
+	CSoundCue* m_bgmStage = nullptr;				//BGMのサウンドキュー
 };
 

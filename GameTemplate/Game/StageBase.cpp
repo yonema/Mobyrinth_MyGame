@@ -21,6 +21,13 @@ bool IStageBase::Start()
 	//ポーズ画面用クラスの作成
 	m_pause = NewGO<CPause>(0, "Pause");
 
+	//BGMのサウンドキューを生成する
+	m_bgmStage = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmStage->Init(L"Assets/sound/Stage.wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmStage->Play(true);
+
 	return StartSub();
 
 }
@@ -303,6 +310,8 @@ IStageBase::~IStageBase()
 	DeleteGO(FindGO<GameCamera>("GameCamera"));
 	DeleteGO(m_pause);
 	DeleteGO(m_startDirecting);
+
+	DeleteGO(m_bgmStage);
 
 	//レベルでロードしたオブジェクトを消去
 

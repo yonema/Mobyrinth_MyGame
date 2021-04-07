@@ -2,6 +2,15 @@
 #include "SoundCue.h"
 
 
+CSoundCue::~CSoundCue()
+{
+	//CSoundCueオブジェクトをDeleteGOした際、再生中だった場合、停止させる。
+	if (m_loopSoundSource) {
+		DeleteGO(m_loopSoundSource);
+	}
+}
+
+
 /// <summary>
 /// 初期化用関数
 /// wavファイルのパスを指定して初期化する
