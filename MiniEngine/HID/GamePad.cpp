@@ -50,7 +50,7 @@ namespace {
 		{ enButtonRight		, VK_NUMPAD6,	'6' 		},
 		{ enButtonA			, 'Z',			0xFFFFFFFF	}, //Œ³‚ÍJ
 		{ enButtonB			, 'X',			0xFFFFFFFF	}, //Œ³‚ÍK
-		{ enButtonY			, 'I',			0xFFFFFFFF	},
+		{ enButtonY			, 'V',			0xFFFFFFFF	}, //Œ³‚ÍI
 		{ enButtonX			, 'C',			0xFFFFFFFF	}, //Œ³‚ÍL
 		{ enButtonSelect	, VK_SPACE,		0xFFFFFFFF	},
 		{ enButtonStart		, VK_ESCAPE,	0xFFFFFFFF	},
