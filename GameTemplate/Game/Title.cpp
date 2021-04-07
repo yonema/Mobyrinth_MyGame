@@ -372,6 +372,11 @@ void Title::StageSelect()
 		}
 		//m_arrow->Deactivate();
 		m_cursor->Deactivate();
+
+
+		//タイトル画面の画像を有効化して表示する。
+		m_title->Activate();
+		m_pressAButton->Activate();
 	}
 
 
@@ -381,5 +386,6 @@ void Title::StageSelect()
 	const float DownSide = -300.0f;		//下端
 	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
 	//カーソル用のフォントレンダラーの場所を設定する
-	m_arrow->SetPosition({ leftSide - 50.0f , UpSide + BetweenLine * m_stageSelectState - 5.0f });
+	//m_arrow->SetPosition({ leftSide - 50.0f , UpSide + BetweenLine * m_stageSelectState - 5.0f });
+	m_cursor->SetPosition({ -400.0f,m_stageName[m_stageSelectState]->GetPositionY(),0.0f });
 }
