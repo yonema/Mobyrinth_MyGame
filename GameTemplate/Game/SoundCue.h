@@ -12,6 +12,8 @@
 /// </summary>
 class CSoundCue : public IGameObject
 {
+public:
+	~CSoundCue();
 public:		//‚±‚±‚Ìƒƒ“ƒoŠÖ”‚ğå‚Ég‚¤
 
 	/// <summary>

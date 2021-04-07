@@ -13,7 +13,6 @@ bool Title::Start()
 
 
 
-
 	//フォントの配置
 	const float leftSide = -100.0f;		//左端
 	const float UpSide = 300.0f;		//上端
@@ -148,11 +147,12 @@ Title::~Title()
 	DeleteGO(m_pressAButton);
 	DeleteGO(m_cursor);
 
+	DeleteGO(m_bgmTitle);
+
 	//デバック用
 	//後で消す
 
 	DeleteGO(m_soundCue);
-	DeleteGO(m_bgmTitle);
 	//デバック用ここまで
 }
 

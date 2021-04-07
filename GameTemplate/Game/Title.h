@@ -83,7 +83,7 @@ private: //画像データ
 	//デバック用
 	//後で消す
 	CSoundCue* m_soundCue = nullptr;				//サウンドキュークラス
-	CSoundCue* m_bgmSC = nullptr;					//BGMのサウンドキュー
+	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
 
 	//デバック用ここまで
 };
