@@ -10,6 +10,7 @@ bool Title::Start()
 	m_stageTitle = NewGO<stage_title>(0, "stage_title");
 	m_stageTitle->SetStartUpStartDirecting(false);
 	m_stageTitle->SetTitlePlayer(true);
+	m_stageTitle->SetStartBGM(false);
 
 
 
