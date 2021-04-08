@@ -49,6 +49,8 @@ private:
 
 	void Goal();
 
+	void BGMInteractive();
+
 public: //インライン関数
 	void SetStartUpStartDirecting(const bool b)
 	{
@@ -57,6 +59,10 @@ public: //インライン関数
 	void SetTitlePlayer(const bool b)
 	{
 		m_titlePlayer = b;
+	}
+	void SetStartBGM(const bool b)
+	{
+		m_startBGM = b;
 	}
 
 protected:
@@ -86,6 +92,10 @@ private:
 	bool m_startUpStartDirecting = true;
 	bool m_titlePlayer = false;
 
+
+private:
 	CSoundCue* m_bgmStage = nullptr;				//BGMのサウンドキュー
+	CSoundCue* m_bgmStage2 = nullptr;				//BGMのサウンドキュー
+	bool m_startBGM = true;
 };
 

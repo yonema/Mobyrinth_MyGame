@@ -27,6 +27,20 @@ bool IStageBase::Start()
 	m_bgmStage->Init(L"Assets/sound/Stage.wav");
 	//BGMをループ再生をオンで再生する。
 	m_bgmStage->Play(true);
+	//もしタイトル画面だった場合、BGM音量を０にする。
+	if (m_startBGM == false) {
+		m_bgmStage->SetVolume(0.0f);
+	}
+
+
+	//BGMのサウンドキューを生成する
+	m_bgmStage2 = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmStage2->Init(L"Assets/sound/Stage2.wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmStage2->Play(true);
+	//BGM音量を０にする。
+	m_bgmStage2->SetVolume(0.0f);
 
 	return StartSub();
 
@@ -312,6 +326,7 @@ IStageBase::~IStageBase()
 	DeleteGO(m_startDirecting);
 
 	DeleteGO(m_bgmStage);
+	DeleteGO(m_bgmStage2);
 
 	//レベルでロードしたオブジェクトを消去
 
@@ -363,6 +378,10 @@ void IStageBase::Update()
 		}
 	}
 
+	if (m_startBGM == true) {
+		BGMInteractive();
+	}
+
 	return;
 }
 void IStageBase::UpdateOnlyPaused()
@@ -403,4 +422,30 @@ void IStageBase::Goal()
 	{
 		Clear();
 	}
+}
+
+void IStageBase::BGMInteractive()
+{
+	QueryGOs<Player>("Player", [&](Player* player)->bool
+		{
+			//ウェイポイントが24～7の場合
+			if (24 <= player->GetWayPointState() && player->GetWayPointState() <= 31 ||
+				0 <= player->GetWayPointState() && player->GetWayPointState() <= 7) {
+				if (m_bgmStage->GetVolume() < 1.0f) {
+					m_bgmStage->SetVolume(m_bgmStage->GetVolume() + 0.01f);
+					m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() - 0.01f);
+				}
+			}
+
+			//ウェイポイントが8～23の場合
+			if (8 <= player->GetWayPointState() && player->GetWayPointState() <= 23) {
+				if (m_bgmStage2->GetVolume() < 1.0f) {
+					m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() + 0.01f);
+					m_bgmStage->SetVolume(m_bgmStage->GetVolume() - 0.01f);
+				}
+			}
+
+			return true;
+		}
+	);
 }
