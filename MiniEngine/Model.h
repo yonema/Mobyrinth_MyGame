@@ -17,7 +17,7 @@ enum EnModelUpAxis {
 struct ModelInitData {
 	const char* m_tkmFilePath = nullptr;							//tkmファイルパス。
 	const char* m_vsEntryPointFunc = "VSMain";						//頂点シェーダーのエントリーポイント。
-	const char* m_vsSkinEntryPointFunc = "VSSkinMain";					//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
+	const char* m_vsSkinEntryPointFunc = "VSSkinMain";				//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
 	const char* m_psEntryPointFunc = "PSMain";						//ピクセルシェーダーのエントリーポイント。
 	const char* m_fxFilePath = nullptr;								//.fxファイルのファイルパス。
 	void* m_expandConstantBuffer = nullptr;							//ユーザー拡張の定数バッファ。
@@ -30,6 +30,9 @@ struct ModelInitData {
 
 	void* m_expandConstantBuffer2 = nullptr;						//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize2 = 0;							//ユーザー拡張の定数バッファのサイズ。
+
+	void* m_shadowConstantBuffer = nullptr;
+	int m_shadowConstantBufferSize = 0;
 };
 
 
@@ -51,13 +54,16 @@ public:
 	/// <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡大率</param>
-	void UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale);
+	void UpdateWorldMatrix(const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="renderContext">レンダリングコンテキスト</param>
 	void Draw(RenderContext& renderContext);
+
+	void Draw(RenderContext& renderContext, const Matrix& viewMatrix, const Matrix& projectionMatrix);
+
 	/// <summary>
 	/// ワールド行列を取得。
 	/// </summary>
@@ -97,6 +103,14 @@ public:
 		return m_tkmFile;
 	}
 
+	void SetShadowReceiverFlag(const bool shadowReceiverFlag)
+	{
+		m_shadowReceiverFlag = shadowReceiverFlag;
+	}
+	void SetShadowCasterFlag(const bool shadowCasterFlag)
+	{
+		m_shadowCasterFlag = shadowCasterFlag;
+	}
 
 	bool InIntersectLine(const Vector3& start, const Vector3& end);
 	const Vector3& GetIntersectPos() const
@@ -117,6 +131,7 @@ public:
 		return m_dbgV2;
 	}
 
+
 private:
 
 	Matrix m_world;														//ワールド行列。
@@ -125,10 +140,14 @@ private:
 	MeshParts m_meshParts;											//メッシュパーツ。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
 
+	bool m_shadowReceiverFlag = false;
+	bool m_shadowCasterFlag = false;
+
 	Vector3 m_intersectPos = g_vec3Zero;
 	Vector3 m_lastStart = g_vec3Zero;
 	float m_dbg = 0.0f;
 	Vector3 m_dbgV1 = g_vec3Zero;
 	Vector3 m_dbgV2 = g_vec3Zero;
+
 
 };

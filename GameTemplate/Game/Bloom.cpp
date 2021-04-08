@@ -84,8 +84,8 @@ void CBloom::InitGaussianBlur()
 
     //ÉiÉ]
     //å„Ç≈êÊê∂Ç…ï∑Ç≠
-    finalSpriteInitData.m_width = 1280 * 4;
-    finalSpriteInitData.m_height = 720 * 2;
+    finalSpriteInitData.m_width = 1280;
+    finalSpriteInitData.m_height = 720;
 
     finalSpriteInitData.m_fxFilePath = "Assets/shader/PostEffect.fx";
     finalSpriteInitData.m_psEntryPoinFunc = "PSBloomFinal";

@@ -1,6 +1,7 @@
 #pragma once
 #include "Bloom.h"
 
+
 class CPostEffect
 {
 public:
@@ -11,5 +12,6 @@ public:
 	void Draw(RenderContext& renderContext);
 private:
 	CBloom m_bloom;
+
 };
 

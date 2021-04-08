@@ -1,6 +1,6 @@
 #pragma once
 #include "LightData.h"
-#include "DirectionLight.h"
+
 
 class CDirectionLight;
 
@@ -94,6 +94,21 @@ public://publidなメンバ関数
 	SDirectionLight* const GetDirectionLigData() //const	//なんかダメみたい
 	{
 		return m_directionLightsData;
+	}
+
+	int GetShadowNum()const
+	{
+		return m_lightParam.numShadow;
+	}
+
+	void AddShadowNum()
+	{
+		m_lightParam.numShadow++;
+	}
+
+	void RemoveShadowNum()
+	{
+		m_lightParam.numShadow--;
 	}
 
 private://データメンバ

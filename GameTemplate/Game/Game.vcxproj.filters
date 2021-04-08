@@ -81,6 +81,12 @@
     <Filter Include="Assets\shader">
       <UniqueIdentifier>{aff3c38e-f266-40da-9211-437d865cbc50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\PostEffect">
+      <UniqueIdentifier>{56d31043-f300-4720-914e-a65248a4ad80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\OBB">
+      <UniqueIdentifier>{83c4e268-35f0-47cb-9fab-54d205179755}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -329,9 +335,6 @@
     <ClCompile Include="Title.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="OBB.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="StartDirecting.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -371,22 +374,34 @@
     <ClCompile Include="SoundCue.cpp">
       <Filter>MyCode\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="OBBWorld.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="MyCharacterController.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="PostEffect.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Bloom.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\MiniEngine\RenderTarget.cpp">
       <Filter>MiniEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Bloom.cpp">
+      <Filter>MyCode\PostEffect</Filter>
+    </ClCompile>
     <ClCompile Include="GaussianBlur.cpp">
+      <Filter>MyCode\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="PostEffect.cpp">
+      <Filter>MyCode\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="OBB.cpp">
+      <Filter>MyCode\OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="OBBWorld.cpp">
+      <Filter>MyCode\OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCharacterController.cpp">
+      <Filter>MyCode\OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>MyCode\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowModel.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="testModel.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -664,9 +679,6 @@
     <ClInclude Include="Title.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="OBB.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="StartDirecting.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -712,22 +724,34 @@
     <ClInclude Include="SoundCue.h">
       <Filter>MyCode\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="OBBWorld.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="MyCharacterController.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="PostEffect.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Bloom.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\MiniEngine\RenderTarget.h">
       <Filter>MiniEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Bloom.h">
+      <Filter>MyCode\PostEffect</Filter>
+    </ClInclude>
     <ClInclude Include="GaussianBlur.h">
+      <Filter>MyCode\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="PostEffect.h">
+      <Filter>MyCode\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="OBB.h">
+      <Filter>MyCode\OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="OBBWorld.h">
+      <Filter>MyCode\OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCharacterController.h">
+      <Filter>MyCode\OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>MyCode\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowModel.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="testModel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -745,6 +769,9 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\PostEffect.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\DrawShadowMap.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

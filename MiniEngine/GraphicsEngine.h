@@ -16,6 +16,8 @@
 #include "RenderTarget.h"
 #include "Sprite.h"
 #include "PostEffect.h"
+#include "ShadowMap.h"
+
 
 
 /// <summary>
@@ -273,6 +275,7 @@ private:
 	/// 描画の完了待ち。
 	/// </summary>
 	void WaitDraw();
+
 	
 public:
 	enum { FRAME_BUFFER_COUNT = 2 };						//フレームバッファの数。
@@ -319,14 +322,16 @@ private:
 	FontEngine m_fontEngine;					//フォントエンジン。
 	std::unique_ptr<DirectX::GraphicsMemory> m_directXTKGfxMemroy;	//DirectXTKのグラフィックメモリシステム。
 
-	public:
-		Sprite m_copyToFrameBufferSprite;
+
+
 	//追加
 private:
 	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット
 	//mainRenderTargetのテクスチャをフレームバッファーに貼り付けるためのスプライト
 	
 	CPostEffect m_postEffect;			//ポストエフェクト
+	CShadowMap m_shadowMap;
+	Sprite m_copyToFrameBufferSprite;
 public:
 	/// <summary>
 	/// メインレンダリングターゲットの取得。
@@ -336,8 +341,43 @@ public:
 	{
 		return m_mainRenderTarget;
 	}
+	/// <summary>
+/// フレームバッファに描画するときのビューポートを取得。
+/// </summary>
+/// <returns></returns>
+	D3D12_VIEWPORT& GetFrameBufferViewport()
+	{
+		return m_viewport;
+	}
+	void ShadowRender();
 	void PostEffectRender();
 	void CopyToFrameBuffer();
+
+	ShadowParam* GetShadowParam()
+	{
+		return m_shadowMap.GetShadowParam();
+	}
+	Texture& GetShadowBlur()
+	{
+		return m_shadowMap.GetShadowBlur();
+	}
+	Texture& GetShadowRenderTex()
+	{
+		return m_shadowMap.GetRenderTargetTex();
+	}
+	void AddShadow(Model& shadowModel)
+	{
+		m_shadowMap.AddShadow(shadowModel);
+	}
+	void RemoveShadow(Model& shadowModel)
+	{
+		m_shadowMap.RemoveShadow(shadowModel);
+	}
+	void CreateShadowMap(const Vector3& direction, const float length)
+	{
+		m_shadowMap.CreateShadowMap(direction, length);
+	}
+
 private:
 	bool InitMainRenderTarget();
 	void InitCopyToFrameBufferSprite();
@@ -346,3 +386,4 @@ private:
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。
 extern Camera* g_camera3D;					//3Dカメラ。
+

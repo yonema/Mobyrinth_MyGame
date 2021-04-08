@@ -231,7 +231,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	////mainRenderTargetのテクスチャをフレームバッファーに貼り付けるためのスプライトの初期化
 	InitCopyToFrameBufferSprite();
 
-
+	m_shadowMap.Init();
 	m_postEffect.Init();
 
 
@@ -511,6 +511,7 @@ void GraphicsEngine::BeginRender()
 
 	UseMainRenderTarget();
 
+
 }
 void GraphicsEngine::UseMainRenderTarget()
 {
@@ -528,6 +529,11 @@ void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
 }
 
+
+void GraphicsEngine::ShadowRender()
+{
+	m_shadowMap.Draw(m_renderContext);
+}
 
 void GraphicsEngine::PostEffectRender()
 {

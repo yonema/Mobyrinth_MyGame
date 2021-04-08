@@ -29,7 +29,9 @@ void MeshParts::InitFromTkmFile(
 	IShaderResource* expandShaderResourceView,
 	DXGI_FORMAT colorBufferFormat,
 	void* expandData2,
-	int expandDataSize2
+	int expandDataSize2,
+	void* shadowParamData,
+	int shadowParamDataSize
 )
 {
 	m_meshs.resize(tkmFile.GetNumMesh());
@@ -58,6 +60,11 @@ void MeshParts::InitFromTkmFile(
 	{
 		m_expandConstantBuffer2.Init(expandDataSize2, nullptr);
 		m_expandData2 = expandData2;
+	}
+	if (shadowParamData)
+	{
+		m_shadowConstantBuffer.Init(shadowParamDataSize, nullptr);
+		m_shadowParamData = shadowParamData;
 	}
 	m_expandShaderResourceView = expandShaderResourceView;
 	//ディスクリプタヒープを作成。
@@ -94,6 +101,10 @@ void MeshParts::CreateDescriptorHeaps()
 			}
 			if (m_expandConstantBuffer2.IsValid()) {
 				descriptorHeap.RegistConstantBuffer(2, m_expandConstantBuffer2);
+			}
+			if (m_shadowConstantBuffer.IsValid())
+			{
+				descriptorHeap.RegistConstantBuffer(3, m_shadowConstantBuffer);
 			}
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
@@ -191,7 +202,8 @@ void MeshParts::Draw(
 	RenderContext& rc,
 	const Matrix& mWorld,
 	const Matrix& mView,
-	const Matrix& mProj
+	const Matrix& mProj,
+	const bool shadowReceiverFlag
 )
 {
 	//メッシュごとにドロー
@@ -203,6 +215,7 @@ void MeshParts::Draw(
 	cb.mWorld = mWorld;
 	cb.mView = mView;
 	cb.mProj = mProj;
+	cb.shadowReceiverFlag = shadowReceiverFlag;
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);
 
@@ -211,6 +224,10 @@ void MeshParts::Draw(
 	}
 	if (m_expandData2) {
 		m_expandConstantBuffer2.CopyToVRAM(m_expandData2);
+	}
+	if (m_shadowParamData)
+	{
+		m_shadowConstantBuffer.CopyToVRAM(m_shadowParamData);
 	}
 	if (m_boneMatricesStructureBuffer.IsInited()) {
 		//ボーン行列を更新する。

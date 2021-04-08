@@ -29,6 +29,7 @@ void CLightManager::Init()
 	m_lightParam.ambientLight = { 0.6f,0.6f,0.6f };
 	m_lightParam.numPointLight = 0;
 	m_lightParam.specPow = 5.0f;
+	m_lightParam.numShadow = 0;
 }
 
 

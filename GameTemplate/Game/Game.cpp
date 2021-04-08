@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
+#include "testModel.h"
 
 
 //スタート関数
@@ -7,7 +8,7 @@ bool Game::Start()
 {
 	//タイトルを生成する
 	NewGO<Title>(0, "Title");
-
+	//NewGO<testModel>(0);
 	return true;
 }
 

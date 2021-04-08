@@ -40,14 +40,16 @@ void Model::Init(const ModelInitData& initData)
 		initData.m_expandShaderResoruceView,
 		initData.m_colorBufferFormat,
 		initData.m_expandConstantBuffer2,
-		initData.m_expandConstantBufferSize2
+		initData.m_expandConstantBufferSize2,
+		initData.m_shadowConstantBuffer,
+		initData.m_shadowConstantBufferSize
 	);
 
 	UpdateWorldMatrix(g_vec3Zero, g_quatIdentity, g_vec3One);
 	
 }
 
-void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
+void Model::UpdateWorldMatrix(const Vector3& pos, const Quaternion& rot, const Vector3& scale)
 {
 	Matrix mBias;
 	if (m_modelUpAxis == enModelUpAxisZ) {
@@ -80,7 +82,18 @@ void Model::Draw(RenderContext& rc)
 		rc, 
 		m_world, 
 		g_camera3D->GetViewMatrix(), 
-		g_camera3D->GetProjectionMatrix()
+		g_camera3D->GetProjectionMatrix(),
+		m_shadowReceiverFlag
+	);
+}
+void Model::Draw(RenderContext& rc, const Matrix& viewMatrix,const Matrix& projectionMatrix)
+{
+	m_meshParts.Draw(
+		rc,
+		m_world,
+		viewMatrix,
+		projectionMatrix,
+		m_shadowReceiverFlag
 	);
 }
 

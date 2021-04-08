@@ -35,6 +35,10 @@ void TkEngine::EndFrame()
 {
 	m_graphicsEngine->EndRender();
 }
+void TkEngine::DrawShadow()
+{
+	m_graphicsEngine->ShadowRender();
+}
 
 void TkEngine::DrawPostEffect()
 {
@@ -44,4 +48,9 @@ void TkEngine::DrawPostEffect()
 void TkEngine::DrawFrameBuffer()
 {
 	m_graphicsEngine->CopyToFrameBuffer();
+}
+
+void TkEngine::CreateShadow(const Vector3& direction, const float length)
+{
+	m_graphicsEngine->CreateShadowMap(direction, length);
 }

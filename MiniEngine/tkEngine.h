@@ -28,9 +28,10 @@ private:
 
 	//’Ç‰Á
 public:
+	void DrawShadow();
 	void DrawPostEffect();
 	void DrawFrameBuffer();
-	
+	void CreateShadow(const Vector3& direction, const float length = 300.0f);
 };
 
 extern TkEngine* g_engine;	//TKƒGƒ“ƒWƒ“B

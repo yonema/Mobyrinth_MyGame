@@ -189,9 +189,9 @@
 		//ルートシグネチャの初期化。
 		m_rootSignature.Init(
 			D3D12_FILTER_MIN_MAG_MIP_LINEAR,
-			D3D12_TEXTURE_ADDRESS_MODE_WRAP,
-			D3D12_TEXTURE_ADDRESS_MODE_WRAP,
-			D3D12_TEXTURE_ADDRESS_MODE_WRAP);
+			D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+			D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+			D3D12_TEXTURE_ADDRESS_MODE_CLAMP);
 
 		//シェーダーを初期化。
 		InitShader(initData);
@@ -228,8 +228,12 @@
 	}
 	void Sprite::Draw(RenderContext& renderContext)
 	{
+		//現在のビューポートから平行投影行列を計算する。
+		D3D12_VIEWPORT viewport = renderContext.GetViewport();
 		Matrix viewMatrix = g_camera2D->GetViewMatrix();
-		Matrix projMatrix = g_camera2D->GetProjectionMatrix();
+		//Matrix projMatrix = g_camera2D->GetProjectionMatrix();
+		Matrix projMatrix;
+		projMatrix.MakeOrthoProjectionMatrix(viewport.Width, viewport.Height, 0.1f, 1.0f);
 
 		m_constantBufferCPU.mvp = m_world * viewMatrix * projMatrix;
 		m_constantBufferCPU.mulColor.x = 1.0f;

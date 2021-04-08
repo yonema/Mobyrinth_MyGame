@@ -10,7 +10,7 @@ static const int Max_DirectionLight = 4;	//ディレクションライトの最�
 static const int Max_PointLight = 4;		//ポイントライトの最大数
 static const int Max_SpotLight = 4;			//スポットライトの最大数
 static const float PI = 3.1415926f;			//π
-
+static const int Max_ShadowMap = 5;
 
 ///////////////////////////////////////////////////
 // 構造体
@@ -24,7 +24,12 @@ struct SDirectionLight
 	float3 direction;
 	float pad;
 };
-
+//シャドウマップ用のパラメータ構造体
+struct ShadowParam
+{
+	float4x4 mLVP;		//ライトビュープロジェクション
+	float3 lightPos;	//ライトの位置
+};
 
 //スキニング用の頂点データをひとまとめ。
 struct SSkinVSIn {
@@ -48,6 +53,8 @@ struct SPSIn {
 	float3 biNormal 	: BINORMAL;		//従法線
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド空間でのピクセルの座標。
+	float4 posInLVP		: TEXCOORD2;
+	//float4 exsample		: TEXCOORD3;
 };
 
 ////////////////////////////////////////////////
@@ -59,9 +66,11 @@ cbuffer ModelCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
+	int shadowReceiverFlag;
 };
 
 //LightManager用の定数バッファ
+//このコンスタントバッファには、どのモデルでも同じ値が渡される
 cbuffer LightManagerCb : register(b1)
 {
 	float3 eyePos;			//視点
@@ -69,6 +78,7 @@ cbuffer LightManagerCb : register(b1)
 	float3 ambientLight;	//アンビエントライト。
 	int numPointLight;		//ポイントライトの数。
 	float specPow;			//スペキュラの絞り
+	int numShadow;
 }
 
 cbuffer DirectionLightCb : register(b2)
@@ -76,6 +86,10 @@ cbuffer DirectionLightCb : register(b2)
 	SDirectionLight directionLight[Max_DirectionLight];
 }
 
+cbuffer ShadowParamCb : register(b3)
+{
+	ShadowParam shadowParam;
+}
 
 
 ////////////////////////////////////////////////
@@ -86,15 +100,13 @@ Texture2D<float4> g_normalMap : register(t1);			//法線マップ
 Texture2D<float4> g_specularMap : register(t2);			//スペキュラマップ。
 														//rgbにスペキュラカラー、aに金属度。
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
+
+Texture2D<float4> g_shadowMap : register(t10);
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ///////////////////////////////////////////
 //関数宣言
 ///////////////////////////////////////////
-//float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
-//float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
-//float3 CalcLigFromDirectionLight(SPSIn psIn, int n);
-//float3 CalcLigFromPointLight(SPSIn psIn, int n);
 float3 GetNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
 float Beckmann(float m, float t);
 float SpcFresnel(float f0, float u);
@@ -264,7 +276,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	psIn.pos = mul(m, vsIn.pos);
 	//ワールド座標を保持しておく
 	psIn.worldPos = psIn.pos;
-
+	float4 worldPos = psIn.pos;
 	//ワールド座標をビュー座標に変換
 	psIn.pos = mul(mView, psIn.pos);
 	//ビュー座標をプロジェクション座標に変換
@@ -279,6 +291,13 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	//UV
 	psIn.uv = vsIn.uv;
 
+	//ライトビュースクリーン空間の座標を計算する。
+	psIn.posInLVP = mul(shadowParam.mLVP, worldPos);
+
+	//頂点のライトから見た深度値を計算する。
+	psIn.posInLVP.z = length(worldPos.xyz - shadowParam.lightPos) / 10000.0f;
+
+
 	return psIn;
 }
 
@@ -291,9 +310,11 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//法線を計算。
 	float3 normal = GetNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
 	
-	//step-2 アルベドカラー、スペキュラカラー、金属度をサンプリングする。
+	//アルベドカラー、スペキュラカラー、金属度をサンプリングする。
 	//アルベドカラー(拡散反射光)。
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
+	
+
 	//スペキュラカラー(鏡面反射光)。
 	float3 specColor = g_specularMap.SampleLevel(g_sampler, psIn.uv, 0).rgb;
 	//金属度。
@@ -339,143 +360,38 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//最終的なカラー
 	float4 finalColor = 1.0f;
 	finalColor.xyz = lig;
+	bool isShadow = false;
+	if (shadowReceiverFlag >= 1)
+	{
+		//ライトビュースクリーン空間からUV空間に座標変換。
+		float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
+		shadowMapUV *= float2(0.5f, -0.5f);
+		shadowMapUV += 0.5f;
+
+		//ライトビュースクリーン空間でのZ値を計算する。
+		float zInLVP = psIn.posInLVP.z;
+
+		if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+			&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
+			) {
+			//step-13 シャドウレシーバーに影を落とす。
+			float2 shadowValue = g_shadowMap.Sample(g_sampler, shadowMapUV).rg;
+			if (zInLVP > shadowValue.r + 0.0001)
+			{
+				float depth_sq = shadowValue.x * shadowValue.x;
+				float variance = min(max(shadowValue.y - depth_sq, 0.0001f), 1.0f);
+				float md = zInLVP - shadowValue.x;
+				float lit_factor = variance / (variance + md * md);
+				float3 shadowColor = finalColor.xyz * 0.5f;
+				finalColor.xyz = lerp(shadowColor, finalColor.xyz, lit_factor);
+				isShadow = true;
+			}
+
+		}
+	}
+	if (isShadow)
+		return finalColor;
+
 	return finalColor;
-
-
-
-
-	///////////////////////////////////////////////////////////////
-
-
-	////ディレクションライトによるライティングを計算する。
-	//float3 directionLig = {0.0f,0.0f,0.0f};
-
-	//for (int i = 0; i < numDirectionLight; i++)
-	//{
-	//	directionLig += CalcLigFromDirectionLight(psIn, i);
-	//}
-	////directionLig += CalcLigFromDirectionLight(psIn, 1);
-	////ポイントライトによるライティングを計算する。
-	//float3 pointLig = { 0.0f,0.0f,0.0f };
-
-	//for (int i = 0; i < numPointLight; i++)
-	//{
-	//	pointLig += CalcLigFromPointLight(psIn, i);
-	//}
-
-	////各種ライトの反射光を足し算して最終的な反射光を求める。
-	//float3 finalLig = directionLig + ambientLight/* + hemiLight*/ + pointLig;
-
-	//float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
-
-	//albedoColor.xyz *= finalLig;
-
-	//return albedoColor;
 }
 
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////////////////
-
-///// <summary>
-///// ランバート拡散反射光を計算する。
-///// </summary>
-//float3 CalcLambertDiffuse(float3 lightDirection, float4 lightColor, float3 normal)
-//{
-//	//ピクセルの法線とライトの方向の内積を計算する。
-//	float t = dot(normal, lightDirection) * -1.0f;
-//	//内積の値を0以上の値にする。
-//	t = max(0.0f, t);
-//	//拡散反射光を計算する。
-//	return lightColor * t;
-//}
-///// <summary>
-///// フォン鏡面反射光を計算する。
-///// </summary>
-//float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal)
-//{
-//	//反射ベクトルを求める。
-//	float3 refVec = reflect(lightDirection, normal);
-//	//光が当たったサーフェイスから視点に伸びるベクトルを求める。
-//	float3 toEye = eyePos - worldPos;
-//	toEye = normalize(toEye);
-//	//鏡面反射の強さを求める。
-//	float t = dot(refVec, toEye);
-//	//鏡面反射の強さを0以上の数値にする。
-//	t = max(0.0f, t);
-//	//鏡面反射の強さを絞る。
-//	t = pow(t, 5.0f);
-//	//鏡面反射光を求める。
-//	return lightColor * t;
-//}
-//
-///// <summary>
-///// ディレクションライトによる反射光を計算。
-///// </summary
-///// <param name="psIn">ピクセルシェーダーからの入力。</param>
-//float3 CalcLigFromDirectionLight(SPSIn psIn, int n)
-//{
-//	//ディレクションライトによるランバート拡散反射光を計算する。
-//	float3 diffDirection= CalcLambertDiffuse
-//	(directionLight[n].dirLigDirection, directionLight[n].dirLigColor, psIn.normal);
-//	//ディレクションライトによるフォン鏡面反射光を計算する。
-//	float3 specDirection= CalcPhongSpecular
-//	(directionLight[n].dirLigDirection, directionLight[n].dirLigColor, psIn.worldPos, psIn.normal);
-//	return diffDirection + specDirection;
-//}
-//
-//
-//
-//
-//
-///// <summary>
-///// ポイントライトによる反射光を計算
-///// </summary>
-///// <param name="psIn">ピクセルシェーダーに渡されている引数</param>
-//float3 CalcLigFromPointLight(SPSIn psIn, int n)
-//{
-//	////step-7 このサーフェイスに入射しているポイントライトの光の向きを計算する。
-//	//float3 ligDir = psIn.worldPos - ptPosition;
-//	////正規化して大きさ１のベクトルにする。
-//	//ligDir = normalize(ligDir);
-//
-//	////step-7 減衰なしのランバート拡散反射光を計算する。
-//	//float3 diffPoint = CalcLambertDiffuse(
-//	//	ligDir, 		//ライトの方向
-//	//	ptColor,	 	//ライトのカラー
-//	//	psIn.normal		//サーフェイスの法線
-//	//);
-//	////step-9 減衰なしのフォン鏡面反射光を計算する。
-//	//float3 specPoint = CalcPhongSpecular(
-//	//	ligDir, 			//ライトの方向。
-//	//	ptColor,		 	//ライトのカラー。
-//	//	psIn.worldPos, 		//サーフェイズのワールド座標。
-//	//	psIn.normal			//サーフェイズの法線。
-//	//);
-//
-//	////step-10 距離による影響率を計算する。
-//	////ポイントライトとの距離を計算する。
-//	//float3 distance = length(psIn.worldPos - ptPosition);
-//
-//	////影響率は距離に比例して小さくなっていく。
-//	//float affect = 1.0f - 1.0f / ptRange * distance;
-//	////影響力がマイナスにならないように補正をかける。
-//	//if (affect < 0.0f) {
-//	//	affect = 0.0f;
-//	//}
-//	////影響の仕方を指数関数的にする。今回のサンプルでは3乗している。
-//	//affect = pow(affect, 3.0f);
-//
-//	////step-11 拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める。
-//	//diffPoint *= affect;
-//	//specPoint *= affect;
-//
-//	//return diffPoint + specPoint;
-//
-//	return 0;
-//}

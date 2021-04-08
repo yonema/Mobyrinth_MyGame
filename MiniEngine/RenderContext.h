@@ -58,6 +58,23 @@ public:
 		m_commandList = commandList;
 	}
 	/// <summary>
+	/// ビューポートとシザリング矩形をセットで設定
+	/// </summary>
+	/// <param name="viewport">ビューポート</param>
+	void SetViewportAndScissor(D3D12_VIEWPORT& viewport)
+	{
+		//シザリング矩形も設定する。
+		D3D12_RECT scissorRect;
+		scissorRect.bottom = viewport.Height;
+		scissorRect.top = 0.0f;
+		scissorRect.left = 0.0f;
+		scissorRect.right = viewport.Width;
+		SetScissorRect(scissorRect);
+
+		m_commandList->RSSetViewports(1, &viewport);
+		m_currentViewport = viewport;
+	}
+	/// <summary>
 	/// ビューポートを設定
 	/// </summary>
 	/// <param name="viewport">ビューポート</param>

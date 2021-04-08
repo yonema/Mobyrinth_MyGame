@@ -291,6 +291,7 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
+    <ClCompile Include="ShadowModel.cpp" />
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="Level2D.cpp" />
@@ -300,6 +301,7 @@
     <ClCompile Include="OBBWorld.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="PostEffect.cpp" />
+    <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundSource.cpp" />
@@ -346,6 +348,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="testModel.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TklFile.cpp" />
     <ClCompile Include="WaveFile.cpp" />
@@ -411,6 +414,7 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="ShadowModel.h" />
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="Level2D.h" />
@@ -421,6 +425,7 @@
     <ClInclude Include="OBBWorld.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="PostEffect.h" />
+    <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundSource.h" />
@@ -460,6 +465,7 @@
     <ClInclude Include="StartDirecting.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="testModel.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TklFile.h" />
     <ClInclude Include="Util.h" />
@@ -467,6 +473,11 @@
     <ClInclude Include="WaveFileBank.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Assets\shader\DrawShadowMap.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Assets\shader\model.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

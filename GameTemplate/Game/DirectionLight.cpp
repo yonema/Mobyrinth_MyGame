@@ -29,10 +29,10 @@ void CDirectionLight::Init()
 	//m_light.ambinetLight = { 0.6f,0.6f,0.6f };		//ŠÂ‹«Œõ
 
 }
-bool CDirectionLight::Start()
-{
-	return true;
-};
+//bool CDirectionLight::Start()
+//{
+//	return true;
+//};
 
 void CDirectionLight::SetDirection(const Vector3& direction)
 {

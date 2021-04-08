@@ -10,7 +10,7 @@ public:
 	CDirectionLight();
 	~CDirectionLight();
 	//抽象クラスの純粋仮想関数のオーバーライド
-	bool Start() override final;
+	//bool Start() override final;
 	//void Update() override final;
 
 	/// <summary>

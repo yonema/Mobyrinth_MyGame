@@ -35,26 +35,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//////////////////////////////////////
 	auto& renderContext = g_graphicsEngine->GetRenderContext();
 
-
-
 	RenderTarget& mainRenderTarget = g_graphicsEngine->GetMainRenderTarget();
 
-
-
-
+	g_engine->CreateShadow({ 1.0f,-1.0f,-1.0f },5000.0f);
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
 		//レンダリング開始。
 		g_engine->BeginFrame();
-		// レンダリングターゲットをmainRenderTargetに変更する
-		// レンダリングターゲットとして利用できるまで待つ
-		renderContext.WaitUntilToPossibleSetRenderTarget(mainRenderTarget);
-		// レンダリングターゲットを設定
-		renderContext.SetRenderTargetAndViewport(mainRenderTarget);
-		// レンダリングターゲットをクリア
-		renderContext.ClearRenderTargetView(mainRenderTarget);
 
 		//////////////////////////////////////
 		//ここから絵を描くコードを記述する。
@@ -67,8 +56,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////
 
+		g_engine->DrawShadow();
 
 		g_engine->DrawPostEffect();
+
 
 
 		g_engine->DrawFrameBuffer();
