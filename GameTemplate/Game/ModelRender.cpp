@@ -159,13 +159,19 @@ void CModelRender::InitAnimation(AnimationClip* animationClips, int numAnimation
 	);
 }
 
+/// <summary>
+/// シャドウ用のモデルを初期化
+/// </summary>
 void CModelRender::InitShadowModel()
 {
+	//シャドウ用のモデルクラスの初期化
 	m_shadowModel.Init();
 
+	//シャドウ用のモデルの初期化データ
 	ModelInitData initShadowModelData;
 	initShadowModelData.m_fxFilePath =
 		"Assets/shader/DrawShadowMap.fx";
+	//シャドウのパラーメータを定数バッファに渡す
 	initShadowModelData.m_expandConstantBuffer = (void*)g_graphicsEngine->GetShadowParam();
 	initShadowModelData.m_expandConstantBufferSize = sizeof(*g_graphicsEngine->GetShadowParam());
 
@@ -173,7 +179,9 @@ void CModelRender::InitShadowModel()
 
 	initShadowModelData.m_tkmFilePath = m_tkmFilePath;
 
+	//シャドウ用のモデルの初期化
 	m_shadowModel.InitModel(initShadowModelData);
+	//パラメータを更新する
 	m_shadowModel.UpdateModel(
 		m_position,
 		m_rotation,
@@ -200,7 +208,9 @@ void CModelRender::Update()
 	//モデルの座標更新
 	m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
+	//シャドウ用のモデルが初期化されていたら
 	if (m_shadowModel.IsValid())
+		//パラメータ更新
 		m_shadowModel.UpdateModel(m_position, m_rotation, m_scale);
 
 }

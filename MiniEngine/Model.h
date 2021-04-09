@@ -103,21 +103,43 @@ public:
 		return m_tkmFile;
 	}
 
+	/// <summary>
+	/// シャドウレシーバーフラグを設定する
+	/// </summary>
+	/// <param name="shadowReceiverFlag">シャドウレシーバー？</param>
 	void SetShadowReceiverFlag(const bool shadowReceiverFlag)
 	{
 		m_shadowReceiverFlag = shadowReceiverFlag;
 	}
+
+	/// <summary>
+	/// シャドウキャスターフラグを設定する
+	/// </summary>
+	/// <param name="shadowCasterFlag">シャドウキャスター？</param>
 	void SetShadowCasterFlag(const bool shadowCasterFlag)
 	{
 		m_shadowCasterFlag = shadowCasterFlag;
 	}
 
+	/// <summary>
+	/// メッシュとレイの交差判定
+	/// </summary>
+	/// <param name="start">レイの始点</param>
+	/// <param name="end">レイの終点</param>
+	/// <returns>交差したか？</returns>
 	bool InIntersectLine(const Vector3& start, const Vector3& end);
+	
+	/// <summary>
+	/// InIntersectLineで交差した交差点を取得
+	/// </summary>
+	/// <returns>交差点</returns>
 	const Vector3& GetIntersectPos() const
 	{
 		return m_intersectPos;
 	}
 
+	//デバック用
+	//後で消す
 	const float getDbg()const
 	{
 		return m_dbg;
@@ -130,22 +152,25 @@ public:
 	{
 		return m_dbgV2;
 	}
-
+	//デバック用ここまで
 
 private:
 
-	Matrix m_world;														//ワールド行列。
-	TkmFile m_tkmFile;													//tkmファイル。
-	Skeleton m_skeleton;												//スケルトン。
-	MeshParts m_meshParts;											//メッシュパーツ。
+	Matrix m_world;										//ワールド行列。
+	TkmFile m_tkmFile;									//tkmファイル。
+	Skeleton m_skeleton;								//スケルトン。
+	MeshParts m_meshParts;								//メッシュパーツ。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
 
-	bool m_shadowReceiverFlag = false;
-	bool m_shadowCasterFlag = false;
+	bool m_shadowReceiverFlag = false;		//シャドウレシーバー？
+	bool m_shadowCasterFlag = false;		//シャドウキャスター？
 
-	Vector3 m_intersectPos = g_vec3Zero;
+	Vector3 m_intersectPos = g_vec3Zero;	//交差点
 	Vector3 m_lastStart = g_vec3Zero;
-	float m_dbg = 0.0f;
+
+	//デバック用
+	//後で消す
+	float m_dbg = 0.0f;	
 	Vector3 m_dbgV1 = g_vec3Zero;
 	Vector3 m_dbgV2 = g_vec3Zero;
 

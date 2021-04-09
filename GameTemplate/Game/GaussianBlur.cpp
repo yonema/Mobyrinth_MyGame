@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "GaussianBlur.h"
 
-
+/// <summary>
+/// 初期化。
+/// </summary>
+/// <param name="originalTexture">ガウシアンブラーをかけるオリジナルテクスチャ。</param>
 void CGaussianBlur::Init(Texture* originalTexture)
 {
 	m_originalTexture = originalTexture;
@@ -12,7 +15,14 @@ void CGaussianBlur::Init(Texture* originalTexture)
 	InitSprites();
 }
 
-
+/// <summary>
+/// ガウシアンブラーをGPU上で実行。
+/// </summary>
+/// <remarks>
+/// 本関数の呼び出しは、DirectX12を利用した描画コマンド生成中に呼び出す必要があります。
+/// </remarks>
+/// <param name="rc">レンダリングターゲット</param>
+/// <param name="blurPower">ブラーの強さ。値が大きいほどボケが強くなる。</param>
 void CGaussianBlur::ExecuteOnGPU(RenderContext& rc, float blurPower)
 {
 	//重みテーブルを更新する。
@@ -45,6 +55,9 @@ void CGaussianBlur::ExecuteOnGPU(RenderContext& rc, float blurPower)
 	rc.WaitUntilFinishDrawingToRenderTarget(m_yBlurRenderTarget);
 }
 
+/// <summary>
+/// レンダリングターゲットを初期化。
+/// </summary>
 void CGaussianBlur::InitRenderTargets()
 {
 	//Xブラー用のレンダリングターゲットを作成する。
@@ -68,6 +81,9 @@ void CGaussianBlur::InitRenderTargets()
 	);
 }
 
+/// <summary>
+/// スプライトを初期化。
+/// </summary>
 void CGaussianBlur::InitSprites()
 {
 	//横ブラー用のスプライトを初期化する。
@@ -111,6 +127,10 @@ void CGaussianBlur::InitSprites()
 		m_yBlurSprite.Init(yBlurSpriteInitData);
 	}
 }
+
+/// <summary>
+/// 重みテーブルを更新する。
+/// </summary>
 void CGaussianBlur::UpdateWeightsTable(float blurPower)
 {
 	float total = 0;

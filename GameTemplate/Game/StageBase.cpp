@@ -4,10 +4,7 @@
 
 bool IStageBase::Start()
 {
-	//ディレクションライトの作成
-	m_stageDirectionLight = NewGO<CDirectionLight>(0);
-	m_stageDirectionLight->SetDirection({ 1.0f,-1.0f,-1.0f });
-	m_stageDirectionLight->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+
 
 	//ステージ開始時の演出の作成
 	m_startDirecting = NewGO<StartDirecting>(0, "StartDirecting");
@@ -299,7 +296,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 IStageBase::~IStageBase()
 {
 	//単体のオブジェクトを消去
-	DeleteGO(m_stageDirectionLight);
 	DeleteGO(FindGO<GameCamera>("GameCamera"));
 	DeleteGO(m_pause);
 	DeleteGO(m_startDirecting);

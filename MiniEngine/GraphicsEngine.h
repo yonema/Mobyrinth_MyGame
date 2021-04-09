@@ -325,63 +325,120 @@ private:
 
 
 	//追加
-private:
-	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット
-	//mainRenderTargetのテクスチャをフレームバッファーに貼り付けるためのスプライト
-	
+private:	//データメンバ
+	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット	
 	CPostEffect m_postEffect;			//ポストエフェクト
-	CShadowMap m_shadowMap;
+	CShadowMap m_shadowMap;				//シャドウマップ
+	//メインレンダリングターゲットの絵をフレームバッファにコピーするためのスプライト
 	Sprite m_copyToFrameBufferSprite;
-public:
+public:		//メンバ関数
 	/// <summary>
 	/// メインレンダリングターゲットの取得。
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>メインレンダリングターゲット</returns>
 	RenderTarget& GetMainRenderTarget()
 	{
 		return m_mainRenderTarget;
 	}
+
 	/// <summary>
-/// フレームバッファに描画するときのビューポートを取得。
-/// </summary>
-/// <returns></returns>
+	/// フレームバッファに描画するときのビューポートを取得。
+	/// </summary>
+	/// <returns>ビューポート</returns>
 	D3D12_VIEWPORT& GetFrameBufferViewport()
 	{
 		return m_viewport;
 	}
+
+	/// <summary>
+	/// シャドウを描画する
+	/// </summary>
 	void ShadowRender();
+
+	/// <summary>
+	/// メインレンダーターゲットを使用できるようにする
+	/// </summary>
+	void UseMainRenderTarget();
+
+	/// <summary>
+	/// ポストエフェクトを描画する
+	/// </summary>
 	void PostEffectRender();
+
+	/// <summary>
+	/// メインレンダリングターゲットの絵をフレームバッファーにコピーする
+	/// </summary>
 	void CopyToFrameBuffer();
 
+	/// <summary>
+	/// シャドウのパラメータを取得する
+	/// </summary>
+	/// <returns>シャドウのパラメータ</returns>
 	ShadowParam* GetShadowParam()
 	{
 		return m_shadowMap.GetShadowParam();
 	}
+
+	/// <summary>
+	/// シャドウマップのガウシアンブラー済みのテクスチャの取得
+	/// </summary>
+	/// <returns>シャドウマップのガウシアンブラー済みのテクスチャ</returns>
 	Texture& GetShadowBlur()
 	{
 		return m_shadowMap.GetShadowBlur();
 	}
-	Texture& GetShadowRenderTex()
+
+	/// <summary>
+	/// シャドウマップに描画するシャドウ用モデルの登録
+	/// </summary>
+	/// <param name="shadowModel">登録するシャドウ用モデル</param>
+	void AddShadowModel(Model& shadowModel)
 	{
-		return m_shadowMap.GetRenderTargetTex();
-	}
-	void AddShadow(Model& shadowModel)
-	{
-		m_shadowMap.AddShadow(shadowModel);
-	}
-	void RemoveShadow(Model& shadowModel)
-	{
-		m_shadowMap.RemoveShadow(shadowModel);
-	}
-	void CreateShadowMap(const Vector3& direction, const float length)
-	{
-		m_shadowMap.CreateShadowMap(direction, length);
+		m_shadowMap.AddShadowModel(shadowModel);
 	}
 
-private:
+	/// <summary>
+	/// シャドウマップからシャドウ用モデルを破棄する
+	/// </summary>
+	/// <param name="shadowModel">破棄するシャドウ用モデル</param>
+	void RemoveShadowModel(Model& shadowModel)
+	{
+		m_shadowMap.RemoveShadowModel(shadowModel);
+	}
+
+	/// <summary>
+	/// 影を生成するライトを生成する
+	/// </summary>
+	/// <param name="direction">影を作るライトの方向</param>
+	/// <param name="length">ライトがどれくらい離れているか</param>
+	/// <param name="target">ライトが照らす目標</param>
+	void CreateShadowMap(const Vector3& direction, const float length, const Vector3& target)
+	{
+		m_shadowMap.CreateShadowMap(direction, length, target);
+	}
+
+	/// <summary>
+	/// 影を生成するライトのパラメーター設定する
+	/// </summary>
+	/// <param name="direction">影を作るライトの方向</param>
+	/// <param name="length">ライトがどれくらい離れているか</param>
+	/// <param name="target">ライトが照らす目標</param>
+	void SetShadowParam(const Vector3& direction, const float length, const Vector3& target)
+	{
+		m_shadowMap.SetShadowParam(direction, length, target);
+	}
+
+private:	//privateなメンバ関数
+	/// <summary>
+	/// メインレンダーターゲットの初期化
+	/// </summary>
+	/// <returns>初期化できたか？</returns>
 	bool InitMainRenderTarget();
+
+	/// <summary>
+	/// フレームバッファにコピーするスプライトの初期化
+	/// </summary>
 	void InitCopyToFrameBufferSprite();
-	void UseMainRenderTarget();
 };
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。

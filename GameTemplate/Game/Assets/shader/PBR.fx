@@ -54,7 +54,6 @@ struct SPSIn {
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド空間でのピクセルの座標。
 	float4 posInLVP		: TEXCOORD2;
-	//float4 exsample		: TEXCOORD3;
 };
 
 ////////////////////////////////////////////////
@@ -110,7 +109,7 @@ sampler g_sampler : register(s0);	//サンプラステート。
 float3 GetNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
 float Beckmann(float m, float t);
 float SpcFresnel(float f0, float u);
-float CookTrranceSpecular(float3 L, float3 V, float3 N, float metaric);
+float CookTrranceSpecular(float3 L, float3 V, float3 N, float3 N2, float metaric);
 float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V);
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin);
 ////////////////////////////////////////////////
@@ -153,7 +152,7 @@ float SpcFresnel(float f0, float u)
 /// <param name="V">視点に向かうベクトル</param>
 /// <param name="N">法線ベクトル</param>
 /// <param name="metaric">金属度</param>
-float CookTrranceSpecular(float3 L, float3 V, float3 N, float metaric)
+float CookTrranceSpecular(float3 L, float3 V, float3 N, float3 N2, float metaric)
 {
 	float microfacet = 0.76f;
 	//金属度を垂直入射の時のフレネル反射率として扱う。
@@ -167,6 +166,8 @@ float CookTrranceSpecular(float3 L, float3 V, float3 N, float metaric)
 	float VdotH = saturate(dot(V, H));
 	float NdotL = saturate(dot(N, L));
 	float NdotV = saturate(dot(N, V));
+	if (NdotV == 0.0f)
+		NdotV = saturate(dot(N2, V));
 
 	//D項をベックマン分布を用いて計算する。
 	float D = Beckmann(microfacet, NdotH);
@@ -177,6 +178,9 @@ float CookTrranceSpecular(float3 L, float3 V, float3 N, float metaric)
 	//m項を求める。
 	float m = PI * NdotV * NdotH;
 	//ここまで求めた、値を利用して、クックトランスモデルの鏡面反射を求める。
+	if (m == 0.0f)
+		//0割り防止
+		return 0.0f;
 	return max(F * D * G / m, 0.0);
 }
 
@@ -300,7 +304,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 
 	return psIn;
 }
-
+float3 g_normal2;
 
 /// <summary>
 /// ピクセルシェーダーのエントリー関数。
@@ -309,7 +313,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 {
 	//法線を計算。
 	float3 normal = GetNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
-	
+	float3 normal2 = psIn.normal;
 	//アルベドカラー、スペキュラカラー、金属度をサンプリングする。
 	//アルベドカラー(拡散反射光)。
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
@@ -343,7 +347,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		//クックトランスモデルを利用した鏡面反射率を計算する。
 
 		//クックトランスモデルの鏡面反射率を計算する。
-		float3 spec = CookTrranceSpecular(-directionLight[dirligNo].direction, toEye, normal, metaric) * directionLight[dirligNo].color;
+		float3 spec = CookTrranceSpecular(-directionLight[dirligNo].direction, toEye, normal,normal2, metaric) * directionLight[dirligNo].color;
 		//金属度が高ければ、鏡面反射はスペキュラカラー、低ければ白。
 		//スペキュラカラーの強さを鏡面反射率として扱う。
 		float specTerm = length(specColor.xyz);
@@ -360,7 +364,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//最終的なカラー
 	float4 finalColor = 1.0f;
 	finalColor.xyz = lig;
-	bool isShadow = false;
+
 	if (shadowReceiverFlag >= 1)
 	{
 		//ライトビュースクリーン空間からUV空間に座標変換。
@@ -384,13 +388,10 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 				float lit_factor = variance / (variance + md * md);
 				float3 shadowColor = finalColor.xyz * 0.5f;
 				finalColor.xyz = lerp(shadowColor, finalColor.xyz, lit_factor);
-				isShadow = true;
 			}
 
 		}
 	}
-	if (isShadow)
-		return finalColor;
 
 	return finalColor;
 }

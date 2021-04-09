@@ -4,6 +4,9 @@
 
 class CDirectionLight;
 
+/// <summary>
+/// ライトマネージャークラス
+/// </summary>
 class CLightManager
 {
 private://privateなメンバ関数
@@ -96,16 +99,26 @@ public://publidなメンバ関数
 		return m_directionLightsData;
 	}
 
+	/// <summary>
+	/// 現在のシャドウの数を取得
+	/// </summary>
+	/// <returns></returns>
 	int GetShadowNum()const
 	{
 		return m_lightParam.numShadow;
 	}
 
+	/// <summary>
+	/// シャドウの数を加算
+	/// </summary>
 	void AddShadowNum()
 	{
 		m_lightParam.numShadow++;
 	}
 
+	/// <summary>
+	/// シャドウの数の減算
+	/// </summary>
 	void RemoveShadowNum()
 	{
 		m_lightParam.numShadow--;

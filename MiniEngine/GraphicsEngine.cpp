@@ -64,6 +64,10 @@ void GraphicsEngine::WaitDraw()
 	}
 }
 
+/// <summary>
+/// メインレンダーターゲットの初期化
+/// </summary>
+/// <returns>初期化できたか？</returns>
 bool GraphicsEngine::InitMainRenderTarget()
 {
 	bool ret =
@@ -80,6 +84,9 @@ bool GraphicsEngine::InitMainRenderTarget()
 	return ret;
 }
 
+/// <summary>
+/// フレームバッファにコピーするスプライトの初期化
+/// </summary>
 void GraphicsEngine::InitCopyToFrameBufferSprite()
 {
 	// mainRenderTargetのテクスチャをフレームバッファーに貼り付けるためのスプライトを初期化する
@@ -101,11 +108,8 @@ void GraphicsEngine::InitCopyToFrameBufferSprite()
 
 bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 {
-	//
+
 	g_graphicsEngine = this;
-
-
-
 
 	m_frameBufferWidth = frameBufferWidth;
 	m_frameBufferHeight = frameBufferHeight;
@@ -156,9 +160,6 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 		return false;
 	}
 	
-
-
-
 
 	//コマンドアロケータの作成。
 	m_d3dDevice->CreateCommandAllocator(
@@ -231,9 +232,10 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	////mainRenderTargetのテクスチャをフレームバッファーに貼り付けるためのスプライトの初期化
 	InitCopyToFrameBufferSprite();
 
+	//シャドウマップの初期化
 	m_shadowMap.Init();
+	//ポストエフェクトの初期化
 	m_postEffect.Init();
-
 
 
 	return true;
@@ -509,10 +511,28 @@ void GraphicsEngine::BeginRender()
 	m_renderContext.ClearRenderTargetView(m_currentFrameBufferRTVHandle, clearColor);
 	m_renderContext.ClearDepthStencilView(m_currentFrameBufferDSVHandle, 1.0f);
 
-	UseMainRenderTarget();
+	//UseMainRenderTarget();
 
 
 }
+
+
+void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
+{
+	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
+}
+
+/// <summary>
+/// シャドウを描画する
+/// </summary>
+void GraphicsEngine::ShadowRender()
+{
+	m_shadowMap.Draw(m_renderContext);
+}
+
+/// <summary>
+/// メインレンダーターゲットを使用できるようにする
+/// </summary>
 void GraphicsEngine::UseMainRenderTarget()
 {
 	// レンダリングターゲットをmainRenderTargetに変更する
@@ -522,27 +542,21 @@ void GraphicsEngine::UseMainRenderTarget()
 	m_renderContext.SetRenderTargetAndViewport(m_mainRenderTarget);
 	// レンダリングターゲットをクリア
 	m_renderContext.ClearRenderTargetView(m_mainRenderTarget);
-
-}
-void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
-{
-	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
 }
 
-
-void GraphicsEngine::ShadowRender()
-{
-	m_shadowMap.Draw(m_renderContext);
-}
-
+/// <summary>
+/// ポストエフェクトを描画する
+/// </summary>
 void GraphicsEngine::PostEffectRender()
 {
 	m_postEffect.Draw(m_renderContext);
 }
 
+/// <summary>
+/// メインレンダリングターゲットの絵をフレームバッファーにコピーする
+/// </summary>
 void GraphicsEngine::CopyToFrameBuffer()
 {
-
 	// メインレンダリングターゲットの絵をフレームバッファーにコピー
 	m_renderContext.SetRenderTarget(
 		m_currentFrameBufferRTVHandle,

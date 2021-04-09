@@ -27,6 +27,7 @@ struct SPointLight
 	Vector4 ptColor;		//カラー。
 };
 
+//シャドウの最大数
 const int g_max_shadowMap = 5;
 
 //シャドウマップ用のパラメータ構造体

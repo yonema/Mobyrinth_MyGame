@@ -146,7 +146,7 @@ private:
 	ConstantBuffer m_lightConstantBuffer;					//ユーザー拡張用の定数バッファ
 	void* m_lightData = nullptr;						//ユーザー拡張データ。
 
-	ConstantBuffer m_shadowConstantBuffer;
-	void* m_shadowParamData = nullptr;
+	ConstantBuffer m_shadowConstantBuffer;				//シャドウ用定数バッファ
+	void* m_shadowParamData = nullptr;					//シャドウ用データ
 
 };

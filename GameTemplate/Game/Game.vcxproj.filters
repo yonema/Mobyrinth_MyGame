@@ -398,11 +398,11 @@
     <ClCompile Include="ShadowMap.cpp">
       <Filter>MyCode\PostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="ShadowModel.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="testModel.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowModel.cpp">
+      <Filter>MyCode\graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -748,11 +748,11 @@
     <ClInclude Include="ShadowMap.h">
       <Filter>MyCode\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="ShadowModel.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="testModel.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowModel.h">
+      <Filter>MyCode\graphic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

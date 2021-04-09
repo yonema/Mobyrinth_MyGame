@@ -1,14 +1,20 @@
 #include "stdafx.h"
 #include "ShadowMap.h"
 
+/// <summary>
+/// 初期化関数
+/// </summary>
 void CShadowMap::Init()
 {
+	//シャドウマップのレンダーターゲットの初期化
 	InitShadowMapRenderTarget();
+	//ガウシアンブラーの初期化
 	InitGaussianBlur();
 }
 
-
-
+/// <summary>
+/// シャドウマップのレンダーターゲットの初期化
+/// </summary>
 void CShadowMap::InitShadowMapRenderTarget()
 {
 	//シャドウマップ描画用のレンダリングターゲットを作成する。
@@ -24,30 +30,51 @@ void CShadowMap::InitShadowMapRenderTarget()
 	);
 }
 
+/// <summary>
+/// ガウシアンブラーの初期化
+/// </summary>
 void CShadowMap::InitGaussianBlur()
 {
 	m_gaussianBlur.Init(&m_shadowMapRenderTarget.GetRenderTargetTexture());
 }
 
-
-void CShadowMap::CreateShadowMap(const Vector3& direction, const float length)
+/// <summary>
+/// 影を生成するライトを生成する
+/// </summary>
+/// <param name="direction">影を作るライトの方向</param>
+/// <param name="length">ライトがどれくらい離れているか</param>
+/// <param name="target">ライトが照らす目標</param>
+void CShadowMap::CreateShadowMap
+(const Vector3& direction, const float length, const Vector3& target)
 {
+	//影を生成するライトが規定数より多かったら作らない
 	if (CLightManager::GetInstance()->GetShadowNum() >= g_max_shadowMap)
 		return;
 
+	//方向と距離からライトのポジションを計算する
 	Vector3 dir = direction;
 	dir.Normalize();
-	Vector3 ligPos = g_vec3Zero - dir;
-	ligPos.Scale(length);
+	dir.Scale(length);
+	Vector3 ligPos = target - dir;
+
 	//カメラの位置を設定。これはライトの位置。
 	Camera lightCamera;
 	lightCamera.SetPosition(ligPos);
 	//カメラの注視点を設定。これがライトが照らしている場所。
-	lightCamera.SetTarget(g_vec3Zero);
-	//上方向を設定。今回はライトが真下を向いているので、X方向を上にしている。
-	lightCamera.SetUp({1.0f,0.0f,0.0f});
-	//lightCamera.SetUp(g_vec3Up);
+	lightCamera.SetTarget(target);
 
+	//上方向を設定。
+	if (direction.x == 0.0f && direction.z == 0.0f && direction.y != 0.0f)
+		//ライトが真下か真上を向いている場合はX方向を上方向に設定する
+		lightCamera.SetUp({ 1.0f,0.0f,0.0f });
+	else
+		//通常はYアップ
+		lightCamera.SetUp(g_vec3Up);
+
+	//ライトカメラを並行投影にする
+	lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Ortho);
+	lightCamera.SetWidth(1024);
+	lightCamera.SetHeight(1024);
 	//ライトビュープロジェクション行列を計算している。
 	lightCamera.Update();
 
@@ -58,9 +85,13 @@ void CShadowMap::CreateShadowMap(const Vector3& direction, const float length)
 		lightCamera.GetViewProjectionMatrix();
 
 	CLightManager::GetInstance()->AddShadowNum();
-
+	m_targetPos = target;
 }
 
+/// <summary>
+/// 描画関数
+/// </summary>
+/// <param name="renderContext">レンダーコンテキスト</param>
 void CShadowMap::Draw(RenderContext& renderContext)
 {
 	//シャドウマップにレンダリング。
@@ -71,15 +102,28 @@ void CShadowMap::Draw(RenderContext& renderContext)
 
 	renderContext.ClearRenderTargetView(m_shadowMapRenderTarget);
 
-	
+	//シャドウマップに描画するシャドウ用モデルのリストを引っ張ってくる
 	std::list<Model*>::iterator itr = m_shadowModels.begin();
+
+	//現在のシャドウの数だけ繰り返す
 	for (int shadowNum = 0; shadowNum < CLightManager::GetInstance()->GetShadowNum(); shadowNum++)
 	{
 		Camera lightCamera;
 		lightCamera.SetPosition(m_shadowParam[shadowNum].lightPos);
-		lightCamera.SetTarget(g_vec3Zero);
-		lightCamera.SetUp({ 1.0f,0.0f,0.0f });
-		//lightCamera.SetUp(g_vec3Up);
+		lightCamera.SetTarget(m_targetPos);
+		Vector3 direction = m_targetPos - m_shadowParam[shadowNum].lightPos;
+		//上方向を設定。
+		if (direction.x == 0.0f && direction.z == 0.0f && direction.y != 0.0f)
+			//ライトが真下か真上を向いている場合はX方向を上方向に設定する
+			lightCamera.SetUp({ 1.0f,0.0f,0.0f });
+		else
+			//通常はYアップ
+			lightCamera.SetUp(g_vec3Up);
+
+		//ライトカメラを並行投影にする
+		lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Ortho);
+		lightCamera.SetWidth(1024);
+		lightCamera.SetHeight(1024);
 		lightCamera.Update();
 		for (; itr != m_shadowModels.end(); itr++)
 		{
@@ -97,11 +141,20 @@ void CShadowMap::Draw(RenderContext& renderContext)
 	m_gaussianBlur.ExecuteOnGPU(renderContext, 5.0f);
 }
 
-void CShadowMap::AddShadow(Model& shadowModel)
+/// <summary>
+/// シャドウマップに描画するシャドウ用モデルの登録
+/// </summary>
+/// <param name="shadowModel">登録するシャドウ用モデル</param>
+void CShadowMap::AddShadowModel(Model& shadowModel)
 {
 	m_shadowModels.push_back(&shadowModel);
 }
-void CShadowMap::RemoveShadow(Model& shadowModel)
+
+/// <summary>
+/// シャドウマップからシャドウ用モデルを破棄する
+/// </summary>
+/// <param name="shadowModel">破棄するシャドウ用モデル</param>
+void CShadowMap::RemoveShadowModel(Model& shadowModel)
 {
 	std::list<Model*>::iterator itr = m_shadowModels.begin();
 	for (; itr != m_shadowModels.end(); itr++)
@@ -112,4 +165,45 @@ void CShadowMap::RemoveShadow(Model& shadowModel)
 			break;
 		}
 	}
+}
+
+/// <summary>
+/// 影を生成するライトのパラメーター設定する
+/// </summary>
+/// <param name="direction">影を作るライトの方向</param>
+/// <param name="length">ライトがどれくらい離れているか</param>
+/// <param name="target">ライトが照らす目標</param>
+void CShadowMap::SetShadowParam
+(const Vector3& direction, const float length, const Vector3& target)
+{
+	Vector3 dir = direction;
+	dir.Normalize();
+	dir.Scale(length);
+	Vector3 ligPos = target - dir;
+	//カメラの位置を設定。これはライトの位置。
+	Camera lightCamera;
+	lightCamera.SetPosition(ligPos);
+	//カメラの注視点を設定。これがライトが照らしている場所。
+	lightCamera.SetTarget(target);
+	//上方向を設定。
+	if (direction.x == 0.0f && direction.z == 0.0f && direction.y != 0.0f)
+		//ライトが真下か真上を向いている場合はX方向を上方向に設定する
+		lightCamera.SetUp({ 1.0f,0.0f,0.0f });
+	else
+		//通常はYアップ
+		lightCamera.SetUp(g_vec3Up);
+
+	//ライトカメラを並行投影にする
+	lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Ortho);
+	lightCamera.SetWidth(1024);
+	lightCamera.SetHeight(1024);
+	//ライトビュープロジェクション行列を計算している。
+	lightCamera.Update();
+
+
+	m_shadowParam[0].lightPos =
+		lightCamera.GetPosition();
+	m_shadowParam[0].mLVP =
+		lightCamera.GetViewProjectionMatrix();
+	m_targetPos = target;
 }

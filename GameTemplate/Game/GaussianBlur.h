@@ -6,12 +6,13 @@
 /// ガウシアンブラークラス。
 /// </summary>
 class CGaussianBlur {
-public:
+public:		//メンバ関数
 	/// <summary>
 	/// 初期化。
 	/// </summary>
 	/// <param name="originalTexture">ガウシアンブラーをかけるオリジナルテクスチャ。</param>
 	void Init(Texture* originalTexture);
+
 	/// <summary>
 	/// ガウシアンブラーをGPU上で実行。
 	/// </summary>
@@ -21,6 +22,7 @@ public:
 	/// <param name="rc">レンダリングターゲット</param>
 	/// <param name="blurPower">ブラーの強さ。値が大きいほどボケが強くなる。</param>
 	void ExecuteOnGPU(RenderContext& rc, float blurPower);
+
 	/// <summary>
 	/// ボケテクスチャを取得。
 	/// </summary>
@@ -29,20 +31,24 @@ public:
 	{
 		return m_yBlurRenderTarget.GetRenderTargetTexture();
 	}
-private:
+
+private:	//privateなメンバ関数
 	/// <summary>
 	/// レンダリングターゲットを初期化。
 	/// </summary>
 	void InitRenderTargets();
+
 	/// <summary>
 	/// スプライトを初期化。
 	/// </summary>
 	void InitSprites();
+
 	/// <summary>
 	/// 重みテーブルを更新する。
 	/// </summary>
 	void UpdateWeightsTable(float blurPower);
-private:
+
+private:	//データメンバ
 	enum { NUM_WEIGHTS = 8 };				//重みの数。
 	float m_weights[NUM_WEIGHTS];			//重みテーブル。
 	Texture* m_originalTexture = nullptr;	//オリジナルテクスチャ。
