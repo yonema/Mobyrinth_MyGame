@@ -145,6 +145,11 @@ public://public‚Èƒƒ“ƒoŠÖ”
 		return m_leftOrRight;
 	}
 
+	const int GetWayPointState()const
+	{
+		return m_wayPointState;
+	}
+
 	/// <summary>
 	/// OBB‚ÌQÆ‚ğ–ß‚·
 	/// </summary>

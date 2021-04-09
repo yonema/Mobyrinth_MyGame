@@ -2,6 +2,7 @@
 
 //基本的に必要
 #include "GameCamera.h"
+#include "SoundCue.h"
 
 //ポーズ画面用
 #include "Pause.h"
@@ -47,6 +48,8 @@ private:
 
 	void Goal();
 
+	void BGMInteractive();
+
 public: //インライン関数
 	void SetStartUpStartDirecting(const bool b)
 	{
@@ -55,6 +58,10 @@ public: //インライン関数
 	void SetTitlePlayer(const bool b)
 	{
 		m_titlePlayer = b;
+	}
+	void SetStartBGM(const bool b)
+	{
+		m_startBGM = b;
 	}
 
 protected:
@@ -79,5 +86,11 @@ private:
 	StartDirecting* m_startDirecting = nullptr;
 	bool m_startUpStartDirecting = true;
 	bool m_titlePlayer = false;
+
+
+private:
+	CSoundCue* m_bgmStage = nullptr;				//BGMのサウンドキュー
+	CSoundCue* m_bgmStage2 = nullptr;				//BGMのサウンドキュー
+	bool m_startBGM = true;
 };
 
