@@ -6,6 +6,7 @@
 CLightManager* CLightManager::m_instance = nullptr;
 SLightParam CLightManager::m_lightParam;
 
+//コンストラクタ
 CLightManager::CLightManager()
 {
 	if (m_instance != nullptr) {
@@ -15,12 +16,14 @@ CLightManager::CLightManager()
 	Init();	//初期化処理
 }
 
+//デストラクタ
 CLightManager::~CLightManager()
 {
 	//nullptrを入れておく
 	m_instance = nullptr;
 }
 
+//初期化関数
 void CLightManager::Init()
 {
 	//ライトの共通のパラメータの初期値を設定
@@ -29,15 +32,22 @@ void CLightManager::Init()
 	m_lightParam.ambientLight = { 0.6f,0.6f,0.6f };
 	m_lightParam.numPointLight = 0;
 	m_lightParam.specPow = 5.0f;
+	m_lightParam.numShadow = 0;
 }
 
 
-
+//アップデート
 void CLightManager::ExecuteUpdate()
 {
 	//視点をカメラの位置にする
 	m_lightParam.eyePos = g_camera3D->GetPosition();
 }
+
+/// <summary>
+/// ライトを追加する関数
+/// </summary>
+/// <param name="light">追加するライト</param>
+/// <returns>追加できたらtrueを戻す</returns>
 bool CLightManager::AddLight(CDirectionLight* light)
 {
 
@@ -66,7 +76,10 @@ bool CLightManager::AddLight(CDirectionLight* light)
 		return true;
 }
 
-
+/// <summary>
+/// ライトを消去する関数
+/// </summary>
+/// <param name="light">消去するライト</param>
 void CLightManager::RemoveLight(CDirectionLight* light)
 {
 	//消すライトの管理番号を取得

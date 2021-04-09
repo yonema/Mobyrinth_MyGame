@@ -1,7 +1,6 @@
 #pragma once
 
 //基本的に必要
-#include "DirectionLight.h"
 #include "GameCamera.h"
 #include "SoundCue.h"
 
@@ -71,10 +70,7 @@ protected:
 	/// </summary>
 	/// <param name="filePath">tklのファイルパス</param>
 	void LoadLevel(const char* tklFilePath);
-	CDirectionLight* GetStageDirectionLight()
-	{
-		return m_stageDirectionLight;
-	}
+
 	virtual bool StartSub() = 0 { return true; };
 	virtual void RetryStage() = 0 {};
 	void Release()
@@ -83,7 +79,6 @@ protected:
 	}
 private:
 	CLevel m_level;
-	CDirectionLight* m_stageDirectionLight = nullptr;
 	CPause* m_pause = nullptr;
 	OOgoal* m_goal = nullptr;
 	int m_goalCounter = 0;

@@ -276,6 +276,7 @@
     <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingShaderTable.cpp" />
     <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingWorld.cpp" />
     <ClCompile Include="..\..\MiniEngine\raytracing\TLASBuffer.cpp" />
+    <ClCompile Include="..\..\MiniEngine\RenderTarget.cpp" />
     <ClCompile Include="..\..\MiniEngine\RootSignature.cpp" />
     <ClCompile Include="..\..\MiniEngine\RWStructuredBuffer.cpp" />
     <ClCompile Include="..\..\MiniEngine\Shader.cpp" />
@@ -288,14 +289,19 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
+    <ClCompile Include="ShadowModel.cpp" />
     <ClCompile Include="FontRender.cpp" />
+    <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="MapChip2D.cpp" />
     <ClCompile Include="MyCharacterController.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="OBBWorld.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="PostEffect.cpp" />
+    <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundSource.cpp" />
@@ -342,6 +348,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="testModel.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TklFile.cpp" />
     <ClCompile Include="WaveFile.cpp" />
@@ -392,6 +399,7 @@
     <ClInclude Include="..\..\MiniEngine\raytracing\TLASBuffer.h" />
     <ClInclude Include="..\..\MiniEngine\RenderContext.h" />
     <ClInclude Include="..\..\MiniEngine\RenderContext_inline.h" />
+    <ClInclude Include="..\..\MiniEngine\RenderTarget.h" />
     <ClInclude Include="..\..\MiniEngine\RootSignature.h" />
     <ClInclude Include="..\..\MiniEngine\RWStructuredBuffer.h" />
     <ClInclude Include="..\..\MiniEngine\Shader.h" />
@@ -404,8 +412,11 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="Bloom.h" />
     <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="ShadowModel.h" />
     <ClInclude Include="FontRender.h" />
+    <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="Level2D.h" />
     <ClInclude Include="MapChip2D.h" />
     <ClInclude Include="MyCharacterController.h" />
@@ -413,6 +424,8 @@
     <ClInclude Include="OBB.h" />
     <ClInclude Include="OBBWorld.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="PostEffect.h" />
+    <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundSource.h" />
@@ -452,11 +465,44 @@
     <ClInclude Include="StartDirecting.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="testModel.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TklFile.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\shader\DrawShadowMap.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\model.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\myModel.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\PBR.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\PostEffect.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\sprite.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

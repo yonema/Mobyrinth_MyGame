@@ -1,4 +1,5 @@
 #pragma once
+#include "ShadowModel.h"
 
 /// <summary>
 /// モデル描画クラス
@@ -74,6 +75,30 @@ public:		//ここのメンバ関数を主に使う。
 		m_animationPtr->Play(animNo, interpolateTime);
 	}
 
+	/// <summary>
+	/// シャドウレシーバーフラグを設定
+	/// </summary>
+	/// <param name="shadowReceiverFlag">シャドウレシーバー？</param>
+	void SetShadowReceiverFlag(const bool shadowReceiverFlag)
+	{
+		m_model.SetShadowReceiverFlag(shadowReceiverFlag);
+	}
+
+	/// <summary>
+	/// シャドウキャスターフラグを設定
+	/// </summary>
+	/// <param name="shadowCasterFlag">シャドウキャスター？</param>
+	void SetShadowCasterFlag(const bool shadowCasterFlag)
+	{
+		//シャドウキャスターがtrueで、かつ
+		//まだシャドウ用モデルが初期化されていなかったら
+		if (shadowCasterFlag && !m_shadowModel.IsValid())
+			//シャドウ用モデルを初期化
+			InitShadowModel();
+
+		m_model.SetShadowCasterFlag(shadowCasterFlag);
+	}
+
 	//モデルの参照を返す
 	Model& GetModel()
 	{
@@ -103,15 +128,24 @@ private:	//privateなメンバ関数
 	/// <param name="numAnimationClips">アニメーションクリップの総数</param>
 	void InitAnimation(AnimationClip* animationClips, int numAnimationClips);
 
+	/// <summary>
+	/// シャドウ用のモデルを初期化
+	/// </summary>
+	void InitShadowModel();
+
 
 private://データメンバ
 	Model m_model;								//モデル表示処理
 	std::unique_ptr<Skeleton> m_skeletonPtr;	//スケルトン。
 	std::unique_ptr<Animation> m_animationPtr;	//アニメション再生処理。
+	const char* m_tkmFilePath = nullptr;
 
 	Vector3 m_position = g_vec3Zero;			//位置
 	Quaternion m_rotation = g_quatIdentity;		//回転
 	Vector3 m_scale = g_vec3One;				//拡大
+
+	CShadowModel m_shadowModel;					//シャドウを描画する用のモデル
+
 
 	bool m_isInited = false;					//初期化済み？
 };
