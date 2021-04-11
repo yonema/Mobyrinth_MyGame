@@ -52,6 +52,8 @@ public:
 		DXGI_FORMAT colorBufferFormat,
 		void* expandData2 = nullptr,
 		int expandDataSize2 = 0,
+		void* expandData3 = nullptr,
+		int expandDataSize3 = 0,
 		void* shadowParamData = nullptr,
 		int shadowParamDataSize = 0
 	);
@@ -95,6 +97,16 @@ public:
 	/// ディスクリプタヒープを作成。
 	/// </summary>
 	void CreateDescriptorHeaps();
+
+	/// <summary>
+	/// 自己発光色を設定する
+	/// </summary>
+	/// <param name="color">自己発光色</param>
+	void SetSelfLuminous(const Vector4& color)
+	{
+		m_selfLuminous = color;
+	}
+
 private:
 	/// <summary>
 	/// tkmメッシュからメッシュを作成。
@@ -129,7 +141,8 @@ private:
 		Matrix mWorld;		//ワールド行列。
 		Matrix mView;		//ビュー行列。
 		Matrix mProj;		//プロジェクション行列。
-		int shadowReceiverFlag;
+		Vector4 selfLuminous;	//自己発光色
+		int shadowReceiverFlag;	//シャドウレシーバー？
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
 	ConstantBuffer m_expandConstantBuffer;					//ユーザー拡張用の定数バッファ
@@ -142,11 +155,12 @@ private:
 
 	ConstantBuffer m_expandConstantBuffer2;					//ユーザー拡張用の定数バッファ
 	void* m_expandData2 = nullptr;						//ユーザー拡張データ。
-
-	ConstantBuffer m_lightConstantBuffer;					//ユーザー拡張用の定数バッファ
-	void* m_lightData = nullptr;						//ユーザー拡張データ。
+	ConstantBuffer m_expandConstantBuffer3;					//ユーザー拡張用の定数バッファ
+	void* m_expandData3 = nullptr;						//ユーザー拡張データ。
 
 	ConstantBuffer m_shadowConstantBuffer;				//シャドウ用定数バッファ
 	void* m_shadowParamData = nullptr;					//シャドウ用データ
+
+	Vector4 m_selfLuminous = { 0.0f,0.0f,0.0f,0.0f };	//自己発光色
 
 };

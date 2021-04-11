@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SoundCue.h"
 
-
+//デストラクタ
 CSoundCue::~CSoundCue()
 {
 	//CSoundCueオブジェクトをDeleteGOした際、再生中だった場合、停止させる。

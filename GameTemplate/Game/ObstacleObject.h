@@ -33,7 +33,16 @@ protected:	//ここのメンバ関数を主に使う
 	/// <returns>trueを戻してね</returns>
 	bool Init(const char* filePath, int objectType);
 
+	/// <summary>
+	/// 自己発光色を設定する
+	/// </summary>
+	/// <param name="color">自己発光色</param>
+	void SetSelfLuminous(const Vector4& color)
+	{
+		m_modelRender->SetSelfLuminous(color);
+	}
+
 private:	//データメンバ
-	CModelRender* m_modelRender = nullptr;
+	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
 };
 

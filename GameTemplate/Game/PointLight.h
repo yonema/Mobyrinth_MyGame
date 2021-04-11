@@ -3,42 +3,48 @@
 #include "LightManager.h"
 
 /// <summary>
-/// ディレクションライトクラス
+/// ポイントライトクラス
 /// </summary>
-class CDirectionLight : public IGameObject
+class CPointLight : public IGameObject
 {
 public:		//自動で呼ばれるメンバ関数
-	CDirectionLight();		//コンストラクタ
-	~CDirectionLight();		//デストラクタ
+	CPointLight();		//コンストラクタ
+	~CPointLight();		//デストラクタ
 
 public:		//メンバ関数
 
 	/// <summary>
-	/// ディレクションライトの方向を設定
+	/// ポイントライトの方向を設定
 	/// </summary>
 	/// <param name="direction">ライトの方向</param>
-	void SetDirection(const Vector3& direction);
+	void SetPosition(const Vector3& direction);
 
 	/// <summary>
-	/// ディレクションライトの方向を取得
+	/// ポイントライトの方向を取得
 	/// </summary>
 	/// <returns>ライトの方向</returns>
-	//const Vector3& GetDirection() const
-	//{
-	//	return m_light.dirLigDirection;
-	//}
+	const Vector3& GetPosition() const
+	{
+		return m_light->ptPosition;
+	}
 
 	/// <summary>
-	/// ディレクションライトの色の設定
+	/// ポイントライトの色の設定
 	/// </summary>
 	/// <param name="color">ライトの色</param>
 	void SetColor(const Vector4& color);
 
 	/// <summary>
+	/// ポイントライトの影響範囲を設定
+	/// </summary>
+	/// <param name="renge">影響範囲</param>
+	void SetRange(const float range);
+
+	/// <summary>
 	/// 生データを取得
 	/// </summary>
 	/// <returns>生データの参照</returns>
-	SDirectionLight* GetRawData()
+	SPointLight* GetRawData()
 	{
 		return m_light;
 	};
@@ -47,7 +53,7 @@ public:		//メンバ関数
 	/// 生データを設定
 	/// </summary>
 	/// <param name="lig">生データ</param>
-	void SetRawData(SDirectionLight* lig)
+	void SetRawData(SPointLight* lig)
 	{
 		m_light = lig;
 	}
@@ -65,16 +71,14 @@ public:		//メンバ関数
 	/// 制御ナンバーを取得
 	/// </summary>
 	/// <returns>制御ナンバー</returns>
-	const int GetControlNumver()const 
+	const int GetControlNumver()const
 	{
 		return m_controlNumber;
 	}
 
 private:	//データメンバ
-	SDirectionLight* m_light = nullptr;	//ディレクションライトの構造体
+	SPointLight* m_light = nullptr;		//ポイントライトの構造体
 	int m_controlNumber;				//制御ナンバー
 	bool m_result;						//ライトマネージャーに登録してあるか？
-
-	
 };
 

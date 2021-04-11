@@ -7,7 +7,7 @@
  // 定数
  ///////////////////////////////////////////////////
 static const int Max_DirectionLight = 4;	//ディレクションライトの最大数
-static const int Max_PointLight = 4;		//ポイントライトの最大数
+static const int Max_PointLight = 32;		//ポイントライトの最大数
 static const int Max_SpotLight = 4;			//スポットライトの最大数
 static const float PI = 3.1415926f;			//π
 static const int Max_ShadowMap = 5;
@@ -24,7 +24,18 @@ struct SDirectionLight
 	float3 direction;
 	float pad;
 };
+
+//ポイントライトのパラメータの構造体
+//Light.hと同じ構造体にする
+struct SPointLight
+{
+	float3 ptPosition;		//位置。
+	float ptRange;			//影響範囲。
+	float4 ptColor;			//カラー。
+};
+
 //シャドウマップ用のパラメータ構造体
+//Light.hと同じ構造体にする
 struct ShadowParam
 {
 	float4x4 mLVP;		//ライトビュープロジェクション
@@ -65,6 +76,7 @@ cbuffer ModelCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
+	float4 selfLuminous;
 	int shadowReceiverFlag;
 };
 
@@ -85,7 +97,12 @@ cbuffer DirectionLightCb : register(b2)
 	SDirectionLight directionLight[Max_DirectionLight];
 }
 
-cbuffer ShadowParamCb : register(b3)
+cbuffer PointLightCb : register(b3)
+{
+	SPointLight pointLight[Max_PointLight];
+}
+
+cbuffer ShadowParamCb : register(b4)
 {
 	ShadowParam shadowParam;
 }
@@ -359,8 +376,54 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 	}
 
+	//ポイントライトを計算
+	for (int ptLigNo = 0; ptLigNo < numPointLight; ptLigNo++)
+	{
+		//距離による影響率を計算する
+		float3 distance = length(psIn.worldPos - pointLight[ptLigNo].ptPosition);
+		float affect = 1.0f - 1.0f / pointLight[ptLigNo].ptRange * distance;
+
+		//影響率が0以下だったら計算する必要なし
+		if (affect <= 0.0f)
+			continue;
+
+		affect = pow(affect, 3.0f);
+
+		float3 ligDir = psIn.worldPos - pointLight[ptLigNo].ptPosition;
+		ligDir = normalize(ligDir);
+
+		//ディズニーベースの拡散反射を実装する。
+
+		//フレネル反射を考慮した拡散反射を計算。
+		float diffuseFromFresnel = CalcDiffuseFromFresnel(normal, -ligDir, toEye);
+		//正規化ランバート拡散反射を求める。
+		float NdotL = saturate(dot(normal, -ligDir));
+		float3 lambertDiffuse = pointLight[ptLigNo].ptColor * NdotL;
+		//最終的な拡散反射光を計算する。
+		float3 diffuse = albedoColor * diffuseFromFresnel * lambertDiffuse;
+
+
+		//クックトランスモデルを利用した鏡面反射率を計算する。
+
+		//クックトランスモデルの鏡面反射率を計算する。
+		float3 spec = CookTrranceSpecular(-ligDir, toEye, normal, normal2, metaric) * pointLight[ptLigNo].ptColor;
+		//金属度が高ければ、鏡面反射はスペキュラカラー、低ければ白。
+		//スペキュラカラーの強さを鏡面反射率として扱う。
+		float specTerm = length(specColor.xyz);
+		spec *= lerp(float3(specTerm, specTerm, specTerm), specColor, metaric);
+
+		//鏡面反射率を使って、拡散反射光と鏡面反射光を合成する。
+		//鏡面反射率が高ければ、拡散反射は弱くなる。
+		lig += (diffuse * (1.0f - specTerm) + spec) * affect;
+
+	}
+
 	//環境光による底上げ。
 	lig += ambientLight * albedoColor;
+
+	//自己発光色
+	lig += albedoColor * selfLuminous;
+
 	//最終的なカラー
 	float4 finalColor = 1.0f;
 	finalColor.xyz = lig;

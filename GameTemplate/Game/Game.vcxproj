@@ -291,6 +291,7 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="ShadowModel.cpp" />
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
@@ -414,6 +415,7 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="ShadowModel.h" />
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="GaussianBlur.h" />

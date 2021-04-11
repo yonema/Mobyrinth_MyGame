@@ -30,6 +30,8 @@ void MeshParts::InitFromTkmFile(
 	DXGI_FORMAT colorBufferFormat,
 	void* expandData2,
 	int expandDataSize2,
+	void* expandData3,
+	int expandDataSize3,
 	void* shadowParamData,
 	int shadowParamDataSize
 )
@@ -60,6 +62,11 @@ void MeshParts::InitFromTkmFile(
 	{
 		m_expandConstantBuffer2.Init(expandDataSize2, nullptr);
 		m_expandData2 = expandData2;
+	}
+	if (expandData3)
+	{
+		m_expandConstantBuffer3.Init(expandDataSize3, nullptr);
+		m_expandData3 = expandData3;
 	}
 	if (shadowParamData)
 	{
@@ -102,9 +109,12 @@ void MeshParts::CreateDescriptorHeaps()
 			if (m_expandConstantBuffer2.IsValid()) {
 				descriptorHeap.RegistConstantBuffer(2, m_expandConstantBuffer2);
 			}
+			if (m_expandConstantBuffer3.IsValid()) {
+				descriptorHeap.RegistConstantBuffer(3, m_expandConstantBuffer3);
+			}
 			if (m_shadowConstantBuffer.IsValid())
 			{
-				descriptorHeap.RegistConstantBuffer(3, m_shadowConstantBuffer);
+				descriptorHeap.RegistConstantBuffer(4, m_shadowConstantBuffer);
 			}
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
@@ -215,6 +225,7 @@ void MeshParts::Draw(
 	cb.mWorld = mWorld;
 	cb.mView = mView;
 	cb.mProj = mProj;
+	cb.selfLuminous = m_selfLuminous;
 	cb.shadowReceiverFlag = shadowReceiverFlag;
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);
@@ -224,6 +235,9 @@ void MeshParts::Draw(
 	}
 	if (m_expandData2) {
 		m_expandConstantBuffer2.CopyToVRAM(m_expandData2);
+	}
+	if (m_expandData3) {
+		m_expandConstantBuffer3.CopyToVRAM(m_expandData3);
 	}
 	if (m_shadowParamData)
 	{

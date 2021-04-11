@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ModelRender.h"
-#include "LightManager.h"
 
 
 /// <summary>
@@ -124,13 +123,19 @@ void CModelRender::InitModel(const char* filePath, EnModelUpAxis modelUpAxis)
 		sizeof(*CLightManager::GetInstance()->GetDirectionLigData()) *
 		CLightManager::GetMax_DirectionLight();
 
+	//ポイントライト達のデータの登録
+	initData.m_expandConstantBuffer3 =
+		CLightManager::GetInstance()->GetPointLigData();
+	initData.m_expandConstantBufferSize3 =
+		sizeof(*CLightManager::GetInstance()->GetPointLigData()) *
+		CLightManager::GetMax_PointLight();
+
 	//シャドウのデータの登録
 	initData.m_shadowConstantBuffer =
 		g_graphicsEngine->GetShadowParam();
 	initData.m_shadowConstantBufferSize = 
 		sizeof(*g_graphicsEngine->GetShadowParam())/* * g_max_shadowMap*/;
 	initData.m_expandShaderResoruceView = &g_graphicsEngine->GetShadowBlur();
-	//initData.m_expandShaderResoruceView = &g_graphicsEngine->GetShadowRenderTex();
 
 
 	//作成した初期化データをもとにモデルを初期化する、

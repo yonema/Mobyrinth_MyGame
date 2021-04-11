@@ -31,8 +31,11 @@ struct ModelInitData {
 	void* m_expandConstantBuffer2 = nullptr;						//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize2 = 0;							//ユーザー拡張の定数バッファのサイズ。
 
-	void* m_shadowConstantBuffer = nullptr;
-	int m_shadowConstantBufferSize = 0;
+	void* m_expandConstantBuffer3 = nullptr;						//ユーザー拡張の定数バッファ。
+	int m_expandConstantBufferSize3 = 0;							//ユーザー拡張の定数バッファのサイズ。
+
+	void* m_shadowConstantBuffer = nullptr;							//シャドウ用の定数バッファ
+	int m_shadowConstantBufferSize = 0;								//シャドウ用の定数バッファのサイズ
 };
 
 
@@ -137,6 +140,16 @@ public:
 	{
 		return m_intersectPos;
 	}
+
+	/// <summary>
+	/// 自己発光色を設定する
+	/// </summary>
+	/// <param name="color">自己発光色</param>
+	void SetSelfLuminous(const Vector4& color)
+	{
+		m_meshParts.SetSelfLuminous(color);
+	}
+
 
 	//デバック用
 	//後で消す

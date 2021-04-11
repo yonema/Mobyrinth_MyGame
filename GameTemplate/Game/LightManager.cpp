@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "LightManager.h"
 #include "DirectionLight.h"
+#include "PointLight.h"
 
 //staticなデータメンバの初期化
 CLightManager* CLightManager::m_instance = nullptr;
@@ -44,7 +45,7 @@ void CLightManager::ExecuteUpdate()
 }
 
 /// <summary>
-/// ライトを追加する関数
+/// ライトを追加する関数（ディレクションライト）
 /// </summary>
 /// <param name="light">追加するライト</param>
 /// <returns>追加できたらtrueを戻す</returns>
@@ -77,7 +78,40 @@ bool CLightManager::AddLight(CDirectionLight* light)
 }
 
 /// <summary>
-/// ライトを消去する関数
+/// ライトを追加する関数（ポイントライト）
+/// </summary>
+/// <param name="light">追加するライト</param>
+/// <returns>追加できたらtrueを戻す</returns>
+bool CLightManager::AddLight(CPointLight* light)
+{
+
+	//ポイントライトの数がMAXより多かったら作られない
+	if (m_lightParam.numPointLight >= Max_PointLight) {
+		return false;
+	}
+
+	//Managerにポイントライトの参照を渡す
+	m_pointLights[m_lightParam.numPointLight]
+		= light;
+	//Managerのポイントライトの初期方向を設定
+	m_pointLightsData[m_lightParam.numPointLight].ptPosition
+		= { 0.0f,0.0f,0.0f };
+	m_pointLightsData[m_lightParam.numPointLight].ptColor
+		= { 0.0f,0.0f,0.0f,1.0f };
+	m_pointLightsData[m_lightParam.numPointLight].ptRange = 300.0f;
+	//LightにManagerのポイントライトの参照を渡す
+	light->SetRawData(&m_pointLightsData[m_lightParam.numPointLight]);
+	//LightにManagerの管理番号を渡す。
+	light->SetControlNumber(m_lightParam.numPointLight);
+
+	//現在のライトの数を増やす
+	m_lightParam.numPointLight++;
+
+	return true;
+}
+
+/// <summary>
+/// ライトを消去する関数（ディレクションライト）
 /// </summary>
 /// <param name="light">消去するライト</param>
 void CLightManager::RemoveLight(CDirectionLight* light)
@@ -103,6 +137,36 @@ void CLightManager::RemoveLight(CDirectionLight* light)
 	}
 
 	m_lightParam.numDirectionLight--;
+
+}
+
+/// <summary>
+/// ライトを消去する関数（ポイントライト）
+/// </summary>
+/// <param name="light">消去するライト</param>
+void CLightManager::RemoveLight(CPointLight* light)
+{
+	//消すライトの管理番号を取得
+	const int targetLigNumBuff = light->GetControlNumver();
+
+	//iの一つ先がポイントライトの数より小さいとき継続
+	for (int i = targetLigNumBuff; i + 1 < m_lightParam.numPointLight; i++)
+	{
+		//Managerの、ポイントライトを交換
+		//交換相手は、Lightの管理番号とその一つ上の番号
+		std::swap<SPointLight>(m_pointLightsData[i], m_pointLightsData[i + 1]);
+		//Managerの、Lightの参照を交換
+		std::swap<CPointLight*>(m_pointLights[i], m_pointLights[i + 1]);
+	}
+
+	//iの一つ先がポイントライトの数より小さいとき継続
+	for (int i = targetLigNumBuff; i + 1 < m_lightParam.numPointLight; i++)
+	{
+		//Lightのポイントライトの構造体の
+		m_pointLights[i]->SetRawData(&m_pointLightsData[i]);
+	}
+
+	m_lightParam.numPointLight--;
 
 
 }

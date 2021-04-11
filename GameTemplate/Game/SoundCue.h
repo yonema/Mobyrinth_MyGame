@@ -12,8 +12,8 @@
 /// </summary>
 class CSoundCue : public IGameObject
 {
-public:
-	~CSoundCue();
+public:		//自動で呼ばれる関数
+	~CSoundCue();	//デストラクタ
 public:		//ここのメンバ関数を主に使う
 
 	/// <summary>
