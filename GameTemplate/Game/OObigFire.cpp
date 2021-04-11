@@ -12,8 +12,28 @@ bool OObigFire::StartSub()
 	obbSize = { 300.0f,300.0f,100.0f };
 	GetOBB().SetDirectionLength(obbSize);
 
+	//ポイントライトを生成
+	m_pointLight = NewGO<CPointLight>(0);
+	Vector3 ptLigPos = m_position;
+	Vector3 up = g_vec3Up;
+	m_rotation.Apply(up);
+	up.Scale(150.0f);
+	ptLigPos += up;
+	m_pointLight->SetPosition(m_position);
+	m_pointLight->SetColor({ 1000.0f,1.0f,1.0f,1.0f });
+	m_pointLight->SetRange(1000.0f);
+
+	//自己発光色を設定
+	SetSelfLuminous({ 10.0f,1.0f,1.0f,1.0f });
+
 	return true;
 }
+
+OObigFire::~OObigFire()
+{
+	DeleteGO(m_pointLight);
+}
+
 
 void OObigFire::Damage()
 {

@@ -41,6 +41,8 @@ void Model::Init(const ModelInitData& initData)
 		initData.m_colorBufferFormat,
 		initData.m_expandConstantBuffer2,
 		initData.m_expandConstantBufferSize2,
+		initData.m_expandConstantBuffer3,
+		initData.m_expandConstantBufferSize3,
 		initData.m_shadowConstantBuffer,
 		initData.m_shadowConstantBufferSize
 	);

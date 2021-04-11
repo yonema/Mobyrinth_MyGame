@@ -38,15 +38,56 @@ bool testModel::Start()
 	g_camera3D->SetPosition({ 0.0f,100.0f,-1000.0f });
 	g_camera3D->SetTarget({ 0.0f,0.0f,0.0f });
 
-
-	CDirectionLight* DirectionLight = NewGO<CDirectionLight>(0);
-	DirectionLight->SetDirection({ 0.1f,-1.0f,0.0f });
-	DirectionLight->SetColor({ 100.0f,1.0f,1.0f,1.0f });
+	m_pointLightPos.y = 100.0f;
+	m_ptLigPosModel = NewGO<CModelRender>(0);
+	m_ptLigPosModel->Init("Assets/modelData/yuka.tkm");
+	m_ptLigPosModel->SetPosition(m_pointLightPos);
 
 	return true;
 }
 
 void testModel::Update()
+{
+	PointLight();
+
+	MoveCamera();
+}
+
+void testModel::PointLight()
+{
+	const float moveLen = 10.0f;
+	const float moveSide = 750.0f;
+	if (m_pointLigMoveDir)
+	{
+		//‰E
+		m_pointLightPos.x += moveLen;
+	}
+	else
+	{
+		//¶
+		m_pointLightPos.x -= moveLen;
+	}
+
+	if (m_pointLightPos.x >= moveSide || m_pointLightPos.x <= -moveSide)
+	{
+		m_pointLigMoveDir = !m_pointLigMoveDir;
+	}
+	m_ptLigPosModel->SetPosition(m_pointLightPos);
+
+	if (g_pad[0]->IsTrigger(enButtonA))
+	{
+		CPointLight* pointLig = NewGO<CPointLight>(0, "PointLight");
+		pointLig->SetPosition(m_pointLightPos);
+		pointLig->SetColor({ 1.0f,100.0f,1.0f,1.0f });
+		pointLig->SetRange(1000.0f);
+	}
+	else if (g_pad[0]->IsTrigger(enButtonB))
+	{
+		DeleteGO(FindGO<CPointLight>("PointLight"));
+	}
+}
+
+void testModel::MoveCamera()
 {
 	Vector3 toCameraPos = { 0.0f,100.0f,-1000.0f };
 
@@ -69,12 +110,11 @@ void testModel::Update()
 	Vector3 x;
 	x = Cross(g_vec3Up, front);
 	Quaternion qRotY;
-	qRotY.SetRotationDeg(x,m_angleY);
+	qRotY.SetRotationDeg(x, m_angleY);
 
 	qRotX.Apply(toCameraPos);
 	qRotY.Apply(toCameraPos);
 
 	//toCameraPos = { -600.0f * 0.2f , 600.0f,0.0f };
 	g_camera3D->SetPosition(toCameraPos);
-
 }

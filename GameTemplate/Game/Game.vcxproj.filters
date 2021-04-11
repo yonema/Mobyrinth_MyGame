@@ -404,6 +404,9 @@
     <ClCompile Include="ShadowModel.cpp">
       <Filter>MyCode\graphic</Filter>
     </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>MyCode\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -753,6 +756,9 @@
     </ClInclude>
     <ClInclude Include="ShadowModel.h">
       <Filter>MyCode\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>MyCode\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

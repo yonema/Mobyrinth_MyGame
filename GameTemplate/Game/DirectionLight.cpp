@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "DirectionLight.h"
-#include "LightData.h"
 
 //コンストラクタ
 CDirectionLight::CDirectionLight()

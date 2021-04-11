@@ -1,4 +1,5 @@
 #pragma once
+#include "LightManager.h"
 #include "ShadowModel.h"
 
 /// <summary>
@@ -97,6 +98,15 @@ public:		//ここのメンバ関数を主に使う。
 			InitShadowModel();
 
 		m_model.SetShadowCasterFlag(shadowCasterFlag);
+	}
+
+	/// <summary>
+	/// 自己発光色を設定する
+	/// </summary>
+	/// <param name="color">自己発光色</param>
+	void SetSelfLuminous(const Vector4& color)
+	{
+		m_model.SetSelfLuminous(color);
 	}
 
 	//モデルの参照を返す
