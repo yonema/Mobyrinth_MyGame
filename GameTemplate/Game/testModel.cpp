@@ -17,15 +17,16 @@ bool testModel::Start()
 		if (i == 4)
 			continue;
 		m_model[i]->SetShadowCasterFlag(true);
-		//m_model[i]->SetShadowReceiverFlag(true);
+		m_model[i]->SetShadowReceiverFlag(true);
 	}
-	//m_model[0]->SetShadowCasterFlag(true);
+	m_model[0]->SetShadowCasterFlag(true);
 	m_model[4]->SetShadowReceiverFlag(true);
 
 	m_model[0]->SetPosition({ 200.0f,200.0f,0.0f });
 	m_model[1]->SetPosition({ 0.0f,100.0f,0.0f });
 	m_model[2]->SetPosition({ -200.0f,100.0f,0.0f });
 	m_model[3]->SetPosition({ 0.0f,-200.0f,0.0f });
+	m_model[0]->SetEmissionColor({ 0.0f,1.0f,0.0f,1.0f });
 
 	m_model[4]->SetPosition({ -500.0f,000.0f,0.0f });
 	Quaternion qRot;
@@ -43,14 +44,32 @@ bool testModel::Start()
 	m_ptLigPosModel->Init("Assets/modelData/yuka.tkm");
 	m_ptLigPosModel->SetPosition(m_pointLightPos);
 
+	Vector3 scale = g_vec3One;
+
+	scale.Scale(75.0f);
+	//m_skyModel = NewGO<CModelRender>(0);
+	//m_skyModel->Init("Assets/modelData/preset/sky.tkm");
+	//m_skyModel->SetScale(scale);
+
+	scale = g_vec3One;
+	scale.Scale(100.0f);
+
+	m_sky = NewGO<CSky>(0);
+	m_sky->SetScale(scale);
+	//m_sky->SetPosition({ 0.0f,0.0f,-6000.0f });
+
+
+
 	return true;
 }
 
 void testModel::Update()
 {
-	PointLight();
+	//PointLight();
 
 	MoveCamera();
+
+
 }
 
 void testModel::PointLight()
@@ -92,10 +111,10 @@ void testModel::MoveCamera()
 	Vector3 toCameraPos = { 0.0f,100.0f,-1000.0f };
 
 	m_angleX += g_pad[0]->GetLStickXF() * 0.75;
-	if (m_angleX > 80.0f)
-		m_angleX = 80.0f;
-	else if (m_angleX < -80.0f)
-		m_angleX = -80.0f;
+	if (m_angleX > 360.0f)
+		m_angleX = 0.0f;
+	else if (m_angleX < 0.0f)
+		m_angleX = 360.0f;
 
 	m_angleY += g_pad[0]->GetLStickYF() * 0.75;
 	if (m_angleY > 80.0f)

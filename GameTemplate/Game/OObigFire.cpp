@@ -24,7 +24,7 @@ bool OObigFire::StartSub()
 	m_pointLight->SetRange(1000.0f);
 
 	//©ŒÈ”­ŒõF‚ğİ’è
-	SetSelfLuminous({ 10.0f,1.0f,1.0f,1.0f });
+	SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
 
 	return true;
 }

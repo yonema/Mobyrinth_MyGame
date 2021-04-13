@@ -76,7 +76,7 @@ cbuffer ModelCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
-	float4 selfLuminous;
+	float4 emissionColor;
 	int shadowReceiverFlag;
 };
 
@@ -321,7 +321,6 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 
 	return psIn;
 }
-float3 g_normal2;
 
 /// <summary>
 /// ピクセルシェーダーのエントリー関数。
@@ -422,7 +421,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	lig += ambientLight * albedoColor;
 
 	//自己発光色
-	lig += albedoColor * selfLuminous;
+	//lig += albedoColor * emissionColor;
+	lig.xyz += emissionColor.xyz;
 
 	//最終的なカラー
 	float4 finalColor = 1.0f;

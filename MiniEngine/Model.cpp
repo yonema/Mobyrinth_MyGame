@@ -28,9 +28,17 @@ void Model::Init(const ModelInitData& initData)
 	
 	m_modelUpAxis = initData.m_modelUpAxis;
 
-	m_tkmFile.Load(initData.m_tkmFilePath);
+	auto tkmFile = g_engine->GetTkmFileFromBank(initData.m_tkmFilePath);
+	if (tkmFile == nullptr) {
+		//–¢“o˜^
+		tkmFile = new TkmFile;
+		tkmFile->Load(initData.m_tkmFilePath);
+		g_engine->RegistTkmFileToBank(initData.m_tkmFilePath, tkmFile);
+	}
+	m_tkmFile = tkmFile;
+
 	m_meshParts.InitFromTkmFile(
-		m_tkmFile, 
+		*m_tkmFile, 
 		wfxFilePath, 
 		initData.m_vsEntryPointFunc,
 		initData.m_vsSkinEntryPointFunc,
@@ -102,7 +110,7 @@ void Model::Draw(RenderContext& rc, const Matrix& viewMatrix,const Matrix& proje
 
 bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 {
-	const auto& meshParts = m_tkmFile.GetMeshParts();
+	const auto& meshParts = m_tkmFile->GetMeshParts();
 
 	bool isHit = false;
 	float dist = FLT_MAX;
