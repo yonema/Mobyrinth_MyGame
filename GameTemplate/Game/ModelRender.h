@@ -96,8 +96,8 @@ public:		//ここのメンバ関数を主に使う。
 		if (shadowCasterFlag && !m_shadowModel.IsValid())
 			//シャドウ用モデルを初期化
 			InitShadowModel();
-
-		m_model.SetShadowCasterFlag(shadowCasterFlag);
+		else if (!shadowCasterFlag && m_shadowModel.IsValid())
+			m_shadowModel.RemoveShadowModel();
 	}
 
 	/// <summary>

@@ -115,14 +115,7 @@ public:
 		m_shadowReceiverFlag = shadowReceiverFlag;
 	}
 
-	/// <summary>
-	/// シャドウキャスターフラグを設定する
-	/// </summary>
-	/// <param name="shadowCasterFlag">シャドウキャスター？</param>
-	void SetShadowCasterFlag(const bool shadowCasterFlag)
-	{
-		m_shadowCasterFlag = shadowCasterFlag;
-	}
+
 
 	/// <summary>
 	/// メッシュとレイの交差判定
@@ -176,7 +169,6 @@ private:
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
 
 	bool m_shadowReceiverFlag = false;		//シャドウレシーバー？
-	bool m_shadowCasterFlag = false;		//シャドウキャスター？
 
 	Vector3 m_intersectPos = g_vec3Zero;	//交差点
 	Vector3 m_lastStart = g_vec3Zero;

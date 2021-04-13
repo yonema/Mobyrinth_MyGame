@@ -43,7 +43,7 @@ public:		//メンバ関数
 	/// <returns>シャドウのパラメータのポインタ</returns>
 	ShadowParam* GetShadowParam()
 	{
-		return &m_shadowParam[0];
+		return m_shadowParam;
 	}
 
 	/// <summary>

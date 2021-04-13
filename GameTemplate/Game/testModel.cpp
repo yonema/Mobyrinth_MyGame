@@ -19,8 +19,7 @@ bool testModel::Start()
 		m_model[i]->SetShadowCasterFlag(true);
 		m_model[i]->SetShadowReceiverFlag(true);
 	}
-	m_model[0]->SetShadowCasterFlag(true);
-	m_model[4]->SetShadowReceiverFlag(true);
+	m_model[4]->SetShadowCasterFlag(false);
 
 	m_model[0]->SetPosition({ 200.0f,200.0f,0.0f });
 	m_model[1]->SetPosition({ 0.0f,100.0f,0.0f });
@@ -58,6 +57,7 @@ bool testModel::Start()
 	m_sky->SetScale(scale);
 	//m_sky->SetPosition({ 0.0f,0.0f,-6000.0f });
 
+	//g_engine->CreateShadow({ -1.0f,-1.0f,1.0f }, 300.0f);
 
 
 	return true;
@@ -110,13 +110,13 @@ void testModel::MoveCamera()
 {
 	Vector3 toCameraPos = { 0.0f,100.0f,-1000.0f };
 
-	m_angleX += g_pad[0]->GetLStickXF() * 0.75;
+	m_angleX += g_pad[0]->GetLStickXF() * 0.75f;
 	if (m_angleX > 360.0f)
 		m_angleX = 0.0f;
 	else if (m_angleX < 0.0f)
 		m_angleX = 360.0f;
 
-	m_angleY += g_pad[0]->GetLStickYF() * 0.75;
+	m_angleY += g_pad[0]->GetLStickYF() * 0.75f;
 	if (m_angleY > 80.0f)
 		m_angleY = 80.0f;
 	else if (m_angleY < -80.0f)

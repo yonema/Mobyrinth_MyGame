@@ -31,6 +31,11 @@ public:		//メンバ関数
 	void UpdateModel(const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 	/// <summary>
+	/// シャドウ用のモデルの登録を消去する
+	/// </summary>
+	void RemoveShadowModel();
+
+	/// <summary>
 	/// 有効かどうか？
 	/// </summary>
 	/// <returns>有効か？</returns>

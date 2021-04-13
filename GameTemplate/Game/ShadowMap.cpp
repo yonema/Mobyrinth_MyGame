@@ -102,12 +102,14 @@ void CShadowMap::Draw(RenderContext& renderContext)
 
 	renderContext.ClearRenderTargetView(m_shadowMapRenderTarget);
 
-	//シャドウマップに描画するシャドウ用モデルのリストを引っ張ってくる
-	std::list<Model*>::iterator itr = m_shadowModels.begin();
+
 
 	//現在のシャドウの数だけ繰り返す
 	for (int shadowNum = 0; shadowNum < CLightManager::GetInstance()->GetShadowNum(); shadowNum++)
 	{
+		//シャドウマップに描画するシャドウ用モデルのリストを引っ張ってくる
+		std::list<Model*>::iterator itr = m_shadowModels.begin();
+
 		Camera lightCamera;
 		lightCamera.SetPosition(m_shadowParam[shadowNum].lightPos);
 		lightCamera.SetTarget(m_targetPos);

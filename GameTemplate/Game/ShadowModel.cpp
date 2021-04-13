@@ -8,8 +8,7 @@ CShadowModel::CShadowModel()
 //デストラクタ
 CShadowModel::~CShadowModel()
 {
-	if (m_isValid)
-		g_graphicsEngine->RemoveShadowModel(*m_model);
+	RemoveShadowModel();
 }
 
 /// <summary>
@@ -40,4 +39,16 @@ void CShadowModel::InitModel(ModelInitData& initData)
 void CShadowModel::UpdateModel(const Vector3& pos, const Quaternion& rot, const Vector3& scale)
 {
 	m_model->UpdateWorldMatrix(pos, rot, scale);
+}
+
+/// <summary>
+/// シャドウ用のモデルの登録を消去する
+/// </summary>
+void CShadowModel::RemoveShadowModel()
+{
+	if (m_isValid)
+	{
+		g_graphicsEngine->RemoveShadowModel(*m_model);
+		m_isValid = false;
+	}
 }
