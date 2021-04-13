@@ -1,6 +1,7 @@
 #pragma once
 #include "ModelRender.h"
-#include "PointLight.h";
+#include "PointLight.h"
+#include "Sky.h"
 
 class testModel : public IGameObject
 {
@@ -19,5 +20,10 @@ private:
 	CModelRender* m_model[5];
 	float m_angleX = 0.0f;
 	float m_angleY = 0.0f;
+
+	CSky* m_sky = nullptr;
+	float m_skyScale = 1.0f;
+
+	CModelRender* m_skyModel = nullptr;
 };
 

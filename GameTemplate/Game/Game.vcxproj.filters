@@ -407,6 +407,9 @@
     <ClCompile Include="PointLight.cpp">
       <Filter>MyCode\Light</Filter>
     </ClCompile>
+    <ClCompile Include="Sky.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -760,6 +763,12 @@
     <ClInclude Include="PointLight.h">
       <Filter>MyCode\Light</Filter>
     </ClInclude>
+    <ClInclude Include="Sky.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\TResourceBank.h">
+      <Filter>MiniEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\myModel.fx">
@@ -778,6 +787,9 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\DrawShadowMap.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\SkyCubeMap.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

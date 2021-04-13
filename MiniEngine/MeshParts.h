@@ -102,9 +102,9 @@ public:
 	/// 自己発光色を設定する
 	/// </summary>
 	/// <param name="color">自己発光色</param>
-	void SetSelfLuminous(const Vector4& color)
+	void SetEmissionColor(const Vector4& color)
 	{
-		m_selfLuminous = color;
+		m_emissionColor = color;
 	}
 
 private:
@@ -161,6 +161,6 @@ private:
 	ConstantBuffer m_shadowConstantBuffer;				//シャドウ用定数バッファ
 	void* m_shadowParamData = nullptr;					//シャドウ用データ
 
-	Vector4 m_selfLuminous = { 0.0f,0.0f,0.0f,0.0f };	//自己発光色
+	Vector4 m_emissionColor = { 0.0f,0.0f,0.0f,0.0f };	//自己発光色
 
 };
