@@ -15,8 +15,8 @@ bool RObird_fish::StartSub()
 	}
 
 	//もう一つの表と裏のモデルレンダラーの初期化
-	m_otherModelRender[enFront]->Init("Assets/modelData/grilled chicken.tkm");
-	m_otherModelRender[enBack]->Init("Assets/modelData/grilled fish.tkm");
+	m_otherModelRender[enFront]->Init("Assets/modelData/grilled_chicken.tkm");
+	m_otherModelRender[enBack]->Init("Assets/modelData/grilled_fish.tkm");
 	//もう一つの表と裏のオブジェクトのタイプを設定
 	m_reversibleType[enFront] = enGrilledChicken;
 	m_reversibleType[enBack] = enGrilledFish;
