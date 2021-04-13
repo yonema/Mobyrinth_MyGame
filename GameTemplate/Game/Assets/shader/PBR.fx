@@ -10,7 +10,7 @@ static const int Max_DirectionLight = 4;	//ディレクションライトの最�
 static const int Max_PointLight = 32;		//ポイントライトの最大数
 static const int Max_SpotLight = 4;			//スポットライトの最大数
 static const float PI = 3.1415926f;			//π
-static const int Max_ShadowMap = 5;
+static const int Max_ShadowMap = 5;			//シャドウマップの最大数
 
 ///////////////////////////////////////////////////
 // 構造体
@@ -64,7 +64,7 @@ struct SPSIn {
 	float3 biNormal 	: BINORMAL;		//従法線
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド空間でのピクセルの座標。
-	float4 posInLVP		: TEXCOORD2;
+	float4 posInLVP[Max_ShadowMap]: TEXCOORD2;
 };
 
 ////////////////////////////////////////////////
@@ -89,7 +89,7 @@ cbuffer LightManagerCb : register(b1)
 	float3 ambientLight;	//アンビエントライト。
 	int numPointLight;		//ポイントライトの数。
 	float specPow;			//スペキュラの絞り
-	int numShadow;
+	int numShadow;			//シャドウマップの数
 }
 
 cbuffer DirectionLightCb : register(b2)
@@ -104,7 +104,7 @@ cbuffer PointLightCb : register(b3)
 
 cbuffer ShadowParamCb : register(b4)
 {
-	ShadowParam shadowParam;
+	ShadowParam shadowParam[Max_ShadowMap];
 }
 
 
@@ -312,11 +312,14 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	//UV
 	psIn.uv = vsIn.uv;
 
-	//ライトビュースクリーン空間の座標を計算する。
-	psIn.posInLVP = mul(shadowParam.mLVP, worldPos);
+	for (int i = 0; i < numShadow; i++)
+	{
+		//ライトビュースクリーン空間の座標を計算する。
+		psIn.posInLVP[i] = mul(shadowParam[i].mLVP, worldPos);
 
-	//頂点のライトから見た深度値を計算する。
-	psIn.posInLVP.z = length(worldPos.xyz - shadowParam.lightPos) / 10000.0f;
+		//頂点のライトから見た深度値を計算する。
+		psIn.posInLVP[i].z = length(worldPos.xyz - shadowParam[i].lightPos) / 10000.0f;
+	}
 
 
 	return psIn;
@@ -430,29 +433,32 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 	if (shadowReceiverFlag >= 1)
 	{
-		//ライトビュースクリーン空間からUV空間に座標変換。
-		float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
-		shadowMapUV *= float2(0.5f, -0.5f);
-		shadowMapUV += 0.5f;
+		for (int shadowNo = 0; shadowNo < numShadow; shadowNo++)
+		{
+			//ライトビュースクリーン空間からUV空間に座標変換。
+			float2 shadowMapUV = psIn.posInLVP[shadowNo].xy / psIn.posInLVP[shadowNo].w;
+			shadowMapUV *= float2(0.5f, -0.5f);
+			shadowMapUV += 0.5f;
 
-		//ライトビュースクリーン空間でのZ値を計算する。
-		float zInLVP = psIn.posInLVP.z;
+			//ライトビュースクリーン空間でのZ値を計算する。
+			float zInLVP = psIn.posInLVP[shadowNo].z;
 
-		if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
-			&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
-			) {
-			//step-13 シャドウレシーバーに影を落とす。
-			float2 shadowValue = g_shadowMap.Sample(g_sampler, shadowMapUV).rg;
-			if (zInLVP > shadowValue.r + 0.0001)
-			{
-				float depth_sq = shadowValue.x * shadowValue.x;
-				float variance = min(max(shadowValue.y - depth_sq, 0.0001f), 1.0f);
-				float md = zInLVP - shadowValue.x;
-				float lit_factor = variance / (variance + md * md);
-				float3 shadowColor = finalColor.xyz * 0.5f;
-				finalColor.xyz = lerp(shadowColor, finalColor.xyz, lit_factor);
+			if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+				&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
+				) {
+				//step-13 シャドウレシーバーに影を落とす。
+				float2 shadowValue = g_shadowMap.Sample(g_sampler, shadowMapUV).rg;
+				if (zInLVP > shadowValue.r + 0.0001)
+				{
+					float depth_sq = shadowValue.x * shadowValue.x;
+					float variance = min(max(shadowValue.y - depth_sq, 0.0001f), 1.0f);
+					float md = zInLVP - shadowValue.x;
+					float lit_factor = variance / (variance + md * md);
+					float3 shadowColor = finalColor.xyz * 0.5f;
+					finalColor.xyz = lerp(shadowColor, finalColor.xyz, lit_factor);
+				}
+
 			}
-
 		}
 	}
 

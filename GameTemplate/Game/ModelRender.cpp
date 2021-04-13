@@ -134,7 +134,7 @@ void CModelRender::InitModel(const char* filePath, EnModelUpAxis modelUpAxis)
 	initData.m_shadowConstantBuffer =
 		g_graphicsEngine->GetShadowParam();
 	initData.m_shadowConstantBufferSize = 
-		sizeof(*g_graphicsEngine->GetShadowParam())/* * g_max_shadowMap*/;
+		sizeof(*g_graphicsEngine->GetShadowParam()) * g_max_shadowMap;
 	initData.m_expandShaderResoruceView = &g_graphicsEngine->GetShadowBlur();
 
 

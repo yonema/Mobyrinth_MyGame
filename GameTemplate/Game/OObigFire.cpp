@@ -17,9 +17,9 @@ bool OObigFire::StartSub()
 	Vector3 ptLigPos = m_position;
 	Vector3 up = g_vec3Up;
 	m_rotation.Apply(up);
-	up.Scale(150.0f);
+	up.Scale(300.0f);
 	ptLigPos += up;
-	m_pointLight->SetPosition(m_position);
+	m_pointLight->SetPosition(ptLigPos);
 	m_pointLight->SetColor({ 1000.0f,1.0f,1.0f,1.0f });
 	m_pointLight->SetRange(1000.0f);
 
