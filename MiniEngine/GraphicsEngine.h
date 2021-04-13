@@ -13,6 +13,12 @@
 #include "Camera.h"
 #include "NullTextureMaps.h"
 #include "font/FontEngine.h"
+#include "RenderTarget.h"
+#include "Sprite.h"
+#include "PostEffect.h"
+#include "ShadowMap.h"
+
+
 
 /// <summary>
 /// DirectX12に依存するグラフィックスエンジン
@@ -199,6 +205,11 @@ public:
 	{
 		return m_fontEngine;
 	}
+
+	ID3D12Resource* GetRenderTarget()
+	{
+		return m_renderTargets[m_frameIndex];
+	}
 private:
 	/// <summary>
 	/// D3Dデバイスの作成。
@@ -264,6 +275,7 @@ private:
 	/// 描画の完了待ち。
 	/// </summary>
 	void WaitDraw();
+
 	
 public:
 	enum { FRAME_BUFFER_COUNT = 2 };						//フレームバッファの数。
@@ -309,7 +321,126 @@ private:
 	NullTextureMaps m_nullTextureMaps;			//ヌルテクスチャマップ。
 	FontEngine m_fontEngine;					//フォントエンジン。
 	std::unique_ptr<DirectX::GraphicsMemory> m_directXTKGfxMemroy;	//DirectXTKのグラフィックメモリシステム。
+
+
+
+	//追加
+private:	//データメンバ
+	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット	
+	CPostEffect m_postEffect;			//ポストエフェクト
+	CShadowMap m_shadowMap;				//シャドウマップ
+	//メインレンダリングターゲットの絵をフレームバッファにコピーするためのスプライト
+	Sprite m_copyToFrameBufferSprite;
+public:		//メンバ関数
+	/// <summary>
+	/// メインレンダリングターゲットの取得。
+	/// </summary>
+	/// <returns>メインレンダリングターゲット</returns>
+	RenderTarget& GetMainRenderTarget()
+	{
+		return m_mainRenderTarget;
+	}
+
+	/// <summary>
+	/// フレームバッファに描画するときのビューポートを取得。
+	/// </summary>
+	/// <returns>ビューポート</returns>
+	D3D12_VIEWPORT& GetFrameBufferViewport()
+	{
+		return m_viewport;
+	}
+
+	/// <summary>
+	/// シャドウを描画する
+	/// </summary>
+	void ShadowRender();
+
+	/// <summary>
+	/// メインレンダーターゲットを使用できるようにする
+	/// </summary>
+	void UseMainRenderTarget();
+
+	/// <summary>
+	/// ポストエフェクトを描画する
+	/// </summary>
+	void PostEffectRender();
+
+	/// <summary>
+	/// メインレンダリングターゲットの絵をフレームバッファーにコピーする
+	/// </summary>
+	void CopyToFrameBuffer();
+
+	/// <summary>
+	/// シャドウのパラメータを取得する
+	/// </summary>
+	/// <returns>シャドウのパラメータ</returns>
+	ShadowParam* GetShadowParam()
+	{
+		return m_shadowMap.GetShadowParam();
+	}
+
+	/// <summary>
+	/// シャドウマップのガウシアンブラー済みのテクスチャの取得
+	/// </summary>
+	/// <returns>シャドウマップのガウシアンブラー済みのテクスチャ</returns>
+	Texture& GetShadowBlur()
+	{
+		return m_shadowMap.GetShadowBlur();
+	}
+
+	/// <summary>
+	/// シャドウマップに描画するシャドウ用モデルの登録
+	/// </summary>
+	/// <param name="shadowModel">登録するシャドウ用モデル</param>
+	void AddShadowModel(Model& shadowModel)
+	{
+		m_shadowMap.AddShadowModel(shadowModel);
+	}
+
+	/// <summary>
+	/// シャドウマップからシャドウ用モデルを破棄する
+	/// </summary>
+	/// <param name="shadowModel">破棄するシャドウ用モデル</param>
+	void RemoveShadowModel(Model& shadowModel)
+	{
+		m_shadowMap.RemoveShadowModel(shadowModel);
+	}
+
+	/// <summary>
+	/// 影を生成するライトを生成する
+	/// </summary>
+	/// <param name="direction">影を作るライトの方向</param>
+	/// <param name="length">ライトがどれくらい離れているか</param>
+	/// <param name="target">ライトが照らす目標</param>
+	void CreateShadowMap(const Vector3& direction, const float length, const Vector3& target)
+	{
+		m_shadowMap.CreateShadowMap(direction, length, target);
+	}
+
+	/// <summary>
+	/// 影を生成するライトのパラメーター設定する
+	/// </summary>
+	/// <param name="direction">影を作るライトの方向</param>
+	/// <param name="length">ライトがどれくらい離れているか</param>
+	/// <param name="target">ライトが照らす目標</param>
+	void SetShadowParam(const Vector3& direction, const float length, const Vector3& target)
+	{
+		m_shadowMap.SetShadowParam(direction, length, target);
+	}
+
+private:	//privateなメンバ関数
+	/// <summary>
+	/// メインレンダーターゲットの初期化
+	/// </summary>
+	/// <returns>初期化できたか？</returns>
+	bool InitMainRenderTarget();
+
+	/// <summary>
+	/// フレームバッファにコピーするスプライトの初期化
+	/// </summary>
+	void InitCopyToFrameBufferSprite();
 };
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。
 extern Camera* g_camera3D;					//3Dカメラ。
+

@@ -10,7 +10,7 @@ bool Title::Start()
 	m_stageTitle = NewGO<stage_title>(0, "stage_title");
 	m_stageTitle->SetStartUpStartDirecting(false);
 	m_stageTitle->SetTitlePlayer(true);
-
+	m_stageTitle->SetStartBGM(false);
 
 
 
@@ -69,32 +69,12 @@ bool Title::Start()
 			//そのまま表示するからfalseを戻す
 			return false;
 		});
-	//フォントレンダラーの生成と初期化
-	/*for (int i = 0; i < enStageNum; i++)
-	{
-		m_stageName[i] = NewGO<CFontRender>(0);
-		m_stageName[i]->SetPostRenderFlag(true);
-	}
-	m_stageName[enStage_kari]->Init(L"stage_kari",
-		{ leftSide ,UpSide + BetweenLine * enStage_kari }
-	);
-	m_stageName[enStageProto01]->Init(L"stage_proto01",
-		{ leftSide ,UpSide + BetweenLine * enStageProto01 }
-	);
-	m_stageName[enStageProto02]->Init(L"stage_proto02",
-		{ leftSide ,UpSide + BetweenLine * enStageProto02 }
-	);*/
 
 	//最初はステージ名は表示しないから、無効化して非表示にする
 	for (int i = 0; i < enStageNum; i++)
 	{
 		m_stageName[i]->Deactivate();
 	}
-	//m_arrow = NewGO<CFontRender>(0);
-	//m_arrow->Init(L"->",
-	//	{ leftSide - 50.0f,UpSide - 5.0f }
-	//);
-	//m_arrow->Deactivate();
 
 	m_cursor->Deactivate();
 
@@ -130,6 +110,14 @@ bool Title::Start()
 
 
 
+	//BGMのサウンドキューを生成する
+	m_bgmTitle = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmTitle->Init(L"Assets/sound/Title.wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmTitle->Play(true);
+
+
 	//デバック用
 	//後で消す
 
@@ -137,21 +125,6 @@ bool Title::Start()
 	m_soundCue = NewGO<CSoundCue>(0);
 	//サウンドキューを、waveファイルを指定して初期化する。
 	m_soundCue->Init(L"Assets/sound/univ1195.wav");
-
-
-
-	//BGMのサウンドキューを生成する
-	m_bgmSC = NewGO<CSoundCue>(0);
-	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_bgmSC->Init(L"Assets/sound/03 HelloUnityjs[convert].wav");
-	//BGMをループ再生をオンで再生する。
-	m_bgmSC->Play(true);
-
-	//BGMのボリュームを設定する
-	//「HelloUnity.js」を聞きたかったら
-	//ここをコメントアウトするか
-	//0.0f以外を入れてね
-	m_bgmSC->SetVolume(0.0f);
 
 	//デバック用ここまで
 
@@ -175,11 +148,12 @@ Title::~Title()
 	DeleteGO(m_pressAButton);
 	DeleteGO(m_cursor);
 
+	DeleteGO(m_bgmTitle);
+
 	//デバック用
 	//後で消す
 
 	DeleteGO(m_soundCue);
-	DeleteGO(m_bgmSC);
 	//デバック用ここまで
 }
 
@@ -215,17 +189,17 @@ void Title::Update()
 	else if (g_pad[0]->IsTrigger(enButtonX))
 	{
 		//Xボタンを入力
-		if (m_bgmSC->IsPlaying())
+		if (m_bgmTitle->IsPlaying())
 		{
 			//再生中なら
 			//停止する
-			m_bgmSC->Stop();
+			m_bgmTitle->Stop();
 		}
 		else
 		{
 			//再生中でないなら
 			//最初から再生する
-			m_bgmSC->Play(true);
+			m_bgmTitle->Play(true);
 		}
 	}
 	else if (g_pad[0]->IsTrigger(enButtonY))
@@ -234,17 +208,17 @@ void Title::Update()
 
 		//停止の検知はIsPlaying()だが、
 		//一時停止の検知はIsPaused()でやる
-		if (m_bgmSC->IsPaused())
+		if (m_bgmTitle->IsPaused())
 		{
 			//一時停止中なら
 			//途中から再生する
-			m_bgmSC->Play(true);
+			m_bgmTitle->Play(true);
 		}
 		else
 		{
 			//一時停止中でないなら
 			//一時停止する
-			m_bgmSC->Pause();
+			m_bgmTitle->Pause();
 		}
 	}
 
@@ -281,7 +255,7 @@ void Title::TitleScreen()
 		{
 			m_stageName[i]->Activate();
 		}
-		//m_arrow->Activate();
+
 		m_cursor->Activate();
 	}
 
@@ -360,18 +334,19 @@ void Title::StageSelect()
 
 		//ステージのステートをタイトル画面にする
 		m_stageState = enTitleScreen;
-		//タイトル画面用のフォントレンダラーを有効化して表示できるようにする
 
-
-
-
-		//ステージセレクトのフォントレンダラーを無効化して表示できないようにする
+		//ステージセレクトの画像無効化して表示できないようにする
 		for (int i = 0; i < enStageNum; i++)
 		{
 			m_stageName[i]->Deactivate();
 		}
 		//m_arrow->Deactivate();
 		m_cursor->Deactivate();
+
+
+		//タイトル画面の画像を有効化して表示する。
+		m_title->Activate();
+		m_pressAButton->Activate();
 	}
 
 
@@ -380,6 +355,6 @@ void Title::StageSelect()
 	const float UpSide = 300.0f;		//上端
 	const float DownSide = -300.0f;		//下端
 	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
-	//カーソル用のフォントレンダラーの場所を設定する
-	//m_arrow->SetPosition({ leftSide - 50.0f , UpSide + BetweenLine * m_stageSelectState - 5.0f });
+	//カーソル用の画像の場所を設定する
+	m_cursor->SetPosition({ -400.0f,m_stageName[m_stageSelectState]->GetPositionY(),0.0f });
 }

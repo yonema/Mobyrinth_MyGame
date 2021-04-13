@@ -17,18 +17,25 @@ enum EnModelUpAxis {
 struct ModelInitData {
 	const char* m_tkmFilePath = nullptr;							//tkmファイルパス。
 	const char* m_vsEntryPointFunc = "VSMain";						//頂点シェーダーのエントリーポイント。
-	const char* m_vsSkinEntryPointFunc = "VSSkinMain";					//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
+	const char* m_vsSkinEntryPointFunc = "VSSkinMain";				//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
 	const char* m_psEntryPointFunc = "PSMain";						//ピクセルシェーダーのエントリーポイント。
 	const char* m_fxFilePath = nullptr;								//.fxファイルのファイルパス。
 	void* m_expandConstantBuffer = nullptr;							//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize = 0;								//ユーザー拡張の定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;			//ユーザー拡張のシェーダーリソース。
+	DXGI_FORMAT m_colorBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;	//レンダリングするカラーバッファのフォーマット。
 	Skeleton* m_skeleton = nullptr;									//スケルトン。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					//モデルの上方向。
 
 
 	void* m_expandConstantBuffer2 = nullptr;						//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize2 = 0;							//ユーザー拡張の定数バッファのサイズ。
+
+	void* m_expandConstantBuffer3 = nullptr;						//ユーザー拡張の定数バッファ。
+	int m_expandConstantBufferSize3 = 0;							//ユーザー拡張の定数バッファのサイズ。
+
+	void* m_shadowConstantBuffer = nullptr;							//シャドウ用の定数バッファ
+	int m_shadowConstantBufferSize = 0;								//シャドウ用の定数バッファのサイズ
 };
 
 
@@ -50,13 +57,16 @@ public:
 	/// <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡大率</param>
-	void UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale);
+	void UpdateWorldMatrix(const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="renderContext">レンダリングコンテキスト</param>
 	void Draw(RenderContext& renderContext);
+
+	void Draw(RenderContext& renderContext, const Matrix& viewMatrix, const Matrix& projectionMatrix);
+
 	/// <summary>
 	/// ワールド行列を取得。
 	/// </summary>
@@ -93,16 +103,49 @@ public:
 	/// <returns></returns>
 	const TkmFile& GetTkmFile() const
 	{
-		return m_tkmFile;
+		return *m_tkmFile;
+	}
+
+	/// <summary>
+	/// シャドウレシーバーフラグを設定する
+	/// </summary>
+	/// <param name="shadowReceiverFlag">シャドウレシーバー？</param>
+	void SetShadowReceiverFlag(const bool shadowReceiverFlag)
+	{
+		m_shadowReceiverFlag = shadowReceiverFlag;
 	}
 
 
+
+	/// <summary>
+	/// メッシュとレイの交差判定
+	/// </summary>
+	/// <param name="start">レイの始点</param>
+	/// <param name="end">レイの終点</param>
+	/// <returns>交差したか？</returns>
 	bool InIntersectLine(const Vector3& start, const Vector3& end);
+	
+	/// <summary>
+	/// InIntersectLineで交差した交差点を取得
+	/// </summary>
+	/// <returns>交差点</returns>
 	const Vector3& GetIntersectPos() const
 	{
 		return m_intersectPos;
 	}
 
+	/// <summary>
+	/// 自己発光色を設定する
+	/// </summary>
+	/// <param name="color">自己発光色</param>
+	void SetEmissionColor(const Vector4& color)
+	{
+		m_meshParts.SetEmissionColor(color);
+	}
+
+
+	//デバック用
+	//後で消す
 	const float getDbg()const
 	{
 		return m_dbg;
@@ -115,19 +158,26 @@ public:
 	{
 		return m_dbgV2;
 	}
+	//デバック用ここまで
 
 private:
 
-	Matrix m_world;														//ワールド行列。
-	TkmFile m_tkmFile;													//tkmファイル。
-	Skeleton m_skeleton;												//スケルトン。
-	MeshParts m_meshParts;											//メッシュパーツ。
+	Matrix m_world;										//ワールド行列。
+	TkmFile* m_tkmFile = nullptr;						//tkmファイル。
+	Skeleton m_skeleton;								//スケルトン。
+	MeshParts m_meshParts;								//メッシュパーツ。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
 
-	Vector3 m_intersectPos = g_vec3Zero;
+	bool m_shadowReceiverFlag = false;		//シャドウレシーバー？
+
+	Vector3 m_intersectPos = g_vec3Zero;	//交差点
 	Vector3 m_lastStart = g_vec3Zero;
-	float m_dbg = 0.0f;
+
+	//デバック用
+	//後で消す
+	float m_dbg = 0.0f;	
 	Vector3 m_dbgV1 = g_vec3Zero;
 	Vector3 m_dbgV2 = g_vec3Zero;
+
 
 };

@@ -12,6 +12,8 @@
 /// </summary>
 class CSoundCue : public IGameObject
 {
+public:		//自動で呼ばれる関数
+	~CSoundCue();	//デストラクタ
 public:		//ここのメンバ関数を主に使う
 
 	/// <summary>
@@ -80,7 +82,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 今の仕様だと、ループ再生は検知できるが、
 	/// ワンショット再生の検知はできない。
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>停止中か？</returns>
 	const bool IsPaused()const
 	{
 		return m_isPaused;

@@ -15,7 +15,8 @@ public:
 		const wchar_t* fxFilePath,
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntriyPointFunc,
-		const char* psEntryPointFunc);
+		const char* psEntryPointFunc,
+		DXGI_FORMAT colorBufferFormat);
 	/// <summary>
 	/// レンダリングを開始するときに呼び出す関数。
 	/// </summary>
@@ -75,7 +76,7 @@ private:
 	/// <summary>
 	/// パイプラインステートの初期化。
 	/// </summary>
-	void InitPipelineState();
+	void InitPipelineState(DXGI_FORMAT colorBufferFormat);
 	/// <summary>
 	/// シェーダーの初期化。
 	/// </summary>
@@ -113,9 +114,9 @@ private:
 	PipelineState m_skinModelPipelineState;			//スキンありモデル用のパイプラインステート。
 	PipelineState m_transSkinModelPipelineState;	//スキンありモデル用のパイプラインステート(半透明マテリアル)。
 	PipelineState m_transNonSkinModelPipelineState;	//スキンなしモデル用のパイプラインステート(半透明マテリアル)。
-	Shader m_vsNonSkinModel;						//スキンなしモデル用の頂点シェーダー。
-	Shader m_vsSkinModel;							//スキンありモデル用の頂点シェーダー。
-	Shader m_psModel;								//モデル用のピクセルシェーダー。
+	Shader* m_vsNonSkinModel = nullptr;						//スキンなしモデル用の頂点シェーダー。
+	Shader* m_vsSkinModel = nullptr;							//スキンありモデル用の頂点シェーダー。
+	Shader* m_psModel = nullptr;								//モデル用のピクセルシェーダー。
 };
 
 

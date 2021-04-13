@@ -79,6 +79,24 @@ public:		//ここのメンバ関数を主に使う
 		m_postRenderFlag = flag;
 	}
 
+	/// <summary>
+	/// m_positionの値を返す。
+	/// </summary>
+	/// <returns>m_position</returns>
+	Vector3 GetPosition()
+	{
+		return m_position;
+	}
+
+	/// <summary>
+	/// m_positionのy軸の値を返す。
+	/// </summary>
+	/// <returns>m_position.y</returns>
+	float GetPositionY()
+	{
+		return m_position.y;
+	}
+
 private:	//データメンバ
 	Sprite m_sprite;							//スプライトクラス
 	SpriteInitData m_initData;					//スプライトの初期化データ。構造体。

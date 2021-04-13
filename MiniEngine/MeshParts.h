@@ -49,8 +49,13 @@ public:
 		void* expandData,
 		int expandDataSize,
 		IShaderResource* expandShaderResourceView,
+		DXGI_FORMAT colorBufferFormat,
 		void* expandData2 = nullptr,
-		int expandDataSize2 = 0
+		int expandDataSize2 = 0,
+		void* expandData3 = nullptr,
+		int expandDataSize3 = 0,
+		void* shadowParamData = nullptr,
+		int shadowParamDataSize = 0
 	);
 	/// <summary>
 	/// 描画。
@@ -60,7 +65,13 @@ public:
 	/// <param name="mView">ビュー行列</param>
 	/// <param name="mProj">プロジェクション行列</param>
 	/// <param name="light">ライト</param>
-	void Draw(RenderContext& rc, const Matrix& mWorld, const Matrix& mView, const Matrix& mProj);
+	void Draw(
+		RenderContext& rc,
+		const Matrix& mWorld,
+		const Matrix& mView,
+		const Matrix& mProj,
+		const bool shadowReceiverFlag
+	);
 	/// <summary>
 	/// スケルトンを関連付ける。
 	/// </summary>
@@ -86,6 +97,16 @@ public:
 	/// ディスクリプタヒープを作成。
 	/// </summary>
 	void CreateDescriptorHeaps();
+
+	/// <summary>
+	/// 自己発光色を設定する
+	/// </summary>
+	/// <param name="color">自己発光色</param>
+	void SetEmissionColor(const Vector4& color)
+	{
+		m_emissionColor = color;
+	}
+
 private:
 	/// <summary>
 	/// tkmメッシュからメッシュを作成。
@@ -102,7 +123,9 @@ private:
 		const wchar_t* fxFilePath,
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntryPointFunc,
-		const char* psEntryPointFunc );
+		const char* psEntryPointFunc,
+		DXGI_FORMAT colorBufferFormat
+	);
 
 	
 private:
@@ -118,6 +141,8 @@ private:
 		Matrix mWorld;		//ワールド行列。
 		Matrix mView;		//ビュー行列。
 		Matrix mProj;		//プロジェクション行列。
+		Vector4 selfLuminous;	//自己発光色
+		int shadowReceiverFlag;	//シャドウレシーバー？
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
 	ConstantBuffer m_expandConstantBuffer;					//ユーザー拡張用の定数バッファ
@@ -130,8 +155,12 @@ private:
 
 	ConstantBuffer m_expandConstantBuffer2;					//ユーザー拡張用の定数バッファ
 	void* m_expandData2 = nullptr;						//ユーザー拡張データ。
+	ConstantBuffer m_expandConstantBuffer3;					//ユーザー拡張用の定数バッファ
+	void* m_expandData3 = nullptr;						//ユーザー拡張データ。
 
-	ConstantBuffer m_lightConstantBuffer;					//ユーザー拡張用の定数バッファ
-	void* m_lightData = nullptr;						//ユーザー拡張データ。
+	ConstantBuffer m_shadowConstantBuffer;				//シャドウ用定数バッファ
+	void* m_shadowParamData = nullptr;					//シャドウ用データ
+
+	Vector4 m_emissionColor = { 0.0f,0.0f,0.0f,0.0f };	//自己発光色
 
 };

@@ -541,7 +541,7 @@ void CReversibleObject::OverlapThrownSide()
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Right;
 		m_throwRot.Apply(dir);
-		dir.Scale(7.0f);
+		dir.Scale(10.0f);
 		m_position += dir;
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
@@ -569,7 +569,7 @@ void CReversibleObject::OverlapThrownSide()
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Left;
 		m_throwRot.Apply(dir);
-		dir.Scale(7.0f);
+		dir.Scale(10.0f);
 		m_position += dir;
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。

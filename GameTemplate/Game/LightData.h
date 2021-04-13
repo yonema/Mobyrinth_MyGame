@@ -8,6 +8,7 @@ struct SLightParam {
 	Vector3 ambientLight;		//アンビエントライト。
 	int numPointLight;			//ポイントライトの数。
 	float specPow;				//スペキュラの絞り
+	int numShadow;	//
 };
 
 //ディレクションライトのパラメータの構造体
@@ -24,4 +25,14 @@ struct SPointLight
 	Vector3 ptPosition;		//位置。
 	float ptRange;			//影響範囲。
 	Vector4 ptColor;		//カラー。
+};
+
+//シャドウの最大数
+const int g_max_shadowMap = 5;
+
+//シャドウマップ用のパラメータ構造体
+struct ShadowParam
+{
+	Matrix mLVP;		//ライトビュープロジェクション
+	Vector3 lightPos;	//ライトの位置
 };

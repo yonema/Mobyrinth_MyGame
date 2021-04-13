@@ -2,12 +2,9 @@
 #include "StageBase.h"
 #include "Title.h"
 
+//スタート関数
 bool IStageBase::Start()
 {
-	//ディレクションライトの作成
-	m_stageDirectionLight = NewGO<CDirectionLight>(0);
-	m_stageDirectionLight->SetDirection({ 1.0f,1.0f,-1.0f });
-	m_stageDirectionLight->SetColor({ 0.1f,0.1f,0.1f,1.0f });
 
 	//ステージ開始時の演出の作成
 	m_startDirecting = NewGO<StartDirecting>(0, "StartDirecting");
@@ -21,10 +18,39 @@ bool IStageBase::Start()
 	//ポーズ画面用クラスの作成
 	m_pause = NewGO<CPause>(0, "Pause");
 
+	//BGMのサウンドキューを生成する
+	m_bgmStage = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmStage->Init(L"Assets/sound/Stage.wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmStage->Play(true);
+	//もしタイトル画面だった場合、BGM音量を０にする。
+	if (m_startBGM == false) {
+		m_bgmStage->SetVolume(0.0f);
+	}
+
+
+	//BGMのサウンドキューを生成する
+	m_bgmStage2 = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmStage2->Init(L"Assets/sound/Stage2.wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmStage2->Play(true);
+	//BGM音量を０にする。
+	m_bgmStage2->SetVolume(0.0f);
+
+	//空を作る
+	m_sky = NewGO<CSky>(0);
+	m_sky->SetScale(1000.0f);
+
 	return StartSub();
 
 }
 
+/// <summary>
+/// レベルのロード
+/// </summary>
+/// <param name="filePath">tklのファイルパス</param>
 void IStageBase::LoadLevel(const char* tklFilePath)
 {
 
@@ -296,13 +322,17 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	return;
 }
 
+//デストラクタ
 IStageBase::~IStageBase()
 {
 	//単体のオブジェクトを消去
-	DeleteGO(m_stageDirectionLight);
 	DeleteGO(FindGO<GameCamera>("GameCamera"));
 	DeleteGO(m_pause);
+	DeleteGO(m_sky);
 	DeleteGO(m_startDirecting);
+
+	DeleteGO(m_bgmStage);
+	DeleteGO(m_bgmStage2);
 
 	//レベルでロードしたオブジェクトを消去
 
@@ -341,57 +371,119 @@ IStageBase::~IStageBase()
 	);
 }
 
-
+//アップデート関数
 void IStageBase::Update()
 {
+	//ゴールがアクティブなら
 	if (m_goal)
 	{
+		//ゴール状態を調べる
 		if (m_goal->GetIsGoal())
 		{
+			//ゴールしていたら、ゴールの処理をする
 			Goal();
 
+			//ゴールしたらポーズができないようにする
 			m_pause->SetCanPause(false);
 		}
 	}
 
+	if (m_startBGM == true) {
+		BGMInteractive();
+	}
+
 	return;
 }
+
+//ポーズ中のみ呼ばれるアップデート関数
 void IStageBase::UpdateOnlyPaused()
 {
+	//ポーズの状態を調べる
+
 	if (m_pause->GetRetryFlag())
 	{
+		//リトライ
 		Retry();
 	}
 	else if (m_pause->GetQuitFlag())
 	{
+		//終了
 		Quit();
 	}
 }
 
+/// <summary>
+/// クリアした時の処理
+/// </summary>
 void IStageBase::Clear()
 {
+	//タイトルの戻る
 	NewGO<Title>(0, "Title");
-	Release();
+	Release();	//リリース
 }
 
+/// <summary>
+/// リトライした時の処理
+/// </summary>
 void IStageBase::Retry()
 {
+	//オーバーライドされているはずの処理を行う
 	RetryStage();
-	Release();
+	Release();	//リリース
 }
 
+/// <summary>
+///	終了した時の処理
+/// </summary>
 void IStageBase::Quit()
 {
+	//タイトルの戻る
 	NewGO<Title>(0, "Title");
-	Release();
+	Release();	//リリース
 }
 
+/// <summary>
+/// ゴールした時の処理
+/// </summary>
 void IStageBase::Goal()
 {
+	//後で直す
+	//フレーム数ではなくて時間にする
+
+
+	//ゴールした後の時間を計測する
 	m_goalCounter++;
 
+	//一定時間たったら
 	if (m_goalCounter >= 180)
 	{
+		//クリアする
 		Clear();
 	}
+}
+
+void IStageBase::BGMInteractive()
+{
+	QueryGOs<Player>("Player", [&](Player* player)->bool
+		{
+			//ウェイポイントが24～7の場合
+			if (24 <= player->GetWayPointState() && player->GetWayPointState() <= 31 ||
+				0 <= player->GetWayPointState() && player->GetWayPointState() <= 7) {
+				if (m_bgmStage->GetVolume() < 1.0f) {
+					m_bgmStage->SetVolume(m_bgmStage->GetVolume() + 0.01f);
+					m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() - 0.01f);
+				}
+			}
+
+			//ウェイポイントが8～23の場合
+			if (8 <= player->GetWayPointState() && player->GetWayPointState() <= 23) {
+				if (m_bgmStage2->GetVolume() < 1.0f) {
+					m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() + 0.01f);
+					m_bgmStage->SetVolume(m_bgmStage->GetVolume() - 0.01f);
+				}
+			}
+
+			return true;
+		}
+	);
 }

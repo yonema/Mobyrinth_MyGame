@@ -1,6 +1,15 @@
 #include "stdafx.h"
 #include "SoundCue.h"
 
+//デストラクタ
+CSoundCue::~CSoundCue()
+{
+	//CSoundCueオブジェクトをDeleteGOした際、再生中だった場合、停止させる。
+	if (m_loopSoundSource) {
+		DeleteGO(m_loopSoundSource);
+	}
+}
+
 
 /// <summary>
 /// 初期化用関数
