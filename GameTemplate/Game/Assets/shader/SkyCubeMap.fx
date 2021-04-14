@@ -59,8 +59,8 @@ Texture2D<float4> g_specularMap : register(t2);			//スペキュラマップ。
 														//rgbにスペキュラカラー、aに金属度。
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 
-Texture2D<float4> g_skyCubeMap : register(t10);
-//TextureCube<float4> g_skyCubeMap : register(t10);
+//Texture2D<float4> g_skyCubeMap : register(t10);
+TextureCube<float4> g_skyCubeMap : register(t10);
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ///////////////////////////////////////////

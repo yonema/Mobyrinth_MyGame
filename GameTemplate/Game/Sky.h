@@ -1,5 +1,5 @@
 #pragma once
-#include "ModelRender.h"
+
 /// <summary>
 /// ‹óƒNƒ‰ƒX
 /// </summary>
@@ -40,7 +40,6 @@ public:
 
 private:
 	Model m_model;
-	//CModelRender* m_modelRender = nullptr;
 	Texture m_texture;
 	Vector3 m_position = g_vec3Zero;
 	Vector3 m_scale = g_vec3One;
