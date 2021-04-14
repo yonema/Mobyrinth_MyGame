@@ -4,8 +4,8 @@
 
 bool ROkey_padlock::StartSub()
 {
-	Init("Assets/modelData/kagi.tkm", enKey,
-		"Assets/modelData/nankinjyo.tkm", enPadlock);
+	Init("Assets/modelData/key.tkm", enKey,
+		"Assets/modelData/padlock.tkm", enPadlock);
 
 	return true;
 }

@@ -3,8 +3,8 @@
 
 bool ROkeymold_empty::StartSub()
 {
-	Init("Assets/modelData/key mold.tkm", enKeymold,
-		"Assets/modelData/key mold.tkm", enKeymold);
+	Init("Assets/modelData/key_mold.tkm", enKeymold,
+		"Assets/modelData/key_mold.tkm", enKeymold);
 
 	return true;
 }

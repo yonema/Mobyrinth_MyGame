@@ -3,8 +3,8 @@
 
 bool ROrunning_stop::StartSub()
 {
-	Init("Assets/modelData/kadou.tkm", enRunning,
-		"Assets/modelData/teishi.tkm", enStop);
+	Init("Assets/modelData/running.tkm", enRunning,
+		"Assets/modelData/stop.tkm", enStop);
 
 	return true;
 }

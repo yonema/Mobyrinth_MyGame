@@ -5,7 +5,7 @@
 bool OObigFire::StartSub()
 {
 	//モデルの初期化とタイプの設定
-	Init("Assets/modelData/bigFire.tkm", enBigFire);
+	Init("Assets/modelData/flame.tkm", enBigFire);
 
 	//OBBのサイズを設定
 	Vector3 obbSize;
