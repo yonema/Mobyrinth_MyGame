@@ -124,8 +124,12 @@ private:	//データメンバ
 
 
 private:
-	CSoundCue* m_bgmStage = nullptr;				//BGMのサウンドキュー
+	CSoundCue* m_bgmStage1 = nullptr;				//BGMのサウンドキュー
 	CSoundCue* m_bgmStage2 = nullptr;				//BGMのサウンドキュー
-	bool m_startBGM = true;
+	CSoundCue* m_loop_bgmStage1 = nullptr;				//BGMのサウンドキュー
+	CSoundCue* m_loop_bgmStage2 = nullptr;				//BGMのサウンドキュー
+	bool m_check_loop1 = false; //ループ確認
+	bool m_check_loop2 = false; //ループ確認
+	bool m_startBGM = true; //タイトル画面のBGM再生のフラグ
 };
 

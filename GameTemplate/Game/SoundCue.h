@@ -88,6 +88,16 @@ public:		//ここのメンバ関数を主に使う
 		return m_isPaused;
 	}
 
+	/// <summary>
+	/// ループする曲が途中のところに飛ぶ場合、
+	/// この関数の返り値を使用して判定する。
+	/// </summary>
+	/// <returns>１回以上曲の終わりにきたか</returns>
+	const bool IsLoop()const
+	{
+		return m_loopSoundSource->GetLoopStart();
+	}
+
 
 private:	//privateなメンバ関数
 	void PlayLoop();	//ループ再生の処理
