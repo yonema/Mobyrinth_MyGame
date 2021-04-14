@@ -20,7 +20,9 @@ bool CSky::Start()
 	//シェーダーファイルのファイルパスを指定する。
 	initData.m_fxFilePath = "Assets/shader/SkyCubeMap.fx";
 
-	m_texture.InitFromDDSFile(L"Assets/modelData/preset/skyCubeMap.dds");
+	//m_texture.InitFromDDSFile(L"Assets/modelData/preset/skyCubeMap.dds");
+	m_texture.InitFromDDSFile(L"Assets/modelData/preset/sky.dds");
+
 
 	initData.m_expandShaderResoruceView = &m_texture;
 
