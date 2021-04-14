@@ -116,6 +116,7 @@ bool Title::Start()
 	m_bgmTitle->Init(L"Assets/sound/Title.wav");
 	//BGMをループ再生をオンで再生する。
 	m_bgmTitle->Play(true);
+	m_bgmTitle->SetVolume(0.5f);
 
 
 	//デバック用

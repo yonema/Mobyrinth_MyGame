@@ -253,7 +253,10 @@ void CSoundSource::UpdateOnMemory()
 		m_isPlaying = false;
 		if (m_isLoop) {
 			//ループ。
-				Play(m_isLoop);
+			Play(m_isLoop);
+
+			//曲の途中でループするBGMの判定に使用する変数をtrueにする。
+			m_loopStart = true;
 		}
 		else {
 			DeleteGO(this);
