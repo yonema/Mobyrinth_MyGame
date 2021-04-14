@@ -47,9 +47,10 @@ bool Player::Start()
 	initData.rotation = m_rotation;
 	//ピボットは底面の中央
 	initData.pivot = { 0.5f,0.0f,0.5f };
-	//OBBを初期化する
+	//キャラクターコントローラーを初期化する
 	m_myCharaCon.Init(initData);
 
+	m_lightDirection = { 1.0f,-1.0f,0.0f };
 
 	//デバック用
 	//後で消す
@@ -345,6 +346,56 @@ void Player::Rotation()
 	return;
 }
 
+/// <summary>
+/// ライトのデータを更新する
+/// </summary>
+void Player::UpdateLightData()
+{
+	//影を生成するライトの更新
+	SetShadowParam();
+	//ディレクションライトの更新
+	SetDirectionLight();
+}
+
+/// <summary>
+/// プレイヤーを照らす影を生成するライトを更新する
+/// </summary>
+void Player::SetShadowParam()
+{
+	Vector3 dir = m_lightDirection;
+	m_finalWPRot.Apply(dir);
+	g_engine->SetShadowPararm(dir, 1000.0f, m_position);
+
+	dir.Normalize();
+	dir.Scale(1000.0f);
+	Vector3 pos = m_position - dir;
+
+	m_dbgModel3->SetPosition(pos);
+}
+
+/// <summary>
+/// ディレクションライトを更新する
+/// </summary>
+void Player::SetDirectionLight()
+{
+	//ディレクションライトが見つかっていなかったら
+	if (!m_gameDirectionLight)
+	{
+		//探す
+		m_gameDirectionLight = FindGO<CDirectionLight>("GameDirectionLight");
+		//まだ見つからなかったら何もせずにreturn
+		if (!m_gameDirectionLight)
+			return;
+	}
+
+	Vector3 dir = m_lightDirection;
+	m_finalWPRot.Apply(dir);
+
+	m_gameDirectionLight->SetDirection(dir);
+
+
+}
+
 //アップデート関数
 void Player::Update()
 {
@@ -369,6 +420,10 @@ void Player::TitleMove()
 
 	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
 	GetOnStage();
+
+	//ライトのデータを更新する
+	UpdateLightData();
+
 
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
@@ -410,6 +465,8 @@ void Player::GameMove()
 	m_myCharaCon.SetRotation(m_finalWPRot);
 	//m_myCharaCon.GetOBB().SetPosition(m_position);
 
+	//ライトのデータを更新する
+	UpdateLightData();
 
 
 	//デバック用
@@ -518,7 +575,7 @@ void Player::PostRender(RenderContext& rc)
 
 
 	//ウェイポイントの切り替え
-	swprintf(text, L"右側%02.2f", m_dbgDot1);
+	swprintf(text, L"Right:%02.2f", m_dbgDot1);
 	m_font.Draw(text,
 		{ -310.0f, 150.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },
@@ -526,7 +583,7 @@ void Player::PostRender(RenderContext& rc)
 		1.0f,
 		{ 0.0f,0.0f }
 	);
-	swprintf(text, L"左側%02.2f", m_dbgDot2);
+	swprintf(text, L"Left:%02.2f", m_dbgDot2);
 	m_font.Draw(text,
 		{ -310.0f, 120.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },

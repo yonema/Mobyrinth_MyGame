@@ -5,8 +5,8 @@
 bool ROmizu_kori::StartSub()
 {
 	//‰Šú‰»—pŠÖ”
-	Init("Assets/modelData/mizu.tkm", enWater,
-		"Assets/modelData/koori.tkm", enIce);
+	Init("Assets/modelData/water.tkm", enWater,
+		"Assets/modelData/ice.tkm", enIce);
 
 	return true;
 }

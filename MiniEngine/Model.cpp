@@ -28,9 +28,17 @@ void Model::Init(const ModelInitData& initData)
 	
 	m_modelUpAxis = initData.m_modelUpAxis;
 
-	m_tkmFile.Load(initData.m_tkmFilePath);
+	auto tkmFile = g_engine->GetTkmFileFromBank(initData.m_tkmFilePath);
+	if (tkmFile == nullptr) {
+		//–¢“o˜^
+		tkmFile = new TkmFile;
+		tkmFile->Load(initData.m_tkmFilePath);
+		g_engine->RegistTkmFileToBank(initData.m_tkmFilePath, tkmFile);
+	}
+	m_tkmFile = tkmFile;
+
 	m_meshParts.InitFromTkmFile(
-		m_tkmFile, 
+		*m_tkmFile, 
 		wfxFilePath, 
 		initData.m_vsEntryPointFunc,
 		initData.m_vsSkinEntryPointFunc,
@@ -38,15 +46,20 @@ void Model::Init(const ModelInitData& initData)
 		initData.m_expandConstantBuffer,
 		initData.m_expandConstantBufferSize,
 		initData.m_expandShaderResoruceView,
+		initData.m_colorBufferFormat,
 		initData.m_expandConstantBuffer2,
-		initData.m_expandConstantBufferSize2
+		initData.m_expandConstantBufferSize2,
+		initData.m_expandConstantBuffer3,
+		initData.m_expandConstantBufferSize3,
+		initData.m_shadowConstantBuffer,
+		initData.m_shadowConstantBufferSize
 	);
 
 	UpdateWorldMatrix(g_vec3Zero, g_quatIdentity, g_vec3One);
 	
 }
 
-void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
+void Model::UpdateWorldMatrix(const Vector3& pos, const Quaternion& rot, const Vector3& scale)
 {
 	Matrix mBias;
 	if (m_modelUpAxis == enModelUpAxisZ) {
@@ -79,14 +92,25 @@ void Model::Draw(RenderContext& rc)
 		rc, 
 		m_world, 
 		g_camera3D->GetViewMatrix(), 
-		g_camera3D->GetProjectionMatrix()
+		g_camera3D->GetProjectionMatrix(),
+		m_shadowReceiverFlag
+	);
+}
+void Model::Draw(RenderContext& rc, const Matrix& viewMatrix,const Matrix& projectionMatrix)
+{
+	m_meshParts.Draw(
+		rc,
+		m_world,
+		viewMatrix,
+		projectionMatrix,
+		m_shadowReceiverFlag
 	);
 }
 
 
 bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 {
-	const auto& meshParts = m_tkmFile.GetMeshParts();
+	const auto& meshParts = m_tkmFile->GetMeshParts();
 
 	bool isHit = false;
 	float dist = FLT_MAX;

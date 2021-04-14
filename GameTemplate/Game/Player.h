@@ -190,6 +190,21 @@ private://privateなメンバ関数
 	/// </summary>
 	void Rotation();
 
+	/// <summary>
+	/// ライトのデータを更新する
+	/// </summary>
+	void UpdateLightData();
+
+	/// <summary>
+	/// プレイヤーを照らす影を生成するライトを更新する
+	/// </summary>
+	void SetShadowParam();
+
+	/// <summary>
+	/// ディレクションライトを更新する
+	/// </summary>
+	void SetDirectionLight();
+
 private:	//データメンバ
 
 	/// <summary>
@@ -224,8 +239,9 @@ private:	//データメンバ
 
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
 	CMyCharacterController m_myCharaCon;	//myキャラクターコントローラー
-	//COBB m_obb;								//OBBの当たり判定
 	Mobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
+	CDirectionLight* m_gameDirectionLight = nullptr;	//ディレクションライトのポインタ
+	Vector3 m_lightDirection = g_vec3Zero;	//ライトの照らす方向
 
 	/// <summary>
 	/// ウェイポイント関連のデータメンバ

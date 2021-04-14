@@ -1,9 +1,9 @@
 #pragma once
 
 //基本的に必要
-#include "DirectionLight.h"
 #include "GameCamera.h"
 #include "SoundCue.h"
+#include "Sky.h"
 
 //ポーズ画面用
 #include "Pause.h"
@@ -33,20 +33,37 @@
 #include "OObox.h"
 
 
-
+/// <summary>
+///	ステージベースクラス
+/// </summary>
 class IStageBase : public IGameObject
 {
-public:
-	bool Start()override final;
-	~IStageBase();
-	void Update()override final;
-	void UpdateOnlyPaused()override final;
+public:		//自動で呼ばれるメンバ関数
+	bool Start()override final;				//スタート関数
+	~IStageBase();							//デストラクタ
+	void Update()override final;			//アップデート関数
+	void UpdateOnlyPaused()override final;	//ポーズ中のみ呼ばれるアップデート関数
 
-private:
+private:	//privateなメンバ関数
+
+	/// <summary>
+	/// クリアした時の処理
+	/// </summary>
 	void Clear();
+
+	/// <summary>
+	/// リトライした時の処理
+	/// </summary>
 	void Retry();
+
+	/// <summary>
+	///	終了した時の処理
+	/// </summary>
 	void Quit();
 
+	/// <summary>
+	/// ゴールした時の処理
+	/// </summary>
 	void Goal();
 
 	void BGMInteractive();
@@ -65,32 +82,45 @@ public: //インライン関数
 		m_startBGM = b;
 	}
 
-protected:
+protected:	//protectedなメンバ関数
 	/// <summary>
 	/// レベルのロード
 	/// </summary>
 	/// <param name="filePath">tklのファイルパス</param>
 	void LoadLevel(const char* tklFilePath);
-	CDirectionLight* GetStageDirectionLight()
-	{
-		return m_stageDirectionLight;
-	}
-	virtual bool StartSub() = 0 { return true; };
-	virtual void RetryStage() = 0 {};
+
+	/// <summary>
+	/// リリース関数
+	/// </summary>
 	void Release()
 	{
 		DeleteGO(this);
 	}
-private:
-	CLevel m_level;
-	CDirectionLight* m_stageDirectionLight = nullptr;
-	CPause* m_pause = nullptr;
-	OOgoal* m_goal = nullptr;
-	int m_goalCounter = 0;
+
+protected:	//オーバーライドしてほしいメンバ関数
+
+	/// <summary>
+	/// オーバーライドしほしいスタート関数
+	/// </summary>
+	/// <returns></returns>
+	virtual bool StartSub() = 0 { return true; };
+
+	/// <summary>
+	/// オーバーライドしてほしい、
+	/// リトライした時の処理
+	/// </summary>
+	virtual void RetryStage() = 0 {};
+
+private:	//データメンバ
+	CLevel m_level;									//レベルロード用クラス
+	CPause* m_pause = nullptr;						//ポーズクラス
+	OOgoal* m_goal = nullptr;						//ゴールクラス
+	CSky* m_sky = nullptr;							//空クラス
+	int m_goalCounter = 0;							//ゴールした後の待ち時間をはかる
 
 	StartDirecting* m_startDirecting = nullptr;
 	bool m_startUpStartDirecting = true;
-	bool m_titlePlayer = false;
+	bool m_titlePlayer = false;	
 
 
 private:

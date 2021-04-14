@@ -3,7 +3,7 @@
 
 bool OOpadlock::StartSub()
 {
-	Init("Assets/modelData/padlock.tkm", enNotHavePadlock);
+	Init("Assets/modelData/padlock1.tkm", enNotHavePadlock);
 
 	//OBB‚ÌƒTƒCƒY‚ğİ’è
 	Vector3 obbSize;

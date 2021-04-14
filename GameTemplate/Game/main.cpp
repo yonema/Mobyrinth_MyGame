@@ -23,43 +23,98 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
 	
-	CLightManager::CreateInstance();
-	CLevelObjectManager::CreateInstance();
-	CSoundEngine::CreateInstance();
-	COBBWorld::CreateInstance();
+	//各管理クラスのインスタンスを生成する。
+	CLightManager::CreateInstance();		//ライトマネージャー
+	CLevelObjectManager::CreateInstance();	//レベルオブジェクトマネージャー
+	CSoundEngine::CreateInstance();			//サウンドエンジン
+	COBBWorld::CreateInstance();			//OBBワールド
 
-	NewGO<Game>(0, "Game");
+	//ゲームのインスタンスを生成する
+	Game* game = NewGO<Game>(0, "Game");
+
+	//シャドウ生成
+	g_engine->CreateShadow({ 1.0f,-1.0f,-1.0f }, 1000.0f);
+	//ディレクションライトの生成
+	CDirectionLight* gameDirectionLight = nullptr;
+	gameDirectionLight = NewGO<CDirectionLight>(0, "GameDirectionLight");
+	gameDirectionLight->SetDirection({ 1.0f,-1.0f,-1.0f });
+	gameDirectionLight->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
 	//////////////////////////////////////
-	auto& renderContext = g_graphicsEngine->GetRenderContext();
+
+	auto& renderContext = g_graphicsEngine->GetRenderContext();	//レンダーコンテキスト
+
+	//メインレンダーターゲット
+	RenderTarget& mainRenderTarget = g_graphicsEngine->GetMainRenderTarget();
+
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
 		//レンダリング開始。
 		g_engine->BeginFrame();
-		
 
-		//////////////////////////////////////
-		//ここから絵を描くコードを記述する。
-		//////////////////////////////////////
+		//////////////////////////////////////////////////////////////
+		///	アップデートの処理開始
+		//////////////////////////////////////////////////////////////
+
+		//ゲームオブジェクトのアップデート
 		GameObjectManager::GetInstance()->ExecuteUpdate();
-		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+		//ライトのアップデート
 		CLightManager::GetInstance()->ExecuteUpdate();
+		//サウンドエンジンのアップデート
 		CSoundEngine::GetInstance()->Update();
-		//////////////////////////////////////
-		//絵を描くコードを書くのはここまで！！！
-		//////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////
+		///	アップデートの処理終了
+		//////////////////////////////////////////////////////////////
+
+
+		//////////////////////////////////////////////////////////////
+		///	レンダリングの処理開始
+		//////////////////////////////////////////////////////////////
+
+		//シャドウイング
+		g_engine->DrawShadow();
+
+		//メインレンダーターゲットをセットする
+		g_engine->UseMainRenderTarget();
+
+		//メインのレンダリングを実行
+		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+
+		//ポストエフェクト
+		g_engine->DrawPostEffect();
+
+		//メインレンダリングターゲットの絵をフレームバッファーに描画する
+		g_engine->DrawFrameBuffer();
+
+		//////////////////////////////////////////////////////////////
+		///	レンダリングの処理終了
+		//////////////////////////////////////////////////////////////
+
+		//レンダリング終了
 		g_engine->EndFrame();
 	}
-	CLightManager::DeleteInstance();
+
+	//ディレクションライトを破棄
+	DeleteGO(gameDirectionLight);
+
+	//ゲームのインスタンスを破棄
+	DeleteGO(game);
+
+
+	//各管理クラスのインスタンスを破棄する。
+	COBBWorld::DeleteInstance();			//OBBワールド
+	CSoundEngine::DeleteInstance();			//サウンドエンジン
+	CLevelObjectManager::DeleteInstance();	//レベルオブジェクトマネージャー
+	CLightManager::DeleteInstance();		//ライトマネージャー
+
 	//ゲームオブジェクトマネージャーを削除。
+	PhysicsWorld::DeleteInstance();
 	GameObjectManager::DeleteInstance();
-	CLevelObjectManager::DeleteInstance();
-	CSoundEngine::DeleteInstance();
-	COBBWorld::DeleteInstance();
 
 
 	return 0;

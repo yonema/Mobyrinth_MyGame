@@ -2,12 +2,9 @@
 #include "StageBase.h"
 #include "Title.h"
 
+//スタート関数
 bool IStageBase::Start()
 {
-	//ディレクションライトの作成
-	m_stageDirectionLight = NewGO<CDirectionLight>(0);
-	m_stageDirectionLight->SetDirection({ 1.0f,1.0f,-1.0f });
-	m_stageDirectionLight->SetColor({ 0.1f,0.1f,0.1f,1.0f });
 
 	//ステージ開始時の演出の作成
 	m_startDirecting = NewGO<StartDirecting>(0, "StartDirecting");
@@ -45,6 +42,7 @@ bool IStageBase::Start()
 	//BGM音量を０にする。
 	m_bgmStage2->SetVolume(0.0f);
 
+
 	//BGMのサウンドキューを生成する
 	m_loop_bgmStage1 = NewGO<CSoundCue>(0);
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
@@ -59,11 +57,22 @@ bool IStageBase::Start()
 	//BGM音量を０にする。
 	m_loop_bgmStage2->SetVolume(0.0f);
 
+	//空を作る
+	m_sky = NewGO<CSky>(0);
+	m_sky->SetScale(1000.0f);
+
+	return StartSub();
+
+
 
 
 	return StartSub();
 }
 
+/// <summary>
+/// レベルのロード
+/// </summary>
+/// <param name="filePath">tklのファイルパス</param>
 void IStageBase::LoadLevel(const char* tklFilePath)
 {
 
@@ -335,12 +344,13 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	return;
 }
 
+//デストラクタ
 IStageBase::~IStageBase()
 {
 	//単体のオブジェクトを消去
-	DeleteGO(m_stageDirectionLight);
 	DeleteGO(FindGO<GameCamera>("GameCamera"));
 	DeleteGO(m_pause);
+	DeleteGO(m_sky);
 	DeleteGO(m_startDirecting);
 
 	DeleteGO(m_bgmStage1);
@@ -385,15 +395,19 @@ IStageBase::~IStageBase()
 	);
 }
 
-
+//アップデート関数
 void IStageBase::Update()
 {
+	//ゴールがアクティブなら
 	if (m_goal)
 	{
+		//ゴール状態を調べる
 		if (m_goal->GetIsGoal())
 		{
+			//ゴールしていたら、ゴールの処理をする
 			Goal();
 
+			//ゴールしたらポーズができないようにする
 			m_pause->SetCanPause(false);
 		}
 	}
@@ -404,42 +418,70 @@ void IStageBase::Update()
 
 	return;
 }
+
+//ポーズ中のみ呼ばれるアップデート関数
 void IStageBase::UpdateOnlyPaused()
 {
+	//ポーズの状態を調べる
+
 	if (m_pause->GetRetryFlag())
 	{
+		//リトライ
 		Retry();
 	}
 	else if (m_pause->GetQuitFlag())
 	{
+		//終了
 		Quit();
 	}
 }
 
+/// <summary>
+/// クリアした時の処理
+/// </summary>
 void IStageBase::Clear()
 {
+	//タイトルの戻る
 	NewGO<Title>(0, "Title");
-	Release();
+	Release();	//リリース
 }
 
+/// <summary>
+/// リトライした時の処理
+/// </summary>
 void IStageBase::Retry()
 {
+	//オーバーライドされているはずの処理を行う
 	RetryStage();
-	Release();
+	Release();	//リリース
 }
 
+/// <summary>
+///	終了した時の処理
+/// </summary>
 void IStageBase::Quit()
 {
+	//タイトルの戻る
 	NewGO<Title>(0, "Title");
-	Release();
+	Release();	//リリース
 }
 
+/// <summary>
+/// ゴールした時の処理
+/// </summary>
 void IStageBase::Goal()
 {
+	//後で直す
+	//フレーム数ではなくて時間にする
+
+
+	//ゴールした後の時間を計測する
 	m_goalCounter++;
 
+	//一定時間たったら
 	if (m_goalCounter >= 180)
 	{
+		//クリアする
 		Clear();
 	}
 }

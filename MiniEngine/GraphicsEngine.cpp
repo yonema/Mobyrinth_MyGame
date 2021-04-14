@@ -63,13 +63,53 @@ void GraphicsEngine::WaitDraw()
 		WaitForSingleObject(m_fenceEvent, INFINITE);
 	}
 }
+
+/// <summary>
+/// メインレンダーターゲットの初期化
+/// </summary>
+/// <returns>初期化できたか？</returns>
+bool GraphicsEngine::InitMainRenderTarget()
+{
+	bool ret =
+		m_mainRenderTarget.Create(
+			m_frameBufferWidth,
+			m_frameBufferHeight,
+			1,
+			1,
+			// 【注目】カラーバッファーのフォーマットを32bit浮動小数点にしている
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			DXGI_FORMAT_D32_FLOAT
+		);
+
+	return ret;
+}
+
+/// <summary>
+/// フレームバッファにコピーするスプライトの初期化
+/// </summary>
+void GraphicsEngine::InitCopyToFrameBufferSprite()
+{
+	// mainRenderTargetのテクスチャをフレームバッファーに貼り付けるためのスプライトを初期化する
+	// スプライトの初期化オブジェクトを作成する
+	SpriteInitData spriteInitData;
+
+	// テクスチャはmainRenderTargetのカラーバッファー
+	spriteInitData.m_textures[0] = &m_mainRenderTarget.GetRenderTargetTexture();
+	spriteInitData.m_width = 1280;
+	spriteInitData.m_height = 720;
+
+	// モノクロ用のシェーダーを指定する
+	spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+
+	// 初期化オブジェクトを使って、スプライトを初期化する
+	m_copyToFrameBufferSprite.Init(spriteInitData);
+	m_copyToFrameBufferSprite.Update(g_vec3Zero, g_quatIdentity, { -1.0f,1.0f,1.0f });
+}
+
 bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 {
-	//
+
 	g_graphicsEngine = this;
-
-
-
 
 	m_frameBufferWidth = frameBufferWidth;
 	m_frameBufferHeight = frameBufferHeight;
@@ -113,6 +153,13 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 		MessageBox(hwnd, TEXT("フレームバッファ用のDSVの作成に失敗しました。"), TEXT("エラー"), MB_OK);
 		return false;
 	}
+
+	//メインレンダリングターゲットの初期化。
+	if (!InitMainRenderTarget()) {
+		MessageBox(hwnd, TEXT("メインレンダリングターゲット用のRTVの作成に失敗しました。"), TEXT("エラー"), MB_OK);
+		return false;
+	}
+	
 
 	//コマンドアロケータの作成。
 	m_d3dDevice->CreateCommandAllocator(
@@ -181,6 +228,15 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_directXTKGfxMemroy = std::make_unique<DirectX::GraphicsMemory>(m_d3dDevice);
 	//フォント描画エンジンを初期化。
 	m_fontEngine.Init();
+
+	////mainRenderTargetのテクスチャをフレームバッファーに貼り付けるためのスプライトの初期化
+	InitCopyToFrameBufferSprite();
+
+	//シャドウマップの初期化
+	m_shadowMap.Init();
+	//ポストエフェクトの初期化
+	m_postEffect.Init();
+
 
 	return true;
 }
@@ -455,11 +511,61 @@ void GraphicsEngine::BeginRender()
 	m_renderContext.ClearRenderTargetView(m_currentFrameBufferRTVHandle, clearColor);
 	m_renderContext.ClearDepthStencilView(m_currentFrameBufferDSVHandle, 1.0f);
 
+	//UseMainRenderTarget();
+
+
 }
+
+
 void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 {
 	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
 }
+
+/// <summary>
+/// シャドウを描画する
+/// </summary>
+void GraphicsEngine::ShadowRender()
+{
+	m_shadowMap.Draw(m_renderContext);
+}
+
+/// <summary>
+/// メインレンダーターゲットを使用できるようにする
+/// </summary>
+void GraphicsEngine::UseMainRenderTarget()
+{
+	// レンダリングターゲットをmainRenderTargetに変更する
+	// レンダリングターゲットとして利用できるまで待つ
+	m_renderContext.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
+	// レンダリングターゲットを設定
+	m_renderContext.SetRenderTargetAndViewport(m_mainRenderTarget);
+	// レンダリングターゲットをクリア
+	m_renderContext.ClearRenderTargetView(m_mainRenderTarget);
+}
+
+/// <summary>
+/// ポストエフェクトを描画する
+/// </summary>
+void GraphicsEngine::PostEffectRender()
+{
+	m_postEffect.Draw(m_renderContext);
+}
+
+/// <summary>
+/// メインレンダリングターゲットの絵をフレームバッファーにコピーする
+/// </summary>
+void GraphicsEngine::CopyToFrameBuffer()
+{
+	// メインレンダリングターゲットの絵をフレームバッファーにコピー
+	m_renderContext.SetRenderTarget(
+		m_currentFrameBufferRTVHandle,
+		m_currentFrameBufferDSVHandle
+	);
+	m_copyToFrameBufferSprite.Draw(m_renderContext);
+}
+
+
 void GraphicsEngine::EndRender()
 {
 	// レンダリングターゲットへの描き込み完了待ち

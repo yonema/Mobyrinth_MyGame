@@ -51,6 +51,16 @@ protected:	//ここのメンバ関数を主に使う
 	(const char* filePath_front, const int type_front,
 		const char* filePath_back, const int type_back);
 
+	/// <summary>
+	/// 自己発光色を設定する
+	/// </summary>
+	/// <param name="color">自己発光色</param>
+	void SetEmissionColor(const Vector4& color)
+	{
+		m_modelRender[enFront]->SetEmissionColor(color);
+		m_modelRender[enBack]->SetEmissionColor(color);
+	}
+
 public:
 	//void Update()override final;
 

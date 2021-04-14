@@ -27,15 +27,28 @@ void MeshParts::InitFromTkmFile(
 	void* expandData,
 	int expandDataSize,
 	IShaderResource* expandShaderResourceView,
+	DXGI_FORMAT colorBufferFormat,
 	void* expandData2,
-	int expandDataSize2
+	int expandDataSize2,
+	void* expandData3,
+	int expandDataSize3,
+	void* shadowParamData,
+	int shadowParamDataSize
 )
 {
 	m_meshs.resize(tkmFile.GetNumMesh());
 	int meshNo = 0;
 	tkmFile.QueryMeshParts([&](const TkmFile::SMesh& mesh) {
 		//tkmファイルのメッシュ情報からメッシュを作成する。
-		CreateMeshFromTkmMesh(mesh, meshNo, fxFilePath, vsEntryPointFunc, vsSkinEntryPointFunc, psEntryPointFunc);
+		CreateMeshFromTkmMesh(
+			mesh, 
+			meshNo, 
+			fxFilePath, 
+			vsEntryPointFunc, 
+			vsSkinEntryPointFunc, 
+			psEntryPointFunc,
+			colorBufferFormat
+		);
 		meshNo++;
 	});
 	//共通定数バッファの作成。
@@ -49,6 +62,16 @@ void MeshParts::InitFromTkmFile(
 	{
 		m_expandConstantBuffer2.Init(expandDataSize2, nullptr);
 		m_expandData2 = expandData2;
+	}
+	if (expandData3)
+	{
+		m_expandConstantBuffer3.Init(expandDataSize3, nullptr);
+		m_expandData3 = expandData3;
+	}
+	if (shadowParamData)
+	{
+		m_shadowConstantBuffer.Init(shadowParamDataSize, nullptr);
+		m_shadowParamData = shadowParamData;
 	}
 	m_expandShaderResourceView = expandShaderResourceView;
 	//ディスクリプタヒープを作成。
@@ -86,6 +109,13 @@ void MeshParts::CreateDescriptorHeaps()
 			if (m_expandConstantBuffer2.IsValid()) {
 				descriptorHeap.RegistConstantBuffer(2, m_expandConstantBuffer2);
 			}
+			if (m_expandConstantBuffer3.IsValid()) {
+				descriptorHeap.RegistConstantBuffer(3, m_expandConstantBuffer3);
+			}
+			if (m_shadowConstantBuffer.IsValid())
+			{
+				descriptorHeap.RegistConstantBuffer(4, m_shadowConstantBuffer);
+			}
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
 			descriptorHeapNo++;
@@ -98,7 +128,9 @@ void MeshParts::CreateMeshFromTkmMesh(
 	const wchar_t* fxFilePath,
 	const char* vsEntryPointFunc,
 	const char* vsSkinEntryPointFunc,
-	const char* psEntryPointFunc)
+	const char* psEntryPointFunc,
+	DXGI_FORMAT colorBufferFormat
+)
 {
 	//1. 頂点バッファを作成。
 	int numVertex = (int)tkmMesh.vertexBuffer.size();
@@ -151,7 +183,14 @@ void MeshParts::CreateMeshFromTkmMesh(
 	mesh->m_materials.reserve(tkmMesh.materials.size());
 	for (auto& tkmMat : tkmMesh.materials) {
 		auto mat = new Material;
-		mat->InitFromTkmMaterila(tkmMat, fxFilePath, vsEntryPointFunc, vsSkinEntryPointFunc, psEntryPointFunc);
+		mat->InitFromTkmMaterila(
+			tkmMat, 
+			fxFilePath,
+			vsEntryPointFunc, 
+			vsSkinEntryPointFunc, 
+			psEntryPointFunc,
+			colorBufferFormat
+		);
 		mesh->m_materials.push_back(mat);
 	}
 
@@ -173,7 +212,8 @@ void MeshParts::Draw(
 	RenderContext& rc,
 	const Matrix& mWorld,
 	const Matrix& mView,
-	const Matrix& mProj
+	const Matrix& mProj,
+	const bool shadowReceiverFlag
 )
 {
 	//メッシュごとにドロー
@@ -185,6 +225,8 @@ void MeshParts::Draw(
 	cb.mWorld = mWorld;
 	cb.mView = mView;
 	cb.mProj = mProj;
+	cb.selfLuminous = m_emissionColor;
+	cb.shadowReceiverFlag = shadowReceiverFlag;
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);
 
@@ -193,6 +235,13 @@ void MeshParts::Draw(
 	}
 	if (m_expandData2) {
 		m_expandConstantBuffer2.CopyToVRAM(m_expandData2);
+	}
+	if (m_expandData3) {
+		m_expandConstantBuffer3.CopyToVRAM(m_expandData3);
+	}
+	if (m_shadowParamData)
+	{
+		m_shadowConstantBuffer.CopyToVRAM(m_shadowParamData);
 	}
 	if (m_boneMatricesStructureBuffer.IsInited()) {
 		//ボーン行列を更新する。

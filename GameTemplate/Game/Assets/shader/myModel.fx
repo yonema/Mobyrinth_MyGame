@@ -1,5 +1,5 @@
 /*!
- * @brief	シンプルなモデルシェーダー。
+ * @brief	自分用のモデルシェーダー。
  */
 
 static const int Max_DirectionLight = 4;	//ディレクションライトの最大数
