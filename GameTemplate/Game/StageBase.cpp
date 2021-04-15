@@ -18,44 +18,7 @@ bool IStageBase::Start()
 	//ポーズ画面用クラスの作成
 	m_pause = NewGO<CPause>(0, "Pause");
 
-	//////////
-	//ステージBGMの初期設定
-	//////////
-
-	//BGMのサウンドキューを生成する
-	m_bgmStage1 = NewGO<CSoundCue>(0);
-	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_bgmStage1->Init(L"Assets/sound/Stage1.wav");
-	//BGMをループ再生をオンで再生する。
-	m_bgmStage1->Play(true);
-	//もしタイトル画面だった場合、BGM音量を０にする。
-	if (m_startBGM == false) {
-		m_bgmStage1->SetVolume(0.0f);
-	}
-
-	//BGMのサウンドキューを生成する
-	m_bgmStage2 = NewGO<CSoundCue>(0);
-	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_bgmStage2->Init(L"Assets/sound/Stage2.wav");
-	//BGMをループ再生をオンで再生する。
-	m_bgmStage2->Play(true);
-	//BGM音量を０にする。
-	m_bgmStage2->SetVolume(0.0f);
-
-
-	//BGMのサウンドキューを生成する
-	m_loop_bgmStage1 = NewGO<CSoundCue>(0);
-	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_loop_bgmStage1->Init(L"Assets/sound/Stage1_Loop.wav");
-	//BGM音量を０にする。
-	m_loop_bgmStage1->SetVolume(0.0f);
-
-	//BGMのサウンドキューを生成する
-	m_loop_bgmStage2 = NewGO<CSoundCue>(0);
-	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_loop_bgmStage2->Init(L"Assets/sound/Stage2_Loop.wav");
-	//BGM音量を０にする。
-	m_loop_bgmStage2->SetVolume(0.0f);
+	
 
 	//空を作る
 	m_sky = NewGO<CSky>(0);
@@ -412,6 +375,16 @@ void IStageBase::Update()
 		}
 	}
 
+	//Start関数ではなくUpdate関数でBGMを初期化しているのは
+	//ステージをロード中にBGMが再生しないようにするため。
+
+	//BGMを初期化していなかったら
+	if (!m_initedBGM)
+	{
+		//BGMを初期化する
+		InitBGM();
+	}
+
 	if (m_startBGM == true) {
 		BGMInteractive();
 	}
@@ -486,13 +459,67 @@ void IStageBase::Goal()
 	}
 }
 
+/// <summary>
+/// BGMの初期化
+/// </summary>
+void IStageBase::InitBGM()
+{
+	//////////
+	//ステージBGMの初期設定
+	//////////
+
+	//BGMのサウンドキューを生成する
+	m_bgmStage1 = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmStage1->Init(L"Assets/sound/Stage1.wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmStage1->Play(true);
+	//もしタイトル画面だった場合、BGM音量を０にする。
+	if (m_startBGM == false) {
+		m_bgmStage1->SetVolume(0.0f);
+	}
+
+	//BGMのサウンドキューを生成する
+	m_bgmStage2 = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmStage2->Init(L"Assets/sound/Stage2.wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmStage2->Play(true);
+	//BGM音量を０にする。
+	m_bgmStage2->SetVolume(0.0f);
+
+
+	//BGMのサウンドキューを生成する
+	m_loop_bgmStage1 = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_loop_bgmStage1->Init(L"Assets/sound/Stage1_Loop.wav");
+	//BGM音量を０にする。
+	m_loop_bgmStage1->SetVolume(0.0f);
+
+	//BGMのサウンドキューを生成する
+	m_loop_bgmStage2 = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_loop_bgmStage2->Init(L"Assets/sound/Stage2_Loop.wav");
+	//BGM音量を０にする。
+	m_loop_bgmStage2->SetVolume(0.0f);
+
+	m_initedBGM = true;
+}
+
 void IStageBase::BGMInteractive()
 {
-	QueryGOs<Player>("Player", [&](Player* player)->bool
-		{
+	if (!m_player)
+	{
+		m_player = FindGO<Player>("Player");
+		if (!m_player)
+			return;
+	}
+
+	//QueryGOs<Player>("Player", [&](Player* player)->bool
+		//{
 			//ウェイポイントが24～7の場合
-			if (24 <= player->GetWayPointState() && player->GetWayPointState() <= 31 ||
-				0 <= player->GetWayPointState() && player->GetWayPointState() <= 7) {
+			if (24 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 31 ||
+				0 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 7) {
 				if (m_bgmStage1->GetVolume() < 1.0f) {
 					m_bgmStage1->SetVolume(m_bgmStage1->GetVolume() + 0.01f);
 					m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() - 0.01f);
@@ -500,16 +527,16 @@ void IStageBase::BGMInteractive()
 			}
 
 			//ウェイポイントが8～23の場合
-			if (8 <= player->GetWayPointState() && player->GetWayPointState() <= 23) {
+			if (8 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 23) {
 				if (m_bgmStage2->GetVolume() < 1.0f) {
 					m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() + 0.01f);
 					m_bgmStage1->SetVolume(m_bgmStage1->GetVolume() - 0.01f);
 				}
 			}
 
-			return true;
-		}
-	);
+		//	return true;
+		//}
+	//);
 
 	//ループ処理
 	if (m_check_loop1 == false && m_bgmStage1->IsLoop()) {
