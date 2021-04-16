@@ -129,27 +129,6 @@ bool Title::Start()
 		});
 
 
-
-	//BGMのサウンドキューを生成する
-	m_bgmTitle = NewGO<CSoundCue>(0);
-	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_bgmTitle->Init(L"Assets/sound/Title.wav");
-	//BGMをループ再生をオンで再生する。
-	m_bgmTitle->Play(true);
-	m_bgmTitle->SetVolume(0.5f);
-
-
-	//デバック用
-	//後で消す
-
-	//サウンドキューを生成する
-	m_soundCue = NewGO<CSoundCue>(0);
-	//サウンドキューを、waveファイルを指定して初期化する。
-	m_soundCue->Init(L"Assets/sound/univ1195.wav");
-
-	//デバック用ここまで
-
-
 	return true;
 }
 
@@ -173,11 +152,6 @@ Title::~Title()
 
 	DeleteGO(m_bgmTitle);
 
-	//デバック用
-	//後で消す
-
-	DeleteGO(m_soundCue);
-	//デバック用ここまで
 }
 
 //アップデート関数
@@ -197,58 +171,33 @@ void Title::Update()
 	default:
 		break;
 	}
+	
 
-	//デバック用
-	//後で消す
+	//Start関数ではなくUpdate関数でBGMを初期化しているのは
+	//ステージをロード中にBGMが再生しないようにするため。
 
-	if (g_pad[0]->IsTrigger(enButtonStart))
+	//BGMを初期化していなかったら
+	if (!m_initedBGM)
 	{
-		//スタートボタンを入力
-
-		//ワンショット再生
-		//サウンドを再生する
-		m_soundCue->Play(false);
+		//BGMを初期化する
+		InitBGM();
 	}
-	else if (g_pad[0]->IsTrigger(enButtonX))
-	{
-		//Xボタンを入力
-		if (m_bgmTitle->IsPlaying())
-		{
-			//再生中なら
-			//停止する
-			m_bgmTitle->Stop();
-		}
-		else
-		{
-			//再生中でないなら
-			//最初から再生する
-			m_bgmTitle->Play(true);
-		}
-	}
-	else if (g_pad[0]->IsTrigger(enButtonY))
-	{
-		//Yボタンを入力
-
-		//停止の検知はIsPlaying()だが、
-		//一時停止の検知はIsPaused()でやる
-		if (m_bgmTitle->IsPaused())
-		{
-			//一時停止中なら
-			//途中から再生する
-			m_bgmTitle->Play(true);
-		}
-		else
-		{
-			//一時停止中でないなら
-			//一時停止する
-			m_bgmTitle->Pause();
-		}
-	}
-
-	//デバック用ここまで
 
 }
 
+//BGMの初期化
+void Title::InitBGM()
+{
+	//BGMのサウンドキューを生成する
+	m_bgmTitle = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmTitle->Init(L"Assets/sound/Title.wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmTitle->Play(true);
+	m_bgmTitle->SetVolume(0.5f);
+
+	m_initedBGM = true;
+}
 
 //タイトル画面
 void Title::TitleScreen()

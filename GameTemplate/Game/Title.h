@@ -26,6 +26,7 @@ public:		//自動で呼ばれるメンバ関数
 
 private:	//privateなメンバ関数
 
+	void InitBGM();		//BGMの初期化
 	void TitleScreen();	//タイトル画面
 	void StageSelect();	//ステージセレクト
 	void Release()		//自身のオブジェクトを破棄する関数
@@ -80,13 +81,8 @@ private: //画像データ
 	CSpriteRender* m_stageName[enStageNum] = { nullptr };
 	CSpriteRender* m_stageSelection = nullptr;
 	CSpriteRender* m_stageSelectionBase = nullptr;
-
-
-	//デバック用
-	//後で消す
-	CSoundCue* m_soundCue = nullptr;				//サウンドキュークラス
 	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
+	bool m_initedBGM = false;						//BGMが初期化済みか？
 
-	//デバック用ここまで
 };
 

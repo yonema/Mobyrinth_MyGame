@@ -68,6 +68,11 @@ private:	//privateなメンバ関数
 
 	void BGMInteractive();
 
+	/// <summary>
+	/// BGMの初期化
+	/// </summary>
+	void InitBGM();
+
 public: //インライン関数
 	void SetStartUpStartDirecting(const bool b)
 	{
@@ -113,9 +118,10 @@ protected:	//オーバーライドしてほしいメンバ関数
 
 private:	//データメンバ
 	CLevel m_level;									//レベルロード用クラス
-	CPause* m_pause = nullptr;						//ポーズクラス
-	OOgoal* m_goal = nullptr;						//ゴールクラス
-	CSky* m_sky = nullptr;							//空クラス
+	Player* m_player = nullptr;						//プレイヤークラスのポインタ
+	CPause* m_pause = nullptr;						//ポーズクラスのポインタ
+	OOgoal* m_goal = nullptr;						//ゴールクラスのポインタ
+	CSky* m_sky = nullptr;							//空クラスのポインタ
 	int m_goalCounter = 0;							//ゴールした後の待ち時間をはかる
 
 	StartDirecting* m_startDirecting = nullptr;
@@ -131,5 +137,6 @@ private:
 	bool m_check_loop1 = false; //ループ確認
 	bool m_check_loop2 = false; //ループ確認
 	bool m_startBGM = true; //タイトル画面のBGM再生のフラグ
+	bool m_initedBGM = false;	//BGMが初期化済みか？
 };
 
