@@ -157,7 +157,7 @@ public:		//publicなデータメンバ
 
 		//反転オブジェクト
 		enWater,
-		enIce,
+		enFire,
 		enBird,
 		enFish,
 		enGrilledChicken,
