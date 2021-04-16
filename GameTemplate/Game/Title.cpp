@@ -214,6 +214,16 @@ void Title::TitleScreen()
 		//Aボタンを入力
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
+
+		//buttonASEのサウンドキューを生成する
+		m_buttonASE = NewGO<CSoundCue>(0);
+		//buttonASEのサウンドキューを、waveファイルを指定して初期化する。
+		m_buttonASE->Init(L"Assets/sound/buttonA.wav");
+		//buttonASEをループ再生をオフで再生する。
+		m_buttonASE->Play(false);
+		//音量調節
+		m_buttonASE->SetVolume(0.5f);
+
 		//ステージのステート（状態）をステージセレクトに移行する。
 		m_stageState = enStageSelect;
 		//ステージ選択状態を初期設定にする。
@@ -253,6 +263,15 @@ void Title::StageSelect()
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
 
+		//selectSEのサウンドキューを生成する
+		m_selectSE = NewGO<CSoundCue>(0);
+		//selectSEのサウンドキューを、waveファイルを指定して初期化する。
+		m_selectSE->Init(L"Assets/sound/select.wav");
+		//selectSEをループ再生をオフで再生する。
+		m_selectSE->Play(false);
+		//音量調節
+		m_selectSE->SetVolume(0.5f);
+
 		//ステージセレクトのステートを加算する
 		m_stageSelectState++;
 		//ステートが最大の値になったら、それより大きくならないようにする
@@ -267,6 +286,15 @@ void Title::StageSelect()
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
 
+		//selectSEのサウンドキューを生成する
+		m_selectSE = NewGO<CSoundCue>(0);
+		//selectSEのサウンドキューを、waveファイルを指定して初期化する。
+		m_selectSE->Init(L"Assets/sound/select.wav");
+		//selectSEをループ再生をオフで再生する。
+		m_selectSE->Play(false);
+		//音量調節
+		m_selectSE->SetVolume(0.5f);
+
 		//ステージセレクトのステートを減算する
 		m_stageSelectState--;
 		//ステートが最小の値になったら、それより小さくならないようにする
@@ -280,6 +308,15 @@ void Title::StageSelect()
 		//Aボタンを入力
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
+
+		//buttonAのサウンドキューを生成する
+		m_buttonASE = NewGO<CSoundCue>(0);
+		//buttonAのサウンドキューを、waveファイルを指定して初期化する。
+		m_buttonASE->Init(L"Assets/sound/buttonA.wav");
+		//buttonAをループ再生をオフで再生する。
+		m_buttonASE->Play(false);
+		//音量調節
+		m_buttonASE->SetVolume(0.5f);
 
 		////////////////////////////////////////////////////////////
 		//ステージを新しく作成した場合、ここでNewGOを行う。
@@ -307,6 +344,15 @@ void Title::StageSelect()
 		//Bボタンを入力
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
+
+		//buttonBのサウンドキューを生成する
+		m_buttonBSE = NewGO<CSoundCue>(0);
+		//buttonBのサウンドキューを、waveファイルを指定して初期化する。
+		m_buttonBSE->Init(L"Assets/sound/buttonB.wav");
+		//buttonBをループ再生をオフで再生する。
+		m_buttonBSE->Play(false);
+		//音量調節
+		m_buttonBSE->SetVolume(0.5f);
 
 		//ステージのステートをタイトル画面にする
 		m_stageState = enTitleScreen;

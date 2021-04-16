@@ -1,5 +1,6 @@
 #pragma once
 #include "LevelObjectBase.h"
+#include "SoundCue.h"
 
 /// <summary>
 ///	リバーシブルオブジェクト（反転オブジェクト）
@@ -213,5 +214,7 @@ private:	//データメンバ
 	Vector3 test = { 0.0f,0.0f,0.0f };
 
 	bool m_flagCheckOverlap = true;
+
+	CSoundCue* m_changeSE = nullptr;
 };
 
