@@ -84,5 +84,8 @@ private: //画像データ
 	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
 	bool m_initedBGM = false;						//BGMが初期化済みか？
 
+	CSoundCue* m_selectSE = nullptr;	//selectSEのサウンドキュー
+	CSoundCue* m_buttonASE = nullptr;	//buttonASEのサウンドキュー
+	CSoundCue* m_buttonBSE = nullptr;	//buttonBSEのサウンドキュー
 };
 

@@ -2,6 +2,7 @@
 #include "FontRender.h"
 #include "SpriteRender.h"
 #include "Level2D.h"
+#include "SoundCue.h"
 
 /// <summary>
 /// ポーズクラス
@@ -115,5 +116,9 @@ private:	//データメンバ
 	CSpriteRender* m_pause = nullptr;
 	CSpriteRender* m_choices[enPauseNum] = { nullptr };
 	CSpriteRender* m_cursor = nullptr;
+
+	CSoundCue* m_selectSE = nullptr;	//selectSEのサウンドキュー
+	CSoundCue* m_buttonASE = nullptr;	//buttonASEのサウンドキュー
+	CSoundCue* m_buttonBSE = nullptr;	//buttonBSEのサウンドキュー
 };
 
