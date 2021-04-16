@@ -334,6 +334,6 @@ void Title::StageSelect()
 	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
 	//カーソル用の画像の場所を設定する
 	m_cursor->SetPosition({ m_stageName[m_stageSelectState]->GetPositionX() - 100.0f,
-		m_stageName[m_stageSelectState]->GetPositionY() + 100.0f,
-		0.0f });
+							m_stageName[m_stageSelectState]->GetPositionY() + 100.0f,
+							0.0f });
 }

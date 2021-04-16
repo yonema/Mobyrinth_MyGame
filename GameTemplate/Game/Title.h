@@ -66,7 +66,7 @@ private:	//データメンバ
 														//（連続入力防止用）
 	CLevel2D m_level2D;									//スプライト用のレベルクラス
 	//CLevel2D m_title2D;
-	std::list<CSpriteRender*> m_spriteRenders;
+	//std::list<CSpriteRender*> m_spriteRenders;
 
 private: //背景
 	Mobius* m_mobius = nullptr;
