@@ -35,32 +35,52 @@ bool Title::Start()
 				return true;
 			}
 			//stage_kari
-			if (objdata.EqualObjectName("Press_A_Button1"))
+			if (objdata.EqualObjectName("Stage_icon1"))
 			{
 				m_stageName[enStage_kari] = NewGO<CSpriteRender>(1);
-				m_stageName[enStage_kari]->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_stageName[enStage_kari]->Init("Assets/level2D/Stage_icon1.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_stageName[enStage_kari]->SetScale(objdata.scale);
 				m_stageName[enStage_kari]->SetPosition(objdata.position);
 				//フックしたらtrueを戻す
 				return true;
 			}
 			//stage_proto01
-			if (objdata.EqualObjectName("Press_A_Button2"))
+			if (objdata.EqualObjectName("Stage_icon2"))
 			{
 				m_stageName[enStageProto01] = NewGO<CSpriteRender>(1);
-				m_stageName[enStageProto01]->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_stageName[enStageProto01]->Init("Assets/level2D/Stage_icon2.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_stageName[enStageProto01]->SetScale(objdata.scale);
 				m_stageName[enStageProto01]->SetPosition(objdata.position);
 				//フックしたらtrueを戻す
 				return true;
 			}
 			//stage_proto02
-			if (objdata.EqualObjectName("Press_A_Button3"))
+			if (objdata.EqualObjectName("Stage_icon3"))
 			{
 				m_stageName[enStageProto02] = NewGO<CSpriteRender>(1);
-				m_stageName[enStageProto02]->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_stageName[enStageProto02]->Init("Assets/level2D/Stage_icon3.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_stageName[enStageProto02]->SetScale(objdata.scale);
 				m_stageName[enStageProto02]->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//ステージセレクト
+			if (objdata.EqualObjectName("Stage_selection"))
+			{
+				m_stageSelection = NewGO<CSpriteRender>(1);
+				m_stageSelection->Init("Assets/level2D/Stage_selection.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_stageSelection->SetScale(objdata.scale);
+				m_stageSelection->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//ステージ選択背景
+			if (objdata.EqualObjectName("Stage_selection_base"))
+			{
+				m_stageSelectionBase = NewGO<CSpriteRender>(1);
+				m_stageSelectionBase->Init("Assets/level2D/Stage_selection_base.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_stageSelectionBase->SetScale(objdata.scale);
+				m_stageSelectionBase->SetPosition(objdata.position);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -77,8 +97,8 @@ bool Title::Start()
 	}
 
 	m_cursor->Deactivate();
-
-
+	m_stageSelection->Deactivate();
+	m_stageSelectionBase->Deactivate();
 
 
 	//タイトル画面の表示
@@ -109,26 +129,6 @@ bool Title::Start()
 		});
 
 
-
-	//BGMのサウンドキューを生成する
-	m_bgmTitle = NewGO<CSoundCue>(0);
-	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_bgmTitle->Init(L"Assets/sound/Title.wav");
-	//BGMをループ再生をオンで再生する。
-	m_bgmTitle->Play(true);
-
-
-	//デバック用
-	//後で消す
-
-	//サウンドキューを生成する
-	m_soundCue = NewGO<CSoundCue>(0);
-	//サウンドキューを、waveファイルを指定して初期化する。
-	m_soundCue->Init(L"Assets/sound/univ1195.wav");
-
-	//デバック用ここまで
-
-
 	return true;
 }
 
@@ -147,14 +147,11 @@ Title::~Title()
 	DeleteGO(m_title);
 	DeleteGO(m_pressAButton);
 	DeleteGO(m_cursor);
+	DeleteGO(m_stageSelection);
+	DeleteGO(m_stageSelectionBase);
 
 	DeleteGO(m_bgmTitle);
 
-	//デバック用
-	//後で消す
-
-	DeleteGO(m_soundCue);
-	//デバック用ここまで
 }
 
 //アップデート関数
@@ -174,58 +171,33 @@ void Title::Update()
 	default:
 		break;
 	}
+	
 
-	//デバック用
-	//後で消す
+	//Start関数ではなくUpdate関数でBGMを初期化しているのは
+	//ステージをロード中にBGMが再生しないようにするため。
 
-	if (g_pad[0]->IsTrigger(enButtonStart))
+	//BGMを初期化していなかったら
+	if (!m_initedBGM)
 	{
-		//スタートボタンを入力
-
-		//ワンショット再生
-		//サウンドを再生する
-		m_soundCue->Play(false);
+		//BGMを初期化する
+		InitBGM();
 	}
-	else if (g_pad[0]->IsTrigger(enButtonX))
-	{
-		//Xボタンを入力
-		if (m_bgmTitle->IsPlaying())
-		{
-			//再生中なら
-			//停止する
-			m_bgmTitle->Stop();
-		}
-		else
-		{
-			//再生中でないなら
-			//最初から再生する
-			m_bgmTitle->Play(true);
-		}
-	}
-	else if (g_pad[0]->IsTrigger(enButtonY))
-	{
-		//Yボタンを入力
-
-		//停止の検知はIsPlaying()だが、
-		//一時停止の検知はIsPaused()でやる
-		if (m_bgmTitle->IsPaused())
-		{
-			//一時停止中なら
-			//途中から再生する
-			m_bgmTitle->Play(true);
-		}
-		else
-		{
-			//一時停止中でないなら
-			//一時停止する
-			m_bgmTitle->Pause();
-		}
-	}
-
-	//デバック用ここまで
 
 }
 
+//BGMの初期化
+void Title::InitBGM()
+{
+	//BGMのサウンドキューを生成する
+	m_bgmTitle = NewGO<CSoundCue>(0);
+	//BGMのサウンドキューを、waveファイルを指定して初期化する。
+	m_bgmTitle->Init(L"Assets/sound/Title.wav");
+	//BGMをループ再生をオンで再生する。
+	m_bgmTitle->Play(true);
+	m_bgmTitle->SetVolume(0.5f);
+
+	m_initedBGM = true;
+}
 
 //タイトル画面
 void Title::TitleScreen()
@@ -244,6 +216,8 @@ void Title::TitleScreen()
 		m_buttonFlag = false;
 		//ステージのステート（状態）をステージセレクトに移行する。
 		m_stageState = enStageSelect;
+		//ステージ選択状態を初期設定にする。
+		m_stageSelectState = enStage_kari;
 
 		//タイトル画面用のスプライトレンダラーを無効化して非表示にする
 		m_title->Deactivate();
@@ -257,6 +231,8 @@ void Title::TitleScreen()
 		}
 
 		m_cursor->Activate();
+		m_stageSelection->Activate();
+		m_stageSelectionBase->Activate();
 	}
 
 }
@@ -265,13 +241,13 @@ void Title::TitleScreen()
 void Title::StageSelect()
 {
 	//ボタンの入力を調べる
-	if (g_pad[0]->GetLStickYF() == 0.0f && !g_pad[0]->IsPressAnyKey())
+	if (g_pad[0]->GetLStickXF() == 0.0f && !g_pad[0]->IsPressAnyKey())
 	{
 		//何も入力がない状態
 		//ボタンを押すことができるようにする（連続入力防止用）
 		m_buttonFlag = true;
 	}
-	if (g_pad[0]->GetLStickYF() < 0.0f && m_buttonFlag)
+	if (g_pad[0]->GetLStickXF() > 0.0f && m_buttonFlag)
 	{
 		//下を入力
 		//ボタンを押すことができないようにする（連続入力防止用）
@@ -285,7 +261,7 @@ void Title::StageSelect()
 			m_stageSelectState = enStageProto02;
 		}
 	}
-	else if (g_pad[0]->GetLStickYF() > 0.0f && m_buttonFlag)
+	else if (g_pad[0]->GetLStickXF() < 0.0f && m_buttonFlag)
 	{
 		//上を入力
 		//ボタンを押すことができないようにする（連続入力防止用）
@@ -340,8 +316,9 @@ void Title::StageSelect()
 		{
 			m_stageName[i]->Deactivate();
 		}
-		//m_arrow->Deactivate();
 		m_cursor->Deactivate();
+		m_stageSelection->Deactivate();
+		m_stageSelectionBase->Deactivate();
 
 
 		//タイトル画面の画像を有効化して表示する。
@@ -356,5 +333,7 @@ void Title::StageSelect()
 	const float DownSide = -300.0f;		//下端
 	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
 	//カーソル用の画像の場所を設定する
-	m_cursor->SetPosition({ -400.0f,m_stageName[m_stageSelectState]->GetPositionY(),0.0f });
+	m_cursor->SetPosition({ m_stageName[m_stageSelectState]->GetPositionX() - 100.0f,
+		m_stageName[m_stageSelectState]->GetPositionY() + 100.0f,
+		0.0f });
 }
