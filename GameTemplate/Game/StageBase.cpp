@@ -25,11 +25,6 @@ bool IStageBase::Start()
 	m_sky->SetScale(1000.0f);
 
 	return StartSub();
-
-
-
-
-	return StartSub();
 }
 
 /// <summary>
