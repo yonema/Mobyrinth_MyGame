@@ -78,6 +78,8 @@ private: //画像データ
 	CSpriteRender* m_pressAButton = nullptr;
 	CSpriteRender* m_cursor = nullptr;
 	CSpriteRender* m_stageName[enStageNum] = { nullptr };
+	CSpriteRender* m_stageSelection = nullptr;
+	CSpriteRender* m_stageSelectionBase = nullptr;
 
 
 	//デバック用
