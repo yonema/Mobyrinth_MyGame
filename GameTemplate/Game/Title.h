@@ -79,6 +79,8 @@ private: //画像データ
 	CSpriteRender* m_pressAButton = nullptr;
 	CSpriteRender* m_cursor = nullptr;
 	CSpriteRender* m_stageName[enStageNum] = { nullptr };
+	CSpriteRender* m_stageSelection = nullptr;
+	CSpriteRender* m_stageSelectionBase = nullptr;
 	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
 	bool m_initedBGM = false;						//BGMが初期化済みか？
 

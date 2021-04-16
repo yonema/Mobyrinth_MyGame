@@ -89,6 +89,15 @@ public:		//ここのメンバ関数を主に使う
 	}
 
 	/// <summary>
+	/// m_positionのx軸の値を返す。
+	/// </summary>
+	/// <returns>m_position.x</returns>
+	float GetPositionX()
+	{
+		return m_position.x;
+	}
+
+	/// <summary>
 	/// m_positionのy軸の値を返す。
 	/// </summary>
 	/// <returns>m_position.y</returns>
