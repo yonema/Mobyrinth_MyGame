@@ -66,13 +66,25 @@ private:	//privateなメンバ関数
 	/// </summary>
 	void Goal();
 
+	/// <summary>
+	/// ゴールしているかどうか調べる
+	/// </summary>
 	void CheckGoal();
 
+	/// <summary>
+	/// タイトルへ遷移する
+	/// </summary>
 	void GoTitle();
 
-	
+	/// <summary>
+	/// ワイプインする
+	/// </summary>
 	void WipeIn();
 
+	/// <summary>
+	/// ワイプアウトする
+	/// </summary>
+	/// <returns>ワイプアウトが終了したか？</returns>
 	bool WipeOut();
 
 	void BGMInteractive();
@@ -96,6 +108,10 @@ public: //インライン関数
 		m_startBGM = b;
 	}
 
+	/// <summary>
+	/// ワイプインするかどうかのフラグを設定
+	/// </summary>
+	/// <param name="wipeInFlag">ワイプインする？</param>
 	void SetWipeInFlag(const bool wipeInFlag)
 	{
 		m_wipeInFlag = wipeInFlag;
@@ -150,6 +166,6 @@ private:	//データメンバ
 	bool m_check_loop2 = false;						//ループ確認
 	bool m_startBGM = true;							//タイトル画面のBGM再生のフラグ
 	bool m_initedBGM = false;						//BGMが初期化済みか？
-	bool m_wipeInFlag = false;
+	bool m_wipeInFlag = false;						//ワイプインする？
 };
 

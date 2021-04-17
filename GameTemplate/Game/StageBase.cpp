@@ -13,10 +13,12 @@ bool IStageBase::Start()
 	}
 	else
 	{
-		WipeIn();
+		//開始演出があるなら、ワイプインフラグを立てる
 		m_wipeInFlag = true;
 	}
 
+	//ワイプインフラグが立っていたら、ワイプインさせる
+	//ワイプインフラグは外からtrueにされることもある。
 	if (m_wipeInFlag)
 		WipeIn();
 
@@ -382,9 +384,12 @@ void IStageBase::Update()
 		BGMInteractive();
 	}
 
+	//ワイプインフラグが立っていたら
 	if (m_wipeInFlag)
 	{
+		//ワイプが終了位置にいないか調べて、
 		m_wipeInFlag = !g_sceneChange->IsWipeFinished();
+		//終了位置まで来ていたら、ワイプの終了させる
 		if (!m_wipeInFlag)
 			g_sceneChange->WipeEnd();
 	}
@@ -482,24 +487,39 @@ void IStageBase::CheckGoal()
 	}
 }
 
+/// <summary>
+/// ワイプインする
+/// </summary>
 void IStageBase::WipeIn()
 {
+	//ワイプインする
 	g_sceneChange->WipeIn();
 }
 
+/// <summary>
+/// ワイプアウトする
+/// </summary>
+/// <returns>ワイプアウトが終了したか？</returns>
 bool IStageBase::WipeOut()
 {
+	//ワイプの状態が、開始位置なら
 	if (g_sceneChange->GetWipeSize() == 0.0f)
-		g_sceneChange->RandomWipeStart();
+		//ワイプアウトする
+		g_sceneChange->RandomWipeOut();
 
-
+	//ワイプが終わったかどうか？
 	return g_sceneChange->IsWipeFinished();
 
 }
 
+/// <summary>
+/// タイトルへ遷移する
+/// </summary>
 void IStageBase::GoTitle()
 {
+	//タイトルを生成
 	Title* title = NewGO<Title>(0);
+	//ワイプインするように設定する
 	title->SetWipeInFlag(true);
 }
 

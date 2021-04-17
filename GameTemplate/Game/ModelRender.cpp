@@ -132,10 +132,10 @@ void CModelRender::InitModel(const char* filePath, EnModelUpAxis modelUpAxis)
 
 	//シャドウのデータの登録
 	initData.m_shadowConstantBuffer =
-		g_graphicsEngine->GetShadowParam();
+		g_shadowMap->GetShadowParam();
 	initData.m_shadowConstantBufferSize = 
-		sizeof(*g_graphicsEngine->GetShadowParam()) * g_max_shadowMap;
-	initData.m_expandShaderResoruceView = &g_graphicsEngine->GetShadowBlur();
+		sizeof(*g_shadowMap->GetShadowParam()) * g_max_shadowMap;
+	initData.m_expandShaderResoruceView = &g_shadowMap->GetShadowBlur();
 
 
 	//作成した初期化データをもとにモデルを初期化する、
@@ -177,8 +177,8 @@ void CModelRender::InitShadowModel()
 	initShadowModelData.m_fxFilePath =
 		"Assets/shader/DrawShadowMap.fx";
 	//シャドウのパラーメータを定数バッファに渡す
-	initShadowModelData.m_expandConstantBuffer = (void*)g_graphicsEngine->GetShadowParam();
-	initShadowModelData.m_expandConstantBufferSize = sizeof(*g_graphicsEngine->GetShadowParam());
+	initShadowModelData.m_expandConstantBuffer = (void*)g_shadowMap->GetShadowParam();
+	initShadowModelData.m_expandConstantBufferSize = sizeof(*g_shadowMap->GetShadowParam());
 
 	initShadowModelData.m_colorBufferFormat = DXGI_FORMAT_R32G32_FLOAT;
 

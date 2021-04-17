@@ -31,12 +31,13 @@ static const int g_nega = 7;                    //ネガポジ反転
 static const int g_noise = 8;                   //ノイズ加工
 
 //各ワイプの最大ワイプサイズ
-static const float g_wipeMax = g_width;
-static const float g_circleWipeMax = g_width / 1.5;
-static const float g_verticalStripeWipeMax = 64.0f;
-static const float g_horizontalStripeWipeMax = 64.0f;
-static const float g_checkerboardWipeMax = 128.0f;
-
+//ここを変更したら、SceneChange.hの定数も変更すること
+static const float g_wipeMax = g_width;                 //普通のワイプのX軸の最大サイズ
+static const float g_circleWipeMax = g_width / 1.5;     //普通のワイプのY軸の最大サイズ
+static const float g_verticalStripeWipeMax = 64.0f;     //円形ワイプの最大サイズ
+static const float g_horizontalStripeWipeMax = 64.0f;   //縦縞ワイプの最大サイズ
+static const float g_checkerboardWipeMax = 128.0f;      //横縞ワイプの最大サイズ
+                                                        //チェッカーボードワイプの最大サイズ
 //ワイプイン、ワイプアウト
 static const int g_in = 0;          //ワイプイン
 static const int g_out = 1;         //ワイプアウト
@@ -71,22 +72,23 @@ cbuffer cb : register(b0)
 
 
 // ワイプパラメータにアクセスするための定数バッファ
+//ここを変更したら、SceneChange.hの構造体も変更すること
 cbuffer WipeCB : register (b1)
 {
-    float2 wipeDirection;
-    float wipeSize;
-    int leftOrLight;
-    int topOrDown;
-    int wipeType;
-    int inOrOut;
+    float2 wipeDirection;   //ワイプする方向
+    float wipeSize;         //ワイプのサイズ
+    int leftOrLight;        //左側か右側か
+    int topOrDown;          //上側か下側か
+    int wipeType;           //ワイプの種類
+    int inOrOut;            //ワイプインかワイプアウトか
 }
 
 
 ////////////////////////////////////////////////
 // グローバル変数。
 ////////////////////////////////////////////////
-Texture2D<float4> colorTexture : register(t0); // カラーテクスチャ
-sampler Sampler : register(s0);
+Texture2D<float4> colorTexture : register(t0);  // カラーテクスチャ
+sampler Sampler : register(s0);                 //サンプラー
 
 
 ///////////////////////////////////////////
@@ -132,6 +134,7 @@ float4 PSMain(PSInput In) : SV_Target0
     //サンプリングする
     float4 color = colorTexture.Sample(Sampler, In.uv);
 
+    //各種ワイプごとに割り振る
     switch (wipeType)
     {
     case g_wipe:
@@ -188,6 +191,7 @@ float4 Wipe(float2 Inpos, float4 color)
     float2 finalUV = Inpos;
     //最終的なワイプの大きさ
     float finalWipeSize = wipeSize;
+    //最終的な上側か下側
     int finalTopOrDown = topOrDown;
 
     //左側からワイプさせたいときは
@@ -198,16 +202,20 @@ float4 Wipe(float2 Inpos, float4 color)
     }
     //右側からワイプさせたいときは、そのまま。
 
+
     //ワイプインの場合はワイプサイズを反転させる
     if (inOrOut == g_in)
     {
+        //ワイプサイズを最大サイズを使って反転
         finalWipeSize = WipeInMode(wipeSize, g_wipeMax);
+        //上側と下側も反転させる
         finalTopOrDown = !finalTopOrDown;
     }
 
     //下側からワイプさせたいときは、
     if (finalTopOrDown == g_down)
     {
+        //UVのY軸を反転させる
         finalUV.y = Inpos.y - g_height;
     }
 
@@ -220,6 +228,8 @@ float4 Wipe(float2 Inpos, float4 color)
 
     //射影されたベクトルがワイプサイズ以下なら表示しない。
     //clip(t - finalWipeSize);
+    //clipだと真っ暗になって、後ろのスプライトが見えないから
+    //アルファ値0.0fのカラーにする
     if ((t - finalWipeSize) < 0)
         color = float4(0.0f, 0.0f, 0.0f, 0.0f);
 

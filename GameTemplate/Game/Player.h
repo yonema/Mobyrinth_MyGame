@@ -259,15 +259,15 @@ private:	//データメンバ
 	bool m_titleMove = false;
 
 public://デバック用
-	void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため
-	Font m_font;							//フォントを表示するためのクラス
-	CModelRender* m_dbgModel = nullptr;		//プレイヤーとステージとの当たり判定を
-	CModelRender* m_dbgModel2 = nullptr;	//取るためのレイの視点と終点とステージとの
-	CModelRender* m_dbgModel3 = nullptr;	//交差点を見るためのモデル
-	bool m_dbgHit = false;					//上のレイが当たっているか表示するための変数
+	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため
+	//Font m_font;							//フォントを表示するためのクラス
+	//CModelRender* m_dbgModel = nullptr;		//プレイヤーとステージとの当たり判定を
+	//CModelRender* m_dbgModel2 = nullptr;	//取るためのレイの視点と終点とステージとの
+	//CModelRender* m_dbgModel3 = nullptr;	//交差点を見るためのモデル
+	//bool m_dbgHit = false;					//上のレイが当たっているか表示するための変数
 
-	float m_dbgDot1 = 0.0f;			//左側のウェイポイントとプレイヤーの内積を入れる
-	float m_dbgDot2 = 0.0f;			//右側のウェイポイントとプレイヤーの内積を入れる
+	//float m_dbgDot1 = 0.0f;			//左側のウェイポイントとプレイヤーの内積を入れる
+	//float m_dbgDot2 = 0.0f;			//右側のウェイポイントとプレイヤーの内積を入れる
 
 	CModelRender* m_dbgObbModel[8] = { nullptr };	//OBBの頂点を見るためのモデル
 

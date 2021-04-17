@@ -65,13 +65,13 @@ bool Player::Start()
 	//デバック用
 	//後で消す
 
-	//レイの視点と終点と交差点を見るためのデバック用モデルの生成
-	m_dbgModel = NewGO<CModelRender>(0);
-	m_dbgModel->Init("Assets/modelData/yuka.tkm");
-	m_dbgModel2 = NewGO<CModelRender>(0);
-	m_dbgModel2->Init("Assets/modelData/yuka.tkm");
-	m_dbgModel3 = NewGO<CModelRender>(0);
-	m_dbgModel3->Init("Assets/modelData/yuka.tkm");
+	////レイの視点と終点と交差点を見るためのデバック用モデルの生成
+	//m_dbgModel = NewGO<CModelRender>(0);
+	//m_dbgModel->Init("Assets/modelData/yuka.tkm");
+	//m_dbgModel2 = NewGO<CModelRender>(0);
+	//m_dbgModel2->Init("Assets/modelData/yuka.tkm");
+	//m_dbgModel3 = NewGO<CModelRender>(0);
+	//m_dbgModel3->Init("Assets/modelData/yuka.tkm");
 	
 	//OBBの頂点の座標の配列の先頭アドレスを取得
 	Vector3* vertPos = m_myCharaCon.GetOBB().GetBoxVertex();
@@ -96,9 +96,9 @@ Player::~Player()
 
 	//デバック用
 	//後で消す
-	DeleteGO(m_dbgModel);
-	DeleteGO(m_dbgModel2);
-	DeleteGO(m_dbgModel3);
+	//DeleteGO(m_dbgModel);
+	//DeleteGO(m_dbgModel2);
+	//DeleteGO(m_dbgModel3);
 	for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
 	{
 		DeleteGO(m_dbgObbModel[i]);
@@ -178,8 +178,12 @@ void Player::CheckWayPoint()
 	float LpDotPlayer = Dot(LpToRpVec, LpToPlayerVec);
 	//右側の内積
 	float RpDotPlayer = Dot(LpToRpVec, RpToPlayerVec);
-	m_dbgDot1 = LpDotPlayer;
-	m_dbgDot2 = RpDotPlayer;
+
+	//デバック用
+	//後で消す
+	//m_dbgDot1 = LpDotPlayer;
+	//m_dbgDot2 = RpDotPlayer;
+	//デバック用ここまで
 
 
 	//左右のウェイポイントとの距離を調べる
@@ -294,13 +298,13 @@ void Player::GetOnStage()
 			m_position = m_mobius->GetModel()->GetIntersectPos();
 			//デバック用
 			//後で消す
-			m_dbgHit = true;
+			//m_dbgHit = true;
 		}
 		else
 		{
 			//デバック用
 			//後で消す
-			m_dbgHit = false;
+			//m_dbgHit = false;
 		}
 	}
 	else
@@ -315,10 +319,10 @@ void Player::GetOnStage()
 	//デバック用
 	//後で消す
 	//レイの始点と終点と交差点を場所を入れる
-	auto hitPos = m_mobius->GetModel()->GetIntersectPos();
-	m_dbgModel->SetPosition(m_onWayPosition + m_upVec);
-	m_dbgModel2->SetPosition(m_onWayPosition - m_upVec);
-	m_dbgModel3->SetPosition(hitPos);
+	//auto hitPos = m_mobius->GetModel()->GetIntersectPos();
+	//m_dbgModel->SetPosition(m_onWayPosition + m_upVec);
+	//m_dbgModel2->SetPosition(m_onWayPosition - m_upVec);
+	//m_dbgModel3->SetPosition(hitPos);
 	//デバック用ここまで
 
 	return;
@@ -374,13 +378,15 @@ void Player::SetShadowParam()
 {
 	Vector3 dir = m_lightDirection;
 	m_finalWPRot.Apply(dir);
-	g_engine->SetShadowPararm(dir, 1000.0f, m_position);
+	g_shadowMap->SetShadowParam(dir, 1000.0f, m_position);
 
 	dir.Normalize();
 	dir.Scale(1000.0f);
 	Vector3 pos = m_position - dir;
 
-	m_dbgModel3->SetPosition(pos);
+	//デバック用
+	//後で消す
+	//m_dbgModel3->SetPosition(pos);
 }
 
 /// <summary>
@@ -523,86 +529,87 @@ void Player::SetWayPointRot
 	m_wayPointRot = rotMap;
 }
 
-
-//デバック用のフォントを表示するため
-void Player::PostRender(RenderContext& rc)
-{
-	//テキスト用意
-	wchar_t text[256];
-
-	//描画開始
-	m_font.Begin(rc);
-
-	//ウェイポイントステートの表示
-	swprintf(text, L"wayPointState:%02d", m_wayPointState);
-	//描画
-	m_font.Draw(text,
-		{ -600.0f, 300.0f },
-		{ 0.0f,0.0f,0.0f,1.0f },
-		0.0f,
-		1.0f,
-		{ 0.0f,0.0f }
-	);
-
-	//プレイヤーの左右のウェイポイントの表示
-	//左側のウェイポイント
-	swprintf(text, L"[%02d]", m_lpIndex);
-	m_font.Draw(text,
-		{ -110.0f, 50.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		0.0f,
-		1.0f,
-		{ 0.0f,0.0f }
-	);
-	//右側のウェイポイント
-	swprintf(text, L"[%02d]", m_rpIndex);
-	m_font.Draw(text,
-		{ 10.0f,50.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		0.0f,
-		1.0f,
-		{ 0.0f,0.0f }
-	);
-
-	//ステージとの当たり判定
-	swprintf(text, L"Hit%d", m_dbgHit);
-	m_font.Draw(text,
-		{ 110.0f, 150.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		0.0f,
-		1.0f,
-		{ 0.0f,0.0f }
-	);
-	//ステージとプレイヤーのポジションとの補完率
-	swprintf(text, L"rate%05f", m_mobius->GetModel()->getDbg());
-	m_font.Draw(text,
-		{ 110.0f, 120.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		0.0f,
-		1.0f,
-		{ 0.0f,0.0f }
-	);
-
-
-	//ウェイポイントの切り替え
-	swprintf(text, L"Right:%02.2f", m_dbgDot1);
-	m_font.Draw(text,
-		{ -310.0f, 150.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		0.0f,
-		1.0f,
-		{ 0.0f,0.0f }
-	);
-	swprintf(text, L"Left:%02.2f", m_dbgDot2);
-	m_font.Draw(text,
-		{ -310.0f, 120.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		0.0f,
-		1.0f,
-		{ 0.0f,0.0f }
-	);
-
-
-	//描画終了
-	m_font.End(rc);
-}
+//デバック用
+//後で消す
+////デバック用のフォントを表示するため
+//void Player::PostRender(RenderContext& rc)
+//{
+//	//テキスト用意
+//	wchar_t text[256];
+//
+//	//描画開始
+//	m_font.Begin(rc);
+//
+//	//ウェイポイントステートの表示
+//	swprintf(text, L"wayPointState:%02d", m_wayPointState);
+//	//描画
+//	m_font.Draw(text,
+//		{ -600.0f, 300.0f },
+//		{ 0.0f,0.0f,0.0f,1.0f },
+//		0.0f,
+//		1.0f,
+//		{ 0.0f,0.0f }
+//	);
+//
+//	//プレイヤーの左右のウェイポイントの表示
+//	//左側のウェイポイント
+//	swprintf(text, L"[%02d]", m_lpIndex);
+//	m_font.Draw(text,
+//		{ -110.0f, 50.0f },
+//		{ 1.0f,0.0f,0.0f,1.0f },
+//		0.0f,
+//		1.0f,
+//		{ 0.0f,0.0f }
+//	);
+//	//右側のウェイポイント
+//	swprintf(text, L"[%02d]", m_rpIndex);
+//	m_font.Draw(text,
+//		{ 10.0f,50.0f },
+//		{ 1.0f,0.0f,0.0f,1.0f },
+//		0.0f,
+//		1.0f,
+//		{ 0.0f,0.0f }
+//	);
+//
+//	//ステージとの当たり判定
+//	swprintf(text, L"Hit%d", m_dbgHit);
+//	m_font.Draw(text,
+//		{ 110.0f, 150.0f },
+//		{ 1.0f,0.0f,0.0f,1.0f },
+//		0.0f,
+//		1.0f,
+//		{ 0.0f,0.0f }
+//	);
+//	//ステージとプレイヤーのポジションとの補完率
+//	swprintf(text, L"rate%05f", m_mobius->GetModel()->getDbg());
+//	m_font.Draw(text,
+//		{ 110.0f, 120.0f },
+//		{ 1.0f,0.0f,0.0f,1.0f },
+//		0.0f,
+//		1.0f,
+//		{ 0.0f,0.0f }
+//	);
+//
+//
+//	//ウェイポイントの切り替え
+//	swprintf(text, L"Right:%02.2f", m_dbgDot1);
+//	m_font.Draw(text,
+//		{ -310.0f, 150.0f },
+//		{ 1.0f,0.0f,0.0f,1.0f },
+//		0.0f,
+//		1.0f,
+//		{ 0.0f,0.0f }
+//	);
+//	swprintf(text, L"Left:%02.2f", m_dbgDot2);
+//	m_font.Draw(text,
+//		{ -310.0f, 120.0f },
+//		{ 1.0f,0.0f,0.0f,1.0f },
+//		0.0f,
+//		1.0f,
+//		{ 0.0f,0.0f }
+//	);
+//
+//
+//	//描画終了
+//	m_font.End(rc);
+//}

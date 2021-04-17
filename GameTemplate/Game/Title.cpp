@@ -312,7 +312,10 @@ void Title::StageSelect()
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
 
-		g_sceneChange->RandomWipeStart();
+		//ランダムワイプアウトをする
+		g_sceneChange->RandomWipeOut();
+
+		//ステージのステートをステージを決定した状態にする
 		m_stageState = enStageDecision;
 
 
@@ -373,8 +376,10 @@ void Title::StageSelect()
 							0.0f });
 }
 
+//ステージを決定した時の処理
 void Title::StageDecision()
 {
+	//ワイプが終わるまで処理しない
 	if (!g_sceneChange->IsWipeFinished())
 		return;
 
