@@ -11,7 +11,7 @@ bool Title::Start()
 	m_stageTitle->SetStartUpStartDirecting(false);
 	m_stageTitle->SetTitlePlayer(true);
 	m_stageTitle->SetStartBGM(false);
-
+	m_stageTitle->SetWipeInFlag(m_wipeInFlag);
 
 
 	//フォントの配置
@@ -146,6 +146,9 @@ void Title::Update()
 		//ステージセレクト
 		StageSelect();
 		break;
+	case enStageDecision:
+		StageDecision();
+		break;
 	default:
 		break;
 	}
@@ -254,27 +257,8 @@ void Title::StageSelect()
 		//Aボタンを入力
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
-
-		////////////////////////////////////////////////////////////
-		//ステージを新しく作成した場合、ここでNewGOを行う。
-		////////////////////////////////////////////////////////////
-		//ステージセレクトのステートによって生成するステージを振り分ける
-		switch (m_stageSelectState)
-		{
-		case enStage_kari:
-			NewGO<stage_kari>(0, "stage_kari");
-			break;
-		case enStageProto01:
-			NewGO<stage_proto01>(0, "stage_proto01");
-			break;
-		case enStageProto02:
-			NewGO<stage_proto02>(0, "stage_proto02");
-			break;
-		default:
-			break;
-		}
-		//自身のオブジェクトを破棄する
-		Release();
+		g_sceneChange->RandomWipeStart();
+		m_stageState = enStageDecision;
 	}
 	else if (g_pad[0]->IsTrigger(enButtonB) && m_buttonFlag)
 	{
@@ -307,4 +291,32 @@ void Title::StageSelect()
 	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
 	//カーソル用の画像の場所を設定する
 	m_cursor->SetPosition({ -400.0f,m_stageName[m_stageSelectState]->GetPositionY(),0.0f });
+}
+
+void Title::StageDecision()
+{
+	if (!g_sceneChange->IsWipeFinished())
+		return;
+
+	////////////////////////////////////////////////////////////
+	//ステージを新しく作成した場合、ここでNewGOを行う。
+	////////////////////////////////////////////////////////////
+	//ステージセレクトのステートによって生成するステージを振り分ける
+	switch (m_stageSelectState)
+	{
+	case enStage_kari:
+		NewGO<stage_kari>(0, "stage_kari");
+		break;
+	case enStageProto01:
+		NewGO<stage_proto01>(0, "stage_proto01");
+		break;
+	case enStageProto02:
+		NewGO<stage_proto02>(0, "stage_proto02");
+		break;
+	default:
+		break;
+	}
+	//自身のオブジェクトを破棄する
+	Release();
+
 }

@@ -292,6 +292,7 @@
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="ShadowModel.cpp" />
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
@@ -418,6 +419,7 @@
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CaslFile.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="SceneChange.h" />
     <ClInclude Include="ShadowModel.h" />
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="GaussianBlur.h" />
@@ -499,6 +501,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Assets\shader\PostEffect.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\SceneChange.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>

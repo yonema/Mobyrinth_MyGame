@@ -73,6 +73,33 @@ void Game::Update()
 
 	//ブレイクポイント用
 	int a = 4;
+	
+	//g_sceneChange->SetWipeType(CSceneChange::enCheckerboardWipe);
+	//g_sceneChange->SetWipeType(m_wipeNum);
+	//g_sceneChange->SetWipeType(CSceneChange::enCircleWipe);
+	//g_sceneChange->SetWipeLeftOrLight(CSceneChange::enLeft);
+	//g_sceneChange->SetWipeDirection({ 1.0f,0.5f });
+	if (g_pad[0]->IsTrigger(enButtonB))
+	{
+
+		//g_sceneChange->SetInOrOut(CSceneChange::enIn);
+		//g_sceneChange->SetInOrOut(m_inorout);
+		if (m_inorout)
+			g_sceneChange->RandomWipeStart();
+		else
+			g_sceneChange->WipeIn();
+		m_inorout = !m_inorout;
+		//g_sceneChange->WipeStart();
+	}
+	else if (g_pad[0]->IsTrigger(enButtonX))
+	{
+		m_wipeNum++;
+		if (m_wipeNum > CSceneChange::enCheckerboardWipe)
+		{
+			m_wipeNum = 0;
+		}
+	}
+	//デバック用ここまで
 
 	return;
 }

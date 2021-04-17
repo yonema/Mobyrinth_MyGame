@@ -66,6 +66,15 @@ private:	//privateなメンバ関数
 	/// </summary>
 	void Goal();
 
+	void CheckGoal();
+
+	void GoTitle();
+
+	
+	void WipeIn();
+
+	bool WipeOut();
+
 	void BGMInteractive();
 
 	/// <summary>
@@ -85,6 +94,11 @@ public: //インライン関数
 	void SetStartBGM(const bool b)
 	{
 		m_startBGM = b;
+	}
+
+	void SetWipeInFlag(const bool wipeInFlag)
+	{
+		m_wipeInFlag = wipeInFlag;
 	}
 
 protected:	//protectedなメンバ関数
@@ -128,15 +142,14 @@ private:	//データメンバ
 	bool m_startUpStartDirecting = true;
 	bool m_titlePlayer = false;	
 
-
-private:
 	CSoundCue* m_bgmStage1 = nullptr;				//BGMのサウンドキュー
 	CSoundCue* m_bgmStage2 = nullptr;				//BGMのサウンドキュー
-	CSoundCue* m_loop_bgmStage1 = nullptr;				//BGMのサウンドキュー
-	CSoundCue* m_loop_bgmStage2 = nullptr;				//BGMのサウンドキュー
-	bool m_check_loop1 = false; //ループ確認
-	bool m_check_loop2 = false; //ループ確認
-	bool m_startBGM = true; //タイトル画面のBGM再生のフラグ
-	bool m_initedBGM = false;	//BGMが初期化済みか？
+	CSoundCue* m_loop_bgmStage1 = nullptr;			//BGMのサウンドキュー
+	CSoundCue* m_loop_bgmStage2 = nullptr;			//BGMのサウンドキュー
+	bool m_check_loop1 = false;						//ループ確認
+	bool m_check_loop2 = false;						//ループ確認
+	bool m_startBGM = true;							//タイトル画面のBGM再生のフラグ
+	bool m_initedBGM = false;						//BGMが初期化済みか？
+	bool m_wipeInFlag = false;
 };
 

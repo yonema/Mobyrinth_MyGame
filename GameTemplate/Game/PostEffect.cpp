@@ -27,7 +27,7 @@ void CPostEffect::Draw(RenderContext& renderContext)
 	RenderTarget& mainRenderTarget = g_graphicsEngine->GetMainRenderTarget();
 
 	// レンダリングターゲットへの書き込み終了待ち
-	renderContext.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
+	//renderContext.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
 
 
 	////////////////////////////////////////

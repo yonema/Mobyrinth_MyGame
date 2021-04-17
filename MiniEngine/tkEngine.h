@@ -85,9 +85,16 @@ public:		//メンバ関数
 	void UseMainRenderTarget();
 
 	/// <summary>
+	/// メインレンダーターゲットの書き込み終了待ち
+	/// </summary>
+	void WaitDrawingMainRenderTarget();
+
+	/// <summary>
 	/// ポストエフェクトを描画する
 	/// </summary>
 	void DrawPostEffect();
+
+	void DrawSceneChange();
 
 	/// <summary>
 	/// メインレンダリングターゲットの絵をフレームバッファーに描画する

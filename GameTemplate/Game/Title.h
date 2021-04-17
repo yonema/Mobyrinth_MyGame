@@ -24,11 +24,18 @@ public:		//自動で呼ばれるメンバ関数
 	~Title();						//デストラクタ
 	void Update()override final;	//アップデート関数
 
+public:		//メンバ関数
+	void SetWipeInFlag(const bool wipeInFlag)
+	{
+		m_wipeInFlag = wipeInFlag;
+	}
+
 private:	//privateなメンバ関数
 
 	void InitBGM();		//BGMの初期化
 	void TitleScreen();	//タイトル画面
 	void StageSelect();	//ステージセレクト
+	void StageDecision();
 	void Release()		//自身のオブジェクトを破棄する関数
 	{
 		DeleteGO(this);
@@ -43,6 +50,7 @@ private:	//データメンバ
 	{
 		enTitleScreen,	//タイトル画面の状態
 		enStageSelect,	//ステージセレクトの状態
+		enStageDecision,
 	};
 	int m_stageState = enTitleScreen;	//現在のステージのステート（状態）
 
@@ -81,6 +89,6 @@ private: //画像データ
 	CSpriteRender* m_stageName[enStageNum] = { nullptr };
 	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
 	bool m_initedBGM = false;						//BGMが初期化済みか？
-
+	bool m_wipeInFlag = false;
 };
 

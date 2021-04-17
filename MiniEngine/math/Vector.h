@@ -60,6 +60,13 @@ public:
 		x = v0.x + (v1.x - v0.x) * t;
 		y = v0.y + (v1.y - v0.y) * t;
 	}
+
+	void Normalize()
+	{
+		DirectX::XMVECTOR xmv = DirectX::XMLoadFloat2(&vec);
+		xmv = DirectX::XMVector2Normalize(xmv);
+		DirectX::XMStoreFloat2(&vec, xmv);
+	}
 };
 /// <summary>
 /// 3次元ベクトル。
