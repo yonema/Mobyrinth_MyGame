@@ -32,25 +32,25 @@ public:		//メンバ関数
 
 private:	//privateなメンバ関数
 
-	void InitBGM();		//BGMの初期化
-	void TitleScreen();	//タイトル画面
-	void StageSelect();	//ステージセレクト
-	void StageDecision();
-	void Release()		//自身のオブジェクトを破棄する関数
+	void InitBGM();			//BGMの初期化
+	void TitleScreen();		//タイトル画面
+	void StageSelect();		//ステージセレクト
+	void StageDecision();	//ステージを決定した時の処理
+	void Release()			//自身のオブジェクトを破棄する関数
 	{
 		DeleteGO(this);
 	}
 
-private:	//データメンバ
+private:	//列挙型
 
 	/// <summary>
 	/// ステージのステート（状態）
 	/// </summary>
 	enum EnState
 	{
-		enTitleScreen,	//タイトル画面の状態
-		enStageSelect,	//ステージセレクトの状態
-		enStageDecision,
+		enTitleScreen,		//タイトル画面の状態
+		enStageSelect,		//ステージセレクトの状態
+		enStageDecision,	//ステージを決定した状態
 	};
 	int m_stageState = enTitleScreen;	//現在のステージのステート（状態）
 
@@ -66,15 +66,15 @@ private:	//データメンバ
 		enStageNum,
 	};
 
+private:	//データメンバ
+
 	int m_stageSelectState = enStage_kari;	//現在のステージセレクトのステート
 
-	//CFontRender* m_stageName[enStageNum] = { nullptr };	//フォントレンダー
-	//CFontRender* m_arrow = nullptr;						//フォントレンダー
-	bool m_buttonFlag = true;							//ボタンを押すことができるか？
-														//（連続入力防止用）
-	CLevel2D m_level2D;									//スプライト用のレベルクラス
-	//CLevel2D m_title2D;
-	//std::list<CSpriteRender*> m_spriteRenders;
+	bool m_buttonFlag = true;				//ボタンを押すことができるか？
+											//（連続入力防止用）
+	CLevel2D m_level2D;						//スプライト用のレベルクラス
+	bool m_wipeInFlag = false;				//ワイプインするか？
+
 
 private: //背景
 	Mobius* m_mobius = nullptr;
@@ -92,7 +92,6 @@ private: //画像データ
 	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
 	bool m_initedBGM = false;						//BGMが初期化済みか？
 
-	bool m_wipeInFlag = false;
 
 
 	CSoundCue* m_selectSE = nullptr;	//selectSEのサウンドキュー

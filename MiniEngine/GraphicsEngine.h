@@ -354,11 +354,6 @@ public:		//メンバ関数
 	}
 
 	/// <summary>
-	/// シャドウを描画する
-	/// </summary>
-	void ShadowRender();
-
-	/// <summary>
 	/// メインレンダーターゲットを使用できるようにする
 	/// </summary>
 	void UseMainRenderTarget();
@@ -369,10 +364,8 @@ public:		//メンバ関数
 	void WaitDrawingMainRenderTarget();
 
 	/// <summary>
-	/// ポストエフェクトを描画する
+	/// 場面転換の描画
 	/// </summary>
-	void PostEffectRender();
-
 	void SceneChangeRender();
 
 	/// <summary>
@@ -380,63 +373,7 @@ public:		//メンバ関数
 	/// </summary>
 	void CopyToFrameBuffer();
 
-	/// <summary>
-	/// シャドウのパラメータを取得する
-	/// </summary>
-	/// <returns>シャドウのパラメータ</returns>
-	ShadowParam* GetShadowParam()
-	{
-		return m_shadowMap.GetShadowParam();
-	}
-
-	/// <summary>
-	/// シャドウマップのガウシアンブラー済みのテクスチャの取得
-	/// </summary>
-	/// <returns>シャドウマップのガウシアンブラー済みのテクスチャ</returns>
-	Texture& GetShadowBlur()
-	{
-		return m_shadowMap.GetShadowBlur();
-	}
-
-	/// <summary>
-	/// シャドウマップに描画するシャドウ用モデルの登録
-	/// </summary>
-	/// <param name="shadowModel">登録するシャドウ用モデル</param>
-	void AddShadowModel(Model& shadowModel)
-	{
-		m_shadowMap.AddShadowModel(shadowModel);
-	}
-
-	/// <summary>
-	/// シャドウマップからシャドウ用モデルを破棄する
-	/// </summary>
-	/// <param name="shadowModel">破棄するシャドウ用モデル</param>
-	void RemoveShadowModel(Model& shadowModel)
-	{
-		m_shadowMap.RemoveShadowModel(shadowModel);
-	}
-
-	/// <summary>
-	/// 影を生成するライトを生成する
-	/// </summary>
-	/// <param name="direction">影を作るライトの方向</param>
-	/// <param name="length">ライトがどれくらい離れているか</param>
-	/// <param name="target">ライトが照らす目標</param>
-	void CreateShadowMap(const Vector3& direction, const float length, const Vector3& target)
-	{
-		m_shadowMap.CreateShadowMap(direction, length, target);
-	}
-
-	/// <summary>
-	/// 影を生成するライトのパラメーター設定する
-	/// </summary>
-	/// <param name="direction">影を作るライトの方向</param>
-	/// <param name="length">ライトがどれくらい離れているか</param>
-	/// <param name="target">ライトが照らす目標</param>
-	void SetShadowParam(const Vector3& direction, const float length, const Vector3& target)
-	{
-		m_shadowMap.SetShadowParam(direction, length, target);
-	}
+	
 
 private:	//privateなメンバ関数
 	/// <summary>
@@ -453,6 +390,8 @@ private:	//privateなメンバ関数
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。
 extern Camera* g_camera3D;					//3Dカメラ。
-extern CSceneChange* g_sceneChange;
+extern CPostEffect* g_postEffect;			//ポストエフェクト
+extern CShadowMap* g_shadowMap;				//シャドウマップ
+extern CSceneChange* g_sceneChange;			//場面転換
 
 

@@ -4,7 +4,9 @@
 GraphicsEngine* g_graphicsEngine = nullptr;	//グラフィックスエンジン
 Camera* g_camera2D = nullptr;				//2Dカメラ。
 Camera* g_camera3D = nullptr;				//3Dカメラ。
-CSceneChange* g_sceneChange = nullptr;
+CPostEffect* g_postEffect = nullptr;		//ポストエフェクト
+CShadowMap* g_shadowMap = nullptr;			//シャドウマップ
+CSceneChange* g_sceneChange = nullptr;		//場面転換
 
 GraphicsEngine::~GraphicsEngine()
 {
@@ -239,6 +241,8 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_postEffect.Init();
 	//
 	m_sceneChange.Init();
+	g_postEffect = &m_postEffect;
+	g_shadowMap = &m_shadowMap;
 	g_sceneChange = &m_sceneChange;
 
 	return true;
@@ -525,13 +529,13 @@ void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
 }
 
-/// <summary>
-/// シャドウを描画する
-/// </summary>
-void GraphicsEngine::ShadowRender()
-{
-	m_shadowMap.Draw(m_renderContext);
-}
+///// <summary>
+///// シャドウを描画する
+///// </summary>
+//void GraphicsEngine::ShadowRender()
+//{
+//	m_shadowMap.Draw(m_renderContext);
+//}
 
 /// <summary>
 /// メインレンダーターゲットを使用できるようにする
@@ -556,16 +560,13 @@ void GraphicsEngine::WaitDrawingMainRenderTarget()
 }
 
 /// <summary>
-/// ポストエフェクトを描画する
+/// 場面転換の描画
 /// </summary>
-void GraphicsEngine::PostEffectRender()
-{
-	m_postEffect.Draw(m_renderContext);
-}
-
 void GraphicsEngine::SceneChangeRender()
 {
+	//パラメータのアップデート
 	m_sceneChange.UpdateParam();
+	//描画
 	m_sceneChange.Draw(m_renderContext);
 }
 

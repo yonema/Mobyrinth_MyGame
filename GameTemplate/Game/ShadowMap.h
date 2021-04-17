@@ -26,7 +26,7 @@ public:		//メンバ関数
 	/// <param name="length">ライトがどれくらい離れているか</param>
 	/// <param name="target">ライトが照らす目標</param>
 	void CreateShadowMap
-	(const Vector3& direction, const float length, const Vector3& target);
+	(const Vector3& direction, const float length = 500.0f, const Vector3& target = g_vec3Zero);
 
 	/// <summary>
 	/// 影を生成するライトのパラメーター設定する

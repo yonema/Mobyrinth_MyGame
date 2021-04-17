@@ -33,7 +33,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	Game* game = NewGO<Game>(0, "Game");
 
 	//シャドウ生成
-	g_engine->CreateShadow({ 1.0f,-1.0f,-1.0f }, 1000.0f);
+	g_shadowMap->CreateShadowMap({ 1.0f,-1.0f,-1.0f }, 1000.0f);
 	//ディレクションライトの生成
 	CDirectionLight* gameDirectionLight = nullptr;
 	gameDirectionLight = NewGO<CDirectionLight>(0, "GameDirectionLight");
@@ -77,25 +77,25 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//////////////////////////////////////////////////////////////
 
 		//シャドウイング
-		g_engine->DrawShadow();
+		g_shadowMap->Draw(renderContext);
 
 		//メインレンダリングターゲットをセットする
-		g_engine->UseMainRenderTarget();
+		g_graphicsEngine->UseMainRenderTarget();
 
 		//メインのレンダリングを実行
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 
 		//メインレンダリングターゲットの書き込み終了待ち
-		g_engine->WaitDrawingMainRenderTarget();
+		g_graphicsEngine->WaitDrawingMainRenderTarget();
 
 		//ポストエフェクト
-		g_engine->DrawPostEffect();
+		g_postEffect->Draw(renderContext);
 
 		//場面転換の2D演出
-		g_engine->DrawSceneChange();
+		g_graphicsEngine->SceneChangeRender();
 
 		//メインレンダリングターゲットの絵をフレームバッファーに描画する
-		g_engine->DrawFrameBuffer();
+		g_graphicsEngine->CopyToFrameBuffer();
 
 		//////////////////////////////////////////////////////////////
 		///	レンダリングの処理終了

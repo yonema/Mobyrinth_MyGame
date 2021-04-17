@@ -17,7 +17,7 @@ CShadowModel::~CShadowModel()
 void CShadowModel::Init()
 {
 	m_model.reset(new Model);
-	g_graphicsEngine->AddShadowModel(*m_model);
+	g_shadowMap->AddShadowModel(*m_model);
 	m_isValid = true;
 }
 
@@ -48,7 +48,7 @@ void CShadowModel::RemoveShadowModel()
 {
 	if (m_isValid)
 	{
-		g_graphicsEngine->RemoveShadowModel(*m_model);
+		g_shadowMap->RemoveShadowModel(*m_model);
 		m_isValid = false;
 	}
 }
