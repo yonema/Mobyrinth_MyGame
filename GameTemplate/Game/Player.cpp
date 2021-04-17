@@ -6,22 +6,32 @@
 //スタート関数
 bool Player::Start()
 {
-	//アニメーションクリップの初期化
-	//Idleのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_Idle].Load("Assets/animData/idle.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
-	//Runのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_Run].Load("Assets/animData/walk.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_Run].SetLoopFlag(true);
+	/////////////////////////////////////////////////////////
+	//お試しプレイヤー
+	/////////////////////////////////////////////////////////
+
+	////アニメーションクリップの初期化
+	////Idleのアニメーションクリップをロードする
+	//m_animationClips[enAnimClip_Idle].Load("Assets/animData/idle.tka");
+	////ループ再生をtrueにする
+	//m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
+	////Runのアニメーションクリップをロードする
+	//m_animationClips[enAnimClip_Run].Load("Assets/animData/walk.tka");
+	////ループ再生をtrueにする
+	//m_animationClips[enAnimClip_Run].SetLoopFlag(true);
 
 	//モデルレンダラーを生成する
 	m_modelRender = NewGO<CModelRender>(0);
 	//モデルレンダラーの初期化をする
 	//この時にアニメーションクリップを一緒に引数に渡しておく
 	m_modelRender->Init
-	("Assets/modelData/unityChan.tkm",m_animationClips,enAnimClip_Num, enModelUpAxisY);
+		/*("Assets/modelData/unityChan.tkm",m_animationClips,enAnimClip_Num, enModelUpAxisY);*/
+		("Assets/modelData/player.tkm");
+
+	/////////////////////////////////////////////////////////////
+	//ここまで
+	/////////////////////////////////////////////////////////////
+
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);

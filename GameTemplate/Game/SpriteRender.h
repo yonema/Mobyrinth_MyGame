@@ -14,6 +14,12 @@ public:		//自動でよばれるメンバ関数
 
 public:		//ここのメンバ関数を主に使う
 
+	void UpdateSprite()
+	{
+		//スプライトのアップデート
+		m_sprite.Update(m_position, m_rotation, m_scale, m_pivot);
+	}
+
 	/// <summary>
 	/// 初期化用関数
 	/// 最初に呼んでね。
@@ -86,6 +92,15 @@ public:		//ここのメンバ関数を主に使う
 	Vector3 GetPosition()
 	{
 		return m_position;
+	}
+
+	/// <summary>
+	/// m_positionのx軸の値を返す。
+	/// </summary>
+	/// <returns>m_position.x</returns>
+	float GetPositionX()
+	{
+		return m_position.x;
 	}
 
 	/// <summary>

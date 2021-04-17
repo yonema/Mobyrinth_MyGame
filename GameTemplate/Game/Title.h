@@ -74,7 +74,7 @@ private:	//データメンバ
 														//（連続入力防止用）
 	CLevel2D m_level2D;									//スプライト用のレベルクラス
 	//CLevel2D m_title2D;
-	std::list<CSpriteRender*> m_spriteRenders;
+	//std::list<CSpriteRender*> m_spriteRenders;
 
 private: //背景
 	Mobius* m_mobius = nullptr;
@@ -87,8 +87,17 @@ private: //画像データ
 	CSpriteRender* m_pressAButton = nullptr;
 	CSpriteRender* m_cursor = nullptr;
 	CSpriteRender* m_stageName[enStageNum] = { nullptr };
+	CSpriteRender* m_stageSelection = nullptr;
+	CSpriteRender* m_stageSelectionBase = nullptr;
 	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
 	bool m_initedBGM = false;						//BGMが初期化済みか？
+
 	bool m_wipeInFlag = false;
+
+
+	CSoundCue* m_selectSE = nullptr;	//selectSEのサウンドキュー
+	CSoundCue* m_buttonASE = nullptr;	//buttonASEのサウンドキュー
+	CSoundCue* m_buttonBSE = nullptr;	//buttonBSEのサウンドキュー
+
 };
 

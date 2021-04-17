@@ -70,6 +70,15 @@ void CReversibleObject::Reverse()
 {
 	//現在の表か裏の、逆の設定にする
 	SetFrontOrBack(!m_frontOrBack);
+
+	//changeSEのサウンドキューを生成する
+	m_changeSE = NewGO<CSoundCue>(0);
+	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_changeSE->Init(L"Assets/sound/change.wav");
+	//changeSEをループ再生をオフで再生する。
+	m_changeSE->Play(false);
+	//音量調節
+	m_changeSE->SetVolume(0.5f);
 }
 
 /// <summary>

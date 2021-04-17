@@ -1,5 +1,8 @@
 #pragma once
 #include "FontRender.h"
+#include "SpriteRender.h"
+#include "Level2D.h"
+#include "SoundCue.h"
 
 /// <summary>
 /// ポーズクラス
@@ -73,6 +76,7 @@ private:	//privateなメンバ関数
 	/// </summary>
 	void Decision();
 
+
 private:	//データメンバ
 
 	/// <summary>
@@ -81,16 +85,15 @@ private:	//データメンバ
 	/// </summary>
 	enum ENPauseState
 	{
-		enPause,			//ポーズ。フォントのみで使用
 		enContinue,			//続ける、を選択した状態
 		enRetry,			//リトライ、を選択した状態
 		enQuit,				//終了、を選択した状態
-		enPauseStateNum		//ステートの数。フォントのみで使用
+		enPauseNum		//ステートの数。フォントのみで使用
 	};
 
 
-	CFontRender* m_fontRender[enPauseStateNum] = { nullptr };	//フォントレンダラー
-	CFontRender* m_arrowFR = nullptr;							//フォントレンダラー
+	//CFontRender* m_fontRender[enPauseStateNum] = { nullptr };	//フォントレンダラー
+	//CFontRender* m_arrowFR = nullptr;							//フォントレンダラー
 
 	int m_pauseState = enContinue;		//現在のポーズ中のステート（状態）
 	bool m_isPaused = false;			//ポーズ中かどうか？
@@ -98,5 +101,24 @@ private:	//データメンバ
 	bool m_retryFlag = false;			//リトライが選択されているか？
 	bool m_quitFlag = false;			//終了が選択されているか？
 	bool m_canPause = false;			//ポーズできるか？
+
+
+
+	/*enum EnPauseList
+	{
+		enContinue,
+		enRetry,
+		enQuit,
+		enPauseNum,
+	};*/
+
+	CLevel2D m_level2D;
+	CSpriteRender* m_pause = nullptr;
+	CSpriteRender* m_choices[enPauseNum] = { nullptr };
+	CSpriteRender* m_cursor = nullptr;
+
+	CSoundCue* m_selectSE = nullptr;	//selectSEのサウンドキュー
+	CSoundCue* m_buttonASE = nullptr;	//buttonASEのサウンドキュー
+	CSoundCue* m_buttonBSE = nullptr;	//buttonBSEのサウンドキュー
 };
 

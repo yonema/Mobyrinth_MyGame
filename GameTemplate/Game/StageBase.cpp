@@ -34,11 +34,6 @@ bool IStageBase::Start()
 
 
 	return StartSub();
-
-
-
-
-	return StartSub();
 }
 
 /// <summary>

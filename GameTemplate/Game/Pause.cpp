@@ -4,61 +4,140 @@
 //スタート関数
 bool CPause::Start()
 {
-	//フォントレンダラーを生成
-	for (int i = 0; i < enPauseStateNum; i++)
-	{
-		m_fontRender[i] = NewGO<CFontRender>(0);
-	}
+	////フォントレンダラーを生成
+	//for (int i = 0; i < enPauseStateNum; i++)
+	//{
+	//	m_fontRender[i] = NewGO<CFontRender>(0);
+	//}
 
 	//フォントの左端の場所
-	const float leftSidePos = -150.0f;
+	//const float leftSidePos = -150.0f;
 
-	//フォントレンダラーの初期化。テキストをセットする。
-	//「Pause」をテキストにセット
-	m_fontRender[enPause]
-		->Init(L"Pause",
-		{ leftSidePos, 300.0f },
-		{ 1.0f,1.0f,1.0f,1.0f },
-		0.0f,
-		2.0f
-	);
-	//「Pause」をテキストにセット
-	m_fontRender[enContinue]
-		->Init(L"Continue",
-		{ leftSidePos, 150.0f }
-	);	
-	m_fontRender[enRetry]
-		->Init(L"Retry",
-		{ leftSidePos, 0.0f }
-	);
-	m_fontRender[enQuit]
-		->Init(L"Quit",
-		{ leftSidePos, -150.0f }
-	);
 
-	
-	for (int i = 0; i < enPauseStateNum; i++)
-	{
-		//PostRenderFlagをtrueにして一番上に表示するようにする
-		m_fontRender[i]->SetPostRenderFlag(true);
-		//フォントを無効化して表示しないようにする。
-		m_fontRender[i]->Deactivate();
+
+	//画像の表示
+	m_level2D.Init("Assets/level2D/Pause.casl", [&](Level2DObjectData& objdata)
+		{
+			//名前が一致でフックする
+			//カーソル
+			if (objdata.EqualObjectName("Pause"))
+			{
+				m_pause = NewGO<CSpriteRender>(1);
+				m_pause->Init("Assets/level2D/Pause.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_pause->SetScale(objdata.scale);
+				m_pause->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//ゲームに戻る
+			if (objdata.EqualObjectName("Continue"))
+			{
+				m_choices[enContinue] = NewGO<CSpriteRender>(1);
+				m_choices[enContinue]->Init("Assets/level2D/Continue.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_choices[enContinue]->SetScale(objdata.scale);
+				m_choices[enContinue]->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//リトライ
+			if (objdata.EqualObjectName("Retry"))
+			{
+				m_choices[enRetry] = NewGO<CSpriteRender>(1);
+				m_choices[enRetry]->Init("Assets/level2D/Retry.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_choices[enRetry]->SetScale(objdata.scale);
+				m_choices[enRetry]->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//ステージから出る
+			if (objdata.EqualObjectName("Quit"))
+			{
+				m_choices[enQuit] = NewGO<CSpriteRender>(1);
+				m_choices[enQuit]->Init("Assets/level2D/Quit.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_choices[enQuit]->SetScale(objdata.scale);
+				m_choices[enQuit]->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			//カーソル
+			if (objdata.EqualObjectName("cursor"))
+			{
+				m_cursor = NewGO<CSpriteRender>(1);
+				m_cursor->Init("Assets/level2D/cursor.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_cursor->SetScale(objdata.scale);
+				m_cursor->SetPosition(objdata.position);
+				//フックしたらtrueを戻す
+				return true;
+			}
+			
+
+
+			//そのまま表示するからfalseを戻す
+			return false;
+		});
+
+
+	for (int i = 0; i < enPauseNum; i++) {
+		m_choices[i]->Deactivate();
 	}
+	m_pause->Deactivate();
+	m_cursor->Deactivate();
+
+
+	for (int i = 0; i < enPauseNum; i++)
+	{
+		m_choices[i]->UpdateSprite();
+	}
+	m_pause->UpdateSprite();
+	m_cursor->UpdateSprite();
+
+
+	////フォントレンダラーの初期化。テキストをセットする。
+	////「Pause」をテキストにセット
+	//m_fontRender[enPause]
+	//	->Init(L"Pause",
+	//	{ leftSidePos, 300.0f },
+	//	{ 1.0f,1.0f,1.0f,1.0f },
+	//	0.0f,
+	//	2.0f
+	//);
+	////「Pause」をテキストにセット
+	//m_fontRender[enContinue]
+	//	->Init(L"Continue",
+	//	{ leftSidePos, 150.0f }
+	//);	
+	//m_fontRender[enRetry]
+	//	->Init(L"Retry",
+	//	{ leftSidePos, 0.0f }
+	//);
+	//m_fontRender[enQuit]
+	//	->Init(L"Quit",
+	//	{ leftSidePos, -150.0f }
+	//);
 
 	
-	//フォントレンダラーの生成
-	m_arrowFR = NewGO<CFontRender>(0);
-	//フォントレンダラーの初期化
-	//カーソルの矢印のテキストを設定
-	m_arrowFR
-		->Init(L"->",
-			{ -200.0f,145.0f },
-			{ 0.0f,0.0f,0.0f,1.0f }
-	);
-	//一番上に表示するようにする
-	m_arrowFR->SetPostRenderFlag(true);
-	//無効化して非表示にする。
-	m_arrowFR->Deactivate();
+	//for (int i = 0; i < enPauseStateNum; i++)
+	//{
+	//	//PostRenderFlagをtrueにして一番上に表示するようにする
+	//	m_fontRender[i]->SetPostRenderFlag(true);
+	//	//フォントを無効化して表示しないようにする。
+	//	m_fontRender[i]->Deactivate();
+	//}
+
+	
+	////フォントレンダラーの生成
+	//m_arrowFR = NewGO<CFontRender>(0);
+	////フォントレンダラーの初期化
+	////カーソルの矢印のテキストを設定
+	//m_arrowFR
+	//	->Init(L"->",
+	//		{ -200.0f,145.0f },
+	//		{ 0.0f,0.0f,0.0f,1.0f }
+	//);
+	////一番上に表示するようにする
+	//m_arrowFR->SetPostRenderFlag(true);
+	////無効化して非表示にする。
+	//m_arrowFR->Deactivate();
 
 	return true;
 }
@@ -70,11 +149,12 @@ CPause::~CPause()
 	UnPause();
 
 	//フォントレンダラーの消去
-	for (int i = 0; i < enPauseStateNum; i++)
+	for (int i = 0; i < enPauseNum; i++)
 	{
-		DeleteGO(m_fontRender[i]);
+		DeleteGO(m_choices[i]);
 	}
-	DeleteGO(m_arrowFR);
+	DeleteGO(m_pause);
+	DeleteGO(m_cursor);
 }
 
 
@@ -114,14 +194,26 @@ void CPause::UpdateOnlyPaused()
 	//選択したカーソルを決定する
 	Decision();
 
-	//カーソルの座標
-	Vector2 arrowPos;
-	//左端の数値を入れる
-	arrowPos.x = -200.0f;
-	//上端から、幅のおおきさ*現在のステート分下に下げる
-	arrowPos.y = 300.0f - m_pauseState * 150.0f - 5.0f;
-	//カーソルの位置を設定する
-	m_arrowFR->SetPosition(arrowPos);
+	////カーソルの座標
+	//Vector2 arrowPos;
+	////左端の数値を入れる
+	//arrowPos.x = -200.0f;
+	////上端から、幅のおおきさ*現在のステート分下に下げる
+	//arrowPos.y = 300.0f - m_pauseState * 150.0f - 5.0f;
+	////カーソルの位置を設定する
+	//m_cursor->SetPosition({ arrowPos.x, arrowPos.y, 0.0f });
+		//カーソル用の画像の場所を設定する
+	m_cursor->SetPosition({ -360.0f,
+							m_choices[m_pauseState]->GetPositionY() + 25,
+							0.0f });
+
+
+	for (int i = 0; i < enPauseNum; i++)
+	{
+		m_choices[i]->UpdateSprite();
+	}
+	m_pause->UpdateSprite();
+	m_cursor->UpdateSprite();
 }
 
 /// <summary>
@@ -138,6 +230,15 @@ void CPause::ToPause()
 	//ポーズ中にする
 	m_isPaused = true;
 
+	//buttonASEのサウンドキューを生成する
+	m_buttonASE = NewGO<CSoundCue>(0);
+	//buttonASEのサウンドキューを、waveファイルを指定して初期化する。
+	m_buttonASE->Init(L"Assets/sound/buttonA.wav");
+	//buttonASEをループ再生をオフで再生する。
+	m_buttonASE->Play(false);
+	//音量調節
+	m_buttonASE->SetVolume(0.5f);
+
 	//IGameObjectにポーズ中だと伝える。
 	//Update()が呼ばれなくなって、
 	//UpdateOnlyPaused()が呼ばれるようになる
@@ -145,11 +246,12 @@ void CPause::ToPause()
 
 	//ポーズ中に表示されるフォントを有効化して
 	//表示できるようにする。
-	for (int i = 0; i < enPauseStateNum; i++)
+	for (int i = 0; i < enPauseNum; i++)
 	{
-		m_fontRender[i]->Activate();
+		m_choices[i]->Activate();
 	}
-	m_arrowFR->Activate();
+	m_pause->Activate();
+	m_cursor->Activate();
 
 }
 
@@ -161,6 +263,17 @@ void CPause::UnPause()
 	//ポーズ中でない状態にする。
 	m_isPaused = false;
 
+	if (g_pad[0]->IsTrigger(enButtonStart)) {
+		//buttonBのサウンドキューを生成する
+		m_buttonBSE = NewGO<CSoundCue>(0);
+		//buttonBのサウンドキューを、waveファイルを指定して初期化する。
+		m_buttonBSE->Init(L"Assets/sound/buttonB.wav");
+		//buttonBをループ再生をオフで再生する。
+		m_buttonBSE->Play(false);
+		//音量調節
+		m_buttonBSE->SetVolume(0.5f);
+	}
+
 	//IGameObjectにポーズ中を解除するように伝える
 	//Update()が呼ばれるようになって、
 	//UpdateOnlyPaused()が呼ばれなくなる。
@@ -168,11 +281,12 @@ void CPause::UnPause()
 
 	//ポーズ中に表示されるフォントを無効化して
 	//表示できなくなるようにする。
-	for (int i = 0; i < enPauseStateNum; i++)
+	for (int i = 0; i < enPauseNum; i++)
 	{
-		m_fontRender[i]->Deactivate();
+		m_choices[i]->Deactivate();
 	}
-	m_arrowFR->Deactivate();
+	m_pause->Deactivate();
+	m_cursor->Deactivate();
 
 }
 
@@ -193,6 +307,16 @@ void CPause::Choose()
 		//下入力
 		//ボタンを押すことができないようにする。（連続入力防止用）
 		m_buttonFlag = false;
+
+		//selectSEのサウンドキューを生成する
+		m_selectSE = NewGO<CSoundCue>(0);
+		//selectSEのサウンドキューを、waveファイルを指定して初期化する。
+		m_selectSE->Init(L"Assets/sound/select.wav");
+		//selectSEをループ再生をオフで再生する。
+		m_selectSE->Play(false);
+		//音量調節
+		m_selectSE->SetVolume(0.5f);
+
 		//現在のポーズ中のステートを加算する
 		m_pauseState++;
 		//一番下のenQuitまで行ったら、
@@ -207,6 +331,16 @@ void CPause::Choose()
 		//上入力
 		//ボタンを押すことができないようにする。（連続入力防止用）
 		m_buttonFlag = false;
+
+		//selectSEのサウンドキューを生成する
+		m_selectSE = NewGO<CSoundCue>(0);
+		//selectSEのサウンドキューを、waveファイルを指定して初期化する。
+		m_selectSE->Init(L"Assets/sound/select.wav");
+		//selectSEをループ再生をオフで再生する。
+		m_selectSE->Play(false);
+		//音量調節
+		m_selectSE->SetVolume(0.5f);
+
 		//現在のポーズ中のステートを減算する
 		m_pauseState--;
 		//一番上のenContinueまで行ったら、
@@ -239,16 +373,41 @@ void CPause::Decision()
 			//「続ける」
 			//ポーズ中を解除する
 			UnPause();
+			//buttonBのサウンドキューを生成する
+			m_buttonBSE = NewGO<CSoundCue>(0);
+			//buttonBのサウンドキューを、waveファイルを指定して初期化する。
+			m_buttonBSE->Init(L"Assets/sound/buttonB.wav");
+			//buttonBをループ再生をオフで再生する。
+			m_buttonBSE->Play(false);
+			//音量調節
+			m_buttonBSE->SetVolume(0.5f);
 			break;
+
 		case enRetry:
 			//「リトライ」
 			//StageBaseにリトライ状態だと伝える
 			m_retryFlag = true;
+			//buttonASEのサウンドキューを生成する
+			m_buttonASE = NewGO<CSoundCue>(0);
+			//buttonASEのサウンドキューを、waveファイルを指定して初期化する。
+			m_buttonASE->Init(L"Assets/sound/buttonA.wav");
+			//buttonASEをループ再生をオフで再生する。
+			m_buttonASE->Play(false);
+			//音量調節
+			m_buttonASE->SetVolume(0.5f);
 			break;
 		case enQuit:
 			//「終了」
 			//StageBaseに終了状態だと伝える
 			m_quitFlag = true;
+			//buttonASEのサウンドキューを生成する
+			m_buttonASE = NewGO<CSoundCue>(0);
+			//buttonASEのサウンドキューを、waveファイルを指定して初期化する。
+			m_buttonASE->Init(L"Assets/sound/buttonA.wav");
+			//buttonASEをループ再生をオフで再生する。
+			m_buttonASE->Play(false);
+			//音量調節
+			m_buttonASE->SetVolume(0.5f);
 			break;
 		default:
 			break;
