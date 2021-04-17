@@ -4,6 +4,7 @@
 GraphicsEngine* g_graphicsEngine = nullptr;	//グラフィックスエンジン
 Camera* g_camera2D = nullptr;				//2Dカメラ。
 Camera* g_camera3D = nullptr;				//3Dカメラ。
+CSceneChange* g_sceneChange = nullptr;
 
 GraphicsEngine::~GraphicsEngine()
 {
@@ -236,7 +237,9 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_shadowMap.Init();
 	//ポストエフェクトの初期化
 	m_postEffect.Init();
-
+	//
+	m_sceneChange.Init();
+	g_sceneChange = &m_sceneChange;
 
 	return true;
 }
@@ -545,11 +548,25 @@ void GraphicsEngine::UseMainRenderTarget()
 }
 
 /// <summary>
+/// メインレンダーターゲットの書き込み終了待ち
+/// </summary>
+void GraphicsEngine::WaitDrawingMainRenderTarget()
+{
+	m_renderContext.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+}
+
+/// <summary>
 /// ポストエフェクトを描画する
 /// </summary>
 void GraphicsEngine::PostEffectRender()
 {
 	m_postEffect.Draw(m_renderContext);
+}
+
+void GraphicsEngine::SceneChangeRender()
+{
+	m_sceneChange.UpdateParam();
+	m_sceneChange.Draw(m_renderContext);
 }
 
 /// <summary>

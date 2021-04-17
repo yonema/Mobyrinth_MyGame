@@ -57,11 +57,24 @@ void TkEngine::UseMainRenderTarget()
 }
 
 /// <summary>
+/// メインレンダーターゲットの書き込み終了待ち
+/// </summary>
+void TkEngine::WaitDrawingMainRenderTarget()
+{
+	g_graphicsEngine->WaitDrawingMainRenderTarget();
+}
+
+/// <summary>
 /// ポストエフェクトを描画する
 /// </summary>
 void TkEngine::DrawPostEffect()
 {
 	m_graphicsEngine->PostEffectRender();
+}
+
+void TkEngine::DrawSceneChange()
+{
+	m_graphicsEngine->SceneChangeRender();
 }
 
 /// <summary>

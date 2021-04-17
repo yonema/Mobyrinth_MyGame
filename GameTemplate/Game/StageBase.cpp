@@ -11,6 +11,14 @@ bool IStageBase::Start()
 	if (m_startUpStartDirecting == false) {
 		m_startDirecting->SetCheckStartDirecting(false);
 	}
+	else
+	{
+		WipeIn();
+		m_wipeInFlag = true;
+	}
+
+	if (m_wipeInFlag)
+		WipeIn();
 
 	//ゲームカメラの作成
 	NewGO<GameCamera>(0, "GameCamera");
@@ -23,6 +31,7 @@ bool IStageBase::Start()
 	//空を作る
 	m_sky = NewGO<CSky>(0);
 	m_sky->SetScale(1000.0f);
+
 
 	return StartSub();
 }
@@ -353,22 +362,11 @@ IStageBase::~IStageBase()
 	);
 }
 
+
 //アップデート関数
 void IStageBase::Update()
 {
-	//ゴールがアクティブなら
-	if (m_goal)
-	{
-		//ゴール状態を調べる
-		if (m_goal->GetIsGoal())
-		{
-			//ゴールしていたら、ゴールの処理をする
-			Goal();
-
-			//ゴールしたらポーズができないようにする
-			m_pause->SetCanPause(false);
-		}
-	}
+	CheckGoal();
 
 	//Start関数ではなくUpdate関数でBGMを初期化しているのは
 	//ステージをロード中にBGMが再生しないようにするため。
@@ -382,6 +380,13 @@ void IStageBase::Update()
 
 	if (m_startBGM == true) {
 		BGMInteractive();
+	}
+
+	if (m_wipeInFlag)
+	{
+		m_wipeInFlag = !g_sceneChange->IsWipeFinished();
+		if (!m_wipeInFlag)
+			g_sceneChange->WipeEnd();
 	}
 
 	return;
@@ -409,8 +414,10 @@ void IStageBase::UpdateOnlyPaused()
 /// </summary>
 void IStageBase::Clear()
 {
+	if (!WipeOut())
+		return;
 	//タイトルの戻る
-	NewGO<Title>(0, "Title");
+	GoTitle();
 	Release();	//リリース
 }
 
@@ -419,6 +426,8 @@ void IStageBase::Clear()
 /// </summary>
 void IStageBase::Retry()
 {
+	if (!WipeOut())
+		return;
 	//オーバーライドされているはずの処理を行う
 	RetryStage();
 	Release();	//リリース
@@ -429,8 +438,10 @@ void IStageBase::Retry()
 /// </summary>
 void IStageBase::Quit()
 {
+	if (!WipeOut())
+		return;
 	//タイトルの戻る
-	NewGO<Title>(0, "Title");
+	GoTitle();
 	Release();	//リリース
 }
 
@@ -452,6 +463,44 @@ void IStageBase::Goal()
 		//クリアする
 		Clear();
 	}
+}
+
+void IStageBase::CheckGoal()
+{
+	//ゴールがアクティブなら
+	if (m_goal)
+	{
+		//ゴール状態を調べる
+		if (m_goal->GetIsGoal())
+		{
+			//ゴールしていたら、ゴールの処理をする
+			Goal();
+
+			//ゴールしたらポーズができないようにする
+			m_pause->SetCanPause(false);
+		}
+	}
+}
+
+void IStageBase::WipeIn()
+{
+	g_sceneChange->WipeIn();
+}
+
+bool IStageBase::WipeOut()
+{
+	if (g_sceneChange->GetWipeSize() == 0.0f)
+		g_sceneChange->RandomWipeStart();
+
+
+	return g_sceneChange->IsWipeFinished();
+
+}
+
+void IStageBase::GoTitle()
+{
+	Title* title = NewGO<Title>(0);
+	title->SetWipeInFlag(true);
 }
 
 /// <summary>
@@ -510,28 +559,24 @@ void IStageBase::BGMInteractive()
 			return;
 	}
 
-	//QueryGOs<Player>("Player", [&](Player* player)->bool
-		//{
-			//ウェイポイントが24～7の場合
-			if (24 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 31 ||
-				0 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 7) {
-				if (m_bgmStage1->GetVolume() < 1.0f) {
-					m_bgmStage1->SetVolume(m_bgmStage1->GetVolume() + 0.01f);
-					m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() - 0.01f);
-				}
-			}
+	//ウェイポイントが24～7の場合
+	if (24 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 31 ||
+		0 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 7) {
+		if (m_bgmStage1->GetVolume() < 1.0f) {
+			m_bgmStage1->SetVolume(m_bgmStage1->GetVolume() + 0.01f);
+			m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() - 0.01f);
+		}
+	}
 
-			//ウェイポイントが8～23の場合
-			if (8 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 23) {
-				if (m_bgmStage2->GetVolume() < 1.0f) {
-					m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() + 0.01f);
-					m_bgmStage1->SetVolume(m_bgmStage1->GetVolume() - 0.01f);
-				}
-			}
+	//ウェイポイントが8～23の場合
+	if (8 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 23) {
+		if (m_bgmStage2->GetVolume() < 1.0f) {
+			m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() + 0.01f);
+			m_bgmStage1->SetVolume(m_bgmStage1->GetVolume() - 0.01f);
+		}
+	}
 
-		//	return true;
-		//}
-	//);
+
 
 	//ループ処理
 	if (m_check_loop1 == false && m_bgmStage1->IsLoop()) {

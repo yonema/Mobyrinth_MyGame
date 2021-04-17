@@ -11,7 +11,7 @@ bool Title::Start()
 	m_stageTitle->SetStartUpStartDirecting(false);
 	m_stageTitle->SetTitlePlayer(true);
 	m_stageTitle->SetStartBGM(false);
-
+	m_stageTitle->SetWipeInFlag(m_wipeInFlag);
 
 
 	//フォントの配置
@@ -168,6 +168,9 @@ void Title::Update()
 		//ステージセレクト
 		StageSelect();
 		break;
+	case enStageDecision:
+		StageDecision();
+		break;
 	default:
 		break;
 	}
@@ -309,6 +312,10 @@ void Title::StageSelect()
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
 
+		g_sceneChange->RandomWipeStart();
+		m_stageState = enStageDecision;
+
+
 		//buttonAのサウンドキューを生成する
 		m_buttonASE = NewGO<CSoundCue>(0);
 		//buttonAのサウンドキューを、waveファイルを指定して初期化する。
@@ -318,26 +325,6 @@ void Title::StageSelect()
 		//音量調節
 		m_buttonASE->SetVolume(0.5f);
 
-		////////////////////////////////////////////////////////////
-		//ステージを新しく作成した場合、ここでNewGOを行う。
-		////////////////////////////////////////////////////////////
-		//ステージセレクトのステートによって生成するステージを振り分ける
-		switch (m_stageSelectState)
-		{
-		case enStage_kari:
-			NewGO<stage_kari>(0, "stage_kari");
-			break;
-		case enStageProto01:
-			NewGO<stage_proto01>(0, "stage_proto01");
-			break;
-		case enStageProto02:
-			NewGO<stage_proto02>(0, "stage_proto02");
-			break;
-		default:
-			break;
-		}
-		//自身のオブジェクトを破棄する
-		Release();
 	}
 	else if (g_pad[0]->IsTrigger(enButtonB) && m_buttonFlag)
 	{
@@ -379,7 +366,38 @@ void Title::StageSelect()
 	const float DownSide = -300.0f;		//下端
 	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
 	//カーソル用の画像の場所を設定する
-	m_cursor->SetPosition({ m_stageName[m_stageSelectState]->GetPositionX() - 100.0f,
+
+	m_cursor->SetPosition({ -400.0f,m_stageName[m_stageSelectState]->GetPositionY(),0.0f });
+  	m_cursor->SetPosition({ m_stageName[m_stageSelectState]->GetPositionX() - 100.0f,
 							m_stageName[m_stageSelectState]->GetPositionY() + 100.0f,
 							0.0f });
+}
+
+void Title::StageDecision()
+{
+	if (!g_sceneChange->IsWipeFinished())
+		return;
+
+	////////////////////////////////////////////////////////////
+	//ステージを新しく作成した場合、ここでNewGOを行う。
+	////////////////////////////////////////////////////////////
+	//ステージセレクトのステートによって生成するステージを振り分ける
+	switch (m_stageSelectState)
+	{
+	case enStage_kari:
+		NewGO<stage_kari>(0, "stage_kari");
+		break;
+	case enStageProto01:
+		NewGO<stage_proto01>(0, "stage_proto01");
+		break;
+	case enStageProto02:
+		NewGO<stage_proto02>(0, "stage_proto02");
+		break;
+	default:
+		break;
+	}
+	//自身のオブジェクトを破棄する
+	Release();
+
+
 }

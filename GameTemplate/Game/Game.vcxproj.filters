@@ -81,11 +81,14 @@
     <Filter Include="Assets\shader">
       <UniqueIdentifier>{aff3c38e-f266-40da-9211-437d865cbc50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\PostEffect">
-      <UniqueIdentifier>{56d31043-f300-4720-914e-a65248a4ad80}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyCode\OBB">
       <UniqueIdentifier>{83c4e268-35f0-47cb-9fab-54d205179755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\graphic\PostEffect">
+      <UniqueIdentifier>{56d31043-f300-4720-914e-a65248a4ad80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\graphic\2D">
+      <UniqueIdentifier>{19573a5f-530e-43a4-a106-fbfa3f10b045}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -378,13 +381,13 @@
       <Filter>MiniEngine</Filter>
     </ClCompile>
     <ClCompile Include="Bloom.cpp">
-      <Filter>MyCode\PostEffect</Filter>
+      <Filter>MyCode\graphic\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="GaussianBlur.cpp">
-      <Filter>MyCode\PostEffect</Filter>
+      <Filter>MyCode\graphic\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="PostEffect.cpp">
-      <Filter>MyCode\PostEffect</Filter>
+      <Filter>MyCode\graphic\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="OBB.cpp">
       <Filter>MyCode\OBB</Filter>
@@ -394,9 +397,6 @@
     </ClCompile>
     <ClCompile Include="MyCharacterController.cpp">
       <Filter>MyCode\OBB</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowMap.cpp">
-      <Filter>MyCode\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="testModel.cpp">
       <Filter>ソース ファイル</Filter>
@@ -409,6 +409,12 @@
     </ClCompile>
     <ClCompile Include="Sky.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>MyCode\graphic\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneChange.cpp">
+      <Filter>MyCode\graphic\2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -734,13 +740,13 @@
       <Filter>MiniEngine</Filter>
     </ClInclude>
     <ClInclude Include="Bloom.h">
-      <Filter>MyCode\PostEffect</Filter>
+      <Filter>MyCode\graphic\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="GaussianBlur.h">
-      <Filter>MyCode\PostEffect</Filter>
+      <Filter>MyCode\graphic\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="PostEffect.h">
-      <Filter>MyCode\PostEffect</Filter>
+      <Filter>MyCode\graphic\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="OBB.h">
       <Filter>MyCode\OBB</Filter>
@@ -750,9 +756,6 @@
     </ClInclude>
     <ClInclude Include="MyCharacterController.h">
       <Filter>MyCode\OBB</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadowMap.h">
-      <Filter>MyCode\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="testModel.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -768,6 +771,12 @@
     </ClInclude>
     <ClInclude Include="..\..\MiniEngine\TResourceBank.h">
       <Filter>MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>MyCode\graphic\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneChange.h">
+      <Filter>MyCode\graphic\2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -790,6 +799,9 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\SkyCubeMap.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\SceneChange.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

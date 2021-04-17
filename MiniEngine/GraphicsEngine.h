@@ -17,6 +17,8 @@
 #include "Sprite.h"
 #include "PostEffect.h"
 #include "ShadowMap.h"
+#include "SceneChange.h"
+
 
 
 
@@ -329,6 +331,7 @@ private:	//データメンバ
 	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット	
 	CPostEffect m_postEffect;			//ポストエフェクト
 	CShadowMap m_shadowMap;				//シャドウマップ
+	CSceneChange m_sceneChange;			//場面転換
 	//メインレンダリングターゲットの絵をフレームバッファにコピーするためのスプライト
 	Sprite m_copyToFrameBufferSprite;
 public:		//メンバ関数
@@ -361,9 +364,16 @@ public:		//メンバ関数
 	void UseMainRenderTarget();
 
 	/// <summary>
+	/// メインレンダーターゲットの書き込み終了待ち
+	/// </summary>
+	void WaitDrawingMainRenderTarget();
+
+	/// <summary>
 	/// ポストエフェクトを描画する
 	/// </summary>
 	void PostEffectRender();
+
+	void SceneChangeRender();
 
 	/// <summary>
 	/// メインレンダリングターゲットの絵をフレームバッファーにコピーする
@@ -443,4 +453,6 @@ private:	//privateなメンバ関数
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。
 extern Camera* g_camera3D;					//3Dカメラ。
+extern CSceneChange* g_sceneChange;
+
 

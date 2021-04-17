@@ -79,14 +79,20 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//シャドウイング
 		g_engine->DrawShadow();
 
-		//メインレンダーターゲットをセットする
+		//メインレンダリングターゲットをセットする
 		g_engine->UseMainRenderTarget();
 
 		//メインのレンダリングを実行
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 
+		//メインレンダリングターゲットの書き込み終了待ち
+		g_engine->WaitDrawingMainRenderTarget();
+
 		//ポストエフェクト
 		g_engine->DrawPostEffect();
+
+		//場面転換の2D演出
+		g_engine->DrawSceneChange();
 
 		//メインレンダリングターゲットの絵をフレームバッファーに描画する
 		g_engine->DrawFrameBuffer();
