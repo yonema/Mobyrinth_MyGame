@@ -435,7 +435,9 @@ void Player::TitleMove()
 	//モデルの回転処理
 	Rotation();
 
-	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
+	//タイトルの時の移動は遅くする
+	const float titleMoveSpeed = 0.5f;
+	m_onWayPosition += m_moveSpeed * titleMoveSpeed * 1.0f / 60.0f;
 	GetOnStage();
 
 	//ライトのデータを更新する
