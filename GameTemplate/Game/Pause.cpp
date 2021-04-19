@@ -139,6 +139,27 @@ bool CPause::Start()
 	////無効化して非表示にする。
 	//m_arrowFR->Deactivate();
 
+	//buttonASEのサウンドキューを生成する
+	m_buttonASE = NewGO<CSoundCue>(0);
+	//buttonASEのサウンドキューを、waveファイルを指定して初期化する。
+	m_buttonASE->Init(L"Assets/sound/buttonA.wav");
+	//音量調節
+	m_buttonASE->SetVolume(0.5f);
+
+	//buttonBのサウンドキューを生成する
+	m_buttonBSE = NewGO<CSoundCue>(0);
+	//buttonBのサウンドキューを、waveファイルを指定して初期化する。
+	m_buttonBSE->Init(L"Assets/sound/buttonB.wav");
+	//音量調節
+	m_buttonBSE->SetVolume(0.5f);
+
+	//selectSEのサウンドキューを生成する
+	m_selectSE = NewGO<CSoundCue>(0);
+	//selectSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_selectSE->Init(L"Assets/sound/select.wav");
+	//音量調節
+	m_selectSE->SetVolume(0.5f);
+
 	return true;
 }
 
@@ -229,15 +250,9 @@ void CPause::ToPause()
 
 	//ポーズ中にする
 	m_isPaused = true;
-
-	//buttonASEのサウンドキューを生成する
-	m_buttonASE = NewGO<CSoundCue>(0);
-	//buttonASEのサウンドキューを、waveファイルを指定して初期化する。
-	m_buttonASE->Init(L"Assets/sound/buttonA.wav");
+	
 	//buttonASEをループ再生をオフで再生する。
 	m_buttonASE->Play(false);
-	//音量調節
-	m_buttonASE->SetVolume(0.5f);
 
 	//IGameObjectにポーズ中だと伝える。
 	//Update()が呼ばれなくなって、
@@ -264,14 +279,10 @@ void CPause::UnPause()
 	m_isPaused = false;
 
 	if (g_pad[0]->IsTrigger(enButtonStart)) {
-		//buttonBのサウンドキューを生成する
-		m_buttonBSE = NewGO<CSoundCue>(0);
-		//buttonBのサウンドキューを、waveファイルを指定して初期化する。
-		m_buttonBSE->Init(L"Assets/sound/buttonB.wav");
+		
 		//buttonBをループ再生をオフで再生する。
 		m_buttonBSE->Play(false);
-		//音量調節
-		m_buttonBSE->SetVolume(0.5f);
+
 	}
 
 	//IGameObjectにポーズ中を解除するように伝える
@@ -307,15 +318,9 @@ void CPause::Choose()
 		//下入力
 		//ボタンを押すことができないようにする。（連続入力防止用）
 		m_buttonFlag = false;
-
-		//selectSEのサウンドキューを生成する
-		m_selectSE = NewGO<CSoundCue>(0);
-		//selectSEのサウンドキューを、waveファイルを指定して初期化する。
-		m_selectSE->Init(L"Assets/sound/select.wav");
+		
 		//selectSEをループ再生をオフで再生する。
 		m_selectSE->Play(false);
-		//音量調節
-		m_selectSE->SetVolume(0.5f);
 
 		//現在のポーズ中のステートを加算する
 		m_pauseState++;
@@ -332,14 +337,8 @@ void CPause::Choose()
 		//ボタンを押すことができないようにする。（連続入力防止用）
 		m_buttonFlag = false;
 
-		//selectSEのサウンドキューを生成する
-		m_selectSE = NewGO<CSoundCue>(0);
-		//selectSEのサウンドキューを、waveファイルを指定して初期化する。
-		m_selectSE->Init(L"Assets/sound/select.wav");
 		//selectSEをループ再生をオフで再生する。
 		m_selectSE->Play(false);
-		//音量調節
-		m_selectSE->SetVolume(0.5f);
 
 		//現在のポーズ中のステートを減算する
 		m_pauseState--;
@@ -373,41 +372,23 @@ void CPause::Decision()
 			//「続ける」
 			//ポーズ中を解除する
 			UnPause();
-			//buttonBのサウンドキューを生成する
-			m_buttonBSE = NewGO<CSoundCue>(0);
-			//buttonBのサウンドキューを、waveファイルを指定して初期化する。
-			m_buttonBSE->Init(L"Assets/sound/buttonB.wav");
 			//buttonBをループ再生をオフで再生する。
 			m_buttonBSE->Play(false);
-			//音量調節
-			m_buttonBSE->SetVolume(0.5f);
 			break;
 
 		case enRetry:
 			//「リトライ」
 			//StageBaseにリトライ状態だと伝える
 			m_retryFlag = true;
-			//buttonASEのサウンドキューを生成する
-			m_buttonASE = NewGO<CSoundCue>(0);
-			//buttonASEのサウンドキューを、waveファイルを指定して初期化する。
-			m_buttonASE->Init(L"Assets/sound/buttonA.wav");
 			//buttonASEをループ再生をオフで再生する。
 			m_buttonASE->Play(false);
-			//音量調節
-			m_buttonASE->SetVolume(0.5f);
 			break;
 		case enQuit:
 			//「終了」
 			//StageBaseに終了状態だと伝える
 			m_quitFlag = true;
-			//buttonASEのサウンドキューを生成する
-			m_buttonASE = NewGO<CSoundCue>(0);
-			//buttonASEのサウンドキューを、waveファイルを指定して初期化する。
-			m_buttonASE->Init(L"Assets/sound/buttonA.wav");
 			//buttonASEをループ再生をオフで再生する。
 			m_buttonASE->Play(false);
-			//音量調節
-			m_buttonASE->SetVolume(0.5f);
 			break;
 		default:
 			break;

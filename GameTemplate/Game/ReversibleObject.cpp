@@ -9,6 +9,13 @@ bool CReversibleObject::PureVirtualStart()
 	//モデルの回転を、現在の場所とイイ感じに合わせる
 	CheckWayPoint();
 
+	//changeSEのサウンドキューを生成する
+	m_changeSE = NewGO<CSoundCue>(0);
+	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_changeSE->Init(L"Assets/sound/change.wav");
+	//音量調節
+	m_changeSE->SetVolume(0.5f);
+
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
 }
@@ -63,6 +70,7 @@ bool CReversibleObject::Init
 }
 
 
+
 /// <summary>
 /// 反転させる
 /// </summary>
@@ -71,14 +79,9 @@ void CReversibleObject::Reverse()
 	//現在の表か裏の、逆の設定にする
 	SetFrontOrBack(!m_frontOrBack);
 
-	//changeSEのサウンドキューを生成する
-	m_changeSE = NewGO<CSoundCue>(0);
-	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_changeSE->Init(L"Assets/sound/change.wav");
 	//changeSEをループ再生をオフで再生する。
 	m_changeSE->Play(false);
-	//音量調節
-	m_changeSE->SetVolume(0.5f);
+	
 }
 
 /// <summary>
