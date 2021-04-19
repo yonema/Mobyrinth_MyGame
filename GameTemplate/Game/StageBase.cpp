@@ -392,7 +392,10 @@ void IStageBase::Update()
 		m_wipeInFlag = !g_sceneChange->IsWipeFinished();
 		//終了位置まで来ていたら、ワイプの終了させる
 		if (!m_wipeInFlag)
+		{
 			g_sceneChange->WipeEnd();
+			m_startDirecting->SetWipeEndFlag(true);
+		}
 	}
 
 	return;

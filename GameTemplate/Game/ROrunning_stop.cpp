@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "ROrunning_stop.h"
 
+//スタート関数
 bool ROrunning_stop::StartSub()
 {
+	//初期化用関数
 	Init("Assets/modelData/running.tkm", enRunning,
 		"Assets/modelData/stop.tkm", enStop);
 
@@ -15,17 +17,26 @@ bool ROrunning_stop::StartSub()
 	return true;
 }
 
+/// <summary>
+/// クエリしてほしいタイミングで呼ばれる関数
+/// </summary>
 void ROrunning_stop::QuerySub()
 {
-
+	//自身が「稼働」の時
 	if (GetObjectType() == enRunning)
 	{
+		//障害オブジェクトの「壁」をクエリ
 		QueryLOs<OOwall>(enWall, [&](OOwall* wall) -> bool
 			{
+				//自身と「壁」が衝突したら
 				if (IsHitObject(*this, *wall))
 				{
+					//壁を稼働モードにする
 					wall->Running();
+					//衝突した壁のアドレスをポインタに保持
 					m_pWall = wall;
+
+					//衝突した壁に、すでに中身があるかどうか調べる
 					if (wall->GetRun_stop())
 					{
 						//中身があったら、その中身を消してから
@@ -46,14 +57,21 @@ void ROrunning_stop::QuerySub()
 			}
 		);
 	}
+	//自身が「停止」の時
 	else if (GetObjectType() == enStop)
 	{
+		//障害オブジェクトの「壁」をクエリ
 		QueryLOs<OOwall>(enWall, [&](OOwall* wall) -> bool
 			{
+				//自身と「壁」が衝突したら
 				if (IsHitObject(*this, *wall))
 				{
+					//壁を停止モードにする
 					wall->Stop();
+					//衝突した壁のアドレスをポインタに保持
 					m_pWall = wall;
+
+					//衝突した壁に、すでに中身があるかどうか調べる
 					if (wall->GetRun_stop())
 					{
 						//中身があったら、その中身を消してから
@@ -76,15 +94,29 @@ void ROrunning_stop::QuerySub()
 	}
 }
 
+//アップデート関数
 void ROrunning_stop::UpdateSub()
 {
+	//壁のアドレスを保持していたら、場所と回転を更新する
 	if (m_pWall)
 	{
+		//壁の場所からどのくらいの上の場所にいるか
+		const float upVecScale = 100.0f;
+
+		//壁の回転を得る
 		Quaternion qRot = m_pWall->GetRotation();
+		//アップベクトル
 		Vector3 upVec = g_vec3Up;
+		//アップベクトルに壁の回転を乗算する
 		qRot.Apply(upVec);
+		//正規化する
 		upVec.Normalize();
-		upVec.Scale(100.0f);
-		m_position = m_pWall->GetPosition() + upVec;
+		//イイ感じの大きさにスケールする
+		upVec.Scale(upVecScale);
+
+		//場所を更新
+		SetPosition(m_pWall->GetPosition() + upVec);
+		//回転を更新
+		SetRotation(qRot);
 	}
 }

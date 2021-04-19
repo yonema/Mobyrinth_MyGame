@@ -27,7 +27,16 @@ void StartDirecting::Update()
 	
 	//wayポイント[16]まで動かす。
 
-	if (m_checkStartDirecting == false) {
+	//演出をしない状態、またはワイプが終了していなかったら
+	//何もせずにreturn
+	if (m_checkStartDirecting == false || !m_wipeEndFlag) {
+		return;
+	}
+
+	//ちょっと待ってから演出を開始する
+	if (m_startCounter < 30)
+	{
+		m_startCounter++;
 		return;
 	}
 

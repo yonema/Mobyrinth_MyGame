@@ -65,6 +65,15 @@ public:	//Get、Set関数
 		m_checkStartDirecting = b;
 	}
 
+	/// <summary>
+	/// ワイプが終わったかを設定
+	/// </summary>
+	/// <param name="wipeEndFlag">ワイプが終わった？</param>
+	void SetWipeEndFlag(const bool wipeEndFlag)
+	{
+		m_wipeEndFlag = wipeEndFlag;
+	}
+
 
 private:
 	Vector3 m_position = g_vec3Zero; //演出に使用する注視点座標
@@ -100,5 +109,8 @@ private:
 	Vector3 m_startPosition = g_vec3Zero; //演出に使用する注視点座標の開始位置
 
 	const int startDirectingTime = 120; //カメラが寄る演出の時間
+
+	bool m_wipeEndFlag = false;			//ワイプが終わった？
+	int m_startCounter = 0;				//演出開始までのカウンター
 };
 
