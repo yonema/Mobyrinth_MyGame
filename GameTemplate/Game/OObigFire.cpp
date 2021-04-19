@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "OObigFire.h"
 
-
+//スタート関数
 bool OObigFire::StartSub()
 {
 	//モデルの初期化とタイプの設定
@@ -30,12 +30,13 @@ bool OObigFire::StartSub()
 	return true;
 }
 
+//デストラクタ
 OObigFire::~OObigFire()
 {
 	DeleteGO(m_pointLight);
 }
 
-
+//ダメージを受ける
 void OObigFire::Damage()
 {
 	if (--m_hp <= 0)
