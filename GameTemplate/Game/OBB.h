@@ -102,6 +102,10 @@ public:		//ここのメンバ関数を主に使う
 		CalcCenterPosition();
 	}
 
+	/// <summary>
+	/// 方向ベクトルの長さを設定
+	/// </summary>
+	/// <param name="directionLength">方向ベクトルの長さ</param>
 	void SetDirectionLength(const Vector3& directionLength)
 	{
 		m_directionLength[enLocalX] = directionLength.x / 2;

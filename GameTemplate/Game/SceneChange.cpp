@@ -77,7 +77,7 @@ void CSceneChange::InitSprite()
 	//後ろに映すスプライトの初期化データ
 	SpriteInitData backSpriteInitData;
 	//テクスチャのファイルパスを設定
-	backSpriteInitData.m_ddsFilePath[0] = "Assets/Image/backSprite.DDS";
+	backSpriteInitData.m_ddsFilePath[0] = "Assets/Image/backSprite2.DDS";
 	//シェーダーを設定
 	backSpriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
 	//テクスチャの幅と高さを設定

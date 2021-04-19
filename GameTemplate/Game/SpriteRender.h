@@ -14,6 +14,10 @@ public:		//自動でよばれるメンバ関数
 
 public:		//ここのメンバ関数を主に使う
 
+	/// <summary>
+	/// 自動で呼ばれるアップデートではなく、
+	/// 手動でスプライトの更新をしたいときに呼ぶ関数
+	/// </summary>
 	void UpdateSprite()
 	{
 		//スプライトのアップデート
@@ -72,6 +76,17 @@ public:		//ここのメンバ関数を主に使う
 	void SetPivot(const Vector2& pivot)
 	{
 		m_pivot = pivot;
+	}
+
+	/// <summary>
+	/// スプライトに色を乗算する関数。
+	/// アルファ値を掛けて透過するときは、Initするときに
+	/// アルファブレンディングモードを透過合成モードにしておいてね。
+	/// </summary>
+	/// <param name="mulColor">乗算する色</param>
+	void SetMulColor(const Vector4& mulColor)
+	{
+		m_sprite.SetMulColor(mulColor);
 	}
 
 	/// <summary>

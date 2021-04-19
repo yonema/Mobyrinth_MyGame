@@ -153,37 +153,35 @@ public:		//publicなデータメンバ
 	/// </summary>
 	enum EnObjectType
 	{
-		enEnpty,
+		enEnpty,			//「空っぽ」
 
 		//反転オブジェクト
-		enWater,
-		enFire,
-		enBird,
-		enFish,
-		enGrilledChicken,
-		enGrilledFish,
-		enRunning,
-		enStop,
-		enWire,
-		enString,
-		enNail,
-		enBar,
-		enAxe,
-		enPickaxe,
-		enKeymold,
-		enKey,
-		enPadlock,
+		enWater,			//「針金」
+		enFire,				//「火」
+		enBird,				//「鳥」
+		enFish,				//「魚」
+		enGrilledChicken,	//「焼き鳥」
+		enGrilledFish,		//「焼き魚」
+		enRunning,			//「稼働」
+		enStop,				//「停止」
+		enWire,				//「針金」
+		enString,			//「紐」
+		enNail,				//「釘」
+		enBar,				//「バール」
+		enAxe,				//「斧」
+		enPickaxe,			//「つるはし」
+		enKeymold,			//「鍵の金型」
+		enKey,				//「鍵」
+		enPadlock,			//「南京錠」
 
 		//障害オブジェクト
-		enObsatcle,
 
-		enBigFire,
-		enWall,
-		enGoal,
-		enNotHavePadlock,
-		enBox,
+		enBigFire,			//「炎」
+		enWall,				//「壁」
+		enGoal,				//「ゴール」
+		enNotHavePadlock,	//「持てない南京錠」
+		enBox,				//「箱」
 
-		enEnd
 	};
 
 protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
