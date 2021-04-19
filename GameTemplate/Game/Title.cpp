@@ -81,6 +81,10 @@ bool Title::Start()
 				m_stageSelectionBase->Init("Assets/level2D/Stage_selection_base.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_stageSelectionBase->SetScale(objdata.scale);
 				m_stageSelectionBase->SetPosition(objdata.position);
+				//スプライトに色を乗算する。
+				//乗算だから、0.0fを掛けると色が消えるよ。
+				//透過するだけだったら、RGBのところは1.0fを掛けてね。
+				m_stageSelectionBase->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 				//フックしたらtrueを戻す
 				return true;
 			}

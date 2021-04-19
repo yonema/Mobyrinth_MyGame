@@ -4,7 +4,7 @@
 
 /// <summary>
 /// 反転オブジェクト。
-/// 水、氷オブジェクト
+/// 水、火オブジェクト
 /// </summary>
 class ROmizu_kori : public CReversibleObject
 {

@@ -8,6 +8,12 @@ bool ROaxe_pickaxe::StartSub()
 	Init("Assets/modelData/axe.tkm", enAxe,
 		"Assets/modelData/pickaxe.tkm", enPickaxe);
 
+	//OBBのサイズを設定
+	Vector3 obbSize;
+	obbSize = { 200.0f,200.0f,100.0f };
+	//OBBの方向ベクトルの長さを設定
+	GetOBB().SetDirectionLength(obbSize);
+
 	return true;
 }
 

@@ -275,12 +275,12 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 				//デバック用
 				//後で消す
-				CModelRender* dbgModel;
-				dbgModel = NewGO<CModelRender>(0, "waypoint");
-				dbgModel->Init("Assets/modelData/yuka.tkm");
-				dbgModel->SetPosition(objData.position);
-				dbgModel->SetRotation(objData.rotation);
-
+				//CModelRender* dbgModel;
+				//dbgModel = NewGO<CModelRender>(0, "waypoint");
+				//dbgModel->Init("Assets/modelData/yuka.tkm");
+				//dbgModel->SetPosition(objData.position);
+				//dbgModel->SetRotation(objData.rotation);
+				//デバック用ここまで
 
 				return true;
 			}
@@ -356,12 +356,13 @@ IStageBase::~IStageBase()
 
 	//デバック用
 	//後で消す
-	QueryGOs<CModelRender>("waypoint", [&](CModelRender* waypoint)->bool
-		{
-			DeleteGO(waypoint);
-			return true;
-		}
-	);
+	//QueryGOs<CModelRender>("waypoint", [&](CModelRender* waypoint)->bool
+	//	{
+	//		DeleteGO(waypoint);
+	//		return true;
+	//	}
+	//);
+	//デバック用ここまで
 }
 
 

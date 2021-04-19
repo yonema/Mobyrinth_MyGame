@@ -49,9 +49,9 @@ bool Player::Start()
 	//OBBの初期化用データ構造体
 	SInitOBBData initData;
 	//なんかいい感じのOBBの大きさにする
-	initData.width = 50.0f;
+	initData.width = 100.0f;
 	initData.length = 200.0f;
-	initData.height = 100.0f;
+	initData.height = 200.0f;
 	//Playerの場所と回転を入れる
 	initData.position = m_position;
 	initData.rotation = m_rotation;
@@ -60,6 +60,7 @@ bool Player::Start()
 	//キャラクターコントローラーを初期化する
 	m_myCharaCon.Init(initData);
 
+	//プレイヤーを照らすライトの方向
 	m_lightDirection = { 1.0f,-1.0f,0.0f };
 
 	//デバック用
