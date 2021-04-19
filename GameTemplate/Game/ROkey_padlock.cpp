@@ -28,9 +28,12 @@ void ROkey_padlock::QuerySub()
 		//障害オブジェクトの「持てない南京錠」をクエリ
 		QueryLOs<OOpadlock>(enNotHavePadlock, [&](OOpadlock* padlock) -> bool
 			{
+				//自身と「持てない南京錠」が衝突したら
 				if (IsHitObject(*this, *padlock))
 				{
+					//「持てない南京錠」を破棄
 					DeleteGO(padlock);
+					//自身のオブジェクトを破棄
 					DeleteGO(this);
 				}
 				return true;
