@@ -127,6 +127,11 @@ public:		//ここのメンバ関数を主に使う
 		return m_position.y;
 	}
 
+	float GetMulColorW()
+	{
+		return m_sprite.GetMulColorW();
+	}
+
 private:	//データメンバ
 	Sprite m_sprite;							//スプライトクラス
 	SpriteInitData m_initData;					//スプライトの初期化データ。構造体。

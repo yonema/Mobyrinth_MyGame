@@ -89,6 +89,10 @@ private: //画像データ
 	CSpriteRender* m_stageName[enStageNum] = { nullptr };
 	CSpriteRender* m_stageSelection = nullptr;
 	CSpriteRender* m_stageSelectionBase = nullptr;
+
+	bool m_blinkingFlag = true; //m_pressAButtonの透過処理に使用
+
+	//BGMデータ
 	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
 	bool m_initedBGM = false;						//BGMが初期化済みか？
 
