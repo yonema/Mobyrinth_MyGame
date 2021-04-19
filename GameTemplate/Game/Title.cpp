@@ -84,7 +84,7 @@ bool Title::Start()
 				//スプライトに色を乗算する。
 				//乗算だから、0.0fを掛けると色が消えるよ。
 				//透過するだけだったら、RGBのところは1.0fを掛けてね。
-				m_stageSelectionBase->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+				m_stageSelectionBase->SetMulColor({ 1.0f,1.0f,1.0f,0.8f });
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -125,6 +125,7 @@ bool Title::Start()
 				m_pressAButton->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_pressAButton->SetScale(objdata.scale);
 				m_pressAButton->SetPosition(objdata.position);
+				m_pressAButton->SetMulColor({ 1.0f,1.0f,1.0f,0.8f });
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -267,6 +268,23 @@ void Title::TitleScreen()
 		m_stageSelectionBase->Activate();
 	}
 
+
+	//Press_A_Buttonの点滅処理
+	if (m_blinkingFlag == true) {
+		m_pressAButton->SetMulColor({ 1.0f,1.0f,1.0f,m_pressAButton->GetMulColorW() - 0.02f });
+
+		if (m_pressAButton->GetMulColorW() <= 0.0f) {
+			m_blinkingFlag = false;
+		}
+	}
+	else {
+		m_pressAButton->SetMulColor({ 1.0f,1.0f,1.0f,m_pressAButton->GetMulColorW() + 0.02f });
+
+		if (m_pressAButton->GetMulColorW() >= 0.8f) {
+			m_blinkingFlag = true;
+		}
+	}
+
 }
 
 //ステージセレクト
@@ -354,6 +372,9 @@ void Title::StageSelect()
 		//タイトル画面の画像を有効化して表示する。
 		m_title->Activate();
 		m_pressAButton->Activate();
+
+		m_blinkingFlag = false;
+		m_pressAButton->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 	}
 
 

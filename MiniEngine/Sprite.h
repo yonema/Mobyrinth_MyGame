@@ -143,5 +143,10 @@ public:		//ƒƒ“ƒoŠÖ”
 		m_constantBufferCPU.mulColor = mulColor;
 	}
 
+	float GetMulColorW()
+	{
+		return m_constantBufferCPU.mulColor.w;
+	}
+
 
 };
