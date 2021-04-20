@@ -177,7 +177,7 @@ private:	//データメンバ
 	CModelRender* m_modelRender[enFrontAndBackNum] = { nullptr };	//モデルレンダラー
 	int m_reversibleType[enFrontAndBackNum] = { enEnpty };	//表と裏のオブジェクトのタイプ
 
-	int m_throwCounter = 0;						//投げている時のカウンター
+	float m_throwCounter = 0.0f;						//投げている時のカウンター
 	Quaternion m_throwRot = g_quatIdentity;		//下に投げるときの回転
 
 	/// <summary>
@@ -216,5 +216,7 @@ private:	//データメンバ
 	bool m_flagCheckOverlap = true;
 
 	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
+
+	bool m_changeObject = true;
 };
 

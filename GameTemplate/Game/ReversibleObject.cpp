@@ -299,6 +299,9 @@ void CReversibleObject::HeldPlayer()
 /// </summary>
 void CReversibleObject::ThrownDown()
 {
+	//投げている時のカウンターの最大値
+	const float maxThrowCounter = 0.5f;
+
 	//下方向のベクトルを保持する
 	Vector3 dir = g_vec3Down;
 	//プレイヤーの回転で下方向のべクトルを回す
@@ -312,17 +315,14 @@ void CReversibleObject::ThrownDown()
 	//モデルの場所を下に下げる
 	m_position += dir;
 	//モデルの回転を、逆さ向きに向かってちょっとずつ回す
-	m_rotation.SetRotationDegX(180.0f * m_throwCounter / 24);
+	m_rotation.SetRotationDegX(180.0f * m_throwCounter / maxThrowCounter);
 	m_rotation.Multiply(m_throwRot);
 
-	//投げている時のカウンターの最大値
-	const int maxThrowCounter = 24;
-
 	//投げている時のカウンターを進める
-	m_throwCounter++;
+	m_throwCounter += GameTime().GetFrameDeltaTime();
 
 	//投げている時のカウンターが最大値まで来たら
-	if (m_throwCounter >= 24)
+	if (m_throwCounter >= maxThrowCounter)
 	{
 		//モデルの回転を完全に逆さ向きに回す。
 		m_rotation.SetRotationDegX(180.0f);
@@ -332,16 +332,20 @@ void CReversibleObject::ThrownDown()
 		m_pPlayer->SetHoldObject(false);
 
 		//投げている時のカウンターを0に戻す
-		m_throwCounter = 0;
+		m_throwCounter = 0.0f;
+
+		m_changeObject = true;
 
 		//ステートをクエリへ移行する
 		m_objectState = enQuery;
 	}
 	//投げている時のカウンターが最大値の半分まで来たら
-	else if (m_throwCounter == maxThrowCounter / 2)
+	else if (m_throwCounter >= maxThrowCounter / 2.0f && m_changeObject == true)
 	{
 		//反転させる
 		Reverse();
+
+		m_changeObject = false;
 	}
 }
 
@@ -375,12 +379,15 @@ void CReversibleObject::Cancel()
 /// </summary>
 void CReversibleObject::ThrownSide()
 {
+	//投げている時のカウンターの最大値
+	const float maxThrowCounter = 0.5f;
+
 	//左方向に投げる
 	if (m_playerLeftOrRight == enLeft) {
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Right;
 		m_throwRot.Apply(dir);
-		dir.Scale(7.0f);
+		dir.Scale(10.0f);
 		m_position += dir;
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
@@ -390,12 +397,12 @@ void CReversibleObject::ThrownSide()
 		m_position += dir2;
 
 		//
-		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / 35);
+		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
 		m_rotation.Multiply(m_throwRot);
-		m_throwCounter++;
+		m_throwCounter += GameTime().GetFrameDeltaTime();
 		m_pPlayer->SetHoldObject(false);
 
-		if (m_throwCounter >= 35)
+		if (m_throwCounter >= maxThrowCounter)
 		{
 			m_rotation.SetRotationDegZ(0.0f);
 			m_rotation.Multiply(m_throwRot);
@@ -408,7 +415,7 @@ void CReversibleObject::ThrownSide()
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Left;
 		m_throwRot.Apply(dir);
-		dir.Scale(7.0f);
+		dir.Scale(10.0f);
 		m_position += dir;
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
@@ -418,12 +425,12 @@ void CReversibleObject::ThrownSide()
 		m_position += dir2;
 
 		//
-		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / 35);
+		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
 		m_rotation.Multiply(m_throwRot);
-		m_throwCounter++;
+		m_throwCounter += GameTime().GetFrameDeltaTime();
 		m_pPlayer->SetHoldObject(false);
 
-		if (m_throwCounter >= 35)
+		if (m_throwCounter >= maxThrowCounter)
 		{
 			m_rotation.SetRotationDegZ(0.0f);
 			m_rotation.Multiply(m_throwRot);
@@ -511,7 +518,7 @@ void CReversibleObject::CheckObjectsOverlap()
 void CReversibleObject::OverlapThrownDown()
 {
 	//投げている時のカウンターの最大値
-	const int maxThrowCounter = 24;
+	const float maxThrowCounter = 0.5f;
 
 	//モデルの場所を下に下げる
 	m_position += test;
@@ -520,7 +527,7 @@ void CReversibleObject::OverlapThrownDown()
 	m_rotation.Multiply(m_throwRot);
 
 	//投げている時のカウンターを進める
-	m_throwCounter++;
+	m_throwCounter += GameTime().GetFrameDeltaTime();
 
 	//投げている時のカウンターが最大値まで来たら
 	if (m_throwCounter >= maxThrowCounter)
@@ -533,21 +540,28 @@ void CReversibleObject::OverlapThrownDown()
 		m_pPlayer->SetHoldObject(false);
 
 		//投げている時のカウンターを0に戻す
-		m_throwCounter = 0;
+		m_throwCounter = 0.0f;
+
+		m_changeObject = true;
 
 		//ステートをクエリへ移行する
 		m_objectState = enQuery;
 	}
 	//投げている時のカウンターが最大値の半分まで来たら
-	else if (m_throwCounter == maxThrowCounter / 2)
+	else if (m_throwCounter >= maxThrowCounter / 2.0f && m_changeObject == true)
 	{
 		//反転させる
 		Reverse();
+
+		m_changeObject = false;
 	}
 }
 
 void CReversibleObject::OverlapThrownSide()
 {
+	//投げている時のカウンターの最大値
+	const float maxThrowCounter = 0.5f;
+
 	//左方向に投げる
 	if (m_playerLeftOrRight == enLeft) {
 		//オブジェクトが横方向に移動するベクトルの作成
@@ -563,12 +577,12 @@ void CReversibleObject::OverlapThrownSide()
 		m_position += dir2;
 
 		//
-		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / 35);
+		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
 		m_rotation.Multiply(m_throwRot);
-		m_throwCounter++;
+		m_throwCounter += GameTime().GetFrameDeltaTime();
 		m_pPlayer->SetHoldObject(false);
 
-		if (m_throwCounter >= 35)
+		if (m_throwCounter >= maxThrowCounter)
 		{
 			m_rotation.SetRotationDegZ(0.0f);
 			m_rotation.Multiply(m_throwRot);
@@ -591,12 +605,12 @@ void CReversibleObject::OverlapThrownSide()
 		m_position += dir2;
 
 		//
-		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / 35);
+		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
 		m_rotation.Multiply(m_throwRot);
-		m_throwCounter++;
+		m_throwCounter += GameTime().GetFrameDeltaTime();
 		m_pPlayer->SetHoldObject(false);
 
-		if (m_throwCounter >= 35)
+		if (m_throwCounter >= maxThrowCounter)
 		{
 			m_rotation.SetRotationDegZ(0.0f);
 			m_rotation.Multiply(m_throwRot);
