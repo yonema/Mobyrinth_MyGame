@@ -115,6 +115,7 @@ bool Title::Start()
 				m_title->Init("Assets/level2D/Title.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_title->SetScale(objdata.scale);
 				m_title->SetPosition(objdata.position);
+				m_title->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -125,7 +126,7 @@ bool Title::Start()
 				m_pressAButton->Init("Assets/level2D/Press_A_Button.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_pressAButton->SetScale(objdata.scale);
 				m_pressAButton->SetPosition(objdata.position);
-				m_pressAButton->SetMulColor({ 1.0f,1.0f,1.0f,0.8f });
+				m_pressAButton->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -186,6 +187,9 @@ void Title::Update()
 	//現在のステージのステート（状態）で処理を振り分ける
 	switch (m_stageState)
 	{
+	case enStartTitle:
+		StartTitle();
+		break;
 	case enTitleScreen:
 		//タイトル画面
 		TitleScreen();
@@ -226,6 +230,22 @@ void Title::InitBGM()
 	m_bgmTitle->SetVolume(0.5f);
 
 	m_initedBGM = true;
+}
+
+//起動時の演出
+void Title::StartTitle()
+{
+	++m_countStartTitle;
+
+	m_title->SetMulColor({ 1.0f,1.0f,1.0f,m_countStartTitle / 120.0f });
+
+	if (m_countStartTitle == 120 || g_pad[0]->IsTrigger(enButtonA)) {
+		m_stageState = enTitleScreen;
+		//ここでタイトルアイコンの位置を設定する。
+		m_title->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		//ボタンを押すことができないようにする（連続入力防止用）
+		m_buttonFlag = false;
+	}
 }
 
 //タイトル画面
