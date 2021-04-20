@@ -34,9 +34,9 @@ void StartDirecting::Update()
 	}
 
 	//ちょっと待ってから演出を開始する
-	if (m_startCounter < 30)
+	if (m_startTimer < 0.5f)
 	{
-		m_startCounter++;
+		m_startTimer += GameTime().GetFrameDeltaTime();
 		return;
 	}
 
@@ -62,7 +62,8 @@ void StartDirecting::Update()
 		//モデルの回転処理
 		Rotation();
 
-		m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
+		//デルタタイムを掛ける
+		m_onWayPosition += m_moveSpeed * GameTime().GetFrameDeltaTime();
 		GetOnStage();
 	}
 	else {

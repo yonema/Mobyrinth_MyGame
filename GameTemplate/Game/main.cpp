@@ -5,6 +5,8 @@
 #include "LevelObjectManager.h"
 #include "SoundEngine.h"
 #include "OBBWorld.h"
+#include "StopWatch.h"
+#include "GameTime.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -28,6 +30,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CLevelObjectManager::CreateInstance();	//レベルオブジェクトマネージャー
 	CSoundEngine::CreateInstance();			//サウンドエンジン
 	COBBWorld::CreateInstance();			//OBBワールド
+
+	//ストップウォッチを生成する
+	CStopWatch stopWatch;
 
 	//ゲームのインスタンスを生成する
 	Game* game = NewGO<Game>(0, "Game");
@@ -53,6 +58,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
+		//ストップウォッチの計測開始
+		stopWatch.Start();
+
+
 		//レンダリング開始。
 		g_engine->BeginFrame();
 
@@ -85,6 +94,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//メインのレンダリングを実行
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 
+		//FPSを描画する
+		GameTime().DrawFPS(renderContext, (float)stopWatch.GetElapsed());
+
 		//メインレンダリングターゲットの書き込み終了待ち
 		g_graphicsEngine->WaitDrawingMainRenderTarget();
 
@@ -103,6 +115,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		//レンダリング終了
 		g_engine->EndFrame();
+
+		//ストップウォッチの計測終了
+		stopWatch.Stop();
+
+		//デルタタイムをストップウォッチの計測時間から、計算する
+		GameTime().PushFrameDeltaTime((float)stopWatch.GetElapsed());
 	}
 
 	//ディレクションライトを破棄

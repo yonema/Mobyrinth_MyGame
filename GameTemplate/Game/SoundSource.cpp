@@ -282,9 +282,8 @@ void CSoundSource::Update()
 		//音源の移動速度を更新。
 		m_velocity.Subtract(m_position, m_lastFramePosition);
 
-		//後で変更
-		//デルタタイムが計測できるようになったら変更する
-		m_velocity.Div(/*GameTime().GetFrameDeltaTime()*/1.0f / 60.0f);
+		//デルタタイムがを掛ける
+		m_velocity.Div(GameTime().GetFrameDeltaTime());
 
 		m_lastFramePosition = m_position;
 	}
