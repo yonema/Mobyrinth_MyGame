@@ -34,6 +34,7 @@ private:	//privateなメンバ関数
 
 	void InitBGM();			//BGMの初期化
 	void TitleScreen();		//タイトル画面
+	void StartTitle();		//起動時の演出
 	void StageSelect();		//ステージセレクト
 	void StageDecision();	//ステージを決定した時の処理
 	void Release()			//自身のオブジェクトを破棄する関数
@@ -48,11 +49,12 @@ private:	//列挙型
 	/// </summary>
 	enum EnState
 	{
+		enStartTitle,		//起動時演出の状態
 		enTitleScreen,		//タイトル画面の状態
 		enStageSelect,		//ステージセレクトの状態
 		enStageDecision,	//ステージを決定した状態
 	};
-	int m_stageState = enTitleScreen;	//現在のステージのステート（状態）
+	int m_stageState = enStartTitle;	//現在のステージのステート（状態）
 
 	/// <summary>
 	/// ステージの番号
@@ -92,15 +94,15 @@ private: //画像データ
 
 	bool m_blinkingFlag = true; //m_pressAButtonの透過処理に使用
 
-	//BGMデータ
+private: //BGMデータ
 	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
 	bool m_initedBGM = false;						//BGMが初期化済みか？
-
-
 
 	CSoundCue* m_selectSE = nullptr;	//selectSEのサウンドキュー
 	CSoundCue* m_buttonASE = nullptr;	//buttonASEのサウンドキュー
 	CSoundCue* m_buttonBSE = nullptr;	//buttonBSEのサウンドキュー
 
+private: //起動時演出の変数
+	int m_countStartTitle = 0;
 };
 
