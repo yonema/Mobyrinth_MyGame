@@ -12,12 +12,11 @@ public:		//自動で呼ばれるメンバ関数
 
 	//デバック用
 	//後で消す
-	void PostRender(RenderContext& rc)override final;	//一番上に描画する関数
+	//void PostRender(RenderContext& rc)override final;	//一番上に描画する関数
 	void Update()override final;						//アップデート関数
 
 
 private:	//データメンバ
-	int m_frameNum = 0;						//フレーム数
 
 	//デバック用
 	//後で消す

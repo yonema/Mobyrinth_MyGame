@@ -123,8 +123,8 @@ void Player::Init()
 	//モデルの回転処理
 	Rotation();
 
-	//道の上の座標を移動させる
-	m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
+	//道の上の座標を移動させる	//デルタタイムを掛ける
+	m_onWayPosition += m_moveSpeed * GameTime().GetFrameDeltaTime();
 
 	//ステージ（メビウスの輪）の上に乗る処理
 	//GetOnStage();
@@ -437,7 +437,8 @@ void Player::TitleMove()
 
 	//タイトルの時の移動は遅くする
 	const float titleMoveSpeed = 0.5f;
-	m_onWayPosition += m_moveSpeed * titleMoveSpeed * 1.0f / 60.0f;
+	//デルタタイムを掛ける
+	m_onWayPosition += m_moveSpeed * titleMoveSpeed * GameTime().GetFrameDeltaTime();
 	GetOnStage();
 
 	//ライトのデータを更新する
@@ -471,9 +472,9 @@ void Player::GameMove()
 	//モデルの回転処理
 	Rotation();
 
-	//道の上の座標を移動させる
-	m_onWayPosition = m_myCharaCon.Execute(m_moveSpeed, 1.0 / 60.0f);
-	//m_onWayPosition += m_moveSpeed * 1.0 / 60.0f;
+	//道の上の座標を移動させる	//デルタタイムを掛ける
+	m_onWayPosition = m_myCharaCon.Execute(m_moveSpeed, GameTime().GetFrameDeltaTime());
+	
 	//ステージ（メビウスの輪）の上に乗る処理
 	GetOnStage();
 

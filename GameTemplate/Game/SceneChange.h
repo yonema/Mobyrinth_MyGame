@@ -1,5 +1,6 @@
 #pragma once
 #include <time.h>
+//#include "GameTime.h"
 
 /// <summary>
 /// 場面転換クラス
@@ -244,5 +245,6 @@ private:	//データメンバ
 	Sprite m_backSprite;			//後ろに映すスプライト
 	WipeParam m_wipeParam;			//ワイプのパラメータ
 	bool m_wipeFlag = false;		//ワイプするか？
-	float m_wipeSpeed = 3.0f;		//ワイプのスピード
+	float m_wipeSpeed = 120.0f;		//ワイプのスピード
+	float m_deltaTime = 0.0f;		//デルタタイム
 };

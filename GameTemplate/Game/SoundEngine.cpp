@@ -246,9 +246,9 @@ void CSoundEngine::Update()
 			m_listener.pCone = NULL;
 		}
 	}
-	//後で変更
-	//デルタタイムを計測できるようになったら変更する
-	float deltaTime = /*GameTime().GetFrameDeltaTime()*/1.0f / 60.0f;
+	
+	//デルタタイムを掛ける
+	float deltaTime = GameTime().GetFrameDeltaTime();
 	if (deltaTime > 0.0f) {
 		//リスナーの移動速度を計算する。
 		Vector3 vel;
