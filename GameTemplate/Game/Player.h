@@ -263,14 +263,13 @@ private:	//データメンバ
 
 	bool m_operationFlag = false; //操作できるかのフラグ
 	bool m_titleMove = false;
-	bool m_stunFlag = false;
-	bool m_stunFlag2 = false;
-	float m_stunTimer = 0.0f;
-	Vector3 m_stunMoveSpeed = g_vec3Zero;
-	Vector3 m_stunDownVec = g_vec3Zero;
-	bool m_stunDownVecFlag = true;
-	COBB* m_hitOBB = nullptr;
-	float m_blinkTimer = 0.0f;
+	bool m_stunFlag = false;					//スタン状態（吹っ飛び状態）か？
+	float m_stunTimer = 0.0f;					//スタンのタイマー
+	Vector3 m_stunMoveSpeed = g_vec3Zero;		//スタン中の吹っ飛ばすベクトル
+	Vector3 m_stunDownVec = g_vec3Zero;			//スタン中の重力
+	bool m_stunMoveFlag = true;					//スタン中に吹っ飛び中か？
+	float m_blinkTimer = 0.0f;					//スタン状態にモデルを点滅させるタイマー
+	COBB* m_hitOBB = nullptr;					//衝突したOBBのポインタ
 
 public://デバック用
 	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため
@@ -283,8 +282,8 @@ public://デバック用
 	//float m_dbgDot1 = 0.0f;			//左側のウェイポイントとプレイヤーの内積を入れる
 	//float m_dbgDot2 = 0.0f;			//右側のウェイポイントとプレイヤーの内積を入れる
 
-	CModelRender* m_dbgObbModel[8] = { nullptr };	//OBBの頂点を見るためのモデル
+	//CModelRender* m_dbgObbModel[8] = { nullptr };	//OBBの頂点を見るためのモデル
 	//CModelRender* m_dbgObbModel2[32][8];
-	CModelRender* m_dbgStunMoveModel = nullptr;
+	//CModelRender* m_dbgStunMoveModel = nullptr;
 };
 
