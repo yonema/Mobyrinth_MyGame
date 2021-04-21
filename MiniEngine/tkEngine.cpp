@@ -15,8 +15,14 @@ TkEngine::~TkEngine()
 void TkEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 {
 	//グラフィックエンジンの初期化。
+	auto hdc = GetDC(hwnd);
+	auto rate = GetDeviceCaps(hdc, VREFRESH);
+
+	//グラフィックエンジンの初期化。
 	m_graphicsEngine = new GraphicsEngine();
 	m_graphicsEngine->Init(hwnd, frameBufferWidth, frameBufferHeight);
+	m_graphicsEngine->SetRefreshRate(rate);
+
 	//ゲームパッドの初期化。
 	for (int i = 0; i < GamePad::CONNECT_PAD_MAX; i++) {
 		g_pad[i] = &m_pad[i];

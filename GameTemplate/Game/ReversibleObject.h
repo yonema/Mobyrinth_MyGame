@@ -222,8 +222,10 @@ private:	//データメンバ
 
 	bool m_flagCheckOverlap = true;
 
+
 	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
 
 	bool m_changeObject = true;
+
 };
 
