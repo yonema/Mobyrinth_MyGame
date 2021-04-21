@@ -291,6 +291,7 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
+    <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="ShadowModel.cpp" />
@@ -418,6 +419,7 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="GameTime.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="SceneChange.h" />
     <ClInclude Include="ShadowModel.h" />
@@ -471,6 +473,7 @@
     <ClInclude Include="stage_title.h" />
     <ClInclude Include="StartDirecting.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StopWatch.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="testModel.h" />
     <ClInclude Include="Title.h" />

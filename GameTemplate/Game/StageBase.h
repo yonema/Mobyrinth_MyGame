@@ -152,7 +152,7 @@ private:	//データメンバ
 	CPause* m_pause = nullptr;						//ポーズクラスのポインタ
 	OOgoal* m_goal = nullptr;						//ゴールクラスのポインタ
 	CSky* m_sky = nullptr;							//空クラスのポインタ
-	int m_goalCounter = 0;							//ゴールした後の待ち時間をはかる
+	float m_goalTimer = 0;							//ゴールした後の待ち時間をはかる
 
 	StartDirecting* m_startDirecting = nullptr;
 	bool m_startUpStartDirecting = true;

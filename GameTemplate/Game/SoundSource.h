@@ -4,6 +4,7 @@
 
 #include "WaveFile.h"
 #include "SoundEngine.h"
+#include "GameTime.h"
 
 
 /*!

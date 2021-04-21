@@ -299,7 +299,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
 	pPlayer->SetWayPointRot
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
-
+	pPlayer->SetWayPointOBB();
 
 	//ステージ開始時の演出時のカメラの注視点の座標を設定する
 	m_startDirecting->SetPosition(pPlayer->GetPosition());
@@ -463,11 +463,11 @@ void IStageBase::Goal()
 	//フレーム数ではなくて時間にする
 
 
-	//ゴールした後の時間を計測する
-	m_goalCounter++;
+	//ゴールした後の時間を計測する	//デルタタイムを掛ける
+	m_goalTimer += GameTime().GetFrameDeltaTime();
 
 	//一定時間たったら
-	if (m_goalCounter >= 180)
+	if (m_goalTimer >= 3.0f)
 	{
 		//クリアする
 		Clear();

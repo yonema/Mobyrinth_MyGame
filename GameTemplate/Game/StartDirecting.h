@@ -1,5 +1,6 @@
 #pragma once
 #include "Mobius.h"
+#include "GameTime.h"
 class ILevelObjectBase;
 
 class StartDirecting : public IGameObject
@@ -111,6 +112,6 @@ private:
 	const int startDirectingTime = 120; //カメラが寄る演出の時間
 
 	bool m_wipeEndFlag = false;			//ワイプが終わった？
-	int m_startCounter = 0;				//演出開始までのカウンター
+	float m_startTimer = 0;				//演出開始までのタイマー
 };
 

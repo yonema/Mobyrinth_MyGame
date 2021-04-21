@@ -198,11 +198,11 @@ private:	//データメンバ
 	//デバック用
 	//後で消す
 private:
-	int m_objectNumber = 0;		//何番目に作られたオブジェクトか保持する
-	static int objectNumber;	//何番目に作られたオブジェクトかカウントする
+	//int m_objectNumber = 0;		//何番目に作られたオブジェクトか保持する
+	//static int objectNumber;	//何番目に作られたオブジェクトかカウントする
 
-	static const int m_dbgOBBNum = 8;			//OBBの頂点の数
-	CModelRender* m_dbgOBBVert[m_dbgOBBNum];	//OBBの頂点を見るためのモデルレンダラー
+	//static const int m_dbgOBBNum = 8;			//OBBの頂点の数
+	//CModelRender* m_dbgOBBVert[m_dbgOBBNum];	//OBBの頂点を見るためのモデルレンダラー
 	//デバック用ここまで
 };
 

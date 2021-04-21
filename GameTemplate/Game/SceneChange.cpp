@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SceneChange.h"
+#include "GameTime.h"
 
 //初期化関数
 void CSceneChange::Init()
@@ -96,8 +97,13 @@ void CSceneChange::UpdateParam()
 	//ワイプフラグが立っていたら
 	if (m_wipeFlag)
 	{
-		//ワイプを進める
-		m_wipeParam.wipeSize += m_wipeSpeed;
+		//ワイプイン時は、直前にロードがあってデルタタイムが著しく長くなるから、
+		//ワイプアウト時のデルタタイムを使う。
+		if (m_wipeParam.inOrOut == enOut)
+			m_deltaTime = GameTime().GetFrameDeltaTime();
+
+		//ワイプを進める	//デルタタイムを掛ける
+		m_wipeParam.wipeSize += m_wipeSpeed * m_deltaTime;
 	}
 }
 
@@ -168,15 +174,15 @@ void CSceneChange::RandomWipeOut()
 	//普通のワイプだったら
 	if (randNum == enWipe)
 		//速くワイプさせる
-		SetWipeSpeed(20.0f);
+		SetWipeSpeed(1200.0f);
 	//円形ワイプだったら
 	else if (randNum == enCircleWipe)
 		//ちょっとだけ早くワイプさせる
-		SetWipeSpeed(10.0f);
+		SetWipeSpeed(600.0f);
 	//その他だったら
 	else
 		//デフォルトのワイプスピードのする
-		SetWipeSpeed(2.0f);
+		SetWipeSpeed(120.0f);
 
 	//ワイプアウトする
 	WipeOut();

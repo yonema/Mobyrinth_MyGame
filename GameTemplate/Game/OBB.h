@@ -153,6 +153,15 @@ public:		//ここのメンバ関数を主に使う
 		return m_directionLength[localAxis];
 	}
 
+	void SetTag(const int obbTag)
+	{
+		m_tag = obbTag;
+	}
+
+	const int GetTag() const
+	{
+		return m_tag;
+	}
 
 private:	//privateなメンバ関数
 	/// <summary>
@@ -170,12 +179,22 @@ private:	//privateなメンバ関数
 
 public:		//publicなデータメンバ
 	//オブジェクトのローカルな軸
-	enum ENLocalAxis
+	enum EnLocalAxis
 	{
 		enLocalX,		//ローカルX軸
 		enLocalY,		//ローカルY軸
 		enLocalZ,		//ローカルZ軸
 		enLocalAxisNum,	//ローカル軸の数
+	};
+
+	//OBBのタグ
+	enum EnTag
+	{
+		enNone,		//なし
+		enBigFire,	//炎
+		enWall,		//壁
+		enPadlock,
+		enBox,
 	};
 private:	//データメンバ
 	Vector3 m_position;							//場所
@@ -184,7 +203,7 @@ private:	//データメンバ
 	
 	Vector3 m_normalDirection[enLocalAxisNum];	//各軸の単位方向ベクトル
 	float m_directionLength[enLocalAxisNum];	//各軸の方向ベクトルの長さ
-
+	int m_tag = enNone;						//OBBのタグ
 
 private:	//staticなデータメンバ
 	static const int m_boxVertexNum = 8;		//ボックスの頂点の数

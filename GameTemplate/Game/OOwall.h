@@ -52,7 +52,7 @@ public:		//メンバ関数
 
 private:	//データメンバ
 	bool m_moveFlag = false;				//稼働状態か？
-	int m_moveCounter = 0;					//稼働中のカウンター
+	float m_moveTimer = 0;					//稼働中のカウンター
 	Vector3 m_startPosition = g_vec3Zero;	//移動前の初期位置
 	Vector3 m_endPosition = g_vec3Zero;		//移動先の終端位置
 	ROrunning_stop* m_pRun_stop = nullptr;	//稼働、停止オブジェクトのポインタ

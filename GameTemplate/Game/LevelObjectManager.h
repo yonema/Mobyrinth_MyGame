@@ -111,6 +111,9 @@ public:		//ここのメンバ関数を主に使う
 		return m_vecSize;
 	}
 
+	const Vector3 CalcWayPointNextPos
+	(const int rpIndex, const Vector3& pos, const float dist, const bool leftOrRight);
+
 	/// <summary>
 	/// 自身（LevelObjectManager）にオブジェクトを追加する
 	/// </summary>
