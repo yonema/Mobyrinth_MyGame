@@ -12,5 +12,8 @@ bool OObox::StartSub()
 	obbSize = { 250.0f,250.0f,250.0f };
 	GetOBB().SetDirectionLength(obbSize);
 
+	GetOBB().SetTag(COBB::enBox);
+
+
 	return true;
 }

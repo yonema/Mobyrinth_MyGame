@@ -61,6 +61,8 @@ public://publicなメンバ関数
 	/// <param name="rotMap">回転のベクター</param>
 	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
 
+	void SetWayPointOBB();
+
 	/// <summary>
 	/// 補完済みの最終的なウェイポイントの回転を取得
 	/// </summary>
@@ -206,6 +208,8 @@ private://privateなメンバ関数
 	/// </summary>
 	void SetDirectionLight();
 
+
+
 private:	//データメンバ
 
 	/// <summary>
@@ -254,10 +258,19 @@ private:	//データメンバ
 	int m_wayPointState = 0;					//自身がどのウェイポイントにいるか表すステート
 	int m_maxWayPointState = 0;					//ウェイポイントステートの最大の値
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
+	std::vector<COBB> m_wayPointOBB;
 
 
 	bool m_operationFlag = false; //操作できるかのフラグ
 	bool m_titleMove = false;
+	bool m_stunFlag = false;
+	bool m_stunFlag2 = false;
+	float m_stunTimer = 0.0f;
+	Vector3 m_stunMoveSpeed = g_vec3Zero;
+	Vector3 m_stunDownVec = g_vec3Zero;
+	bool m_stunDownVecFlag = true;
+	COBB* m_hitOBB = nullptr;
+	float m_blinkTimer = 0.0f;
 
 public://デバック用
 	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため
@@ -271,6 +284,7 @@ public://デバック用
 	//float m_dbgDot2 = 0.0f;			//右側のウェイポイントとプレイヤーの内積を入れる
 
 	CModelRender* m_dbgObbModel[8] = { nullptr };	//OBBの頂点を見るためのモデル
-
+	//CModelRender* m_dbgObbModel2[32][8];
+	CModelRender* m_dbgStunMoveModel = nullptr;
 };
 

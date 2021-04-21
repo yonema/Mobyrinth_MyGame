@@ -247,7 +247,7 @@ void CReversibleObject::HeldPlayer()
 	//上方向のベクトルをプレイヤーの回転で回す
 	qRot.Apply(up);
 	//ベクトルを伸ばす
-	up.Scale(100.0f);
+	up.Scale(m_heldUpLen);
 
 	//モデルの場所をプレイヤーの上にする
 	m_position = m_pPlayer->GetPosition() + up;

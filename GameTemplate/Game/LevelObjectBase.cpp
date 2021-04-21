@@ -2,7 +2,7 @@
 #include "LevelObjectBase.h"
 //デバック用
 //後で消す
-int ILevelObjectBase::objectNumber = 0;
+//int ILevelObjectBase::objectNumber = 0;
 
 //スタート関数
 bool ILevelObjectBase::Start()
@@ -20,15 +20,15 @@ bool ILevelObjectBase::Start()
 
 	//デバック用
 	//後で消す。
-	m_objectNumber = objectNumber++;
+	//m_objectNumber = objectNumber++;
 
-	Vector3* vertPos = m_obb.GetBoxVertex();
-	for (int i = 0; i < m_dbgOBBNum; i++)
-	{
-		m_dbgOBBVert[i] = NewGO<CModelRender>(0);
-		m_dbgOBBVert[i]->Init("Assets/modelData/dbgBox.tkm");
-		m_dbgOBBVert[i]->SetPosition(vertPos[i]);
-	}
+	//Vector3* vertPos = m_obb.GetBoxVertex();
+	//for (int i = 0; i < m_dbgOBBNum; i++)
+	//{
+	//	m_dbgOBBVert[i] = NewGO<CModelRender>(0);
+	//	m_dbgOBBVert[i]->Init("Assets/modelData/dbgBox.tkm");
+	//	m_dbgOBBVert[i]->SetPosition(vertPos[i]);
+	//}
 
 	//デバック用ここまで
 
@@ -42,10 +42,10 @@ ILevelObjectBase::~ILevelObjectBase()
 {
 	//デバック用
 	//後で消す
-	for (int i = 0; i < m_dbgOBBNum; i++)
-	{
-		DeleteGO(m_dbgOBBVert[i]);
-	}
+	//for (int i = 0; i < m_dbgOBBNum; i++)
+	//{
+	//	DeleteGO(m_dbgOBBVert[i]);
+	//}
 	//デバック用ここまで
 
 	//LevelObjectManagerにオブジェクトが破棄されたことを伝える
@@ -201,12 +201,12 @@ void ILevelObjectBase::Update()
 
 	//デバック用
 	//後で消す
-	Vector3* vertPos = m_obb.GetBoxVertex();
-	for (int i = 0; i < m_dbgOBBNum; i++)
-	{
-		m_dbgOBBVert[i]->SetPosition(vertPos[i]);
-		m_dbgOBBVert[i]->SetRotation(m_rotation);
-	}
+	//Vector3* vertPos = m_obb.GetBoxVertex();
+	//for (int i = 0; i < m_dbgOBBNum; i++)
+	//{
+	//	m_dbgOBBVert[i]->SetPosition(vertPos[i]);
+	//	m_dbgOBBVert[i]->SetRotation(m_rotation);
+	//}
 	//デバック用ここまで
 }
 
