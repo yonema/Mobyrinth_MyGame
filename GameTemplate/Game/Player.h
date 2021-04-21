@@ -5,6 +5,7 @@
 #include "Mobius.h"
 #include "OBB.h"
 #include "MyCharacterController.h"
+#include "SoundCue.h"
 
 class ILevelObjectBase;
 

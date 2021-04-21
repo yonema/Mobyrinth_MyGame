@@ -15,5 +15,7 @@ public:		//自動で呼ばれるメンバ関数
 	/// クエリしてほしいタイミングで呼ばれる関数
 	/// </summary>
 	void QuerySub()override final;
+
+	CSoundCue* m_padlockbreakSE = nullptr; //padlockbreakSEのサウンドキュー
 };
 

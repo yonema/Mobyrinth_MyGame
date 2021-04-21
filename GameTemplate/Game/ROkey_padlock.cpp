@@ -14,6 +14,13 @@ bool ROkey_padlock::StartSub()
 	//OBBの方向ベクトルの長さを設定
 	GetOBB().SetDirectionLength(obbSize);
 
+	//padlockbreakSEのサウンドキューを生成する
+	m_padlockbreakSE = NewGO<CSoundCue>(0);
+	//padlockbreakSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_padlockbreakSE->Init(L"Assets/sound/padlockbreak.wav");
+	//音量調節
+	m_padlockbreakSE->SetVolume(0.5f);
+
 	return true;
 }
 
@@ -33,6 +40,10 @@ void ROkey_padlock::QuerySub()
 				{
 					//「持てない南京錠」を破棄
 					DeleteGO(padlock);
+
+					//padlockbreakSEをループ再生をオフで再生する。
+					m_padlockbreakSE->Play(false);
+
 					//自身のオブジェクトを破棄
 					DeleteGO(this);
 				}
