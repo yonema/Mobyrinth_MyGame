@@ -19,7 +19,7 @@ private:
 	void InGameCamera();
 
 public:	//ƒCƒ“ƒ‰ƒCƒ“ŠÖ”
-	void StartDirectingZoomInCamera(const bool b)
+	void SetStartDirectingZoomInCamera(const bool b)
 	{
 		m_startDirectingZoomInCamera = b;
 	}

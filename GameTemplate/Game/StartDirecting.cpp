@@ -154,7 +154,7 @@ void StartDirecting::CheckWayPoint()
 			checkZoomIn = true;
 			//カメラの寄る処理のフラグをtrueにする。
 			GameCamera* gameCamera = FindGO<GameCamera>("GameCamera");
-			gameCamera->StartDirectingZoomInCamera(true);
+			gameCamera->SetStartDirectingZoomInCamera(true);
 		}
 	}
 
