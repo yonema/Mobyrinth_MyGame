@@ -74,20 +74,20 @@ bool Player::Start()
 	//m_dbgModel3 = NewGO<CModelRender>(0);
 	//m_dbgModel3->Init("Assets/modelData/yuka.tkm");
 	
-	//OBBの頂点の座標の配列の先頭アドレスを取得
-	Vector3* vertPos = m_myCharaCon.GetOBB().GetBoxVertex();
-	//OBBの頂点の数だけ繰り返す
-	for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
-	{
-		//OBBの頂点の座標を見るためのモデルの生成
-		m_dbgObbModel[i] = NewGO<CModelRender>(0);
-		m_dbgObbModel[i]->Init("Assets/modelData/dbgBox.tkm");
-		m_dbgObbModel[i]->SetPosition(vertPos[i]);
-	}
+	////OBBの頂点の座標の配列の先頭アドレスを取得
+	//Vector3* vertPos = m_myCharaCon.GetOBB().GetBoxVertex();
+	////OBBの頂点の数だけ繰り返す
+	//for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
+	//{
+	//	//OBBの頂点の座標を見るためのモデルの生成
+	//	m_dbgObbModel[i] = NewGO<CModelRender>(0);
+	//	m_dbgObbModel[i]->Init("Assets/modelData/dbgBox.tkm");
+	//	m_dbgObbModel[i]->SetPosition(vertPos[i]);
+	//}
 
-	m_dbgStunMoveModel = NewGO<CModelRender>(0);
-	m_dbgStunMoveModel->Init("Assets/modelData/dbgBox.tkm");
-	m_dbgStunMoveModel->SetPosition(g_vec3Zero);
+	//m_dbgStunMoveModel = NewGO<CModelRender>(0);
+	//m_dbgStunMoveModel->Init("Assets/modelData/dbgBox.tkm");
+	//m_dbgStunMoveModel->SetPosition(g_vec3Zero);
 	//デバック用ここまで
 
 	return true;
@@ -104,10 +104,10 @@ Player::~Player()
 	//DeleteGO(m_dbgModel);
 	//DeleteGO(m_dbgModel2);
 	//DeleteGO(m_dbgModel3);
-	for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
-	{
-		DeleteGO(m_dbgObbModel[i]);
-	}
+	//for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
+	//{
+	//	DeleteGO(m_dbgObbModel[i]);
+	//}
 	//for (int i = 0; i < 32; i++)
 	//{
 	//	for (int j = 0; j < 8; j++)
@@ -424,10 +424,13 @@ void Player::Move()
 			}
 			m_stunMoveSpeed = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
 			(m_rpIndex, m_onWayPosition, 1000.0f, leftOrRight);
-			m_dbgStunMoveModel->SetPosition(m_stunMoveSpeed);
+			//デバック用
+			//後で消す
+			//m_dbgStunMoveModel->SetPosition(m_stunMoveSpeed);
+			//デバック用ここまで
 			m_stunMoveSpeed -= m_onWayPosition;
 			m_stunMoveSpeed *= 0.7f;
-			m_stunDownVecFlag = true;
+			m_stunMoveFlag = true;
 			Vector3 upVec = m_upVec;
 			upVec.Scale(1000.0f);
 			m_stunDownVec = upVec;
@@ -452,7 +455,7 @@ void Player::Move()
 		
 
 
-		if (m_stunDownVecFlag)
+		if (m_stunMoveFlag)
 		{
 
 			Vector3 down = m_upVec;
@@ -750,7 +753,7 @@ void Player::GameMove()
 			if (vec1DotUp <= 0.0f)
 			{
 				m_onWayPosition = intersectPos;
-				m_stunDownVecFlag = false;
+				m_stunMoveFlag = false;
 			}
 		}
 		m_position = m_onWayPosition;
@@ -785,15 +788,15 @@ void Player::GameMove()
 	//デバック用
 	//後で消す
 
-	//OBBの頂点の座標の配列の先頭アドレスを取得
-	Vector3* boxVertex = m_myCharaCon.GetOBB().GetBoxVertex();
-	//OBBの頂点の数だけ繰り返す
-	for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
-	{
-		//OBBの頂点を見るためのモデルの場所を設定
-		m_dbgObbModel[i]->SetPosition(boxVertex[i]);
-		m_dbgObbModel[i]->SetRotation(m_rotation);
-	}
+	////OBBの頂点の座標の配列の先頭アドレスを取得
+	//Vector3* boxVertex = m_myCharaCon.GetOBB().GetBoxVertex();
+	////OBBの頂点の数だけ繰り返す
+	//for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
+	//{
+	//	//OBBの頂点を見るためのモデルの場所を設定
+	//	m_dbgObbModel[i]->SetPosition(boxVertex[i]);
+	//	m_dbgObbModel[i]->SetRotation(m_rotation);
+	//}
 	//for (int i = 0; i < 32; i++)
 	//{
 	//	Vector3* vertPos2 = m_wayPointOBB[i].GetBoxVertex();
