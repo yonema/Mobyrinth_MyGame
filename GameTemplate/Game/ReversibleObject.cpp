@@ -307,13 +307,13 @@ void CReversibleObject::ThrownDown()
 	//プレイヤーの回転で下方向のべクトルを回す
 	m_throwRot.Apply(dir);
 	//ベクトルを伸ばす
-	dir.Scale(7.0f);
+	dir.Scale(400.0f);
 
 	test = dir;
 	test.Scale(0.9f);
 
 	//モデルの場所を下に下げる
-	m_position += dir;
+	m_position += dir * GameTime().GetFrameDeltaTime();
 	//モデルの回転を、逆さ向きに向かってちょっとずつ回す
 	m_rotation.SetRotationDegX(180.0f * m_throwCounter / maxThrowCounter);
 	m_rotation.Multiply(m_throwRot);
@@ -387,14 +387,14 @@ void CReversibleObject::ThrownSide()
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Right;
 		m_throwRot.Apply(dir);
-		dir.Scale(10.0f);
-		m_position += dir;
+		dir.Scale(700.0f);
+		m_position += dir * GameTime().GetFrameDeltaTime();
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
 		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
 		m_throwRot.Apply(dir2);
-		dir2.Scale(7.0f);
-		m_position += dir2;
+		dir2.Scale(250.0f);
+		m_position += dir2 * GameTime().GetFrameDeltaTime();
 
 		//
 		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
@@ -415,14 +415,14 @@ void CReversibleObject::ThrownSide()
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Left;
 		m_throwRot.Apply(dir);
-		dir.Scale(10.0f);
-		m_position += dir;
+		dir.Scale(700.0f);
+		m_position += dir * GameTime().GetFrameDeltaTime();
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
 		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
 		m_throwRot.Apply(dir2);
-		dir2.Scale(7.0f);
-		m_position += dir2;
+		dir2.Scale(250.0f);
+		m_position += dir2 * GameTime().GetFrameDeltaTime();
 
 		//
 		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
@@ -521,7 +521,7 @@ void CReversibleObject::OverlapThrownDown()
 	const float maxThrowCounter = 0.5f;
 
 	//モデルの場所を下に下げる
-	m_position += test;
+	m_position += test * GameTime().GetFrameDeltaTime();
 	//モデルの回転を、逆さ向きに向かってちょっとずつ回す
 	m_rotation.SetRotationDegX(-180.0f * m_throwCounter / maxThrowCounter);
 	m_rotation.Multiply(m_throwRot);
@@ -567,14 +567,14 @@ void CReversibleObject::OverlapThrownSide()
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Right;
 		m_throwRot.Apply(dir);
-		dir.Scale(10.0f);
-		m_position += dir;
+		dir.Scale(700.0f);
+		m_position += dir * GameTime().GetFrameDeltaTime();
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
 		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
 		m_throwRot.Apply(dir2);
-		dir2.Scale(7.0f);
-		m_position += dir2;
+		dir2.Scale(450.0f);
+		m_position += dir2 * GameTime().GetFrameDeltaTime();
 
 		//
 		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
@@ -595,14 +595,14 @@ void CReversibleObject::OverlapThrownSide()
 		//オブジェクトが横方向に移動するベクトルの作成
 		Vector3 dir = g_vec3Left;
 		m_throwRot.Apply(dir);
-		dir.Scale(10.0f);
-		m_position += dir;
+		dir.Scale(700.0f);
+		m_position += dir * GameTime().GetFrameDeltaTime();
 
 		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
 		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
 		m_throwRot.Apply(dir2);
-		dir2.Scale(7.0f);
-		m_position += dir2;
+		dir2.Scale(450.0f);
+		m_position += dir2 * GameTime().GetFrameDeltaTime();
 
 		//
 		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
