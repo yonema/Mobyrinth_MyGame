@@ -690,7 +690,6 @@ void Player::GameMove()
 	else if (m_padLStickXF > 0.0f)
 		m_leftOrRight = enRight;	//右向き
 
-
 	//ウェイポイントの更新処理
 	CheckWayPoint();
 	//移動処理
