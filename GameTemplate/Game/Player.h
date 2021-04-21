@@ -5,12 +5,8 @@
 #include "Mobius.h"
 #include "OBB.h"
 #include "MyCharacterController.h"
-<<<<<<< HEAD
 #include "SoundCue.h"
-=======
 #include "GameTime.h"
->>>>>>> abfd00a661c3ae8cd38622c800a9beee25a6e83b
-
 class ILevelObjectBase;
 
 
