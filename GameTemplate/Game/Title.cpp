@@ -317,9 +317,9 @@ void Title::StageSelect()
 		//ボタンを押すことができるようにする（連続入力防止用）
 		m_buttonFlag = true;
 	}
-	if (g_pad[0]->GetLStickXF() > 0.0f && m_buttonFlag)
+	if (g_pad[0]->GetLStickXF() > 0.5f && m_buttonFlag)
 	{
-		//下を入力
+		//右を入力
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
 
@@ -334,9 +334,9 @@ void Title::StageSelect()
 			m_stageSelectState = enStageProto02;
 		}
 	}
-	else if (g_pad[0]->GetLStickXF() < 0.0f && m_buttonFlag)
+	else if (g_pad[0]->GetLStickXF() < -0.5f && m_buttonFlag)
 	{
-		//上を入力
+		//左を入力
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
 
