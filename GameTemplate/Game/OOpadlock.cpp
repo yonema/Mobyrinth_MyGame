@@ -12,5 +12,7 @@ bool OOpadlock::StartSub()
 	obbSize = { 300.0f,300.0f,300.0f };
 	GetOBB().SetDirectionLength(obbSize);
 
+	GetOBB().SetTag(COBB::enPadlock);
+
 	return true;
 }

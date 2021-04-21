@@ -60,6 +60,60 @@ void CLevelObjectManager::InitWayPointRot(const std::size_t vecSize, std::map<in
 	}
 }
 
+const Vector3 CLevelObjectManager::CalcWayPointNextPos
+(const int rpIndex, const Vector3& pos, const float dist, const bool leftOrRight)
+{
+	int lpIndex = rpIndex + 1;
+	const int maxWayPointIndex = m_vecSize - 1;
+	if (lpIndex > maxWayPointIndex)
+	{
+		lpIndex = 0;
+	}
+
+	Vector3 addVec = g_vec3Zero;
+	int nextIndex = 0;
+	if (!leftOrRight)
+	{
+		//左向いてるから右に飛ばす
+		nextIndex = rpIndex;
+	}
+	else
+	{
+		//右向いてるから左に飛ばす
+		nextIndex = lpIndex;
+	}
+	Vector3 originPos = pos;
+	addVec = m_wayPointPos[nextIndex] - originPos;
+
+
+	float addLen = addVec.Length();
+	float rDist = dist;
+	if (addLen <= rDist)
+	{
+		rDist -= addLen;
+		int otherIndex = nextIndex;
+		if (!leftOrRight)
+		{
+			//左向いてるから右に飛ばす
+			nextIndex--;
+		}
+		else
+		{
+			//右向いてるから左に飛ばす
+			nextIndex++;
+		}
+		originPos = m_wayPointPos[otherIndex];
+		addVec = m_wayPointPos[nextIndex] - originPos;
+		addLen = addVec.Length();
+	}
+	addVec.Normalize();
+	addVec.Scale(rDist);
+
+	return originPos + addVec;
+}
+
+
+
 /// <summary>
 /// 自身（LevelObjectManager）にオブジェクトを追加する
 /// </summary>

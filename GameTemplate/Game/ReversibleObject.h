@@ -104,6 +104,11 @@ public:		//ここのメンバ関数を主に使う
 	/// <param name="activeFlag">有効化フラグ</param>
 	void SetBothModelActiveFlag(const bool activeFlag);
 
+	void SetHeldUpLen(const float heldUpLen)
+	{
+		m_heldUpLen = heldUpLen;
+	}
+
 private:	//privateなメンバ関数
 
 	/// <summary>
@@ -179,6 +184,8 @@ private:	//データメンバ
 
 	int m_throwCounter = 0;						//投げている時のカウンター
 	Quaternion m_throwRot = g_quatIdentity;		//下に投げるときの回転
+
+	float m_heldUpLen = 100.0f;
 
 	/// <summary>
 	/// オブジェクトの現在のステート（状態）

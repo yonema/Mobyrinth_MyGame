@@ -10,7 +10,7 @@ bool OOwall::StartSub()
 
 	//OBBのサイズを設定
 	Vector3 obbSize;
-	obbSize = { 400.0f,1000.0f,100.0f };
+	obbSize = { 400.0f,1000.0f,400.0f };
 	GetOBB().SetDirectionLength(obbSize);
 
 	//移動前の初期位置の設定
@@ -28,6 +28,8 @@ bool OOwall::StartSub()
 	upVec.Scale(moveLen * moveTime);
 	//移動先の終端位置の設定
 	m_endPosition = m_startPosition + upVec;
+
+	GetOBB().SetTag(COBB::enWall);
 
 	return true;
 }

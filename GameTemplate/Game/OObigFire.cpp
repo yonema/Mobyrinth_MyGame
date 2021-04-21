@@ -9,7 +9,7 @@ bool OObigFire::StartSub()
 
 	//OBBのサイズを設定
 	Vector3 obbSize;
-	obbSize = { 300.0f,300.0f,100.0f };
+	obbSize = { 300.0f,300.0f,400.0f };
 	//OBBの方向ベクトルの長さを設定
 	GetOBB().SetDirectionLength(obbSize);
 
@@ -26,6 +26,8 @@ bool OObigFire::StartSub()
 
 	//自己発光色を設定
 	SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
+
+	GetOBB().SetTag(COBB::enBigFire);
 
 	return true;
 }

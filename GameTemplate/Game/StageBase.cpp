@@ -299,7 +299,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
 	pPlayer->SetWayPointRot
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
-
+	pPlayer->SetWayPointOBB();
 
 	//ステージ開始時の演出時のカメラの注視点の座標を設定する
 	m_startDirecting->SetPosition(pPlayer->GetPosition());
