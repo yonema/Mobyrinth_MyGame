@@ -44,15 +44,19 @@ void ROaxe_pickaxe::QuerySub()
 	//自身が「つるはし」の時
 	else if (GetObjectType() == enPickaxe)
 	{
-		//QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
-		//	{
-		//		if (IsHitObject(*this, *bigFire, hitDot))
-		//		{
-		//			bigFire->Damage();
-		//			DeleteGO(this);
-		//		}
-		//		return true;
-		//	}
-		//);
+		//障害オブジェクトの「箱」をクエリ
+		QueryLOs<OObox>(enBox, [&](OObox* box) -> bool
+			{
+				//自身と「箱」が衝突したら
+				if (IsHitObject(*this, *box))
+				{
+					//「箱」を破棄する
+					DeleteGO(box);
+					//自身を破棄する
+					DeleteGO(this);
+				}
+				return true;
+			}
+		);
 	}
 }

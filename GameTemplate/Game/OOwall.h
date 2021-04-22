@@ -50,11 +50,19 @@ public:		//メンバ関数
 		return m_pRun_stop;
 	}
 
+private:	//privateなメンバ関数
+
+	/// <summary>
+	/// 一回目のアップデートでだけ呼ばれる関数
+	/// </summary>
+	void FirstUpdate();
+
 private:	//データメンバ
 	bool m_moveFlag = false;				//稼働状態か？
 	float m_moveTimer = 0;					//稼働中のカウンター
 	Vector3 m_startPosition = g_vec3Zero;	//移動前の初期位置
 	Vector3 m_endPosition = g_vec3Zero;		//移動先の終端位置
 	ROrunning_stop* m_pRun_stop = nullptr;	//稼働、停止オブジェクトのポインタ
+	bool m_firstUpdateFlag = true;			//一回目のアップデートか？
 };
 
