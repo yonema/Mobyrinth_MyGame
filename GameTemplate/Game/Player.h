@@ -185,14 +185,29 @@ private://privateなメンバ関数
 	void Move();
 
 	/// <summary>
+	/// スタン中の移動処理
+	/// </summary>
+	void StunMove();
+
+	/// <summary>
 	/// ステージに乗る
 	/// </summary>
 	void GetOnStage();
 
 	/// <summary>
+	/// スタン中のステージに乗る処理
+	/// </summary>
+	void StunGetOnStage();
+
+	/// <summary>
 	/// モデルの回転処理
 	/// </summary>
 	void Rotation();
+
+	/// <summary>
+	/// 衝突したOBBのタグを調べる
+	/// </summary>
+	void CheckHitOBBTag();
 
 	/// <summary>
 	/// ライトのデータを更新する

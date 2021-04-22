@@ -403,92 +403,138 @@ void Player::Move()
 			m_moveSpeed += moveToRight * m_padLStickXF * moveLen;
 		}
 	}
-	//スタン中の吹っ飛び処理
+	//スタン中
 	else
 	{
-		//吹っ飛び時間
-		const float maxTime = 3.0f;
 
-		//吹っ飛びタイマーが0.0fの時
-		//つまり吹っ飛ぶときに、最初の一回ずつしか呼ばれない
-		if (m_stunTimer == 0.0f)
-		{
-			Vector3 playerToHitOBB = m_hitOBB->GetPosition() - m_onWayPosition;
-			Vector3 rightVec = g_vec3Right;
-			m_finalWPRot.Apply(rightVec);
-			float hitOBBDotRight = Dot(playerToHitOBB, rightVec);
-			int leftOrRight = enLeft;
-			if (hitOBBDotRight <= 0.0f)
-			{
-				leftOrRight = enRight;
-			}
-			m_stunMoveSpeed = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
-			(m_rpIndex, m_onWayPosition, 1000.0f, leftOrRight);
-			//デバック用
-			//後で消す
-			//m_dbgStunMoveModel->SetPosition(m_stunMoveSpeed);
-			//デバック用ここまで
-			m_stunMoveSpeed -= m_onWayPosition;
-			m_stunMoveSpeed *= 0.7f;
-			m_stunMoveFlag = true;
-			Vector3 upVec = m_upVec;
-			upVec.Scale(1000.0f);
-			m_stunDownVec = upVec;
-		}
-
-		const float blinkInterval = maxTime / 24;
-		if (m_blinkTimer < blinkInterval)
-		{
-			float color = 0.3f;
-			m_modelRender->SetEmissionColor({ color,color,color,color });
-		}
-		else if(m_blinkTimer < blinkInterval * 2)
-		{
-			float color = 0.0f;
-			m_modelRender->SetEmissionColor({ color,color,color,color });
-		}
-		else
-		{
-			m_blinkTimer = 0.0f;
-		}
-
-		
-
-
-		if (m_stunMoveFlag)
-		{
-
-			Vector3 down = m_upVec;
-			down.Scale(-20.0f);
-			down.Scale(90.0f);
-			down.Scale(GameTime().GetFrameDeltaTime());
-			m_stunDownVec += down;
-		}
-		else
-		{
-			m_stunMoveSpeed = g_vec3Zero;
-			m_stunDownVec = g_vec3Zero;
-
-		}
-
-		m_blinkTimer += GameTime().GetFrameDeltaTime();
-		m_stunTimer += GameTime().GetFrameDeltaTime();
-
-		if (m_stunTimer >= maxTime)
-		{
-			m_stunFlag = false;
-			COBBWorld::GetInstance()->AddOBB(m_hitOBB);
-			m_hitOBB = nullptr;
-			m_stunTimer = 0.0f;
-			m_modelRender->SetEmissionColor({ 0.0f,0.0f,0.0f,0.0f });
-
-		}
-
-		m_moveSpeed += m_stunMoveSpeed + m_stunDownVec;
+		//スタン中の移動処理
+		StunMove();
 	}
 
 
 	return;
+}
+
+/// <summary>
+/// スタン中の移動処理
+/// </summary>
+void Player::StunMove()
+{
+	//スタン状態の最大時間
+	const float maxTime = 3.0f;
+
+	//スタン中タイマーが0.0fの時
+	//つまりスタン中に、最初の一回ずつしか呼ばれない
+	if (m_stunTimer == 0.0f)
+	{
+		//プレイヤーから衝突したOBBへのベクトル
+		Vector3 playerToHitOBB = m_hitOBB->GetPosition() - m_onWayPosition;
+		//右向きのベクトル
+		Vector3 rightVec = g_vec3Right;
+		//右向きのベクトルを回して、プレイヤーの右向きのベクトルにする
+		m_finalWPRot.Apply(rightVec);
+		//OBBへのベクトルと、右向きのベクトルの内積
+		float hitOBBDotRight = Dot(playerToHitOBB, rightVec);
+		//左に飛ばされるか、右に飛ばされるか
+		int leftOrRight = enLeft;
+		if (hitOBBDotRight <= 0.0f)
+		{
+			//内積が負だったら
+			//反対側にする
+			leftOrRight = enRight;
+		}
+		//最終的に吹っ飛ばされる先の座標を取ってくる
+		m_stunMoveSpeed = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
+		(m_rpIndex, m_onWayPosition, 1000.0f, leftOrRight);
+		//デバック用
+		//後で消す
+		//m_dbgStunMoveModel->SetPosition(m_stunMoveSpeed);
+		//デバック用ここまで
+		//現在の座標から移動先のベクトルを出す
+		m_stunMoveSpeed -= m_onWayPosition;
+		//少し小さくする
+		m_stunMoveSpeed *= 0.7f;
+		//スタン中に吹っ飛び中のフラグを立てる
+		m_stunMoveFlag = true;
+		//現在のUpベクトルをとってくる
+		Vector3 upVec = m_upVec;
+		//大きくする
+		upVec.Scale(1000.0f);
+		//吹っ飛ぶときの上下に動くベクトルに上向きのベクトルを入れる
+		m_stunDownVec = upVec;
+	}
+
+	//吹っ飛び中のフラグが立っていたら
+	if (m_stunMoveFlag)
+	{
+		//下に加えるベクトル、現在のUpベクトルを入れる
+		Vector3 down = m_upVec;
+		//Upベクトルを下向き大きくする
+		down.Scale(-20.0f);
+		down.Scale(90.0f);
+		//デルタタイムを掛ける
+		down.Scale(GameTime().GetFrameDeltaTime());
+		//吹っ飛び中の上下に動くベクトルに下向きのベクトルを加える
+		m_stunDownVec += down;
+	}
+	else
+	{
+		//吹っ飛び中のフラグが折れていたら
+		//吹っ飛ぶ力をゼロにする
+		m_stunMoveSpeed = g_vec3Zero;
+		m_stunDownVec = g_vec3Zero;
+
+	}
+
+	//点滅処理
+	//点滅の間隔	//スタン状態の最大時間のうち24回切り替わるようにする
+	const float blinkInterval = maxTime / 24;
+	//点滅タイマーが、点滅の間隔より小さかったら
+	if (m_blinkTimer < blinkInterval)
+	{
+		//少し白く光らせる
+		float color = 0.3f;
+		m_modelRender->SetEmissionColor({ color,color,color,color });
+	}
+	//点滅タイマーが、点滅の間隔の2倍より小さかったら
+	else if (m_blinkTimer < blinkInterval * 2)
+	{
+		//元の明るさに戻す
+		float color = 0.0f;
+		m_modelRender->SetEmissionColor({ color,color,color,color });
+	}
+	//点滅タイマーが、点滅の間隔の2倍を過ぎたら
+	else
+	{
+		//点滅タイマーを0.0fに戻す
+		m_blinkTimer = 0.0f;
+	}
+
+	//点滅タイマーを進める
+	m_blinkTimer += GameTime().GetFrameDeltaTime();
+	//スタン中のタイマーを進める
+	m_stunTimer += GameTime().GetFrameDeltaTime();
+
+	//スタン中のタイマーが、スタン中の最大時間を過ぎたら
+	if (m_stunTimer >= maxTime)
+	{
+		//スタン中ではなくする
+		m_stunFlag = false;
+		//解除していたOBBを登録しなおす
+		COBBWorld::GetInstance()->AddOBB(m_hitOBB);
+		//衝突したOBBをnullptrにする
+		m_hitOBB = nullptr;
+		//スタン中タイマーをゼロにする
+		m_stunTimer = 0.0f;
+		//点滅タイマーをゼロにする
+		m_blinkTimer = 0.0f;
+		//明るさを元に戻す
+		m_modelRender->SetEmissionColor({ 0.0f,0.0f,0.0f,0.0f });
+
+	}
+
+	//移動スピードにスタン中のスピードを加算する
+	m_moveSpeed += m_stunMoveSpeed + m_stunDownVec;
 }
 
 
@@ -546,6 +592,42 @@ void Player::GetOnStage()
 }
 
 /// <summary>
+/// スタン中のステージに乗る処理
+/// </summary>
+void Player::StunGetOnStage()
+{
+	//現在のUpべクトル
+	Vector3 upVec = m_upVec;
+	//レイの長さ分大きくする
+	upVec.Scale(300.0f);
+
+	//メビウスの輪のモデルのポリゴンと、レイの当たり判定を取る
+	if (m_mobius->GetModel()
+		->InIntersectLine(m_onWayPosition + upVec, m_onWayPosition - upVec))
+	{
+		//ポリゴンとレイの交差点
+		Vector3 intersectPos = m_mobius->GetModel()->GetIntersectPos();
+		//交差点からプレイヤーの道上の座標のベクトル
+		Vector3 intersectToOnWay = m_onWayPosition - intersectPos;
+		//正規化する
+		intersectToOnWay.Normalize();
+		//さっきのベクトルとUpベクトルとの内積
+		float vec1DotUp = Dot(intersectToOnWay, m_upVec);
+		//内積が負なら
+		if (vec1DotUp <= 0.0f)
+		{
+			//メビウスの輪よりプレイヤーの座標が下に来てしまったら
+			//プレイヤーの座標を交差点にする
+			m_onWayPosition = intersectPos;
+			//スタン中でももう吹っ飛ばないようにする
+			m_stunMoveFlag = false;
+		}
+	}
+	//プレイヤーの場所を更新する
+	m_position = m_onWayPosition;
+}
+
+/// <summary>
 /// モデルの回転処理
 /// </summary>
 void Player::Rotation()
@@ -583,6 +665,45 @@ void Player::Rotation()
 }
 
 /// <summary>
+/// 衝突したOBBのタグを調べる
+/// </summary>
+void Player::CheckHitOBBTag()
+{
+	if (m_myCharaCon.GetTag() == COBB::enBigFire)
+	{
+		if (m_hitOBB != m_myCharaCon.GetHitOBB())
+		{
+			m_stunFlag = true;
+			m_stunTimer = 0.0f;
+
+			if (m_hitOBB)
+				COBBWorld::GetInstance()->AddOBB(m_hitOBB);
+
+			m_hitOBB = m_myCharaCon.GetHitOBB();
+			COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
+		}
+
+	}
+	else if (m_myCharaCon.GetTag() == COBB::enWall)
+	{
+		const COBB* hit = m_myCharaCon.GetHitOBB();
+		Vector3 vec = hit->GetPosition() - m_position;
+		vec.Normalize();
+		Vector3 up = m_upVec;
+		up.Normalize();
+		float vecDotUp = Dot(up, vec);
+		if (vecDotUp >= 0.8)
+		{
+			m_stunFlag = true;
+			if (m_hitOBB)
+				COBBWorld::GetInstance()->AddOBB(m_hitOBB);
+			m_hitOBB = m_myCharaCon.GetHitOBB();
+			COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
+		}
+	}
+}
+
+/// <summary>
 /// ライトのデータを更新する
 /// </summary>
 void Player::UpdateLightData()
@@ -598,16 +719,18 @@ void Player::UpdateLightData()
 /// </summary>
 void Player::SetShadowParam()
 {
+	//ライトの照らす方向
 	Vector3 dir = m_lightDirection;
+	//プレイヤー回転で方向をまわす
 	m_finalWPRot.Apply(dir);
+	//シャドウのつくるライトのパラメータを設定
 	g_shadowMap->SetShadowParam(dir, 1000.0f, m_position);
-
-	dir.Normalize();
-	dir.Scale(1000.0f);
-	Vector3 pos = m_position - dir;
 
 	//デバック用
 	//後で消す
+	//dir.Normalize();
+	//dir.Scale(1000.0f);
+	//Vector3 pos = m_position - dir;
 	//m_dbgModel3->SetPosition(pos);
 }
 
@@ -626,9 +749,11 @@ void Player::SetDirectionLight()
 			return;
 	}
 
+	//ライトの照らす方向
 	Vector3 dir = m_lightDirection;
+	//プレイヤー回転で方向をまわす
 	m_finalWPRot.Apply(dir);
-
+	//ディレクションライトの方向を
 	m_gameDirectionLight->SetDirection(dir);
 
 
@@ -667,7 +792,7 @@ void Player::TitleMove()
 	//ライトのデータを更新する
 	UpdateLightData();
 
-
+	//モデルの場所と回転を更新する
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 }
@@ -702,63 +827,15 @@ void Player::GameMove()
 
 	//道の上の座標を移動させる	//デルタタイムを掛ける
 	m_onWayPosition = m_myCharaCon.Execute(m_moveSpeed, GameTime().GetFrameDeltaTime());
-	if (m_myCharaCon.GetTag() == COBB::enBigFire)
-	{
-		if (m_hitOBB != m_myCharaCon.GetHitOBB())
-		{
-			m_stunFlag = true;
-			m_stunTimer = 0.0f;
-
-			if (m_hitOBB)
-				COBBWorld::GetInstance()->AddOBB(m_hitOBB);
-
-			m_hitOBB = m_myCharaCon.GetHitOBB();
-			COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
-		}
-
-	}
-	else if (m_myCharaCon.GetTag() == COBB::enWall)
-	{
-		const COBB* hit = m_myCharaCon.GetHitOBB();
-		Vector3 vec = hit->GetPosition() - m_position;
-		vec.Normalize();
-		Vector3 up = m_upVec;
-		up.Normalize();
-		float vecDotUp = Dot(up, vec);
-		if (vecDotUp >= 0.8)
-		{
-			m_stunFlag = true;
-			if (m_hitOBB)
-				COBBWorld::GetInstance()->AddOBB(m_hitOBB);
-			m_hitOBB = m_myCharaCon.GetHitOBB();
-			COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
-		}
-	}
+	//衝突したOBBのタグを調べる
+	CheckHitOBBTag();
 
 	//ステージ（メビウスの輪）の上に乗る処理
 	if (!m_stunFlag)
 		GetOnStage();
 	else
-	{
-		Vector3 upVec = m_upVec;
-		upVec.Scale(300.0f);
-		if (m_mobius->GetModel()
-			->InIntersectLine(m_onWayPosition + upVec, m_onWayPosition - upVec))
-		{
-			//ポリゴンとレイの交差点をを取ってきてモデルの座標に入れる
-			Vector3 intersectPos = m_mobius->GetModel()->GetIntersectPos();
-			Vector3 vec1 = m_onWayPosition - intersectPos;
-			vec1.Normalize();
-			float vec1DotUp = Dot(vec1, m_upVec);
-			if (vec1DotUp <= 0.0f)
-			{
-				m_onWayPosition = intersectPos;
-				m_stunMoveFlag = false;
-			}
-		}
-		m_position = m_onWayPosition;
-
-	}
+		//スタン中のステージの上に乗る処理
+		StunGetOnStage();
 
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
