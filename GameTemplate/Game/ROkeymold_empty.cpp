@@ -34,6 +34,7 @@ void ROkeymold_empty::QuerySub()
 				{
 					//j‹à‚ðŒ®‚É•Ï‚¦‚é
 					wire->ChangeToKey();
+					DeleteGO(this);
 				}
 				return true;
 			}

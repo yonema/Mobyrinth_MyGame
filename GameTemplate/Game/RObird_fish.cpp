@@ -64,6 +64,8 @@ void RObird_fish::QuerySub()
 					SetBothModelActiveFlag(false);
 					//もう一つの裏表のモデルを有効化する
 					m_otherModelRender[GetFrontOrBack()]->Activate();
+					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
+					m_flagOverlap = false;
 				}
 				//trueを戻す
 				return true;
@@ -83,6 +85,8 @@ void RObird_fish::QuerySub()
 					SetBothModelActiveFlag(false);
 					//もう一つの裏表のモデルを有効化する
 					m_otherModelRender[GetFrontOrBack()]->Activate();
+					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
+					m_flagOverlap = false;
 				}
 				//trueを戻す
 				return true;
