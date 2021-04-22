@@ -31,12 +31,21 @@ bool OOwall::StartSub()
 
 	GetOBB().SetTag(COBB::enWall);
 
+	//最初に入れていおく稼働、停止オブジェクトを
+	//停止で生成する
+	m_pRun_stop = NewGO<ROrunning_stop>(0);
+	m_pRun_stop->SetPosition(m_position);
+	m_pRun_stop->SetFrontOrBack(CReversibleObject::enBack);	
+
 	return true;
 }
 
 //アップデート関数
 void OOwall::UpdateSub()
 {
+	if (m_firstUpdateFlag)
+		FirstUpdate();
+
 	//稼働中か？
 	if (m_moveFlag)
 	{
@@ -75,4 +84,22 @@ void OOwall::UpdateSub()
 	}
 
 	return;
+}
+
+/// <summary>
+/// 一回目のアップデートでだけ呼ばれる関数
+/// </summary>
+void OOwall::FirstUpdate()
+{
+	//稼働、停止オブジェクトがクエリすると、
+	//m_pRun_stopの中身のオブジェクトを消してしまうから、
+	//いったんローカル変数のポインタに避難させておいて
+	//m_pRun_stopにはnullptrを入れておく
+	ROrunning_stop* pRun_stop = m_pRun_stop;
+	m_pRun_stop = nullptr;
+	//クエリをして壁を探す
+	pRun_stop->QuerySub();
+
+	//一回目のアップデートの終了
+	m_firstUpdateFlag = false;
 }

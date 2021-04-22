@@ -18,6 +18,17 @@ public:		//自動で呼ばれるメンバ関数
 
 	void UpdateSub()override final;	//アップデート関数
 
+public:
+
+	/// <summary>
+	/// 壁のポインタを設定する
+	/// </summary>
+	/// <param name="wall">壁のポインタ</param>
+	void SetWall(OOwall* wall)
+	{
+		m_pWall = wall;
+	}
+
 private:	//データメンバ
 	OOwall* m_pWall = nullptr;		//壁のポインタ
 };
