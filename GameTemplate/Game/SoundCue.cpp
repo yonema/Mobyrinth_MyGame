@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "SoundCue.h"
 
+float CSoundCue::m_BGMVolume = 1.0f;					//BGMのボリューム
+float CSoundCue::m_SEVolume = 1.0f;						//SEのボリューム
+
 //デストラクタ
 CSoundCue::~CSoundCue()
 {
@@ -73,6 +76,8 @@ void CSoundCue::PlayLoop()
 		m_loopSoundSource = NewGO<CSoundSource>(0);
 		m_loopSoundSource->Init(m_filePath, m_is3DSound);
 		m_loopSoundSource->Play(true);
+		float vol = m_volume * GetTypeVolume();
+		SetVolume(vol);
 	}
 }
 
@@ -84,10 +89,27 @@ void CSoundCue::PlayOneShot()
 	//重くならないぜ！
 	CSoundSource* ss = NewGO<CSoundSource>(0);
 	ss->Init(m_filePath, m_is3DSound);
-	ss->SetVolume(m_volume);	//OSの場合はここでボリュームを設定する
+	float vol = m_volume * GetTypeVolume();
+	ss->SetVolume(vol);	//OSの場合はここでボリュームを設定する
 	ss->Play(false);
 }
 
+//タイプ別のボリュームを取得
+float CSoundCue::GetTypeVolume()
+{
+	float typeVolume = 1.0f;
+	switch (m_soundType)
+	{
+	case enBGM:
+		typeVolume = m_BGMVolume;
+		break;
+	case enSE:
+		typeVolume = m_SEVolume;
+		break;
+	}
+
+	return typeVolume;
+}
 
 /// <summary>
 /// ボリュームを設定
@@ -105,7 +127,8 @@ void CSoundCue::SetVolume(const float volume)
 		return;
 
 	//ループ再生用のサウンドソースのボリュームを設定する
-	m_loopSoundSource->SetVolume(m_volume);
+	float vol = m_volume * GetTypeVolume();
+	m_loopSoundSource->SetVolume(vol);
 }
 
 /// <summary>
