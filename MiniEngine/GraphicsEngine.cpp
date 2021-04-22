@@ -598,13 +598,13 @@ void GraphicsEngine::EndRender()
 	//コマンドを実行。
 	ID3D12CommandList* ppCommandLists[] = { m_commandList };
 	m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-#ifdef SAMPE_16_04
+
 	// Present the frame.
-	m_swapChain->Present(0, 0);
-#else
-	// Present the frame.
-	m_swapChain->Present(1, 0);
-#endif
+	if (m_refreshRate >= 100)
+		m_swapChain->Present(2, 0);
+	else
+		m_swapChain->Present(1, 0);
+
 	m_directXTKGfxMemroy->GarbageCollect();
 	//描画完了待ち。
 	WaitDraw();

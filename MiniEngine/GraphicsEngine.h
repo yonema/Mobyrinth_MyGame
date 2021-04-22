@@ -334,6 +334,7 @@ private:	//データメンバ
 	CSceneChange m_sceneChange;			//場面転換
 	//メインレンダリングターゲットの絵をフレームバッファにコピーするためのスプライト
 	Sprite m_copyToFrameBufferSprite;
+	int m_refreshRate = 59;
 public:		//メンバ関数
 	/// <summary>
 	/// メインレンダリングターゲットの取得。
@@ -373,6 +374,10 @@ public:		//メンバ関数
 	/// </summary>
 	void CopyToFrameBuffer();
 
+	void SetRefreshRate(const int rate)
+	{
+		m_refreshRate = rate;
+	};
 	
 
 private:	//privateなメンバ関数
