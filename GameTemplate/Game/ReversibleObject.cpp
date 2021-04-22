@@ -473,6 +473,7 @@ void CReversibleObject::Query()
 void CReversibleObject::CheckObjectsOverlap()
 {
 	if (m_flagOverlap == false) {
+		m_objectState = enCheckPlayer;
 		return;
 	}
 
@@ -512,8 +513,9 @@ void CReversibleObject::CheckObjectsOverlap()
 
 		return;
 	}
-
-	m_objectState = enCheckPlayer;
+	else {
+		m_objectState = enCheckPlayer;
+	}
 }
 
 

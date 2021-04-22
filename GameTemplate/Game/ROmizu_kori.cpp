@@ -40,10 +40,47 @@ void ROmizu_kori::QuerySub()
 				return true;
 			}
 		);
+		//反転オブジェクトの「火」をクエリ
+		QueryLOs<ROmizu_kori>(enFire, [&](ROmizu_kori* Fire) -> bool
+			{
+				//自身と「火」が衝突したら
+				if (IsHitObject(*this, *Fire))
+				{
+					if (m_actionFlag) {
+						//相手を破棄する。
+						DeleteGO(Fire);
+						//自身は破棄する
+						DeleteGO(this);
+						//行動できなくする
+						m_actionFlag = false;
+					}
+				}
+				//trueを戻す
+				return true;
+			}
+		);
 	}
 	//自身が「火」の時
 	else if (GetObjectType() == enFire)
 	{
-
+		//反転オブジェクトの「水」をクエリ
+		QueryLOs<ROmizu_kori>(enWater, [&](ROmizu_kori* Water) -> bool
+			{
+				//自身と「水」が衝突したら
+				if (IsHitObject(*this, *Water))
+				{
+					if (m_actionFlag) {
+						//相手を破棄する。
+						DeleteGO(Water);
+						//自身は破棄する
+						DeleteGO(this);
+						//行動できなくする
+						m_actionFlag = false;
+					}
+				}
+				//trueを戻す
+				return true;
+			}
+		);
 	}
 }

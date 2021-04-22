@@ -17,6 +17,7 @@ public:		//自動で呼ばれるメンバ関数
 	void QuerySub()override final;
 
 private:	//データメンバ
-
+	//一度に複数のオブジェクトを破棄することを防ぐためのフラグ
+	bool m_actionFlag = true;	//行動できるか？
 };
 

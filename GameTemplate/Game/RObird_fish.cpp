@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "RObird_fish.h"
+#include "OObigFire.h"
+#include "ROmizu_kori.h"
 
 //スタート関数
 bool RObird_fish::StartSub()
@@ -71,6 +73,23 @@ void RObird_fish::QuerySub()
 				return true;
 			}
 		);
+		//反転オブジェクトの「火」をクエリ
+		QueryLOs<ROmizu_kori>(enFire, [&](ROmizu_kori* Fire) -> bool
+			{
+				//自身と「火」が衝突したら
+				if (IsHitObject(*this, *Fire))
+				{
+					//元の裏表のモデルを無効化する
+					SetBothModelActiveFlag(false);
+					//もう一つの裏表のモデルを有効化する
+					m_otherModelRender[GetFrontOrBack()]->Activate();
+					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
+					m_flagOverlap = false;
+				}
+				//trueを戻す
+				return true;
+			}
+		);
 	}
 	//自身が「魚」の時
 	else if (GetObjectType() == enFish)
@@ -80,6 +99,23 @@ void RObird_fish::QuerySub()
 			{
 				//自身と「でかい火」が衝突したら
 				if (IsHitObject(*this, *bigFire))
+				{
+					//元の裏表のモデルを無効化する
+					SetBothModelActiveFlag(false);
+					//もう一つの裏表のモデルを有効化する
+					m_otherModelRender[GetFrontOrBack()]->Activate();
+					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
+					m_flagOverlap = false;
+				}
+				//trueを戻す
+				return true;
+			}
+		);
+		//反転オブジェクトの「火」をクエリ
+		QueryLOs<ROmizu_kori>(enFire, [&](ROmizu_kori* Fire) -> bool
+			{
+				//自身と「火」が衝突したら
+				if (IsHitObject(*this, *Fire))
 				{
 					//元の裏表のモデルを無効化する
 					SetBothModelActiveFlag(false);
