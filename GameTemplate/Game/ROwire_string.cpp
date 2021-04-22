@@ -33,6 +33,8 @@ void ROwire_string::QuerySub()
 				{
 					//「鍵」を生成して自身のオブジェクトを破棄する
 					ChangeToKey();
+
+					DeleteGO(keymold);
 				}
 				return true;
 			}

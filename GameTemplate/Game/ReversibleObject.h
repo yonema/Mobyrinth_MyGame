@@ -81,9 +81,9 @@ public:		//ここのメンバ関数を主に使う
 	/// オブジェクトが重なっているかを確認する処理を動かすか確認するフラグの値を変更
 	/// </summary>
 	/// <param name="b">trueかfalseを入れる</param>
-	void SetFlagCheckOverlap(const bool b)
+	void SetFlagOverlap(const bool b)
 	{
-		m_flagCheckOverlap = b;
+		m_flagOverlap = b;
 	}
 
 
@@ -216,14 +216,15 @@ private:	//データメンバ
 	};
 	int m_playerLeftOrRight = enRight;	//キャラクターの左右の向き
 
-	bool m_checkOverlap = false;
+	bool m_checkOverlap = false; //このオブジェクトを戻らせるかのフラグ
 
 	Vector3 test = { 0.0f,0.0f,0.0f };
-
-	bool m_flagCheckOverlap = true;
 
 	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
 
 	bool m_changeObject = true;
+
+protected:
+	bool m_flagOverlap = true; //このオブジェクトが重なっているかを判定する処理を動かすかどうか
 };
 
