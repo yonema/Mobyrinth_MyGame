@@ -98,16 +98,60 @@ public:		//ここのメンバ関数を主に使う
 		return m_loopSoundSource->GetLoopStart();
 	}
 
+	/// <summary>
+	/// サウンドタイプを設定する
+	/// CSoundCue::enBGMかCSoundCue::enSEを引数に指定してね。
+	/// </summary>
+	/// <param name="soundType">サウンドタイプ</param>
+	void SetSoundType(const int soundType)
+	{
+		m_soundType = soundType;
+	}
 
+
+
+public:
+	//サウンドタイプ
+	enum EnSountType
+	{
+		enBGM,	//BGM
+		enSE,	//SE
+	};
 private:	//privateなメンバ関数
-	void PlayLoop();	//ループ再生の処理
-	void PlayOneShot();	//ワンショット再生の処理
+	void PlayLoop();		//ループ再生の処理
+	void PlayOneShot();		//ワンショット再生の処理
+	float GetTypeVolume();	//タイプ別のボリュームを取得
 
 private:	//データメンバ
 	wchar_t m_filePath[256];					//wavファイルパス
 	bool m_is3DSound = false;					//3Dサウンドで再生するか？
-	float m_volume = 1.0f;						//ボリューム
+	float m_volume = 1.0f;						//全体のボリューム
+	int m_soundType = enSE;						//サウンドのタイプ
 	bool m_isPaused = false;					//一時停止中か？
 	CSoundSource* m_loopSoundSource = nullptr;	//ループ再生用のサウンドソース
+
+public:		//staticなメンバ関数
+
+	/// <summary>
+	/// BGMのボリュームを設定する
+	/// </summary>
+	/// <param name="BGMVolume">BGMのボリューム</param>
+	static void SetBGMVolume(const float BGMVolume)
+	{
+		m_BGMVolume = BGMVolume;
+	}
+
+	/// <summary>
+	/// SEのボリュームを設定する
+	/// </summary>
+	/// <param name="SEVolume">SEのボリューム</param>
+	static void SetSEVolume(const float SEVolume)
+	{
+		m_SEVolume = SEVolume;
+	}
+
+private:	//staticなデータメンバ
+	static float m_BGMVolume;					//BGMのボリューム
+	static float m_SEVolume;					//SEのボリューム
 };
 

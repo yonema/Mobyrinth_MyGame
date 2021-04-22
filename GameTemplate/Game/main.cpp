@@ -43,7 +43,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CDirectionLight* gameDirectionLight = nullptr;
 	gameDirectionLight = NewGO<CDirectionLight>(0, "GameDirectionLight");
 	gameDirectionLight->SetDirection({ 1.0f,-1.0f,-1.0f });
-	gameDirectionLight->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	gameDirectionLight->SetColor({ 3.0f,3.0f,3.0f,1.0f });
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

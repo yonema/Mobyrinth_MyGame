@@ -5,7 +5,6 @@
 //スタート関数
 bool Title::Start()
 {
-
 	//背景
 	m_stageTitle = NewGO<stage_title>(0, "stage_title");
 	m_stageTitle->SetStartUpStartDirecting(false);
@@ -226,9 +225,10 @@ void Title::InitBGM()
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
 	m_bgmTitle->Init(L"Assets/sound/Title.wav");
 	//BGMをループ再生をオンで再生する。
+	m_bgmTitle->SetSoundType(CSoundCue::enBGM);
 	m_bgmTitle->Play(true);
 	m_bgmTitle->SetVolume(0.5f);
-
+	
 	m_initedBGM = true;
 }
 
