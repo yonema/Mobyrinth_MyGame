@@ -4,17 +4,6 @@
 //スタート関数
 bool CPause::Start()
 {
-	////フォントレンダラーを生成
-	//for (int i = 0; i < enPauseStateNum; i++)
-	//{
-	//	m_fontRender[i] = NewGO<CFontRender>(0);
-	//}
-
-	//フォントの左端の場所
-	//const float leftSidePos = -150.0f;
-
-
-
 	//画像の表示
 	m_level2D.Init("Assets/level2D/Pause.casl", [&](Level2DObjectData& objdata)
 		{
@@ -92,52 +81,6 @@ bool CPause::Start()
 	m_cursor->UpdateSprite();
 
 
-	////フォントレンダラーの初期化。テキストをセットする。
-	////「Pause」をテキストにセット
-	//m_fontRender[enPause]
-	//	->Init(L"Pause",
-	//	{ leftSidePos, 300.0f },
-	//	{ 1.0f,1.0f,1.0f,1.0f },
-	//	0.0f,
-	//	2.0f
-	//);
-	////「Pause」をテキストにセット
-	//m_fontRender[enContinue]
-	//	->Init(L"Continue",
-	//	{ leftSidePos, 150.0f }
-	//);	
-	//m_fontRender[enRetry]
-	//	->Init(L"Retry",
-	//	{ leftSidePos, 0.0f }
-	//);
-	//m_fontRender[enQuit]
-	//	->Init(L"Quit",
-	//	{ leftSidePos, -150.0f }
-	//);
-
-	
-	//for (int i = 0; i < enPauseStateNum; i++)
-	//{
-	//	//PostRenderFlagをtrueにして一番上に表示するようにする
-	//	m_fontRender[i]->SetPostRenderFlag(true);
-	//	//フォントを無効化して表示しないようにする。
-	//	m_fontRender[i]->Deactivate();
-	//}
-
-	
-	////フォントレンダラーの生成
-	//m_arrowFR = NewGO<CFontRender>(0);
-	////フォントレンダラーの初期化
-	////カーソルの矢印のテキストを設定
-	//m_arrowFR
-	//	->Init(L"->",
-	//		{ -200.0f,145.0f },
-	//		{ 0.0f,0.0f,0.0f,1.0f }
-	//);
-	////一番上に表示するようにする
-	//m_arrowFR->SetPostRenderFlag(true);
-	////無効化して非表示にする。
-	//m_arrowFR->Deactivate();
 
 	//buttonASEのサウンドキューを生成する
 	m_buttonASE = NewGO<CSoundCue>(0);
@@ -225,15 +168,9 @@ void CPause::UpdateOnlyPaused()
 	//選択したカーソルを決定する
 	Decision();
 
-	////カーソルの座標
-	//Vector2 arrowPos;
-	////左端の数値を入れる
-	//arrowPos.x = -200.0f;
-	////上端から、幅のおおきさ*現在のステート分下に下げる
-	//arrowPos.y = 300.0f - m_pauseState * 150.0f - 5.0f;
-	////カーソルの位置を設定する
-	//m_cursor->SetPosition({ arrowPos.x, arrowPos.y, 0.0f });
-		//カーソル用の画像の場所を設定する
+
+
+	//カーソル用の画像の場所を設定する
 	m_cursor->SetPosition({ -360.0f,
 							m_choices[m_pauseState]->GetPositionY() + 25,
 							0.0f });
