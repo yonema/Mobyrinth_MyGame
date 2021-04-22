@@ -185,6 +185,11 @@ CPause::~CPause()
 /// </summary>
 void CPause::UpdateWhenPaused()
 {
+	//ポーズ画面の操作ができない場合、この関数の処理を行わない。
+	if (m_flagOperation == false) {
+		return;
+	}
+
 	//スタートボタンを押したら
 	//（キーボードならEnterを押したら）
 	if (g_pad[0]->IsTrigger(enButtonStart))
@@ -210,6 +215,11 @@ void CPause::UpdateWhenPaused()
 /// </summary>
 void CPause::UpdateOnlyPaused()
 {
+	//ポーズ画面の操作ができない場合、この関数の処理を行わない。
+	if (m_flagOperation == false) {
+		return;
+	}
+
 	//カーソルを選択させる
 	Choose();
 	//選択したカーソルを決定する
@@ -382,6 +392,8 @@ void CPause::Decision()
 			m_retryFlag = true;
 			//buttonASEをループ再生をオフで再生する。
 			m_buttonASE->Play(false);
+			//ポーズ画面の操作をできないようにする。
+			m_flagOperation = false;
 			break;
 		case enQuit:
 			//「終了」
@@ -389,6 +401,8 @@ void CPause::Decision()
 			m_quitFlag = true;
 			//buttonASEをループ再生をオフで再生する。
 			m_buttonASE->Play(false);
+			//ポーズ画面の操作をできないようにする。
+			m_flagOperation = false;
 			break;
 		default:
 			break;

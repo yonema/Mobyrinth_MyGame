@@ -101,6 +101,7 @@ private:	//データメンバ
 	bool m_retryFlag = false;			//リトライが選択されているか？
 	bool m_quitFlag = false;			//終了が選択されているか？
 	bool m_canPause = false;			//ポーズできるか？
+	bool m_flagOperation = true;		//ポーズ画面の操作が可能か？
 
 
 
