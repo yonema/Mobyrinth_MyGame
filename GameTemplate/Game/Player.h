@@ -149,6 +149,10 @@ public://publicなメンバ関数
 		return m_leftOrRight;
 	}
 
+	/// <summary>
+	/// 自身がどのウェイポイントにいるか表すステートを戻す関数
+	/// </summary>
+	/// <returns>ウェイポイントのステート</returns>
 	const int GetWayPointState()const
 	{
 		return m_wayPointState;

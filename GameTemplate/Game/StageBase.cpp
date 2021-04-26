@@ -28,11 +28,21 @@ bool IStageBase::Start()
 	//ポーズ画面用クラスの作成
 	m_pause = NewGO<CPause>(0, "Pause");
 
-	
-
 	//空を作る
 	m_sky = NewGO<CSky>(0);
 	m_sky->SetScale(1000.0f);
+
+	//表側と裏側の反転オブジェクトの数を表示する
+	//フォントレンダラーの初期化
+	for (int i = 0; i < 2; i++)
+	{
+		m_roNumFR[i] = NewGO<CFontRender>(0);
+		m_roNumFR[i]->SetPostRenderFlag(true);
+	}
+	m_roNumFR[0]->Init(L"bandDream",
+		{ -600.0f,300.0f }, { 1.0f,0.0f,0.0f,1.0f }, 0.0f, 2.0f, { 0.5f,0.5f });
+	m_roNumFR[1]->Init(L"bandDream", 
+		{ 300.0f,300.0f }, { 0.0f,0.0f,1.0f,1.0f }, 0.0f, 2.0f, { 0.5f,0.5f });
 
 
 	return StartSub();
@@ -327,6 +337,9 @@ IStageBase::~IStageBase()
 	DeleteGO(m_loop_bgmStage1);
 	DeleteGO(m_loop_bgmStage2);
 
+	DeleteGO(m_roNumFR[0]);
+	DeleteGO(m_roNumFR[1]);
+
 	//レベルでロードしたオブジェクトを消去
 
 	////////////////////////////////////////////////////////////
@@ -397,6 +410,17 @@ void IStageBase::Update()
 			m_startDirecting->SetWipeEndFlag(true);
 		}
 	}
+
+	//テキスト用意
+	wchar_t text[256];
+	//現在の表側と裏側の反転オブジェクトの数を取得
+	const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
+	//テキストをセット
+	swprintf(text, L"front:%d", num[0]);
+	m_roNumFR[0]->SetText(text);
+	swprintf(text, L"back:%d", num[1]);
+	m_roNumFR[1]->SetText(text);
+
 
 	return;
 }

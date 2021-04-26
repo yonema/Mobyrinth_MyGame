@@ -8,6 +8,8 @@ bool CReversibleObject::PureVirtualStart()
 {
 	//モデルの回転を、現在の場所とイイ感じに合わせる
 	CheckWayPoint();
+	//自身が表側にあるか裏側にあるかを調べる
+	CheckFrontOrBackSide();
 
 	//changeSEのサウンドキューを生成する
 	m_changeSE = NewGO<CSoundCue>(0);
@@ -15,6 +17,9 @@ bool CReversibleObject::PureVirtualStart()
 	m_changeSE->Init(L"Assets/sound/change.wav");
 	//音量調節
 	m_changeSE->SetVolume(0.5f);
+
+
+
 
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
@@ -31,6 +36,8 @@ CReversibleObject::~CReversibleObject()
 	{
 		DeleteGO(m_modelRender[i]);
 	}
+
+	CLevelObjectManager::GetInstance()->RemoveReversibleObjectNum(GetFrontOrBackSide());
 
 }
 
@@ -242,6 +249,14 @@ void CReversibleObject::CheckPlayer()
 /// </summary>
 void CReversibleObject::HeldPlayer()
 {
+	//プレイヤーの左側のウェイポイントのインデックスを取得
+	int lpIndex = m_pPlayer->GetLeftPointIndex();
+
+	//自身の左側のウェイポイントのインデックスを設定する
+	SetLeftWayPointIndex(lpIndex);
+	//自身が表側にあるか裏側にあるかを調べる関数
+	CheckFrontOrBackSide();
+
 	//プレイヤーの回転を保持
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
 	//上方向ベクトルを保持
@@ -459,6 +474,11 @@ void CReversibleObject::Cancel()
 /// </summary>
 void CReversibleObject::Query()
 {
+	//ウェイポイントの場所を更新する
+	CheckWayPoint();
+	//表側か裏側かを更新する
+	CheckFrontOrBackSide();
+
 	//オーバーライドしてほしい関数QuerySub()
 	QuerySub();
 

@@ -170,11 +170,13 @@ void ILevelObjectBase::CheckWayPoint()
 		}
 	}
 
+
+	m_lpIndex = lpIndex;
 	//左のウェイポイントから右のウェイポイントへのベクトル
-	Vector3 lpToRpLen = (*wayPointPosVec)[rpIndex] - (*wayPointPosVec)[lpIndex];
+	Vector3 lpToRpLen = (*wayPointPosVec)[rpIndex] - (*wayPointPosVec)[m_lpIndex];
 
 	//左のウェイポイントからプレイヤーへのベクトル
-	Vector3 lpToPosLen = m_position - (*wayPointPosVec)[lpIndex];
+	Vector3 lpToPosLen = m_position - (*wayPointPosVec)[m_lpIndex];
 
 	//自身が左右のウェイポイントの間のどれくらいの位置にいるかで
 	//補完率を計算する
@@ -182,8 +184,43 @@ void ILevelObjectBase::CheckWayPoint()
 
 	//球面線形補完
 	//を使って回転させる
-	m_rotation.Slerp(ComplementRate, (*wayPointRotVec)[lpIndex], (*wayPointRotVec)[rpIndex]);
+	m_rotation.Slerp(ComplementRate, (*wayPointRotVec)[m_lpIndex], (*wayPointRotVec)[rpIndex]);
 
+}
+
+/// <summary>
+/// 自身が表側にあるか裏側にあるかを調べる関数
+/// </summary>
+void ILevelObjectBase::CheckFrontOrBackSide()
+{
+	//表側か裏側か
+	int nextFrontOrBackSide = 0;
+
+	//左側のウェイポイントを調べて表側か裏側か調べる
+	if ((25 <= m_lpIndex && m_lpIndex <= 31) ||
+		(0 <= m_lpIndex && m_lpIndex <= 8))
+	{
+		//表側
+		nextFrontOrBackSide = CLevelObjectManager::enFrontSide;
+	}
+	else if (9 <= m_lpIndex <= 24)
+	{
+		//裏側
+		nextFrontOrBackSide = CLevelObjectManager::enBackSide;
+	}
+
+	//初期値ではなかったら
+	if (m_frontOrBackSide != CLevelObjectManager::enNone)
+	{
+		//前の場所の反転オブジェクトの数を減算する
+		CLevelObjectManager::GetInstance()->RemoveReversibleObjectNum(m_frontOrBackSide);
+	}
+
+	//現在の表側か裏側かを更新する
+	m_frontOrBackSide = nextFrontOrBackSide;
+	//現在の場所の反転オブジェクトの数を加算する
+	CLevelObjectManager::GetInstance()->AddReversibleObjectNum(m_frontOrBackSide);
+	
 }
 
 

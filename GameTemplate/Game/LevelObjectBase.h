@@ -131,13 +131,43 @@ public:		//ここのメンバ関数を主に使う
 		m_isDead = true;
 	}
 
-
-
 	/// <summary>
 	/// 自身とプレイヤーの当たり判定
 	/// </summary>
 	/// <returns>trueが戻ってきたら当たっている</returns>
 	bool IsHitPlayer();
+
+	/// <summary>
+	/// 自身の左側のウェイポイントのインデックスを戻す
+	/// </summary>
+	/// <returns>左側のウェイポイントのインデックス</returns>
+	const int GetLeftWayPointIndex() const
+	{
+		return m_lpIndex;
+	}
+
+	/// <summary>
+	/// 自身の左側のウェイポイントのインデックスを設定する
+	/// </summary>
+	/// <param name="lpIndex">左側のウェイポイントのインデックス</param>
+	void SetLeftWayPointIndex(const int lpIndex)
+	{
+		m_lpIndex = lpIndex;
+	}
+
+	/// <summary>
+	/// 表側にあるか裏側にあるかを戻す
+	/// </summary>
+	/// <returns>表側か裏側か</returns>
+	const int GetFrontOrBackSide() const
+	{
+		return m_frontOrBackSide;
+	}
+
+	/// <summary>
+	/// 自身が表側にあるか裏側にあるかを調べる関数
+	/// </summary>
+	void CheckFrontOrBackSide();
 
 private:	//privateなメンバ関数
 
@@ -189,11 +219,14 @@ protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
 	Quaternion m_rotation = g_quatIdentity;	//回転
 	Vector3 m_scale = g_vec3One;			//拡大
 	Player* m_pPlayer = nullptr;			//プレイヤーのポインタ
+	
 
 private:	//データメンバ
 	int m_objectType = enEnpty;				//タイプ
 	bool m_isDead = false;					//死んでいるか？
 	COBB m_obb;								//OBBの当たり判定
+	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス
+	int m_frontOrBackSide = CLevelObjectManager::enNone;	//自身が表側にあるか裏側にあるか
 
 	//デバック用
 	//後で消す

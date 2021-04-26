@@ -167,5 +167,8 @@ private:	//データメンバ
 	bool m_startBGM = true;							//タイトル画面のBGM再生のフラグ
 	bool m_initedBGM = false;						//BGMが初期化済みか？
 	bool m_wipeInFlag = false;						//ワイプインする？
+
+
+	CFontRender* m_roNumFR[2];						//表側と裏側にある反転オブジェクトの数
 };
 
