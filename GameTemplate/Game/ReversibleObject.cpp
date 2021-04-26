@@ -169,21 +169,21 @@ void CReversibleObject::PureVirtualUpdate()
 	case enCancel: //持っているオブジェクトをその場に置く
 		Cancel();
 		break;
-	case enThrownSide:	//持っているオブジェクトを横に投げる関数
-		ThrownSide();
-		break;
+	//case enThrownSide: //持っているオブジェクトを横に投げる関数
+	//	ThrownSide();
+	//	break;
 	case enQuery: //クエリしてほしいタイミング
 		Query();
 		break;
 	case enOverlap: //障害オブジェクトに重なっているかの確認
 		CheckObjectsOverlap();
 		break;
-	case enOverlapThrownDown:
+	case enOverlapThrownDown: //オブジェクトが戻ってくる処理（縦）
 		OverlapThrownDown();
 		break;
-	case enOverlapThrownSide:
-		OverlapThrownSide();
-		break;
+	//case enOverlapThrownSide: //オブジェクトが戻ってくる処理（横）
+	//	OverlapThrownSide();
+	//	break;
 	default:
 		break;
 	}
@@ -275,24 +275,24 @@ void CReversibleObject::HeldPlayer()
 		m_objectAction = enCancel;
 	}
 	//オブジェクトを横に投げる処理
-	else if (g_pad[0]->IsTrigger(enButtonX))
-	{
-		if (m_objectState != enThrownSide)
-		{
-			//CalcTargetPos();
-			m_throwRot = m_pPlayer->GetFinalWPRot();
-			//投げる位置をプレイヤーの少し上に設定
-			Vector3 dir = { 0.0f,10.0f,0.0f };
-			m_throwRot.Apply(dir);
-			dir.Scale(7.0f);
-			m_position += dir;
-			//プレイヤーの左右の向きを調べる
-			m_playerLeftOrRight = m_pPlayer->GetEnLeftOrRight();
-		}
-		//ステートを横に投げる状態へ
-		m_objectState = enThrownSide;
-		m_objectAction = enThrownSide;
-	}
+	//else if (g_pad[0]->IsTrigger(enButtonX))
+	//{
+	//	if (m_objectState != enThrownSide)
+	//	{
+	//		//CalcTargetPos();
+	//		m_throwRot = m_pPlayer->GetFinalWPRot();
+	//		//投げる位置をプレイヤーの少し上に設定
+	//		Vector3 dir = { 0.0f,10.0f,0.0f };
+	//		m_throwRot.Apply(dir);
+	//		dir.Scale(7.0f);
+	//		m_position += dir;
+	//		//プレイヤーの左右の向きを調べる
+	//		m_playerLeftOrRight = m_pPlayer->GetEnLeftOrRight();
+	//	}
+	//	//ステートを横に投げる状態へ
+	//	m_objectState = enThrownSide;
+	//	m_objectAction = enThrownSide;
+	//}
 }
 
 /// <summary>
@@ -379,69 +379,69 @@ void CReversibleObject::Cancel()
 /// 持っているオブジェクトを横に投げる関数
 /// enQueryへステート（状態）を移行
 /// </summary>
-void CReversibleObject::ThrownSide()
-{
-	//投げている時のカウンターの最大値
-	const float maxThrowCounter = 0.5f;
-
-	//左方向に投げる
-	if (m_playerLeftOrRight == enLeft) {
-		//オブジェクトが横方向に移動するベクトルの作成
-		Vector3 dir = g_vec3Right;
-		m_throwRot.Apply(dir);
-		dir.Scale(700.0f);
-		m_position += dir * GameTime().GetFrameDeltaTime();
-
-		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
-		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
-		m_throwRot.Apply(dir2);
-		dir2.Scale(250.0f);
-		m_position += dir2 * GameTime().GetFrameDeltaTime();
-
-		//
-		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
-		m_rotation.Multiply(m_throwRot);
-		m_throwCounter += GameTime().GetFrameDeltaTime();
-		m_pPlayer->SetHoldObject(false);
-
-		if (m_throwCounter >= maxThrowCounter)
-		{
-			m_rotation.SetRotationDegZ(0.0f);
-			m_rotation.Multiply(m_throwRot);
-			m_objectState = enQuery;
-			m_throwCounter = 0;
-		}
-	}
-	//右方向に投げる
-	else if (m_playerLeftOrRight == enRight) {
-		//オブジェクトが横方向に移動するベクトルの作成
-		Vector3 dir = g_vec3Left;
-		m_throwRot.Apply(dir);
-		dir.Scale(700.0f);
-		m_position += dir * GameTime().GetFrameDeltaTime();
-
-		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
-		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
-		m_throwRot.Apply(dir2);
-		dir2.Scale(250.0f);
-		m_position += dir2 * GameTime().GetFrameDeltaTime();
-
-		//
-		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
-		m_rotation.Multiply(m_throwRot);
-		m_throwCounter += GameTime().GetFrameDeltaTime();
-		m_pPlayer->SetHoldObject(false);
-
-		if (m_throwCounter >= maxThrowCounter)
-		{
-			m_rotation.SetRotationDegZ(0.0f);
-			m_rotation.Multiply(m_throwRot);
-			m_objectState = enQuery;
-			m_throwCounter = 0;
-		}
-	}
-	
-}
+//void CReversibleObject::ThrownSide()
+//{
+//	//投げている時のカウンターの最大値
+//	const float maxThrowCounter = 0.5f;
+//
+//	//左方向に投げる
+//	if (m_playerLeftOrRight == enLeft) {
+//		//オブジェクトが横方向に移動するベクトルの作成
+//		Vector3 dir = g_vec3Right;
+//		m_throwRot.Apply(dir);
+//		dir.Scale(700.0f);
+//		m_position += dir * GameTime().GetFrameDeltaTime();
+//
+//		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
+//		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
+//		m_throwRot.Apply(dir2);
+//		dir2.Scale(250.0f);
+//		m_position += dir2 * GameTime().GetFrameDeltaTime();
+//
+//		//
+//		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
+//		m_rotation.Multiply(m_throwRot);
+//		m_throwCounter += GameTime().GetFrameDeltaTime();
+//		m_pPlayer->SetHoldObject(false);
+//
+//		if (m_throwCounter >= maxThrowCounter)
+//		{
+//			m_rotation.SetRotationDegZ(0.0f);
+//			m_rotation.Multiply(m_throwRot);
+//			m_objectState = enQuery;
+//			m_throwCounter = 0;
+//		}
+//	}
+//	//右方向に投げる
+//	else if (m_playerLeftOrRight == enRight) {
+//		//オブジェクトが横方向に移動するベクトルの作成
+//		Vector3 dir = g_vec3Left;
+//		m_throwRot.Apply(dir);
+//		dir.Scale(700.0f);
+//		m_position += dir * GameTime().GetFrameDeltaTime();
+//
+//		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
+//		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
+//		m_throwRot.Apply(dir2);
+//		dir2.Scale(250.0f);
+//		m_position += dir2 * GameTime().GetFrameDeltaTime();
+//
+//		//
+//		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
+//		m_rotation.Multiply(m_throwRot);
+//		m_throwCounter += GameTime().GetFrameDeltaTime();
+//		m_pPlayer->SetHoldObject(false);
+//
+//		if (m_throwCounter >= maxThrowCounter)
+//		{
+//			m_rotation.SetRotationDegZ(0.0f);
+//			m_rotation.Multiply(m_throwRot);
+//			m_objectState = enQuery;
+//			m_throwCounter = 0;
+//		}
+//	}
+//	
+//}
 
 /// <summary>
 /// オブジェクトを横に投げる際の、投げる先を計算する関数
@@ -489,24 +489,24 @@ void CReversibleObject::CheckObjectsOverlap()
 		case enCancel:
 			m_objectState = enHeldPlayer;
 			break;
-		case enThrownSide:
-			m_objectState = enOverlapThrownSide;
+		//case enThrownSide:
+		//	m_objectState = enOverlapThrownSide;
 
-			if (m_playerLeftOrRight == enLeft) {
-				m_playerLeftOrRight = enRight;
-			}
-			else if (m_playerLeftOrRight == enRight) {
-				m_playerLeftOrRight = enLeft;
-			}
+		//	if (m_playerLeftOrRight == enLeft) {
+		//		m_playerLeftOrRight = enRight;
+		//	}
+		//	else if (m_playerLeftOrRight == enRight) {
+		//		m_playerLeftOrRight = enLeft;
+		//	}
 
-			//投げる位置をプレイヤーの少し上に設定
-			{
-				Vector3 dir = { 0.0f,12.0f,0.0f };
-				m_throwRot.Apply(dir);
-				dir.Scale(7.0f);
-				m_position += dir;
-			}
-			break;
+		//	//投げる位置をプレイヤーの少し上に設定
+		//	{
+		//		Vector3 dir = { 0.0f,12.0f,0.0f };
+		//		m_throwRot.Apply(dir);
+		//		dir.Scale(7.0f);
+		//		m_position += dir;
+		//	}
+		//	break;
 		default:
 			break;
 		}
@@ -561,65 +561,65 @@ void CReversibleObject::OverlapThrownDown()
 	}
 }
 
-void CReversibleObject::OverlapThrownSide()
-{
-	//投げている時のカウンターの最大値
-	const float maxThrowCounter = 0.5f;
-
-	//左方向に投げる
-	if (m_playerLeftOrRight == enLeft) {
-		//オブジェクトが横方向に移動するベクトルの作成
-		Vector3 dir = g_vec3Right;
-		m_throwRot.Apply(dir);
-		dir.Scale(700.0f);
-		m_position += dir * GameTime().GetFrameDeltaTime();
-
-		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
-		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
-		m_throwRot.Apply(dir2);
-		dir2.Scale(450.0f);
-		m_position += dir2 * GameTime().GetFrameDeltaTime();
-
-		//
-		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
-		m_rotation.Multiply(m_throwRot);
-		m_throwCounter += GameTime().GetFrameDeltaTime();
-		m_pPlayer->SetHoldObject(false);
-
-		if (m_throwCounter >= maxThrowCounter)
-		{
-			m_rotation.SetRotationDegZ(0.0f);
-			m_rotation.Multiply(m_throwRot);
-			m_objectState = enQuery;
-			m_throwCounter = 0;
-		}
-	}
-	//右方向に投げる
-	else if (m_playerLeftOrRight == enRight) {
-		//オブジェクトが横方向に移動するベクトルの作成
-		Vector3 dir = g_vec3Left;
-		m_throwRot.Apply(dir);
-		dir.Scale(700.0f);
-		m_position += dir * GameTime().GetFrameDeltaTime();
-
-		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
-		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
-		m_throwRot.Apply(dir2);
-		dir2.Scale(450.0f);
-		m_position += dir2 * GameTime().GetFrameDeltaTime();
-
-		//
-		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
-		m_rotation.Multiply(m_throwRot);
-		m_throwCounter += GameTime().GetFrameDeltaTime();
-		m_pPlayer->SetHoldObject(false);
-
-		if (m_throwCounter >= maxThrowCounter)
-		{
-			m_rotation.SetRotationDegZ(0.0f);
-			m_rotation.Multiply(m_throwRot);
-			m_objectState = enQuery;
-			m_throwCounter = 0;
-		}
-	}
-}
+//void CReversibleObject::OverlapThrownSide()
+//{
+//	//投げている時のカウンターの最大値
+//	const float maxThrowCounter = 0.5f;
+//
+//	//左方向に投げる
+//	if (m_playerLeftOrRight == enLeft) {
+//		//オブジェクトが横方向に移動するベクトルの作成
+//		Vector3 dir = g_vec3Right;
+//		m_throwRot.Apply(dir);
+//		dir.Scale(700.0f);
+//		m_position += dir * GameTime().GetFrameDeltaTime();
+//
+//		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
+//		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
+//		m_throwRot.Apply(dir2);
+//		dir2.Scale(450.0f);
+//		m_position += dir2 * GameTime().GetFrameDeltaTime();
+//
+//		//
+//		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
+//		m_rotation.Multiply(m_throwRot);
+//		m_throwCounter += GameTime().GetFrameDeltaTime();
+//		m_pPlayer->SetHoldObject(false);
+//
+//		if (m_throwCounter >= maxThrowCounter)
+//		{
+//			m_rotation.SetRotationDegZ(0.0f);
+//			m_rotation.Multiply(m_throwRot);
+//			m_objectState = enQuery;
+//			m_throwCounter = 0;
+//		}
+//	}
+//	//右方向に投げる
+//	else if (m_playerLeftOrRight == enRight) {
+//		//オブジェクトが横方向に移動するベクトルの作成
+//		Vector3 dir = g_vec3Left;
+//		m_throwRot.Apply(dir);
+//		dir.Scale(700.0f);
+//		m_position += dir * GameTime().GetFrameDeltaTime();
+//
+//		//投げ終わったオブジェクトが地面と良い感じの距離になるように調整する。
+//		Vector3 dir2 = { 0.0f,-0.5f,0.0f };
+//		m_throwRot.Apply(dir2);
+//		dir2.Scale(450.0f);
+//		m_position += dir2 * GameTime().GetFrameDeltaTime();
+//
+//		//
+//		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
+//		m_rotation.Multiply(m_throwRot);
+//		m_throwCounter += GameTime().GetFrameDeltaTime();
+//		m_pPlayer->SetHoldObject(false);
+//
+//		if (m_throwCounter >= maxThrowCounter)
+//		{
+//			m_rotation.SetRotationDegZ(0.0f);
+//			m_rotation.Multiply(m_throwRot);
+//			m_objectState = enQuery;
+//			m_throwCounter = 0;
+//		}
+//	}
+//}

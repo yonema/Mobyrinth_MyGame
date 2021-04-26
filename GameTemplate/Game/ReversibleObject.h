@@ -141,7 +141,7 @@ private:	//privateなメンバ関数
 	/// 持っているオブジェクトを横に投げる関数
 	/// enQueryへステート（状態）を移行
 	/// </summary>
-	void ThrownSide();
+	//void ThrownSide();
 
 	/// <summary>
 	/// クエリしてほしいタイミングで呼ばれる関数
@@ -160,9 +160,15 @@ private:	//privateなメンバ関数
 	/// </summary>
 	void CheckObjectsOverlap();
 
+	/// <summary>
+	/// オブジェクトが戻ってくる処理（縦）
+	/// </summary>
 	void OverlapThrownDown();
 
-	void OverlapThrownSide();
+	/// <summary>
+	/// オブジェクトが戻ってくる処理（横）
+	/// </summary>
+	//void OverlapThrownSide();
 
 public:		//publicなデータメンバ
 
@@ -197,12 +203,12 @@ private:	//データメンバ
 		enHeldPlayer,	//プレイヤーに持たれている状態
 		enThrownDown,	//持っているオブジェクトを下に投げる関数
 		enCancel,		//持っているオブジェクトをその場に置く
-		enThrownSide,	//持っているオブジェクトを横に投げる関数
+		//enThrownSide,	//持っているオブジェクトを横に投げる関数
 		enQuery,		//クエリしてほしいタイミング
 
 		enOverlap,		//障害オブジェクトに重ねっているかの確認
-		enOverlapThrownDown,
-		enOverlapThrownSide
+		enOverlapThrownDown, //オブジェクトが戻ってくる処理（縦）
+		//enOverlapThrownSide //オブジェクトが戻ってくる処理（横）
 	};
 	int m_objectState = enCheckPlayer;			//現在のオブジェクトのステート（状態）
 	int m_objectAction = enCheckPlayer;			//オブジェクトに行ったアクションを保存
