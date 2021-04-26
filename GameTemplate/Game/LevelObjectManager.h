@@ -168,7 +168,33 @@ public:		//ここのメンバ関数を主に使う
 	/// </summary>
 	void AllDeleteLOs();
 
+	/// <summary>
+	/// 表側か裏側かの、反転オブジェクトの数を加算する
+	/// </summary>
+	/// <param name="frontOrBackSide">表側か裏側か</param>
+	void AddReversibleObjectNum(const int frontOrBackSide)
+	{
+		m_reversibleObjectNum[frontOrBackSide]++;
+	}
 
+	/// <summary>
+	/// 表側か裏側かの、反転オブジェクトの数を減算する
+	/// </summary>
+	/// <param name="frontOrBackSide">表側か裏側か</param>
+	void RemoveReversibleObjectNum(const int frontOrBackSide)
+	{
+		m_reversibleObjectNum[frontOrBackSide]--;
+	}
+
+	/// <summary>
+	/// 反転オブジェクトの、表側と裏側のそれぞれの数を戻す。
+	/// 配列の先頭アドレスを戻す
+	/// </summary>
+	/// <returns>数の配列の先頭アドレス</returns>
+	const int* GetReversibleObjectNum() const
+	{
+		return m_reversibleObjectNum;
+	}
 
 	//デバック用
 	//後で消す
@@ -176,13 +202,27 @@ public:		//ここのメンバ関数を主に使う
 	{
 		return m_levelObjects;
 	}
-private:
+
+public:	//列挙体
+	/// <summary>
+	/// 表側か裏側か
+	/// </summary>
+	enum EnFrontOrBackSide
+	{
+		enFrontSide,			//表側
+		enBackSide,				//裏側
+		enFrontOrBackSideNum,	//表と裏の数
+		enNone = -1,			//無し
+	};
+private:	//データメンバ
 	Player* m_player = nullptr;				//プレイヤーのポインタ
 	std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
 	std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
 	int m_vecSize = 0;						//ウェイポイントステートの最大の値
 
 	std::vector<ILevelObjectBase*> m_levelObjects;	//インスタンスしたレベルオブジェクトの配列
+	//反転オブジェクトの、表側と裏側のそれぞれの数
+	int m_reversibleObjectNum[enFrontOrBackSideNum] = { 0,0 };
 
 };
 
