@@ -422,6 +422,12 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
     </ClCompile>
+    <ClCompile Include="UFO.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>MyCode\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -789,6 +795,12 @@
     </ClInclude>
     <ClInclude Include="StopWatch.h">
       <Filter>MyCode\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="UFO.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>MyCode\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

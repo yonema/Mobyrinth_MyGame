@@ -1,8 +1,9 @@
 #include "stdafx.h"
-#include "PointLight.h"
+#include "SpotLight.h"
+
 
 //コンストラクタ
-CPointLight::CPointLight()
+CSpotLight::CSpotLight()
 {
 	m_result = CLightManager::GetInstance()->AddLight(this);
 	if (m_result == false)
@@ -12,38 +13,38 @@ CPointLight::CPointLight()
 }
 
 //デストラクタ
-CPointLight::~CPointLight()
+CSpotLight::~CSpotLight()
 {
 	if (m_result)
 		CLightManager::GetInstance()->RemoveLight(this);
 }
 
 /// <summary>
-/// ポイントライトの座標を設定
+/// スポットライトの座標を設定
 /// </summary>
 /// <param name="direction">ライトの座標</param>
-void CPointLight::SetPosition(const Vector3& position)
+void CSpotLight::SetPosition(const Vector3& position)
 {
 	if (m_result)
-		m_light->ptPosition = position;
+		m_light->position = position;
 }
 
 /// <summary>
-/// ポイントライトの色の設定
+/// スポットライトの色の設定
 /// </summary>
 /// <param name="color">ライトの色</param>
-void CPointLight::SetColor(const Vector4& color)
+void CSpotLight::SetColor(const Vector4& color)
 {
 	if (m_result)
-		m_light->ptColor = color;
+		m_light->color = color;
 }
 
 /// <summary>
-/// ポイントライトの影響範囲を設定
+/// スポットライトの影響範囲を設定
 /// </summary>
 /// <param name="renge">影響範囲</param>
-void CPointLight::SetRange(const float range)
+void CSpotLight::SetRange(const float range)
 {
 	if (m_result)
-		m_light->ptRange = range;
+		m_light->range = range;
 }

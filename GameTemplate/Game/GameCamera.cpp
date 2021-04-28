@@ -94,12 +94,17 @@ void GameCamera::StartDirectingCamera()
 
 void GameCamera::InGameCamera()
 {
+	//static int num = 0;
 	if (m_pPlayer)
 	{
+		//if (num >= 400)
+		//	return;
+		//else
+		//	num++;
 		//プレイヤーが見つかっていたら
 
 		//注視点から視点へのベクトルを設定する
-		m_toCameraPos = { 0.0f,0.0f,1000.0f };
+		m_toCameraPos = { 0.0f,0.0f,1200.0f };
 
 		const Quaternion qRot = (m_pPlayer->GetFinalWPRot());
 		qRot.Apply(m_toCameraPos);

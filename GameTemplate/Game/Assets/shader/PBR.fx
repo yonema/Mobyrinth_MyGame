@@ -34,6 +34,17 @@ struct SPointLight
 	float4 ptColor;			//カラー。
 };
 
+//スポットライトのパラメータ構造体
+//Light.hと同じ構造体にする
+struct SSpotLight
+{
+	float3 position;	//座標
+	float range;		//影響範囲
+	float4  color;		//カラー
+	float3 direction;	//射出方向
+	float angle;		//射出角度
+};
+
 //シャドウマップ用のパラメータ構造体
 //Light.hと同じ構造体にする
 struct ShadowParam
@@ -90,6 +101,7 @@ cbuffer LightManagerCb : register(b1)
 	int numPointLight;		//ポイントライトの数。
 	float specPow;			//スペキュラの絞り
 	int numShadow;			//シャドウマップの数
+	int numSpotLight;		//スポットライトの数
 }
 
 cbuffer DirectionLightCb : register(b2)
@@ -102,7 +114,12 @@ cbuffer PointLightCb : register(b3)
 	SPointLight pointLight[Max_PointLight];
 }
 
-cbuffer ShadowParamCb : register(b4)
+cbuffer SpotLightCb : register(b4)
+{
+	SSpotLight spotLight[Max_SpotLight];
+}
+
+cbuffer ShadowParamCb : register(b5)
 {
 	ShadowParam shadowParam[Max_ShadowMap];
 }
@@ -417,6 +434,73 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		//鏡面反射率を使って、拡散反射光と鏡面反射光を合成する。
 		//鏡面反射率が高ければ、拡散反射は弱くなる。
 		lig += (diffuse * (1.0f - specTerm) + spec) * affect;
+
+	}
+
+	//スポットライトを計算
+	for (int spLigNo = 0; spLigNo < numSpotLight; spLigNo++)
+	{
+		//距離による影響率を計算する
+		float3 distance = length(psIn.worldPos - spotLight[spLigNo].position);
+		float affect = 1.0f - 1.0f / spotLight[spLigNo].range * distance;
+
+		//影響率が0以下だったら計算する必要なし
+		if (affect <= 0.0f)
+			continue;
+
+		affect = pow(affect, 3.0f);
+
+		float3 ligDir = psIn.worldPos - spotLight[spLigNo].position;
+		ligDir = normalize(ligDir);
+
+		//ディズニーベースの拡散反射を実装する。
+
+		//フレネル反射を考慮した拡散反射を計算。
+		float diffuseFromFresnel = CalcDiffuseFromFresnel(normal, -ligDir, toEye);
+		//正規化ランバート拡散反射を求める。
+		float NdotL = saturate(dot(normal, -ligDir));
+		float3 lambertDiffuse = spotLight[spLigNo].color * NdotL;
+		//最終的な拡散反射光を計算する。
+		float3 diffuse = albedoColor * diffuseFromFresnel * lambertDiffuse;
+
+
+		//クックトランスモデルを利用した鏡面反射率を計算する。
+
+		//クックトランスモデルの鏡面反射率を計算する。
+		float3 spec = CookTrranceSpecular(-ligDir, toEye, normal, normal2, metaric) * spotLight[spLigNo].color;
+		//金属度が高ければ、鏡面反射はスペキュラカラー、低ければ白。
+		//スペキュラカラーの強さを鏡面反射率として扱う。
+		float specTerm = length(specColor.xyz);
+		spec *= lerp(float3(specTerm, specTerm, specTerm), specColor, metaric);
+
+		//鏡面反射率を使って、拡散反射光と鏡面反射光を合成する。
+		//鏡面反射率が高ければ、拡散反射は弱くなる。
+		float3 diffuseAndSpec = (diffuse * (1.0f - specTerm) + spec) * affect;
+
+		// 入射光と射出方向の角度を求める
+		// dot()を利用して内積を求める
+		float angle = dot(ligDir, spotLight[spLigNo].direction);
+
+		// dot()で求めた値をacos()に渡して角度を求める
+		angle = abs(acos(angle));
+
+		// 角度による影響率を求める
+		// 角度に比例して小さくなっていく影響率を計算する
+		affect = 1.0f - 1.0f / spotLight[spLigNo].angle * angle;
+
+		// 影響力がマイナスにならないように補正をかける
+		if (affect < 0.0f)
+		{
+			affect = 0.0f;
+		}
+
+		// 影響の仕方を指数関数的にする。
+		affect = pow(affect, 0.5f);
+		diffuseAndSpec *= affect;
+
+
+		lig += diffuseAndSpec;
+
 
 	}
 

@@ -172,8 +172,23 @@ void ILevelObjectBase::CheckWayPoint()
 
 
 	m_lpIndex = lpIndex;
+	m_rpIndex = rpIndex;
+	
+	CheckRotation();
+}
+
+void ILevelObjectBase::CheckRotation()
+{
+	//LevelObjectManagerからウェイポイントの情報を持ってくる
+	//ウェイポイントの「場所」を持ってくる
+	std::vector<Vector3>* wayPointPosVec
+		= CLevelObjectManager::GetInstance()->GetWayPointPos();
+	//ウェイポイントの「回転」を持ってくる
+	std::vector<Quaternion>* wayPointRotVec
+
+		= CLevelObjectManager::GetInstance()->GetWayPointRot();
 	//左のウェイポイントから右のウェイポイントへのベクトル
-	Vector3 lpToRpLen = (*wayPointPosVec)[rpIndex] - (*wayPointPosVec)[m_lpIndex];
+	Vector3 lpToRpLen = (*wayPointPosVec)[m_rpIndex] - (*wayPointPosVec)[m_lpIndex];
 
 	//左のウェイポイントからプレイヤーへのベクトル
 	Vector3 lpToPosLen = m_position - (*wayPointPosVec)[m_lpIndex];
@@ -184,8 +199,7 @@ void ILevelObjectBase::CheckWayPoint()
 
 	//球面線形補完
 	//を使って回転させる
-	m_rotation.Slerp(ComplementRate, (*wayPointRotVec)[m_lpIndex], (*wayPointRotVec)[rpIndex]);
-
+	m_rotation.Slerp(ComplementRate, (*wayPointRotVec)[m_lpIndex], (*wayPointRotVec)[m_rpIndex]);
 }
 
 /// <summary>

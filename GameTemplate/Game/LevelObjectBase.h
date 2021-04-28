@@ -28,6 +28,7 @@ protected:	//ここのメンバ関数を主に使う
 	/// 近くのウェイポイントを探して、イイ感じに回転する関数
 	/// </summary>
 	void CheckWayPoint();
+	void CheckRotation();
 
 public:		//ここのメンバ関数を主に使う
 	
@@ -153,6 +154,22 @@ public:		//ここのメンバ関数を主に使う
 	void SetLeftWayPointIndex(const int lpIndex)
 	{
 		m_lpIndex = lpIndex;
+		m_rpIndex = m_lpIndex - 1;
+		const int maxWayPoint = 31;
+		if (m_rpIndex < 0)
+		{
+			m_rpIndex = maxWayPoint;
+		}
+	}
+
+	/// <summary>
+	/// 自身の右側のウェイポイントのインデックスを戻す
+	/// </summary>
+	/// <returns></returns>
+	const int GetRightWayPointIndex() const
+	{
+
+		return m_rpIndex;
 	}
 
 	/// <summary>
@@ -226,6 +243,7 @@ private:	//データメンバ
 	bool m_isDead = false;					//死んでいるか？
 	COBB m_obb;								//OBBの当たり判定
 	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス
+	int m_rpIndex = 0;
 	int m_frontOrBackSide = CLevelObjectManager::enNone;	//自身が表側にあるか裏側にあるか
 
 	//デバック用

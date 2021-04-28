@@ -8,7 +8,8 @@ struct SLightParam {
 	Vector3 ambientLight;		//アンビエントライト。
 	int numPointLight;			//ポイントライトの数。
 	float specPow;				//スペキュラの絞り
-	int numShadow;	//
+	int numShadow;				//シャドウの数
+	int numSpotLight;			//スポットライトの数
 };
 
 //ディレクションライトのパラメータの構造体
@@ -25,6 +26,16 @@ struct SPointLight
 	Vector3 ptPosition;		//位置。
 	float ptRange;			//影響範囲。
 	Vector4 ptColor;		//カラー。
+};
+
+//スポットライトのパラメータ構造体
+struct SSpotLight
+{
+	Vector3 position;	//座標
+	float range;		//影響範囲
+	Vector4  color;		//カラー
+	Vector3 direction;	//射出方向
+	float angle;		//射出角度
 };
 
 //シャドウの最大数

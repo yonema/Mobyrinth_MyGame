@@ -4,6 +4,7 @@
 
 class CDirectionLight;
 class CPointLight;
+class CSpotLight;
 
 /// <summary>
 /// ライトマネージャークラス
@@ -21,8 +22,8 @@ private://privateなメンバ関数
 private://staticなデータメンバ
 	static CLightManager* m_instance;			//唯一のインスタンス。シングルトンパターン
 	static const int Max_DirectionLight = 4;	//ディレクションライトの最大数
-	static const int Max_PointLight = 4;		//ポイントライトの最大数
-	static const int Max_SpotLight = 32;		//スポットライトの最大数
+	static const int Max_PointLight = 32;		//ポイントライトの最大数
+	static const int Max_SpotLight = 4;			//スポットライトの最大数
 
 public://staicなメンバ関数
 	/// <summary>
@@ -70,6 +71,15 @@ public://staicなメンバ関数
 		return Max_PointLight;
 	}
 
+	/// <summary>
+	/// スポットライトの最大数を戻す関数
+	/// </summary>
+	/// <returns>スポットライトの最大数</returns>
+	static const int GetMax_SpotLight()
+	{
+		return Max_SpotLight;
+	}
+
 public://publidなメンバ関数
 
 	/// <summary>
@@ -93,6 +103,13 @@ public://publidなメンバ関数
 	bool AddLight(CPointLight* light);
 
 	/// <summary>
+	/// ライトを追加する関数（スポットライト）
+	/// </summary>
+	/// <param name="light">追加するライト</param>
+	/// <returns>追加できたらtrueを戻す</returns>
+	bool AddLight(CSpotLight* light);
+
+	/// <summary>
 	/// ライトを消去する関数（ディレクションライト）
 	/// </summary>
 	/// <param name="light">消去するライト</param>
@@ -103,6 +120,12 @@ public://publidなメンバ関数
 	/// </summary>
 	/// <param name="light">消去するライト</param>
 	void RemoveLight(CPointLight* light);
+
+	/// <summary>
+	/// ライトを消去する関数（スポットライト）
+	/// </summary>
+	/// <param name="light">消去するライト</param>
+	void RemoveLight(CSpotLight* light);
 
 	/// <summary>
 	/// ライトの共通パラメータの参照を戻す関数
@@ -129,6 +152,15 @@ public://publidなメンバ関数
 	SPointLight* const GetPointLigData()
 	{
 		return m_pointLightsData;
+	}
+
+	/// <summary>
+	/// スポットライト達の先頭アドレスを戻す関数
+	/// </summary>
+	/// <returns>スポットライト達の先頭アドレス</returns>
+	SSpotLight* const GetSpotLigData()
+	{
+		return m_spotLightsData;
 	}
 
 	/// <summary>
@@ -160,17 +192,28 @@ private://データメンバ
 
 	static SLightParam m_lightParam;	//ライトの共通パラメータ
 
+	//////////ディレクションライト//////////
 	//それぞれのディレクションライトのデータ
 	SDirectionLight m_directionLightsData[Max_DirectionLight];
 
 	//それぞれのディレクションライトの参照
 	CDirectionLight* m_directionLights[Max_DirectionLight] = { nullptr };
 
+
+	//////////ポイントライト//////////
 	//それぞれのポイントライトのデータ
-	SPointLight m_pointLightsData[Max_SpotLight];
+	SPointLight m_pointLightsData[Max_PointLight];
 
 	//それぞれのポイントライトの参照
-	CPointLight* m_pointLights[Max_SpotLight] = { nullptr };
+	CPointLight* m_pointLights[Max_PointLight] = { nullptr };
+
+
+	//////////スポットライト//////////
+	//それぞれのスポットライトのデータ
+	SSpotLight m_spotLightsData[Max_SpotLight];
+
+	//それぞれのスポットライトの参照
+	CSpotLight* m_spotLights[Max_SpotLight] = { nullptr };
 
 };
 

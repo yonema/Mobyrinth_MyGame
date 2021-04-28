@@ -54,6 +54,8 @@ public:
 		int expandDataSize2 = 0,
 		void* expandData3 = nullptr,
 		int expandDataSize3 = 0,
+		void* expandData4 = nullptr,
+		int expandDataSize4 = 0,
 		void* shadowParamData = nullptr,
 		int shadowParamDataSize = 0
 	);
@@ -157,6 +159,8 @@ private:
 	void* m_expandData2 = nullptr;						//ユーザー拡張データ。
 	ConstantBuffer m_expandConstantBuffer3;					//ユーザー拡張用の定数バッファ
 	void* m_expandData3 = nullptr;						//ユーザー拡張データ。
+	ConstantBuffer m_expandConstantBuffer4;					//ユーザー拡張用の定数バッファ
+	void* m_expandData4 = nullptr;						//ユーザー拡張データ。
 
 	ConstantBuffer m_shadowConstantBuffer;				//シャドウ用定数バッファ
 	void* m_shadowParamData = nullptr;					//シャドウ用データ

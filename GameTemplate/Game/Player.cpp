@@ -88,6 +88,8 @@ bool Player::Start()
 	//m_dbgStunMoveModel = NewGO<CModelRender>(0);
 	//m_dbgStunMoveModel->Init("Assets/modelData/dbgBox.tkm");
 	//m_dbgStunMoveModel->SetPosition(g_vec3Zero);
+
+
 	//デバック用ここまで
 
 	return true;
@@ -437,9 +439,9 @@ void Player::StunMove()
 		float hitOBBDotRight = Dot(playerToHitOBB, rightVec);
 		//左に飛ばされるか、右に飛ばされるか
 		int leftOrRight = enLeft;
-		if (hitOBBDotRight <= 0.0f)
+		if (hitOBBDotRight >= 0.0f)
 		{
-			//内積が負だったら
+			//内積が正だったら
 			//反対側にする
 			leftOrRight = enRight;
 		}
@@ -836,6 +838,8 @@ void Player::GameMove()
 	else
 		//スタン中のステージの上に乗る処理
 		StunGetOnStage();
+
+
 
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);

@@ -2,6 +2,7 @@
 #include "LightManager.h"
 #include "DirectionLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 
 //staticなデータメンバの初期化
 CLightManager* CLightManager::m_instance = nullptr;
@@ -111,6 +112,41 @@ bool CLightManager::AddLight(CPointLight* light)
 }
 
 /// <summary>
+/// ライトを追加する関数（スポットライト）
+/// </summary>
+/// <param name="light">追加するライト</param>
+/// <returns>追加できたらtrueを戻す</returns>
+bool CLightManager::AddLight(CSpotLight* light)
+{
+
+	//スポットライトの数がMAXより多かったら作られない
+	if (m_lightParam.numSpotLight >= Max_SpotLight) {
+		return false;
+	}
+
+	//Managerにスポットライトの参照を渡す
+	m_spotLights[m_lightParam.numSpotLight]
+		= light;
+	//Managerのスポットライトの初期値を設定
+	m_spotLightsData[m_lightParam.numSpotLight].position
+		= { 0.0f,0.0f,0.0f };
+	m_spotLightsData[m_lightParam.numSpotLight].color
+		= { 0.0f,0.0f,0.0f,1.0f };
+	m_spotLightsData[m_lightParam.numSpotLight].range = 300.0f;
+	m_spotLightsData[m_lightParam.numSpotLight].direction = g_vec3Down;
+	m_spotLightsData[m_lightParam.numSpotLight].angle = 45.0f;
+	//LightにManagerのスポットライトの参照を渡す
+	light->SetRawData(&m_spotLightsData[m_lightParam.numSpotLight]);
+	//LightにManagerの管理番号を渡す。
+	light->SetControlNumber(m_lightParam.numSpotLight);
+
+	//現在のライトの数を増やす
+	m_lightParam.numSpotLight++;
+
+	return true;
+}
+
+/// <summary>
 /// ライトを消去する関数（ディレクションライト）
 /// </summary>
 /// <param name="light">消去するライト</param>
@@ -168,5 +204,35 @@ void CLightManager::RemoveLight(CPointLight* light)
 
 	m_lightParam.numPointLight--;
 
+}
+
+
+/// <summary>
+/// ライトを消去する関数（スポットライト）
+/// </summary>
+/// <param name="light">消去するライト</param>
+void CLightManager::RemoveLight(CSpotLight* light)
+{
+	//消すライトの管理番号を取得
+	const int targetLigNumBuff = light->GetControlNumver();
+
+	//iの一つ先がスポットライトの数より小さいとき継続
+	for (int i = targetLigNumBuff; i + 1 < m_lightParam.numSpotLight; i++)
+	{
+		//Managerの、スポットライトを交換
+		//交換相手は、Lightの管理番号とその一つ上の番号
+		std::swap<SSpotLight>(m_spotLightsData[i], m_spotLightsData[i + 1]);
+		//Managerの、Lightの参照を交換
+		std::swap<CSpotLight*>(m_spotLights[i], m_spotLights[i + 1]);
+	}
+
+	//iの一つ先がスポットライトの数より小さいとき継続
+	for (int i = targetLigNumBuff; i + 1 < m_lightParam.numSpotLight; i++)
+	{
+		//Lightのスポットライトの構造体の
+		m_spotLights[i]->SetRawData(&m_spotLightsData[i]);
+	}
+
+	m_lightParam.numSpotLight--;
 
 }
