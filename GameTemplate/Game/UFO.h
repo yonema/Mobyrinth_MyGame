@@ -2,6 +2,7 @@
 #include "LevelObjectBase.h"
 #include "ModelRender.h"
 #include "SpotLight.h"
+#include "UFOLandingPoint.h"
 
 /// <summary>
 /// UFOクラス
@@ -20,6 +21,8 @@ private:	//privateなメンバ関数
 	void Search();		//プレイヤーを探す処理
 	void Capture();		//プレイヤーを見つけた時の処理
 	void Transport();	//プレイヤーを運ぶ処理
+	void Landing();
+	void Leave();
 
 	void Move();		//移動処理
 	void GetOnStage();	//メビウスの輪のステージにイイ感じに合わせる処理
@@ -32,18 +35,29 @@ private:	//列挙型
 		enSearch,		//プレイヤーを探す
 		enCapture,		//プレイヤーを見つけた
 		enTransport,	//プレイヤーを運ぶ
+		enLanding,		//着地
+		enLeave,
+	};
+
+	enum EnLeftOrRight
+	{
+		enLeft,
+		enRight,
 	};
 private:	//データメンバ
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
 	Vector3 m_onWayPosition = g_vec3Zero;	//ウェイポイント上の座標
 	Mobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
 	Vector3 m_upVec = g_vec3Up;				//アップベクトル
+	bool m_leftOrRight = enRight;
 	float m_defaultSpeed = 1300.0f;			//デフォルトの移動速度
 	float m_moveSpeed = m_defaultSpeed;		//移動速度
 	int m_updateState = enSearch;			//アップデートのステート（状態）
 	int m_searchFlag = true;				//プレイヤーを探しているか？
 	float m_timer = 0.0f;					//タイマー
 	CSpotLight* m_spotLight = nullptr;		//スポットライト
+	CUFOLandingPoint* m_ufoLandingPoint = nullptr;	//着地点
+	bool m_getOnStageFlag = true;
 
 	//デバック用
 private:

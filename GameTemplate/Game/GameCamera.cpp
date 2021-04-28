@@ -94,13 +94,8 @@ void GameCamera::StartDirectingCamera()
 
 void GameCamera::InGameCamera()
 {
-	//static int num = 0;
 	if (m_pPlayer)
 	{
-		//if (num >= 400)
-		//	return;
-		//else
-		//	num++;
 		//プレイヤーが見つかっていたら
 
 		//注視点から視点へのベクトルを設定する

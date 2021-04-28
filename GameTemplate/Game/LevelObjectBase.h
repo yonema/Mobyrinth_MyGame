@@ -200,7 +200,7 @@ public:		//publicなデータメンバ
 	/// </summary>
 	enum EnObjectType
 	{
-		enEnpty,			//「空っぽ」
+		enEmpty,			//「空っぽ」
 
 		//反転オブジェクト
 		enWater,			//「針金」
@@ -239,7 +239,7 @@ protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
 	
 
 private:	//データメンバ
-	int m_objectType = enEnpty;				//タイプ
+	int m_objectType = enEmpty;				//タイプ
 	bool m_isDead = false;					//死んでいるか？
 	COBB m_obb;								//OBBの当たり判定
 	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス

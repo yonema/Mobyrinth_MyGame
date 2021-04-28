@@ -30,6 +30,11 @@ bool CUFO::PureVirtualStart()
 	up.Scale(-1.0f);
 	m_spotLight->SetDirection(g_vec3Down);
 
+	//UFOの着地点の生成と初期化
+	m_ufoLandingPoint = NewGO<CUFOLandingPoint>(0);
+	m_ufoLandingPoint->SetPosition(m_position);
+
+
 	//CModelRender* model = NewGO<CModelRender>(0);
 	//model->Init("Assets/modelData/fire.tkm");
 	//model->SetPosition({ 0.0f,1600.0f,0.0f });
@@ -70,6 +75,9 @@ CUFO::~CUFO()
 	//スポットライトの破棄
 	DeleteGO(m_spotLight);
 
+	//UFOの着地点の破棄
+	DeleteGO(m_ufoLandingPoint);
+
 	//デバック用
 	//後で消す
 	for (int i = 0; i < m_vertNum; i++)
@@ -91,6 +99,7 @@ void CUFO::PureVirtualUpdate()
 	//回転を現在の座標に合わせてた回転にする
 	CheckRotation();
 	//アップベクトルを回転に合わせる
+	m_upVec = g_vec3Up;
 	m_rotation.Apply(m_upVec);
 	m_upVec.Normalize();
 	//ステージの上に乗る
@@ -111,10 +120,18 @@ void CUFO::PureVirtualUpdate()
 		//プレイヤーを運ぶ処理
 		Transport();
 		break;
+	case enLanding:
+		Landing();
+		break;
+	case enLeave:
+		Leave();
+		break;
 	}
 
 	//ライトの更新
-	m_spotLight->SetPosition(m_position);
+	Vector3 upVec = m_upVec;
+	upVec.Scale(300.0f);
+	m_spotLight->SetPosition(m_position + upVec);
 	Vector3 downVec = m_upVec;
 	downVec.Scale(-1.0f);
 	m_spotLight->SetDirection(downVec);
@@ -142,7 +159,7 @@ void CUFO::Search()
 	m_timer += GameTime().GetFrameDeltaTime();
 
 	//捜索フラグの切り替えと時間
-	const int switchingTime = 3.0f;
+	const int switchingTime = 1.5f;
 
 	//切り替え時間になったら
 	if (m_timer >= switchingTime)
@@ -153,9 +170,10 @@ void CUFO::Search()
 		m_timer = 0.0f;
 	}
 
-	//捜索中なら
+	
 	if (m_searchFlag)
 	{
+		//捜索中なら
 		m_modelRender->SetEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
 		m_spotLight->SetColor({ 300.0f,300.0f,0.0f,1.0f });
 		//プレイヤーを衝突しているか？
@@ -164,11 +182,17 @@ void CUFO::Search()
 			//プレイヤーを見つけた
 			m_modelRender->SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
 			m_spotLight->SetColor({ 600.0f,0.0f,0.0f,1.0f });
+			m_updateState = enCapture;
+			m_pPlayer->SetCapturedUFOFlag(true);
+			m_pPlayer->SetRotation(m_rotation);
+			m_moveSpeed = 0.0f;
+			m_timer = 0.0f;
 
 		}
 	}
 	else
 	{
+		//捜索中ではない
 		m_modelRender->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		m_spotLight->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 
@@ -178,37 +202,188 @@ void CUFO::Search()
 //プレイヤーを見つけた時の処理
 void CUFO::Capture()
 {
+	//アップベクトルを得る
+	Vector3 upVec = m_upVec;
+	//イイ感じに伸ばす
+	const float upVecLen = 500.0f;
+	upVec.Scale(upVecLen);
+
+	//UFOに捕まる位置
+	Vector3 capturePos = m_position + upVec;
+
+	//プレイヤーに加えるベクトル
+	Vector3 addVec = capturePos - m_pPlayer->GetPosition();
+	//デルタタイムを掛けておく
+	addVec.Scale(GameTime().GetFrameDeltaTime());
+	//プレイヤーの座標を設定
+	m_pPlayer->SetPosition(m_pPlayer->GetPosition() + addVec);
+	m_pPlayer->SetRotation(m_rotation);
+	//タイマーの切り替え時間
+	const float switchingTimer = 2.0f;
+	if (m_timer >= 2.0f)
+	{
+		//タイマーが切り替え時間になったら
+		//タイマーを初期化して
+		m_timer = 0.0f;
+		//プレイヤーを運ぶ処理へ
+		m_updateState = enTransport;
+	}
+	else
+		//まだならタイマーを進める
+		m_timer += GameTime().GetFrameDeltaTime();
 
 }
 
 //プレイヤーを運ぶ処理
 void CUFO::Transport()
-
 {
+	if (m_timer == 0.0f)
+	{
+		int reverseLp = GetLeftWayPointIndex() + 16;
+		if (reverseLp > 31)
+			reverseLp -= 32;
+
+		if (m_ufoLandingPoint->GetLeftWayPointIndex() <= reverseLp)
+			m_leftOrRight = enLeft;
+		else
+			m_leftOrRight = enRight;
+
+		m_moveSpeed = m_defaultSpeed;
+	}
+
+	//アップベクトルを得る
+	Vector3 upVec = m_upVec;
+	//イイ感じに伸ばす
+	const float upVecLen = 500.0f;
+	upVec.Scale(upVecLen);
+
+	//UFOに捕まる位置
+	Vector3 capturePos = m_position + upVec;
+
+	if (IsHitObject(*this, *m_ufoLandingPoint))
+	{
+		m_updateState = enLanding;
+		m_timer = 0.0f;
+	}
+	else
+		m_timer += GameTime().GetFrameDeltaTime();
+
+	m_pPlayer->SetPosition(capturePos);
+	m_pPlayer->SetRotation(m_rotation);
+	m_pPlayer->SetLeftPointIndex(GetLeftWayPointIndex());
+	m_pPlayer->SetRightPointIndex(GetRightWayPointIndex());
+}
+
+void CUFO::Landing()
+{
+	//m_timer += GameTime().GetFrameDeltaTime();
+	const float goDownTimer = 2.0f;
+	const float goUpTimer = goDownTimer * 2.0f;
+
+	//アップベクトルを得る
+	Vector3 upVec = m_upVec;
+	//イイ感じに伸ばす
+	const float upVecLen = 500.0f;
+	upVec.Scale(upVecLen);
+	//UFOに捕まる位置
+	Vector3 capturePos = m_position + upVec;
+
+	Vector3 dist = (m_ufoLandingPoint->GetPosition() + upVec);
+	dist -= capturePos;
+	float distLen = dist.Length();
+	const float maxDistLen = 1000.0f;
+	const float minDistlen = 100.0f;
+	if (distLen > minDistlen && m_timer == 0.0f)
+	{
+		m_moveSpeed = m_defaultSpeed;
+		m_moveSpeed *= distLen / maxDistLen;
+	}
+	else 
+	{
+		m_timer += GameTime().GetFrameDeltaTime();
+		if (m_timer <= goDownTimer)
+		{
+			m_getOnStageFlag = false;
+			m_moveSpeed = 0.0f;
+			Vector3 goDownVec = m_upVec;
+			goDownVec.Scale(-200.0f);
+			goDownVec.Scale(GameTime().GetFrameDeltaTime());
+			m_position += goDownVec;
+		}
+		else if (m_timer <= goUpTimer)
+		{
+			Vector3 goUpVec = m_upVec;
+			goUpVec.Scale(200.0f);
+			goUpVec.Scale(GameTime().GetFrameDeltaTime());
+			m_position += goUpVec;
+		}
+		else
+		{
+			m_updateState = enLeave;
+		}
+	}
+
+	if (m_timer <= goDownTimer)
+	{
+		m_pPlayer->SetPosition(capturePos);
+		m_pPlayer->SetRotation(m_rotation);
+		m_pPlayer->SetLeftPointIndex(GetLeftWayPointIndex());
+		m_pPlayer->SetRightPointIndex(GetRightWayPointIndex());
+	}
+	else if (m_updateState == enLeave)
+	{
+		m_timer = 0.0f;
+		m_onWayPosition = m_position;
+		SetLeftWayPointIndex(m_ufoLandingPoint->GetLeftWayPointIndex());
+		m_getOnStageFlag = true;
+
+	}
+
+}
+
+void CUFO::Leave()
+{
+	m_leftOrRight = enRight;
+	m_moveSpeed = m_defaultSpeed;
+	const float switchingTime = 2.0f;
+	if (m_timer >= switchingTime)
+	{
+		m_updateState = enSearch;
+		m_timer = 0.0f;
+		m_pPlayer->SetCapturedUFOFlag(false);
+	}
+	else
+		m_timer += GameTime().GetFrameDeltaTime();
 
 }
 
 //移動処理
 void CUFO::Move()
 {
-	//右に動く
-	bool right = true;
 	//次のウェイポイント
 	int nextIndex = GetRightWayPointIndex();
 	//最終的な移動速度	//移動速度にデルタタイムを掛ける
 	float finalMoveSpeed = m_moveSpeed * GameTime().GetFrameDeltaTime();
 	//ウェイポイント上の次の座標を計算する
 	m_onWayPosition = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
-	(GetRightWayPointIndex(), m_onWayPosition, finalMoveSpeed, right, &nextIndex);
+	(GetRightWayPointIndex(), m_onWayPosition, finalMoveSpeed, m_leftOrRight, &nextIndex);
 
-	//右に動いたので、次のウェイポイントを加算する
-	nextIndex++;
 	//ウェイポイントの最大数
 	const int maxWayPointNum = 31;
-	//ウェイポイントの最大数より大きかったら
-	if (nextIndex > maxWayPointNum)
-		//一周して0にする
-		nextIndex = 0;
+	if (m_leftOrRight == enLeft)
+	{
+		//左に動いたら、特に何もいじらない
+	}
+	else
+	{
+		//右に動いたので、次のウェイポイントを加算する
+
+		nextIndex++;
+		//ウェイポイントの最大数より大きかったら
+		if (nextIndex > maxWayPointNum)
+			//一周して0にする
+			nextIndex = 0;
+	}
 	//自身の左側のウェイポイントを更新する
 	SetLeftWayPointIndex(nextIndex);
 }
@@ -216,6 +391,8 @@ void CUFO::Move()
 //メビウスの輪のステージにイイ感じに合わせる処理
 void CUFO::GetOnStage()
 {
+	if (!m_getOnStageFlag)
+		return;
 	//Upベクトルをイイ感じに伸ばす。
 	//伸ばした先がレイの始点となる
 	Vector3 upVec = g_vec3Up;

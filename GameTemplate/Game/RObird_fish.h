@@ -20,6 +20,6 @@ private:	//データメンバ
 	/// もう一つの裏表のオブジェクトのモデルレンダラー
 	/// </summary>
 	CModelRender* m_otherModelRender[enFrontAndBackNum] = { nullptr };
-	int m_reversibleType[enFrontAndBackNum] = { enEnpty };				//オブジェクトのタイプ
+	int m_reversibleType[enFrontAndBackNum] = { enEmpty };				//オブジェクトのタイプ
 };
 

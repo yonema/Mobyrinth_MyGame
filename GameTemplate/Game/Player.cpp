@@ -804,12 +804,12 @@ void Player::GameMove()
 	if (m_operationFlag == false) {
 		return;
 	}
-	//if (m_stunFlag)
-	//{
-	//	Stun();
-	//	return;
-	//}
 
+	if (m_capturedUFOFlag == true)
+	{
+		CapturedUFO();
+		return;
+	}
 
 	//ゲームパッドの左スティックのX軸の入力情報を取得
 	m_padLStickXF = g_pad[0]->GetLStickXF();
@@ -888,6 +888,23 @@ void Player::GameMove()
 	//	}
 	//}
 	//デバックここまで
+}
+
+void Player::CapturedUFO()
+{
+	//ウェイポイントの更新処理
+	//CheckWayPoint();
+	m_onWayPosition = m_position;
+	//モデルの回転処理
+	//Rotation();
+	//モデルの場所と回転を設定
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+	m_finalWPRot = m_rotation;
+	//OBBの場所と回転を設定
+	m_myCharaCon.SetRotation(m_rotation);
+	//ライトのデータを更新する
+	UpdateLightData();
 }
 
 

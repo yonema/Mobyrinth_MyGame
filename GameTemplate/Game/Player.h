@@ -121,6 +121,11 @@ public://publicなメンバ関数
 		return m_lpIndex;
 	}
 
+	void SetLeftPointIndex(const int lpIndex)
+	{
+		m_lpIndex = lpIndex;
+	}
+
 	/// <summary>
 	/// 現在のプレイヤーの右側のウェイポイントの番号を得る
 	/// </summary>
@@ -128,6 +133,11 @@ public://publicなメンバ関数
 	const int GetRightPointIndex()const
 	{
 		return m_rpIndex;
+	}
+
+	void SetRightPointIndex(const int rpIndex)
+	{
+		m_rpIndex = rpIndex;
 	}
 
 	/// <summary>
@@ -156,6 +166,11 @@ public://publicなメンバ関数
 	const int GetWayPointState()const
 	{
 		return m_wayPointState;
+	}
+
+	void SetCapturedUFOFlag(const bool captured)
+	{
+		m_capturedUFOFlag = captured;
 	}
 
 	/// <summary>
@@ -228,7 +243,7 @@ private://privateなメンバ関数
 	/// </summary>
 	void SetDirectionLight();
 
-
+	void CapturedUFO();
 
 private:	//データメンバ
 
@@ -290,6 +305,8 @@ private:	//データメンバ
 	bool m_stunMoveFlag = true;					//スタン中に吹っ飛び中か？
 	float m_blinkTimer = 0.0f;					//スタン状態にモデルを点滅させるタイマー
 	COBB* m_hitOBB = nullptr;					//衝突したOBBのポインタ
+
+	bool m_capturedUFOFlag = false;				//UFOにキャプチャされているか？
 
 public://デバック用
 	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため
