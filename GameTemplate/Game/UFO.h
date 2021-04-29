@@ -3,6 +3,7 @@
 #include "ModelRender.h"
 #include "SpotLight.h"
 #include "UFOLandingPoint.h"
+#include "ReversibleObject.h"
 
 /// <summary>
 /// UFOƒNƒ‰ƒX

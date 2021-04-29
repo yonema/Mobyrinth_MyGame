@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "LightManager.h"
 #include "LevelObjectManager.h"
+#include "ReversibleObject.h"
 
 //スタート関数
 bool Player::Start()
@@ -895,6 +896,7 @@ void Player::CapturedUFO()
 	//ウェイポイントの更新処理
 	//CheckWayPoint();
 	m_onWayPosition = m_position;
+	m_myCharaCon.GetOBB().SetPosition(m_position);
 	//モデルの回転処理
 	//Rotation();
 	//モデルの場所と回転を設定

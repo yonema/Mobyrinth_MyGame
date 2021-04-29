@@ -104,6 +104,11 @@ public:		//ここのメンバ関数を主に使う
 	/// <param name="activeFlag">有効化フラグ</param>
 	void SetBothModelActiveFlag(const bool activeFlag);
 
+	void StateToCancel()
+	{
+		m_objectState = enCancel;
+	}
+
 	void SetHeldUpLen(const float heldUpLen)
 	{
 		m_heldUpLen = heldUpLen;

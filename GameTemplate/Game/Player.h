@@ -8,7 +8,8 @@
 #include "SoundCue.h"
 #include "GameTime.h"
 
-class ILevelObjectBase;
+class CReversibleObject;
+
 
 
 /// <summary>
@@ -78,9 +79,13 @@ public://publicなメンバ関数
 	/// 持っている場合はtrueを渡す
 	/// </summary>
 	/// <param name="holdFlag">オブジェクトを持っているか？</param>
-	void SetHoldObject(const bool holdFlag)
+	void SetHoldObject(const bool holdFlag, CReversibleObject* reversibeObject = nullptr)
 	{
 		m_holdObject = holdFlag;
+		if (m_holdObject)
+			m_reversibleObject = reversibeObject;
+		else
+			m_reversibleObject = nullptr;
 	}
 
 	/// <summary>
@@ -91,6 +96,11 @@ public://publicなメンバ関数
 	const bool GetHoldObject()const
 	{
 		return m_holdObject;
+	}
+
+	CReversibleObject* GetReversibleObject()
+	{
+		return m_reversibleObject;
 	}
 
 	void SetOperationFlag(const bool b)
@@ -166,6 +176,11 @@ public://publicなメンバ関数
 	const int GetWayPointState()const
 	{
 		return m_wayPointState;
+	}
+
+	void SetWayPointState(const int wayPointState)
+	{
+		m_wayPointState = wayPointState;
 	}
 
 	void SetCapturedUFOFlag(const bool captured)
@@ -264,6 +279,7 @@ private:	//データメンバ
 	Quaternion m_rotation = g_quatIdentity;			//キャラクターの回転
 	Vector3 m_upVec = g_vec3Up;						//プレイヤーのUpベクトル
 	bool m_holdObject = false;						//オブジェクトを持っているか？
+	CReversibleObject* m_reversibleObject = nullptr;
 	
 	/// <summary>
 	/// プレイヤーが右を向いているか左を向いているか

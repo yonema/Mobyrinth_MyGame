@@ -159,7 +159,7 @@ void CUFO::Search()
 	m_timer += GameTime().GetFrameDeltaTime();
 
 	//捜索フラグの切り替えと時間
-	const int switchingTime = 1.5f;
+	const float switchingTime = 1.5f;
 
 	//切り替え時間になったら
 	if (m_timer >= switchingTime)
@@ -185,6 +185,8 @@ void CUFO::Search()
 			m_updateState = enCapture;
 			m_pPlayer->SetCapturedUFOFlag(true);
 			m_pPlayer->SetRotation(m_rotation);
+			if (m_pPlayer->GetHoldObject())
+				m_pPlayer->GetReversibleObject()->StateToCancel();
 			m_moveSpeed = 0.0f;
 			m_timer = 0.0f;
 
@@ -237,16 +239,59 @@ void CUFO::Capture()
 //プレイヤーを運ぶ処理
 void CUFO::Transport()
 {
+	//タイマーが0.0fの時に
+	//つまり最初の一回だけ呼ばれる
 	if (m_timer == 0.0f)
 	{
-		int reverseLp = GetLeftWayPointIndex() + 16;
-		if (reverseLp > 31)
-			reverseLp -= 32;
+		//ウェイポイントの最大値
+		const int maxWayPoint = 31;
 
-		if (m_ufoLandingPoint->GetLeftWayPointIndex() <= reverseLp)
-			m_leftOrRight = enLeft;
+		//現在の左側のウェイポイントの反対側のウェイポイントを出す。
+		//0を含むため最大値に1加算してから、反対側を出すため半分にして、
+		//現在の左側のウェイポイントにその値を加算している。
+		int reverseLp = GetLeftWayPointIndex() + (maxWayPoint + 1) / 2;
+
+		//右側から回って行くのか左側から行くのか決める
+		if (GetLeftWayPointIndex() == m_ufoLandingPoint->GetLeftWayPointIndex())
+		{
+			//自身の左側のウェイポイントと、着地点の左側のウェイポイントが同じなら
+
+			//右の単位方向ベクトル
+			Vector3 rightVec = g_vec3Right;
+			//自身の回転を掛ける
+			m_rotation.Apply(rightVec);
+			//自身（UFO）から着地点へのベクトル
+			Vector3 UFOToLandPointVec = m_ufoLandingPoint->GetPosition() - m_position;
+			//正規化する
+			UFOToLandPointVec.Normalize();
+			//着地点への
+			float landVecDotRightVec = Dot(UFOToLandPointVec, rightVec);
+			if (landVecDotRightVec >= 0.0f)
+				m_leftOrRight = enLeft;
+			else
+				m_leftOrRight = enRight;
+		}
+		else if (reverseLp > 31)
+		{
+			reverseLp -= 32;
+			if (GetLeftWayPointIndex() < m_ufoLandingPoint->GetLeftWayPointIndex() ||
+				m_ufoLandingPoint->GetLeftWayPointIndex() <= reverseLp)
+				m_leftOrRight = enLeft;
+			else
+				m_leftOrRight = enRight;
+		}
 		else
-			m_leftOrRight = enRight;
+		{
+			if (m_ufoLandingPoint->GetLeftWayPointIndex() <= reverseLp)
+			{
+				m_leftOrRight = enLeft;
+			}
+			else
+			{
+				m_leftOrRight = enRight;
+			}
+		}
+
 
 		m_moveSpeed = m_defaultSpeed;
 	}
@@ -276,8 +321,9 @@ void CUFO::Transport()
 
 void CUFO::Landing()
 {
+	//m_ufoLandingPoint->UpdateSideOBB();
 	//m_timer += GameTime().GetFrameDeltaTime();
-	const float goDownTimer = 2.0f;
+	const float goDownTimer = 1.0f;
 	const float goUpTimer = goDownTimer * 2.0f;
 
 	//アップベクトルを得る
@@ -293,7 +339,13 @@ void CUFO::Landing()
 	float distLen = dist.Length();
 	const float maxDistLen = 1000.0f;
 	const float minDistlen = 100.0f;
-	if (distLen > minDistlen && m_timer == 0.0f)
+	Vector3 landUpVec = g_vec3Up;
+	m_ufoLandingPoint->GetRotation().Apply(landUpVec);
+	float upDotLandUp = Dot(m_upVec, landUpVec);
+	float threshold = 0.0001f;
+
+	if (!CollisionOBBs(GetOBB(), m_ufoLandingPoint->GetSideOBB(m_leftOrRight)) && 
+		m_timer == 0.0f)
 	{
 		m_moveSpeed = m_defaultSpeed;
 		m_moveSpeed *= distLen / maxDistLen;
@@ -301,19 +353,20 @@ void CUFO::Landing()
 	else 
 	{
 		m_timer += GameTime().GetFrameDeltaTime();
+		const float vecScale = 400.0f;
 		if (m_timer <= goDownTimer)
 		{
 			m_getOnStageFlag = false;
 			m_moveSpeed = 0.0f;
 			Vector3 goDownVec = m_upVec;
-			goDownVec.Scale(-200.0f);
+			goDownVec.Scale(-vecScale);
 			goDownVec.Scale(GameTime().GetFrameDeltaTime());
 			m_position += goDownVec;
 		}
 		else if (m_timer <= goUpTimer)
 		{
 			Vector3 goUpVec = m_upVec;
-			goUpVec.Scale(200.0f);
+			goUpVec.Scale(vecScale);
 			goUpVec.Scale(GameTime().GetFrameDeltaTime());
 			m_position += goUpVec;
 		}
@@ -327,15 +380,13 @@ void CUFO::Landing()
 	{
 		m_pPlayer->SetPosition(capturePos);
 		m_pPlayer->SetRotation(m_rotation);
+		m_pPlayer->SetWayPointState(GetLeftWayPointIndex());
 		m_pPlayer->SetLeftPointIndex(GetLeftWayPointIndex());
 		m_pPlayer->SetRightPointIndex(GetRightWayPointIndex());
 	}
 	else if (m_updateState == enLeave)
 	{
 		m_timer = 0.0f;
-		m_onWayPosition = m_position;
-		SetLeftWayPointIndex(m_ufoLandingPoint->GetLeftWayPointIndex());
-		m_getOnStageFlag = true;
 
 	}
 
@@ -344,6 +395,32 @@ void CUFO::Landing()
 void CUFO::Leave()
 {
 	m_leftOrRight = enRight;
+	if (m_timer == 0.0f)
+	{
+		m_onWayPosition = m_position;
+
+		m_getOnStageFlag = true;
+
+		//ウェイポイントの最大数
+		const int maxWayPointNum = 31;
+		int nextIndex = m_ufoLandingPoint->GetLeftWayPointIndex();
+		if (m_leftOrRight == enLeft)
+		{
+			//左に動いたら、特に何もいじらない
+		}
+		else
+		{
+			//右に動いたので、次のウェイポイントを加算する
+
+			nextIndex--;
+			//ウェイポイントの最大数より大きかったら
+			if (nextIndex < 0)
+				//一周して0にする
+				nextIndex = maxWayPointNum;
+		}
+		//自身の左側のウェイポイントを更新する
+		SetLeftWayPointIndex(nextIndex);
+	}
 	m_moveSpeed = m_defaultSpeed;
 	const float switchingTime = 2.0f;
 	if (m_timer >= switchingTime)
