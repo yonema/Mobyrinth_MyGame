@@ -355,6 +355,7 @@
     <ClCompile Include="testModel.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TklFile.cpp" />
+    <ClCompile Include="TransparentObject.cpp" />
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="WaveFileBank.cpp" />
   </ItemGroup>
@@ -478,6 +479,7 @@
     <ClInclude Include="testModel.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TklFile.h" />
+    <ClInclude Include="TransparentObject.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />

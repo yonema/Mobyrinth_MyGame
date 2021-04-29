@@ -93,6 +93,9 @@
     <Filter Include="MyCode\Timer">
       <UniqueIdentifier>{70b6ee87-5725-4869-ab1d-15b0b3a1cae8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\LevelObject\TransparentObject">
+      <UniqueIdentifier>{29081464-a22e-4612-9396-393e3742a98e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -421,6 +424,9 @@
     </ClCompile>
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="TransparentObject.cpp">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -789,6 +795,9 @@
     </ClInclude>
     <ClInclude Include="StopWatch.h">
       <Filter>MyCode\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="TransparentObject.h">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
