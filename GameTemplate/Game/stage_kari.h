@@ -1,5 +1,6 @@
 #pragma once
 #include "StageBase.h"
+#include "UFO.h"
 
 class stage_kari : public IStageBase
 {
@@ -12,5 +13,6 @@ public:
 	}
 
 private:	//データメンバ
+	CUFO* m_ufo = nullptr;
 };
 

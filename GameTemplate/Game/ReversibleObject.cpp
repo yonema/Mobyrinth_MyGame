@@ -232,7 +232,7 @@ void CReversibleObject::CheckPlayer()
 				//ステートをプレイヤーに持たれている状態へ
 				m_objectState = enHeldPlayer;
 				//プレイヤーをオブジェクトを持ってる状態にする
-				m_pPlayer->SetHoldObject(true);
+				m_pPlayer->SetHoldObject(true, this);
 				//オブジェクトが重なっているかを判定する処理を動かすフラグをtrueにする
 				m_flagOverlap = true;
 			}

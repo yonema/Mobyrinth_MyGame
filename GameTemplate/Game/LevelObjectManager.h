@@ -111,8 +111,16 @@ public:		//ここのメンバ関数を主に使う
 		return m_vecSize;
 	}
 
+	/// <summary>
+	/// ウェイポイント上での移動先を計算する関数
+	/// </summary>
+	/// <param name="rpIndex">現在の右側のウェイポイントのインデックス</param>
+	/// <param name="pos">現在の座標</param>
+	/// <param name="dist">移動する距離</param>
+	/// <param name="leftOrRight">右側に移動するか左側い移動するか。0:左,1:右</param>
+	/// <returns>移動先の座標</returns>
 	const Vector3 CalcWayPointNextPos
-	(const int rpIndex, const Vector3& pos, const float dist, const bool leftOrRight);
+	(const int rpIndex, const Vector3& pos, const float dist, const bool leftOrRight, int* pNextIndex = nullptr);
 
 	/// <summary>
 	/// 自身（LevelObjectManager）にオブジェクトを追加する

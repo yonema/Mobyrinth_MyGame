@@ -130,6 +130,13 @@ void CModelRender::InitModel(const char* filePath, EnModelUpAxis modelUpAxis)
 		sizeof(*CLightManager::GetInstance()->GetPointLigData()) *
 		CLightManager::GetMax_PointLight();
 
+	//スポットライト達のデータの登録
+	initData.m_expandConstantBuffer4 =
+		CLightManager::GetInstance()->GetSpotLigData();
+	initData.m_expandConstantBufferSize4 =
+		sizeof(*CLightManager::GetInstance()->GetPointLigData()) *
+		CLightManager::GetMax_SpotLight();
+
 	//シャドウのデータの登録
 	initData.m_shadowConstantBuffer =
 		g_shadowMap->GetShadowParam();

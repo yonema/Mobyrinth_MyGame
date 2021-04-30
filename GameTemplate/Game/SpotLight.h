@@ -3,33 +3,33 @@
 #include "LightManager.h"
 
 /// <summary>
-/// ポイントライトクラス	
+/// スポットライトクラス
 /// </summary>
-class CPointLight : public IGameObject
+class CSpotLight : public IGameObject
 {
 public:		//自動で呼ばれるメンバ関数
-	CPointLight();		//コンストラクタ
-	~CPointLight();		//デストラクタ
+	CSpotLight();	//コンストラクタ
+	~CSpotLight();	//デストラクタ
 
 public:		//メンバ関数
 
 	/// <summary>
-	/// ポイントライトの座標を設定
+	/// スポットライトの座標を設定
 	/// </summary>
 	/// <param name="direction">ライトの座標</param>
-	void SetPosition(const Vector3& position);
+	void SetPosition(const Vector3& direction);
 
 	/// <summary>
-	/// ポイントライトの座標を取得
+	/// スポットライトの座標を取得
 	/// </summary>
 	/// <returns>ライトの座標</returns>
 	const Vector3& GetPosition() const
 	{
-		return m_light->ptPosition;
+		return m_light->position;
 	}
 
 	/// <summary>
-	/// ポイントライトの色の設定
+	/// スポットライトの色の設定
 	/// </summary>
 	/// <param name="color">ライトの色</param>
 	void SetColor(const Vector4& color);
@@ -41,10 +41,32 @@ public:		//メンバ関数
 	void SetRange(const float range);
 
 	/// <summary>
+	/// スポットライトの射出方向の設定
+	/// </summary>
+	/// <param name="direction">射出方向</param>
+	void SetDirection(const Vector3 direction)
+	{
+		if (m_result)
+		{
+			m_light->direction = direction;
+		}
+	}
+
+	/// <summary>
+	/// スポットライトの射出角度の設定
+	/// </summary>
+	/// <param name="angle">射出角度</param>
+	void SetAngle(const float angle)
+	{
+		if (m_result)
+			m_light->angle = angle;
+	}
+
+	/// <summary>
 	/// 生データを取得
 	/// </summary>
 	/// <returns>生データの参照</returns>
-	SPointLight* GetRawData()
+	SSpotLight* GetRawData()
 	{
 		return m_light;
 	};
@@ -53,7 +75,7 @@ public:		//メンバ関数
 	/// 生データを設定
 	/// </summary>
 	/// <param name="lig">生データ</param>
-	void SetRawData(SPointLight* lig)
+	void SetRawData(SSpotLight* lig)
 	{
 		m_light = lig;
 	}
@@ -77,8 +99,9 @@ public:		//メンバ関数
 	}
 
 private:	//データメンバ
-	SPointLight* m_light = nullptr;		//ポイントライトの構造体
+	SSpotLight* m_light = nullptr;		//ポイントライトの構造体
 	int m_controlNumber;				//制御ナンバー
 	bool m_result;						//ライトマネージャーに登録してあるか？
+
 };
 

@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "LightManager.h"
 #include "LevelObjectManager.h"
+#include "ReversibleObject.h"
 
 //スタート関数
 bool Player::Start()
@@ -88,6 +89,8 @@ bool Player::Start()
 	//m_dbgStunMoveModel = NewGO<CModelRender>(0);
 	//m_dbgStunMoveModel->Init("Assets/modelData/dbgBox.tkm");
 	//m_dbgStunMoveModel->SetPosition(g_vec3Zero);
+
+
 	//デバック用ここまで
 
 	return true;
@@ -437,9 +440,9 @@ void Player::StunMove()
 		float hitOBBDotRight = Dot(playerToHitOBB, rightVec);
 		//左に飛ばされるか、右に飛ばされるか
 		int leftOrRight = enLeft;
-		if (hitOBBDotRight <= 0.0f)
+		if (hitOBBDotRight >= 0.0f)
 		{
-			//内積が負だったら
+			//内積が正だったら
 			//反対側にする
 			leftOrRight = enRight;
 		}
@@ -802,12 +805,12 @@ void Player::GameMove()
 	if (m_operationFlag == false) {
 		return;
 	}
-	//if (m_stunFlag)
-	//{
-	//	Stun();
-	//	return;
-	//}
 
+	if (m_capturedUFOFlag == true)
+	{
+		CapturedUFO();
+		return;
+	}
 
 	//ゲームパッドの左スティックのX軸の入力情報を取得
 	m_padLStickXF = g_pad[0]->GetLStickXF();
@@ -836,6 +839,8 @@ void Player::GameMove()
 	else
 		//スタン中のステージの上に乗る処理
 		StunGetOnStage();
+
+
 
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
@@ -884,6 +889,24 @@ void Player::GameMove()
 	//	}
 	//}
 	//デバックここまで
+}
+
+void Player::CapturedUFO()
+{
+	//ウェイポイントの更新処理
+	//CheckWayPoint();
+	m_onWayPosition = m_position;
+	m_myCharaCon.GetOBB().SetPosition(m_position);
+	//モデルの回転処理
+	//Rotation();
+	//モデルの場所と回転を設定
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+	m_finalWPRot = m_rotation;
+	//OBBの場所と回転を設定
+	m_myCharaCon.SetRotation(m_rotation);
+	//ライトのデータを更新する
+	UpdateLightData();
 }
 
 

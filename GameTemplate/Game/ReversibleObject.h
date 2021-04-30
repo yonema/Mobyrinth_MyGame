@@ -104,6 +104,18 @@ public:		//ここのメンバ関数を主に使う
 	/// <param name="activeFlag">有効化フラグ</param>
 	void SetBothModelActiveFlag(const bool activeFlag);
 
+	/// <summary>
+	/// ステートをキャンセル状態にする
+	/// </summary>
+	void StateToCancel()
+	{
+		m_objectState = enCancel;
+	}
+
+	/// <summary>
+	/// 持ち上げた時の、上に持ち上げるベクトルの長さを設定
+	/// </summary>
+	/// <param name="heldUpLen"></param>
 	void SetHeldUpLen(const float heldUpLen)
 	{
 		m_heldUpLen = heldUpLen;
@@ -186,12 +198,12 @@ private:	//データメンバ
 	bool m_frontOrBack = enFront;				//表か裏か？
 	bool m_bothModelactiveFlag = true;			//表裏両方の有効化フラグ
 	CModelRender* m_modelRender[enFrontAndBackNum] = { nullptr };	//モデルレンダラー
-	int m_reversibleType[enFrontAndBackNum] = { enEnpty };	//表と裏のオブジェクトのタイプ
+	int m_reversibleType[enFrontAndBackNum] = { enEmpty };	//表と裏のオブジェクトのタイプ
 
 	float m_throwCounter = 0.0f;						//投げている時のカウンター
 	Quaternion m_throwRot = g_quatIdentity;		//下に投げるときの回転
 
-	float m_heldUpLen = 100.0f;
+	float m_heldUpLen = 100.0f;					//持ち上げた時の、上に持ち上げるベクトルの長さ
 
 	/// <summary>
 	/// オブジェクトの現在のステート（状態）

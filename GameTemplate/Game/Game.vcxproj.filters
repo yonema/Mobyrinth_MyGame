@@ -93,6 +93,12 @@
     <Filter Include="MyCode\Timer">
       <UniqueIdentifier>{70b6ee87-5725-4869-ab1d-15b0b3a1cae8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\LevelObject\UFO">
+      <UniqueIdentifier>{c8de0a8c-23ed-4b8b-8a83-ba31620c7986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\LevelObject\Mobius">
+      <UniqueIdentifier>{d3c1a188-a5fa-42b6-9000-377662da058c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -246,9 +252,6 @@
       <Filter>MiniEngine\font</Filter>
     </ClCompile>
     <ClCompile Include="GameCamera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Mobius.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
@@ -421,6 +424,18 @@
     </ClCompile>
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>MyCode\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="UFO.cpp">
+      <Filter>MyCode\LevelObject\UFO</Filter>
+    </ClCompile>
+    <ClCompile Include="UFOLandingPoint.cpp">
+      <Filter>MyCode\LevelObject\UFO</Filter>
+    </ClCompile>
+    <ClCompile Include="Mobius.cpp">
+      <Filter>MyCode\LevelObject\Mobius</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -599,9 +614,6 @@
       <Filter>ExEngine\physics</Filter>
     </ClInclude>
     <ClInclude Include="GameCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Mobius.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
@@ -789,6 +801,18 @@
     </ClInclude>
     <ClInclude Include="StopWatch.h">
       <Filter>MyCode\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="UFO.h">
+      <Filter>MyCode\LevelObject\UFO</Filter>
+    </ClInclude>
+    <ClInclude Include="UFOLandingPoint.h">
+      <Filter>MyCode\LevelObject\UFO</Filter>
+    </ClInclude>
+    <ClInclude Include="Mobius.h">
+      <Filter>MyCode\LevelObject\Mobius</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

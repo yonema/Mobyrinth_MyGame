@@ -32,6 +32,8 @@ void MeshParts::InitFromTkmFile(
 	int expandDataSize2,
 	void* expandData3,
 	int expandDataSize3,
+	void* expandData4,
+	int expandDataSize4,
 	void* shadowParamData,
 	int shadowParamDataSize
 )
@@ -67,6 +69,11 @@ void MeshParts::InitFromTkmFile(
 	{
 		m_expandConstantBuffer3.Init(expandDataSize3, nullptr);
 		m_expandData3 = expandData3;
+	}
+	if (expandData4)
+	{
+		m_expandConstantBuffer4.Init(expandDataSize4, nullptr);
+		m_expandData4 = expandData4;
 	}
 	if (shadowParamData)
 	{
@@ -112,9 +119,12 @@ void MeshParts::CreateDescriptorHeaps()
 			if (m_expandConstantBuffer3.IsValid()) {
 				descriptorHeap.RegistConstantBuffer(3, m_expandConstantBuffer3);
 			}
+			if (m_expandConstantBuffer4.IsValid()) {
+				descriptorHeap.RegistConstantBuffer(4, m_expandConstantBuffer4);
+			}
 			if (m_shadowConstantBuffer.IsValid())
 			{
-				descriptorHeap.RegistConstantBuffer(4, m_shadowConstantBuffer);
+				descriptorHeap.RegistConstantBuffer(5, m_shadowConstantBuffer);
 			}
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
@@ -238,6 +248,9 @@ void MeshParts::Draw(
 	}
 	if (m_expandData3) {
 		m_expandConstantBuffer3.CopyToVRAM(m_expandData3);
+	}
+	if (m_expandData4) {
+		m_expandConstantBuffer4.CopyToVRAM(m_expandData4);
 	}
 	if (m_shadowParamData)
 	{
