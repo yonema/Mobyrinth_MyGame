@@ -49,7 +49,7 @@ public:		//‚±‚±‚Ìƒƒ“ƒoŠÖ”‚ğå‚Ég‚¤B
 	template <typename T>
 	void SetText(const wchar_t* text, const T var)
 	{
-		wsprintf(m_text, text, var);
+		swprintf_s(m_text, text, var);
 	}
 
 	/// <summary>
