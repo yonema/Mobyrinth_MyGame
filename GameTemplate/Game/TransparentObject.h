@@ -4,7 +4,12 @@
 class CTransparentObject : public CReversibleObject
 {
 public:		//publicなオーバーライドしてほしいメンバ関数
-	virtual bool StartSub() { return true; };	//スタート関数
+	virtual bool StartSub() //スタート関数
+	{
+		//オブジェクトを持ち上げられないようにする。
+		SetFlagHeld(false);
+		return true;
+	};
 	void UpdateSub()override final;		//アップデート関数
 
 private:	//privateなオーバーライドしてほしいメンバ関数
@@ -24,12 +29,11 @@ public: //Set関数
 	{
 		m_resetTimer = i;
 		//オブジェクトを持ち上げられるようにする。
-		m_flagHeld = true;
+		SetFlagHeld(true);
 	}
 
 protected: //メンバ変数
 	//bool m_flagTransparentObject = true; //一定時間だけ持ち上げられるオブジェクトかどうかのフラグ
-	bool m_flagHeld = false; //オブジェクトが現在持ち上げられるかのフラグ
 	int m_resetTimer = 0; //オブジェクトの状態をリセットするまでのカウントに使用するリセットタイマー
 	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //オブジェクトの初期位置を保存する位置情報変数
 	Quaternion m_startRotation = g_quatIdentity;

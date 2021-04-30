@@ -428,6 +428,9 @@
     <ClCompile Include="TransparentObject.cpp">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClCompile>
+    <ClCompile Include="TransparentSwitch.cpp">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -797,6 +800,9 @@
       <Filter>MyCode\Timer</Filter>
     </ClInclude>
     <ClInclude Include="TransparentObject.h">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TransparentSwitch.h">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClInclude>
   </ItemGroup>
