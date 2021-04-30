@@ -12,14 +12,14 @@ public: //Set関数
 	/// リセットタイマーが作動したときの値を変更
 	/// </summary>
 	/// <param name="i">リセットタイマーが作動したときの値</param>
-	void SetResetTimerStartValue(int i)
+	void SetResetTimerStartValue(float f)
 	{
-		m_resetTimerStartValue = i;
+		m_resetTimerStartValue = f;
 	}
 
 private: //メンバ変数
-	int m_resetTimer = 0; //オブジェクトの状態をリセットするまでのカウントに使用するリセットタイマー
-	int m_resetTimerStartValue = 1000; //リセットタイマーが作動したときの値を保存する変数
+	float m_resetTimer = 0.0f; //オブジェクトの状態をリセットするまでのカウントに使用するリセットタイマー
+	float m_resetTimerStartValue = 10.0f; //リセットタイマーが作動したときの値を保存する変数
 	bool m_flagSwitchOn = false; //スイッチが押されて、透明オブジェクトを持ち上げられる状態になっているかのフラグ
 };
 

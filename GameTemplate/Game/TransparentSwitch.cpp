@@ -19,9 +19,10 @@ void OOTransparentSwitch::UpdateSub()
 	//透明オブジェクトを持っている場合、そのオブジェクトを持っていない状態にする。
 	//透明オブジェクトを初期位置に戻す。
 	if (m_flagSwitchOn == true) {
-		--m_resetTimer;
+		m_resetTimer -= GameTime().GetFrameDeltaTime();
+		///--m_resetTimer;
 
-		if (m_resetTimer <= 0) {
+		if (m_resetTimer <= 0.0f) {
 			m_flagSwitchOn = false;
 
 			//ここに透明オブジェクトの処理を追加する。
@@ -32,11 +33,8 @@ void OOTransparentSwitch::UpdateSub()
 
 		}
 	}
-
-
-
 	//リセットタイマーが０のときに下の文の処理を作動させる。
-	if (m_flagSwitchOn == false) {
+	else if (m_flagSwitchOn == false) {
 		//スイッチが押されたとき
 		//透明オブジェクトをすべて持ち上げられるようにする。
 		//スイッチのオブジェクトの範囲内でAボタンが押されたとき
