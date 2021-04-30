@@ -17,7 +17,7 @@ bool CUFO::PureVirtualStart()
 
 	//OBBを調節する
 	GetOBB().SetPivot({ 0.5f,0.0f,0.5f });
-	GetOBB().SetDirectionLength({ 400.0f,200.0f,400.0f });
+	GetOBB().SetDirectionLength({ 250.0f,200.0f,400.0f });
 
 	//スポットライトの生成と初期化
 	m_spotLight = NewGO<CSpotLight>(0);
@@ -34,14 +34,6 @@ bool CUFO::PureVirtualStart()
 	m_ufoLandingPoint = NewGO<CUFOLandingPoint>(0);
 	m_ufoLandingPoint->SetPosition(m_position);
 
-
-	//CModelRender* model = NewGO<CModelRender>(0);
-	//model->Init("Assets/modelData/fire.tkm");
-	//model->SetPosition({ 0.0f,1600.0f,0.0f });
-	//Quaternion qRot;
-	//qRot.SetRotationDegX(-20.0f);
-	//model->SetScale({ 3.0f,3.0f,3.0f });
-	//model->SetRotation(qRot);
 
 	//デバック用
 	//後で消す
@@ -82,10 +74,12 @@ CUFO::~CUFO()
 	//後で消す
 	for (int i = 0; i < m_vertNum; i++)
 	{
+		//頂点を見るためのモデルの破棄
 		DeleteGO(m_dbgVertPosMR[i]);
 	}
 	for (int i = 0; i < 2; i++)
 	{
+		//レイを見るためのモデルを破棄
 		DeleteGO(m_dbgRay[i]);
 	}
 	//デバック用ここまで
@@ -121,20 +115,17 @@ void CUFO::PureVirtualUpdate()
 		Transport();
 		break;
 	case enLanding:
+		//着地の処理
 		Landing();
 		break;
 	case enLeave:
+		//着地点から離れる処理
 		Leave();
 		break;
 	}
 
 	//ライトの更新
-	Vector3 upVec = m_upVec;
-	upVec.Scale(300.0f);
-	m_spotLight->SetPosition(m_position + upVec);
-	Vector3 downVec = m_upVec;
-	downVec.Scale(-1.0f);
-	m_spotLight->SetDirection(downVec);
+	UpdateLight();
 
 	//モデルレンダラーの更新
 	m_modelRender->SetPosition(m_position);
@@ -145,6 +136,7 @@ void CUFO::PureVirtualUpdate()
 	Vector3* vertPos = GetOBB().GetBoxVertex();
 	for (int i = 0; i < m_vertNum; i++)
 	{
+		//頂点を見るためのモデルの更新
 		m_dbgVertPosMR[i]->SetPosition(vertPos[i]);
 		m_dbgVertPosMR[i]->SetRotation(m_rotation);
 
@@ -155,6 +147,11 @@ void CUFO::PureVirtualUpdate()
 //プレイヤーを探す処理
 void CUFO::Search()
 {
+	//スピードが0.0fなら探さない
+	if (m_moveSpeed == 0.0f)
+		return;
+
+
 	//タイマーにデルタタイムを加算
 	m_timer += GameTime().GetFrameDeltaTime();
 
@@ -170,24 +167,36 @@ void CUFO::Search()
 		m_timer = 0.0f;
 	}
 
-	
+	//探索中か？
 	if (m_searchFlag)
 	{
 		//捜索中なら
+
+		//黄色に光る
 		m_modelRender->SetEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
 		m_spotLight->SetColor({ 300.0f,300.0f,0.0f,1.0f });
+
 		//プレイヤーを衝突しているか？
 		if (IsHitPlayer())
 		{
 			//プレイヤーを見つけた
+
+			//アップデートステートをプレイヤーを見つけた状態にする
+			m_updateState = enCapture;
+
+			//赤色に光る
 			m_modelRender->SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
 			m_spotLight->SetColor({ 600.0f,0.0f,0.0f,1.0f });
-			m_updateState = enCapture;
+			
+			//プレイヤーをUFOに捕まった状態にする
 			m_pPlayer->SetCapturedUFOFlag(true);
 			m_pPlayer->SetRotation(m_rotation);
+			//プレイヤーが何か持っていたら、離させる
 			if (m_pPlayer->GetHoldObject())
 				m_pPlayer->GetReversibleObject()->StateToCancel();
+			//スピードを0にする
 			m_moveSpeed = 0.0f;
+			//タイマーを初期化する
 			m_timer = 0.0f;
 
 		}
@@ -195,6 +204,8 @@ void CUFO::Search()
 	else
 	{
 		//捜索中ではない
+
+		//光らない
 		m_modelRender->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		m_spotLight->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 
@@ -220,14 +231,15 @@ void CUFO::Capture()
 	//プレイヤーの座標を設定
 	m_pPlayer->SetPosition(m_pPlayer->GetPosition() + addVec);
 	m_pPlayer->SetRotation(m_rotation);
+
 	//タイマーの切り替え時間
 	const float switchingTimer = 2.0f;
-	if (m_timer >= 2.0f)
+	if (m_timer >= switchingTimer)
 	{
 		//タイマーが切り替え時間になったら
 		//タイマーを初期化して
 		m_timer = 0.0f;
-		//プレイヤーを運ぶ処理へ
+		//アップデートステートをプレイヤーを運ぶ処理状態にする
 		m_updateState = enTransport;
 	}
 	else
@@ -264,36 +276,57 @@ void CUFO::Transport()
 			Vector3 UFOToLandPointVec = m_ufoLandingPoint->GetPosition() - m_position;
 			//正規化する
 			UFOToLandPointVec.Normalize();
-			//着地点への
+			//着地点へのベクトルと右のベクトルの内積を取る
 			float landVecDotRightVec = Dot(UFOToLandPointVec, rightVec);
+			//内積の正か負かで左右を振り分ける
 			if (landVecDotRightVec >= 0.0f)
+				//左に進む
 				m_leftOrRight = enLeft;
 			else
+				//右に進む
 				m_leftOrRight = enRight;
 		}
-		else if (reverseLp > 31)
+		//反対側のウェイポイントが最大値を超えているか？
+		else if (reverseLp > maxWayPoint)
 		{
-			reverseLp -= 32;
+			//超えている時
+
+			//最大値+1（0を含むため）を減算する
+			reverseLp -= ( maxWayPoint + 1 );
+
+			//着地点の位置を調べて、右から行くか左から行くかを振り分ける
 			if (GetLeftWayPointIndex() < m_ufoLandingPoint->GetLeftWayPointIndex() ||
 				m_ufoLandingPoint->GetLeftWayPointIndex() <= reverseLp)
+				//着地点が、現在のウェイポイントよりも大きいか
+				//反対側のウェイポイント以下だったら
+				//左に進む
 				m_leftOrRight = enLeft;
 			else
+				//それ以外なら
+				//右に進む
 				m_leftOrRight = enRight;
 		}
 		else
 		{
+			//超えていない時
+
+			//着地点の位置を調べて、右から行くか左から行くかを振り分ける
 			if (m_ufoLandingPoint->GetLeftWayPointIndex() <= reverseLp)
 			{
+				//着地点が反対側のウェイポイント以下だったら
+				//左に進む
 				m_leftOrRight = enLeft;
 			}
 			else
 			{
+				//それ以外なら
+				//右に進む
 				m_leftOrRight = enRight;
 			}
 		}
 
-
-		m_moveSpeed = m_defaultSpeed;
+		//移動速度をデフォルトの速度にする
+		SetMoveSpeed();
 	}
 
 	//アップベクトルを得る
@@ -305,25 +338,34 @@ void CUFO::Transport()
 	//UFOに捕まる位置
 	Vector3 capturePos = m_position + upVec;
 
+	//自身のOBBと着地点のOBBが衝突しているか？
 	if (IsHitObject(*this, *m_ufoLandingPoint))
 	{
+		//衝突した時
+
+		//アップデートステートを着地状態にする
 		m_updateState = enLanding;
+		//タイマーを初期化する
 		m_timer = 0.0f;
 	}
 	else
+		//衝突していなかったら
+		//タイマーを進める
 		m_timer += GameTime().GetFrameDeltaTime();
 
+	//プレイヤーの情報を更新する
 	m_pPlayer->SetPosition(capturePos);
 	m_pPlayer->SetRotation(m_rotation);
 	m_pPlayer->SetLeftPointIndex(GetLeftWayPointIndex());
 	m_pPlayer->SetRightPointIndex(GetRightWayPointIndex());
 }
 
+//着地の処理
 void CUFO::Landing()
 {
-	//m_ufoLandingPoint->UpdateSideOBB();
-	//m_timer += GameTime().GetFrameDeltaTime();
+	//下に下がる時間
 	const float goDownTimer = 1.0f;
+	//上に上がる時間
 	const float goUpTimer = goDownTimer * 2.0f;
 
 	//アップベクトルを得る
@@ -333,51 +375,81 @@ void CUFO::Landing()
 	upVec.Scale(upVecLen);
 	//UFOに捕まる位置
 	Vector3 capturePos = m_position + upVec;
-
+	//UFOに捕まる位置と着地点の少し上の間のベクトル
 	Vector3 dist = (m_ufoLandingPoint->GetPosition() + upVec);
 	dist -= capturePos;
+	//距離を出す
 	float distLen = dist.Length();
+	//距離の最大値
 	const float maxDistLen = 1000.0f;
-	const float minDistlen = 100.0f;
-	Vector3 landUpVec = g_vec3Up;
-	m_ufoLandingPoint->GetRotation().Apply(landUpVec);
-	float upDotLandUp = Dot(m_upVec, landUpVec);
-	float threshold = 0.0001f;
 
+	//タイマーが0.0fか？
+	//自身のOBBと着地点の端のOBBが衝突しているか？
 	if (!CollisionOBBs(GetOBB(), m_ufoLandingPoint->GetSideOBB(m_leftOrRight)) && 
 		m_timer == 0.0f)
 	{
-		m_moveSpeed = m_defaultSpeed;
+		//0.0fかつ
+		//衝突していない時
+
+		//移動速度をデフォルトにしてから
+		SetMoveSpeed();
+		//距離が近いほど遅くする
 		m_moveSpeed *= distLen / maxDistLen;
 	}
 	else 
 	{
+		//0.0fでない、または、
+		//衝突している時
+
+		//タイマーを進める
 		m_timer += GameTime().GetFrameDeltaTime();
+
+		//上下に動くベクトルの大きさ
 		const float vecScale = 400.0f;
+
+		//タイマーの進具合を調べる
 		if (m_timer <= goDownTimer)
 		{
+			//下に下がる時間以下なら
+
+			//ステージの上に乗る処理を行わないようにする
 			m_getOnStageFlag = false;
+			//移動速度を0にする
 			m_moveSpeed = 0.0f;
+			//下に下がるベクトル
 			Vector3 goDownVec = m_upVec;
 			goDownVec.Scale(-vecScale);
+			//デルタタイムを掛けておく
 			goDownVec.Scale(GameTime().GetFrameDeltaTime());
+			//デルタタイムを掛けておく
 			m_position += goDownVec;
 		}
 		else if (m_timer <= goUpTimer)
 		{
+			//下に下がる時間より大きい、かつ、
+			//上に上がる時間以下なら
+
+			//上に上がるベクトル
 			Vector3 goUpVec = m_upVec;
 			goUpVec.Scale(vecScale);
+			//デルタタイムを掛けておく
 			goUpVec.Scale(GameTime().GetFrameDeltaTime());
+			//座標を上に上げる
 			m_position += goUpVec;
 		}
 		else
 		{
+			//上下に動く時間が終わったら
+
+			//アップデートステートを着地点から離れる処理状態にする
 			m_updateState = enLeave;
 		}
 	}
 
 	if (m_timer <= goDownTimer)
 	{
+		//タイマーが下に下がる時間以下のときだけ
+		//プレイヤーのパラメーターを更新する
 		m_pPlayer->SetPosition(capturePos);
 		m_pPlayer->SetRotation(m_rotation);
 		m_pPlayer->SetWayPointState(GetLeftWayPointIndex());
@@ -386,23 +458,34 @@ void CUFO::Landing()
 	}
 	else if (m_updateState == enLeave)
 	{
+		//アップデートパラメータがenLeave状態なら
+
+		//タイマーを0にする
 		m_timer = 0.0f;
 
 	}
 
 }
 
+//着地点から離れる処理
 void CUFO::Leave()
 {
+	//進む向きを右向きに戻す。
 	m_leftOrRight = enRight;
+
+	//タイマーが0.0fの時に
+	//つまり最初の一回だけ呼ばれる
 	if (m_timer == 0.0f)
 	{
+		//ウェイポイント上の座標に今の
 		m_onWayPosition = m_position;
 
+		//ステージの上に乗る処理を行うようにする
 		m_getOnStageFlag = true;
 
 		//ウェイポイントの最大数
 		const int maxWayPointNum = 31;
+		//次に進むウェイポイント
 		int nextIndex = m_ufoLandingPoint->GetLeftWayPointIndex();
 		if (m_leftOrRight == enLeft)
 		{
@@ -410,26 +493,38 @@ void CUFO::Leave()
 		}
 		else
 		{
-			//右に動いたので、次のウェイポイントを加算する
+			//右に動いたので、次のウェイポイントを減算する
 
 			nextIndex--;
-			//ウェイポイントの最大数より大きかったら
+			//0より小さかったら
 			if (nextIndex < 0)
-				//一周して0にする
+				//一周して最大値にする
 				nextIndex = maxWayPointNum;
 		}
 		//自身の左側のウェイポイントを更新する
 		SetLeftWayPointIndex(nextIndex);
 	}
-	m_moveSpeed = m_defaultSpeed;
+
+	//移動速度をデフォルトの速度にする
+	SetMoveSpeed();
+	//切り替えタイム
 	const float switchingTime = 2.0f;
+
+	//タイマーの調べる
 	if (m_timer >= switchingTime)
 	{
+		//切り替え時間以上になったら
+
+		//アップデートステートをプレイヤーを探す処理状態にする
 		m_updateState = enSearch;
+		//タイマーを初期化する
 		m_timer = 0.0f;
+		//プレイヤーをUFOに捕まっていない状態にする
 		m_pPlayer->SetCapturedUFOFlag(false);
 	}
 	else
+		//切り替え時間より小さかったら
+		//タイマーを進める
 		m_timer += GameTime().GetFrameDeltaTime();
 
 }
@@ -504,4 +599,18 @@ void CUFO::GetOnStage()
 		m_mobius = FindGO<Mobius>("Mobius");
 		return;
 	}
+}
+
+//ライトの更新
+void CUFO::UpdateLight()
+{
+	//ライトの更新
+	Vector3 upVec = m_upVec;
+	upVec.Scale(300.0f);
+	//照らす位置
+	m_spotLight->SetPosition(m_position + upVec);
+	Vector3 downVec = m_upVec;
+	downVec.Scale(-1.0f);
+	//照らす方向
+	m_spotLight->SetDirection(downVec);
 }

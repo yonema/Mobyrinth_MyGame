@@ -1,6 +1,7 @@
 #pragma once
 #include "Mobius.h"
 #include "GameTime.h"
+#include "UFO.h"
 class ILevelObjectBase;
 
 class StartDirecting : public IGameObject

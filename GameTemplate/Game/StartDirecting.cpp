@@ -48,6 +48,10 @@ void StartDirecting::Update()
 		//ポーズの操作フラグをtrueにする。
 		CPause* pause = FindGO<CPause>("Pause");
 		pause->SetCanPause(true);
+		//UFOがあったら動かす
+		CUFO* ufo = FindGO<CUFO>("UFO");
+		if (ufo)
+			ufo->SetMoveSpeed();
 	}
 
 	if (checkZoomIn == false) {
@@ -78,6 +82,10 @@ void StartDirecting::Update()
 			//ポーズの操作フラグをtrueにする。
 			CPause* pause = FindGO<CPause>("Pause");
 			pause->SetCanPause(true);
+			//UFOがあったら動かす
+			CUFO* ufo = FindGO<CUFO>("UFO");
+			if (ufo)
+				ufo->SetMoveSpeed();
 		}
 	}
 }

@@ -63,6 +63,7 @@ public://publicなメンバ関数
 	/// <param name="rotMap">回転のベクター</param>
 	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
 
+	//ウェイポイント用のOBBを設定
 	void SetWayPointOBB();
 
 	/// <summary>
@@ -98,6 +99,10 @@ public://publicなメンバ関数
 		return m_holdObject;
 	}
 
+	/// <summary>
+	/// 持っている反転オブジェクトの参照を得る
+	/// </summary>
+	/// <returns>持っている反転オブジェクトの参照</returns>
 	CReversibleObject* GetReversibleObject()
 	{
 		return m_reversibleObject;
@@ -131,6 +136,10 @@ public://publicなメンバ関数
 		return m_lpIndex;
 	}
 
+	/// <summary>
+	/// プレイヤーの左側のウェイポイントを設定する
+	/// </summary>
+	/// <param name="lpIndex">左側のウェイポイント</param>
 	void SetLeftPointIndex(const int lpIndex)
 	{
 		m_lpIndex = lpIndex;
@@ -145,6 +154,10 @@ public://publicなメンバ関数
 		return m_rpIndex;
 	}
 
+	/// <summary>
+	/// プレイヤーの右側のウェイポイントを設定する
+	/// </summary>
+	/// <param name="lpIndex">右側のウェイポイント</param>
 	void SetRightPointIndex(const int rpIndex)
 	{
 		m_rpIndex = rpIndex;
@@ -178,11 +191,19 @@ public://publicなメンバ関数
 		return m_wayPointState;
 	}
 
+	/// <summary>
+	/// 自身がどのウェイポイントにいるか表すステートを設定
+	/// </summary>
+	/// <param name="wayPointState">ウェイポイントのステート</param>
 	void SetWayPointState(const int wayPointState)
 	{
 		m_wayPointState = wayPointState;
 	}
 
+	/// <summary>
+	/// UFOに捕まっているか？を設定
+	/// </summary>
+	/// <param name="captured">UFOに捕まっているか？</param>
 	void SetCapturedUFOFlag(const bool captured)
 	{
 		m_capturedUFOFlag = captured;
@@ -258,6 +279,9 @@ private://privateなメンバ関数
 	/// </summary>
 	void SetDirectionLight();
 
+	/// <summary>
+	/// UFOに捕まっている時の処理
+	/// </summary>
 	void CapturedUFO();
 
 private:	//データメンバ
@@ -279,7 +303,7 @@ private:	//データメンバ
 	Quaternion m_rotation = g_quatIdentity;			//キャラクターの回転
 	Vector3 m_upVec = g_vec3Up;						//プレイヤーのUpベクトル
 	bool m_holdObject = false;						//オブジェクトを持っているか？
-	CReversibleObject* m_reversibleObject = nullptr;
+	CReversibleObject* m_reversibleObject = nullptr;	//持っている反転オブジェクトのポインタ
 	
 	/// <summary>
 	/// プレイヤーが右を向いているか左を向いているか
@@ -309,7 +333,7 @@ private:	//データメンバ
 	int m_wayPointState = 0;					//自身がどのウェイポイントにいるか表すステート
 	int m_maxWayPointState = 0;					//ウェイポイントステートの最大の値
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
-	std::vector<COBB> m_wayPointOBB;
+	std::vector<COBB> m_wayPointOBB;			//ウェイポイント用のOBB
 
 
 	bool m_operationFlag = false; //操作できるかのフラグ
