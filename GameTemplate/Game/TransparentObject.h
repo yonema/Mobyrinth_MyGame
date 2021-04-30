@@ -22,15 +22,26 @@ private:	//privateなオーバーライドしてほしいメンバ関数
 
 public: //Set関数
 	/// <summary>
+	/// オブジェクトを初期位置に戻す。
+	/// </summary>
+	void ResetObject()
+	{
+		m_position = m_startPosition;
+		m_rotation = m_startRotation;
+		//表裏の状態も初期状態に戻す。
+
+	}
+
+	/// <summary>
 	/// リセットタイマーの時間をセットし、タイマーをスタートする。
 	/// </summary>
 	/// <param name="i">リセットタイマーの設定値</param>
-	void SetANDStartResetTimer(int i)
-	{
-		m_resetTimer = i;
-		//オブジェクトを持ち上げられるようにする。
-		SetFlagHeld(true);
-	}
+	//void SetANDStartResetTimer(int i)
+	//{
+	//	m_resetTimer = i;
+	//	//オブジェクトを持ち上げられるようにする。
+	//	SetFlagHeld(true);
+	//}
 
 protected: //メンバ変数
 	//bool m_flagTransparentObject = true; //一定時間だけ持ち上げられるオブジェクトかどうかのフラグ

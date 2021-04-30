@@ -31,6 +31,7 @@
 #include "OOgoal.h"
 #include "OOpadlock.h"
 #include "OObox.h"
+#include "TransparentSwitch.h"
 
 
 /// <summary>

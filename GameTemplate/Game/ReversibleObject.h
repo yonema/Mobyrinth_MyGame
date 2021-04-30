@@ -117,6 +117,16 @@ public:		//ここのメンバ関数を主に使う
 		m_objectState = enCheckPlayer;
 	}
 
+	int GetObjectState()
+	{
+		return m_objectState;
+	}
+
+	int GetEnCheckPlayer()
+	{
+		return enCheckPlayer;
+	}
+
 private:	//privateなメンバ関数
 
 	/// <summary>
