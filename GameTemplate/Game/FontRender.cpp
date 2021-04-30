@@ -46,7 +46,7 @@ void CFontRender::Init
 /// <param name="text">テキスト</param>
 void CFontRender::SetText(const wchar_t* text)
 {
-	wsprintf(m_text, text);
+	swprintf_s(m_text, text);
 }
 
 

@@ -437,6 +437,9 @@
     <ClCompile Include="Mobius.cpp">
       <Filter>MyCode\LevelObject\Mobius</Filter>
     </ClCompile>
+    <ClCompile Include="OOReverseALL.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -813,6 +816,9 @@
     </ClInclude>
     <ClInclude Include="Mobius.h">
       <Filter>MyCode\LevelObject\Mobius</Filter>
+    </ClInclude>
+    <ClInclude Include="OOReverseALL.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
