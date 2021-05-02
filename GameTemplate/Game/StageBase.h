@@ -4,6 +4,8 @@
 #include "GameCamera.h"
 #include "SoundCue.h"
 #include "Sky.h"
+#include "TipsController.h"
+
 
 //ポーズ画面用
 #include "Pause.h"
@@ -168,7 +170,7 @@ private:	//データメンバ
 	bool m_initedBGM = false;						//BGMが初期化済みか？
 	bool m_wipeInFlag = false;						//ワイプインする？
 
-
+	CTipsController* m_tipsController = nullptr;
 	CFontRender* m_roNumFR[2];						//表側と裏側にある反転オブジェクトの数
 };
 

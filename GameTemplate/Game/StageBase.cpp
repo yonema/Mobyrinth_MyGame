@@ -44,6 +44,7 @@ bool IStageBase::Start()
 	m_roNumFR[1]->Init(L"bandDream", 
 		{ 300.0f,300.0f }, { 0.0f,0.0f,1.0f,1.0f }, 0.0f, 2.0f, { 0.5f,0.5f });
 
+	m_tipsController = NewGO<CTipsController>(0);
 
 	return StartSub();
 }
@@ -339,6 +340,8 @@ IStageBase::~IStageBase()
 
 	DeleteGO(m_roNumFR[0]);
 	DeleteGO(m_roNumFR[1]);
+
+	DeleteGO(m_tipsController);
 
 	//レベルでロードしたオブジェクトを消去
 

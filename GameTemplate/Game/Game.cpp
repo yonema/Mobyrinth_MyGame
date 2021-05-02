@@ -13,6 +13,7 @@ bool Game::Start()
 	//後で消す
 	//NewGO<testModel>(0);
 
+
 	return true;
 }
 
@@ -64,6 +65,21 @@ void Game::Update()
 
 	//ブレイクポイント用
 	int a = 4;
+
+
+	//if (g_pad[0]->IsTrigger(enButtonB))
+	//{
+	//	m_textType++;
+	//	if (m_textType >= enObjectTypeNum)
+	//		m_textType = enEmpty + 1;
+
+	//	m_tips.SetText(m_textType);
+	//}
+	//else if (g_pad[0]->IsTrigger(enButtonX))
+	//{
+	//	m_tips.ClearText();
+	//}
+
 
 	//if (g_pad[0]->IsTrigger(enButtonB))
 	//{

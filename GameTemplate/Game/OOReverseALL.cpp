@@ -52,21 +52,41 @@ OOReverseALL::~OOReverseALL()
 void OOReverseALL::UpdateSub()
 {
 	//アップデートステートで処理を振り分ける
-	switch (m_updateState)
-	{
-	case enBeforHitPlayer:
+	//switch (m_updateState)
+	//{
+	//case enBeforHitPlayer:
+	//	//プレイヤーと衝突前の処理
+	//	BeforeHitPlayer();
+	//	break;
+	//case enHitPlayer:
+	//	//プレイヤーと衝突時の処理
+	//	HitPlayer();
+	//	break;
+	//case enAfterHitPlayer:
+	//	//プレイヤーと衝突後の処理
+	//	AfterHitPlayer();
+	//	break;
+	//}
+
+
+	///
+	///
+	/// switchやelse ifにしてしまうと、
+	/// 目的の処理が1フレーム遅れてしまうため
+	/// 全部ifで振り分けた。
+
+	//アップデートステートで処理を振り分ける
+	if (m_updateState == enBeforHitPlayer)
 		//プレイヤーと衝突前の処理
 		BeforeHitPlayer();
-		break;
-	case enHitPlayer:
+
+	if (m_updateState == enHitPlayer)
 		//プレイヤーと衝突時の処理
 		HitPlayer();
-		break;
-	case enAfterHitPlayer:
+
+	if (m_updateState == enAfterHitPlayer)
 		//プレイヤーと衝突後の処理
 		AfterHitPlayer();
-		break;
-	}
 
 }
 
@@ -107,6 +127,8 @@ void OOReverseALL::HitPlayer()
 	{
 		//衝突していない
 
+		//衝突後のプレイヤーの座標の確保
+		m_playerAfterPosition = m_pPlayer->GetPosition();
 		//アップデートステートをプレイヤーと衝突後の状態へ
 		m_updateState = enAfterHitPlayer;
 	}
@@ -115,26 +137,41 @@ void OOReverseALL::HitPlayer()
 //プレイヤーと衝突後の処理
 void OOReverseALL::AfterHitPlayer()
 {
-	//衝突後のプレイヤーの
+	//衝突後のプレイヤーの座標の確保
 	m_playerAfterPosition = m_pPlayer->GetPosition();
 
+	//衝突前から衝突時の座標へのベクトル
 	Vector3 beforeToHit = m_playerHitPosition - m_playerBeforePosition;
+	//衝突時から衝突後の座標へのベクトル
 	Vector3 hitToAfter = m_playerAfterPosition - m_playerHitPosition;
+	//正規化しておく
 	beforeToHit.Normalize();
 	hitToAfter.Normalize();
+	//二つの内積を取る
 	float inner = Dot(beforeToHit, hitToAfter);
 
+	//内積で二つのベクトルの向きを調べる
 	if (inner >= 0.0f)
 	{
+		//正、同じ向きなら
+
+		//レベルオブジェクトを取ってくる
 		std::vector<ILevelObjectBase*> levelObjects
 			= CLevelObjectManager::GetInstance()->GetLevelObjects();
+		//全てのレベルオブジェクトに検索
 		for (int i = 0; i < levelObjects.size(); i++)
 		{
+			//CReversibleObjectなら反転させる
 			CReversibleObject* revers = dynamic_cast<CReversibleObject*>(levelObjects[i]);
 			if (revers)
 				revers->Reverse();
 		}
 
 	}
+
+	//衝突前のプレイヤーの座標を保持
+	m_playerBeforePosition = m_pPlayer->GetPosition();
+
+	//アップデートステートをプレイヤーと衝突前の状態へ
 	m_updateState = enBeforHitPlayer;
 }

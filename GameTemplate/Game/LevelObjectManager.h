@@ -137,7 +137,7 @@ public:		//ここのメンバ関数を主に使う
 	/// <summary>
 	/// 自身（LevelObjectManager）に登録してあるオブジェクトの中から
 	/// クエリ（問い合わせ）をする。
-	/// タイプ一覧はLevelObjectBase.hを参照
+	/// タイプ一覧はObjectType.hを参照
 	/// </summary>
 	/// <typeparam name="T">クエリするオブジェクトの型</typeparam>
 	/// <param name="objectType">クエリするオブジェクトのタイプ</param>
@@ -204,6 +204,8 @@ public:		//ここのメンバ関数を主に使う
 		return m_reversibleObjectNum;
 	}
 
+	const int GetNearestObjectType();
+
 	//デバック用
 	//後で消す
 	std::vector<ILevelObjectBase*> GetLevelObjects()
@@ -238,7 +240,7 @@ private:	//データメンバ
 /// <summary>
 /// LevelObjectManagerに登録してあるオブジェクトの中から
 /// クエリ（問い合わせ）をする。
-/// タイプ一覧はLevelObjectBase.hを参照
+/// タイプ一覧はObjectType.hを参照
 /// </summary>
 /// <typeparam name="T">クエリするオブジェクトの型</typeparam>
 /// <param name="objectType">クエリするオブジェクトのタイプ</param>

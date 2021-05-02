@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "LevelObjectManager.h"
 #include "LevelObjectBase.h"
+#include "ReversibleObject.h"
 
 //インスタンスの初期化
 CLevelObjectManager* CLevelObjectManager::m_instance = nullptr;
@@ -179,4 +180,48 @@ bool CLevelObjectManager::QueryLevelAllObjects(ILevelObjectBase& thisObject, con
 		}
 	}
 	return false;
+}
+
+const int CLevelObjectManager::GetNearestObjectType()
+{
+	//プレイヤーが何か持っていたら、
+	if (m_player->GetHoldObject())
+		return m_player->GetReversibleObject()->GetObjectType();
+
+	const int maxWayPoint = m_vecSize - 1;
+	int wayPoint = m_player->GetLeftPointIndex();
+	int leftWayPoint = wayPoint + 1;
+	if (leftWayPoint > maxWayPoint)
+		leftWayPoint = 0;
+	int rightWayPoint = wayPoint - 1;
+	if (rightWayPoint < 0)
+		rightWayPoint = maxWayPoint;
+
+	const float threshold = 300.0f;
+	float dist = threshold;
+
+	int objectType = enEmpty;
+
+	for (int i = 0; i < m_levelObjects.size(); i++)
+	{
+		int objectsWayPoint = m_levelObjects[i]->GetLeftWayPointIndex();
+		if (objectsWayPoint == leftWayPoint || objectsWayPoint == wayPoint ||
+			objectsWayPoint == rightWayPoint)
+		{
+			Vector3 playerToObject = m_levelObjects[i]->GetPosition() - m_player->GetPosition();
+			float length = playerToObject.Length();
+			if (length <= dist)
+			{
+				objectType = m_levelObjects[i]->GetObjectType();
+				dist = length;
+			}
+		}
+		else
+		{
+			continue;
+		}
+	}
+	
+	return objectType;
+
 }
