@@ -44,6 +44,7 @@ bool IStageBase::Start()
 	m_roNumFR[1]->Init(L"bandDream", 
 		{ 300.0f,300.0f }, { 0.0f,0.0f,1.0f,1.0f }, 0.0f, 2.0f, { 0.5f,0.5f });
 
+	//Tipsコントローラーの生成
 	m_tipsController = NewGO<CTipsController>(0);
 
 	return StartSub();

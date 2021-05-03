@@ -4,11 +4,13 @@
 #include "GameCamera.h"
 #include "SoundCue.h"
 #include "Sky.h"
-#include "TipsController.h"
-
 
 //ポーズ画面用
 #include "Pause.h"
+
+//Tips用
+#include "TipsController.h"
+
 
 //レベルのロードで必要
 #include "Level.h"
@@ -170,7 +172,7 @@ private:	//データメンバ
 	bool m_initedBGM = false;						//BGMが初期化済みか？
 	bool m_wipeInFlag = false;						//ワイプインする？
 
-	CTipsController* m_tipsController = nullptr;
+	CTipsController* m_tipsController = nullptr;	//Tipsのコントロ―ルクラス
 	CFontRender* m_roNumFR[2];						//表側と裏側にある反転オブジェクトの数
 };
 

@@ -66,41 +66,6 @@ void Game::Update()
 	//ブレイクポイント用
 	int a = 4;
 
-
-	//if (g_pad[0]->IsTrigger(enButtonB))
-	//{
-	//	m_textType++;
-	//	if (m_textType >= enObjectTypeNum)
-	//		m_textType = enEmpty + 1;
-
-	//	m_tips.SetText(m_textType);
-	//}
-	//else if (g_pad[0]->IsTrigger(enButtonX))
-	//{
-	//	m_tips.ClearText();
-	//}
-
-
-	//if (g_pad[0]->IsTrigger(enButtonB))
-	//{
-
-	//	//g_sceneChange->SetInOrOut(CSceneChange::enIn);
-	//	//g_sceneChange->SetInOrOut(m_inorout);
-	//	if (m_inorout)
-	//		g_sceneChange->RandomWipeOut();
-	//	else
-	//		g_sceneChange->WipeIn();
-	//	m_inorout = !m_inorout;
-	//	//g_sceneChange->WipeStart();
-	//}
-	//else if (g_pad[0]->IsTrigger(enButtonX))
-	//{
-	//	m_wipeNum++;
-	//	if (m_wipeNum > CSceneChange::enCheckerboardWipe)
-	//	{
-	//		m_wipeNum = 0;
-	//	}
-	//}
 	//デバック用ここまで
 
 	return;

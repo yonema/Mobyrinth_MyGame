@@ -204,6 +204,10 @@ public:		//ここのメンバ関数を主に使う
 		return m_reversibleObjectNum;
 	}
 
+	/// <summary>
+	/// プレイヤーに一番近いオブジェクトのオブジェクトタイプを戻す
+	/// </summary>
+	/// <returns>オブジェクトタイプ</returns>
 	const int GetNearestObjectType();
 
 	//デバック用
