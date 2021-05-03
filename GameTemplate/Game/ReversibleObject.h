@@ -41,7 +41,7 @@ protected:	//ここのメンバ関数を主に使う
 	/// 最初に読んでね。trueを戻してね。
 	/// 表のモデルとそのタイプ、裏のモデルとそのタイプ
 	/// を設定する。
-	/// タイプ一覧はLevelObjectBase.hを参照
+	/// タイプ一覧はObjectType.hを参照
 	/// </summary>
 	/// <param name="filePath_front">表のモデルのtkmファイルパス</param>
 	/// <param name="type_front">表のタイプ</param>
