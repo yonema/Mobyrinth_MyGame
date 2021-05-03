@@ -254,8 +254,28 @@ void CReversibleObject::HeldPlayer()
 
 	//自身の左側のウェイポイントのインデックスを設定する
 	SetLeftWayPointIndex(lpIndex);
+
+	int oldFrontOrBackSide = GetFrontOrBackSide();
 	//自身が表側にあるか裏側にあるかを調べる関数
 	CheckFrontOrBackSide();
+
+	if (oldFrontOrBackSide != GetFrontOrBackSide())
+	{
+		const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
+		const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
+		int otherSideNum = 0;
+		int otherSideMaxNum = 0;
+
+		otherSideNum = num[GetFrontOrBackSide()];
+		otherSideMaxNum = maxNum[GetFrontOrBackSide()];
+		
+		if (otherSideNum >= otherSideMaxNum)
+		{
+
+		}
+	}
+	
+
 
 	//プレイヤーの回転を保持
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
@@ -476,14 +496,37 @@ void CReversibleObject::Query()
 {
 	//ウェイポイントの場所を更新する
 	CheckWayPoint();
+
+
+	const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
+	const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
+	int otherSideNum = 0;
+	int otherSideMaxNum = 0;
+	if (GetFrontOrBackSide() == CLevelObjectManager::enFrontSide)
+	{
+		otherSideNum = num[CLevelObjectManager::enBackSide];
+		otherSideMaxNum = maxNum[CLevelObjectManager::enBackSide];
+	}
+	else
+	{
+		otherSideNum = num[CLevelObjectManager::enFrontSide];
+		otherSideMaxNum = maxNum[CLevelObjectManager::enFrontSide];
+	}
 	//表側か裏側かを更新する
 	CheckFrontOrBackSide();
+	if (otherSideNum < otherSideMaxNum)
+	{
 
-	//オーバーライドしてほしい関数QuerySub()
-	QuerySub();
-
-	//ステートをプレイヤーに持たれるかどうか調べる状態に移行する
-	m_objectState = enOverlap;
+		//オーバーライドしてほしい関数QuerySub()
+		QuerySub();
+		//ステートをプレイヤーに持たれるかどうか調べる状態に移行する
+		m_objectState = enOverlap;
+	}
+	else
+	{
+		m_objectState = enOverlapThrownDown;
+		test.Scale(-1.0f);
+	}
 }
 
 
