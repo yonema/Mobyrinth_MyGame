@@ -239,6 +239,13 @@ bool ILevelObjectBase::IsHitPlayer()
 bool IsHitObject
 (ILevelObjectBase& lhs, ILevelObjectBase& rhs)
 {
+	//オブジェクトの衝突判定を行わない状態の場合
+	if (lhs.GetFlagIsHit() == false || rhs.GetFlagIsHit() == false) {
+		//衝突していない判定する。
+		return false;
+	}
+
+
 	//OBB同士の当たり判定をして、
 	//その結果を戻す
 	return CollisionOBBs(lhs.GetOBB(), rhs.GetOBB());

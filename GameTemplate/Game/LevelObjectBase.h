@@ -195,6 +195,31 @@ private:	//データメンバ
 	bool m_isDead = false;					//死んでいるか？
 	COBB m_obb;								//OBBの当たり判定
 
+
+	////////////////////////////////////////////////////////////
+	// 透明オブジェクト用の変数と関数
+	////////////////////////////////////////////////////////////
+public: //Set関数
+	/// <summary>
+	/// 重なっているかの判定の処理を行うか確認するフラグの値を変更する。
+	/// </summary>
+	/// <param name="b">フラグの値</param>
+	void SetFlagIsHit(const bool b)
+	{
+		m_flagIsHit = b;
+	}
+
+	const bool GetFlagIsHit()const
+	{
+		return m_flagIsHit;
+	}
+
+
+private:
+	bool m_flagIsHit = true; //重なっているかの判定の処理を行うか確認するフラグ
+
+
+
 	//デバック用
 	//後で消す
 private:
