@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "LevelObjectManager.h"
 #include "LevelObjectBase.h"
+#include "ReversibleObject.h"
 
 //インスタンスの初期化
 CLevelObjectManager* CLevelObjectManager::m_instance = nullptr;
@@ -179,4 +180,81 @@ bool CLevelObjectManager::QueryLevelAllObjects(ILevelObjectBase& thisObject, con
 		}
 	}
 	return false;
+}
+
+/// <summary>
+/// プレイヤーに一番近いオブジェクトのオブジェクトタイプを戻す
+/// </summary>
+/// <returns>オブジェクトタイプ</returns>
+const int CLevelObjectManager::GetNearestObjectType()
+{
+	//プレイヤーが何か持っていたら、
+	if (m_player->GetHoldObject())
+		//プレイヤーが持っているオブジェクトのタイプを戻す
+		return m_player->GetReversibleObject()->GetObjectType();
+
+	//ウェイポイントの最大値
+	const int maxWayPoint = m_vecSize - 1;
+	//プレイヤーのいるウェイポイント
+	int wayPoint = m_player->GetLeftPointIndex();
+	//ウェイポイント左のウェイポイント
+	int leftWayPoint = wayPoint + 1;
+	//最大値より大きかったら
+	if (leftWayPoint > maxWayPoint)
+		//一周させて0にする
+		leftWayPoint = 0;
+	//ウェイポイント左のウェイポイント
+	int rightWayPoint = wayPoint - 1;
+	//0より小さかったら
+	if (rightWayPoint < 0)
+		//一周させて最大値にする
+		rightWayPoint = maxWayPoint;
+
+	//オブジェクトとの距離のしきい値
+	const float threshold = 300.0f;
+
+	//オブジェクトとの距離
+	//しきい値以下の一番近い距離を探す
+	float dist = threshold;
+
+	//戻すオブジェクトタイプ
+	//近くにオブジェクトがなかったらenEmptyを戻す
+	int objectType = enEmpty;
+
+	//レベルオブジェクトを全部調べる
+	for (int i = 0; i < m_levelObjects.size(); i++)
+	{
+		//オブジェクトがいるウェイポイントを調べる
+		int objectsWayPoint = m_levelObjects[i]->GetLeftWayPointIndex();
+		//オブジェクトの位置を調べる
+		if (objectsWayPoint == leftWayPoint || objectsWayPoint == wayPoint ||
+			objectsWayPoint == rightWayPoint)
+		{
+			//プレイヤーと同じウェイポイント、または、その左右のどちらかにいたら
+
+			//プレイヤーからオブジェクトへのベクトル
+			Vector3 playerToObject = m_levelObjects[i]->GetPosition() - m_player->GetPosition();
+			//ベクトルの長さ
+			float length = playerToObject.Length();
+
+			//長さが、しきい値以下で
+			//今までの長さより近かったら
+			if (length <= dist)
+			{
+				//戻すオブジェクトタイプを更新
+				objectType = m_levelObjects[i]->GetObjectType();
+				//距離も更新
+				dist = length;
+			}
+		}
+		else
+		{
+			//ウェイポイントの場所が違ったらスキップ
+			continue;
+		}
+	}
+	
+	//オブジェクトタイプを戻す
+	return objectType;
+
 }

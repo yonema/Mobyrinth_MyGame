@@ -291,7 +291,9 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
+    <ClCompile Include="Tips.cpp" />
     <ClCompile Include="OOReverseALL.cpp" />
+    <ClCompile Include="TipsController.cpp" />
     <ClCompile Include="UFOLandingPoint.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="PointLight.cpp" />
@@ -423,7 +425,10 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="ObjectType.h" />
+    <ClInclude Include="Tips.h" />
     <ClInclude Include="OOReverseALL.h" />
+    <ClInclude Include="TipsController.h" />
     <ClInclude Include="UFOLandingPoint.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="PointLight.h" />

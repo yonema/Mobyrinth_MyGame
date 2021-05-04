@@ -13,6 +13,7 @@ bool Game::Start()
 	//後で消す
 	//NewGO<testModel>(0);
 
+
 	return true;
 }
 
@@ -65,26 +66,6 @@ void Game::Update()
 	//ブレイクポイント用
 	int a = 4;
 
-	//if (g_pad[0]->IsTrigger(enButtonB))
-	//{
-
-	//	//g_sceneChange->SetInOrOut(CSceneChange::enIn);
-	//	//g_sceneChange->SetInOrOut(m_inorout);
-	//	if (m_inorout)
-	//		g_sceneChange->RandomWipeOut();
-	//	else
-	//		g_sceneChange->WipeIn();
-	//	m_inorout = !m_inorout;
-	//	//g_sceneChange->WipeStart();
-	//}
-	//else if (g_pad[0]->IsTrigger(enButtonX))
-	//{
-	//	m_wipeNum++;
-	//	if (m_wipeNum > CSceneChange::enCheckerboardWipe)
-	//	{
-	//		m_wipeNum = 0;
-	//	}
-	//}
 	//デバック用ここまで
 
 	return;

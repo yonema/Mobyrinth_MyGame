@@ -1,5 +1,6 @@
 #pragma once
 #include "Title.h"
+#include "Tips.h"
 
 /// <summary>
 /// ゲームクラス
@@ -21,7 +22,6 @@ private:	//データメンバ
 	//デバック用
 	//後で消す
 	std::vector<ILevelObjectBase*> m_lb;	//ILevelObjectBaseの情報を受け取る。
-	bool m_inorout = true;
-	int m_wipeNum = 0;
+
 };
 

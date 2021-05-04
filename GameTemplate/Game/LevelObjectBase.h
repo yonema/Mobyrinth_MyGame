@@ -3,6 +3,7 @@
 #include "LevelObjectManager.h"
 #include "Player.h"
 #include "OBB.h"
+#include "ObjectType.h"
 
 //デバック用
 //後で消す
@@ -88,7 +89,7 @@ public:		//ここのメンバ関数を主に使う
 
 	/// <summary>
 	/// タイプを設定する
-	/// タイプはLevelObjectBase.hのEnObjectTypeを参照
+	/// タイプはObjectType.hのEnObjectTypeを参照
 	/// </summary>
 	/// <param name="objectType">タイプ</param>
 	void SetObjectType(int objectType)
@@ -98,7 +99,7 @@ public:		//ここのメンバ関数を主に使う
 
 	/// <summary>
 	/// タイプを取得する
-	/// タイプはLevelObjectBase.hのEnObjectTypeを参照
+	/// タイプはObjectType.hのEnObjectTypeを参照
 	/// </summary>
 	/// <returns>タイプ</returns>
 	const int GetObjectType()const
@@ -192,44 +193,6 @@ private:	//privateなメンバ関数
 	/// OBBの初期化関数
 	/// </summary>
 	void InitOBB();
-
-public:		//publicなデータメンバ
-	/// <summary>
-	/// オブジェクトの番号
-	/// オブジェクトを増やしたらここで番号を増やすこと
-	/// </summary>
-	enum EnObjectType
-	{
-		enEmpty,			//「空っぽ」
-
-		//反転オブジェクト
-		enWater,			//「針金」
-		enFire,				//「火」
-		enBird,				//「鳥」
-		enFish,				//「魚」
-		enGrilledChicken,	//「焼き鳥」
-		enGrilledFish,		//「焼き魚」
-		enRunning,			//「稼働」
-		enStop,				//「停止」
-		enWire,				//「針金」
-		enString,			//「紐」
-		enNail,				//「釘」
-		enBar,				//「バール」
-		enAxe,				//「斧」
-		enPickaxe,			//「つるはし」
-		enKeymold,			//「鍵の金型」
-		enKey,				//「鍵」
-		enPadlock,			//「南京錠」
-
-		//障害オブジェクト
-
-		enBigFire,			//「炎」
-		enWall,				//「壁」
-		enGoal,				//「ゴール」
-		enNotHavePadlock,	//「持てない南京錠」
-		enBox,				//「箱」
-
-	};
 
 protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
 	Vector3 m_position = g_vec3Zero;		//場所

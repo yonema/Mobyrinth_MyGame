@@ -107,10 +107,11 @@ public:		//ここのメンバ関数を主に使う。
 	{
 		m_postRenderFlag = flag;
 	}
-
+private:
+	static const int m_maxTextSize = 256;
 private:	//データメンバ
 	Font m_font;								//フォントクラス
-	wchar_t m_text[256];						//表示するテキスト
+	wchar_t m_text[m_maxTextSize];				//表示するテキスト
 	Vector2 m_position = { 0.0f,0.0f };			//表示する場所。{0.0f,0.0f}が中央
 	Vector4 m_color = { 1.0f,1.0f,1.0f,1.0f };	//カラー{1.0f,1.0f,1.0f,1.0f}が白色
 	float m_rotation = 0.0f;					//回転

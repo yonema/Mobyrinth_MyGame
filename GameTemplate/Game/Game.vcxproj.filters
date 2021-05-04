@@ -99,6 +99,9 @@
     <Filter Include="MyCode\LevelObject\Mobius">
       <UniqueIdentifier>{d3c1a188-a5fa-42b6-9000-377662da058c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Tips">
+      <UniqueIdentifier>{f849e9e9-7bd9-47a0-965b-eba1d87d0459}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -437,8 +440,14 @@
     <ClCompile Include="Mobius.cpp">
       <Filter>MyCode\LevelObject\Mobius</Filter>
     </ClCompile>
+    <ClCompile Include="TipsController.cpp">
+      <Filter>MyCode\Tips</Filter>
+    </ClCompile>
+    <ClCompile Include="Tips.cpp">
+      <Filter>MyCode\Tips</Filter>
+    </ClCompile>
     <ClCompile Include="OOReverseALL.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -817,8 +826,17 @@
     <ClInclude Include="Mobius.h">
       <Filter>MyCode\LevelObject\Mobius</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>MyCode\LevelObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TipsController.h">
+      <Filter>MyCode\Tips</Filter>
+    </ClInclude>
+    <ClInclude Include="Tips.h">
+      <Filter>MyCode\Tips</Filter>
+    </ClInclude>
     <ClInclude Include="OOReverseALL.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
