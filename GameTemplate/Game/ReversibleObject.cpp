@@ -179,6 +179,9 @@ void CReversibleObject::PureVirtualUpdate()
 	//case enThrownSide: //持っているオブジェクトを横に投げる関数
 	//	ThrownSide();
 	//	break;
+	case enRepelled:
+		Repelled();
+		break;
 	case enQuery: //クエリしてほしいタイミング
 		Query();
 		break;
@@ -256,9 +259,10 @@ void CReversibleObject::HeldPlayer()
 	SetLeftWayPointIndex(lpIndex);
 
 	int oldFrontOrBackSide = GetFrontOrBackSide();
+	Vector3 oldPosition = m_position;
+
 	//自身が表側にあるか裏側にあるかを調べる関数
 	CheckFrontOrBackSide();
-
 	if (oldFrontOrBackSide != GetFrontOrBackSide())
 	{
 		const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
@@ -269,9 +273,10 @@ void CReversibleObject::HeldPlayer()
 		otherSideNum = num[GetFrontOrBackSide()];
 		otherSideMaxNum = maxNum[GetFrontOrBackSide()];
 		
-		if (otherSideNum >= otherSideMaxNum)
+		if (otherSideNum > otherSideMaxNum)
 		{
-
+			m_objectState = enRepelled;
+			m_timer = 0.0f;
 		}
 	}
 	
@@ -292,8 +297,19 @@ void CReversibleObject::HeldPlayer()
 	m_rotation = qRot;
 
   
+	if (m_objectState == enRepelled)
+	{
+		Vector3 oldToNext = m_position - oldPosition;
+		Vector3 rightVec = g_vec3Left;
+		m_rotation.Apply(rightVec);
+		float inner = Dot(oldToNext, rightVec);
+		if (inner >= 0.0f)
+			m_leftOrRight = enLeft;
+		else
+			m_leftOrRight = enRight;
+	}
 	//オブジェクトを裏側に投げて、オブジェクトの性質を反転させる。
-	if (g_pad[0]->IsTrigger(enButtonA))
+	else if (g_pad[0]->IsTrigger(enButtonA))
 	{
 		//プレイヤーの回転を保持する
 		m_throwRot = m_pPlayer->GetFinalWPRot();
@@ -486,6 +502,43 @@ void CReversibleObject::Cancel()
 //	m_pPlayer->GetLeftPointIndex();
 //}
 
+void CReversibleObject::Repelled()
+{
+	const float switchingTimer = 1.0f;
+
+	if (m_timer == 0.0f)
+	{
+		int leftOrRight = enLeft;
+		if (GetFrontOrBackSide() == CLevelObjectManager::enBackSide)
+			int leftOrRight = enRight;
+
+		const float addLen = 500.0f;
+		//ウェイポイント上の次の座標を計算する
+		m_addPosition = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
+		(GetRightWayPointIndex(), m_position, addLen, m_leftOrRight);
+
+		m_addPosition -= m_position;
+		m_addPosition /= switchingTimer;
+
+		//プレイヤーがオブジェクトを持っていない状態にする
+		m_pPlayer->SetHoldObject(false);
+	}
+
+	CheckWayPoint();
+	if (m_timer < switchingTimer)
+	{
+		m_position += m_addPosition * GameTime().GetFrameDeltaTime();
+		m_timer += GameTime().GetFrameDeltaTime();
+	}
+	else
+	{
+		m_timer = 0.0f;
+		m_objectState = enQuery;
+
+	}
+
+}
+
 
 /// <summary>
 /// クエリしてほしいタイミングで呼ばれる関数
@@ -497,6 +550,8 @@ void CReversibleObject::Query()
 	//ウェイポイントの場所を更新する
 	CheckWayPoint();
 
+	//表側か裏側かを更新する
+	CheckFrontOrBackSide();
 
 	const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
 	const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
@@ -504,17 +559,16 @@ void CReversibleObject::Query()
 	int otherSideMaxNum = 0;
 	if (GetFrontOrBackSide() == CLevelObjectManager::enFrontSide)
 	{
-		otherSideNum = num[CLevelObjectManager::enBackSide];
-		otherSideMaxNum = maxNum[CLevelObjectManager::enBackSide];
-	}
-	else
-	{
 		otherSideNum = num[CLevelObjectManager::enFrontSide];
 		otherSideMaxNum = maxNum[CLevelObjectManager::enFrontSide];
 	}
-	//表側か裏側かを更新する
-	CheckFrontOrBackSide();
-	if (otherSideNum < otherSideMaxNum)
+	else
+	{
+		otherSideNum = num[CLevelObjectManager::enBackSide];
+		otherSideMaxNum = maxNum[CLevelObjectManager::enBackSide];
+	}
+
+	if (otherSideNum <= otherSideMaxNum)
 	{
 
 		//オーバーライドしてほしい関数QuerySub()

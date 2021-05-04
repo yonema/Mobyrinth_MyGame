@@ -155,6 +155,8 @@ private:	//privateなメンバ関数
 	/// </summary>
 	//void ThrownSide();
 
+	void Repelled();
+
 	/// <summary>
 	/// クエリしてほしいタイミングで呼ばれる関数
 	/// オーバーライドしてほしい関数、QuerySub()はここで呼ばれる。
@@ -204,7 +206,8 @@ private:	//データメンバ
 	Quaternion m_throwRot = g_quatIdentity;		//下に投げるときの回転
 
 	float m_heldUpLen = 100.0f;					//持ち上げた時の、上に持ち上げるベクトルの長さ
-
+	float m_timer = 0.0f;
+	Vector3 m_addPosition = g_vec3Zero;
 	/// <summary>
 	/// オブジェクトの現在のステート（状態）
 	/// これでアップデート中の処理を割り振る
@@ -216,6 +219,7 @@ private:	//データメンバ
 		enThrownDown,	//持っているオブジェクトを下に投げる関数
 		enCancel,		//持っているオブジェクトをその場に置く
 		//enThrownSide,	//持っているオブジェクトを横に投げる関数
+		enRepelled,
 		enQuery,		//クエリしてほしいタイミング
 
 		enOverlap,		//障害オブジェクトに重ねっているかの確認
@@ -232,8 +236,8 @@ private:	//データメンバ
 		enLeft,		//左
 		enRight,	//右
 	};
-	int m_playerLeftOrRight = enRight;	//キャラクターの左右の向き
-
+	//int m_playerLeftOrRight = enRight;	//キャラクターの左右の向き
+	int m_leftOrRight = enLeft;
 	bool m_checkOverlap = false; //このオブジェクトを戻らせるかのフラグ
 
 	Vector3 test = { 0.0f,0.0f,0.0f };
