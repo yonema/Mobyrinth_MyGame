@@ -159,43 +159,45 @@ void CReversibleObject::PureVirtualUpdate()
 			return;
 	}
 
-	/// <summary>
-	/// ステート（状態）アップデートを割り振る
-	/// </summary>
-	switch (m_objectState)
-	{
-	case enCheckPlayer:	//プレイヤーに持たれるかどうか調べる
-		CheckPlayer();
-		break;
-	case enHeldPlayer:	//プレイヤーに持たれている状態
-		HeldPlayer();
-		break;
-	case enThrownDown: //持っているオブジェクトを下に投げる関数
-		ThrownDown();
-		break;
-	case enCancel: //持っているオブジェクトをその場に置く
-		Cancel();
-		break;
-	//case enThrownSide: //持っているオブジェクトを横に投げる関数
-	//	ThrownSide();
-	//	break;
-	case enRepelled:	//横に弾かれる
-		Repelled();
-		break;
-	case enQuery: //クエリしてほしいタイミング
-		Query();
-		break;
-	case enOverlap: //障害オブジェクトに重なっているかの確認
-		CheckObjectsOverlap();
-		break;
-	case enOverlapThrownDown: //オブジェクトが戻ってくる処理（縦）
-		OverlapThrownDown();
-		break;
-	//case enOverlapThrownSide: //オブジェクトが戻ってくる処理（横）
-	//	OverlapThrownSide();
-	//	break;
-	default:
-		break;
+
+	//オブジェクトが持てない状態なら、この関switch文の処理を行わない。
+	if (m_flagHeld == true) {
+		/// <summary>
+		/// ステート（状態）アップデートを割り振る
+		/// </summary>
+		switch (m_objectState)
+		{
+		case enCheckPlayer:	//プレイヤーに持たれるかどうか調べる
+			CheckPlayer();
+			break;
+		case enHeldPlayer:	//プレイヤーに持たれている状態
+			HeldPlayer();
+			break;
+		case enThrownDown: //持っているオブジェクトを下に投げる関数
+			ThrownDown();
+			break;
+		case enCancel: //持っているオブジェクトをその場に置く
+			Cancel();
+			break;
+			//case enThrownSide: //持っているオブジェクトを横に投げる関数
+			//	ThrownSide();
+			//	break;
+		case enQuery: //クエリしてほしいタイミング
+			Query();
+			break;
+		case enOverlap: //障害オブジェクトに重なっているかの確認
+			CheckObjectsOverlap();
+			break;
+		case enOverlapThrownDown: //オブジェクトが戻ってくる処理（縦）
+			OverlapThrownDown();
+			break;
+			//case enOverlapThrownSide: //オブジェクトが戻ってくる処理（横）
+			//	OverlapThrownSide();
+			//	break;
+		default:
+			break;
+		}
+
 	}
 
 

@@ -93,14 +93,10 @@
     <Filter Include="MyCode\Timer">
       <UniqueIdentifier>{70b6ee87-5725-4869-ab1d-15b0b3a1cae8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\LevelObject\UFO">
-      <UniqueIdentifier>{c8de0a8c-23ed-4b8b-8a83-ba31620c7986}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\LevelObject\Mobius">
-      <UniqueIdentifier>{d3c1a188-a5fa-42b6-9000-377662da058c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\Tips">
-      <UniqueIdentifier>{f849e9e9-7bd9-47a0-965b-eba1d87d0459}</UniqueIdentifier>
+
+    <Filter Include="MyCode\LevelObject\TransparentObject">
+      <UniqueIdentifier>{29081464-a22e-4612-9396-393e3742a98e}</UniqueIdentifier>
+
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -428,26 +424,16 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="SpotLight.cpp">
-      <Filter>MyCode\Light</Filter>
+
+    <ClCompile Include="RTransparentObject.cpp">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClCompile>
-    <ClCompile Include="UFO.cpp">
-      <Filter>MyCode\LevelObject\UFO</Filter>
+    <ClCompile Include="TransparentSwitch.cpp">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClCompile>
-    <ClCompile Include="UFOLandingPoint.cpp">
-      <Filter>MyCode\LevelObject\UFO</Filter>
-    </ClCompile>
-    <ClCompile Include="Mobius.cpp">
-      <Filter>MyCode\LevelObject\Mobius</Filter>
-    </ClCompile>
-    <ClCompile Include="TipsController.cpp">
-      <Filter>MyCode\Tips</Filter>
-    </ClCompile>
-    <ClCompile Include="Tips.cpp">
-      <Filter>MyCode\Tips</Filter>
-    </ClCompile>
-    <ClCompile Include="OOReverseALL.cpp">
-      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    <ClCompile Include="OTransparentObject.cpp">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
+
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -814,29 +800,16 @@
     <ClInclude Include="StopWatch.h">
       <Filter>MyCode\Timer</Filter>
     </ClInclude>
-    <ClInclude Include="SpotLight.h">
-      <Filter>MyCode\Light</Filter>
+
+    <ClInclude Include="RTransparentObject.h">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClInclude>
-    <ClInclude Include="UFO.h">
-      <Filter>MyCode\LevelObject\UFO</Filter>
+    <ClInclude Include="TransparentSwitch.h">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClInclude>
-    <ClInclude Include="UFOLandingPoint.h">
-      <Filter>MyCode\LevelObject\UFO</Filter>
-    </ClInclude>
-    <ClInclude Include="Mobius.h">
-      <Filter>MyCode\LevelObject\Mobius</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectType.h">
-      <Filter>MyCode\LevelObject</Filter>
-    </ClInclude>
-    <ClInclude Include="TipsController.h">
-      <Filter>MyCode\Tips</Filter>
-    </ClInclude>
-    <ClInclude Include="Tips.h">
-      <Filter>MyCode\Tips</Filter>
-    </ClInclude>
-    <ClInclude Include="OOReverseALL.h">
-      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    <ClInclude Include="OTransparentObject.h">
+      <Filter>MyCode\LevelObject\TransparentObject</Filter>
+
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

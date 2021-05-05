@@ -121,6 +121,24 @@ public:		//ここのメンバ関数を主に使う
 		m_heldUpLen = heldUpLen;
 	}
 
+	/// <summary>
+	/// オブジェクトの状態をenCheckPlayerにセットする。
+	/// </summary>
+	void SetObjectStateEnCheckPlayer()
+	{
+		m_objectState = enCheckPlayer;
+	}
+
+	int GetObjectState()
+	{
+		return m_objectState;
+	}
+
+	int GetEnCheckPlayer()
+	{
+		return enCheckPlayer;
+	}
+
 private:	//privateなメンバ関数
 
 	/// <summary>
@@ -230,7 +248,7 @@ private:	//データメンバ
 		//enOverlapThrownSide //オブジェクトが戻ってくる処理（横）
 	};
 	int m_objectState = enCheckPlayer;			//現在のオブジェクトのステート（状態）
-	int m_objectAction = enCheckPlayer;			//オブジェクトに行ったアクションを保存
+	int m_objectAction = enCheckPlayer;			//オブジェクトに行ったアクションを保存（戻ってくる処理に使用）
 
 	
 	//キャラクターの左右の向きを調べるのに使用
@@ -251,5 +269,23 @@ private:	//データメンバ
 
 protected:
 	bool m_flagOverlap = true; //このオブジェクトが重なっているかを判定する処理を動かすかどうか
+
+
+	////////////////////////////////////////////////////////////
+	// TransparentObjectに関係する関数、変数
+	////////////////////////////////////////////////////////////
+
+public: //TransparentObject関連の関数
+	/// <summary>
+	/// オブジェクトが現在持ち上げられるかのフラグの値を代入する。
+	/// </summary>
+	/// <param name="b">オブジェクトが現在持てるか</param>
+	void SetFlagHeld(bool b)
+	{
+		m_flagHeld = b;
+	}
+
+private: //TransparentObject関連の変数
+	bool m_flagHeld = true; //オブジェクトが現在持ち上げられるかのフラグ
 };
 

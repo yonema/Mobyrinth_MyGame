@@ -209,6 +209,31 @@ private:	//データメンバ
 	int m_rpIndex = 0;
 	int m_frontOrBackSide = CLevelObjectManager::enNone;	//自身が表側にあるか裏側にあるか
 
+
+	////////////////////////////////////////////////////////////
+	// 透明オブジェクト用の変数と関数
+	////////////////////////////////////////////////////////////
+public: //Set関数
+	/// <summary>
+	/// 重なっているかの判定の処理を行うか確認するフラグの値を変更する。
+	/// </summary>
+	/// <param name="b">フラグの値</param>
+	void SetFlagIsHit(const bool b)
+	{
+		m_flagIsHit = b;
+	}
+
+	const bool GetFlagIsHit()const
+	{
+		return m_flagIsHit;
+	}
+
+
+private:
+	bool m_flagIsHit = true; //重なっているかの判定の処理を行うか確認するフラグ
+
+
+
 	//デバック用
 	//後で消す
 private:
