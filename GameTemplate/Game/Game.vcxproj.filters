@@ -93,10 +93,8 @@
     <Filter Include="MyCode\Timer">
       <UniqueIdentifier>{70b6ee87-5725-4869-ab1d-15b0b3a1cae8}</UniqueIdentifier>
     </Filter>
-
     <Filter Include="MyCode\LevelObject\TransparentObject">
       <UniqueIdentifier>{29081464-a22e-4612-9396-393e3742a98e}</UniqueIdentifier>
-
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -424,7 +422,6 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
     </ClCompile>
-
     <ClCompile Include="RTransparentObject.cpp">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClCompile>
@@ -433,7 +430,27 @@
     </ClCompile>
     <ClCompile Include="OTransparentObject.cpp">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
-
+    </ClCompile>
+    <ClCompile Include="Tips.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="OOReverseALL.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="TipsController.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="UFOLandingPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Mobius.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="UFO.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -800,7 +817,6 @@
     <ClInclude Include="StopWatch.h">
       <Filter>MyCode\Timer</Filter>
     </ClInclude>
-
     <ClInclude Include="RTransparentObject.h">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClInclude>
@@ -809,7 +825,30 @@
     </ClInclude>
     <ClInclude Include="OTransparentObject.h">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
-
+    </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Tips.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="OOReverseALL.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TipsController.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="UFOLandingPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Mobius.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="UFO.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
