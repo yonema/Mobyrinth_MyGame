@@ -294,6 +294,7 @@
     <ClCompile Include="Tips.cpp" />
     <ClCompile Include="OOReverseALL.cpp" />
     <ClCompile Include="TipsController.cpp" />
+    <ClCompile Include="UFO.cpp" />
     <ClCompile Include="UFOLandingPoint.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="OTransparentObject.cpp" />
@@ -361,10 +362,8 @@
     <ClCompile Include="testModel.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TklFile.cpp" />
-
     <ClCompile Include="RTransparentObject.cpp" />
     <ClCompile Include="TransparentSwitch.cpp" />
-
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="WaveFileBank.cpp" />
   </ItemGroup>
@@ -433,6 +432,7 @@
     <ClInclude Include="Tips.h" />
     <ClInclude Include="OOReverseALL.h" />
     <ClInclude Include="TipsController.h" />
+    <ClInclude Include="UFO.h" />
     <ClInclude Include="UFOLandingPoint.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="OTransparentObject.h" />
@@ -495,10 +495,8 @@
     <ClInclude Include="testModel.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TklFile.h" />
-
     <ClInclude Include="RTransparentObject.h" />
     <ClInclude Include="TransparentSwitch.h" />
-
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />
