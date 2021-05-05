@@ -205,6 +205,27 @@ public:		//ここのメンバ関数を主に使う
 	}
 
 	/// <summary>
+	/// 反転オブジェクトの、表側と裏側のそれぞれの最大数を設定する
+	/// </summary>
+	/// <param name="frontOfBackSide">表側か裏側か？</param>
+	/// <param name="maxNum">最大数</param>
+	void SetReversibleObjectMaxNum(const int frontOfBackSide, const int maxNum)
+	{
+		m_reversibleObjectMaxNum[frontOfBackSide] = maxNum;
+	}
+
+	/// <summary>
+	/// 反転オブジェクトの、表側と裏側のそれぞれの最大数を戻す。
+	/// 配列の先頭アドレスを戻す
+	/// </summary>
+	/// <returns>数の配列の先頭アドレス</returns>
+	const int* GetReversibleObjectMaxNum()
+	{
+		return m_reversibleObjectMaxNum;
+	}
+		
+
+	/// <summary>
 	/// プレイヤーに一番近いオブジェクトのオブジェクトタイプを戻す
 	/// </summary>
 	/// <returns>オブジェクトタイプ</returns>
@@ -237,7 +258,8 @@ private:	//データメンバ
 	std::vector<ILevelObjectBase*> m_levelObjects;	//インスタンスしたレベルオブジェクトの配列
 	//反転オブジェクトの、表側と裏側のそれぞれの数
 	int m_reversibleObjectNum[enFrontOrBackSideNum] = { 0,0 };
-
+	//反転オブジェクトの、表側と裏側のそれぞれの最大数
+	int m_reversibleObjectMaxNum[enFrontOrBackSideNum] = { 0,0 };
 };
 
 

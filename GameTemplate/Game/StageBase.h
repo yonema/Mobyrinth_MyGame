@@ -174,5 +174,6 @@ private:	//データメンバ
 
 	CTipsController* m_tipsController = nullptr;	//Tipsのコントロ―ルクラス
 	CFontRender* m_roNumFR[2];						//表側と裏側にある反転オブジェクトの数
+
 };
 
