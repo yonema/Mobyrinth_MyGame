@@ -111,8 +111,16 @@ public:		//ここのメンバ関数を主に使う
 		return m_vecSize;
 	}
 
+	/// <summary>
+	/// ウェイポイント上での移動先を計算する関数
+	/// </summary>
+	/// <param name="rpIndex">現在の右側のウェイポイントのインデックス</param>
+	/// <param name="pos">現在の座標</param>
+	/// <param name="dist">移動する距離</param>
+	/// <param name="leftOrRight">右側に移動するか左側い移動するか。0:左,1:右</param>
+	/// <returns>移動先の座標</returns>
 	const Vector3 CalcWayPointNextPos
-	(const int rpIndex, const Vector3& pos, const float dist, const bool leftOrRight);
+	(const int rpIndex, const Vector3& pos, const float dist, const bool leftOrRight, int* pNextIndex = nullptr);
 
 	/// <summary>
 	/// 自身（LevelObjectManager）にオブジェクトを追加する
@@ -129,7 +137,7 @@ public:		//ここのメンバ関数を主に使う
 	/// <summary>
 	/// 自身（LevelObjectManager）に登録してあるオブジェクトの中から
 	/// クエリ（問い合わせ）をする。
-	/// タイプ一覧はLevelObjectBase.hを参照
+	/// タイプ一覧はObjectType.hを参照
 	/// </summary>
 	/// <typeparam name="T">クエリするオブジェクトの型</typeparam>
 	/// <param name="objectType">クエリするオブジェクトのタイプ</param>
@@ -168,7 +176,60 @@ public:		//ここのメンバ関数を主に使う
 	/// </summary>
 	void AllDeleteLOs();
 
+	/// <summary>
+	/// 表側か裏側かの、反転オブジェクトの数を加算する
+	/// </summary>
+	/// <param name="frontOrBackSide">表側か裏側か</param>
+	void AddReversibleObjectNum(const int frontOrBackSide)
+	{
+		m_reversibleObjectNum[frontOrBackSide]++;
+	}
 
+	/// <summary>
+	/// 表側か裏側かの、反転オブジェクトの数を減算する
+	/// </summary>
+	/// <param name="frontOrBackSide">表側か裏側か</param>
+	void RemoveReversibleObjectNum(const int frontOrBackSide)
+	{
+		m_reversibleObjectNum[frontOrBackSide]--;
+	}
+
+	/// <summary>
+	/// 反転オブジェクトの、表側と裏側のそれぞれの数を戻す。
+	/// 配列の先頭アドレスを戻す
+	/// </summary>
+	/// <returns>数の配列の先頭アドレス</returns>
+	const int* GetReversibleObjectNum() const
+	{
+		return m_reversibleObjectNum;
+	}
+
+	/// <summary>
+	/// 反転オブジェクトの、表側と裏側のそれぞれの最大数を設定する
+	/// </summary>
+	/// <param name="frontOfBackSide">表側か裏側か？</param>
+	/// <param name="maxNum">最大数</param>
+	void SetReversibleObjectMaxNum(const int frontOfBackSide, const int maxNum)
+	{
+		m_reversibleObjectMaxNum[frontOfBackSide] = maxNum;
+	}
+
+	/// <summary>
+	/// 反転オブジェクトの、表側と裏側のそれぞれの最大数を戻す。
+	/// 配列の先頭アドレスを戻す
+	/// </summary>
+	/// <returns>数の配列の先頭アドレス</returns>
+	const int* GetReversibleObjectMaxNum()
+	{
+		return m_reversibleObjectMaxNum;
+	}
+		
+
+	/// <summary>
+	/// プレイヤーに一番近いオブジェクトのオブジェクトタイプを戻す
+	/// </summary>
+	/// <returns>オブジェクトタイプ</returns>
+	const int GetNearestObjectType();
 
 	//デバック用
 	//後で消す
@@ -176,21 +237,36 @@ public:		//ここのメンバ関数を主に使う
 	{
 		return m_levelObjects;
 	}
-private:
+
+public:	//列挙体
+	/// <summary>
+	/// 表側か裏側か
+	/// </summary>
+	enum EnFrontOrBackSide
+	{
+		enFrontSide,			//表側
+		enBackSide,				//裏側
+		enFrontOrBackSideNum,	//表と裏の数
+		enNone = -1,			//無し
+	};
+private:	//データメンバ
 	Player* m_player = nullptr;				//プレイヤーのポインタ
 	std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
 	std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
 	int m_vecSize = 0;						//ウェイポイントステートの最大の値
 
 	std::vector<ILevelObjectBase*> m_levelObjects;	//インスタンスしたレベルオブジェクトの配列
-
+	//反転オブジェクトの、表側と裏側のそれぞれの数
+	int m_reversibleObjectNum[enFrontOrBackSideNum] = { 0,0 };
+	//反転オブジェクトの、表側と裏側のそれぞれの最大数
+	int m_reversibleObjectMaxNum[enFrontOrBackSideNum] = { 0,0 };
 };
 
 
 /// <summary>
 /// LevelObjectManagerに登録してあるオブジェクトの中から
 /// クエリ（問い合わせ）をする。
-/// タイプ一覧はLevelObjectBase.hを参照
+/// タイプ一覧はObjectType.hを参照
 /// </summary>
 /// <typeparam name="T">クエリするオブジェクトの型</typeparam>
 /// <param name="objectType">クエリするオブジェクトのタイプ</param>

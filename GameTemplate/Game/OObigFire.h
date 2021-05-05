@@ -11,12 +11,18 @@ class OObigFire : public CObstacleObject
 public:		//自動で呼ばれるメンバ関数
 	bool StartSub() override final;	//スタート関数
 	~OObigFire();					//デストラクタ
+	void UpdateSub() override final;
 
 public:		//メンバ関数
 	void Damage();	//ダメージを受ける
+	void Burn(); //燃えるSE
+
 private:
 	int m_maxHp = 3;						//最大HP
 	int m_hp = m_maxHp;						//現在のHP
 	CPointLight* m_pointLight = nullptr;	//ポイントライト
+
+	CSoundCue* m_flameSE = nullptr; //flameのサウンドキュー
+
 };
 

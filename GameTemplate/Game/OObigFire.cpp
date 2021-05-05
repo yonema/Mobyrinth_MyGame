@@ -29,6 +29,11 @@ bool OObigFire::StartSub()
 
 	GetOBB().SetTag(COBB::enBigFire);
 
+	//flameSEのサウンドキューを生成する
+	m_flameSE = NewGO<CSoundCue>(0);
+	//flameSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_flameSE->Init(L"Assets/sound/flame.wav");
+
 	return true;
 }
 
@@ -36,6 +41,14 @@ bool OObigFire::StartSub()
 OObigFire::~OObigFire()
 {
 	DeleteGO(m_pointLight);
+	if (m_flameSE->IsPlaying()) {
+		m_flameSE->Stop();
+	}
+}
+
+void OObigFire::UpdateSub()
+{
+	Burn();
 }
 
 //ダメージを受ける
@@ -56,10 +69,10 @@ void OObigFire::Damage()
 		//大きさを5/5→4/5→3/5→0と変化させる
 		const int sizeComplement = 3;
 
-			//m_hpとm_maxHpはint型。
-			//int型同士の割り算だから小数が切り捨てられて
-			//評価した値が0になってしまう。
-			//だから、m_hpをfloatにキャストする
+		//m_hpとm_maxHpはint型。
+		//int型同士の割り算だから小数が切り捨てられて
+		//評価した値が0になってしまう。
+		//だから、m_hpをfloatにキャストする
 		obbSize.Scale(static_cast<float>(m_hp + sizeComplement) / (m_maxHp + sizeComplement));
 		GetOBB().SetDirectionLength(obbSize);
 
@@ -72,5 +85,31 @@ void OObigFire::Damage()
 			//これがSetScale(g_vec3One * (m_hp / m_maxHp))
 			//だったらうまくいかない。
 		SetScale(g_vec3One * (m_hp + sizeComplement) / (m_maxHp + sizeComplement));
+	}
+}
+
+//プレイヤーが炎に近づくと燃えてる音を出す
+void OObigFire::Burn()
+{
+	Vector3 distance = m_position - m_pPlayer->GetPosition();
+	const float MaxDist = 700;
+	const float DistLen = distance.Length();
+
+	if (DistLen < MaxDist) {
+		float Le = MaxDist - DistLen;
+		float SubLe = Le / MaxDist;
+		float Vo = 2.0f * SubLe;
+
+		//flameSEをループ再生をオンで再生する。
+		m_flameSE->Play(true);
+
+		//音量調節
+		m_flameSE->SetVolume(Vo);
+
+	}
+	else {
+		if (m_flameSE->IsPlaying()) {
+			m_flameSE->Stop();
+		}
 	}
 }

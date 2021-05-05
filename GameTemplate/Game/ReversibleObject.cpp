@@ -8,6 +8,8 @@ bool CReversibleObject::PureVirtualStart()
 {
 	//モデルの回転を、現在の場所とイイ感じに合わせる
 	CheckWayPoint();
+	//自身が表側にあるか裏側にあるかを調べる
+	CheckFrontOrBackSide();
 
 	//changeSEのサウンドキューを生成する
 	m_changeSE = NewGO<CSoundCue>(0);
@@ -15,6 +17,9 @@ bool CReversibleObject::PureVirtualStart()
 	m_changeSE->Init(L"Assets/sound/change.wav");
 	//音量調節
 	m_changeSE->SetVolume(0.5f);
+
+
+
 
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
@@ -32,6 +37,8 @@ CReversibleObject::~CReversibleObject()
 		DeleteGO(m_modelRender[i]);
 	}
 
+	CLevelObjectManager::GetInstance()->RemoveReversibleObjectNum(GetFrontOrBackSide());
+
 }
 
 
@@ -40,7 +47,7 @@ CReversibleObject::~CReversibleObject()
 /// 最初に読んでね。trueを戻してね。
 /// 表のモデルとそのタイプ、裏のモデルとそのタイプ
 /// を設定する。
-/// タイプ一覧はLevelObjectBase.hを参照
+/// タイプ一覧はObjectType.hを参照
 /// </summary>
 /// <param name="filePath_front">表のモデルのtkmファイルパス</param>
 /// <param name="type_front">表のタイプ</param>
@@ -152,6 +159,7 @@ void CReversibleObject::PureVirtualUpdate()
 			return;
 	}
 
+
 	//オブジェクトが持てない状態なら、この関switch文の処理を行わない。
 	if (m_flagHeld == true) {
 		/// <summary>
@@ -189,6 +197,7 @@ void CReversibleObject::PureVirtualUpdate()
 		default:
 			break;
 		}
+
 	}
 
 
@@ -228,7 +237,7 @@ void CReversibleObject::CheckPlayer()
 				//ステートをプレイヤーに持たれている状態へ
 				m_objectState = enHeldPlayer;
 				//プレイヤーをオブジェクトを持ってる状態にする
-				m_pPlayer->SetHoldObject(true);
+				m_pPlayer->SetHoldObject(true, this);
 				//オブジェクトが重なっているかを判定する処理を動かすフラグをtrueにする
 				m_flagOverlap = true;
 			}
@@ -245,6 +254,45 @@ void CReversibleObject::CheckPlayer()
 /// </summary>
 void CReversibleObject::HeldPlayer()
 {
+	//プレイヤーの左側のウェイポイントのインデックスを取得
+	int lpIndex = m_pPlayer->GetLeftPointIndex();
+
+	//自身の左側のウェイポイントのインデックスを設定する
+	SetLeftWayPointIndex(lpIndex);
+
+	//更新前の表面か裏面か？
+	int oldFrontOrBackSide = GetFrontOrBackSide();
+	//更新前の座標
+	Vector3 oldPosition = m_position;
+
+	//自身が表側にあるか裏側にあるかを調べる関数
+	CheckFrontOrBackSide();
+
+	//更新前と更新後の表門か裏面か？が違っていたら
+	if (oldFrontOrBackSide != GetFrontOrBackSide())
+	{
+		//反転オブジェクトの表面と裏面のそれぞれの数
+		const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
+		//反転オブジェクトの表面と裏面のそれぞれの最大数
+		const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
+
+		//次の表面か裏面かの数
+		int nextSideNum = num[GetFrontOrBackSide()];
+		//次の表面か裏面かの最大数
+		int nextSideMaxNum = maxNum[GetFrontOrBackSide()];
+
+		//数が最大数より大きかったら
+		if (nextSideNum > nextSideMaxNum)
+		{
+			//ステートを横に弾かれる状態へ
+			m_objectState = enRepelled;
+			//タイマーを初期化する
+			m_timer = 0.0f;
+		}
+	}
+	
+
+
 	//プレイヤーの回転を保持
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
 	//上方向ベクトルを保持
@@ -259,9 +307,31 @@ void CReversibleObject::HeldPlayer()
 	//モデルの回転をプレイヤーと同じにする
 	m_rotation = qRot;
 
-  
+	//ステートが弾かれる状態だったら
+	if (m_objectState == enRepelled)
+	{
+		//更新前から更新後の座標へのベクトル
+		Vector3 oldToNext = m_position - oldPosition;
+		//右へのベクトル
+		Vector3 rightVec = g_vec3Left;
+		//自身の回転で右へのベクトルを回す
+		m_rotation.Apply(rightVec);
+		//更新前から更新後の座標へのベクトルと
+		//右へのベクトルの内積を取る
+		float inner = Dot(oldToNext, rightVec);
+
+		//内積が正か負か
+		if (inner >= 0.0f)
+			//正
+			//右に移動しているから、左に弾く
+			m_leftOrRight = enLeft;
+		else
+			//負
+			//左に移動しているから、右に弾く
+			m_leftOrRight = enRight;
+	}
 	//オブジェクトを裏側に投げて、オブジェクトの性質を反転させる。
-	if (g_pad[0]->IsTrigger(enButtonA))
+	else if (g_pad[0]->IsTrigger(enButtonA))
 	{
 		//プレイヤーの回転を保持する
 		m_throwRot = m_pPlayer->GetFinalWPRot();
@@ -454,6 +524,73 @@ void CReversibleObject::Cancel()
 //	m_pPlayer->GetLeftPointIndex();
 //}
 
+/// <summary>
+/// 横に弾かれる
+/// </summary>
+void CReversibleObject::Repelled()
+{
+	//切り替えタイマー
+	const float switchingTimer = 1.0f;
+
+	//タイマーが0.0fの時
+	//つまり最初の1回だけ呼ばれる
+	if (m_timer == 0.0f)
+	{
+		//弾く距離
+		const float addLen = 500.0f;
+		//ウェイポイント上の次の座標を計算する
+		m_addPosition = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
+		(GetRightWayPointIndex(), m_position, addLen, m_leftOrRight);
+
+		//自身の座標から次の座標へのベクトルにする
+		m_addPosition -= m_position;
+		//切り替え時間いっぱいで次の座標へ行けるようにする
+		m_addPosition /= switchingTimer;
+
+		//プレイヤーがオブジェクトを持っていない状態にする
+		m_pPlayer->SetHoldObject(false);
+	}
+
+	//ウェイポイントと回転の更新
+	CheckWayPoint();
+
+	//タイマーが切り替え時間より小さいか？
+	if (m_timer < switchingTimer)
+	{
+		//小さい
+
+		//縦に動かすベクトル
+		Vector3 verticalPower = { 0.0f,4000.0f,0.0f };
+		//自身の回転で回す
+		m_rotation.Apply(verticalPower);
+		//二次関数的な動きにする
+		verticalPower *= pow(static_cast<double>(m_timer - switchingTimer / 2.0), 2.0);
+		//半分の時間が過ぎたら下に下げる
+		if (m_timer >= switchingTimer / 2.0f)
+			verticalPower *= -1.0f;
+
+		//Y軸中心にくるくる回転させる
+		Quaternion qRot = m_rotation;
+		m_rotation.SetRotationDegY(360.0f * 2.0f * m_timer / switchingTimer);
+		m_rotation.Multiply(qRot);
+
+		//座標に次へのベクトルを加算する	//デルタタイムを掛けておく
+		m_position += (m_addPosition + verticalPower) * GameTime().GetFrameDeltaTime();
+		//タイマーを進める
+		m_timer += GameTime().GetFrameDeltaTime();
+	}
+	else
+	{
+		//大きい
+
+		//タイマーを初期化
+		m_timer = 0.0f;
+		//ステートをクエリ状態へ
+		m_objectState = enQuery;
+	}
+
+}
+
 
 /// <summary>
 /// クエリしてほしいタイミングで呼ばれる関数
@@ -462,11 +599,39 @@ void CReversibleObject::Cancel()
 /// </summary>
 void CReversibleObject::Query()
 {
-	//オーバーライドしてほしい関数QuerySub()
-	QuerySub();
+	//ウェイポイントの場所を更新する
+	CheckWayPoint();
 
-	//ステートをプレイヤーに持たれるかどうか調べる状態に移行する
-	m_objectState = enOverlap;
+	//表側か裏側かを更新する
+	CheckFrontOrBackSide();
+
+	//反転オブジェクトの表面と裏面のそれぞれの数
+	const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
+	//反転オブジェクトの表面と裏面のそれぞれの最大数
+	const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
+	//次の表面か裏面かの数
+	int nextSideNum = num[GetFrontOrBackSide()];
+	//次の表面か裏面かの最大数
+	int nextSideMaxNum = maxNum[GetFrontOrBackSide()];
+
+	//数が最大数以下だったら
+	if (nextSideNum <= nextSideMaxNum)
+	{
+		//通常のクエリの処理
+
+		//オーバーライドしてほしい関数QuerySub()
+		QuerySub();
+		//ステートをプレイヤーに持たれるかどうか調べる状態に移行する
+		m_objectState = enOverlap;
+	}
+	else
+	{
+		//より大きければ
+
+		//クエリせずに元の位置に戻す
+		m_objectState = enOverlapThrownDown;
+		test.Scale(-1.0f);
+	}
 }
 
 

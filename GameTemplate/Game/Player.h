@@ -8,7 +8,8 @@
 #include "SoundCue.h"
 #include "GameTime.h"
 
-class ILevelObjectBase;
+class CReversibleObject;
+
 
 
 /// <summary>
@@ -62,6 +63,7 @@ public://publicなメンバ関数
 	/// <param name="rotMap">回転のベクター</param>
 	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
 
+	//ウェイポイント用のOBBを設定
 	void SetWayPointOBB();
 
 	/// <summary>
@@ -78,9 +80,13 @@ public://publicなメンバ関数
 	/// 持っている場合はtrueを渡す
 	/// </summary>
 	/// <param name="holdFlag">オブジェクトを持っているか？</param>
-	void SetHoldObject(const bool holdFlag)
+	void SetHoldObject(const bool holdFlag, CReversibleObject* reversibeObject = nullptr)
 	{
 		m_holdObject = holdFlag;
+		if (m_holdObject)
+			m_reversibleObject = reversibeObject;
+		else
+			m_reversibleObject = nullptr;
 	}
 
 	/// <summary>
@@ -91,6 +97,15 @@ public://publicなメンバ関数
 	const bool GetHoldObject()const
 	{
 		return m_holdObject;
+	}
+
+	/// <summary>
+	/// 持っている反転オブジェクトの参照を得る
+	/// </summary>
+	/// <returns>持っている反転オブジェクトの参照</returns>
+	CReversibleObject* GetReversibleObject()
+	{
+		return m_reversibleObject;
 	}
 
 	void SetOperationFlag(const bool b)
@@ -122,12 +137,30 @@ public://publicなメンバ関数
 	}
 
 	/// <summary>
+	/// プレイヤーの左側のウェイポイントを設定する
+	/// </summary>
+	/// <param name="lpIndex">左側のウェイポイント</param>
+	void SetLeftPointIndex(const int lpIndex)
+	{
+		m_lpIndex = lpIndex;
+	}
+
+	/// <summary>
 	/// 現在のプレイヤーの右側のウェイポイントの番号を得る
 	/// </summary>
 	/// <returns>右側のウェイポイントの番号</returns>
 	const int GetRightPointIndex()const
 	{
 		return m_rpIndex;
+	}
+
+	/// <summary>
+	/// プレイヤーの右側のウェイポイントを設定する
+	/// </summary>
+	/// <param name="lpIndex">右側のウェイポイント</param>
+	void SetRightPointIndex(const int rpIndex)
+	{
+		m_rpIndex = rpIndex;
 	}
 
 	/// <summary>
@@ -149,9 +182,31 @@ public://publicなメンバ関数
 		return m_leftOrRight;
 	}
 
+	/// <summary>
+	/// 自身がどのウェイポイントにいるか表すステートを戻す関数
+	/// </summary>
+	/// <returns>ウェイポイントのステート</returns>
 	const int GetWayPointState()const
 	{
 		return m_wayPointState;
+	}
+
+	/// <summary>
+	/// 自身がどのウェイポイントにいるか表すステートを設定
+	/// </summary>
+	/// <param name="wayPointState">ウェイポイントのステート</param>
+	void SetWayPointState(const int wayPointState)
+	{
+		m_wayPointState = wayPointState;
+	}
+
+	/// <summary>
+	/// UFOに捕まっているか？を設定
+	/// </summary>
+	/// <param name="captured">UFOに捕まっているか？</param>
+	void SetCapturedUFOFlag(const bool captured)
+	{
+		m_capturedUFOFlag = captured;
 	}
 
 	/// <summary>
@@ -185,14 +240,29 @@ private://privateなメンバ関数
 	void Move();
 
 	/// <summary>
+	/// スタン中の移動処理
+	/// </summary>
+	void StunMove();
+
+	/// <summary>
 	/// ステージに乗る
 	/// </summary>
 	void GetOnStage();
 
 	/// <summary>
+	/// スタン中のステージに乗る処理
+	/// </summary>
+	void StunGetOnStage();
+
+	/// <summary>
 	/// モデルの回転処理
 	/// </summary>
 	void Rotation();
+
+	/// <summary>
+	/// 衝突したOBBのタグを調べる
+	/// </summary>
+	void CheckHitOBBTag();
 
 	/// <summary>
 	/// ライトのデータを更新する
@@ -209,7 +279,10 @@ private://privateなメンバ関数
 	/// </summary>
 	void SetDirectionLight();
 
-
+	/// <summary>
+	/// UFOに捕まっている時の処理
+	/// </summary>
+	void CapturedUFO();
 
 private:	//データメンバ
 
@@ -230,6 +303,7 @@ private:	//データメンバ
 	Quaternion m_rotation = g_quatIdentity;			//キャラクターの回転
 	Vector3 m_upVec = g_vec3Up;						//プレイヤーのUpベクトル
 	bool m_holdObject = false;						//オブジェクトを持っているか？
+	CReversibleObject* m_reversibleObject = nullptr;	//持っている反転オブジェクトのポインタ
 	
 	/// <summary>
 	/// プレイヤーが右を向いているか左を向いているか
@@ -259,7 +333,7 @@ private:	//データメンバ
 	int m_wayPointState = 0;					//自身がどのウェイポイントにいるか表すステート
 	int m_maxWayPointState = 0;					//ウェイポイントステートの最大の値
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
-	std::vector<COBB> m_wayPointOBB;
+	std::vector<COBB> m_wayPointOBB;			//ウェイポイント用のOBB
 
 
 	bool m_operationFlag = false; //操作できるかのフラグ
@@ -271,6 +345,8 @@ private:	//データメンバ
 	bool m_stunMoveFlag = true;					//スタン中に吹っ飛び中か？
 	float m_blinkTimer = 0.0f;					//スタン状態にモデルを点滅させるタイマー
 	COBB* m_hitOBB = nullptr;					//衝突したOBBのポインタ
+
+	bool m_capturedUFOFlag = false;				//UFOにキャプチャされているか？
 
 public://デバック用
 	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため

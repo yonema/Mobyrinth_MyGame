@@ -291,6 +291,10 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
+    <ClCompile Include="Tips.cpp" />
+    <ClCompile Include="OOReverseALL.cpp" />
+    <ClCompile Include="TipsController.cpp" />
+    <ClCompile Include="UFOLandingPoint.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="OTransparentObject.cpp" />
     <ClCompile Include="PointLight.cpp" />
@@ -310,6 +314,7 @@
     <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundSource.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="OObigFire.cpp" />
@@ -356,8 +361,10 @@
     <ClCompile Include="testModel.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TklFile.cpp" />
+
     <ClCompile Include="RTransparentObject.cpp" />
     <ClCompile Include="TransparentSwitch.cpp" />
+
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="WaveFileBank.cpp" />
   </ItemGroup>
@@ -422,6 +429,11 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="ObjectType.h" />
+    <ClInclude Include="Tips.h" />
+    <ClInclude Include="OOReverseALL.h" />
+    <ClInclude Include="TipsController.h" />
+    <ClInclude Include="UFOLandingPoint.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="OTransparentObject.h" />
     <ClInclude Include="PointLight.h" />
@@ -442,6 +454,7 @@
     <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundSource.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="OObigFire.h" />
@@ -482,8 +495,10 @@
     <ClInclude Include="testModel.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TklFile.h" />
+
     <ClInclude Include="RTransparentObject.h" />
     <ClInclude Include="TransparentSwitch.h" />
+
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />

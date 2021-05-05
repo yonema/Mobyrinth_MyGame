@@ -3,7 +3,7 @@
 #include "LightManager.h"
 
 /// <summary>
-/// ポイントライトクラス
+/// ポイントライトクラス	
 /// </summary>
 class CPointLight : public IGameObject
 {
@@ -14,15 +14,15 @@ public:		//自動で呼ばれるメンバ関数
 public:		//メンバ関数
 
 	/// <summary>
-	/// ポイントライトの方向を設定
+	/// ポイントライトの座標を設定
 	/// </summary>
-	/// <param name="direction">ライトの方向</param>
-	void SetPosition(const Vector3& direction);
+	/// <param name="direction">ライトの座標</param>
+	void SetPosition(const Vector3& position);
 
 	/// <summary>
-	/// ポイントライトの方向を取得
+	/// ポイントライトの座標を取得
 	/// </summary>
-	/// <returns>ライトの方向</returns>
+	/// <returns>ライトの座標</returns>
 	const Vector3& GetPosition() const
 	{
 		return m_light->ptPosition;

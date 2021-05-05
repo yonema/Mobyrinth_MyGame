@@ -1,5 +1,7 @@
 #pragma once
 #include "StageBase.h"
+#include "UFO.h"
+#include "OOReverseALL.h"
 
 class stage_kari : public IStageBase
 {
@@ -12,5 +14,7 @@ public:
 	}
 
 private:	//データメンバ
+	CUFO* m_ufo = nullptr;
+	OOReverseALL* m_reverseALL = nullptr;
 };
 

@@ -3,6 +3,7 @@
 #include "LevelObjectManager.h"
 #include "Player.h"
 #include "OBB.h"
+#include "ObjectType.h"
 
 //デバック用
 //後で消す
@@ -28,6 +29,7 @@ protected:	//ここのメンバ関数を主に使う
 	/// 近くのウェイポイントを探して、イイ感じに回転する関数
 	/// </summary>
 	void CheckWayPoint();
+	void CheckRotation();
 
 public:		//ここのメンバ関数を主に使う
 	
@@ -87,7 +89,7 @@ public:		//ここのメンバ関数を主に使う
 
 	/// <summary>
 	/// タイプを設定する
-	/// タイプはLevelObjectBase.hのEnObjectTypeを参照
+	/// タイプはObjectType.hのEnObjectTypeを参照
 	/// </summary>
 	/// <param name="objectType">タイプ</param>
 	void SetObjectType(int objectType)
@@ -97,7 +99,7 @@ public:		//ここのメンバ関数を主に使う
 
 	/// <summary>
 	/// タイプを取得する
-	/// タイプはLevelObjectBase.hのEnObjectTypeを参照
+	/// タイプはObjectType.hのEnObjectTypeを参照
 	/// </summary>
 	/// <returns>タイプ</returns>
 	const int GetObjectType()const
@@ -131,13 +133,59 @@ public:		//ここのメンバ関数を主に使う
 		m_isDead = true;
 	}
 
-
-
 	/// <summary>
 	/// 自身とプレイヤーの当たり判定
 	/// </summary>
 	/// <returns>trueが戻ってきたら当たっている</returns>
 	bool IsHitPlayer();
+
+	/// <summary>
+	/// 自身の左側のウェイポイントのインデックスを戻す
+	/// </summary>
+	/// <returns>左側のウェイポイントのインデックス</returns>
+	const int GetLeftWayPointIndex() const
+	{
+		return m_lpIndex;
+	}
+
+	/// <summary>
+	/// 自身の左側のウェイポイントのインデックスを設定する
+	/// </summary>
+	/// <param name="lpIndex">左側のウェイポイントのインデックス</param>
+	void SetLeftWayPointIndex(const int lpIndex)
+	{
+		m_lpIndex = lpIndex;
+		m_rpIndex = m_lpIndex - 1;
+		const int maxWayPoint = 31;
+		if (m_rpIndex < 0)
+		{
+			m_rpIndex = maxWayPoint;
+		}
+	}
+
+	/// <summary>
+	/// 自身の右側のウェイポイントのインデックスを戻す
+	/// </summary>
+	/// <returns></returns>
+	const int GetRightWayPointIndex() const
+	{
+
+		return m_rpIndex;
+	}
+
+	/// <summary>
+	/// 表側にあるか裏側にあるかを戻す
+	/// </summary>
+	/// <returns>表側か裏側か</returns>
+	const int GetFrontOrBackSide() const
+	{
+		return m_frontOrBackSide;
+	}
+
+	/// <summary>
+	/// 自身が表側にあるか裏側にあるかを調べる関数
+	/// </summary>
+	void CheckFrontOrBackSide();
 
 private:	//privateなメンバ関数
 
@@ -146,54 +194,20 @@ private:	//privateなメンバ関数
 	/// </summary>
 	void InitOBB();
 
-public:		//publicなデータメンバ
-	/// <summary>
-	/// オブジェクトの番号
-	/// オブジェクトを増やしたらここで番号を増やすこと
-	/// </summary>
-	enum EnObjectType
-	{
-		enEnpty,			//「空っぽ」
-
-		//反転オブジェクト
-		enWater,			//「針金」
-		enFire,				//「火」
-		enBird,				//「鳥」
-		enFish,				//「魚」
-		enGrilledChicken,	//「焼き鳥」
-		enGrilledFish,		//「焼き魚」
-		enRunning,			//「稼働」
-		enStop,				//「停止」
-		enWire,				//「針金」
-		enString,			//「紐」
-		enNail,				//「釘」
-		enBar,				//「バール」
-		enAxe,				//「斧」
-		enPickaxe,			//「つるはし」
-		enKeymold,			//「鍵の金型」
-		enKey,				//「鍵」
-		enPadlock,			//「南京錠」
-
-		//障害オブジェクト
-
-		enBigFire,			//「炎」
-		enWall,				//「壁」
-		enGoal,				//「ゴール」
-		enNotHavePadlock,	//「持てない南京錠」
-		enBox,				//「箱」
-
-	};
-
 protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
 	Vector3 m_position = g_vec3Zero;		//場所
 	Quaternion m_rotation = g_quatIdentity;	//回転
 	Vector3 m_scale = g_vec3One;			//拡大
 	Player* m_pPlayer = nullptr;			//プレイヤーのポインタ
+	
 
 private:	//データメンバ
-	int m_objectType = enEnpty;				//タイプ
+	int m_objectType = enEmpty;				//タイプ
 	bool m_isDead = false;					//死んでいるか？
 	COBB m_obb;								//OBBの当たり判定
+	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス
+	int m_rpIndex = 0;
+	int m_frontOrBackSide = CLevelObjectManager::enNone;	//自身が表側にあるか裏側にあるか
 
 
 	////////////////////////////////////////////////////////////

@@ -19,9 +19,9 @@ CPointLight::~CPointLight()
 }
 
 /// <summary>
-/// ポイントライトの方向を設定
+/// ポイントライトの座標を設定
 /// </summary>
-/// <param name="direction">ライトの方向</param>
+/// <param name="direction">ライトの座標</param>
 void CPointLight::SetPosition(const Vector3& position)
 {
 	if (m_result)

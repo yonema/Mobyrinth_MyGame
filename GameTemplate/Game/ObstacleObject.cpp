@@ -36,7 +36,7 @@ CObstacleObject::~CObstacleObject()
 /// 最初に呼んでね。trueを戻してね。
 /// モデルのファイルパスとオブジェクトのタイプを
 /// 設定する
-/// タイプ一覧はLevelObjectBase.hを参照
+/// タイプ一覧はObjectType.hを参照
 /// </summary>
 /// <param name="filePath">モデルのtkmファイルパス</param>
 /// <param name="objectType">タイプ</param>

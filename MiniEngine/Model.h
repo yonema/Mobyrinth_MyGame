@@ -34,6 +34,9 @@ struct ModelInitData {
 	void* m_expandConstantBuffer3 = nullptr;						//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize3 = 0;							//ユーザー拡張の定数バッファのサイズ。
 
+	void* m_expandConstantBuffer4 = nullptr;						//ユーザー拡張の定数バッファ。
+	int m_expandConstantBufferSize4 = 0;							//ユーザー拡張の定数バッファのサイズ。
+
 	void* m_shadowConstantBuffer = nullptr;							//シャドウ用の定数バッファ
 	int m_shadowConstantBufferSize = 0;								//シャドウ用の定数バッファのサイズ
 };

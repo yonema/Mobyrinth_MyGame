@@ -93,8 +93,10 @@
     <Filter Include="MyCode\Timer">
       <UniqueIdentifier>{70b6ee87-5725-4869-ab1d-15b0b3a1cae8}</UniqueIdentifier>
     </Filter>
+
     <Filter Include="MyCode\LevelObject\TransparentObject">
       <UniqueIdentifier>{29081464-a22e-4612-9396-393e3742a98e}</UniqueIdentifier>
+
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -249,9 +251,6 @@
       <Filter>MiniEngine\font</Filter>
     </ClCompile>
     <ClCompile Include="GameCamera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Mobius.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
@@ -425,6 +424,7 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
     </ClCompile>
+
     <ClCompile Include="RTransparentObject.cpp">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClCompile>
@@ -433,6 +433,7 @@
     </ClCompile>
     <ClCompile Include="OTransparentObject.cpp">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
+
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -611,9 +612,6 @@
       <Filter>ExEngine\physics</Filter>
     </ClInclude>
     <ClInclude Include="GameCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Mobius.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
@@ -802,6 +800,7 @@
     <ClInclude Include="StopWatch.h">
       <Filter>MyCode\Timer</Filter>
     </ClInclude>
+
     <ClInclude Include="RTransparentObject.h">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClInclude>
@@ -810,6 +809,7 @@
     </ClInclude>
     <ClInclude Include="OTransparentObject.h">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
+
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
