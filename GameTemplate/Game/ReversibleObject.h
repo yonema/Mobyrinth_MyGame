@@ -155,6 +155,9 @@ private:	//privateなメンバ関数
 	/// </summary>
 	//void ThrownSide();
 
+	/// <summary>
+	/// 横に弾かれる
+	/// </summary>
 	void Repelled();
 
 	/// <summary>
@@ -206,8 +209,8 @@ private:	//データメンバ
 	Quaternion m_throwRot = g_quatIdentity;		//下に投げるときの回転
 
 	float m_heldUpLen = 100.0f;					//持ち上げた時の、上に持ち上げるベクトルの長さ
-	float m_timer = 0.0f;
-	Vector3 m_addPosition = g_vec3Zero;
+	float m_timer = 0.0f;						//タイマー
+	Vector3 m_addPosition = g_vec3Zero;			//ポジションに加えるベクトル
 	/// <summary>
 	/// オブジェクトの現在のステート（状態）
 	/// これでアップデート中の処理を割り振る
@@ -219,7 +222,7 @@ private:	//データメンバ
 		enThrownDown,	//持っているオブジェクトを下に投げる関数
 		enCancel,		//持っているオブジェクトをその場に置く
 		//enThrownSide,	//持っているオブジェクトを横に投げる関数
-		enRepelled,
+		enRepelled,		//横に弾かれる
 		enQuery,		//クエリしてほしいタイミング
 
 		enOverlap,		//障害オブジェクトに重ねっているかの確認
