@@ -141,6 +141,7 @@ public:		//ここのメンバ関数を主に使う
 		return enCheckPlayer;
 	}
 
+
 private:	//privateなメンバ関数
 
 	/// <summary>

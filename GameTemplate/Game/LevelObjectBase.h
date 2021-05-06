@@ -107,6 +107,27 @@ public:		//ここのメンバ関数を主に使う
 		return m_objectType;
 	}
 
+
+	/// <summary>
+	/// ロック中か？設定する。
+	/// Tips表示や全反転をロックする
+	/// </summary>
+	/// <param name="lock">ロックするか？</param>
+	void SetLock(const bool lock)
+	{
+		m_lock = lock;
+	}
+
+	/// <summary>
+	/// ロック中か？を得る
+	/// Tips表示や全反転がロックされているか。
+	/// </summary>
+	/// <returns>ロック中か？</returns>
+	const bool GetLock() const
+	{
+		return m_lock;
+	}
+
 	/// <summary>
 	/// OBBの参照を戻す
 	/// </summary>
@@ -208,6 +229,7 @@ private:	//データメンバ
 	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス
 	int m_rpIndex = 0;
 	int m_frontOrBackSide = CLevelObjectManager::enNone;	//自身が表側にあるか裏側にあるか
+	bool m_lock = false;					//ロック中か？、Tips表示や全反転をロックする
 
 
 	////////////////////////////////////////////////////////////

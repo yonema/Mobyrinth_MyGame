@@ -36,7 +36,8 @@ bool OOwall::StartSub()
 	m_pRun_stop = NewGO<ROrunning_stop>(0);
 	m_pRun_stop->SetPosition(m_position);
 	m_pRun_stop->SetFrontOrBack(CReversibleObject::enBack);	
-
+	//‘S”½“]‚µ‚È‚¢‚æ‚¤‚É‚ÆATips‚ð•\Ž¦‚µ‚È‚¢‚æ‚¤‚É‚·‚é
+	m_pRun_stop->SetLock(true);
 	return true;
 }
 

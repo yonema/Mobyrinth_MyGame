@@ -35,6 +35,8 @@ void ROrunning_stop::QuerySub()
 					wall->Running();
 					//衝突した壁のアドレスをポインタに保持
 					m_pWall = wall;
+					//ロック中にする
+					SetLock(true);
 
 					//衝突した壁に、すでに中身があるかどうか調べる
 					if (wall->GetRun_stop() && wall->GetRun_stop() != this)
@@ -71,6 +73,8 @@ void ROrunning_stop::QuerySub()
 					wall->Stop();
 					//衝突した壁のアドレスをポインタに保持
 					m_pWall = wall;
+					//ロック中にする
+					SetLock(true);
 
 					//衝突した壁に、すでに中身があるかどうか調べる
 					if (wall->GetRun_stop() && wall->GetRun_stop() != this)

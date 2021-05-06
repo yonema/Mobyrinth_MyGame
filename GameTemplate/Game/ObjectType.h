@@ -10,7 +10,7 @@ enum EnObjectType
 	enEmpty,			//「空っぽ」
 
 	//反転オブジェクト
-	enWater,			//「針金」
+	enWater,			//「水」
 	enFire,				//「火」
 	enBird,				//「鳥」
 	enFish,				//「魚」
