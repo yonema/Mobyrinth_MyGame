@@ -91,6 +91,12 @@ void CReversibleObject::Reverse()
 	
 }
 
+void CReversibleObject::AllReverse()
+{
+	//現在の表か裏の、逆の設定にする
+	SetFrontOrBack(!m_frontOrBack);
+}
+
 /// <summary>
 /// 表か裏かを設定するする
 /// </summary>

@@ -17,6 +17,13 @@ bool OOReverseALL::StartSub()
 	GetOBB().SetDirectionLength({ 10.0f,400.0f,400.0f });
 	GetOBB().SetPivot({ 0.5f,0.0f,0.5f });
 
+	//changeSEのサウンドキューを生成する
+	m_changeSE = NewGO<CSoundCue>(0);
+	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_changeSE->Init(L"Assets/sound/change.wav");
+	//音量調節
+	m_changeSE->SetVolume(0.5f);
+
 
 	//デバック用
 	//後で消す
@@ -164,10 +171,13 @@ void OOReverseALL::AfterHitPlayer()
 			//CReversibleObjectなら反転させる
 			CReversibleObject* revers = dynamic_cast<CReversibleObject*>(levelObjects[i]);
 			if (revers)
-				revers->Reverse();
+				revers->AllReverse();
 		}
 
 	}
+
+	//changeSEをループ再生をオフで再生する。
+	m_changeSE->Play(false);
 
 	//衝突前のプレイヤーの座標を保持
 	m_playerBeforePosition = m_pPlayer->GetPosition();

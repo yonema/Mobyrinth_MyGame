@@ -37,7 +37,7 @@ void ROrunning_stop::QuerySub()
 					m_pWall = wall;
 
 					//衝突した壁に、すでに中身があるかどうか調べる
-					if (wall->GetRun_stop())
+					if (wall->GetRun_stop() && wall->GetRun_stop() != this)
 					{
 						//中身があったら、その中身を消してから
 						//自身を入れる
@@ -73,7 +73,7 @@ void ROrunning_stop::QuerySub()
 					m_pWall = wall;
 
 					//衝突した壁に、すでに中身があるかどうか調べる
-					if (wall->GetRun_stop())
+					if (wall->GetRun_stop() && wall->GetRun_stop() != this)
 					{
 						//中身があったら、その中身を消してから
 						//自身を入れる
