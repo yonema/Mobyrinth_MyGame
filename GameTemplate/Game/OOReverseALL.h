@@ -38,6 +38,7 @@ private:	//データメンバ
 	Vector3 m_playerBeforePosition = g_vec3Zero;	//衝突前のプレイヤーの座標
 	Vector3 m_playerHitPosition = g_vec3Zero;		//衝突時のプレイヤーの座標
 	Vector3 m_playerAfterPosition = g_vec3Zero;		//衝突後のプレイヤーの座標
+	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
 
 private:	//デバック用
 //後で消す

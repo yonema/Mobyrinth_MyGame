@@ -71,6 +71,8 @@ public:		//ここのメンバ関数を主に使う
 	/// </summary>
 	void Reverse();
 
+	void AllReverse();
+
 	/// <summary>
 	/// 表か裏かを設定するする
 	/// </summary>
