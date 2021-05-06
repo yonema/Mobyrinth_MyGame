@@ -10,5 +10,10 @@
 #include "physics/CharacterController.h"
 #include "physics/PhysicsStaticObject.h"
 
+#include "Effekseer.h"
+#include "EffekseerRendererDX12.h"
+
 #include "gameObject/GameObjectManager.h"
 #include "gameObject/IGameObject.h"
+
+#include "effect/EffectEngine.h"
