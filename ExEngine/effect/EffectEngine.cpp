@@ -16,12 +16,12 @@ EffectEngine::EffectEngine()
 	// レンダラーを作成。
 	m_renderer = ::EffekseerRendererDX12::Create(
 		d3dDevice,
-		commandQueue, 
-		3, 
+		commandQueue,
+		3,
 		&format,
-		1, 
-		DXGI_FORMAT_UNKNOWN, 
-		false, 
+		1,
+		DXGI_FORMAT_D32_FLOAT,
+		false,
 		8000
 	);
 	//メモリプールの作成。
@@ -43,11 +43,6 @@ EffectEngine::EffectEngine()
 	m_manager->SetModelLoader(m_renderer->CreateModelLoader());
 	m_manager->SetMaterialLoader(m_renderer->CreateMaterialLoader());
 	m_manager->SetCurveLoader(Effekseer::MakeRefPtr<Effekseer::CurveLoader>());
-}
-
-EffectEngine::~EffectEngine()
-{
-
 }
 Effekseer::EffectRef EffectEngine::LoadEffect(const char16_t* filePath)
 {
@@ -78,7 +73,7 @@ void EffectEngine::Stop(int effectHandle)
 
 void EffectEngine::Update(float deltaTime)
 {
-	
+
 	m_memoryPool->NewFrame();
 
 	// Begin a command list
@@ -114,4 +109,10 @@ void EffectEngine::Draw()
 	// コマンドリストを終了する。
 	m_renderer->SetCommandList(nullptr);
 	EffekseerRendererDX12::EndCommandList(m_commandList);
+}
+
+
+EffectEngine::~EffectEngine()
+{
+
 }
