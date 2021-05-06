@@ -102,6 +102,9 @@
     <Filter Include="MyCode\Tips">
       <UniqueIdentifier>{f849e9e9-7bd9-47a0-965b-eba1d87d0459}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ExEngine\effect">
+      <UniqueIdentifier>{c549521a-8801-4d62-819d-a3eefeb37cef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -448,6 +451,12 @@
     </ClCompile>
     <ClCompile Include="OOReverseALL.cpp">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
+      <Filter>ExEngine\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\effect\Effect.cpp">
+      <Filter>ExEngine\effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -837,6 +846,12 @@
     </ClInclude>
     <ClInclude Include="OOReverseALL.h">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
+      <Filter>ExEngine\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\effect\Effect.h">
+      <Filter>ExEngine\effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

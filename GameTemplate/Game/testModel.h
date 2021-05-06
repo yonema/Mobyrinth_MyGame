@@ -2,6 +2,8 @@
 #include "ModelRender.h"
 #include "PointLight.h"
 #include "Sky.h"
+#include "effect/Effect.h"
+
 
 class testModel : public IGameObject
 {
@@ -25,5 +27,7 @@ private:
 	float m_skyScale = 1.0f;
 
 	CModelRender* m_skyModel = nullptr;
+
+	Effect* m_effect = nullptr;
 };
 
