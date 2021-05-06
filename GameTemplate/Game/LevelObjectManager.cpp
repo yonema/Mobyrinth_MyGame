@@ -211,7 +211,7 @@ const int CLevelObjectManager::GetNearestObjectType()
 		rightWayPoint = maxWayPoint;
 
 	//オブジェクトとの距離のしきい値
-	const float threshold = 300.0f;
+	const float threshold = 500.0f;
 
 	//オブジェクトとの距離
 	//しきい値以下の一番近い距離を探す
@@ -224,6 +224,10 @@ const int CLevelObjectManager::GetNearestObjectType()
 	//レベルオブジェクトを全部調べる
 	for (int i = 0; i < m_levelObjects.size(); i++)
 	{
+		//ロック中ならスキップ
+		if (m_levelObjects[i]->GetLock())
+			continue;
+
 		//オブジェクトがいるウェイポイントを調べる
 		int objectsWayPoint = m_levelObjects[i]->GetLeftWayPointIndex();
 		//オブジェクトの位置を調べる

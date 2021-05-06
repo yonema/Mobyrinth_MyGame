@@ -93,6 +93,9 @@ void CReversibleObject::Reverse()
 
 void CReversibleObject::AllReverse()
 {
+	if (GetLock())
+		return;
+
 	//現在の表か裏の、逆の設定にする
 	SetFrontOrBack(!m_frontOrBack);
 }
@@ -188,6 +191,9 @@ void CReversibleObject::PureVirtualUpdate()
 			//case enThrownSide: //持っているオブジェクトを横に投げる関数
 			//	ThrownSide();
 			//	break;
+		case enRepelled:	//横に弾かれる
+			Repelled();
+			break;
 		case enQuery: //クエリしてほしいタイミング
 			Query();
 			break;
