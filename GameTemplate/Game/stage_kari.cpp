@@ -12,7 +12,8 @@ bool stage_kari::StartSub()
 }
 stage_kari::~stage_kari()
 {
-
+	DeleteGO(m_ufo);
+	DeleteGO(m_reverseALL);
 }
 
 

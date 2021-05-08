@@ -78,6 +78,9 @@ void CTips::InitText()
 		case enBox:			//箱
 			LoadText(objectType, "box");
 			break;
+		case enOneway:		//一方通行
+			LoadText(objectType, "oneWay");
+			break;
 		default:		//デフォルト
 			LoadText(objectType, "empty");
 			break;

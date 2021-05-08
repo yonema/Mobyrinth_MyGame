@@ -467,6 +467,9 @@
     <ClCompile Include="TipsController.cpp">
       <Filter>MyCode\Tips</Filter>
     </ClCompile>
+    <ClCompile Include="OOoneway.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -870,6 +873,9 @@
     </ClInclude>
     <ClInclude Include="ObjectType.h">
       <Filter>MyCode\LevelObject</Filter>
+    </ClInclude>
+    <ClInclude Include="OOoneway.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
