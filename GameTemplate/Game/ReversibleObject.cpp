@@ -682,6 +682,8 @@ void CReversibleObject::Repelled()
 		m_timer = 0.0f;
 		//ステートをクエリ状態へ
 		m_objectState = enQuery;
+		//移動先でオブジェクト同士が重なったときの処理を設定
+		m_objectAction = enRepelled;
 	}
 
 }
@@ -700,21 +702,27 @@ void CReversibleObject::Query()
 	//表側か裏側かを更新する
 	CheckFrontOrBackSide();
 
-	//数が最大数以下だったら
+	//キャパシティがオーバーしているか？
 	if (!IsCapacityOver(GetFrontOrBackSide()))
 	{
+		//オーバーしていない
 		//通常のクエリの処理
 
 		//オーバーライドしてほしい関数QuerySub()
 		QuerySub();
-		//ステートをプレイヤーに持たれるかどうか調べる状態に移行する
+		//オーバーラップをチェックする状態へ
 		m_objectState = enOverlap;
 	}
 	else
 	{
-		//より大きければ
+		//念のため書いてるけど、本来ここを通る前に、
+		//ThrownDown()でキャパシティオーバーを調べて
+		//オーバーしてたらRepelled()に行っているはず
 
-		//クエリせずに元の位置に戻す
+		//オーバーしている
+
+		//クエリせずに
+		//下に投げた時のオーバーラップ
 		m_objectState = enOverlapThrownDown;
 		test.Scale(-1.0f);
 	}
@@ -742,6 +750,10 @@ void CReversibleObject::CheckObjectsOverlap()
 			break;
 		case enCancel:
 			m_objectState = enHeldPlayer;
+			break;
+		case enRepelled:
+			//横に弾いた先で重なってたら、もう一回横に弾く
+			m_objectState = enRepelled;
 			break;
 		//case enThrownSide:
 		//	m_objectState = enOverlapThrownSide;
