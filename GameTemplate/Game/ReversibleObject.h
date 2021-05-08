@@ -71,6 +71,9 @@ public:		//ここのメンバ関数を主に使う
 	/// </summary>
 	void Reverse();
 
+	/// <summary>
+	/// ぜんぶの反転オブジェクトを反転させるときに使う関数
+	/// </summary>
 	void AllReverse();
 
 	/// <summary>
@@ -208,6 +211,15 @@ private:	//privateなメンバ関数
 	/// </summary>
 	//void OverlapThrownSide();
 
+	/// <summary>
+	/// 表側か裏側のキャパシティがオーバーしているか？
+	/// を調べる関数
+	/// 調整値には、自身はまだ対象の側にいないが、行ったとしたら
+	/// キャパシティはオーバーするのか？を調べるときに、1を入れる。
+	/// </summary>
+	/// <param name="frontOrBackSide">表側か裏側か？</param>
+	/// <param name="adjust">調整値</param>
+	/// <returns>オーバーしているか？</returns>
 	const bool IsCapacityOver(const int frontOrBackSide, const int adjust = 0);
 
 public:		//publicなデータメンバ
