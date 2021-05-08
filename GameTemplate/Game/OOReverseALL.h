@@ -4,6 +4,7 @@
 #include "FontRender.h"
 
 /// <summary>
+/// 障害オブジェクト
 /// 全反転オブジェクト
 /// </summary>
 class OOReverseALL : public CObstacleObject

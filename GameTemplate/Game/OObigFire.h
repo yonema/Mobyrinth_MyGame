@@ -9,9 +9,9 @@
 class OObigFire : public CObstacleObject
 {
 public:		//自動で呼ばれるメンバ関数
-	bool StartSub() override final;	//スタート関数
-	~OObigFire();					//デストラクタ
-	void UpdateSub() override final;
+	bool StartSub() override final;		//スタート関数
+	~OObigFire();						//デストラクタ
+	void UpdateSub() override final;	//アップデート関数
 
 public:		//メンバ関数
 	void Damage();	//ダメージを受ける
