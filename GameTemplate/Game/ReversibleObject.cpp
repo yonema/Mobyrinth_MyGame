@@ -65,8 +65,8 @@ bool CReversibleObject::Init
 		m_modelRender[i] = NewGO<CModelRender>(0);
 	}
 	//モデルレンダラーを初期化
-	m_modelRender[enFront]->Init(filePath_front);
-	m_modelRender[enBack]->Init(filePath_back);
+	m_modelRender[enFront]->Init(filePath_front, D3D12_CULL_MODE_NONE);
+	m_modelRender[enBack]->Init(filePath_back, D3D12_CULL_MODE_NONE);
 	//タイプを設定
 	m_reversibleType[enFront] = type_front;
 	m_reversibleType[enBack] = type_back;
@@ -702,30 +702,36 @@ void CReversibleObject::Query()
 	//表側か裏側かを更新する
 	CheckFrontOrBackSide();
 
-	//キャパシティがオーバーしているか？
-	if (!IsCapacityOver(GetFrontOrBackSide()))
-	{
-		//オーバーしていない
-		//通常のクエリの処理
+	//オーバーライドしてほしい関数QuerySub()
+	QuerySub();
 
-		//オーバーライドしてほしい関数QuerySub()
-		QuerySub();
-		//オーバーラップをチェックする状態へ
-		m_objectState = enOverlap;
-	}
-	else
-	{
-		//念のため書いてるけど、本来ここを通る前に、
-		//ThrownDown()でキャパシティオーバーを調べて
-		//オーバーしてたらRepelled()に行っているはず
 
-		//オーバーしている
+	//オーバーラップをチェックする状態へ
+	m_objectState = enOverlap;
+	////キャパシティがオーバーしているか？
+	//if (!IsCapacityOver(GetFrontOrBackSide()))
+	//{
+	//	//オーバーしていない
+	//	//通常のクエリの処理
 
-		//クエリせずに
-		//下に投げた時のオーバーラップ
-		m_objectState = enOverlapThrownDown;
-		test.Scale(-1.0f);
-	}
+	//	//オーバーライドしてほしい関数QuerySub()
+	//	QuerySub();
+	//	//オーバーラップをチェックする状態へ
+	//	m_objectState = enOverlap;
+	//}
+	//else
+	//{
+	//	//念のため書いてるけど、本来ここを通る前に、
+	//	//ThrownDown()でキャパシティオーバーを調べて
+	//	//オーバーしてたらRepelled()に行っているはず
+
+	//	//オーバーしている
+
+	//	//クエリせずに
+	//	//下に投げた時のオーバーラップ
+	//	m_objectState = enOverlapThrownDown;
+	//	test.Scale(-1.0f);
+	//}
 }
 
 

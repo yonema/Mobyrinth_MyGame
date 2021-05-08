@@ -16,7 +16,8 @@ public:
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntriyPointFunc,
 		const char* psEntryPointFunc,
-		DXGI_FORMAT colorBufferFormat);
+		DXGI_FORMAT colorBufferFormat,
+		D3D12_CULL_MODE cullMode);
 	/// <summary>
 	/// レンダリングを開始するときに呼び出す関数。
 	/// </summary>
@@ -76,7 +77,7 @@ private:
 	/// <summary>
 	/// パイプラインステートの初期化。
 	/// </summary>
-	void InitPipelineState(DXGI_FORMAT colorBufferFormat);
+	void InitPipelineState(DXGI_FORMAT colorBufferFormat, D3D12_CULL_MODE cullMode);
 	/// <summary>
 	/// シェーダーの初期化。
 	/// </summary>
