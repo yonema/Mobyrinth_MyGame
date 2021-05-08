@@ -37,6 +37,7 @@ CReversibleObject::~CReversibleObject()
 		DeleteGO(m_modelRender[i]);
 	}
 
+	//表側か裏側かの反転オブジェクトの数を減算する
 	CLevelObjectManager::GetInstance()->RemoveReversibleObjectNum(GetFrontOrBackSide());
 
 }
@@ -91,9 +92,14 @@ void CReversibleObject::Reverse()
 	
 }
 
+/// <summary>
+/// ぜんぶの反転オブジェクトを反転させるときに使う関数
+/// </summary>
 void CReversibleObject::AllReverse()
 {
+	//ロック中か？
 	if (GetLock())
+		//ロック中なら反転しない
 		return;
 
 	//現在の表か裏の、逆の設定にする
@@ -283,19 +289,11 @@ void CReversibleObject::HeldPlayer()
 	//更新前と更新後の表門か裏面か？が違っていたら
 	if (oldFrontOrBackSide != GetFrontOrBackSide())
 	{
-		//反転オブジェクトの表面と裏面のそれぞれの数
-		const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
-		//反転オブジェクトの表面と裏面のそれぞれの最大数
-		const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
-
-		//次の表面か裏面かの数
-		int nextSideNum = num[GetFrontOrBackSide()];
-		//次の表面か裏面かの最大数
-		int nextSideMaxNum = maxNum[GetFrontOrBackSide()];
-
-		//数が最大数より大きかったら
-		if (nextSideNum > nextSideMaxNum)
+		//キャパシティがオーバーしているか？
+		if (IsCapacityOver(GetFrontOrBackSide()))
 		{
+			//オーバーしていたら
+
 			//ステートを横に弾かれる状態へ
 			m_objectState = enRepelled;
 			//タイマーを初期化する
@@ -319,9 +317,11 @@ void CReversibleObject::HeldPlayer()
 	//モデルの回転をプレイヤーと同じにする
 	m_rotation = qRot;
 
-	//ステートが弾かれる状態だったら
+	//ステートが弾かれる状態か？
 	if (m_objectState == enRepelled)
 	{
+		//弾かれる状態である
+
 		//更新前から更新後の座標へのベクトル
 		Vector3 oldToNext = m_position - oldPosition;
 		//右へのベクトル
@@ -342,6 +342,7 @@ void CReversibleObject::HeldPlayer()
 			//左に移動しているから、右に弾く
 			m_leftOrRight = enRight;
 	}
+	//弾かれる状態ではない
 	//オブジェクトを裏側に投げて、オブジェクトの性質を反転させる。
 	else if (g_pad[0]->IsTrigger(enButtonA))
 	{
@@ -391,6 +392,7 @@ void CReversibleObject::ThrownDown()
 
 	//下方向のベクトルを保持する
 	Vector3 dir = g_vec3Down;
+
 	//プレイヤーの回転で下方向のべクトルを回す
 	m_throwRot.Apply(dir);
 	//ベクトルを伸ばす
@@ -399,21 +401,84 @@ void CReversibleObject::ThrownDown()
 	test = dir;
 	test.Scale(0.9f);
 
+	//手前に動かすベクトル
+	Vector3 backwardPower = { 0.0f,0.0f,1.0f };
+	//手前に動かすベクトルの大きさ
+	const float backwardPowerScale = 60000.0f;
+	//手前に動かすベクトルを拡大する
+	backwardPower.Scale(backwardPowerScale);
+	//自身の回転で回す
+	m_throwRot.Apply(backwardPower);
+
+	//カウンターを調節する変数
+	float counterAdjust = 0.0f;
+
+	//縦に弾かれるか？
+	if (!m_virticalRepelledFlag)
+	{
+		//弾かれない
+		//通常の処理
+
+		//二次関数的な動きにする
+		backwardPower *= pow(static_cast<double>(m_throwCounter - maxThrowCounter / 2.0), 2.0);
+
+		//モデルの回転を、逆さ向きに向かってちょっとずつ回す
+		m_rotation.SetRotationDegX(180.0f * m_throwCounter / maxThrowCounter);
+		m_rotation.Multiply(m_throwRot);
+	}
+	else
+	{
+		//弾かれる
+		//跳ね返る処理
+
+		//手前に弾くベクトルを弱くする
+		float toWeaken = 0.042f;
+		backwardPower.Scale(toWeaken);
+		//二次関数的な動きにする
+		backwardPower *= pow(static_cast<double>
+			((maxThrowCounter * 2.0 - maxThrowCounter / 2.0) - 
+				(m_throwCounter - maxThrowCounter / 2.0))
+			, 2.0);
+
+		//下方向のベクトルを上方向にする
+		dir.Scale(-1.0f);
+		//弱める
+		toWeaken = 0.5f;
+		dir.Scale(toWeaken);
+		//モデルの回転の値
+		float rotValue = 90.0f - 360.0f * 
+			(m_throwCounter - maxThrowCounter / 2) / (maxThrowCounter * 2 - maxThrowCounter / 2);
+		m_rotation.SetRotationDegX(rotValue);
+		m_rotation.Multiply(m_throwRot);
+		//カウンターを調節する時間にカウンターの最大値を入れる
+		counterAdjust = maxThrowCounter;
+	}
+
+	//半分の時間が過ぎたら下に下げる
+	if (m_throwCounter >= maxThrowCounter / 2.0f)
+		backwardPower *= -1.0f;
+
 	//モデルの場所を下に下げる
-	m_position += dir * GameTime().GetFrameDeltaTime();
-	//モデルの回転を、逆さ向きに向かってちょっとずつ回す
-	m_rotation.SetRotationDegX(180.0f * m_throwCounter / maxThrowCounter);
-	m_rotation.Multiply(m_throwRot);
+	m_position += (dir + backwardPower) * GameTime().GetFrameDeltaTime();
+
 
 	//投げている時のカウンターを進める
 	m_throwCounter += GameTime().GetFrameDeltaTime();
 
 	//投げている時のカウンターが最大値まで来たら
-	if (m_throwCounter >= maxThrowCounter)
+	if (m_throwCounter >= maxThrowCounter + counterAdjust)
 	{
-		//モデルの回転を完全に逆さ向きに回す。
-		m_rotation.SetRotationDegX(180.0f);
-		m_rotation.Multiply(m_throwRot);
+		//縦に弾かれるか？
+		if (!m_virticalRepelledFlag)
+		{
+			//弾かれないとき（通常時）
+
+			//モデルの回転を完全に逆さ向きに回す。
+			m_rotation.SetRotationDegX(180.0f);
+			m_rotation.Multiply(m_throwRot);
+		}
+		else
+			test.Scale(-1.0f);
 
 		//プレイヤーがオブジェクトを持っていない状態にする
 		m_pPlayer->SetHoldObject(false);
@@ -423,16 +488,34 @@ void CReversibleObject::ThrownDown()
 
 		m_changeObject = true;
 
+		//縦に弾かれるか？を初期化する
+		m_virticalRepelledFlag = false;
+
 		//ステートをクエリへ移行する
 		m_objectState = enQuery;
 	}
 	//投げている時のカウンターが最大値の半分まで来たら
 	else if (m_throwCounter >= maxThrowCounter / 2.0f && m_changeObject == true)
 	{
-		//反転させる
-		Reverse();
+		//表側か裏側か？
+		int frontOrBackSide = CLevelObjectManager::enFrontSide;
+		//自分がいる側の反対側にする
+		if (GetFrontOrBackSide() == CLevelObjectManager::enFrontSide)
+			frontOrBackSide = CLevelObjectManager::enBackSide;
+
+		//キャパシティオーバーか？
+		//自分がいない側のキャパシティを調べる
+		//自分はまだそっち側にいないから、調整値に1を入れている
+		if (IsCapacityOver(frontOrBackSide, 1))
+			//キャパオーバーしてる
+			m_virticalRepelledFlag = true;
+		else
+			//キャパオーバーではない
+			//反転させる
+			Reverse();
 
 		m_changeObject = false;
+
 	}
 }
 
@@ -599,6 +682,8 @@ void CReversibleObject::Repelled()
 		m_timer = 0.0f;
 		//ステートをクエリ状態へ
 		m_objectState = enQuery;
+		//移動先でオブジェクト同士が重なったときの処理を設定
+		m_objectAction = enRepelled;
 	}
 
 }
@@ -617,30 +702,27 @@ void CReversibleObject::Query()
 	//表側か裏側かを更新する
 	CheckFrontOrBackSide();
 
-	//反転オブジェクトの表面と裏面のそれぞれの数
-	const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
-	//反転オブジェクトの表面と裏面のそれぞれの最大数
-	const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
-	//次の表面か裏面かの数
-	int nextSideNum = num[GetFrontOrBackSide()];
-	//次の表面か裏面かの最大数
-	int nextSideMaxNum = maxNum[GetFrontOrBackSide()];
-
-	//数が最大数以下だったら
-	if (nextSideNum <= nextSideMaxNum)
+	//キャパシティがオーバーしているか？
+	if (!IsCapacityOver(GetFrontOrBackSide()))
 	{
+		//オーバーしていない
 		//通常のクエリの処理
 
 		//オーバーライドしてほしい関数QuerySub()
 		QuerySub();
-		//ステートをプレイヤーに持たれるかどうか調べる状態に移行する
+		//オーバーラップをチェックする状態へ
 		m_objectState = enOverlap;
 	}
 	else
 	{
-		//より大きければ
+		//念のため書いてるけど、本来ここを通る前に、
+		//ThrownDown()でキャパシティオーバーを調べて
+		//オーバーしてたらRepelled()に行っているはず
 
-		//クエリせずに元の位置に戻す
+		//オーバーしている
+
+		//クエリせずに
+		//下に投げた時のオーバーラップ
 		m_objectState = enOverlapThrownDown;
 		test.Scale(-1.0f);
 	}
@@ -668,6 +750,10 @@ void CReversibleObject::CheckObjectsOverlap()
 			break;
 		case enCancel:
 			m_objectState = enHeldPlayer;
+			break;
+		case enRepelled:
+			//横に弾いた先で重なってたら、もう一回横に弾く
+			m_objectState = enRepelled;
 			break;
 		//case enThrownSide:
 		//	m_objectState = enOverlapThrownSide;
@@ -704,29 +790,93 @@ void CReversibleObject::OverlapThrownDown()
 	//投げている時のカウンターの最大値
 	const float maxThrowCounter = 0.5f;
 
+	//手前に動かすベクトル
+	Vector3 backwardPower = { 0.0f,0.0f,1.0f };
+	//手前に動かすベクトルの大きさ
+	const float backwardPowerScale = 60000.0f;
+	//手前に動かすベクトルを拡大する
+	backwardPower.Scale(backwardPowerScale);
+	//自身の回転で回す
+	m_throwRot.Apply(backwardPower);
+
+	//カウンターを調節する変数
+	float counterAdjust = 0.0f;
+
+	//縦に弾かれるか？
+	if (!m_virticalRepelledFlag)
+	{
+		//弾かれない
+		//通常の処理
+
+		//二次関数的な動きにする
+		backwardPower *= pow(static_cast<double>(m_throwCounter - maxThrowCounter / 2.0), 2.0);
+
+		//モデルの回転を、逆さ向きに向かってちょっとずつ回す
+		m_rotation.SetRotationDegX(180.0f * m_throwCounter / maxThrowCounter);
+		m_rotation.Multiply(m_throwRot);
+	}
+	else
+	{
+		//弾かれる
+		//跳ね返る処理
+
+		//手前に弾くベクトルを弱くする
+		float toWeaken = 0.042f;
+		backwardPower.Scale(toWeaken);
+		//二次関数的な動きにする
+		backwardPower *= pow(static_cast<double>
+			((maxThrowCounter * 2.0 - maxThrowCounter / 2.0) -
+				(m_throwCounter - maxThrowCounter / 2.0))
+			, 2.0);
+
+		//下方向のベクトルを上方向にする
+		test.Scale(-1.0f);
+		//弱める
+		toWeaken = 0.5f;
+		test.Scale(toWeaken);
+		//モデルの回転の値
+		float rotValue = 90.0f - 360.0f *
+			(m_throwCounter - maxThrowCounter / 2) / (maxThrowCounter * 2 - maxThrowCounter / 2);
+		m_rotation.SetRotationDegX(rotValue);
+		m_rotation.Multiply(m_throwRot);
+		//カウンターを調節する時間にカウンターの最大値を入れる
+		counterAdjust = maxThrowCounter;
+	}
+
+	//半分の時間が過ぎたら下に下げる
+	if (m_throwCounter >= maxThrowCounter / 2.0f)
+		backwardPower *= -1.0f;
+
 	//モデルの場所を下に下げる
-	m_position += test * GameTime().GetFrameDeltaTime();
-	//モデルの回転を、逆さ向きに向かってちょっとずつ回す
-	m_rotation.SetRotationDegX(-180.0f * m_throwCounter / maxThrowCounter);
-	m_rotation.Multiply(m_throwRot);
+	m_position += (test + backwardPower) * GameTime().GetFrameDeltaTime();
+
 
 	//投げている時のカウンターを進める
 	m_throwCounter += GameTime().GetFrameDeltaTime();
 
 	//投げている時のカウンターが最大値まで来たら
-	if (m_throwCounter >= maxThrowCounter)
+	if (m_throwCounter >= maxThrowCounter + counterAdjust)
 	{
-		//モデルの回転を完全に逆さ向きに回す。
-		m_rotation.SetRotationDegX(0.0f);
-		m_rotation.Multiply(m_throwRot);
+		//縦に弾かれるか？
+		if (!m_virticalRepelledFlag)
+		{
+			//弾かれないとき（通常時）
+
+			//モデルの回転を完全に逆さ向きに回す。
+			m_rotation.SetRotationDegX(180.0f);
+			m_rotation.Multiply(m_throwRot);
+		}
 
 		//プレイヤーがオブジェクトを持っていない状態にする
-		m_pPlayer->SetHoldObject(false);
+		//m_pPlayer->SetHoldObject(false);
 
 		//投げている時のカウンターを0に戻す
 		m_throwCounter = 0.0f;
 
 		m_changeObject = true;
+
+		//縦に弾かれるか？を初期化する
+		m_virticalRepelledFlag = false;
 
 		//ステートをクエリへ移行する
 		m_objectState = enQuery;
@@ -734,11 +884,50 @@ void CReversibleObject::OverlapThrownDown()
 	//投げている時のカウンターが最大値の半分まで来たら
 	else if (m_throwCounter >= maxThrowCounter / 2.0f && m_changeObject == true)
 	{
-		//反転させる
-		Reverse();
+		//表側か裏側か？
+		int frontOrBackSide = CLevelObjectManager::enFrontSide;
+		//自分がいる側の反対側にする
+		if (GetFrontOrBackSide() == CLevelObjectManager::enFrontSide)
+			frontOrBackSide = CLevelObjectManager::enBackSide;
+
+		//キャパシティオーバーか？
+		//自分がいない側のキャパシティを調べる
+		//自分はまだそっち側にいないから、調整値に1を入れている
+		if (IsCapacityOver(frontOrBackSide, 1))
+			//キャパオーバーしてる
+			m_virticalRepelledFlag = true;
+		else
+			//キャパオーバーではない
+			//反転させる
+			Reverse();
 
 		m_changeObject = false;
+
 	}
+}
+
+/// <summary>
+/// 表側か裏側のキャパシティがオーバーしているか？
+/// を調べる関数
+/// 調整値には、自身はまだ対象の側にいないが、行ったとしたら
+/// キャパシティはオーバーするのか？を調べるときに、1を入れる。
+/// </summary>
+/// <param name="frontOrBackSide">表側か裏側か？</param>
+/// <param name="adjust">調整値</param>
+/// <returns>オーバーしているか？</returns>
+const bool CReversibleObject::IsCapacityOver(const int frontOrBackSide, const int adjust)
+{
+	//反転オブジェクトの表面と裏面のそれぞれの数
+	const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
+	//反転オブジェクトの表面と裏面のそれぞれの最大数
+	const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
+	//次の表面か裏面かの数
+	int nextSideNum = num[frontOrBackSide] + adjust;
+	//次の表面か裏面かの最大数
+	int nextSideMaxNum = maxNum[frontOrBackSide];
+
+	//数が最大数以下だったら
+	return nextSideNum > nextSideMaxNum;
 }
 
 //void CReversibleObject::OverlapThrownSide()

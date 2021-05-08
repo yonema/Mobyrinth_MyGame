@@ -71,6 +71,9 @@ public:		//ここのメンバ関数を主に使う
 	/// </summary>
 	void Reverse();
 
+	/// <summary>
+	/// ぜんぶの反転オブジェクトを反転させるときに使う関数
+	/// </summary>
 	void AllReverse();
 
 	/// <summary>
@@ -208,6 +211,17 @@ private:	//privateなメンバ関数
 	/// </summary>
 	//void OverlapThrownSide();
 
+	/// <summary>
+	/// 表側か裏側のキャパシティがオーバーしているか？
+	/// を調べる関数
+	/// 調整値には、自身はまだ対象の側にいないが、行ったとしたら
+	/// キャパシティはオーバーするのか？を調べるときに、1を入れる。
+	/// </summary>
+	/// <param name="frontOrBackSide">表側か裏側か？</param>
+	/// <param name="adjust">調整値</param>
+	/// <returns>オーバーしているか？</returns>
+	const bool IsCapacityOver(const int frontOrBackSide, const int adjust = 0);
+
 public:		//publicなデータメンバ
 
 	/// <summary>
@@ -232,6 +246,7 @@ private:	//データメンバ
 	float m_heldUpLen = 100.0f;					//持ち上げた時の、上に持ち上げるベクトルの長さ
 	float m_timer = 0.0f;						//タイマー
 	Vector3 m_addPosition = g_vec3Zero;			//ポジションに加えるベクトル
+	bool m_virticalRepelledFlag = false;		//盾に弾かれるか？
 	/// <summary>
 	/// オブジェクトの現在のステート（状態）
 	/// これでアップデート中の処理を割り振る
