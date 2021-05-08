@@ -21,6 +21,7 @@ public:		//ここのメンバ関数を主に使う。
 	/// <param name="numAnimationClips">アニメーションクリップの総数</param>
 	/// <param name="modelUpAxis">モデルのUP軸</param>
 	void Init(const char* filePath,
+		D3D12_CULL_MODE cullMode = D3D12_CULL_MODE_BACK,
 		AnimationClip* animationClips = nullptr,
 		int numAnimationClips = 0,
 		EnModelUpAxis modelUpAxis = enModelUpAxisZ
@@ -129,7 +130,7 @@ private:	//privateなメンバ関数
 	/// </summary>
 	/// <param name="filePath">tkmファイルパス</param>
 	/// <param name="modelUpAxis">モデルのUP軸</param>
-	void InitModel(const char* filePath, EnModelUpAxis modelUpAxis);
+	void InitModel(const char* filePath, D3D12_CULL_MODE cullMode, EnModelUpAxis modelUpAxis);
 
 	/// <summary>
 	/// アニメーションを初期化。

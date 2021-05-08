@@ -53,6 +53,11 @@ COBB* COBBWorld::HitAllOBB(const COBB& myOBB)
 	//OBBWorldに登録してあるOBBを一つずつ取り出して、調べる
 	for (auto OBB : m_worldOBBs)
 	{
+		//例外フラグを調べる
+		if (OBB->GetExceptionFlag())
+			//例外ならパス
+			continue;
+
 		//引数で渡された自身のOBBと、OBBWorldから取り出したOBBとの
 		//衝突判定
 		if (CollisionOBBs(myOBB, *OBB))

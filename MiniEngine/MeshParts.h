@@ -46,6 +46,7 @@ public:
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntryPointFunc,
 		const char* psEntryPointFunc,
+		D3D12_CULL_MODE cullMode,
 		void* expandData,
 		int expandDataSize,
 		IShaderResource* expandShaderResourceView,
@@ -126,7 +127,8 @@ private:
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntryPointFunc,
 		const char* psEntryPointFunc,
-		DXGI_FORMAT colorBufferFormat
+		DXGI_FORMAT colorBufferFormat,
+		D3D12_CULL_MODE cullMode
 	);
 
 	
