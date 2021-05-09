@@ -3,7 +3,13 @@
 
 bool stage_kari::StartSub()
 {
+	//LoadLevel("Assets/level/stage_kari02.tkl");
+	//LoadLevel("Assets/level/Y_easy.tkl");
 	LoadLevel("Assets/level/Y_normal.tkl");
+
+	
+
+
 	//デバック用
 	//後で消す
 	//m_ufo = NewGO<CUFO>(0, "UFO");
