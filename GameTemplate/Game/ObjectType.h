@@ -27,6 +27,8 @@ enum EnObjectType
 	enKeymold,			//「鍵の金型」
 	enKey,				//「鍵」
 	enPadlock,			//「南京錠」
+	enLeftType,			//「左」	//enLeftは他でもよく使っているためTypeを加える
+	enRightType,		//「右」	//enRightは他でもよく使っているためTypeを加える
 
 	//障害オブジェクト
 

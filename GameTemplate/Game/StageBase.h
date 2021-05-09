@@ -28,6 +28,7 @@
 #include "ROnail_bar.h"
 #include "ROaxe_pickaxe.h"
 #include "ROkeymold_empty.h"
+#include "ROleft_right.h"
 
 //「障害オブジェクト」ObstacleObject
 #include "OObigFire.h"
@@ -36,6 +37,11 @@
 #include "OOpadlock.h"
 #include "OObox.h"
 #include "TransparentSwitch.h"
+#include "OOoneway.h"
+#include "OOReverseALL.h"
+
+//「UFO」
+#include "UFO.h"
 
 
 /// <summary>
