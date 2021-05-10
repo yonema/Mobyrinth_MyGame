@@ -13,8 +13,8 @@ bool Game::Start()
 	//å„Ç≈è¡Ç∑
 	//NewGO<testModel>(0);
 
-	//CSoundCue::SetBGMVolume(0.0f);
-	//CSoundCue::SetSEVolume(0.0f);
+	CSoundCue::SetBGMVolume(0.0f);
+	CSoundCue::SetSEVolume(0.0f);
 
 	return true;
 }

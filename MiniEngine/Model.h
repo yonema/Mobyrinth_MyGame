@@ -27,6 +27,7 @@ struct ModelInitData {
 	Skeleton* m_skeleton = nullptr;									//スケルトン。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					//モデルの上方向。
 
+	D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK;
 
 	void* m_expandConstantBuffer2 = nullptr;						//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize2 = 0;							//ユーザー拡張の定数バッファのサイズ。
@@ -144,6 +145,15 @@ public:
 	void SetEmissionColor(const Vector4& color)
 	{
 		m_meshParts.SetEmissionColor(color);
+	}
+
+	/// <summary>
+	/// 乗算カラーを設定する
+	/// </summary>
+	/// <param name="color">乗算カラー</param>
+	void SetMulColor(const Vector4& color)
+	{
+		m_meshParts.SetMulColor(color);
 	}
 
 

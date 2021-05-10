@@ -12,7 +12,8 @@ public:
 		NewGO<stage_proto01>(0);
 	}
 
-private:
+private:	//デバック用
+	//後で消す
 	OOoneway* m_oneway = nullptr;
 };
 

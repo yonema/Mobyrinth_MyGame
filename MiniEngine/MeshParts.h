@@ -46,6 +46,7 @@ public:
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntryPointFunc,
 		const char* psEntryPointFunc,
+		D3D12_CULL_MODE cullMode,
 		void* expandData,
 		int expandDataSize,
 		IShaderResource* expandShaderResourceView,
@@ -109,6 +110,15 @@ public:
 		m_emissionColor = color;
 	}
 
+	/// <summary>
+	/// 乗算カラーを設定する
+	/// </summary>
+	/// <param name="color">乗算カラー</param>
+	void SetMulColor(const Vector4& color)
+	{
+		m_mulColor = color;
+	}
+
 private:
 	/// <summary>
 	/// tkmメッシュからメッシュを作成。
@@ -126,7 +136,8 @@ private:
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntryPointFunc,
 		const char* psEntryPointFunc,
-		DXGI_FORMAT colorBufferFormat
+		DXGI_FORMAT colorBufferFormat,
+		D3D12_CULL_MODE cullMode
 	);
 
 	
@@ -143,7 +154,8 @@ private:
 		Matrix mWorld;		//ワールド行列。
 		Matrix mView;		//ビュー行列。
 		Matrix mProj;		//プロジェクション行列。
-		Vector4 selfLuminous;	//自己発光色
+		Vector4 emissionColor;	//自己発光色
+		Vector4 mulColor;		//乗算カラー
 		int shadowReceiverFlag;	//シャドウレシーバー？
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
@@ -166,5 +178,6 @@ private:
 	void* m_shadowParamData = nullptr;					//シャドウ用データ
 
 	Vector4 m_emissionColor = { 0.0f,0.0f,0.0f,0.0f };	//自己発光色
+	Vector4 m_mulColor = { 1.0f,1.0f,1.0f,1.0f };		//乗算カラー
 
 };
