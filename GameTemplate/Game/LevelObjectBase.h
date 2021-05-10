@@ -206,7 +206,8 @@ public:		//ここのメンバ関数を主に使う
 	/// <summary>
 	/// 自身が表側にあるか裏側にあるかを調べる関数
 	/// </summary>
-	void CheckFrontOrBackSide();
+	/// <param name="reversibleObject">反転オブジェクトか？</param>
+	void CheckFrontOrBackSide(const bool reversibleObject = true);
 
 private:	//privateなメンバ関数
 
@@ -259,11 +260,13 @@ private:
 	//デバック用
 	//後で消す
 private:
-	//int m_objectNumber = 0;		//何番目に作られたオブジェクトか保持する
-	//static int objectNumber;	//何番目に作られたオブジェクトかカウントする
+#ifdef MY_DEBUG
+	int m_objectNumber = 0;		//何番目に作られたオブジェクトか保持する
+	static int objectNumber;	//何番目に作られたオブジェクトかカウントする
 
-	//static const int m_dbgOBBNum = 8;			//OBBの頂点の数
-	//CModelRender* m_dbgOBBVert[m_dbgOBBNum];	//OBBの頂点を見るためのモデルレンダラー
+	static const int m_dbgOBBNum = 8;			//OBBの頂点の数
+	CModelRender* m_dbgOBBVert[m_dbgOBBNum];	//OBBの頂点を見るためのモデルレンダラー
+#endif
 	//デバック用ここまで
 };
 

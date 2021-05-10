@@ -26,6 +26,7 @@ bool OOReverseALL::StartSub()
 
 
 	//デバック用
+#ifdef MY_DEBUG
 	//後で消す
 	Vector3* vertPos = GetOBB().GetBoxVertex();
 	for (int i = 0; i < m_vertNum; i++)
@@ -37,14 +38,14 @@ bool OOReverseALL::StartSub()
 		m_dbgVertPosMR[i]->SetRotation(m_rotation);
 	}
 	//デバック用ここまで
-
+#endif
 	return true;
 }
 
 //デストラクタ
 OOReverseALL::~OOReverseALL()
 {
-
+#ifdef MY_DEBUG
 	//デバック用
 	//後で消す
 	for (int i = 0; i < m_vertNum; i++)
@@ -53,6 +54,7 @@ OOReverseALL::~OOReverseALL()
 		DeleteGO(m_dbgVertPosMR[i]);
 	}
 	//デバック用ここまで
+#endif
 }
 
 //アップデート関数

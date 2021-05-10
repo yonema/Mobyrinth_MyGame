@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "LevelObjectBase.h"
 //デバック用
+#ifdef MY_DEBUG
 //後で消す
-//int ILevelObjectBase::objectNumber = 0;
-
+int ILevelObjectBase::objectNumber = 0;
+#endif
 //スタート関数
 bool ILevelObjectBase::Start()
 {
@@ -18,20 +19,21 @@ bool ILevelObjectBase::Start()
 	//OBBを初期化する
 	InitOBB();
 
+#ifdef MY_DEBUG
 	//デバック用
 	//後で消す。
-	//m_objectNumber = objectNumber++;
+	m_objectNumber = objectNumber++;
 
-	//Vector3* vertPos = m_obb.GetBoxVertex();
-	//for (int i = 0; i < m_dbgOBBNum; i++)
-	//{
-	//	m_dbgOBBVert[i] = NewGO<CModelRender>(0);
-	//	m_dbgOBBVert[i]->Init("Assets/modelData/dbgBox.tkm");
-	//	m_dbgOBBVert[i]->SetPosition(vertPos[i]);
-	//}
+	Vector3* vertPos = m_obb.GetBoxVertex();
+	for (int i = 0; i < m_dbgOBBNum; i++)
+	{
+		m_dbgOBBVert[i] = NewGO<CModelRender>(0);
+		m_dbgOBBVert[i]->Init("Assets/modelData/dbgBox.tkm");
+		m_dbgOBBVert[i]->SetPosition(vertPos[i]);
+	}
 
 	//デバック用ここまで
-
+#endif
 	//オーバーライドしてほしい関数PureVirtualStart()
 	return PureVirtualStart();
 
@@ -40,14 +42,15 @@ bool ILevelObjectBase::Start()
 //デストラクタ
 ILevelObjectBase::~ILevelObjectBase()
 {
+#ifdef MY_DEBUG
 	//デバック用
 	//後で消す
-	//for (int i = 0; i < m_dbgOBBNum; i++)
-	//{
-	//	DeleteGO(m_dbgOBBVert[i]);
-	//}
+	for (int i = 0; i < m_dbgOBBNum; i++)
+	{
+		DeleteGO(m_dbgOBBVert[i]);
+	}
 	//デバック用ここまで
-
+#endif
 	//LevelObjectManagerにオブジェクトが破棄されたことを伝える
 	CLevelObjectManager::GetInstance()->RemoveObject(this);
 }
@@ -205,7 +208,8 @@ void ILevelObjectBase::CheckRotation()
 /// <summary>
 /// 自身が表側にあるか裏側にあるかを調べる関数
 /// </summary>
-void ILevelObjectBase::CheckFrontOrBackSide()
+/// <param name="reversibleObject">反転オブジェクトか？</param>
+void ILevelObjectBase::CheckFrontOrBackSide(const bool reversibleObject)
 {
 	//表側か裏側か
 	int nextFrontOrBackSide = 0;
@@ -223,18 +227,20 @@ void ILevelObjectBase::CheckFrontOrBackSide()
 		nextFrontOrBackSide = CLevelObjectManager::enBackSide;
 	}
 
-	//初期値ではなかったら
-	if (m_frontOrBackSide != CLevelObjectManager::enNone)
+	if (reversibleObject)
 	{
-		//前の場所の反転オブジェクトの数を減算する
-		CLevelObjectManager::GetInstance()->RemoveReversibleObjectNum(m_frontOrBackSide);
-	}
+		//初期値ではなかったら
+		if (m_frontOrBackSide != CLevelObjectManager::enNone)
+		{
+			//前の場所の反転オブジェクトの数を減算する
+			CLevelObjectManager::GetInstance()->RemoveReversibleObjectNum(m_frontOrBackSide);
+		}
 
-	//現在の表側か裏側かを更新する
+		//次の場所の反転オブジェクトの数を加算する
+		CLevelObjectManager::GetInstance()->AddReversibleObjectNum(nextFrontOrBackSide);
+	}
+		//現在の表側か裏側かを更新する
 	m_frontOrBackSide = nextFrontOrBackSide;
-	//現在の場所の反転オブジェクトの数を加算する
-	CLevelObjectManager::GetInstance()->AddReversibleObjectNum(m_frontOrBackSide);
-	
 }
 
 
@@ -249,16 +255,17 @@ void ILevelObjectBase::Update()
 	//OBBの場所と回転を設定する
 	m_obb.SetPosition(m_position);
 	m_obb.SetRotation(m_rotation);
-
+#ifdef MY_DEBUG
 	//デバック用
 	//後で消す
-	//Vector3* vertPos = m_obb.GetBoxVertex();
-	//for (int i = 0; i < m_dbgOBBNum; i++)
-	//{
-	//	m_dbgOBBVert[i]->SetPosition(vertPos[i]);
-	//	m_dbgOBBVert[i]->SetRotation(m_rotation);
-	//}
+	Vector3* vertPos = m_obb.GetBoxVertex();
+	for (int i = 0; i < m_dbgOBBNum; i++)
+	{
+		m_dbgOBBVert[i]->SetPosition(vertPos[i]);
+		m_dbgOBBVert[i]->SetRotation(m_rotation);
+	}
 	//デバック用ここまで
+#endif
 }
 
 
@@ -295,7 +302,8 @@ bool IsHitObject
 		//衝突していない判定する。
 		return false;
 	}
-
+	if (lhs.GetFrontOrBackSide() != rhs.GetFrontOrBackSide())
+		return false;
 
 	//OBB同士の当たり判定をして、
 	//その結果を戻す

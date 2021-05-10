@@ -42,8 +42,11 @@ private:	//データメンバ
 	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
 
 private:	//デバック用
+
+#ifdef MY_DEBUG
 //後で消す
 	static const int m_vertNum = 8;		//頂点の数
 	CModelRender* m_dbgVertPosMR[m_vertNum] = { nullptr };	//頂点を見るためのモデル
+#endif
 };
 
