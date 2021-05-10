@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Root>
-  <WindowWidth>1248</WindowWidth>
-  <WindowHeight>704</WindowHeight>
-  <WindowPosX>70</WindowPosX>
-  <WindowPosY>32</WindowPosY>
-  <WindowIsMaximumMode>0</WindowIsMaximumMode>
+  <WindowWidth>1920</WindowWidth>
+  <WindowHeight>1030</WindowHeight>
+  <WindowPosX>0</WindowPosX>
+  <WindowPosY>0</WindowPosY>
+  <WindowIsMaximumMode>1</WindowIsMaximumMode>
   <Docks>
     <Effekseer.GUI.Dock.ViewerController>Open</Effekseer.GUI.Dock.ViewerController>
     <Effekseer.GUI.Dock.NodeTreeView>Open</Effekseer.GUI.Dock.NodeTreeView>

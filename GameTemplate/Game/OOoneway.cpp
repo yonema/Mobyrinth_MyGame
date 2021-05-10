@@ -5,7 +5,7 @@
 bool OOoneway::StartSub()
 {
 	//モデルの初期化とタイプの設定
-	Init("Assets/modelData/oneway.tkm", enBigFire);
+	Init("Assets/modelData/oneway.tkm", enOneway);
 
 	//OBBのサイズを設定
 	Vector3 obbSize;
