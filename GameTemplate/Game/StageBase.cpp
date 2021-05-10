@@ -118,6 +118,14 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObject->SetFrontOrBack(CReversibleObject::enFront);
 				return true;
 			}
+			else if (objData.EqualObjectName(L"fire") == true)
+			{
+				ROmizu_kori* RObject;
+				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
 			else if (objData.EqualObjectName(L"koori") == true)
 			{
 				ROmizu_kori* RObject;
@@ -220,6 +228,23 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObject->SetFrontOrBack(CReversibleObject::enFront);
 				return true;
 			}
+			//left_right
+			else if (objData.EqualObjectName(L"left") == true)
+			{
+			ROleft_right* RObject;
+			RObject = NewGO<ROleft_right>(0, "left_right");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"right") == true)
+			{
+			ROleft_right* RObject;
+			RObject = NewGO<ROleft_right>(0, "left_right");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			return true;
+			}
 
 			///
 			///
@@ -275,6 +300,45 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				OObject = NewGO<OOTransparentSwitch>(0, "transparentSwitch");
 				OObject->SetPosition(objData.position);
 				return true;
+			}
+			//oneway
+			else if (objData.EqualObjectName(L"oneway_left") == true)
+			{
+			OOoneway* OObject;
+			OObject = NewGO<OOoneway>(0, "oneway");
+			OObject->SetPosition(objData.position);
+			OObject->SetLeftOrRight(OOoneway::enLeft);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"oneway_right") == true)
+			{
+			OOoneway* OObject;
+			OObject = NewGO<OOoneway>(0, "oneway");
+			OObject->SetPosition(objData.position);
+			OObject->SetLeftOrRight(OOoneway::enRight);
+			OObject->SetScale({ -1.0f,1.0f,1.0f });
+			return true;
+			}
+			//reverseAll
+			else if (objData.EqualObjectName(L"reverseAll") == true)
+			{
+			OOReverseALL* OObject;
+			OObject = NewGO<OOReverseALL>(0, "oneway");
+			OObject->SetPosition(objData.position);
+			return true;
+			}
+
+			///
+			///
+			/// 「UFO」
+
+			//UFO
+			else if (objData.EqualObjectName(L"UFO") == true)
+			{
+			CUFO* bject;
+			bject = NewGO<CUFO>(0, "UFO");
+			bject->SetPosition(objData.position);
+			return true;
 			}
 
 

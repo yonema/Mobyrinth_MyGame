@@ -294,6 +294,7 @@
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
     <ClCompile Include="OOoneway.cpp" />
+    <ClCompile Include="ROleft_right.cpp" />
     <ClCompile Include="Tips.cpp" />
     <ClCompile Include="OOReverseALL.cpp" />
     <ClCompile Include="TipsController.cpp" />
@@ -435,6 +436,7 @@
     <ClInclude Include="CaslFile.h" />
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="OOoneway.h" />
+    <ClInclude Include="ROleft_right.h" />
     <ClInclude Include="Tips.h" />
     <ClInclude Include="OOReverseALL.h" />
     <ClInclude Include="TipsController.h" />

@@ -33,6 +33,11 @@ bool OOoneway::StartSub()
 	initOBBData.position = m_position + sideVec;
 	m_sideOBB[enRight].Init(initOBBData);
 
+	for (int i = 0; i < enLeftAndRightNum; i++)
+	{
+		COBBWorld::GetInstance()->AddOBB(&m_sideOBB[i]);
+	}
+
 	Vector3* vertPos;
 	for (int i = 0; i < enLeftAndRightNum; i++)
 	{
@@ -43,8 +48,6 @@ bool OOoneway::StartSub()
 			m_dbgVertMR[i][j]->Init("Assets/modelData/dbgBox.tkm");
 			m_dbgVertMR[i][j]->SetPosition(vertPos[j]);
 		}
-		if (i == m_leftOrRight)
-			COBBWorld::GetInstance()->AddOBB(&m_sideOBB[i]);
 	}
 
 	return true;
@@ -68,10 +71,10 @@ OOoneway::~OOoneway()
 void OOoneway::UpdateSub()
 {
 
-		if (m_pPlayer->GetEnLeftOrRight() == m_leftOrRight)
-			m_sideOBB[m_leftOrRight].SetExceptionFlag(true);
-		else
-			m_sideOBB[m_leftOrRight].SetExceptionFlag(false);
+	if (m_pPlayer->GetEnLeftOrRight() == m_leftOrRight)
+		m_sideOBB[m_leftOrRight].SetExceptionFlag(true);
+	else
+		m_sideOBB[m_leftOrRight].SetExceptionFlag(false);
 
 
 }

@@ -14,6 +14,10 @@ public:		//©“®‚ÅŒÄ‚Î‚ê‚éƒƒ“ƒoŠÖ”
 	void SetLeftOrRight(const int leftOrRight)
 	{
 		m_leftOrRight = leftOrRight;
+		for (int i = 0; i < enLeftAndRightNum; i++)
+		{
+			m_sideOBB[i].SetExceptionFlag(true);
+		}
 	}
 
 public:
