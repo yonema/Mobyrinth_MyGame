@@ -13,9 +13,6 @@ public:
 		NewGO<stage_kari>(0);
 	}
 
-private:	//デバック用
-	//後で消す
-	//CUFO* m_ufo = nullptr;
-	//OOReverseALL* m_reverseALL = nullptr;
+private:
 };
 

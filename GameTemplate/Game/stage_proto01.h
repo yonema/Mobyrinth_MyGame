@@ -13,7 +13,6 @@ public:
 	}
 
 private:	//デバック用
-	//後で消す
-	OOoneway* m_oneway = nullptr;
+	
 };
 

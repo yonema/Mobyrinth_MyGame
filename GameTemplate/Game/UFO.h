@@ -77,13 +77,16 @@ private:	//データメンバ
 	int m_searchFlag = true;				//プレイヤーを探しているか？
 	float m_timer = 0.0f;					//タイマー
 	CSpotLight* m_spotLight = nullptr;		//スポットライト
+	CModelRender* m_ufoLight = nullptr;		//UFOのライト
 	CUFOLandingPoint* m_ufoLandingPoint = nullptr;	//着地点クラス
 	bool m_getOnStageFlag = true;			//ステージの上に乗る処理を行うか？
 
 	//デバック用
 private:
+#ifdef MY_DEBUG
 	static const int m_vertNum = 8;				//頂点の数
 	CModelRender* m_dbgVertPosMR[m_vertNum];	//OBBの頂点を見るためのモデル
 	CModelRender* m_dbgRay[2] = { nullptr,nullptr };	//レイの始点と終点を見るためのモデル
+#endif
 };
 

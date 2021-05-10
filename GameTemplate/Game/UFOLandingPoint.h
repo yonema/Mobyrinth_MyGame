@@ -41,9 +41,11 @@ private:	//データメンバ
 
 
 private:	//デバック用
+#ifdef MY_DEBUG
 	//後で消す
 	static const int m_vertNum = 8;		//頂点の数
 	CModelRender* m_dbgVertPosMR[m_vertNum] = { nullptr };	//頂点を見るためのモデル
 	CModelRender* m_dbgSidePosMR[enLeftAndRightNum][m_vertNum];	//端のOBBを見るためのモデル
+#endif
 };
 

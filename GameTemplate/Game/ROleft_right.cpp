@@ -68,21 +68,33 @@ void ROleft_right::QuerySub()
 /// </summary>
 void ROleft_right::ObjectReverse()
 {
+	//配置してあるすべてのレベルオブジェクトの参照のベクター
 	std::vector<ILevelObjectBase*> levelObjects =
 		CLevelObjectManager::GetInstance()->GetLevelObjects();
 
+	//レベルオブジェクトたちを一つずつ取り出す
 	for (auto lo : levelObjects)
 	{
+		//自分自身の時はスキップ
 		if (lo == this)
 			continue;
 
+		//自身とオブジェクトが衝突しているか？
 		if (IsHitObject(*this, *lo))
 		{
+			//衝突していたら
+
+			//行動可能か？
 			if (m_actionFlag)
 			{
+				//可能
+
+				//左右反転する方向
 				float xScale = 1.0f;
 				if (GetObjectType() == enRightType)
+					//右向きなら、左右反転させる
 					xScale *= -1.0f;
+				//衝突したオブジェクトのスケールを設定する
 				lo->SetScale({ xScale,1.0f,1.0f });
 				//自身は破棄する
 				DeleteGO(this);
