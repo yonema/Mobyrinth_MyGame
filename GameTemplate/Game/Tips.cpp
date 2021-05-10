@@ -54,6 +54,33 @@ void CTips::InitText()
 		case enFire:	//火
 			LoadText(objectType, "fire");
 			break;
+		case enRunning:	//稼働
+			LoadText(objectType, "running");
+			break;
+		case enStop:	//停止
+			LoadText(objectType, "stop");
+			break;
+		case enNail:	//釘
+			LoadText(objectType, "nail");
+			break;
+		case enBar:		//バール
+			LoadText(objectType, "bar");
+			break;
+		case enBigFire:		//炎
+			LoadText(objectType, "bigFire");
+			break;
+		case enWall:		//壁
+			LoadText(objectType, "wall");
+			break;
+		case enGoal:		//ゴール
+			LoadText(objectType, "goal");
+			break;
+		case enBox:			//箱
+			LoadText(objectType, "box");
+			break;
+		case enOneway:		//一方通行
+			LoadText(objectType, "oneWay");
+			break;
 		default:		//デフォルト
 			LoadText(objectType, "empty");
 			break;

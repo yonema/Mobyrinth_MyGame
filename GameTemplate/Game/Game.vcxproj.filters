@@ -96,6 +96,15 @@
     <Filter Include="MyCode\LevelObject\TransparentObject">
       <UniqueIdentifier>{29081464-a22e-4612-9396-393e3742a98e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ExEngine\effect">
+      <UniqueIdentifier>{c549521a-8801-4d62-819d-a3eefeb37cef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\LevelObject\UFO">
+      <UniqueIdentifier>{d6ac6489-28b5-44e3-9d67-f3659c000321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Tips">
+      <UniqueIdentifier>{f2cd75c1-751f-4372-8ec1-413aab0a18ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -431,26 +440,35 @@
     <ClCompile Include="OTransparentObject.cpp">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClCompile>
-    <ClCompile Include="Tips.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
+      <Filter>ExEngine\effect</Filter>
     </ClCompile>
-    <ClCompile Include="OOReverseALL.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="TipsController.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="UFOLandingPoint.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="SpotLight.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="..\..\ExEngine\effect\Effect.cpp">
+      <Filter>ExEngine\effect</Filter>
     </ClCompile>
     <ClCompile Include="Mobius.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyCode\LevelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="OOReverseALL.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>MyCode\Light</Filter>
     </ClCompile>
     <ClCompile Include="UFO.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyCode\LevelObject\UFO</Filter>
+    </ClCompile>
+    <ClCompile Include="UFOLandingPoint.cpp">
+      <Filter>MyCode\LevelObject\UFO</Filter>
+    </ClCompile>
+    <ClCompile Include="Tips.cpp">
+      <Filter>MyCode\Tips</Filter>
+    </ClCompile>
+    <ClCompile Include="TipsController.cpp">
+      <Filter>MyCode\Tips</Filter>
+    </ClCompile>
+    <ClCompile Include="OOoneway.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -826,29 +844,38 @@
     <ClInclude Include="OTransparentObject.h">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectType.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
+      <Filter>ExEngine\effect</Filter>
     </ClInclude>
-    <ClInclude Include="Tips.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="OOReverseALL.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="TipsController.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="UFOLandingPoint.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SpotLight.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="..\..\ExEngine\effect\Effect.h">
+      <Filter>ExEngine\effect</Filter>
     </ClInclude>
     <ClInclude Include="Mobius.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\LevelObject</Filter>
+    </ClInclude>
+    <ClInclude Include="OOReverseALL.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="UFOLandingPoint.h">
+      <Filter>MyCode\LevelObject\UFO</Filter>
     </ClInclude>
     <ClInclude Include="UFO.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\LevelObject\UFO</Filter>
+    </ClInclude>
+    <ClInclude Include="Tips.h">
+      <Filter>MyCode\Tips</Filter>
+    </ClInclude>
+    <ClInclude Include="TipsController.h">
+      <Filter>MyCode\Tips</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>MyCode\LevelObject</Filter>
+    </ClInclude>
+    <ClInclude Include="OOoneway.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

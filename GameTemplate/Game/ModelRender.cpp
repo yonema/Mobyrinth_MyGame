@@ -12,6 +12,7 @@
 /// <param name="modelUpAxis">モデルのUP軸</param>
 void CModelRender::Init(
 	const char* filePath,
+	D3D12_CULL_MODE cullMode,
 	AnimationClip* animationClips,
 	int numAnimationClips,
 	EnModelUpAxis modelUpAxis)
@@ -21,7 +22,7 @@ void CModelRender::Init(
 	//スケルトンのデータの読み込み。
 	InitSkeleton(filePath);
 	//モデルを初期化
-	InitModel(filePath, modelUpAxis);
+	InitModel(filePath, cullMode, modelUpAxis);
 	//アニメーションを初期化
 	InitAnimation(animationClips, numAnimationClips);
 	SetShadowCasterFlag(true);
@@ -94,7 +95,7 @@ bool CModelRender::InitSkeleton(const char* filePath)
 /// </summary>
 /// <param name="filePath">tkmファイルパス</param>
 /// <param name="modelUpAxis">モデルのUP軸</param>
-void CModelRender::InitModel(const char* filePath, EnModelUpAxis modelUpAxis)
+void CModelRender::InitModel(const char* filePath, D3D12_CULL_MODE cullMode, EnModelUpAxis modelUpAxis)
 {
 	//初期化データを作成する
 	ModelInitData initData;
@@ -144,6 +145,7 @@ void CModelRender::InitModel(const char* filePath, EnModelUpAxis modelUpAxis)
 		sizeof(*g_shadowMap->GetShadowParam()) * g_max_shadowMap;
 	initData.m_expandShaderResoruceView = &g_shadowMap->GetShadowBlur();
 
+	initData.m_cullMode = cullMode;
 
 	//作成した初期化データをもとにモデルを初期化する、
 	m_model.Init(initData);

@@ -46,6 +46,7 @@ OObigFire::~OObigFire()
 	}
 }
 
+//アップデート関数
 void OObigFire::UpdateSub()
 {
 	Burn();

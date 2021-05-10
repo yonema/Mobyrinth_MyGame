@@ -582,6 +582,7 @@ void IStageBase::InitBGM()
 	m_bgmStage1 = NewGO<CSoundCue>(0);
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
 	m_bgmStage1->Init(L"Assets/sound/Stage1.wav");
+	m_bgmStage1->SetSoundType(CSoundCue::enBGM);
 	//BGMをループ再生をオンで再生する。
 	m_bgmStage1->Play(true);
 	//もしタイトル画面だった場合、BGM音量を０にする。
@@ -593,6 +594,7 @@ void IStageBase::InitBGM()
 	m_bgmStage2 = NewGO<CSoundCue>(0);
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
 	m_bgmStage2->Init(L"Assets/sound/Stage2.wav");
+	m_bgmStage2->SetSoundType(CSoundCue::enBGM);
 	//BGMをループ再生をオンで再生する。
 	m_bgmStage2->Play(true);
 	//BGM音量を０にする。
@@ -603,6 +605,7 @@ void IStageBase::InitBGM()
 	m_loop_bgmStage1 = NewGO<CSoundCue>(0);
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
 	m_loop_bgmStage1->Init(L"Assets/sound/Stage1_Loop.wav");
+	m_loop_bgmStage1->SetSoundType(CSoundCue::enBGM);
 	//BGM音量を０にする。
 	m_loop_bgmStage1->SetVolume(0.0f);
 
@@ -610,6 +613,7 @@ void IStageBase::InitBGM()
 	m_loop_bgmStage2 = NewGO<CSoundCue>(0);
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
 	m_loop_bgmStage2->Init(L"Assets/sound/Stage2_Loop.wav");
+	m_loop_bgmStage2->SetSoundType(CSoundCue::enBGM);
 	//BGM音量を０にする。
 	m_loop_bgmStage2->SetVolume(0.0f);
 
