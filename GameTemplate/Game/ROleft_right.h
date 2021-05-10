@@ -17,7 +17,10 @@ public:		//自動で呼ばれるメンバ関数
 	void QuerySub()override final;
 
 private:	//privateなメンバ関数
-
+	
+	/// <summary>
+	/// 当たったオブジェクトを左右反転させる
+	/// </summary>
 	void ObjectReverse();
 
 private:	//データメンバ

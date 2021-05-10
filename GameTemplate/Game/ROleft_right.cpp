@@ -63,6 +63,9 @@ void ROleft_right::QuerySub()
 	}
 }
 
+/// <summary>
+/// 当たったオブジェクトを左右反転させる
+/// </summary>
 void ROleft_right::ObjectReverse()
 {
 	std::vector<ILevelObjectBase*> levelObjects =

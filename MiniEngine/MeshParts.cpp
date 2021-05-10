@@ -239,7 +239,8 @@ void MeshParts::Draw(
 	cb.mWorld = mWorld;
 	cb.mView = mView;
 	cb.mProj = mProj;
-	cb.selfLuminous = m_emissionColor;
+	cb.emissionColor = m_emissionColor;
+	cb.mulColor = m_mulColor;
 	cb.shadowReceiverFlag = shadowReceiverFlag;
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);

@@ -110,6 +110,15 @@ public:		//ここのメンバ関数を主に使う。
 		m_model.SetEmissionColor(color);
 	}
 
+	/// <summary>
+	/// 乗算カラーを設定する
+	/// </summary>
+	/// <param name="color">乗算カラー</param>
+	void SetMulColor(const Vector4& color)
+	{
+		m_model.SetMulColor(color);
+	}
+
 	//モデルの参照を返す
 	Model& GetModel()
 	{

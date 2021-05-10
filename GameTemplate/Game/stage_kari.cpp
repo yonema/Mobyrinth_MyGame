@@ -5,7 +5,10 @@ bool stage_kari::StartSub()
 {
 	//LoadLevel("Assets/level/stage_kari02.tkl");
 	//LoadLevel("Assets/level/Y_easy.tkl");
-	LoadLevel("Assets/level/Y_normal.tkl");
+	//LoadLevel("Assets/level/Y_normal.tkl");
+	//LoadLevel("Assets/level/Y_hard.tkl");
+	//LoadLevel("Assets/level/O_easy.tkl");
+	LoadLevel("Assets/level/O_normal.tkl");
 
 	
 

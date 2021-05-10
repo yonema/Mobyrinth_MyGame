@@ -9,7 +9,8 @@ cbuffer ModelCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
-	float4 selfLuminous;
+	float4 emissionColor;
+	float4 mulColor;
 	int shadowReceiverFlag;
 };
 
@@ -135,6 +136,6 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
 	//step-10 ライトから見た深度値と、ライトから見た深度値の２乗を出力する。
-	return float4(psIn.depth.x, psIn.depth.y,0.0f,1.0f);
+	return float4(psIn.depth.x * mulColor.w, psIn.depth.y * mulColor.w,0.0f,1.0f);
 
 }
