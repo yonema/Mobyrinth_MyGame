@@ -13,73 +13,127 @@ class CReversibleObject;
 
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[‚ª‘€ì‚·‚éƒLƒƒƒ‰ƒNƒ^[‚ÌƒNƒ‰ƒX
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ“ä½œã™ã‚‹ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ã‚¯ãƒ©ã‚¹
 /// </summary>
 class Player : public IGameObject
 {
-public://public‚Èƒƒ“ƒoŠÖ”
-	bool Start() override final;	//ƒXƒ^[ƒgŠÖ”
-	~Player();						//ƒfƒXƒgƒ‰ƒNƒ^
-	void Update() override final;	//ƒAƒbƒvƒf[ƒgŠÖ”
+public://publicãªãƒ¡ãƒ³ãƒé–¢æ•°
+	bool Start() override final;	//ã‚¹ã‚¿ãƒ¼ãƒˆé–¢æ•°
+	~Player();						//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	void Update() override final;	//ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆé–¢æ•°
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ÌÀ•W‚ğİ’è
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã‚’è¨­å®š
 	/// </summary>
-	/// <param name="pos">êŠ</param>
+	/// <param name="pos">å ´æ‰€</param>
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
 	}
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚Ì‰ñ“]‚ğİ’è
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å›è»¢ã‚’è¨­å®š
 	/// </summary>
-	/// <param name="rot">‰ñ“]</param>
+	/// <param name="rot">å›è»¢</param>
 	void SetRotation(const Quaternion& rot)
 	{
 		m_rotation = rot;
 	}
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ÌÀ•W‚ğæ“¾
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å›è»¢ã‚’å¾—ã‚‹
 	/// </summary>
-	/// <returns>êŠ</returns>
+	/// <returns>å›è»¢</returns>
+	const Quaternion& GetRotation() const
+	{
+		return m_rotation;
+	}
+
+	/// <summary>
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ‹¡å¤§ã‚’è¨­å®šã™ã‚‹
+	/// </summary>
+	/// <param name="scale"></param>
+	void SetScale(const Vector3& scale)
+	{
+		m_modelRender->SetScale(scale);
+	}
+
+	/// <summary>
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã‚’å–å¾—
+	/// </summary>
+	/// <returns>å ´æ‰€</returns>
 	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
 
 	/// <summary>
-	/// ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌuêŠv‚ğæ“¾
+	/// ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã€Œå ´æ‰€ã€ã‚’å–å¾—
 	/// </summary>
-	/// <param name="vecSize">ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌƒTƒCƒY</param>
-	/// <param name="posMap">êŠ‚ÌƒxƒNƒ^[</param>
+	/// <param name="vecSize">ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã‚µã‚¤ã‚º</param>
+	/// <param name="posMap">å ´æ‰€ã®ãƒ™ã‚¯ã‚¿ãƒ¼</param>
 	void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>*const posMap);
 
 	/// <summary>
-	/// ƒEƒFƒCƒ|ƒCƒ“ƒg‚Ìu‰ñ“]v‚ğæ“¾
+	/// ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã€Œå›è»¢ã€ã‚’å–å¾—
 	/// </summary>
-	/// <param name="vecSize">ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌƒTƒCƒY</param>
-	/// <param name="rotMap">‰ñ“]‚ÌƒxƒNƒ^[</param>
+	/// <param name="vecSize">ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã‚µã‚¤ã‚º</param>
+	/// <param name="rotMap">å›è»¢ã®ãƒ™ã‚¯ã‚¿ãƒ¼</param>
 	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
 
-	//ƒEƒFƒCƒ|ƒCƒ“ƒg—p‚ÌOBB‚ğİ’è
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆç”¨ã®OBBã‚’è¨­å®š
 	void SetWayPointOBB();
 
 	/// <summary>
-	/// •âŠ®Ï‚İ‚ÌÅI“I‚ÈƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì‰ñ“]‚ğæ“¾
+	/// è£œå®Œæ¸ˆã¿ã®æœ€çµ‚çš„ãªã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®å›è»¢ã‚’å–å¾—
 	/// </summary>
-	/// <returns>•âŠ®Ï‚İ‚ÌÅI“I‚ÈƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì‰ñ“]</returns>
+	/// <returns>è£œå®Œæ¸ˆã¿ã®æœ€çµ‚çš„ãªã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®å›è»¢</returns>
 	const Quaternion& GetFinalWPRot()const
 	{
 		return m_finalWPRot;
 	}
+
+	/// <summary>
+	///	UFOã«ã‚­ãƒ£ãƒ—ãƒãƒ£ã•ã‚Œä¸­ã®å›è»¢ã‚’å¾—ã‚‹
+	/// </summary>
+	/// <returns>UFOã«ã‚­ãƒ£ãƒ—ãƒãƒ£ã•ã‚Œä¸­ã®å›è»¢</returns>
+	const Quaternion& GetCapturedRotation() const
+	{
+		return m_capturedRotation;
+	}
 	
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ªƒIƒuƒWƒFƒNƒg‚ğ‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğİ’è‚·‚é
-	/// ‚Á‚Ä‚¢‚éê‡‚Ítrue‚ğ“n‚·
+	/// UFOã«ã‚­ãƒ£ãƒ—ãƒãƒ£ã•ã‚Œä¸­ã®å›è»¢ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	/// <param name="holdFlag">ƒIƒuƒWƒFƒNƒg‚ğ‚Á‚Ä‚¢‚é‚©H</param>
+	/// <param name="qRot">UFOã«ã‚­ãƒ£ãƒ—ãƒãƒ£ã•ã‚Œä¸­ã®å›è»¢</param>
+	void SetCapturedRotation(const Quaternion& qRot)
+	{
+		m_capturedRotation = qRot;
+	}
+
+	/// <summary>
+	/// UFOã«ã‚­ãƒ£ãƒ—ãƒãƒ£ã•ã‚Œä¸­ã®åº§æ¨™ã‚’å¾—ã‚‹
+	/// </summary>
+	/// <returns>UFOã«ã‚­ãƒ£ãƒ—ãƒãƒ£ã•ã‚Œä¸­ã®åº§æ¨™</returns>
+	const Vector3& GetCapturedPosition() const
+	{
+		return m_capturedPosition;
+	}
+
+	/// <summary>
+	/// UFOã«ã‚­ãƒ£ãƒ—ãƒãƒ£ã•ã‚Œä¸­ã®åº§æ¨™ã‚’è¨­å®šã™ã‚‹
+	/// </summary>
+	/// <param name="position">UFOã«ã‚­ãƒ£ãƒ—ãƒãƒ£ã•ã‚Œä¸­ã®åº§æ¨™</param>
+	void SetCapturedPosition(const Vector3 position)
+	{
+		m_capturedPosition = position;
+	}
+
+	/// <summary>
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã£ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¨­å®šã™ã‚‹
+	/// æŒã£ã¦ã„ã‚‹å ´åˆã¯trueã‚’æ¸¡ã™
+	/// </summary>
+	/// <param name="holdFlag">ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã£ã¦ã„ã‚‹ã‹ï¼Ÿ</param>
 	void SetHoldObject(const bool holdFlag, CReversibleObject* reversibeObject = nullptr)
 	{
 		m_holdObject = holdFlag;
@@ -90,19 +144,19 @@ public://public‚Èƒƒ“ƒoŠÖ”
 	}
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ªƒIƒuƒWƒFƒNƒg‚ğ‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ’²‚×‚é
-	/// ‚Á‚Ä‚¢‚éê‡‚Ítrue‚ª–ß‚Á‚Ä‚­‚é
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã£ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹
+	/// æŒã£ã¦ã„ã‚‹å ´åˆã¯trueãŒæˆ»ã£ã¦ãã‚‹
 	/// </summary>
-	/// <returns>ƒIƒuƒWƒFƒNƒg‚ğ‚Á‚Ä‚¢‚é‚©</returns>
+	/// <returns>ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã£ã¦ã„ã‚‹ã‹</returns>
 	const bool GetHoldObject()const
 	{
 		return m_holdObject;
 	}
 
 	/// <summary>
-	/// ‚Á‚Ä‚¢‚é”½“]ƒIƒuƒWƒFƒNƒg‚ÌQÆ‚ğ“¾‚é
+	/// æŒã£ã¦ã„ã‚‹åè»¢ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‚ç…§ã‚’å¾—ã‚‹
 	/// </summary>
-	/// <returns>‚Á‚Ä‚¢‚é”½“]ƒIƒuƒWƒFƒNƒg‚ÌQÆ</returns>
+	/// <returns>æŒã£ã¦ã„ã‚‹åè»¢ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‚ç…§</returns>
 	CReversibleObject* GetReversibleObject()
 	{
 		return m_reversibleObject;
@@ -119,91 +173,91 @@ public://public‚Èƒƒ“ƒoŠÖ”
 
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌUpƒxƒNƒgƒ‹‚ğ“¾‚é
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®Upãƒ™ã‚¯ãƒˆãƒ«ã‚’å¾—ã‚‹
 	/// </summary>
-	/// <returns>UpƒxƒNƒgƒ‹</returns>
+	/// <returns>Upãƒ™ã‚¯ãƒˆãƒ«</returns>
 	const Vector3& GetUpVec()const
 	{
 		return m_upVec;
 	}
 
 	/// <summary>
-	/// Œ»İ‚ÌƒvƒŒƒCƒ„[‚Ì¶‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì”Ô†‚ğ“¾‚é
+	/// ç¾åœ¨ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å·¦å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ç•ªå·ã‚’å¾—ã‚‹
 	/// </summary>
-	/// <returns>¶‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì”Ô†</returns>
+	/// <returns>å·¦å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ç•ªå·</returns>
 	const int GetLeftPointIndex()const
 	{
 		return m_lpIndex;
 	}
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚Ì¶‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ğİ’è‚·‚é
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å·¦å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	/// <param name="lpIndex">¶‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg</param>
+	/// <param name="lpIndex">å·¦å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆ</param>
 	void SetLeftPointIndex(const int lpIndex)
 	{
 		m_lpIndex = lpIndex;
 	}
 
 	/// <summary>
-	/// Œ»İ‚ÌƒvƒŒƒCƒ„[‚Ì‰E‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì”Ô†‚ğ“¾‚é
+	/// ç¾åœ¨ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å³å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ç•ªå·ã‚’å¾—ã‚‹
 	/// </summary>
-	/// <returns>‰E‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì”Ô†</returns>
+	/// <returns>å³å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ç•ªå·</returns>
 	const int GetRightPointIndex()const
 	{
 		return m_rpIndex;
 	}
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚Ì‰E‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ğİ’è‚·‚é
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å³å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	/// <param name="lpIndex">‰E‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg</param>
+	/// <param name="lpIndex">å³å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆ</param>
 	void SetRightPointIndex(const int rpIndex)
 	{
 		m_rpIndex = rpIndex;
 	}
 
 	/// <summary>
-	/// ˆø”‚Å“n‚³‚ê‚½”Ô†‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌêŠ‚ğ–ß‚·
+	/// å¼•æ•°ã§æ¸¡ã•ã‚ŒãŸç•ªå·ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®å ´æ‰€ã‚’æˆ»ã™
 	/// </summary>
-	/// <param name="index">ƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì”Ô†</param>
-	/// <returns>ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌêŠ</returns>
+	/// <param name="index">ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ç•ªå·</param>
+	/// <returns>ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®å ´æ‰€</returns>
 	const Vector3& GerWayPointPos(const int index)
 	{
 		return (*m_wayPointPos)[index];
 	}
 
 	/// <summary>
-	/// ƒLƒƒƒ‰ƒNƒ^[‚ª¶‚Æ‰E‚Ç‚¿‚ç‚ğŒü‚¢‚Ä‚¢‚é‚©’²‚×‚é
+	/// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãŒå·¦ã¨å³ã©ã¡ã‚‰ã‚’å‘ã„ã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
 	/// </summary>
-	/// <returns>enLefti0j‚©enRighti1j</returns>
+	/// <returns>enLeftï¼ˆ0ï¼‰ã‹enRightï¼ˆ1ï¼‰</returns>
 	const int GetEnLeftOrRight()const
 	{
 		return m_leftOrRight;
 	}
 
 	/// <summary>
-	/// ©g‚ª‚Ç‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚É‚¢‚é‚©•\‚·ƒXƒe[ƒg‚ğ–ß‚·ŠÖ”
+	/// è‡ªèº«ãŒã©ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã«ã„ã‚‹ã‹è¡¨ã™ã‚¹ãƒ†ãƒ¼ãƒˆã‚’æˆ»ã™é–¢æ•°
 	/// </summary>
-	/// <returns>ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌƒXƒe[ƒg</returns>
+	/// <returns>ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã‚¹ãƒ†ãƒ¼ãƒˆ</returns>
 	const int GetWayPointState()const
 	{
 		return m_wayPointState;
 	}
 
 	/// <summary>
-	/// ©g‚ª‚Ç‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚É‚¢‚é‚©•\‚·ƒXƒe[ƒg‚ğİ’è
+	/// è‡ªèº«ãŒã©ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã«ã„ã‚‹ã‹è¡¨ã™ã‚¹ãƒ†ãƒ¼ãƒˆã‚’è¨­å®š
 	/// </summary>
-	/// <param name="wayPointState">ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌƒXƒe[ƒg</param>
+	/// <param name="wayPointState">ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã‚¹ãƒ†ãƒ¼ãƒˆ</param>
 	void SetWayPointState(const int wayPointState)
 	{
 		m_wayPointState = wayPointState;
 	}
 
 	/// <summary>
-	/// UFO‚É•ß‚Ü‚Á‚Ä‚¢‚é‚©H‚ğİ’è
+	/// UFOã«æ•ã¾ã£ã¦ã„ã‚‹ã‹ï¼Ÿã‚’è¨­å®š
 	/// </summary>
-	/// <param name="captured">UFO‚É•ß‚Ü‚Á‚Ä‚¢‚é‚©H</param>
+	/// <param name="captured">UFOã«æ•ã¾ã£ã¦ã„ã‚‹ã‹ï¼Ÿ</param>
 	void SetCapturedUFOFlag(const bool captured)
 	{
 		m_capturedUFOFlag = captured;
@@ -215,159 +269,162 @@ public://public‚Èƒƒ“ƒoŠÖ”
 	}
 
 	/// <summary>
-	/// OBB‚ÌQÆ‚ğ–ß‚·
+	/// OBBã®å‚ç…§ã‚’æˆ»ã™
 	/// </summary>
-	/// <returns>OBB‚ÌQÆ</returns>
+	/// <returns>OBBã®å‚ç…§</returns>
 	COBB& GetOBB()
 	{
 		return m_myCharaCon.GetOBB();
 	}
 
 
-private://private‚Èƒƒ“ƒoŠÖ”
+private://privateãªãƒ¡ãƒ³ãƒé–¢æ•°
 
 	void TitleMove();
 	void GameMove();
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚Ì‰Šúİ’è
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åˆæœŸè¨­å®š
 	/// </summary>
 	void Init();
 
 	/// <summary>
-	/// ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌXVˆ—
+	/// ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®æ›´æ–°å‡¦ç†
 	/// </summary>
 	void CheckWayPoint();
 
 	/// <summary>
-	/// ˆÚ“®ˆ—
+	/// ç§»å‹•å‡¦ç†
 	/// </summary>
 	void Move();
 
 	/// <summary>
-	/// ƒXƒ^ƒ“’†‚ÌˆÚ“®ˆ—
+	/// ã‚¹ã‚¿ãƒ³ä¸­ã®ç§»å‹•å‡¦ç†
 	/// </summary>
 	void StunMove();
 
 	/// <summary>
-	/// ƒXƒe[ƒW‚Éæ‚é
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã«ä¹—ã‚‹
 	/// </summary>
 	void GetOnStage();
 
 	/// <summary>
-	/// ƒXƒ^ƒ“’†‚ÌƒXƒe[ƒW‚Éæ‚éˆ—
+	/// ã‚¹ã‚¿ãƒ³ä¸­ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã«ä¹—ã‚‹å‡¦ç†
 	/// </summary>
 	void StunGetOnStage();
 
 	/// <summary>
-	/// ƒ‚ƒfƒ‹‚Ì‰ñ“]ˆ—
+	/// ãƒ¢ãƒ‡ãƒ«ã®å›è»¢å‡¦ç†
 	/// </summary>
 	void Rotation();
 
 	/// <summary>
-	/// Õ“Ë‚µ‚½OBB‚Ìƒ^ƒO‚ğ’²‚×‚é
+	/// è¡çªã—ãŸOBBã®ã‚¿ã‚°ã‚’èª¿ã¹ã‚‹
 	/// </summary>
 	void CheckHitOBBTag();
 
 	/// <summary>
-	/// ƒ‰ƒCƒg‚Ìƒf[ƒ^‚ğXV‚·‚é
+	/// ãƒ©ã‚¤ãƒˆã®ãƒ‡ãƒ¼ã‚¿ã‚’æ›´æ–°ã™ã‚‹
 	/// </summary>
 	void UpdateLightData();
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ğÆ‚ç‚·‰e‚ğ¶¬‚·‚éƒ‰ƒCƒg‚ğXV‚·‚é
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç…§ã‚‰ã™å½±ã‚’ç”Ÿæˆã™ã‚‹ãƒ©ã‚¤ãƒˆã‚’æ›´æ–°ã™ã‚‹
 	/// </summary>
 	void SetShadowParam();
 
 	/// <summary>
-	/// ƒfƒBƒŒƒNƒVƒ‡ƒ“ƒ‰ƒCƒg‚ğXV‚·‚é
+	/// ãƒ‡ã‚£ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ãƒ©ã‚¤ãƒˆã‚’æ›´æ–°ã™ã‚‹
 	/// </summary>
 	void SetDirectionLight();
 
 	/// <summary>
-	/// UFO‚É•ß‚Ü‚Á‚Ä‚¢‚é‚Ìˆ—
+	/// UFOã«æ•ã¾ã£ã¦ã„ã‚‹æ™‚ã®å‡¦ç†
 	/// </summary>
 	void CapturedUFO();
 
+
 	void Fall();
 
-private:	//ƒf[ƒ^ƒƒ“ƒo
+
+private:	//ãƒ‡ãƒ¼ã‚¿ãƒ¡ãƒ³ãƒ
 
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒvB
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—ã€‚
 	/// </summary>
 	enum EnAnimationClip {
-		enAnimClip_Idle,	//•à‚«‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv
-		enAnimClip_Run,		//‘–‚è‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv
-		enAnimClip_Num,		//ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv‚Ì‘”
+		enAnimClip_Idle,	//æ­©ãã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—
+		enAnimClip_Run,		//èµ°ã‚Šã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—
+		enAnimClip_Num,		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—ã®ç·æ•°
 	};
 
-	AnimationClip m_animationClips[enAnimClip_Num];	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒvB
+	AnimationClip m_animationClips[enAnimClip_Num];	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—ã€‚
 
-	Vector3 m_moveSpeed = g_vec3Zero;				//ƒLƒƒƒ‰ƒNƒ^[‚ÌˆÚ“®ƒXƒs[ƒh
-	Vector3 m_position = g_vec3Zero;				//ƒLƒƒƒ‰ƒNƒ^[‚ÌÀ•W
-	Vector3 m_onWayPosition = g_vec3Zero;			//“¹‚Ìã‚ÌÀ•W
-	Quaternion m_rotation = g_quatIdentity;			//ƒLƒƒƒ‰ƒNƒ^[‚Ì‰ñ“]
-	Vector3 m_upVec = g_vec3Up;						//ƒvƒŒƒCƒ„[‚ÌUpƒxƒNƒgƒ‹
-	bool m_holdObject = false;						//ƒIƒuƒWƒFƒNƒg‚ğ‚Á‚Ä‚¢‚é‚©H
-	CReversibleObject* m_reversibleObject = nullptr;	//‚Á‚Ä‚¢‚é”½“]ƒIƒuƒWƒFƒNƒg‚Ìƒ|ƒCƒ“ƒ^
-	
+	Vector3 m_moveSpeed = g_vec3Zero;				//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ç§»å‹•ã‚¹ãƒ”ãƒ¼ãƒ‰
+	Vector3 m_position = g_vec3Zero;				//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®åº§æ¨™
+	Vector3 m_onWayPosition = g_vec3Zero;			//é“ã®ä¸Šã®åº§æ¨™
+	Quaternion m_rotation = g_quatIdentity;			//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®å›è»¢
+	Vector3 m_upVec = g_vec3Up;						//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®Upãƒ™ã‚¯ãƒˆãƒ«
+	bool m_holdObject = false;						//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã£ã¦ã„ã‚‹ã‹ï¼Ÿ
+	CReversibleObject* m_reversibleObject = nullptr;	//æŒã£ã¦ã„ã‚‹åè»¢ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒã‚¤ãƒ³ã‚¿
+	Quaternion m_capturedRotation = m_rotation;		//ã‚«ãƒ¡ãƒ©ã«æ¸¡ã™å›è»¢
+	Vector3 m_capturedPosition = m_position;			//ã‚«ãƒ¡ãƒ©ã«æ¸¡ã™åº§æ¨™
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ª‰E‚ğŒü‚¢‚Ä‚¢‚é‚©¶‚ğŒü‚¢‚Ä‚¢‚é‚©
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå³ã‚’å‘ã„ã¦ã„ã‚‹ã‹å·¦ã‚’å‘ã„ã¦ã„ã‚‹ã‹
 	/// </summary>
 	enum EnLeftOrRight
 	{
-		enLeft,		//¶
-		enRight,	//‰E
+		enLeft,		//å·¦
+		enRight,	//å³
 	};
-	int m_leftOrRight = enRight;			//ƒLƒƒƒ‰ƒNƒ^[‚Ì¶‰E‚ÌŒü‚«
+	int m_leftOrRight = enRight;			//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®å·¦å³ã®å‘ã
 
-	float m_padLStickXF = 0.0f;				//ƒpƒbƒh‚Ì¶ƒXƒeƒBƒbƒN‚ÌX²‚Ì“ü—Íî•ñ
+	float m_padLStickXF = 0.0f;				//ãƒ‘ãƒƒãƒ‰ã®å·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®Xè»¸ã®å…¥åŠ›æƒ…å ±
 
-	CModelRender* m_modelRender = nullptr;	//ƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[
-	CMyCharacterController m_myCharaCon;	//myƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[
-	Mobius* m_mobius = nullptr;				//ƒXƒe[ƒW‚ÌƒƒrƒEƒX‚Ì—Ö‚Ìƒ|ƒCƒ“ƒ^
-	CDirectionLight* m_gameDirectionLight = nullptr;	//ƒfƒBƒŒƒNƒVƒ‡ƒ“ƒ‰ƒCƒg‚Ìƒ|ƒCƒ“ƒ^
-	Vector3 m_lightDirection = g_vec3Zero;	//ƒ‰ƒCƒg‚ÌÆ‚ç‚·•ûŒü
+	CModelRender* m_modelRender = nullptr;	//ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼
+	CMyCharacterController m_myCharaCon;	//myã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
+	Mobius* m_mobius = nullptr;				//ã‚¹ãƒ†ãƒ¼ã‚¸ã®ãƒ¡ãƒ“ã‚¦ã‚¹ã®è¼ªã®ãƒã‚¤ãƒ³ã‚¿
+	CDirectionLight* m_gameDirectionLight = nullptr;	//ãƒ‡ã‚£ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ãƒ©ã‚¤ãƒˆã®ãƒã‚¤ãƒ³ã‚¿
+	Vector3 m_lightDirection = g_vec3Zero;	//ãƒ©ã‚¤ãƒˆã®ç…§ã‚‰ã™æ–¹å‘
 
 	/// <summary>
-	/// ƒEƒFƒCƒ|ƒCƒ“ƒgŠÖ˜A‚Ìƒf[ƒ^ƒƒ“ƒo
+	/// ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆé–¢é€£ã®ãƒ‡ãƒ¼ã‚¿ãƒ¡ãƒ³ãƒ
 	/// </summary>
-	std::vector<Vector3>* m_wayPointPos;		//ƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌuêŠv‚ÌƒRƒ“ƒeƒi
-	std::vector<Quaternion>* m_wayPointRot;		//ƒEƒFƒCƒ|ƒCƒ“ƒg‚Ìu‰ñ“]v‚ÌƒRƒ“ƒeƒi
-	int m_rpIndex = 0;							//‰E‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌƒCƒ“ƒfƒbƒNƒX
-	int m_lpIndex = m_rpIndex + 1;				//¶‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ÌƒCƒ“ƒfƒbƒNƒX
-	int m_wayPointState = 0;					//©g‚ª‚Ç‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚É‚¢‚é‚©•\‚·ƒXƒe[ƒg
-	int m_maxWayPointState = 0;					//ƒEƒFƒCƒ|ƒCƒ“ƒgƒXƒe[ƒg‚ÌÅ‘å‚Ì’l
-	Quaternion m_finalWPRot = g_quatIdentity;	//•âŠ®Ï‚İ‚ÌÅI“I‚ÈƒEƒFƒCƒ|ƒCƒ“ƒg‚Ì‰ñ“]
-	std::vector<COBB> m_wayPointOBB;			//ƒEƒFƒCƒ|ƒCƒ“ƒg—p‚ÌOBB
+	std::vector<Vector3>* m_wayPointPos;		//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã€Œå ´æ‰€ã€ã®ã‚³ãƒ³ãƒ†ãƒŠ
+	std::vector<Quaternion>* m_wayPointRot;		//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã€Œå›è»¢ã€ã®ã‚³ãƒ³ãƒ†ãƒŠ
+	int m_rpIndex = 0;							//å³ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	int m_lpIndex = m_rpIndex + 1;				//å·¦ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	int m_wayPointState = 0;					//è‡ªèº«ãŒã©ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã«ã„ã‚‹ã‹è¡¨ã™ã‚¹ãƒ†ãƒ¼ãƒˆ
+	int m_maxWayPointState = 0;					//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‚¹ãƒ†ãƒ¼ãƒˆã®æœ€å¤§ã®å€¤
+	Quaternion m_finalWPRot = g_quatIdentity;	//è£œå®Œæ¸ˆã¿ã®æœ€çµ‚çš„ãªã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã®å›è»¢
+	std::vector<COBB> m_wayPointOBB;			//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆç”¨ã®OBB
 
 
-	bool m_operationFlag = false; //‘€ì‚Å‚«‚é‚©‚Ìƒtƒ‰ƒO
+	bool m_operationFlag = false; //æ“ä½œã§ãã‚‹ã‹ã®ãƒ•ãƒ©ã‚°
 	bool m_titleMove = false;
-	bool m_stunFlag = false;					//ƒXƒ^ƒ“ó‘Ôi‚Á”ò‚Ñó‘Ôj‚©H
-	float m_stunTimer = 0.0f;					//ƒXƒ^ƒ“‚Ìƒ^ƒCƒ}[
-	Vector3 m_stunMoveSpeed = g_vec3Zero;		//ƒXƒ^ƒ“’†‚Ì‚Á”ò‚Î‚·ƒxƒNƒgƒ‹
-	Vector3 m_stunDownVec = g_vec3Zero;			//ƒXƒ^ƒ“’†‚Ìd—Í
-	bool m_stunMoveFlag = true;					//ƒXƒ^ƒ“’†‚É‚Á”ò‚Ñ’†‚©H
-	float m_blinkTimer = 0.0f;					//ƒXƒ^ƒ“ó‘Ô‚Éƒ‚ƒfƒ‹‚ğ“_–Å‚³‚¹‚éƒ^ƒCƒ}[
-	COBB* m_hitOBB = nullptr;					//Õ“Ë‚µ‚½OBB‚Ìƒ|ƒCƒ“ƒ^
+	bool m_stunFlag = false;					//ã‚¹ã‚¿ãƒ³çŠ¶æ…‹ï¼ˆå¹ã£é£›ã³çŠ¶æ…‹ï¼‰ã‹ï¼Ÿ
+	float m_stunTimer = 0.0f;					//ã‚¹ã‚¿ãƒ³ã®ã‚¿ã‚¤ãƒãƒ¼
+	Vector3 m_stunMoveSpeed = g_vec3Zero;		//ã‚¹ã‚¿ãƒ³ä¸­ã®å¹ã£é£›ã°ã™ãƒ™ã‚¯ãƒˆãƒ«
+	Vector3 m_stunDownVec = g_vec3Zero;			//ã‚¹ã‚¿ãƒ³ä¸­ã®é‡åŠ›
+	bool m_stunMoveFlag = true;					//ã‚¹ã‚¿ãƒ³ä¸­ã«å¹ã£é£›ã³ä¸­ã‹ï¼Ÿ
+	float m_blinkTimer = 0.0f;					//ã‚¹ã‚¿ãƒ³çŠ¶æ…‹ã«ãƒ¢ãƒ‡ãƒ«ã‚’ç‚¹æ»…ã•ã›ã‚‹ã‚¿ã‚¤ãƒãƒ¼
+	COBB* m_hitOBB = nullptr;					//è¡çªã—ãŸOBBã®ãƒã‚¤ãƒ³ã‚¿
 
-	bool m_capturedUFOFlag = false;				//UFO‚ÉƒLƒƒƒvƒ`ƒƒ‚³‚ê‚Ä‚¢‚é‚©H
-	bool m_fallFlag = false;					//—‰º’†‚©H
+	bool m_capturedUFOFlag = false;				//UFOã«ã‚­ãƒ£ãƒ—ãƒãƒ£ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+	bool m_fallFlag = false;					//è½ä¸‹ä¸­ã‹ï¼Ÿ
 
-public://ƒfƒoƒbƒN—p
-	//void PostRender(RenderContext& rc)override final;	//ƒfƒoƒbƒN—p‚ÌƒtƒHƒ“ƒg‚ğ•\¦‚·‚é‚½‚ß
-	//Font m_font;							//ƒtƒHƒ“ƒg‚ğ•\¦‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
-	//CModelRender* m_dbgModel = nullptr;		//ƒvƒŒƒCƒ„[‚ÆƒXƒe[ƒW‚Æ‚Ì“–‚½‚è”»’è‚ğ
-	//CModelRender* m_dbgModel2 = nullptr;	//æ‚é‚½‚ß‚ÌƒŒƒC‚Ì‹“_‚ÆI“_‚ÆƒXƒe[ƒW‚Æ‚Ì
-	//CModelRender* m_dbgModel3 = nullptr;	//Œğ·“_‚ğŒ©‚é‚½‚ß‚Ìƒ‚ƒfƒ‹
-	//bool m_dbgHit = false;					//ã‚ÌƒŒƒC‚ª“–‚½‚Á‚Ä‚¢‚é‚©•\¦‚·‚é‚½‚ß‚Ì•Ï”
+public://ãƒ‡ãƒãƒƒã‚¯ç”¨
+	//void PostRender(RenderContext& rc)override final;	//ãƒ‡ãƒãƒƒã‚¯ç”¨ã®ãƒ•ã‚©ãƒ³ãƒˆã‚’è¡¨ç¤ºã™ã‚‹ãŸã‚
+	//Font m_font;							//ãƒ•ã‚©ãƒ³ãƒˆã‚’è¡¨ç¤ºã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
+	//CModelRender* m_dbgModel = nullptr;		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã‚¹ãƒ†ãƒ¼ã‚¸ã¨ã®å½“ãŸã‚Šåˆ¤å®šã‚’
+	//CModelRender* m_dbgModel2 = nullptr;	//å–ã‚‹ãŸã‚ã®ãƒ¬ã‚¤ã®è¦–ç‚¹ã¨çµ‚ç‚¹ã¨ã‚¹ãƒ†ãƒ¼ã‚¸ã¨ã®
+	//CModelRender* m_dbgModel3 = nullptr;	//äº¤å·®ç‚¹ã‚’è¦‹ã‚‹ãŸã‚ã®ãƒ¢ãƒ‡ãƒ«
+	//bool m_dbgHit = false;					//ä¸Šã®ãƒ¬ã‚¤ãŒå½“ãŸã£ã¦ã„ã‚‹ã‹è¡¨ç¤ºã™ã‚‹ãŸã‚ã®å¤‰æ•°
 
-	//float m_dbgDot1 = 0.0f;			//¶‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ÆƒvƒŒƒCƒ„[‚Ì“àÏ‚ğ“ü‚ê‚é
-	//float m_dbgDot2 = 0.0f;			//‰E‘¤‚ÌƒEƒFƒCƒ|ƒCƒ“ƒg‚ÆƒvƒŒƒCƒ„[‚Ì“àÏ‚ğ“ü‚ê‚é
+	//float m_dbgDot1 = 0.0f;			//å·¦å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å†…ç©ã‚’å…¥ã‚Œã‚‹
+	//float m_dbgDot2 = 0.0f;			//å³å´ã®ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å†…ç©ã‚’å…¥ã‚Œã‚‹
 
-	//CModelRender* m_dbgObbModel[8] = { nullptr };	//OBB‚Ì’¸“_‚ğŒ©‚é‚½‚ß‚Ìƒ‚ƒfƒ‹
+	//CModelRender* m_dbgObbModel[8] = { nullptr };	//OBBã®é ‚ç‚¹ã‚’è¦‹ã‚‹ãŸã‚ã®ãƒ¢ãƒ‡ãƒ«
 	//CModelRender* m_dbgObbModel2[32][8];
 	//CModelRender* m_dbgStunMoveModel = nullptr;
 };

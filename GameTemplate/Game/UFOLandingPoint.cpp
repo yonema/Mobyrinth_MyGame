@@ -93,7 +93,7 @@ CUFOLandingPoint::~CUFOLandingPoint()
 void CUFOLandingPoint::UpdateSideOBB()
 {
 	//横幅
-	const float sideLen = 150.0f;
+	const float sideLen = 10.0f;
 	//左右へのベクトル
 	Vector3 sideVec[enLeftAndRightNum] = { g_vec3Left, g_vec3Right };
 
