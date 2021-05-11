@@ -25,16 +25,27 @@ bool CUFO::PureVirtualStart()
 	up.Scale(100.0f);
 	m_spotLight->SetPosition({ 0.0f,2000.0f, 0.0f });
 	m_spotLight->SetColor({ 300.0f, 300.0f, 0.0f, 0.0f });
-	m_spotLight->SetRange(500.0f);
+	m_spotLight->SetRange(1000.0f);
+	m_spotLight->SetAngle(10.0f);
 	up.Normalize();
-	up.Scale(-1.0f);
+	//up.Scale(-1.0f);
 	m_spotLight->SetDirection(g_vec3Down);
+	m_ufoLight = NewGO<CModelRender>(1);
+	ModelInitData ufoLigInitData;
+	ufoLigInitData.m_tkmFilePath = "Assets/modelData/ufoLight.tkm";
+	ufoLigInitData.m_fxFilePath = "Assets/shader/ufoLight.fx";
+	m_ufoLight->Init(ufoLigInitData);
+	m_ufoLight->SetPosition(m_position + up);
+	m_ufoLight->SetRotation(m_rotation);
+	m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 
 	//UFOの着地点の生成と初期化
 	m_ufoLandingPoint = NewGO<CUFOLandingPoint>(0);
 	m_ufoLandingPoint->SetPosition(m_position);
 
+	SetFlagIsHit(false);
 
+#ifdef MY_DEBUG
 	//デバック用
 	//後で消す
 	Vector3* vertPos = GetOBB().GetBoxVertex();
@@ -53,6 +64,7 @@ bool CUFO::PureVirtualStart()
 		m_dbgRay[i] = NewGO<CModelRender>(0);
 		m_dbgRay[i]->Init("Assets/modelData/dbgBox.tkm");
 	}
+#endif
 	//デバック用ここまで
 
 	return true;
@@ -66,10 +78,11 @@ CUFO::~CUFO()
 
 	//スポットライトの破棄
 	DeleteGO(m_spotLight);
+	DeleteGO(m_ufoLight);
 
 	//UFOの着地点の破棄
 	DeleteGO(m_ufoLandingPoint);
-
+#ifdef MY_DEBUG
 	//デバック用
 	//後で消す
 	for (int i = 0; i < m_vertNum; i++)
@@ -82,6 +95,7 @@ CUFO::~CUFO()
 		//レイを見るためのモデルを破棄
 		DeleteGO(m_dbgRay[i]);
 	}
+#endif
 	//デバック用ここまで
 }
 
@@ -132,6 +146,7 @@ void CUFO::PureVirtualUpdate()
 	m_modelRender->SetRotation(m_rotation);
 
 	//デバック用
+#ifdef MY_DEBUG
 	//後で消す
 	Vector3* vertPos = GetOBB().GetBoxVertex();
 	for (int i = 0; i < m_vertNum; i++)
@@ -141,6 +156,7 @@ void CUFO::PureVirtualUpdate()
 		m_dbgVertPosMR[i]->SetRotation(m_rotation);
 
 	}
+#endif
 	//デバック用ここまで
 }
 
@@ -173,8 +189,10 @@ void CUFO::Search()
 		//捜索中なら
 
 		//黄色に光る
-		m_modelRender->SetEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
+		//m_modelRender->SetEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
 		m_spotLight->SetColor({ 300.0f,300.0f,0.0f,1.0f });
+		m_ufoLight->SetEmissionColor({ 1.5f,1.5f,0.0f,1.0f });
+		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 
 		//プレイヤーを衝突しているか？
 		if (IsHitPlayer())
@@ -185,8 +203,10 @@ void CUFO::Search()
 			m_updateState = enCapture;
 
 			//赤色に光る
-			m_modelRender->SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
-			m_spotLight->SetColor({ 600.0f,0.0f,0.0f,1.0f });
+			//m_modelRender->SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
+			m_spotLight->SetColor({ 900.0f,0.0f,0.0f,1.0f });
+			m_ufoLight->SetEmissionColor({ 3.0f,0.0f,0.0f,1.0f });
+			m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 			
 			//プレイヤーをUFOに捕まった状態にする
 			m_pPlayer->SetCapturedUFOFlag(true);
@@ -206,8 +226,10 @@ void CUFO::Search()
 		//捜索中ではない
 
 		//光らない
-		m_modelRender->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
+		//m_modelRender->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		m_spotLight->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+		m_ufoLight->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
+		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 
 	}
 }
@@ -255,6 +277,10 @@ void CUFO::Transport()
 	//つまり最初の一回だけ呼ばれる
 	if (m_timer == 0.0f)
 	{
+		m_spotLight->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+		m_ufoLight->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
+		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+
 		//ウェイポイントの最大値
 		const int maxWayPoint = 31;
 
@@ -311,9 +337,13 @@ void CUFO::Transport()
 			//超えていない時
 
 			//着地点の位置を調べて、右から行くか左から行くかを振り分ける
-			if (m_ufoLandingPoint->GetLeftWayPointIndex() <= reverseLp)
+			//if (m_ufoLandingPoint->GetLeftWayPointIndex() <= reverseLp)
+			if (m_ufoLandingPoint->GetLeftWayPointIndex() >= GetLeftWayPointIndex())
 			{
 				//着地点が反対側のウェイポイント以下だったら
+				//左に進む
+
+				//着地点が自身のウェイポイント以上だったら
 				//左に進む
 				m_leftOrRight = enLeft;
 			}
@@ -339,7 +369,7 @@ void CUFO::Transport()
 	Vector3 capturePos = m_position + upVec;
 
 	//自身のOBBと着地点のOBBが衝突しているか？
-	if (IsHitObject(*this, *m_ufoLandingPoint))
+	if (CollisionOBBs(GetOBB(), m_ufoLandingPoint->GetOBB()))
 	{
 		//衝突した時
 
@@ -393,6 +423,14 @@ void CUFO::Landing()
 
 		//移動速度をデフォルトにしてから
 		SetMoveSpeed();
+
+		//距離の最低値、スピードを一定以下にしないため
+		float minDistLen = 200.0f;
+		if (distLen < minDistLen)
+			//距離が最低値未満だったら
+			//最低値にしておく
+			distLen = minDistLen;
+
 		//距離が近いほど遅くする
 		m_moveSpeed *= distLen / maxDistLen;
 	}
@@ -572,9 +610,11 @@ void CUFO::GetOnStage()
 	upVec.Scale(500.0f);
 
 	//デバック用
+#ifdef MY_DEBUG
 	//後で消す
 	m_dbgRay[0]->SetPosition(m_onWayPosition + upVec);
 	m_dbgRay[1]->SetPosition(m_onWayPosition - upVec);
+#endif
 	//デバック用ここまで
 	if (m_mobius)
 	{
@@ -606,11 +646,14 @@ void CUFO::UpdateLight()
 {
 	//ライトの更新
 	Vector3 upVec = m_upVec;
-	upVec.Scale(300.0f);
+	upVec.Scale(400.0f);
 	//照らす位置
+	m_spotLight->SetAngle(10.0f);
 	m_spotLight->SetPosition(m_position + upVec);
-	Vector3 downVec = m_upVec;
-	downVec.Scale(-1.0f);
+	m_ufoLight->SetPosition(m_position);
+	m_ufoLight->SetRotation(m_rotation);
+	//Vector3 downVec = m_upVec;
+	//downVec.Scale(-1.0f);
 	//照らす方向
-	m_spotLight->SetDirection(downVec);
+	m_spotLight->SetDirection(m_upVec);
 }

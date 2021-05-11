@@ -102,8 +102,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//エフェクトのドロー。
 		EffectEngine::GetInstance()->Draw();
 
+#ifdef MY_DEBUG
 		//FPSを描画する
 		GameTime().DrawFPS(renderContext, (float)stopWatch.GetElapsed());
+#endif
 
 		//メインレンダリングターゲットの書き込み終了待ち
 		g_graphicsEngine->WaitDrawingMainRenderTarget();

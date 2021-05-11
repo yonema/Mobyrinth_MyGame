@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "testModel.h"
 
+//#define SOUND_OFF	//定義されていたらサウンドをオフにする。
 
 //スタート関数
 bool Game::Start()
@@ -13,8 +14,12 @@ bool Game::Start()
 	//後で消す
 	//NewGO<testModel>(0);
 
+#ifdef SOUND_OFF
+	//BGMの音量を消す
 	CSoundCue::SetBGMVolume(0.0f);
+	//SEの音量を消す
 	CSoundCue::SetSEVolume(0.0f);
+#endif
 
 	return true;
 }
