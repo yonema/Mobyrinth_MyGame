@@ -41,6 +41,24 @@ public://publicなメンバ関数
 	}
 
 	/// <summary>
+	/// プレイヤーの回転を得る
+	/// </summary>
+	/// <returns>回転</returns>
+	const Quaternion& GetRotation() const
+	{
+		return m_rotation;
+	}
+
+	/// <summary>
+	/// プレイヤーの拡大を設定する
+	/// </summary>
+	/// <param name="scale"></param>
+	void SetScale(const Vector3& scale)
+	{
+		m_modelRender->SetScale(scale);
+	}
+
+	/// <summary>
 	/// プレイヤーの座標を取得
 	/// </summary>
 	/// <returns>場所</returns>
@@ -74,7 +92,43 @@ public://publicなメンバ関数
 	{
 		return m_finalWPRot;
 	}
+
+	/// <summary>
+	///	UFOにキャプチャされ中の回転を得る
+	/// </summary>
+	/// <returns>UFOにキャプチャされ中の回転</returns>
+	const Quaternion& GetCapturedRotation() const
+	{
+		return m_capturedRotation;
+	}
 	
+	/// <summary>
+	/// UFOにキャプチャされ中の回転を設定する
+	/// </summary>
+	/// <param name="qRot">UFOにキャプチャされ中の回転</param>
+	void SetCapturedRotation(const Quaternion& qRot)
+	{
+		m_capturedRotation = qRot;
+	}
+
+	/// <summary>
+	/// UFOにキャプチャされ中の座標を得る
+	/// </summary>
+	/// <returns>UFOにキャプチャされ中の座標</returns>
+	const Vector3& GetCapturedPosition() const
+	{
+		return m_capturedPosition;
+	}
+
+	/// <summary>
+	/// UFOにキャプチャされ中の座標を設定する
+	/// </summary>
+	/// <param name="position">UFOにキャプチャされ中の座標</param>
+	void SetCapturedPosition(const Vector3 position)
+	{
+		m_capturedPosition = position;
+	}
+
 	/// <summary>
 	/// プレイヤーがオブジェクトを持っているかどうかを設定する
 	/// 持っている場合はtrueを渡す
@@ -284,6 +338,8 @@ private://privateなメンバ関数
 	/// </summary>
 	void CapturedUFO();
 
+
+
 private:	//データメンバ
 
 	/// <summary>
@@ -304,7 +360,8 @@ private:	//データメンバ
 	Vector3 m_upVec = g_vec3Up;						//プレイヤーのUpベクトル
 	bool m_holdObject = false;						//オブジェクトを持っているか？
 	CReversibleObject* m_reversibleObject = nullptr;	//持っている反転オブジェクトのポインタ
-	
+	Quaternion m_capturedRotation = m_rotation;		//カメラに渡す回転
+	Vector3 m_capturedPosition = m_position;			//カメラに渡す座標
 	/// <summary>
 	/// プレイヤーが右を向いているか左を向いているか
 	/// </summary>

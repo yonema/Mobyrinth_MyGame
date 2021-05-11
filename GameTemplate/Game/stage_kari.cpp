@@ -11,8 +11,8 @@ bool stage_kari::StartSub()
 	//その他のLoadLevelは全部コメントアウトしてね。
 
 	//制作者Y
-	LoadLevel("Assets/level/Y_easy.tkl");
-	//LoadLevel("Assets/level/Y_normal.tkl");
+	//LoadLevel("Assets/level/Y_easy.tkl");
+	LoadLevel("Assets/level/Y_normal.tkl");
 	//LoadLevel("Assets/level/Y_hard.tkl");
 
 	//製作者O

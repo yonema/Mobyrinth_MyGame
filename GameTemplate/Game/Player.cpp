@@ -717,6 +717,7 @@ void Player::UpdateLightData()
 	SetDirectionLight();
 }
 
+
 /// <summary>
 /// プレイヤーを照らす影を生成するライトを更新する
 /// </summary>
@@ -795,9 +796,12 @@ void Player::TitleMove()
 	//ライトのデータを更新する
 	UpdateLightData();
 
+
 	//モデルの場所と回転を更新する
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+
+
 }
 
 void Player::GameMove()
@@ -806,9 +810,15 @@ void Player::GameMove()
 		return;
 	}
 
+	//UFOに捕まっているか？
 	if (m_capturedUFOFlag == true)
 	{
+		//捕まっていたら
+
+		//捕まっている時の処理
 		CapturedUFO();
+
+		//そのままreturn
 		return;
 	}
 
@@ -847,6 +857,8 @@ void Player::GameMove()
 	m_modelRender->SetRotation(m_rotation);
 	//OBBの場所と回転を設定
 	m_myCharaCon.SetRotation(m_rotation);
+
+
 	////左右の向き
 	//if (!m_stunFlag)
 	//{
@@ -865,7 +877,6 @@ void Player::GameMove()
 
 	//ライトのデータを更新する
 	UpdateLightData();
-
 
 	//デバック用
 	//後で消す
@@ -891,6 +902,9 @@ void Player::GameMove()
 	//デバックここまで
 }
 
+/// <summary>
+/// UFOに捕まっている時の処理
+/// </summary>
 void Player::CapturedUFO()
 {
 	//ウェイポイントの更新処理
@@ -900,8 +914,8 @@ void Player::CapturedUFO()
 	//モデルの回転処理
 	//Rotation();
 	//モデルの場所と回転を設定
-	m_modelRender->SetPosition(m_position);
-	m_modelRender->SetRotation(m_rotation);
+	m_modelRender->SetPosition(m_capturedPosition);
+	m_modelRender->SetRotation(m_capturedRotation);
 	m_finalWPRot = m_rotation;
 	//OBBの場所と回転を設定
 	m_myCharaCon.SetRotation(m_rotation);
