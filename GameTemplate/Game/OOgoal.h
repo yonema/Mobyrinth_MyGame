@@ -1,6 +1,7 @@
 #pragma once
 #include "ObstacleObject.h"
 #include "FontRender.h"
+#include "effect/Effect.h"
 
 /// <summary>
 /// 障害オブジェクト
@@ -27,5 +28,6 @@ public:		//メンバ関数
 private:	//データメンバ
 	CFontRender* m_fontRender = nullptr;	//ゴールした時のスプライト
 	bool m_isGoal = false;					//ゴール判定
+	Effect* m_effect = nullptr;
 };
 

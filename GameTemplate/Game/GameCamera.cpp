@@ -74,15 +74,22 @@ void GameCamera::StartDirectingCamera()
 
 		}
 		else {
-			Vector3 differenceCameraPos = { 0.0f,0.0f,1000.0f / m_startDirecting->GetStartDirectingTime() };
-			//Vector3 cameraPos1 = { 0.0f,0.0f,2000.0f };
-			//Vector3 cameraPos2= { 0.0f,0.0f,1000.0f };
+			if (m_zoomFinished == false) {
+				Vector3 differenceCameraPos = { 0.0f,0.0f,1000.0f / m_startDirecting->GetStartDirectingTime() };
+				//Vector3 cameraPos1 = { 0.0f,0.0f,2000.0f };
+				//Vector3 cameraPos2= { 0.0f,0.0f,1000.0f };
 
-			m_toCameraPos = m_toCameraPos - differenceCameraPos;
+				m_toCameraPos = m_toCameraPos - differenceCameraPos;
 
-			g_camera3D->SetTarget(m_startDirecting->GetPosition());
+				g_camera3D->SetTarget(m_startDirecting->GetPosition());
 
-			g_camera3D->SetPosition(m_startDirecting->GetPosition() + m_toCameraPos);
+				g_camera3D->SetPosition(m_startDirecting->GetPosition() + m_toCameraPos);
+			}
+			else
+			{
+				g_camera3D->SetTarget({ 0.0f,1800.0f,0.0f });
+				g_camera3D->SetPosition({ 0.0f,1800.0f,1200.0f });
+			}
 		}
 	}
 	else {

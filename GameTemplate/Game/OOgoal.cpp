@@ -24,6 +24,14 @@ bool OOgoal::StartSub()
 	//OBBWorldに自身のOBBの登録を消去させる
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
 
+	m_effect = NewGO<Effect>(0);
+	m_effect->Init(u"Assets/effect/ster.efk");
+	float scale = 50.0f;
+	m_effect->SetScale({ scale ,scale ,scale });
+	m_effect->SetPosition(m_position);
+	m_effect->Play();
+
+
 	return true;
 }
 
@@ -31,6 +39,7 @@ bool OOgoal::StartSub()
 OOgoal::~OOgoal()
 {
 	DeleteGO(m_fontRender);
+	DeleteGO(m_effect);
 }
 
 //アップデート関数

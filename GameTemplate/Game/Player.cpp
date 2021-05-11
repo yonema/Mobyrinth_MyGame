@@ -11,11 +11,11 @@ bool Player::Start()
 	//お試しプレイヤー
 	/////////////////////////////////////////////////////////
 
-	////アニメーションクリップの初期化
-	////Idleのアニメーションクリップをロードする
-	//m_animationClips[enAnimClip_Idle].Load("Assets/animData/idle.tka");
-	////ループ再生をtrueにする
-	//m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
+	//アニメーションクリップの初期化
+	//Idleのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_Idle].Load("Assets/animData/walk.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
 	////Runのアニメーションクリップをロードする
 	//m_animationClips[enAnimClip_Run].Load("Assets/animData/walk.tka");
 	////ループ再生をtrueにする
@@ -26,8 +26,8 @@ bool Player::Start()
 	//モデルレンダラーの初期化をする
 	//この時にアニメーションクリップを一緒に引数に渡しておく
 	m_modelRender->Init
-		/*("Assets/modelData/unityChan.tkm",m_animationClips,enAnimClip_Num, enModelUpAxisY);*/
-		("Assets/modelData/player.tkm");
+		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips,enAnimClip_Num,enModelUpAxisZ);
+		/*("Assets/modelData/player.tkm");*/
 
 	/////////////////////////////////////////////////////////////
 	//ここまで
@@ -806,6 +806,12 @@ void Player::TitleMove()
 
 void Player::GameMove()
 {
+	if (m_fallFlag == true)
+	{
+		Fall();
+		return;
+	}
+
 	if (m_operationFlag == false) {
 		return;
 	}
@@ -821,6 +827,8 @@ void Player::GameMove()
 		//そのままreturn
 		return;
 	}
+
+
 
 	//ゲームパッドの左スティックのX軸の入力情報を取得
 	m_padLStickXF = g_pad[0]->GetLStickXF();
@@ -922,6 +930,17 @@ void Player::CapturedUFO()
 	//ライトのデータを更新する
 	UpdateLightData();
 }
+
+void Player::Fall()
+{
+	//Rotation();
+	//モデルの場所と回転を設定
+	m_myCharaCon.SetPosition(m_position);
+	m_onWayPosition = m_position;
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+}
+
 
 
 /// <summary>

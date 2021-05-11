@@ -93,7 +93,7 @@ void CReversibleObject::Reverse()
 }
 
 /// <summary>
-/// ぜんぶの反転オブジェクトを反転させるときに使う関数
+/// 特定の場所を通過した際にすべてのオブジェクトを反転させる処理に使用する関数
 /// </summary>
 void CReversibleObject::AllReverse()
 {

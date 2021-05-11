@@ -3,6 +3,8 @@
 #include "GameTime.h"
 #include "UFO.h"
 class ILevelObjectBase;
+class Player;
+class GameCamera;
 
 class StartDirecting : public IGameObject
 {
@@ -31,6 +33,10 @@ private:
 	/// モデルの回転処理
 	/// </summary>
 	void Rotation();
+	/// <summary>
+	/// プレイヤーの演出時の落下処理
+	/// </summary>
+	void FallPlayer();
 
 public:	//Get、Set関数
 	const bool GetStartDirecting()const
@@ -96,6 +102,9 @@ private:
 
 	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
+	Player* m_player = nullptr;		//プレイヤーの初期化
+
+	GameCamera* m_gameCamera = nullptr;		//ゲームカメラの初期化
 
 	enum EnLeftOrRight
 	{
@@ -114,5 +123,7 @@ private:
 
 	bool m_wipeEndFlag = false;			//ワイプが終わった？
 	float m_startTimer = 0;				//演出開始までのタイマー
+
+	float m_fallTimer = 0.0f;			//落下後から開始までの時間
 };
 
