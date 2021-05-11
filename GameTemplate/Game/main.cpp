@@ -7,6 +7,7 @@
 #include "OBBWorld.h"
 #include "StopWatch.h"
 #include "GameTime.h"
+#include "effect/effect.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -30,6 +31,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CLevelObjectManager::CreateInstance();	//レベルオブジェクトマネージャー
 	CSoundEngine::CreateInstance();			//サウンドエンジン
 	COBBWorld::CreateInstance();			//OBBワールド
+
+	//エフェクトエンジンのインスタンスを作成する。
+	EffectEngine::CreateInstance();
 
 	//ストップウォッチを生成する
 	CStopWatch stopWatch;
@@ -61,7 +65,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//ストップウォッチの計測開始
 		stopWatch.Start();
 
-
 		//レンダリング開始。
 		g_engine->BeginFrame();
 
@@ -71,6 +74,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		//ゲームオブジェクトのアップデート
 		GameObjectManager::GetInstance()->ExecuteUpdate();
+		//エフェクトエンジンのアップデート。
+		EffectEngine::GetInstance()->Update(GameTime().GetFrameDeltaTime());
 		//ライトのアップデート
 		CLightManager::GetInstance()->ExecuteUpdate();
 		//サウンドエンジンのアップデート
@@ -93,6 +98,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		//メインのレンダリングを実行
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+
+		//エフェクトのドロー。
+		EffectEngine::GetInstance()->Draw();
 
 		//FPSを描画する
 		GameTime().DrawFPS(renderContext, (float)stopWatch.GetElapsed());
@@ -129,6 +137,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームのインスタンスを破棄
 	DeleteGO(game);
 
+	//エフェクトエンジンのインスタンスの破棄
+	EffectEngine::DeleteInstance();
 
 	//各管理クラスのインスタンスを破棄する。
 	COBBWorld::DeleteInstance();			//OBBワールド

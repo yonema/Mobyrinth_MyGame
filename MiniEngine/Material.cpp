@@ -60,7 +60,8 @@ void Material::InitFromTkmMaterila(
 	const char* vsEntryPointFunc,
 	const char* vsSkinEntryPointFunc,
 	const char* psEntryPointFunc,
-	DXGI_FORMAT colorBufferFormat)
+	DXGI_FORMAT colorBufferFormat,
+	D3D12_CULL_MODE cullMode)
 {
 	//テクスチャをロード。
 	InitTexture(tkmMat);
@@ -82,10 +83,10 @@ void Material::InitFromTkmMaterila(
 		//シェーダーを初期化。
 		InitShaders(fxFilePath, vsEntryPointFunc, vsSkinEntryPointFunc, psEntryPointFunc);
 		//パイプラインステートを初期化。
-		InitPipelineState(colorBufferFormat);
+		InitPipelineState(colorBufferFormat, cullMode);
 	}
 }
-void Material::InitPipelineState(DXGI_FORMAT colorBufferFormat)
+void Material::InitPipelineState(DXGI_FORMAT colorBufferFormat, D3D12_CULL_MODE cullMode)
 {
 	// 頂点レイアウトを定義する。
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -115,6 +116,7 @@ void Material::InitPipelineState(DXGI_FORMAT colorBufferFormat)
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	psoDesc.NumRenderTargets = 3;
 	psoDesc.RTVFormats[0] = colorBufferFormat;		//アルベドカラー出力用。
+	psoDesc.RasterizerState.CullMode = cullMode;	//カリング設定
 #ifdef SAMPE_16_02
 	psoDesc.RTVFormats[1] = DXGI_FORMAT_R16G16B16A16_FLOAT;	//法線出力用。	
 	psoDesc.RTVFormats[2] = DXGI_FORMAT_R32_FLOAT;						//Z値。

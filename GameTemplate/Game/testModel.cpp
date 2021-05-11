@@ -59,7 +59,12 @@ bool testModel::Start()
 
 	//g_engine->CreateShadow({ -1.0f,-1.0f,1.0f }, 300.0f);
 
-
+	m_effect = NewGO<Effect>(0);
+	m_effect->Init(u"Assets/effect/laser.efk");
+	float scalef = 50.0f;
+	m_effect->SetScale({ scalef ,scalef ,scalef });
+	m_effect->SetPosition({ 0.0f,0.0f,-100.0f });
+	m_effect->SetRotation(qRot2);
 	return true;
 }
 
@@ -69,6 +74,10 @@ void testModel::Update()
 
 	MoveCamera();
 
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		//Ä¶ŠJŽnB
+		m_effect->Play();
+	}
 
 }
 

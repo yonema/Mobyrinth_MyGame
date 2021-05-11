@@ -24,6 +24,7 @@ void MeshParts::InitFromTkmFile(
 	const char* vsEntryPointFunc,
 	const char* vsSkinEntryPointFunc,
 	const char* psEntryPointFunc,
+	D3D12_CULL_MODE cullMode,
 	void* expandData,
 	int expandDataSize,
 	IShaderResource* expandShaderResourceView,
@@ -49,7 +50,8 @@ void MeshParts::InitFromTkmFile(
 			vsEntryPointFunc, 
 			vsSkinEntryPointFunc, 
 			psEntryPointFunc,
-			colorBufferFormat
+			colorBufferFormat,
+			cullMode
 		);
 		meshNo++;
 	});
@@ -139,7 +141,8 @@ void MeshParts::CreateMeshFromTkmMesh(
 	const char* vsEntryPointFunc,
 	const char* vsSkinEntryPointFunc,
 	const char* psEntryPointFunc,
-	DXGI_FORMAT colorBufferFormat
+	DXGI_FORMAT colorBufferFormat,
+	D3D12_CULL_MODE cullMode
 )
 {
 	//1. 頂点バッファを作成。
@@ -199,7 +202,8 @@ void MeshParts::CreateMeshFromTkmMesh(
 			vsEntryPointFunc, 
 			vsSkinEntryPointFunc, 
 			psEntryPointFunc,
-			colorBufferFormat
+			colorBufferFormat,
+			cullMode
 		);
 		mesh->m_materials.push_back(mat);
 	}

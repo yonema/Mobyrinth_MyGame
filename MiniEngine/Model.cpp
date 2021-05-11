@@ -43,6 +43,7 @@ void Model::Init(const ModelInitData& initData)
 		initData.m_vsEntryPointFunc,
 		initData.m_vsSkinEntryPointFunc,
 		initData.m_psEntryPointFunc,
+		initData.m_cullMode,
 		initData.m_expandConstantBuffer,
 		initData.m_expandConstantBufferSize,
 		initData.m_expandShaderResoruceView,

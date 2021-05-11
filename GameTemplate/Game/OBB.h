@@ -153,14 +153,40 @@ public:		//ここのメンバ関数を主に使う
 		return m_directionLength[localAxis];
 	}
 
+	/// <summary>
+	/// タグを設定する
+	/// </summary>
+	/// <param name="obbTag">タグ</param>
 	void SetTag(const int obbTag)
 	{
 		m_tag = obbTag;
 	}
 
+	/// <summary>
+	/// タグを取得する
+	/// </summary>
+	/// <returns>タグ</returns>
 	const int GetTag() const
 	{
 		return m_tag;
+	}
+
+	/// <summary>
+	/// 例外フラグを設定する
+	/// </summary>
+	/// <param name="exceptionFlag"></param>
+	void SetExceptionFlag(const bool exceptionFlag)
+	{
+		m_exceptionFlag = exceptionFlag;
+	}
+
+	/// <summary>
+	/// 例外フラグを取得する
+	/// </summary>
+	/// <returns></returns>
+	const bool GetExceptionFlag()
+	{
+		return m_exceptionFlag;
 	}
 
 private:	//privateなメンバ関数
@@ -203,7 +229,8 @@ private:	//データメンバ
 	
 	Vector3 m_normalDirection[enLocalAxisNum];	//各軸の単位方向ベクトル
 	float m_directionLength[enLocalAxisNum];	//各軸の方向ベクトルの長さ
-	int m_tag = enNone;						//OBBのタグ
+	int m_tag = enNone;							//OBBのタグ
+	bool m_exceptionFlag = false;				//例外フラグ
 
 private:	//staticなデータメンバ
 	static const int m_boxVertexNum = 8;		//ボックスの頂点の数
