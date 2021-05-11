@@ -11,54 +11,69 @@ bool CPause::Start()
 			//カーソル
 			if (objdata.EqualObjectName("Pause"))
 			{
-				m_pause = NewGO<CSpriteRender>(1);
+				m_pause = NewGO<CSpriteRender>(3);
 				m_pause->Init("Assets/level2D/Pause.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_pause->SetScale(objdata.scale);
 				m_pause->SetPosition(objdata.position);
+				m_pause->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
 			//ゲームに戻る
-			if (objdata.EqualObjectName("Continue"))
+			else if (objdata.EqualObjectName("Continue"))
 			{
-				m_choices[enContinue] = NewGO<CSpriteRender>(1);
+				m_choices[enContinue] = NewGO<CSpriteRender>(3);
 				m_choices[enContinue]->Init("Assets/level2D/Continue.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_choices[enContinue]->SetScale(objdata.scale);
 				m_choices[enContinue]->SetPosition(objdata.position);
+				m_choices[enContinue]->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
 			//リトライ
-			if (objdata.EqualObjectName("Retry"))
+			else if (objdata.EqualObjectName("Retry"))
 			{
-				m_choices[enRetry] = NewGO<CSpriteRender>(1);
+				m_choices[enRetry] = NewGO<CSpriteRender>(3);
 				m_choices[enRetry]->Init("Assets/level2D/Retry.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_choices[enRetry]->SetScale(objdata.scale);
 				m_choices[enRetry]->SetPosition(objdata.position);
+				m_choices[enRetry]->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
 			//ステージから出る
-			if (objdata.EqualObjectName("Quit"))
+			else if (objdata.EqualObjectName("Quit"))
 			{
-				m_choices[enQuit] = NewGO<CSpriteRender>(1);
+				m_choices[enQuit] = NewGO<CSpriteRender>(3);
 				m_choices[enQuit]->Init("Assets/level2D/Quit.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_choices[enQuit]->SetScale(objdata.scale);
 				m_choices[enQuit]->SetPosition(objdata.position);
+				m_choices[enQuit]->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
 			//カーソル
-			if (objdata.EqualObjectName("cursor"))
+			else if (objdata.EqualObjectName("cursor"))
 			{
-				m_cursor = NewGO<CSpriteRender>(1);
+				m_cursor = NewGO<CSpriteRender>(3);
 				m_cursor->Init("Assets/level2D/cursor.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_cursor->SetScale(objdata.scale);
 				m_cursor->SetPosition(objdata.position);
+				m_cursor->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
-			
+			//ポーズ中の背景
+			else if (objdata.EqualObjectName("Pause_background"))
+			{
+				m_background = NewGO<CSpriteRender>(2);
+				m_background->Init(objdata.ddsFilePath, 1280.0f, 780.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_background->SetScale(objdata.scale);
+				m_background->SetPosition(objdata.position);
+				m_background->SetPostRenderFlag(true);
+				//フックしたらtrueを戻す
+				return true;
+			}
 
 
 			//そのまま表示するからfalseを戻す
@@ -71,7 +86,7 @@ bool CPause::Start()
 	}
 	m_pause->Deactivate();
 	m_cursor->Deactivate();
-
+	m_background->Deactivate();
 
 	for (int i = 0; i < enPauseNum; i++)
 	{
@@ -79,7 +94,7 @@ bool CPause::Start()
 	}
 	m_pause->UpdateSprite();
 	m_cursor->UpdateSprite();
-
+	m_background->UpdateSprite();
 
 
 	//buttonASEのサウンドキューを生成する
@@ -119,6 +134,7 @@ CPause::~CPause()
 	}
 	DeleteGO(m_pause);
 	DeleteGO(m_cursor);
+	DeleteGO(m_background);
 }
 
 
@@ -182,6 +198,7 @@ void CPause::UpdateOnlyPaused()
 	}
 	m_pause->UpdateSprite();
 	m_cursor->UpdateSprite();
+	m_background->UpdateSprite();
 }
 
 /// <summary>
@@ -214,6 +231,7 @@ void CPause::ToPause()
 	}
 	m_pause->Activate();
 	m_cursor->Activate();
+	m_background->Activate();
 
 }
 
@@ -245,6 +263,7 @@ void CPause::UnPause()
 	}
 	m_pause->Deactivate();
 	m_cursor->Deactivate();
+	m_background->Deactivate();
 
 }
 

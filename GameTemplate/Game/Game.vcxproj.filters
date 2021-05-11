@@ -473,6 +473,9 @@
     <ClCompile Include="ROleft_right.cpp">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>MyCode\stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -882,6 +885,9 @@
     </ClInclude>
     <ClInclude Include="ROleft_right.h">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>MyCode\stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
