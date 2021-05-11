@@ -46,6 +46,7 @@ private:	//データメンバ
 
 	COBB m_sideOBB[enLeftAndRightNum];	//両サイドのOBB
 	int m_leftOrRight = enLeft;			//左か右か？
+	CModelRender* m_canPassMR = nullptr;	//通れる時のモデル
 
 private:	//デバック用
 #ifdef MY_DEBUG

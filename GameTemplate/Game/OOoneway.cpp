@@ -7,6 +7,14 @@ bool OOoneway::StartSub()
 	//モデルの初期化とタイプの設定
 	Init("Assets/modelData/oneway.tkm", enOneway);
 
+	//通れる時のモデルの生成と初期化
+	m_canPassMR = NewGO<CModelRender>(0);
+	m_canPassMR->Init("Assets/modelData/oneway2.tkm", D3D12_CULL_MODE_NONE);
+	m_canPassMR->SetPosition(m_position);
+	m_canPassMR->SetRotation(m_rotation);
+	m_canPassMR->SetScale(m_scale);
+	m_canPassMR->Deactivate();
+
 	//OBBのサイズを設定
 	Vector3 obbSize;
 	obbSize = { 300.0f,300.0f,400.0f };
@@ -85,12 +93,28 @@ void OOoneway::UpdateSub()
 {
 	//プレイヤーが自身と同じ向きを向いているか
 	if (m_pPlayer->GetEnLeftOrRight() == m_leftOrRight)
+	{
 		//向いている時は
 		//通れる
 		m_sideOBB[m_leftOrRight].SetExceptionFlag(true);
+		Deactivate();
+		m_canPassMR->Activate();
+	}
 	else
+	{
 		//向いていない時は
 		//通れない
 		m_sideOBB[m_leftOrRight].SetExceptionFlag(false);
+		Activate();
+		m_canPassMR->Deactivate();
+	}
+
+
+	if (m_canPassMR->IsActive())
+	{
+		m_canPassMR->SetPosition(m_position);
+		m_canPassMR->SetRotation(m_rotation);
+		m_canPassMR->SetScale(m_scale);
+	}
 
 }

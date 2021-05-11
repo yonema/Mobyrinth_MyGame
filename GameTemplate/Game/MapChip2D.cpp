@@ -8,7 +8,7 @@
 void MapChip2D::Init(CaslData* caslData)
 {
 	//スプライトレンダラーの生成
-	m_spriteRender = NewGO<CSpriteRender>(0);
+	m_spriteRender = NewGO<CSpriteRender>(1);
 	//スプライトレンダラーの初期化
 	m_spriteRender->Init(caslData->ddsFilePath.get(), caslData->width, caslData->height);
 

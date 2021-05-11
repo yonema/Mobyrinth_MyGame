@@ -10,9 +10,10 @@
 #include "Player.h"
 
 //ステージ
-#include "stage_kari.h"
-#include "stage_proto01.h"
-#include "stage_proto02.h"
+//#include "stage_kari.h"
+//#include "stage_proto01.h"
+//#include "stage_proto02.h"
+#include "Stage.h"
 
 /// <summary>
 /// タイトルクラス
@@ -62,21 +63,27 @@ private:	//列挙型
 	/// </summary>
 	enum EnStageList
 	{
-		enStage_kari,
-		enStageProto01,
-		enStageProto02,
-		enStageNum,
+		enStage1,		//ステージ1
+		enStage2,		//ステージ2
+		enStage3,		//ステージ3
+		enStage4,		//ステージ4
+		enStage5,		//ステージ5
+		enStage6,		//ステージ6
+		enStage7,		//ステージ7
+		enStage8,		//ステージ8
+		enStage9,		//ステージ9
+		enStageNum,		//ステージの総数
 	};
 
 private:	//データメンバ
 
-	int m_stageSelectState = enStage_kari;	//現在のステージセレクトのステート
+	int m_stageSelectState = enStage1;	//現在のステージセレクトのステート
 
 	bool m_buttonFlag = true;				//ボタンを押すことができるか？
 											//（連続入力防止用）
 	CLevel2D m_level2D;						//スプライト用のレベルクラス
 	bool m_wipeInFlag = false;				//ワイプインするか？
-
+	Vector3 m_stageIconToCursorVec = g_vec3Zero;	//ステージのアイコンからカーソルへのベクトル
 
 private: //背景
 	Mobius* m_mobius = nullptr;
@@ -89,6 +96,7 @@ private: //画像データ
 	CSpriteRender* m_pressAButton = nullptr;
 	CSpriteRender* m_cursor = nullptr;
 	CSpriteRender* m_stageName[enStageNum] = { nullptr };
+	CSpriteRender* m_stageClear[enStageNum] = { nullptr };
 	CSpriteRender* m_stageSelection = nullptr;
 	CSpriteRender* m_stageSelectionBase = nullptr;
 
