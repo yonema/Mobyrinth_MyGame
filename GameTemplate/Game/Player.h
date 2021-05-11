@@ -209,6 +209,11 @@ public://publicなメンバ関数
 		m_capturedUFOFlag = captured;
 	}
 
+	void SetFallFlag(const bool fallFlag)
+	{
+		m_fallFlag = fallFlag;
+	}
+
 	/// <summary>
 	/// OBBの参照を戻す
 	/// </summary>
@@ -284,6 +289,8 @@ private://privateなメンバ関数
 	/// </summary>
 	void CapturedUFO();
 
+	void Fall();
+
 private:	//データメンバ
 
 	/// <summary>
@@ -347,6 +354,7 @@ private:	//データメンバ
 	COBB* m_hitOBB = nullptr;					//衝突したOBBのポインタ
 
 	bool m_capturedUFOFlag = false;				//UFOにキャプチャされているか？
+	bool m_fallFlag = false;					//落下中か？
 
 public://デバック用
 	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため

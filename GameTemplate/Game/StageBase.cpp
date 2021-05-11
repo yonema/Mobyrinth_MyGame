@@ -85,6 +85,10 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				//プレイヤーを作成する
 				pPlayer = NewGO<Player>(0, "Player");
 				//プレイヤーのポジションをロードしたオブジェクトと同じポジションにする
+				if (m_titlePlayer==false) {		//ゲーム画面の時
+					pPlayer->SetPosition({ 0.0f,3000.0f,0.0f });	//	画面外に移動
+				}
+				else
 				pPlayer->SetPosition(objData.position);
 				//タイトル画面かどうかの確認
 				pPlayer->SetTitleMove(m_titlePlayer);
@@ -568,7 +572,7 @@ void IStageBase::Goal()
 	//後で直す
 	//フレーム数ではなくて時間にする
 
-
+	m_player->GetPosition()
 	//ゴールした後の時間を計測する	//デルタタイムを掛ける
 	m_goalTimer += GameTime().GetFrameDeltaTime();
 

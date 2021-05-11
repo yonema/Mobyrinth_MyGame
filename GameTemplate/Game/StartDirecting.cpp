@@ -12,6 +12,9 @@ bool StartDirecting::Start()
 
 	m_startPosition = m_position;
 
+	m_player = FindGO<Player>("Player");
+	m_gameCamera = FindGO<GameCamera>("GameCamera");
+
 	return true;
 }
 
@@ -41,17 +44,24 @@ void StartDirecting::Update()
 	}
 
 	if (g_pad[0]->IsTrigger(enButtonA) == true) {
-		m_checkStartDirecting = false;
-		//プレイヤーの操作フラグをtrueにする。
-		Player* player = FindGO<Player>("Player");
-		player->SetOperationFlag(true);
-		//ポーズの操作フラグをtrueにする。
-		CPause* pause = FindGO<CPause>("Pause");
-		pause->SetCanPause(true);
-		//UFOがあったら動かす
-		CUFO* ufo = FindGO<CUFO>("UFO");
-		if (ufo)
-			ufo->SetMoveSpeed();
+		checkZoomIn = true;
+		countZoomIn = startDirectingTime;
+
+		m_gameCamera->FinishZoom();
+		//カメラの寄る処理のフラグをtrueにする。
+		m_gameCamera->SetStartDirectingZoomInCamera(true);
+		//FallPlayer();
+		//m_checkStartDirecting = false;
+		////プレイヤーの操作フラグをtrueにする。
+		//Player* player = FindGO<Player>("Player");
+		//player->SetOperationFlag(true);
+		////ポーズの操作フラグをtrueにする。
+		//CPause* pause = FindGO<CPause>("Pause");
+		//pause->SetCanPause(true);
+		////UFOがあったら動かす
+		//CUFO* ufo = FindGO<CUFO>("UFO");
+		//if (ufo)
+		//	ufo->SetMoveSpeed();
 	}
 
 	if (checkZoomIn == false) {
@@ -75,17 +85,19 @@ void StartDirecting::Update()
 			++countZoomIn;
 		}
 		else {
-			m_checkStartDirecting = false;
-			//プレイヤーの操作フラグをtrueにする。
-			Player* player = FindGO<Player>("Player");
-			player->SetOperationFlag(true);
-			//ポーズの操作フラグをtrueにする。
-			CPause* pause = FindGO<CPause>("Pause");
-			pause->SetCanPause(true);
-			//UFOがあったら動かす
-			CUFO* ufo = FindGO<CUFO>("UFO");
-			if (ufo)
-				ufo->SetMoveSpeed();
+			m_gameCamera->FinishZoom();
+			FallPlayer();
+			//m_checkStartDirecting = false;
+			////プレイヤーの操作フラグをtrueにする。
+			//m_player = FindGO<Player>("Player");
+			//player->SetOperationFlag(true);
+			////ポーズの操作フラグをtrueにする。
+			//CPause* pause = FindGO<CPause>("Pause");
+			//pause->SetCanPause(true);
+			////UFOがあったら動かす
+			//CUFO* ufo = FindGO<CUFO>("UFO");
+			//if (ufo)
+			//	ufo->SetMoveSpeed();
 		}
 	}
 }
@@ -161,8 +173,7 @@ void StartDirecting::CheckWayPoint()
 		if (m_wayPointState == 15) {
 			checkZoomIn = true;
 			//カメラの寄る処理のフラグをtrueにする。
-			GameCamera* gameCamera = FindGO<GameCamera>("GameCamera");
-			gameCamera->SetStartDirectingZoomInCamera(true);
+			m_gameCamera->SetStartDirectingZoomInCamera(true);
 		}
 	}
 
@@ -255,7 +266,33 @@ void StartDirecting::Rotation()
 	return;
 }
 
+void StartDirecting::FallPlayer()
+{
+	m_player->SetFallFlag(true);
+	Vector3 fallpos = m_player->GetPosition();
+	fallpos.y -= 500.0f * GameTime().GetFrameDeltaTime();
+	if (fallpos.y <= 1800.0f) {
+		fallpos.y = 1800.0f;
 
+		if (m_fallTimer > 1.0f) {
+			m_player->SetFallFlag(false);
+			m_checkStartDirecting = false;
+			//プレイヤーの操作フラグをtrueにする。
+			m_player->SetOperationFlag(true);
+			//ポーズの操作フラグをtrueにする。
+			CPause* pause = FindGO<CPause>("Pause");
+			pause->SetCanPause(true);
+			//UFOがあったら動かす
+			CUFO* ufo = FindGO<CUFO>("UFO");
+			if (ufo)
+				ufo->SetMoveSpeed();
+		}
+		else {
+			m_fallTimer += GameTime().GetFrameDeltaTime();
+		}
+	}
+	m_player->SetPosition(fallpos);
+}
 
 
 void StartDirecting::SetWayPointPos
