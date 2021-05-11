@@ -667,10 +667,7 @@ void IStageBase::Quit()
 /// </summary>
 void IStageBase::Goal()
 {
-	//後で直す
-	//フレーム数ではなくて時間にする
-
-	m_player->GetPosition()
+	m_player->GetPosition();
 	//ゴールした後の時間を計測する	//デルタタイムを掛ける
 	m_goalTimer += GameTime().GetFrameDeltaTime();
 
