@@ -52,6 +52,7 @@ void FontEngine::Init()
 		d3dDevice,
 		re,
 		L"Assets/font/myfile.spritefont",
+		//L"Assets/font/checkPoint.spritefont",
 		cpuHandle,
 		gpuHandle);
 

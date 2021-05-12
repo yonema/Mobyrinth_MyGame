@@ -1,6 +1,8 @@
 #pragma once
+#include "SpriteRender.h"
 #include "FontRender.h"
 #include <locale>
+#include <codecvt>
 #include "ObjectType.h"
 
 /// <summary>
@@ -44,8 +46,12 @@ private:	//staticなデータメンバ
 	static const int m_maxTextSize = 256;
 
 private:	//データメンバ
+	CSpriteRender* m_tipsUISR = nullptr;			//「Tips」のUI
 	CFontRender* m_tipsFR = nullptr;				//「Tips」のフォントレンダラー
 	CFontRender* m_sentenceFR = nullptr;			//Tipsの文章を表示するフォントレンダラー
 	char m_text[enObjectTypeNum][m_maxTextSize];	//ロードしたTipsの文章
 };
 
+std::string wide_to_multi_capi(std::wstring const& src);
+std::wstring utf8_to_wide_cppapi(std::string const& src);
+std::string utf8_to_multi_cppapi(std::string const& src);

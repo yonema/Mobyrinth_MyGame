@@ -13,6 +13,16 @@ public:		//自動で呼ばれるメンバ関数
 	virtual ~CReversibleObject();			//デストラクタ
 	void PureVirtualUpdate()override final;			//アップデート関数
 
+public:
+	/// <summary>
+	/// 表か裏かのモデルの参照を得る
+	/// </summary>
+	/// <param name="frontOrBack">表か裏か？</param>
+	/// <returns>モデルの参照</returns>
+	CModelRender* GetModelRender(const int frontOrBack = 0) override final
+	{
+		return m_modelRender[frontOrBack];
+	}
 
 public:		//publicなオーバーライドしてほしいメンバ関数
 	virtual bool StartSub() { return true; };	//スタート関数

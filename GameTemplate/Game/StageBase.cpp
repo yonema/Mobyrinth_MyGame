@@ -32,11 +32,18 @@ bool IStageBase::Start()
 	m_sky = NewGO<CSky>(0);
 	m_sky->SetScale(1000.0f);
 
+
+
+	m_capacityDisplaySR = NewGO<CSpriteRender>(0);
+	m_capacityDisplaySR->Init
+	("Assets/image/Capacity_display.DDS", 512.0f * 1.3f, 256.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+	m_capacityDisplaySR->SetPosition({ -450.0f, 240.0f,0.0f });
+	m_capacityDisplaySR->SetPostRenderFlag(true);
 	//表側と裏側の反転オブジェクトの数を表示する
 	//フォントレンダラーの初期化
 	for (int i = 0; i < 2; i++)
 	{
-		m_roNumFR[i] = NewGO<CFontRender>(0);
+		m_roNumFR[i] = NewGO<CFontRender>(1);
 		m_roNumFR[i]->SetPostRenderFlag(true);
 		CLevelObjectManager::GetInstance()->SetReversibleObjectMaxNum(i, 5);
 	}
@@ -45,7 +52,6 @@ bool IStageBase::Start()
 		{ -600.0f,300.0f }, { 1.0f,0.0f,0.0f,1.0f }, 0.0f, scale, { 0.5f,0.5f });
 	m_roNumFR[1]->Init(L"", 
 		{ -600.0f,240.0f }, { 0.0f,0.0f,1.0f,1.0f }, 0.0f, scale, { 0.5f,0.5f });
-
 
 
 	//Tipsコントローラーの生成
@@ -518,7 +524,7 @@ IStageBase::~IStageBase()
 
 	DeleteGO(m_roNumFR[0]);
 	DeleteGO(m_roNumFR[1]);
-
+	DeleteGO(m_capacityDisplaySR);
 
 	DeleteGO(m_tipsController);
 

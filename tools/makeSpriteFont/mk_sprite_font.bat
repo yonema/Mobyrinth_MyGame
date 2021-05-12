@@ -1,0 +1,1 @@
+MakeSpriteFont.exe "ロンド B スクエア" myfile.spritefont /FontSize:32

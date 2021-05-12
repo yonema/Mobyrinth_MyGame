@@ -170,6 +170,10 @@ void OOReverseALL::AfterHitPlayer()
 		//全てのレベルオブジェクトに検索
 		for (int i = 0; i < levelObjects.size(); i++)
 		{
+			//モデルの参照を得てから、SetMulColor()を呼ぶ
+			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
+			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 			//CReversibleObjectなら反転させる
 			CReversibleObject* revers = dynamic_cast<CReversibleObject*>(levelObjects[i]);
 			if (revers)

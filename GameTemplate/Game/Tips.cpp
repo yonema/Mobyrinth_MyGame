@@ -4,10 +4,15 @@
 //コンストラクタ
 CTips::CTips()
 {
+	m_tipsUISR = NewGO<CSpriteRender>(0);
+	m_tipsUISR->Init("Assets/image/Tips_UI.DDS",
+		512.0f * 1.5f, 256.0f * 0.8f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+	m_tipsUISR->SetPosition({ 400.0f, 240.0f + 20.0f, 0.0f});
+	m_tipsUISR->SetPostRenderFlag(true);
 	//「Tips」のフォントレンダーの生成と初期化
 	m_tipsFR = NewGO<CFontRender>(0);
 	m_tipsFR->Init(L"Tips", 
-		{ 200.0f,350.0f },			//座標
+		{ 200.0f,330.0f },			//座標
 		{ 1.0f,1.0f,1.0f,1.0f },	//カラー
 		0.0f,						//回転
 		0.8f						//拡大
@@ -17,9 +22,10 @@ CTips::CTips()
 
 	//Tipsの文章を表示するフォントレンダラーの生成と初期化
 	m_sentenceFR = NewGO<CFontRender>(0);
-	m_sentenceFR->Init(L"", { 220.0f,300.0f });
+	m_sentenceFR->Init(L"", { 220.0f,270.0f });
 	//ポストレンダラーで描画する
 	m_sentenceFR->SetPostRenderFlag(true);
+	m_sentenceFR->SetScale(0.8f);
 
 	//テキストの初期化
 	InitText();
@@ -29,6 +35,7 @@ CTips::CTips()
 //デストラクタ
 CTips::~CTips()
 {
+	DeleteGO(m_tipsUISR);
 	DeleteGO(m_tipsFR);
 	DeleteGO(m_sentenceFR);
 }
@@ -98,6 +105,7 @@ void CTips::LoadText(const int objectType, const char* fileName)
 {
 	//日本語をセット
 	setlocale(LC_CTYPE, "ja_JP.UTF-8");
+	//setlocale(LC_CTYPE, "ja_JP.SJIS");
 	//std::locale("");
 
 	//ファイルパスの頭につける文字列
@@ -148,7 +156,31 @@ void CTips::LoadText(const int objectType, const char* fileName)
 
 	//ファイルを閉じる
 	fclose(fp);
-
+	//std::string utf8String = m_text[objectType];
+	//setlocale(LC_CTYPE, "");
+	//std::string MultiString = utf8_to_multi_cppapi(utf8String);
+	//printf(m_text[objectType], MultiString.c_str());
+}
+std::string wide_to_multi_capi(std::wstring const& src)
+{
+	std::size_t converted{};
+	std::vector<char> dest(src.size() * sizeof(wchar_t) + 1, '\0');
+	if (::_wcstombs_s_l(&converted, dest.data(), dest.size(), src.data(), _TRUNCATE, ::_create_locale(LC_ALL, "jpn")) != 0) {
+		throw std::system_error{ errno, std::system_category() };
+	}
+	dest.resize(std::char_traits<char>::length(dest.data()));
+	dest.shrink_to_fit();
+	return std::string(dest.begin(), dest.end());
+}
+std::wstring utf8_to_wide_cppapi(std::string const& src)
+{
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	return converter.from_bytes(src);
+}
+std::string utf8_to_multi_cppapi(std::string const& src)
+{
+	auto const wide = utf8_to_wide_cppapi(src);
+	return wide_to_multi_capi(wide);
 }
 
 /// <summary>
@@ -163,6 +195,10 @@ void CTips::SetText(const int textType)
 	//wchar_t型のテキスト
 	wchar_t text[m_maxTextSize];
 	//char型のデータメンバをwchar_t型に変換する
+	char mText[256];
+	printf(mText,m_text[textType]);
+	if (textType == enWater)
+		int a = 1;
 	mbstowcs(text, m_text[textType], m_maxTextSize);
 	//テキストをフォントレンダラーにセット
 	m_sentenceFR->SetText(text);
