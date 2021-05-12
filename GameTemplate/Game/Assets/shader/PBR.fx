@@ -88,6 +88,7 @@ cbuffer ModelCb : register(b0){
 	float4x4 mView;
 	float4x4 mProj;
 	float4 emissionColor;
+	float4 mulColor;
 	int shadowReceiverFlag;
 };
 
@@ -545,7 +546,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 			}
 		}
 	}
-
+	finalColor *= mulColor;
 	return finalColor;
 }
 

@@ -30,6 +30,7 @@ bool CUFOLandingPoint::StartSub()
 
 
 	//デバック用
+#ifdef MY_DEBUG
 	//後で消す
 	Vector3* vertPos = GetOBB().GetBoxVertex();
 	for (int i = 0; i < m_vertNum; i++)
@@ -53,6 +54,7 @@ bool CUFOLandingPoint::StartSub()
 			m_dbgSidePosMR[i][j]->SetRotation(m_rotation);
 		}
 	}
+#endif
 	//デバック用ここまで
 
 	//端のOBBのアップデート
@@ -65,6 +67,7 @@ bool CUFOLandingPoint::StartSub()
 CUFOLandingPoint::~CUFOLandingPoint()
 {
 	//デバック用
+#ifdef MY_DEBUG
 	//後で消す
 	for (int i = 0; i < m_vertNum; i++)
 	{
@@ -80,6 +83,7 @@ CUFOLandingPoint::~CUFOLandingPoint()
 			DeleteGO(m_dbgSidePosMR[i][j]);
 		}
 	}
+#endif
 	//デバック用ここまで
 }
 
@@ -89,7 +93,7 @@ CUFOLandingPoint::~CUFOLandingPoint()
 void CUFOLandingPoint::UpdateSideOBB()
 {
 	//横幅
-	const float sideLen = 150.0f;
+	const float sideLen = 10.0f;
 	//左右へのベクトル
 	Vector3 sideVec[enLeftAndRightNum] = { g_vec3Left, g_vec3Right };
 
@@ -107,6 +111,7 @@ void CUFOLandingPoint::UpdateSideOBB()
 		m_sideOBB[i].SetPosition(m_position + sideVec[i]);
 		m_sideOBB[i].SetRotation(m_rotation);
 	}
+#ifdef MY_DEBUG
 	//デバック用
 	//後で消す
 	for (int i = 0; i < enLeftAndRightNum; i++)
@@ -118,6 +123,7 @@ void CUFOLandingPoint::UpdateSideOBB()
 			m_dbgSidePosMR[i][j]->SetRotation(m_rotation);
 		}
 	}
+#endif
 	//デバック用ここまで
 
 }

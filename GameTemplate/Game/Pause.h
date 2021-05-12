@@ -117,6 +117,7 @@ private:	//データメンバ
 	CSpriteRender* m_pause = nullptr;
 	CSpriteRender* m_choices[enPauseNum] = { nullptr };
 	CSpriteRender* m_cursor = nullptr;
+	CSpriteRender* m_background = nullptr;
 
 	CSoundCue* m_selectSE = nullptr;	//selectSEのサウンドキュー
 	CSoundCue* m_buttonASE = nullptr;	//buttonASEのサウンドキュー

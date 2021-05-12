@@ -470,6 +470,12 @@
     <ClCompile Include="OOoneway.cpp">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
+    <ClCompile Include="ROleft_right.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>MyCode\stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -877,6 +883,12 @@
     <ClInclude Include="OOoneway.h">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
+    <ClInclude Include="ROleft_right.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>MyCode\stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\myModel.fx">
@@ -901,6 +913,9 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\SceneChange.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\ufoLight.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

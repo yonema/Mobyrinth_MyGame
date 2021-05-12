@@ -44,6 +44,11 @@ private:	//privateなメンバ関数
 
 	void Move();		//移動処理
 	void GetOnStage();	//メビウスの輪のステージにイイ感じに合わせる処理
+	/// <summary>
+	/// 回転処理
+	/// </summary>
+	/// <returns>計算された回転</returns>
+	const Quaternion& Rotating();
 	void UpdateLight();	//ライトの更新
 
 private:	//列挙型
@@ -76,14 +81,21 @@ private:	//データメンバ
 	int m_updateState = enSearch;			//アップデートのステート（状態）
 	int m_searchFlag = true;				//プレイヤーを探しているか？
 	float m_timer = 0.0f;					//タイマー
-	CSpotLight* m_spotLight = nullptr;		//スポットライト
+	CSpotLight* m_spotLightUp = nullptr;	//スポットライト
+	CSpotLight* m_spotLightDown = nullptr;	//スポットライト
+	CModelRender* m_ufoLight = nullptr;		//UFOのライト
 	CUFOLandingPoint* m_ufoLandingPoint = nullptr;	//着地点クラス
 	bool m_getOnStageFlag = true;			//ステージの上に乗る処理を行うか？
+	float m_ufoAngle = 0.0f;				//UFOの回転の角度
+	float m_ufoAngleSpeed = 100.0f;			//UFOの回転するスピー度
 
 	//デバック用
 private:
+#ifdef MY_DEBUG
 	static const int m_vertNum = 8;				//頂点の数
 	CModelRender* m_dbgVertPosMR[m_vertNum];	//OBBの頂点を見るためのモデル
 	CModelRender* m_dbgRay[2] = { nullptr,nullptr };	//レイの始点と終点を見るためのモデル
+	CModelRender* m_dbgSpotLigPos = nullptr;		//スポットライトの位置を見るためのモデル
+#endif
 };
 

@@ -11,11 +11,11 @@ bool Player::Start()
 	//お試しプレイヤー
 	/////////////////////////////////////////////////////////
 
-	////アニメーションクリップの初期化
-	////Idleのアニメーションクリップをロードする
-	//m_animationClips[enAnimClip_Idle].Load("Assets/animData/idle.tka");
-	////ループ再生をtrueにする
-	//m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
+	//アニメーションクリップの初期化
+	//Idleのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_Idle].Load("Assets/animData/walk.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
 	////Runのアニメーションクリップをロードする
 	//m_animationClips[enAnimClip_Run].Load("Assets/animData/walk.tka");
 	////ループ再生をtrueにする
@@ -26,8 +26,8 @@ bool Player::Start()
 	//モデルレンダラーの初期化をする
 	//この時にアニメーションクリップを一緒に引数に渡しておく
 	m_modelRender->Init
-		/*("Assets/modelData/unityChan.tkm",m_animationClips,enAnimClip_Num, enModelUpAxisY);*/
-		("Assets/modelData/player.tkm");
+		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips,enAnimClip_Num,enModelUpAxisZ);
+		/*("Assets/modelData/player.tkm");*/
 
 	/////////////////////////////////////////////////////////////
 	//ここまで
@@ -717,6 +717,7 @@ void Player::UpdateLightData()
 	SetDirectionLight();
 }
 
+
 /// <summary>
 /// プレイヤーを照らす影を生成するライトを更新する
 /// </summary>
@@ -795,22 +796,39 @@ void Player::TitleMove()
 	//ライトのデータを更新する
 	UpdateLightData();
 
+
 	//モデルの場所と回転を更新する
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+
+
 }
 
 void Player::GameMove()
 {
+	if (m_fallFlag == true)
+	{
+		Fall();
+		return;
+	}
+
 	if (m_operationFlag == false) {
 		return;
 	}
 
+	//UFOに捕まっているか？
 	if (m_capturedUFOFlag == true)
 	{
+		//捕まっていたら
+
+		//捕まっている時の処理
 		CapturedUFO();
+
+		//そのままreturn
 		return;
 	}
+
+
 
 	//ゲームパッドの左スティックのX軸の入力情報を取得
 	m_padLStickXF = g_pad[0]->GetLStickXF();
@@ -847,6 +865,8 @@ void Player::GameMove()
 	m_modelRender->SetRotation(m_rotation);
 	//OBBの場所と回転を設定
 	m_myCharaCon.SetRotation(m_rotation);
+
+
 	////左右の向き
 	//if (!m_stunFlag)
 	//{
@@ -865,7 +885,6 @@ void Player::GameMove()
 
 	//ライトのデータを更新する
 	UpdateLightData();
-
 
 	//デバック用
 	//後で消す
@@ -891,6 +910,9 @@ void Player::GameMove()
 	//デバックここまで
 }
 
+/// <summary>
+/// UFOに捕まっている時の処理
+/// </summary>
 void Player::CapturedUFO()
 {
 	//ウェイポイントの更新処理
@@ -900,14 +922,25 @@ void Player::CapturedUFO()
 	//モデルの回転処理
 	//Rotation();
 	//モデルの場所と回転を設定
-	m_modelRender->SetPosition(m_position);
-	m_modelRender->SetRotation(m_rotation);
+	m_modelRender->SetPosition(m_capturedPosition);
+	m_modelRender->SetRotation(m_capturedRotation);
 	m_finalWPRot = m_rotation;
 	//OBBの場所と回転を設定
 	m_myCharaCon.SetRotation(m_rotation);
 	//ライトのデータを更新する
 	UpdateLightData();
 }
+
+void Player::Fall()
+{
+	//Rotation();
+	//モデルの場所と回転を設定
+	m_myCharaCon.SetPosition(m_position);
+	m_onWayPosition = m_position;
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+}
+
 
 
 /// <summary>

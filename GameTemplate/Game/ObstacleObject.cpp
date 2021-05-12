@@ -11,6 +11,8 @@ bool CObstacleObject::PureVirtualStart()
 	//モデルの回転を、現在の場所とイイ感じに合わせる
 	CheckWayPoint();
 
+	CheckFrontOrBackSide(false);
+
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
 }

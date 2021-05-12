@@ -1,6 +1,7 @@
-5
+6
 5,Pause,42,../../GameTemplate/Game/Resource/Pause.png,20.625,260.625,1024,512,10,1.0,1.0,9,Pause.dds
 6,cursor,43,../../GameTemplate/Game/Resource/cursor.png,-373.75,93.75,1024,512,10,0.3299031856489069,0.3299031856489069,10,cursor.dds
 5,Retry,42,../../GameTemplate/Game/Resource/Retry.png,-185.0,-65.0,1024,512,10,0.6829277758373113,0.6829277758373113,9,Retry.dds
 4,Quit,41,../../GameTemplate/Game/Resource/Quit.png,-16.25,-210.0,1024,512,10,0.7269106877908834,0.7269106877908834,8,Quit.dds
 8,Continue,45,../../GameTemplate/Game/Resource/Continue.png,-70.0,70.0,1024,512,10,0.725662818572354,0.725662818572354,12,Continue.dds
+16,Pause_background,53,../../GameTemplate/Game/Resource/Pause_background.png,0.0,0.0,1024,512,1,1.0,1.0,20,Pause_background.dds

@@ -85,6 +85,10 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				//プレイヤーを作成する
 				pPlayer = NewGO<Player>(0, "Player");
 				//プレイヤーのポジションをロードしたオブジェクトと同じポジションにする
+				if (m_titlePlayer==false) {		//ゲーム画面の時
+					pPlayer->SetPosition({ 0.0f,3000.0f,0.0f });	//	画面外に移動
+				}
+				else
 				pPlayer->SetPosition(objData.position);
 				//タイトル画面かどうかの確認
 				pPlayer->SetTitleMove(m_titlePlayer);
@@ -118,7 +122,24 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObject->SetFrontOrBack(CReversibleObject::enFront);
 				return true;
 			}
+			else if (objData.EqualObjectName(L"fire") == true)
+			{
+				ROmizu_kori* RObject;
+				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
 			else if (objData.EqualObjectName(L"koori") == true)
+			{
+				ROmizu_kori* RObject;
+				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
+				RObject->SetPosition(objData.position);
+				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				return true;
+			}
+			//mizu_kori_switch
+			else if (objData.EqualObjectName(L"fire_switch") == true)
 			{
 				ROmizu_kori* RObject;
 				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
@@ -194,6 +215,25 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObject->SetFrontOrBack(CReversibleObject::enBack);
 				return true;
 			}
+			//nail_bar_switch
+			else if (objData.EqualObjectName(L"nail_switch") == true)
+			{
+			ROnail_bar* RObject;
+			RObject = NewGO<ROnail_bar>(0, "nail_bar");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			//スイッチの処理
+			return true;
+			}
+			else if (objData.EqualObjectName(L"bar_switch") == true)
+			{
+			ROnail_bar* RObject;
+			RObject = NewGO<ROnail_bar>(0, "nail_bar");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			//スイッチの処理
+			return true;
+			}
 			//axe_pickaxe
 			else if (objData.EqualObjectName(L"axe") == true)
 			{
@@ -220,6 +260,59 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObject->SetFrontOrBack(CReversibleObject::enFront);
 				return true;
 			}
+			//key_padlock
+			else if (objData.EqualObjectName(L"key") == true)
+			{
+			ROkey_padlock* RObject;
+			RObject = NewGO<ROkey_padlock>(0, "key");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"padlock") == true)
+			{
+			ROkey_padlock* RObject;
+			RObject = NewGO<ROkey_padlock>(0, "padlock");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			return true;
+			}
+			//keymold_padlock_switch
+			else if (objData.EqualObjectName(L"key_switch") == true)
+			{
+			ROkey_padlock* RObject;
+			RObject = NewGO<ROkey_padlock>(0, "key");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			//スイッチの処理
+			return true;
+			}
+			else if (objData.EqualObjectName(L"padlock_switch") == true)
+			{
+			ROkey_padlock* RObject;
+			RObject = NewGO<ROkey_padlock>(0, "padlock");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			//スイッチの処理
+			return true;
+			}
+			//left_right
+			else if (objData.EqualObjectName(L"left") == true)
+			{
+			ROleft_right* RObject;
+			RObject = NewGO<ROleft_right>(0, "left_right");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"right") == true)
+			{
+			ROleft_right* RObject;
+			RObject = NewGO<ROleft_right>(0, "left_right");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			return true;
+			}
 
 			///
 			///
@@ -237,6 +330,14 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				m_goal->SetPosition(objData.position);
 				return true;
 			}
+			//goal_switch
+			else if (objData.EqualObjectName(L"goal_switch") == true)
+			{
+			//ゴールはメンバ変数で保持しておく。
+			m_goal = NewGO<OOgoal>(0, "goal");
+			m_goal->SetPosition(objData.position);
+			return true;
+			}
 			//bigFire
 			else if (objData.EqualObjectName(L"bigFire") == true)
 			{
@@ -244,6 +345,14 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				OObject = NewGO<OObigFire>(0, "bigFire");
 				OObject->SetPosition(objData.position);
 				return true;
+			}
+			//bigFire_switch
+			else if (objData.EqualObjectName(L"bigFire_switch") == true)
+			{
+			OObigFire* OObject;
+			OObject = NewGO<OObigFire>(0, "bigFire");
+			OObject->SetPosition(objData.position);
+			return true;
 			}
 			//wall
 			else if (objData.EqualObjectName(L"wall") == true)
@@ -269,12 +378,69 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				OObject->SetPosition(objData.position);
 				return true;
 			}
+			//box_switch
+			else if (objData.EqualObjectName(L"box_switch") == true)
+			{
+			OObox* OObject;
+			OObject = NewGO<OObox>(0, "box");
+			OObject->SetPosition(objData.position);
+			//スイッチの処理
+			return true;
+			}
 			else if (objData.EqualObjectName(L"transparentSwitch") == true)
 			{
 				OOTransparentSwitch* OObject;
 				OObject = NewGO<OOTransparentSwitch>(0, "transparentSwitch");
 				OObject->SetPosition(objData.position);
 				return true;
+			}
+			//oneway
+			else if (objData.EqualObjectName(L"oneway_left") == true)
+			{
+			OOoneway* OObject;
+			OObject = NewGO<OOoneway>(0, "oneway");
+			OObject->SetPosition(objData.position);
+			OObject->SetLeftOrRight(OOoneway::enLeft);
+			return true;
+			}
+			else if (objData.EqualObjectName(L"oneway_right") == true)
+			{
+			OOoneway* OObject;
+			OObject = NewGO<OOoneway>(0, "oneway");
+			OObject->SetPosition(objData.position);
+			OObject->SetLeftOrRight(OOoneway::enRight);
+			OObject->SetScale({ -1.0f,1.0f,1.0f });
+			return true;
+			}
+			//reverseAll
+			else if (objData.EqualObjectName(L"reverseAll") == true)
+			{
+			OOReverseALL* OObject;
+			OObject = NewGO<OOReverseALL>(0, "oneway");
+			OObject->SetPosition(objData.position);
+			return true;
+			}
+			//switch
+			else if (objData.EqualObjectName(L"switch") == true)
+			{
+			RObird_fish* RObject;
+			RObject = NewGO<RObird_fish>(0, "bird_fish");
+			RObject->SetPosition(objData.position);
+			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			return true;
+			}
+
+			///
+			///
+			/// 「UFO」
+
+			//UFO
+			else if (objData.EqualObjectName(L"UFO") == true)
+			{
+			CUFO* bject;
+			bject = NewGO<CUFO>(0, "UFO");
+			bject->SetPosition(objData.position);
+			return true;
 			}
 
 
@@ -501,10 +667,7 @@ void IStageBase::Quit()
 /// </summary>
 void IStageBase::Goal()
 {
-	//後で直す
-	//フレーム数ではなくて時間にする
-
-
+	m_player->GetPosition();
 	//ゴールした後の時間を計測する	//デルタタイムを掛ける
 	m_goalTimer += GameTime().GetFrameDeltaTime();
 

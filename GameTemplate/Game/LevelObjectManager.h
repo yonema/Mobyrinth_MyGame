@@ -231,8 +231,11 @@ public:		//ここのメンバ関数を主に使う
 	/// <returns>オブジェクトタイプ</returns>
 	const int GetNearestObjectType();
 
-	//デバック用
-	//後で消す
+
+	/// <summary>
+	/// 配置していあるレベルオブジェクトたちの参照のベクター
+	/// </summary>
+	/// <returns>レベルオブジェクトたちの参照のベクター</returns>
 	std::vector<ILevelObjectBase*> GetLevelObjects()
 	{
 		return m_levelObjects;

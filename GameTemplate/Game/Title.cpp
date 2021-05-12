@@ -12,54 +12,76 @@ bool Title::Start()
 	m_stageTitle->SetStartBGM(false);
 	m_stageTitle->SetWipeInFlag(m_wipeInFlag);
 
-
-	//フォントの配置
-	const float leftSide = -100.0f;		//左端
-	const float UpSide = 300.0f;		//上端
-	const float DownSide = -300.0f;		//下端
-	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
-
-
-	m_level2D.Init("Assets/level2D/Stage_selection.casl", [&](Level2DObjectData& objdata)
+	//レベル2Dの初期化
+	m_level2D.Init("Assets/level2D/Stage_selection2.casl", [&](Level2DObjectData& objdata)
 		{
 			//名前が一致でフックする
+
+			//オブジェクトネームに"Stage_icon"があったら
+			if (std::strstr(objdata.name, "Stage_icon") != NULL)
+			{
+				//番号（"n"）の文字列があるアドレスを返す
+				//さらに、その次のポインタを指して、数字を得る
+				std::string buff = (std::strstr(objdata.name, "n")) + 1;
+				//stringをintに変換
+				int num = atoi(buff.c_str());
+				//ステージ名は1から始まるけど、配列は0から始まるから
+				//デクリメントする
+				num--;
+
+				//すでに作られていないかチェック
+				if (m_stageName[num] == nullptr)
+				{
+					//作られていないなら
+
+					//読み込んだ番号にステージのアイコンを生成
+					m_stageName[num] = NewGO<CSpriteRender>(1);
+					m_stageName[num]->Init(objdata.ddsFilePath, objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+					m_stageName[num]->SetScale(objdata.scale);
+					m_stageName[num]->SetPosition(objdata.position);
+				}
+				else
+					//すでに作られていたら、そのまま表示
+					return false;
+
+				return true;
+			}
+			//オブジェクトネームに"Stage_clear"があったら
+			else if (std::strstr(objdata.name, "Stage_clear") != NULL)
+			{
+				//番号（"r"）の文字列があるアドレスを返す
+				//さらに、その次のポインタを指して、数字を得る
+				std::string buff = (std::strstr(objdata.name, "r")) + 1;
+				//stringをintに変換
+				int num = atoi(buff.c_str());
+				//ステージ名は1から始まるけど、配列は0から始まるから
+				//デクリメントする
+				num--;
+
+				//すでに作られていないかチェック
+				if (m_stageClear[num] == nullptr)
+				{
+					//作られていないなら
+
+					//読み込んだ番号にステージクリアのアイコンを生成
+					m_stageClear[num] = NewGO<CSpriteRender>(1);
+					m_stageClear[num]->Init(objdata.ddsFilePath, objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+					m_stageClear[num]->SetScale(objdata.scale);
+					m_stageClear[num]->SetPosition(objdata.position);
+				}
+				else
+					//すでに作られていたら、そのまま表示
+					return false;
+
+				return true;
+			}
 			//カーソル
-			if (objdata.EqualObjectName("cursor"))
+			else if (objdata.EqualObjectName("cursor"))
 			{
 				m_cursor = NewGO<CSpriteRender>(1);
 				m_cursor->Init("Assets/level2D/cursor.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_cursor->SetScale(objdata.scale);
 				m_cursor->SetPosition(objdata.position);
-				//フックしたらtrueを戻す
-				return true;
-			}
-			//stage_kari
-			if (objdata.EqualObjectName("Stage_icon1"))
-			{
-				m_stageName[enStage_kari] = NewGO<CSpriteRender>(1);
-				m_stageName[enStage_kari]->Init("Assets/level2D/Stage_icon1.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-				m_stageName[enStage_kari]->SetScale(objdata.scale);
-				m_stageName[enStage_kari]->SetPosition(objdata.position);
-				//フックしたらtrueを戻す
-				return true;
-			}
-			//stage_proto01
-			if (objdata.EqualObjectName("Stage_icon2"))
-			{
-				m_stageName[enStageProto01] = NewGO<CSpriteRender>(1);
-				m_stageName[enStageProto01]->Init("Assets/level2D/Stage_icon2.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-				m_stageName[enStageProto01]->SetScale(objdata.scale);
-				m_stageName[enStageProto01]->SetPosition(objdata.position);
-				//フックしたらtrueを戻す
-				return true;
-			}
-			//stage_proto02
-			if (objdata.EqualObjectName("Stage_icon3"))
-			{
-				m_stageName[enStageProto02] = NewGO<CSpriteRender>(1);
-				m_stageName[enStageProto02]->Init("Assets/level2D/Stage_icon3.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-				m_stageName[enStageProto02]->SetScale(objdata.scale);
-				m_stageName[enStageProto02]->SetPosition(objdata.position);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -97,6 +119,7 @@ bool Title::Start()
 	for (int i = 0; i < enStageNum; i++)
 	{
 		m_stageName[i]->Deactivate();
+		m_stageClear[i]->Deactivate();
 	}
 
 	m_cursor->Deactivate();
@@ -133,6 +156,12 @@ bool Title::Start()
 			return false;
 		});
 
+	//ステージのアイコンからカーソルへのベクトルを設定
+	m_stageIconToCursorVec = m_cursor->GetPosition() - m_stageName[enStage1]->GetPosition();
+
+
+
+
 	//buttonASEのサウンドキューを生成する
 	m_buttonASE = NewGO<CSoundCue>(0);
 	//buttonASEのサウンドキューを、waveファイルを指定して初期化する。
@@ -166,6 +195,7 @@ Title::~Title()
 	for (int i = 0; i < enStageNum; i++)
 	{
 		DeleteGO(m_stageName[i]);
+		DeleteGO(m_stageClear[i]);
 	}
 	//DeleteGO(m_arrow);
 
@@ -270,7 +300,7 @@ void Title::TitleScreen()
 		//ステージのステート（状態）をステージセレクトに移行する。
 		m_stageState = enStageSelect;
 		//ステージ選択状態を初期設定にする。
-		m_stageSelectState = enStage_kari;
+		m_stageSelectState = enStage1;
 
 		//タイトル画面用のスプライトレンダラーを無効化して非表示にする
 		m_title->Deactivate();
@@ -281,6 +311,7 @@ void Title::TitleScreen()
 		for (int i = 0; i < enStageNum; i++)
 		{
 			m_stageName[i]->Activate();
+			m_stageClear[i]->Activate();
 		}
 
 		m_cursor->Activate();
@@ -311,45 +342,148 @@ void Title::TitleScreen()
 void Title::StageSelect()
 {
 	//ボタンの入力を調べる
-	if (g_pad[0]->GetLStickXF() == 0.0f && !g_pad[0]->IsPressAnyKey())
+	if (g_pad[0]->GetLStickXF() == 0.0f && g_pad[0]->GetLStickYF() == 0.0f &&
+		!g_pad[0]->IsPressAnyKey())
 	{
 		//何も入力がない状態
 		//ボタンを押すことができるようにする（連続入力防止用）
 		m_buttonFlag = true;
 	}
+
 	if (g_pad[0]->GetLStickXF() > 0.5f && m_buttonFlag)
 	{
 		//右を入力
+
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
-
-		//selectSEをループ再生をオフで再生する。
-		m_selectSE->Play(false);
 		
-		//ステージセレクトのステートを加算する
-		m_stageSelectState++;
-		//ステートが最大の値になったら、それより大きくならないようにする
-		if (m_stageSelectState > enStageProto02)
+		//ステージセレクトのステートが特定の時のみ
+		if (m_stageSelectState == enStage3 || m_stageSelectState == enStage6)
 		{
-			m_stageSelectState = enStageProto02;
+			//ステージセレクトのステートがステージ3かステージ6の時
+
+			//ステージセレクトのステートを加算する
+			m_stageSelectState++;
+			//selectSEをループ再生をオフで再生する。
+			m_selectSE->Play(false);
 		}
+		else
+		{
+			//該当しない時
+
+			//SEを鳴らさないか、
+			//m_selectSEとは別の音を鳴らしたい
+		}
+
+
 	}
 	else if (g_pad[0]->GetLStickXF() < -0.5f && m_buttonFlag)
 	{
 		//左を入力
+
+		//ボタンを押すことができないようにする（連続入力防止用）
+		m_buttonFlag = false;
+		
+		//ステージセレクトのステートが特定の時のみ
+		if (m_stageSelectState == enStage4 || m_stageSelectState == enStage7)
+		{
+			//ステージセレクトのステートがステージ4かステージ7の時
+
+			//ステージセレクトのステートを減算する
+			m_stageSelectState--;
+			//selectSEをループ再生をオフで再生する。
+			m_selectSE->Play(false);
+		}
+		else
+		{
+			//該当しない時
+
+			//SEを鳴らさないか、
+			//m_selectSEとは別の音を鳴らしたい
+		}
+
+	}
+	else if (g_pad[0]->GetLStickYF() > 0.5f && m_buttonFlag)
+	{
+		//上を入力
+
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
 
-		//selectSEをループ再生をオフで再生する。
-		m_selectSE->Play(false);
-		
-		//ステージセレクトのステートを減算する
-		m_stageSelectState--;
-		//ステートが最小の値になったら、それより小さくならないようにする
-		if (m_stageSelectState <= enStage_kari)
+		//ステージセレクトのステートが特定の時のみ
+		if (m_stageSelectState != enStage3 && m_stageSelectState != enStage4 &&
+			m_stageSelectState != enStage9)
 		{
-			m_stageSelectState = enStage_kari;
+			//ステージセレクトのステートがステージ3かつステージ4かつステージ9ではない時
+
+			//さらにステージセレクトのステートで加算するか減算するか決める
+			if (m_stageSelectState == enStage5 || m_stageSelectState == enStage6)
+			{
+				//ステージセレクトのステートがステージ5かステージ6の時
+
+				//ステージセレクトのステートを減算する
+				m_stageSelectState--;
+			}
+			else
+			{
+				//ステージセレクトのステートがステージ4かステージ5以外の時
+
+				//ステージセレクトのステートを加算する
+				m_stageSelectState++;
+			}
+
+			//selectSEをループ再生をオフで再生する。
+			m_selectSE->Play(false);
 		}
+		else
+		{
+			//該当しない時
+
+			//SEを鳴らさないか、
+			//m_selectSEとは別の音を鳴らしたい
+		}
+
+	}
+	else if (g_pad[0]->GetLStickYF() < -0.5f && m_buttonFlag)
+	{
+		//下を入力
+
+		//ボタンを押すことができないようにする（連続入力防止用）
+		m_buttonFlag = false;
+
+		//ステージセレクトのステートが特定の時のみ
+		if (m_stageSelectState != enStage1 && m_stageSelectState != enStage6 &&
+			m_stageSelectState != enStage7)
+		{
+			//ステージセレクトのステートがステージ1かつステージ6かつステージ7ではない時
+
+			//さらにステージセレクトのステートで加算するか減算するか決める
+			if (m_stageSelectState == enStage4 || m_stageSelectState == enStage5)
+			{
+				//ステージセレクトのステートがステージ4かステージ5の時
+
+				//ステージセレクトのステートを加算する
+				m_stageSelectState++;
+			}
+			else
+			{
+				//ステージセレクトのステートがステージ4かステージ5以外の時
+
+				//ステージセレクトのステートを減算する
+				m_stageSelectState--;
+			}
+
+			//selectSEをループ再生をオフで再生する。
+			m_selectSE->Play(false);
+		}
+		else
+		{
+			//該当しない時
+
+			//SEを鳴らさないか、
+			//m_selectSEとは別の音を鳴らしたい
+		}
+
 	}
 	else if (g_pad[0]->IsTrigger(enButtonA) && m_buttonFlag)
 	{
@@ -383,6 +517,7 @@ void Title::StageSelect()
 		for (int i = 0; i < enStageNum; i++)
 		{
 			m_stageName[i]->Deactivate();
+			m_stageClear[i]->Activate();
 		}
 		m_cursor->Deactivate();
 		m_stageSelection->Deactivate();
@@ -398,17 +533,13 @@ void Title::StageSelect()
 	}
 
 
-	//フォントの配置
-	const float leftSide = -100.0f;		//左端
-	const float UpSide = 300.0f;		//上端
-	const float DownSide = -300.0f;		//下端
-	const float BetweenLine = (DownSide - UpSide) / enStageNum;	//フォントの配置の幅
 	//カーソル用の画像の場所を設定する
-
-	m_cursor->SetPosition({ -400.0f,m_stageName[m_stageSelectState]->GetPositionY(),0.0f });
-  	m_cursor->SetPosition({ m_stageName[m_stageSelectState]->GetPositionX() - 100.0f,
-							m_stageName[m_stageSelectState]->GetPositionY() + 100.0f,
-							0.0f });
+	//m_cursor->SetPosition({ -400.0f,m_stageName[m_stageSelectState]->GetPositionY(),0.0f });
+ // 	m_cursor->SetPosition({ m_stageName[m_stageSelectState]->GetPositionX() - 100.0f,
+	//						m_stageName[m_stageSelectState]->GetPositionY() + 100.0f,
+	//						0.0f });
+	m_cursor->SetPosition
+	(m_stageName[m_stageSelectState]->GetPosition() + m_stageIconToCursorVec);
 }
 
 //ステージを決定した時の処理
@@ -421,21 +552,54 @@ void Title::StageDecision()
 	////////////////////////////////////////////////////////////
 	//ステージを新しく作成した場合、ここでNewGOを行う。
 	////////////////////////////////////////////////////////////
+
+	CStage* stage = nullptr;	//ステージのポインタ
+
 	//ステージセレクトのステートによって生成するステージを振り分ける
 	switch (m_stageSelectState)
 	{
-	case enStage_kari:
-		NewGO<stage_kari>(0, "stage_kari");
+	case enStage1:
+		//ステージを生成
+		stage = NewGO<CStage>(0, "stage");
+		//ステージの初期化、レベルのファイルパスを指定する。
+		stage->Init("Assets/level/O_easy.tkl");
 		break;
-	case enStageProto01:
-		NewGO<stage_proto01>(0, "stage_proto01");
+	case enStage2:
+		stage = NewGO<CStage>(0, "stage");
+		stage->Init("Assets/level/Y_easy.tkl");
 		break;
-	case enStageProto02:
-		NewGO<stage_proto02>(0, "stage_proto02");
+	case enStage3:
+		stage = NewGO<CStage>(0, "stage");
+		stage->Init("Assets/level/T_easy.tkl");
+		break;
+	case enStage4:
+		stage = NewGO<CStage>(0, "stage");
+		stage->Init("Assets/level/O_normal.tkl");
+		break;
+	case enStage5:
+		stage = NewGO<CStage>(0, "stage");
+		stage->Init("Assets/level/T_normal.tkl");
+		break;
+	case enStage6:
+		stage = NewGO<CStage>(0, "stage");
+		stage->Init("Assets/level/Y_normal.tkl");
+		break;
+	case enStage7:
+		stage = NewGO<CStage>(0, "stage");
+		stage->Init("Assets/level/O_hard.tkl");
+		break;
+	case enStage8:
+		stage = NewGO<CStage>(0, "stage");
+		stage->Init("Assets/level/T_hard.tkl");
+		break;
+	case enStage9:
+		stage = NewGO<CStage>(0, "stage");
+		stage->Init("Assets/level/Y_hard.tkl");
 		break;
 	default:
 		break;
 	}
+
 	//自身のオブジェクトを破棄する
 	Release();
 

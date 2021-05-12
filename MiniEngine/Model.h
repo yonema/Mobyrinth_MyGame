@@ -147,22 +147,15 @@ public:
 		m_meshParts.SetEmissionColor(color);
 	}
 
+	/// <summary>
+	/// 乗算カラーを設定する
+	/// </summary>
+	/// <param name="color">乗算カラー</param>
+	void SetMulColor(const Vector4& color)
+	{
+		m_meshParts.SetMulColor(color);
+	}
 
-	//デバック用
-	//後で消す
-	const float getDbg()const
-	{
-		return m_dbg;
-	}
-	const Vector3 getDbgV1()const
-	{
-		return m_dbgV1;
-	}
-	const Vector3 getDbgV2()const
-	{
-		return m_dbgV2;
-	}
-	//デバック用ここまで
 
 private:
 

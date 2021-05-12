@@ -13,8 +13,6 @@ public:
 		NewGO<stage_kari>(0);
 	}
 
-private:	//データメンバ
-	CUFO* m_ufo = nullptr;
-	OOReverseALL* m_reverseALL = nullptr;
+private:
 };
 

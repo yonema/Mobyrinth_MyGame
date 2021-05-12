@@ -42,6 +42,22 @@ protected:	//ここのメンバ関数を主に使う
 		m_modelRender->SetEmissionColor(color);
 	}
 
+	/// <summary>
+	/// ゲームオブジェクトをアクティブにする
+	/// </summary>
+	void Activate()
+	{
+		m_modelRender->Activate();
+	}
+
+	/// <summary>
+	/// ゲームオブジェクトを非アクティブにする
+	/// </summary>
+	void Deactivate()
+	{
+		m_modelRender->Deactivate();
+	}
+
 private:	//データメンバ
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
 };
