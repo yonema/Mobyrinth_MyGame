@@ -176,7 +176,7 @@ void CReversibleObject::PureVirtualUpdate()
 
 
 	//オブジェクトが持てない状態なら、この関switch文の処理を行わない。
-	if (m_flagHeld == true) {
+	if (GetFlagHeld() == true) {
 		/// <summary>
 		/// ステート（状態）アップデートを割り振る
 		/// </summary>
@@ -256,6 +256,7 @@ void CReversibleObject::CheckPlayer()
 				m_objectState = enHeldPlayer;
 				//プレイヤーをオブジェクトを持ってる状態にする
 				m_pPlayer->SetHoldObject(true, this);
+				SetFlagHeldPlayer(true);
 				//オブジェクトが重なっているかを判定する処理を動かすフラグをtrueにする
 				m_flagOverlap = true;
 			}
@@ -352,6 +353,7 @@ void CReversibleObject::HeldPlayer()
 		//ステートを下に投げる状態へ
 		m_objectState = enThrownDown;
 		m_objectAction = enThrownDown;
+		SetFlagHeldPlayer(false);
 	}
 	//オブジェクトをプレイヤーの足元に置く。
 	else if (g_pad[0]->IsTrigger(enButtonB))
@@ -359,6 +361,7 @@ void CReversibleObject::HeldPlayer()
 		//ステートをキャンセル状態へ
 		m_objectState = enCancel;
 		m_objectAction = enCancel;
+		SetFlagHeldPlayer(false);
 	}
 	//オブジェクトを横に投げる処理
 	//else if (g_pad[0]->IsTrigger(enButtonX))
@@ -756,6 +759,7 @@ void CReversibleObject::CheckObjectsOverlap()
 			break;
 		case enCancel:
 			m_objectState = enHeldPlayer;
+			SetFlagHeldPlayer(true);
 			break;
 		case enRepelled:
 			//横に弾いた先で重なってたら、もう一回横に弾く

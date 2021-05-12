@@ -26,7 +26,27 @@ void OOTransparentSwitch::UpdateSub()
 			m_flagSwitchOn = false;
 
 			//ここに透明オブジェクトの処理を追加する。
-		
+			//配置してあるすべてのレベルオブジェクトの参照のベクター
+			std::vector<ILevelObjectBase*> levelObjects =
+				CLevelObjectManager::GetInstance()->GetLevelObjects();
+
+			//レベルオブジェクトたちを一つずつ取り出す
+			for (auto lo : levelObjects)
+			{
+				//自分自身の時はスキップ
+				if (lo == this)
+					continue;
+
+				//透明オブジェクトの場合
+				if (GetFlagTransparentObject() == true)
+				{
+					//ここにオブジェクトに対する処理
+					lo->TransparentSwitchOff();
+
+					//オブジェクトを持っている場合
+					lo->SetFlagHeldPlayer(false);
+				}
+			}
 
 
 
@@ -44,7 +64,29 @@ void OOTransparentSwitch::UpdateSub()
 			m_resetTimer = m_resetTimerStartValue;
 
 			//ここに透明オブジェクトの処理を追加する。
+			//配置してあるすべてのレベルオブジェクトの参照のベクター
+			std::vector<ILevelObjectBase*> levelObjects =
+				CLevelObjectManager::GetInstance()->GetLevelObjects();
 
+			//レベルオブジェクトたちを一つずつ取り出す
+			for (auto lo : levelObjects)
+			{
+				//自分自身の時はスキップ
+				if (lo == this)
+					continue;
+
+				//透明オブジェクトの場合
+				if (GetFlagTransparentObject() == true)
+				{
+					//ここにオブジェクトに対する処理
+					lo->TransparentSwitchOn();
+
+					//オブジェクトを持ち上げられるようにする。
+					//lo->SetFlagHeld(true);
+					//オブジェクトの衝突判定を行うようにする。
+					lo->SetFlagIsHit(true);
+				}
+			}
 
 
 

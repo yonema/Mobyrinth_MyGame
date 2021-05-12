@@ -431,13 +431,7 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="RTransparentObject.cpp">
-      <Filter>MyCode\LevelObject\TransparentObject</Filter>
-    </ClCompile>
     <ClCompile Include="TransparentSwitch.cpp">
-      <Filter>MyCode\LevelObject\TransparentObject</Filter>
-    </ClCompile>
-    <ClCompile Include="OTransparentObject.cpp">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
@@ -841,13 +835,7 @@
     <ClInclude Include="StopWatch.h">
       <Filter>MyCode\Timer</Filter>
     </ClInclude>
-    <ClInclude Include="RTransparentObject.h">
-      <Filter>MyCode\LevelObject\TransparentObject</Filter>
-    </ClInclude>
     <ClInclude Include="TransparentSwitch.h">
-      <Filter>MyCode\LevelObject\TransparentObject</Filter>
-    </ClInclude>
-    <ClInclude Include="OTransparentObject.h">
       <Filter>MyCode\LevelObject\TransparentObject</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
