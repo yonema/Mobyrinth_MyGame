@@ -302,7 +302,6 @@
     <ClCompile Include="UFO.cpp" />
     <ClCompile Include="UFOLandingPoint.cpp" />
     <ClCompile Include="GameTime.cpp" />
-    <ClCompile Include="OTransparentObject.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="ShadowModel.cpp" />
@@ -367,7 +366,6 @@
     <ClCompile Include="testModel.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TklFile.cpp" />
-    <ClCompile Include="RTransparentObject.cpp" />
     <ClCompile Include="TransparentSwitch.cpp" />
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="WaveFileBank.cpp" />
@@ -445,7 +443,6 @@
     <ClInclude Include="UFO.h" />
     <ClInclude Include="UFOLandingPoint.h" />
     <ClInclude Include="GameTime.h" />
-    <ClInclude Include="OTransparentObject.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="SceneChange.h" />
     <ClInclude Include="ShadowModel.h" />
@@ -505,7 +502,6 @@
     <ClInclude Include="testModel.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TklFile.h" />
-    <ClInclude Include="RTransparentObject.h" />
     <ClInclude Include="TransparentSwitch.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />

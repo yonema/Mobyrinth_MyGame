@@ -35,7 +35,7 @@ private:	//privateなオーバーライドしてほしいメンバ関数
 	virtual void QuerySub()
 	{
 		//重なっているかを判定しない場合、この関数の処理をしない
-		if (m_flagIsHit == false) {
+		if (GetFlagIsHit() == false) {
 			return;
 		}
 	};
@@ -294,22 +294,5 @@ private:	//データメンバ
 protected:
 	bool m_flagOverlap = true; //このオブジェクトが重なっているかを判定する処理を動かすかどうか
 
-
-	////////////////////////////////////////////////////////////
-	// TransparentObjectに関係する関数、変数
-	////////////////////////////////////////////////////////////
-
-public: //TransparentObject関連の関数
-	/// <summary>
-	/// オブジェクトが現在持ち上げられるかのフラグの値を代入する。
-	/// </summary>
-	/// <param name="b">オブジェクトが現在持てるか</param>
-	void SetFlagHeld(bool b)
-	{
-		m_flagHeld = b;
-	}
-
-private: //TransparentObject関連の変数
-	bool m_flagHeld = true; //オブジェクトが現在持ち上げられるかのフラグ
 };
 

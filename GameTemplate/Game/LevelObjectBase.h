@@ -32,7 +32,7 @@ protected:	//ここのメンバ関数を主に使う
 	void CheckRotation();
 
 public:		//ここのメンバ関数を主に使う
-	
+
 	/// <summary>
 	///	場所を設定する
 	/// </summary>
@@ -82,7 +82,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 拡大を取得
 	/// </summary>
 	/// <returns>拡大</returns>
-	const Vector3& GetScale()const 
+	const Vector3& GetScale()const
 	{
 		return m_scale;
 	}
@@ -221,7 +221,7 @@ protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
 	Quaternion m_rotation = g_quatIdentity;	//回転
 	Vector3 m_scale = g_vec3One;			//拡大
 	Player* m_pPlayer = nullptr;			//プレイヤーのポインタ
-	
+
 
 private:	//データメンバ
 	int m_objectType = enEmpty;				//タイプ
@@ -267,15 +267,74 @@ public: //Set関数
 
 
 public: //透明スイッチに使用する関数
-	void TransparentSwitchOn();
+	/// <summary>
+	/// 透明スイッチが押されたときに使用される関数
+	/// </summary>
+	void TransparentSwitchOn()
+	{
+		//オブジェクトを持ち上げられるようにする。
+		m_flagHeld = true;
+		//オブジェクトの衝突判定を行うようにする。
+		m_flagIsHit = true;
+	}
 
+	/// <summary>
+	/// 透明スイッチの効果が消えたときに使用される関数
+	/// </summary>
+	void TransparentSwitchOff()
+	{
+		//オブジェクトを持ち上げられないようにする。
+		m_flagHeld = false;
+		//オブジェクトの衝突判定を行わないようにする。
+		m_flagIsHit = false;
+		//位置、回転情報を初期状態に戻す。
+		m_position = m_startPosition;
+		m_rotation = m_startRotation;
+	}
 
-	void TransparentSwitchOff();
+	/// <summary>
+	/// オブジェクトが現在持ち上げられるかのフラグの値を代入する。
+	/// </summary>
+	/// <param name="b">オブジェクトが現在持てるか</param>
+	void SetFlagHeld(bool b)
+	{
+		m_flagHeld = b;
+	}
 
+	bool GetFlagHeld()
+	{
+		return m_flagHeld;
+	}
 
-protected: //メンバ変数
+	/// <summary>
+	/// 重なっているかの判定の処理を行うか確認するフラグの値を取得
+	/// </summary>
+	/// <returns>m_flagIsHitの値</returns>
+	bool GetFlagIsHit()
+	{
+		return m_flagIsHit;
+	}
+
+	void SetFlagHeldPlayer(bool b)
+	{
+		m_flagHeldPlayer = b;
+	}
+
+	bool GetFlagHeldPlayer()
+	{
+		return m_flagHeldPlayer;
+	}
+
+	bool GetFlagTransparentObject()
+	{
+		return m_flagTransparentObject;
+	}
+
+private: //メンバ変数
 	bool m_flagTransparentObject = false; //透明オブジェクトどうかのフラグ
 	bool m_flagIsHit = true; //重なっているかの判定の処理を行うか確認するフラグ
+	bool m_flagHeld = true; //オブジェクトが現在持ち上げられるかのフラグ
+	bool m_flagHeldPlayer = false; //現在このオブジェクトが持たれているかのフラグ
 
 	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //オブジェクトの初期位置を保存する位置情報変数
 	Quaternion m_startRotation = g_quatIdentity; //オブジェクトの初期回転を保存する回転情報変数
