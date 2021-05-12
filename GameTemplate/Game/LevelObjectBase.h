@@ -274,6 +274,12 @@ public: //Set関数
 		//リセット時に使用する位置、回転情報を初期化
 		m_startPosition = m_position;
 		m_startRotation = m_rotation;
+
+		//オブジェクトを半透明にする。
+		//GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+		//GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+		//上記の半透明にする処理がうまく動かなかった場合、
+		//ChangeTransparent()関数を使ってください。
 	}
 
 
@@ -340,6 +346,7 @@ public: //透明スイッチに使用する関数
 	{
 		return m_flagTransparentObject;
 	}
+
 
 private: //メンバ変数
 	bool m_flagTransparentObject = false; //透明オブジェクトどうかのフラグ

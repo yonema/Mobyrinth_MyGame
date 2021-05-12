@@ -9,6 +9,9 @@ bool OOTransparentSwitch::StartSub()
 	//OBBWorldに自身のOBBの登録を消去させる
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
 
+	//透明オブジェクトを半透明にする。
+	ChangeTransparent();
+
 	return true;
 }
 
@@ -48,7 +51,8 @@ void OOTransparentSwitch::UpdateSub()
 				}
 			}
 
-
+			//透明オブジェクトを半透明にする。
+			ChangeTransparent();
 
 
 		}
@@ -88,8 +92,8 @@ void OOTransparentSwitch::UpdateSub()
 				}
 			}
 
-
-
+			//透明オブジェクトを実体にする。
+			ChangeEntity();
 
 		}
 	}
