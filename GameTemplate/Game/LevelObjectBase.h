@@ -250,9 +250,35 @@ public: //Set関数
 		return m_flagIsHit;
 	}
 
+	/// <summary>
+	/// 透明オブジェクトに使用するデータを初期化する。
+	/// </summary>
+	void SetTransparentObject()
+	{
+		//透明オブジェクト判定に使用するフラグをtrueにする。
+		m_flagTransparentObject = true;
+		//オブジェクトの重なっている判定を行わないようにする。
+		m_flagIsHit = false;
+		//リセット時に使用する位置、回転情報を初期化
+		m_startPosition = m_position;
+		m_startRotation = m_rotation;
+	}
 
-private:
+
+public: //透明スイッチに使用する関数
+	void TransparentSwitchOn();
+
+
+	void TransparentSwitchOff();
+
+
+protected: //メンバ変数
+	bool m_flagTransparentObject = false; //透明オブジェクトどうかのフラグ
 	bool m_flagIsHit = true; //重なっているかの判定の処理を行うか確認するフラグ
+
+	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //オブジェクトの初期位置を保存する位置情報変数
+	Quaternion m_startRotation = g_quatIdentity; //オブジェクトの初期回転を保存する回転情報変数
+
 
 
 

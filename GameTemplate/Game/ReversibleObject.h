@@ -32,7 +32,13 @@ private:	//privateなオーバーライドしてほしいメンバ関数
 	/// ここでQueryLOsを呼んでオブジェクト同士の反応を書く。
 	/// 例はROnail_barを参照
 	/// </summary>
-	virtual void QuerySub() {};
+	virtual void QuerySub()
+	{
+		//重なっているかを判定しない場合、この関数の処理をしない
+		if (m_flagIsHit == false) {
+			return;
+		}
+	};
 
 
 protected:	//ここのメンバ関数を主に使う
