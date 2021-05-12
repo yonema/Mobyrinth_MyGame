@@ -1,1 +1,1 @@
-MakeSpriteFont.exe "ロンド B スクエア" myfile.spritefont /FontSize:32
+MakeSpriteFont.exe "BIZ UD明朝 Medium" myfile.spritefont /FontSize:32

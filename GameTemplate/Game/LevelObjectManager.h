@@ -229,7 +229,7 @@ public:		//ここのメンバ関数を主に使う
 	/// プレイヤーに一番近いオブジェクトのオブジェクトタイプを戻す
 	/// </summary>
 	/// <returns>オブジェクトタイプ</returns>
-	const int GetNearestObjectType();
+	const int GetNearestObjectType(const float nearDist = 500.0f);
 
 
 	/// <summary>

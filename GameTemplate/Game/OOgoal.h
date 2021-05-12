@@ -1,6 +1,6 @@
 #pragma once
 #include "ObstacleObject.h"
-#include "FontRender.h"
+#include "SpriteRender.h"
 #include "effect/Effect.h"
 
 /// <summary>
@@ -26,8 +26,8 @@ public:		//メンバ関数
 	}
 
 private:	//データメンバ
-	CFontRender* m_fontRender = nullptr;	//ゴールした時のスプライト
-	bool m_isGoal = false;					//ゴール判定
+	CSpriteRender* m_spriteRender = nullptr;	//ゴールした時のスプライト
+	bool m_isGoal = false;						//ゴール判定
 	Effect* m_effect = nullptr;
 };
 

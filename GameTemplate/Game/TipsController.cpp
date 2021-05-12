@@ -11,7 +11,7 @@ bool CTipsController::Start()
 void CTipsController::Update()
 {
 	//プレイヤーに一番近いオブジェクトのタイプを取得
-	int objectType = CLevelObjectManager::GetInstance()->GetNearestObjectType();
+	int objectType = CLevelObjectManager::GetInstance()->GetNearestObjectType(1000.0f);
 
 	//Tipsにセットする
 	m_tips.SetText(objectType);

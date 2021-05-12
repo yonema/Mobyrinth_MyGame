@@ -27,6 +27,11 @@ public:		//メンバ関数
 	/// </summary>
 	void ClearText();
 
+	/// <summary>
+	/// タイトル画面時の処理にする
+	/// </summary>
+	void SetTitleMode();
+
 private:	//privateなメンバ関数
 
 	/// <summary>

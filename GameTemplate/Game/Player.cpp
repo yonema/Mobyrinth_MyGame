@@ -939,6 +939,7 @@ void Player::Fall()
 	m_onWayPosition = m_position;
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+	m_finalWPRot = g_quatIdentity;
 }
 
 

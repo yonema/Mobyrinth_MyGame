@@ -8,18 +8,13 @@ bool OOgoal::StartSub()
 	Init("Assets/modelData/goal.tkm", enGoal);
 
 	//フォントレンダラーの生成
-	m_fontRender = NewGO<CFontRender>(0);
+	m_spriteRender = NewGO<CSpriteRender>(2);
 	//初期化
-	m_fontRender->Init(L"ゴール！",
-		{-200.0f,100.0f},
-		{1.0f,1.0f,0.0f,1.0f},
-		0.0f,
-		3.0f
-		);
-	//ポストレンダラーで描画する
-	m_fontRender->SetPostRenderFlag(true);
+	m_spriteRender->Init
+	("Assets/Image/Clear.DDS", 1024.0f, 512.0f, {0.5f,0.5f}, AlphaBlendMode_Trans);
+
 	//無効化する
-	m_fontRender->Deactivate();
+	m_spriteRender->Deactivate();
 
 	//OBBWorldに自身のOBBの登録を消去させる
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
@@ -38,7 +33,7 @@ bool OOgoal::StartSub()
 //デストラクタ
 OOgoal::~OOgoal()
 {
-	DeleteGO(m_fontRender);
+	DeleteGO(m_spriteRender);
 	DeleteGO(m_effect);
 }
 
@@ -51,7 +46,7 @@ void OOgoal::UpdateSub()
 		//ゴール状態にする
 		m_isGoal = true;
 		//フォントレンダラーを有効化する
-		m_fontRender->Activate();
+		m_spriteRender->Activate();
 	}
 
 }

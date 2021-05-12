@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "StageBase.h"
 #include "Title.h"
 
@@ -33,12 +33,22 @@ bool IStageBase::Start()
 	m_sky->SetScale(1000.0f);
 
 
-
+	//キャパシティを表示するスプライトの生成と初期化
 	m_capacityDisplaySR = NewGO<CSpriteRender>(0);
 	m_capacityDisplaySR->Init
-	("Assets/image/Capacity_display.DDS", 512.0f * 1.3f, 256.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-	m_capacityDisplaySR->SetPosition({ -450.0f, 240.0f,0.0f });
+	("Assets/image/Capacity_display.DDS", 512.0f * 1.0f, 256.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+	m_capacityDisplaySR->SetPosition({ -490.0f, 240.0f,0.0f });
 	m_capacityDisplaySR->SetPostRenderFlag(true);
+	//タイトル画面か？
+	if (m_titlePlayer)
+	{
+		//タイトル画面なら
+		//非表示にする
+		m_capacityDisplaySR->Deactivate();
+	}
+
+
+
 	//表側と裏側の反転オブジェクトの数を表示する
 	//フォントレンダラーの初期化
 	for (int i = 0; i < 2; i++)
@@ -52,11 +62,26 @@ bool IStageBase::Start()
 		{ -600.0f,300.0f }, { 1.0f,0.0f,0.0f,1.0f }, 0.0f, scale, { 0.5f,0.5f });
 	m_roNumFR[1]->Init(L"", 
 		{ -600.0f,240.0f }, { 0.0f,0.0f,1.0f,1.0f }, 0.0f, scale, { 0.5f,0.5f });
+	//タイトル画面か？
+	if (m_titlePlayer)
+	{
+		//タイトル画面なら
 
+		//非表示にする
+		m_roNumFR[0]->Deactivate();
+		m_roNumFR[1]->Deactivate();
+	}
 
 	//Tipsコントローラーの生成
 	m_tipsController = NewGO<CTipsController>(0);
+	//タイトル画面か？
+	if (m_titlePlayer)
+	{
+		//タイトル画面なら
 
+		//Tipsをタイトルモードにする
+		m_tipsController->SetTitleMode();
+	}
 	return StartSub();
 }
 
@@ -627,9 +652,10 @@ void IStageBase::Update()
 	const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
 	const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
 	//テキストをセット
-	swprintf(text, L"front:%d/%d", num[0], maxNum[0]);
+	std::wstring wString = L"あ";
+	swprintf(text, L"表:%d/%d", num[0], maxNum[0]);
 	m_roNumFR[0]->SetText(text);
-	swprintf(text, L"back :%d/%d", num[1], maxNum[1]);
+	swprintf(text, L"裏:%d/%d", num[1], maxNum[1]);
 	m_roNumFR[1]->SetText(text);
 
 
