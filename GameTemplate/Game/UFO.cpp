@@ -29,7 +29,7 @@ bool CUFO::PureVirtualStart()
 	m_spotLightUp->SetPosition(m_position + up);
 	m_spotLightUp->SetColor({ 300.0f, 300.0f, 0.0f, 0.0f });
 	m_spotLightUp->SetRange(500.0f);
-	m_spotLightUp->SetAngle(90.0f);
+	m_spotLightUp->SetAngle(/*90.0f*/3.14f * 0.5f);
 	m_spotLightUp->SetDirection(g_vec3Down);
 
 
@@ -43,6 +43,7 @@ bool CUFO::PureVirtualStart()
 	m_spotLightDown->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	m_spotLightDown->SetRange(500.0f);
 	m_spotLightDown->SetDirection(g_vec3Down);
+	m_spotLightDown->SetAngle(3.14f * 0.25f);
 
 	//UFO‚ÌŒõü‚Ìƒ‚ƒfƒ‹‚Ì¶¬‚Æ‰Šú‰»
 	m_ufoLight = NewGO<CModelRender>(1);

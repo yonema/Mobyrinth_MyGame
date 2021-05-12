@@ -195,11 +195,14 @@ void CTips::SetText(const int textType)
 	//wchar_t型のテキスト
 	wchar_t text[m_maxTextSize];
 	//char型のデータメンバをwchar_t型に変換する
-	char mText[256];
-	printf(mText,m_text[textType]);
-	if (textType == enWater)
+
+	if (textType != enWater)
 		int a = 1;
-	mbstowcs(text, m_text[textType], m_maxTextSize);
+	
+	std::string str = m_text[textType];
+	mbstowcs(text, str.c_str(), m_maxTextSize);
+
+	//mbstowcs(text, m_text[textType], m_maxTextSize);
 	//テキストをフォントレンダラーにセット
 	m_sentenceFR->SetText(text);
 }
@@ -211,4 +214,11 @@ void CTips::ClearText()
 {
 	//空っぽのテキストをセット
 	SetText(enEmpty);
+}
+
+void CTips::SetTitleMode()
+{
+	m_tipsUISR->Deactivate();
+	m_tipsFR->Deactivate();
+	m_sentenceFR->Deactivate();
 }

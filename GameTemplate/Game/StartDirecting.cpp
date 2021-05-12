@@ -7,6 +7,7 @@
 
 bool StartDirecting::Start()
 {
+	m_position = { 0.0f,1740.0f,0.0f };
 	m_onWayPosition = m_position;
 	m_mobius = FindGO<Mobius>("Mobius");
 
@@ -14,6 +15,7 @@ bool StartDirecting::Start()
 
 	m_player = FindGO<Player>("Player");
 	m_gameCamera = FindGO<GameCamera>("GameCamera");
+
 
 	return true;
 }
@@ -37,7 +39,7 @@ void StartDirecting::Update()
 	}
 
 	//ちょっと待ってから演出を開始する
-	if (m_startTimer < 0.5f)
+	if (m_startTimer < /*0.5f*/0.5f)
 	{
 		m_startTimer += GameTime().GetFrameDeltaTime();
 		return;
@@ -67,7 +69,10 @@ void StartDirecting::Update()
 	if (checkZoomIn == false) {
 
 		//カメラの移動力
-		m_padLStickXF = 1.0f;
+		//m_padLStickXF = 1.0f;
+		m_padLStickXF = 1.3f /** GameTime().GetFrameDeltaTime()*/;
+		if (m_padLStickXF > 1.5f)
+			m_padLStickXF = 1.5f;
 
 		//ウェイポイントの更新処理
 		CheckWayPoint();
@@ -270,7 +275,7 @@ void StartDirecting::FallPlayer()
 {
 	m_player->SetFallFlag(true);
 	Vector3 fallpos = m_player->GetPosition();
-	fallpos.y -= 500.0f * GameTime().GetFrameDeltaTime();
+	fallpos.y -= 1200.0f * GameTime().GetFrameDeltaTime();
 	if (fallpos.y <= 1800.0f) {
 		fallpos.y = 1800.0f;
 

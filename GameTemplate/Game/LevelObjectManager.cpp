@@ -186,7 +186,7 @@ bool CLevelObjectManager::QueryLevelAllObjects(ILevelObjectBase& thisObject, con
 /// プレイヤーに一番近いオブジェクトのオブジェクトタイプを戻す
 /// </summary>
 /// <returns>オブジェクトタイプ</returns>
-const int CLevelObjectManager::GetNearestObjectType()
+const int CLevelObjectManager::GetNearestObjectType(const float nearDist)
 {
 	//プレイヤーが何か持っていたら、
 	if (m_player->GetHoldObject())
@@ -211,7 +211,7 @@ const int CLevelObjectManager::GetNearestObjectType()
 		rightWayPoint = maxWayPoint;
 
 	//オブジェクトとの距離のしきい値
-	const float threshold = 500.0f;
+	const float threshold = nearDist;
 
 	//オブジェクトとの距離
 	//しきい値以下の一番近い距離を探す
