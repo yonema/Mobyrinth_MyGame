@@ -15,6 +15,18 @@ public:		//自動で呼ばれるメンバ関数
 	virtual ~CObstacleObject();					//デストラクタ
 	void PureVirtualUpdate()override final;		//アップデート関数
 
+public:
+	/// <summary>
+	/// モデルの参照を得る
+	/// </summary>
+	/// <param name="frontOrBack">裏表がないので関係ない</param>
+	/// <returns>モデルの参照</returns>
+	CModelRender* GetModelRender(const int frontOrBack = 0) override final
+	{
+		return m_modelRender;
+	}
+
+
 public:		//オーバーライドしてほしいメンバ関数
 	virtual bool StartSub() { return true; };	//スタート関数
 	virtual void UpdateSub() {};				//アップデート関数

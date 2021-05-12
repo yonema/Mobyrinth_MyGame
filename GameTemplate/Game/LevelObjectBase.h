@@ -24,6 +24,17 @@ public:		//オーバーライドしてほしいメンバ関数
 	virtual bool PureVirtualStart() = 0 {};		//スタート関数
 	virtual void PureVirtualUpdate() = 0 {};	//アップデート関数
 
+	/// <summary>
+	/// 表裏がある場合は、表か裏かのモデルの参照を得る。
+	/// ない場合は、普通にモデルの参照を得る
+	/// </summary>
+	/// <param name="frontOrBack">表か裏か？ない場合は関係ない</param>
+	/// <returns>モデルの参照</returns>
+	virtual CModelRender* GetModelRender(const int frontOrBack = 0)
+	{
+		return nullptr;
+	}
+
 protected:	//ここのメンバ関数を主に使う
 	/// <summary>
 	/// 近くのウェイポイントを探して、イイ感じに回転する関数
