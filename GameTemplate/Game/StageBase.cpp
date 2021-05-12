@@ -390,6 +390,28 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			OObox* OObject;
 			OObject = NewGO<OObox>(0, "box");
 			OObject->SetPosition(objData.position);
+
+
+
+
+
+			////////////////////////////////////////////////////////////
+			// 透明オブジェクトを作成時、ここに追加
+			////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			//スイッチの処理
 			return true;
 			}
