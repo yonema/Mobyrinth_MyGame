@@ -17,6 +17,52 @@ public: //Set関数
 		m_resetTimerStartValue = f;
 	}
 
+	/// <summary>
+	/// オブジェクトを半透明にする
+	/// </summary>
+	void ChangeTransparent()
+	{
+		//レベルオブジェクトを取ってくる
+		std::vector<ILevelObjectBase*> levelObjects
+			= CLevelObjectManager::GetInstance()->GetLevelObjects();
+		//全てのレベルオブジェクトに検索
+		for (int i = 0; i < levelObjects.size(); i++)
+		{
+			//透明オブジェクトではない場合、次のオブジェクトを検索
+			if (levelObjects[i]->GetFlagTransparentObject() == false) {
+				continue;
+			}
+
+			//モデルの参照を得てから、SetMulColor()を呼ぶ
+			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
+			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+		}
+	}
+
+	/// <summary>
+	/// オブジェクトを実体にする
+	/// </summary>
+	void ChangeEntity()
+	{
+		//レベルオブジェクトを取ってくる
+		std::vector<ILevelObjectBase*> levelObjects
+			= CLevelObjectManager::GetInstance()->GetLevelObjects();
+		//全てのレベルオブジェクトに検索
+		for (int i = 0; i < levelObjects.size(); i++)
+		{
+			//透明オブジェクトではない場合、次のオブジェクトを検索
+			if (levelObjects[i]->GetFlagTransparentObject() == false) {
+				continue;
+			}
+
+			//モデルの参照を得てから、SetMulColor()を呼ぶ
+			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
+			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		}
+	}
+
 private: //メンバ変数
 	float m_resetTimer = 0.0f; //オブジェクトの状態をリセットするまでのカウントに使用するリセットタイマー
 	float m_resetTimerStartValue = 10.0f; //リセットタイマーが作動したときの値を保存する変数
