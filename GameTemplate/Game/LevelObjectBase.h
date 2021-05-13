@@ -299,6 +299,9 @@ public: //透明スイッチに使用する関数
 		m_flagHeld = true;
 		//オブジェクトの衝突判定を行うようにする。
 		m_flagIsHit = true;
+
+		//オブジェクトの当たり判定を有効にする。
+		m_obb.SetExceptionFlag(false);
 	}
 
 	/// <summary>
@@ -315,11 +318,12 @@ public: //透明スイッチに使用する関数
 		m_position = m_startPosition;
 		//表裏情報を初期状態に戻す。
 		m_frontOrBack = m_startfrontOrBack;
-
-
 		CheckWayPoint();
 		CheckFrontOrBackSide();
 		SwitchReverse(m_frontOrBack);
+
+		//オブジェクトの当たり判定を無効にする。
+		m_obb.SetExceptionFlag(true);
 
 	}
 
@@ -346,15 +350,15 @@ public: //透明スイッチに使用する関数
 		return m_flagIsHit;
 	}
 
-	void SetFlagHeldPlayer(bool b)
-	{
-		m_flagHeldPlayer = b;
-	}
+	//void SetFlagHeldPlayer(bool b)
+	//{
+	//	m_flagHeldPlayer = b;
+	//}
 
-	bool GetFlagHeldPlayer()
-	{
-		return m_flagHeldPlayer;
-	}
+	//bool GetFlagHeldPlayer()
+	//{
+	//	return m_flagHeldPlayer;
+	//}
 
 	bool GetFlagTransparentObject()
 	{
@@ -366,7 +370,7 @@ private: //メンバ変数
 	bool m_flagTransparentObject = false; //透明オブジェクトどうかのフラグ
 	bool m_flagIsHit = true; //重なっているかの判定の処理を行うか確認するフラグ
 	bool m_flagHeld = true; //オブジェクトが現在持ち上げられるかのフラグ
-	bool m_flagHeldPlayer = false; //現在このオブジェクトが持たれているかのフラグ
+	//bool m_flagHeldPlayer = false; //現在このオブジェクトが持たれているかのフラグ
 
 	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //オブジェクトの初期位置を保存する位置情報変数
 	Quaternion m_startRotation = g_quatIdentity; //オブジェクトの初期回転を保存する回転情報変数
