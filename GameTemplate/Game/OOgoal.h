@@ -28,6 +28,5 @@ public:		//メンバ関数
 private:	//データメンバ
 	CSpriteRender* m_spriteRender = nullptr;	//ゴールした時のスプライト
 	bool m_isGoal = false;						//ゴール判定
-	Effect* m_effect = nullptr;
 };
 

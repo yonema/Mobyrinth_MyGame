@@ -24,6 +24,14 @@ bool OOReverseALL::StartSub()
 	//音量調節
 	m_changeSE->SetVolume(0.5f);
 
+	//エフェクトの作成
+	m_obujectefk = NewGO<Effect>(0);
+	m_obujectefk->Init(u"Assets/effect/reverseall.efk");
+	float scale = 200.0f;								//小さいので大きくしておく
+	m_obujectefk->SetScale({ scale ,scale ,scale });
+	m_obujectefk->SetPosition(m_position);				//座標を渡す
+	m_obujectefk->SetRotation(m_rotation);
+	m_obujectefk->Play();								//再生
 
 	//デバック用
 #ifdef MY_DEBUG
@@ -45,6 +53,7 @@ bool OOReverseALL::StartSub()
 //デストラクタ
 OOReverseALL::~OOReverseALL()
 {
+	DeleteGO(m_obujectefk);
 #ifdef MY_DEBUG
 	//デバック用
 	//後で消す
@@ -60,6 +69,12 @@ OOReverseALL::~OOReverseALL()
 //アップデート関数
 void OOReverseALL::UpdateSub()
 {
+	//エフェクト再生までのタイマー
+	i++;
+	if (i == 121.0f) {				//120フレームでエフェクトが終わるので121から始める
+		m_obujectefk->Play();
+		i = 0;
+	}
 	//アップデートステートで処理を振り分ける
 	//switch (m_updateState)
 	//{

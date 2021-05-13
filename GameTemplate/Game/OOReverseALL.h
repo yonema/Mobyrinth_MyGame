@@ -2,6 +2,7 @@
 #include "ObstacleObject.h"
 #include "ReversibleObject.h"
 #include "FontRender.h"
+#include "effect/Effect.h"
 
 /// <summary>
 /// 障害オブジェクト
@@ -40,6 +41,8 @@ private:	//データメンバ
 	Vector3 m_playerHitPosition = g_vec3Zero;		//衝突時のプレイヤーの座標
 	Vector3 m_playerAfterPosition = g_vec3Zero;		//衝突後のプレイヤーの座標
 	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
+	Effect* m_obujectefk = nullptr;  //全反転する場所のエフェクト
+	float i = 0.0f;					 //エフェクトのループ再生ようのタイマー
 
 private:	//デバック用
 
