@@ -24,7 +24,7 @@ public:		//オーバーライドしてほしいメンバ関数
 	virtual bool PureVirtualStart() = 0 {};		//スタート関数
 	virtual void PureVirtualUpdate() = 0 {};	//アップデート関数
 
-	/// <summary>
+	/// <summary>5
 	/// 表裏がある場合は、表か裏かのモデルの参照を得る。
 	/// ない場合は、普通にモデルの参照を得る
 	/// </summary>
@@ -272,8 +272,9 @@ public: //Set関数
 		//オブジェクトの重なっている判定を行わないようにする。
 		m_flagIsHit = false;
 		//リセット時に使用する位置、回転情報を初期化
+		//m_startRotation = m_rotation;
 		m_startPosition = m_position;
-		m_startRotation = m_rotation;
+		
 
 		//オブジェクトを半透明にする。
 		//GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
@@ -305,8 +306,8 @@ public: //透明スイッチに使用する関数
 		//オブジェクトの衝突判定を行わないようにする。
 		m_flagIsHit = false;
 		//位置、回転情報を初期状態に戻す。
-		m_position = m_startPosition;
 		m_rotation = m_startRotation;
+		m_position = m_startPosition;
 	}
 
 	/// <summary>
