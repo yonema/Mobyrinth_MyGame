@@ -238,20 +238,20 @@ private:	//privateなメンバ関数
 	/// <returns>オーバーしているか？</returns>
 	const bool IsCapacityOver(const int frontOrBackSide, const int adjust = 0);
 
-public:		//publicなデータメンバ
-
-	/// <summary>
-	/// 表か裏かを表す列挙体
-	/// </summary>
-	enum EnFrontAndBack
-	{
-		enFront,			//表状態
-		enBack,				//裏状態
-		enFrontAndBackNum,	//表裏の数
-	};
+//public:		//publicなデータメンバ
+//
+//	/// <summary>
+//	/// 表か裏かを表す列挙体
+//	/// </summary>
+//	enum EnFrontAndBack
+//	{
+//		enFront,			//表状態
+//		enBack,				//裏状態
+//		enFrontAndBackNum,	//表裏の数
+//	};
 
 private:	//データメンバ
-	bool m_frontOrBack = enFront;				//表か裏か？
+	//bool m_frontOrBack = enFront;				//表か裏か？
 	bool m_bothModelactiveFlag = true;			//表裏両方の有効化フラグ
 	CModelRender* m_modelRender[enFrontAndBackNum] = { nullptr };	//モデルレンダラー
 	int m_reversibleType[enFrontAndBackNum] = { enEmpty };	//表と裏のオブジェクトのタイプ
