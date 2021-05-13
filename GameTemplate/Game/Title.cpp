@@ -13,7 +13,7 @@ bool Title::Start()
 	m_stageTitle->SetWipeInFlag(m_wipeInFlag);
 
 	//レベル2Dの初期化
-	m_level2D.Init("Assets/level2D/Stage_selection2.casl", [&](Level2DObjectData& objdata)
+	m_level2D.Init("Assets/level2D/Stage_selection3.casl", [&](Level2DObjectData& objdata)
 		{
 			//名前が一致でフックする
 
@@ -358,7 +358,8 @@ void Title::StageSelect()
 		m_buttonFlag = false;
 		
 		//ステージセレクトのステートが特定の時のみ
-		if (m_stageSelectState == enStage3 || m_stageSelectState == enStage6)
+		//if (m_stageSelectState == enStage3 || m_stageSelectState == enStage6)
+		if (m_stageSelectState != (enStageNum - 1))
 		{
 			//ステージセレクトのステートがステージ3かステージ6の時
 
@@ -385,7 +386,8 @@ void Title::StageSelect()
 		m_buttonFlag = false;
 		
 		//ステージセレクトのステートが特定の時のみ
-		if (m_stageSelectState == enStage4 || m_stageSelectState == enStage7)
+		//if (m_stageSelectState == enStage4 || m_stageSelectState == enStage7)
+		if (m_stageSelectState != enStage1)
 		{
 			//ステージセレクトのステートがステージ4かステージ7の時
 
@@ -411,27 +413,34 @@ void Title::StageSelect()
 		m_buttonFlag = false;
 
 		//ステージセレクトのステートが特定の時のみ
-		if (m_stageSelectState != enStage3 && m_stageSelectState != enStage4 &&
-			m_stageSelectState != enStage9)
+		//if (m_stageSelectState != enStage3 && m_stageSelectState != enStage4 &&
+		//	m_stageSelectState != enStage9)
+		//{
+		//	//ステージセレクトのステートがステージ3かつステージ4かつステージ9ではない時
+
+		//	//さらにステージセレクトのステートで加算するか減算するか決める
+		//	if (m_stageSelectState == enStage5 || m_stageSelectState == enStage6)
+		//	{
+		//		//ステージセレクトのステートがステージ5かステージ6の時
+
+		//		//ステージセレクトのステートを減算する
+		//		m_stageSelectState--;
+		//	}
+		//	else
+		//	{
+		//		//ステージセレクトのステートがステージ4かステージ5以外の時
+
+		//		//ステージセレクトのステートを加算する
+		//		m_stageSelectState++;
+		//	}
+
+		//	//selectSEをループ再生をオフで再生する。
+		//	m_selectSE->Play(false);
+		//}
+		if (m_stageSelectState != enStage1)
 		{
-			//ステージセレクトのステートがステージ3かつステージ4かつステージ9ではない時
-
-			//さらにステージセレクトのステートで加算するか減算するか決める
-			if (m_stageSelectState == enStage5 || m_stageSelectState == enStage6)
-			{
-				//ステージセレクトのステートがステージ5かステージ6の時
-
-				//ステージセレクトのステートを減算する
-				m_stageSelectState--;
-			}
-			else
-			{
-				//ステージセレクトのステートがステージ4かステージ5以外の時
-
-				//ステージセレクトのステートを加算する
-				m_stageSelectState++;
-			}
-
+			//ステージセレクトのステートを減算する
+			m_stageSelectState--;
 			//selectSEをループ再生をオフで再生する。
 			m_selectSE->Play(false);
 		}
@@ -451,28 +460,37 @@ void Title::StageSelect()
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
 
-		//ステージセレクトのステートが特定の時のみ
-		if (m_stageSelectState != enStage1 && m_stageSelectState != enStage6 &&
-			m_stageSelectState != enStage7)
+		////ステージセレクトのステートが特定の時のみ
+		//if (m_stageSelectState != enStage1 && m_stageSelectState != enStage6 &&
+		//	m_stageSelectState != enStage7)
+		//{
+		//	//ステージセレクトのステートがステージ1かつステージ6かつステージ7ではない時
+
+		//	//さらにステージセレクトのステートで加算するか減算するか決める
+		//	if (m_stageSelectState == enStage4 || m_stageSelectState == enStage5)
+		//	{
+		//		//ステージセレクトのステートがステージ4かステージ5の時
+
+		//		//ステージセレクトのステートを加算する
+		//		m_stageSelectState++;
+		//	}
+		//	else
+		//	{
+		//		//ステージセレクトのステートがステージ4かステージ5以外の時
+
+		//		//ステージセレクトのステートを減算する
+		//		m_stageSelectState--;
+		//	}
+
+		//	//selectSEをループ再生をオフで再生する。
+		//	m_selectSE->Play(false);
+		//}
+		if (m_stageSelectState != (enStageNum - 1))
 		{
-			//ステージセレクトのステートがステージ1かつステージ6かつステージ7ではない時
+			//ステージセレクトのステートがステージ3かステージ6の時
 
-			//さらにステージセレクトのステートで加算するか減算するか決める
-			if (m_stageSelectState == enStage4 || m_stageSelectState == enStage5)
-			{
-				//ステージセレクトのステートがステージ4かステージ5の時
-
-				//ステージセレクトのステートを加算する
-				m_stageSelectState++;
-			}
-			else
-			{
-				//ステージセレクトのステートがステージ4かステージ5以外の時
-
-				//ステージセレクトのステートを減算する
-				m_stageSelectState--;
-			}
-
+			//ステージセレクトのステートを加算する
+			m_stageSelectState++;
 			//selectSEをループ再生をオフで再生する。
 			m_selectSE->Play(false);
 		}
