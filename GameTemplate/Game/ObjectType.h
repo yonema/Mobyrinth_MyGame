@@ -38,6 +38,7 @@ enum EnObjectType
 	enNotHavePadlock,	//「持てない南京錠」
 	enBox,				//「箱」
 	enOneway,			//「一方通行」
+	enTransparentSwitch,//「スイッチ」
 
 	enObjectTypeNum		//オブジェクトタイプの総数
 };
