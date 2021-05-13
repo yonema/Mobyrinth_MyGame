@@ -51,8 +51,8 @@ void FontEngine::Init()
 	m_spriteFont = make_unique<SpriteFont>(
 		d3dDevice,
 		re,
-		L"Assets/font/myfile.spritefont",
-		//L"Assets/font/checkPoint.spritefont",
+		//L"Assets/font/myfile.spritefont",
+		L"Assets/font/checkPoint.spritefont",
 		cpuHandle,
 		gpuHandle);
 

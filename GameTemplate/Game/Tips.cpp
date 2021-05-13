@@ -88,6 +88,9 @@ void CTips::InitText()
 		case enOneway:		//一方通行
 			LoadText(objectType, "oneWay");
 			break;
+		case enUFOCapture:	//UFOに捕まった
+			LoadText(objectType, "UFOCapture");
+			break;
 		default:		//デフォルト
 			LoadText(objectType, "empty");
 			break;

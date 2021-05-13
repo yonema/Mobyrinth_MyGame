@@ -35,6 +35,11 @@ public:	//インライン関数
 	{
 		g_camera3D->SetPosition(pos);
 	}
+
+	void TitleMode()
+	{
+		m_titleMode = true;
+	}
 private:
 	Player* m_pPlayer = nullptr;	//プレイヤーのポインタ
 	Vector3 m_toCameraPos;				//注視点から視点へのベクトル
@@ -43,5 +48,7 @@ private:
 	bool m_startDirectingZoomInCamera = false; //カメラを寄せる処理のフラグ
 
 	bool m_zoomFinished = false;	//Zoomが終わったか
+
+	bool m_titleMode = false;		//タイトル画面か？
 };
 

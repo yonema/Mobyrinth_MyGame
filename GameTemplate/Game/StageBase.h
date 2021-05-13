@@ -165,6 +165,8 @@ private:	//データメンバ
 	CSky* m_sky = nullptr;							//空クラスのポインタ
 	float m_goalTimer = 0;							//ゴールした後の待ち時間をはかる
 
+	GameCamera* m_gameCamea = nullptr;				//ゲームカメラ
+
 	StartDirecting* m_startDirecting = nullptr;
 	bool m_startUpStartDirecting = true;
 	bool m_titlePlayer = false;	
