@@ -203,6 +203,14 @@ void ILevelObjectBase::CheckRotation()
 	//‹…–ÊüŒ`•âŠ®
 	//‚ğg‚Á‚Ä‰ñ“]‚³‚¹‚é
 	m_rotation.Slerp(ComplementRate, (*wayPointRotVec)[m_lpIndex], (*wayPointRotVec)[m_rpIndex]);
+
+	//Å‰‚Ì‚Æ‚«‚¾‚¯Am_startRotation‚É‘ã“ü
+	if (m_startRotation.x == g_quatIdentity.x &&
+		m_startRotation.y == g_quatIdentity.y &&
+		m_startRotation.z == g_quatIdentity.z &&
+		m_startRotation.w == g_quatIdentity.w) {
+		m_startRotation = m_rotation;
+	}
 }
 
 /// <summary>

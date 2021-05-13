@@ -37,6 +37,10 @@ public: //Set関数
 			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
 			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+
+			levelObjects[i]->TransparentSwitchOff();
+			//オブジェクトを持っている場合
+			levelObjects[i]->SetFlagHeldPlayer(false);
 		}
 	}
 
@@ -60,6 +64,8 @@ public: //Set関数
 			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
 			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+
+			levelObjects[i]->TransparentSwitchOn();
 		}
 	}
 
