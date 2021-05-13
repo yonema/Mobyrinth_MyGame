@@ -400,11 +400,11 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				OObject->SetPosition(objData.position);
 				return true;
 			}
-			//bigPadlock
-			else if (objData.EqualObjectName(L"padlock") == true)
+			//notHavePadlock
+			else if (objData.EqualObjectName(L"notHavePadlock") == true)
 			{
 				OOpadlock* OObject;
-				OObject = NewGO<OOpadlock>(0, "bigPadlock");
+				OObject = NewGO<OOpadlock>(0, "notHavePadlock");
 				OObject->SetPosition(objData.position);
 				return true;
 			}
