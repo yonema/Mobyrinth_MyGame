@@ -35,6 +35,8 @@ public:		//オーバーライドしてほしいメンバ関数
 		return nullptr;
 	}
 
+	virtual void SwitchReverse(const bool frontOrBack = 0) {};
+
 protected:	//ここのメンバ関数を主に使う
 	/// <summary>
 	/// 近くのウェイポイントを探して、イイ感じに回転する関数
@@ -313,6 +315,12 @@ public: //透明スイッチに使用する関数
 		m_position = m_startPosition;
 		//表裏情報を初期状態に戻す。
 		m_frontOrBack = m_startfrontOrBack;
+
+
+		CheckWayPoint();
+		CheckFrontOrBackSide();
+		SwitchReverse(m_frontOrBack);
+
 	}
 
 	/// <summary>

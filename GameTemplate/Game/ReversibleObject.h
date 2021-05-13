@@ -24,6 +24,11 @@ public:
 		return m_modelRender[frontOrBack];
 	}
 
+	void SwitchReverse(const bool frontOrBack)override final
+	{
+		SetFrontOrBack(frontOrBack);
+	}
+
 public:		//publicなオーバーライドしてほしいメンバ関数
 	virtual bool StartSub() { return true; };	//スタート関数
 	virtual void UpdateSub() {};				//アップデート関数
