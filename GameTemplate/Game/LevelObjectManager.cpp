@@ -190,8 +190,20 @@ const int CLevelObjectManager::GetNearestObjectType(const float nearDist)
 {
 	//プレイヤーが何か持っていたら、
 	if (m_player->GetHoldObject())
+	{
 		//プレイヤーが持っているオブジェクトのタイプを戻す
-		return m_player->GetReversibleObject()->GetObjectType();
+		if (m_player->GetReversibleObject())
+			return m_player->GetReversibleObject()->GetObjectType();
+	}
+	//プレイヤーがUFOに捕まっているか？
+	else if (m_player->GetCapturedUFOFlag())
+	{
+		//捕まっていたら
+
+		//UFOに捕まっている状態を戻す
+		return enUFOCapture;
+	}
+
 
 	//ウェイポイントの最大値
 	const int maxWayPoint = m_vecSize - 1;

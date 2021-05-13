@@ -23,7 +23,14 @@ bool IStageBase::Start()
 		WipeIn();
 
 	//ゲームカメラの作成
-	NewGO<GameCamera>(0, "GameCamera");
+	m_gameCamea = NewGO<GameCamera>(0, "GameCamera");
+	//タイトル画面か？
+	if (m_titlePlayer)
+	{
+		//タイトル画面なら
+		//タイトルモードにする
+		m_gameCamea->TitleMode();
+	}
 
 	//ポーズ画面用クラスの作成
 	m_pause = NewGO<CPause>(0, "Pause");
@@ -553,7 +560,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 IStageBase::~IStageBase()
 {
 	//単体のオブジェクトを消去
-	DeleteGO(FindGO<GameCamera>("GameCamera"));
+	DeleteGO(m_gameCamea);
 	DeleteGO(m_pause);
 	DeleteGO(m_sky);
 	DeleteGO(m_startDirecting);

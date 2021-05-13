@@ -7,6 +7,9 @@ bool CUFOLandingPoint::StartSub()
 	//モデルの初期化とタイプの設定
 	Init("Assets/modelData/UFO_Landing.tkm", enEmpty);
 
+	const float scale = 0.4f;
+	m_scale = { scale ,1.0f ,scale };
+
 	//OBBWorldに自身のOBBの登録を消去させる
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
 
