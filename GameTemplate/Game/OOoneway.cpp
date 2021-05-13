@@ -75,6 +75,8 @@ bool OOoneway::StartSub()
 //デストラクタ
 OOoneway::~OOoneway()
 {
+
+	DeleteGO(m_canPassMR);
 	//両サイドのOBBをOBBワールドから解除する
 	for (int i = 0; i < enLeftAndRightNum; i++)
 	{
@@ -97,7 +99,7 @@ void OOoneway::UpdateSub()
 		//向いている時は
 		//通れる
 		m_sideOBB[m_leftOrRight].SetExceptionFlag(true);
-		Deactivate();
+		GetModelRender()->Deactivate();
 		m_canPassMR->Activate();
 	}
 	else
@@ -105,7 +107,7 @@ void OOoneway::UpdateSub()
 		//向いていない時は
 		//通れない
 		m_sideOBB[m_leftOrRight].SetExceptionFlag(false);
-		Activate();
+		GetModelRender()->Activate();
 		m_canPassMR->Deactivate();
 	}
 

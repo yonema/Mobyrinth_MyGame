@@ -5,7 +5,7 @@
 bool CUFOLandingPoint::StartSub()
 {
 	//モデルの初期化とタイプの設定
-	Init("Assets/modelData/grilled_chicken.tkm", enEmpty);
+	Init("Assets/modelData/UFO_Landing.tkm", enEmpty);
 
 	//OBBWorldに自身のOBBの登録を消去させる
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
