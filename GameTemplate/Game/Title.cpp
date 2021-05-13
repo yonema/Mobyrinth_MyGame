@@ -535,7 +535,7 @@ void Title::StageSelect()
 		for (int i = 0; i < enStageNum; i++)
 		{
 			m_stageName[i]->Deactivate();
-			m_stageClear[i]->Activate();
+			m_stageClear[i]->Deactivate();
 		}
 		m_cursor->Deactivate();
 		m_stageSelection->Deactivate();
