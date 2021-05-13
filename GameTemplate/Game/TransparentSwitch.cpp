@@ -6,6 +6,8 @@
 
 bool OOTransparentSwitch::StartSub()
 {
+	Init("Assets/modelData/transparentSwitch.tkm", enTransparentSwitch);
+
 	//OBBWorld‚ÉŽ©g‚ÌOBB‚Ì“o˜^‚ðÁ‹Ž‚³‚¹‚é
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
 

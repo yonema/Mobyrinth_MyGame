@@ -176,6 +176,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
 				RObject->SetPosition(objData.position);
 				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				RObject->SetTransparentObject();
 				return true;
 			}
 			//bird_fish
@@ -253,6 +254,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject = NewGO<ROnail_bar>(0, "nail_bar");
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			RObject->SetTransparentObject();
 			//スイッチの処理
 			return true;
 			}
@@ -262,6 +264,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject = NewGO<ROnail_bar>(0, "nail_bar");
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			RObject->SetTransparentObject();
 			//スイッチの処理
 			return true;
 			}
@@ -315,6 +318,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject = NewGO<ROkey_padlock>(0, "key");
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			RObject->SetTransparentObject();
 			//スイッチの処理
 			return true;
 			}
@@ -324,6 +328,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject = NewGO<ROkey_padlock>(0, "padlock");
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			RObject->SetTransparentObject();
 			//スイッチの処理
 			return true;
 			}
@@ -367,6 +372,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			//ゴールはメンバ変数で保持しておく。
 			m_goal = NewGO<OOgoal>(0, "goal");
 			m_goal->SetPosition(objData.position);
+			m_goal->SetTransparentObject();
 			return true;
 			}
 			//bigFire
@@ -383,6 +389,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			OObigFire* OObject;
 			OObject = NewGO<OObigFire>(0, "bigFire");
 			OObject->SetPosition(objData.position);
+			OObject->SetTransparentObject();
 			return true;
 			}
 			//wall
@@ -415,11 +422,10 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			OObox* OObject;
 			OObject = NewGO<OObox>(0, "box");
 			OObject->SetPosition(objData.position);
-
-
-
-
-
+			OObject->SetTransparentObject();
+			//スイッチの処理
+			return true;
+			}
 			////////////////////////////////////////////////////////////
 			// 透明オブジェクトを作成時、ここに追加
 			////////////////////////////////////////////////////////////
@@ -428,19 +434,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 
 
-
-
-
-
-
-
-
-
-
-			//スイッチの処理
-			return true;
-			}
-			else if (objData.EqualObjectName(L"transparentSwitch") == true)
+			else if (objData.EqualObjectName(L"switch") == true)
 			{
 				OOTransparentSwitch* OObject;
 				OObject = NewGO<OOTransparentSwitch>(0, "transparentSwitch");
@@ -473,15 +467,15 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			OObject->SetPosition(objData.position);
 			return true;
 			}
-			//switch
-			else if (objData.EqualObjectName(L"switch") == true)
-			{
-			RObird_fish* RObject;
-			RObject = NewGO<RObird_fish>(0, "bird_fish");
-			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::enFront);
-			return true;
-			}
+			////switch
+			//else if (objData.EqualObjectName(L"switch") == true)
+			//{
+			//RObird_fish* RObject;
+			//RObject = NewGO<RObird_fish>(0, "bird_fish");
+			//RObject->SetPosition(objData.position);
+			//RObject->SetFrontOrBack(CReversibleObject::enFront);
+			//return true;
+			//}
 
 			///
 			///
