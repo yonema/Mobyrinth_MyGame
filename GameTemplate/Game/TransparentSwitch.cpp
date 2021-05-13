@@ -32,26 +32,26 @@ void OOTransparentSwitch::UpdateSub()
 
 			//ここに透明オブジェクトの処理を追加する。
 			//配置してあるすべてのレベルオブジェクトの参照のベクター
-			std::vector<ILevelObjectBase*> levelObjects =
-				CLevelObjectManager::GetInstance()->GetLevelObjects();
+			//std::vector<ILevelObjectBase*> levelObjects =
+			//	CLevelObjectManager::GetInstance()->GetLevelObjects();
 
-			//レベルオブジェクトたちを一つずつ取り出す
-			for (auto lo : levelObjects)
-			{
-				//自分自身の時はスキップ
-				if (lo == this)
-					continue;
+			////レベルオブジェクトたちを一つずつ取り出す
+			//for (auto lo : levelObjects)
+			//{
+			//	//自分自身の時はスキップ
+			//	if (lo == this)
+			//		continue;
 
-				//透明オブジェクトの場合
-				if (GetFlagTransparentObject() == true)
-				{
-					//ここにオブジェクトに対する処理
-					lo->TransparentSwitchOff();
+			//	//透明オブジェクトの場合
+			//	if (GetFlagTransparentObject() == true)
+			//	{
+			//		//ここにオブジェクトに対する処理
+			//		lo->TransparentSwitchOff();
 
-					//オブジェクトを持っている場合
-					lo->SetFlagHeldPlayer(false);
-				}
-			}
+			//		//オブジェクトを持っている場合
+			//		lo->SetFlagHeldPlayer(false);
+			//	}
+			//}
 
 			//透明オブジェクトを半透明にする。
 			ChangeTransparent();
@@ -71,28 +71,28 @@ void OOTransparentSwitch::UpdateSub()
 
 			//ここに透明オブジェクトの処理を追加する。
 			//配置してあるすべてのレベルオブジェクトの参照のベクター
-			std::vector<ILevelObjectBase*> levelObjects =
-				CLevelObjectManager::GetInstance()->GetLevelObjects();
+			//std::vector<ILevelObjectBase*> levelObjects =
+				//CLevelObjectManager::GetInstance()->GetLevelObjects();
 
 			//レベルオブジェクトたちを一つずつ取り出す
-			for (auto lo : levelObjects)
-			{
+			//for (auto lo : levelObjects)
+			//{
 				//自分自身の時はスキップ
-				if (lo == this)
-					continue;
+				//if (lo == this)
+					//continue;
 
 				//透明オブジェクトの場合
-				if (GetFlagTransparentObject() == true)
-				{
-					//ここにオブジェクトに対する処理
-					lo->TransparentSwitchOn();
+				//if (GetFlagTransparentObject() == true)
+				//{
+				//	//ここにオブジェクトに対する処理
+				//	lo->TransparentSwitchOn();
 
-					//オブジェクトを持ち上げられるようにする。
-					//lo->SetFlagHeld(true);
-					//オブジェクトの衝突判定を行うようにする。
-					lo->SetFlagIsHit(true);
-				}
-			}
+				//	//オブジェクトを持ち上げられるようにする。
+				//	//lo->SetFlagHeld(true);
+				//	//オブジェクトの衝突判定を行うようにする。
+				//	//lo->SetFlagIsHit(true);
+				//}
+			//}
 
 			//透明オブジェクトを実体にする。
 			ChangeEntity();
