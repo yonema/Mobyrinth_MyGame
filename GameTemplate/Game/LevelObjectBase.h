@@ -274,6 +274,9 @@ public: //Set関数
 		//リセット時に使用する位置、回転情報を初期化
 		//m_startRotation = m_rotation;
 		m_startPosition = m_position;
+
+		//リセット時に使用する表裏情報を初期化
+		m_startfrontOrBack = m_frontOrBack;
 		
 
 		//オブジェクトを半透明にする。
@@ -308,6 +311,8 @@ public: //透明スイッチに使用する関数
 		//位置、回転情報を初期状態に戻す。
 		m_rotation = m_startRotation;
 		m_position = m_startPosition;
+		//表裏情報を初期状態に戻す。
+		m_frontOrBack = m_startfrontOrBack;
 	}
 
 	/// <summary>
@@ -358,6 +363,26 @@ private: //メンバ変数
 	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //オブジェクトの初期位置を保存する位置情報変数
 	Quaternion m_startRotation = g_quatIdentity; //オブジェクトの初期回転を保存する回転情報変数
 
+
+	////////////////////////////////////////////////////////////
+	// 反転オブジェクト用の変数と関数（透明オブジェクトのために移動）
+	////////////////////////////////////////////////////////////
+
+public:		//publicなデータメンバ
+
+	/// <summary>
+	/// 表か裏かを表す列挙体
+	/// </summary>
+	enum EnFrontAndBack
+	{
+		enFront,			//表状態
+		enBack,				//裏状態
+		enFrontAndBackNum,	//表裏の数
+	};
+
+protected:
+	bool m_frontOrBack = enFront;				//表か裏か？
+	bool m_startfrontOrBack = enFront;
 
 
 
