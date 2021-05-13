@@ -13,7 +13,7 @@ CTips::CTips()
 	m_tipsFR = NewGO<CFontRender>(0);
 	m_tipsFR->Init(L"Tips", 
 		{ 200.0f,330.0f },			//座標
-		{ 1.0f,1.0f,1.0f,1.0f },	//カラー
+		{ 1.0f,1.0f,0.0f,1.0f },	//カラー
 		0.0f,						//回転
 		0.8f						//拡大
 	);

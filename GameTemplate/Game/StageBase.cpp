@@ -65,10 +65,18 @@ bool IStageBase::Start()
 		CLevelObjectManager::GetInstance()->SetReversibleObjectMaxNum(i, 5);
 	}
 	const float scale = 1.5f;
+	Vector3 fontColor;
+	fontColor = { 214.0f,85.0f,0.0f };
+	fontColor.Normalize();
 	m_roNumFR[0]->Init(L"",
-		{ -600.0f,300.0f }, { 1.0f,0.0f,0.0f,1.0f }, 0.0f, scale, { 0.5f,0.5f });
+		{ -600.0f,300.0f }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
+		0.0f, scale, { 0.5f,0.5f });
+	fontColor = { 99.0f,97.0f,99.0f };
+	fontColor.Normalize();
+	fontColor.Scale(0.1);
 	m_roNumFR[1]->Init(L"", 
-		{ -600.0f,240.0f }, { 0.0f,0.0f,1.0f,1.0f }, 0.0f, scale, { 0.5f,0.5f });
+		{ -600.0f,240.0f }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
+		0.0f, scale, { 0.5f,0.5f });
 	//タイトル画面か？
 	if (m_titlePlayer)
 	{
