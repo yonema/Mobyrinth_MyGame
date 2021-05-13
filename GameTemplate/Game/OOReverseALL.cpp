@@ -7,6 +7,8 @@ bool OOReverseALL::StartSub()
 	//モデルの初期化とタイプの設定
 	Init("Assets/modelData/grilled fish.tkm", enEmpty);
 
+	m_scale = { 0.0f,0.0f,0.0f };
+
 	//OBBWorldに自身のOBBの登録を消去させる
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
 
