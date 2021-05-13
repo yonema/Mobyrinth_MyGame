@@ -51,8 +51,11 @@ void FontEngine::Init()
 	m_spriteFont = make_unique<SpriteFont>(
 		d3dDevice,
 		re,
-		L"Assets/font/myfile.spritefont",
-		//L"Assets/font/checkPoint.spritefont",
+		//L"Assets/font/myfile.spritefont",				//デフォルト
+		L"Assets/font/checkPoint.spritefont",			//チェックポイント★リベンジ
+		//L"Assets/font/mukashimukashi.spritefont",		//昔々フォント
+		//L"Assets/font/rondeBsquare.spritefont",		//ロンド B スクエア
+		//L"Assets/font/stick.spritefont",				//スティック
 		cpuHandle,
 		gpuHandle);
 

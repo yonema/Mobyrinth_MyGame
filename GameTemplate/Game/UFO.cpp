@@ -95,6 +95,9 @@ bool CUFO::PureVirtualStart()
 //デストラクタ
 CUFO::~CUFO()
 {
+	//LevelObjectManagerにこのオブジェクトは消すよ！って伝える。
+	Delete();
+
 	//モデルレンダラーの破棄
 	DeleteGO(m_modelRender);
 

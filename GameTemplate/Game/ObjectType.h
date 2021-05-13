@@ -39,6 +39,7 @@ enum EnObjectType
 	enBox,				//「箱」
 	enOneway,			//「一方通行」
 	enTransparentSwitch,//「スイッチ」
+	enUFOCapture,		//「UFOに捕まった」
 
 	enObjectTypeNum		//オブジェクトタイプの総数
 };

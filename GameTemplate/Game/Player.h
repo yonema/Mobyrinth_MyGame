@@ -263,6 +263,15 @@ public://publicなメンバ関数
 		m_capturedUFOFlag = captured;
 	}
 
+	/// <summary>
+	/// UFOに捕まっているか？を取得
+	/// </summary>
+	/// <returns>UFOに捕まっているか？</returns>
+	const bool GetCapturedUFOFlag()const
+	{
+		return m_capturedUFOFlag;
+	}
+
 	void SetFallFlag(const bool fallFlag)
 	{
 		m_fallFlag = fallFlag;

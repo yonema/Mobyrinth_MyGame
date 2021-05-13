@@ -257,7 +257,8 @@ void CReversibleObject::CheckPlayer()
 		if (g_pad[0]->IsTrigger(enButtonA))
 		{
 			//プレイヤーが別のオブジェクトを持っていなかったら
-			if (!m_pPlayer->GetHoldObject())
+			//かつ、UFOに捕まっていなかったら
+			if (!m_pPlayer->GetHoldObject() && !m_pPlayer->GetCapturedUFOFlag())
 			{
 				//ステートをプレイヤーに持たれている状態へ
 				m_objectState = enHeldPlayer;
