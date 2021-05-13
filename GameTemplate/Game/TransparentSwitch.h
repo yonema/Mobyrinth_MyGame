@@ -39,8 +39,6 @@ public: //Set関数
 			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 
 			levelObjects[i]->TransparentSwitchOff();
-			//オブジェクトを持っている場合
-			levelObjects[i]->SetFlagHeldPlayer(false);
 		}
 	}
 
