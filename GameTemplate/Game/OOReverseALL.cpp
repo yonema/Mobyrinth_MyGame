@@ -5,7 +5,7 @@
 bool OOReverseALL::StartSub()
 {
 	//モデルの初期化とタイプの設定
-	Init("Assets/modelData/grilled fish.tkm", enEmpty);
+	Init("Assets/modelData/grilled fish.tkm", enReverseAll);
 
 	m_scale = { 0.0f,0.0f,0.0f };
 
