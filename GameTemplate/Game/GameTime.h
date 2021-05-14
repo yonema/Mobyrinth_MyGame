@@ -41,7 +41,7 @@ public:  //ƒƒ“ƒoŠÖ”
 
 	void PushFrameDeltaTime(float deltaTime)
 	{
-		m_frameDeltaTimeQue.push_back(deltaTime);
+		m_frameDeltaTimeQue.push_back(min( max( 1.0f/144.0f, deltaTime), 1.0f/30.0f) );
 		if (m_frameDeltaTimeQue.size() > 30.0f) {
 			float totalTime = 0.0f;
 			for (auto time : m_frameDeltaTimeQue) {

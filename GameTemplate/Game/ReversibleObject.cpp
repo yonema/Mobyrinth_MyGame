@@ -67,6 +67,9 @@ bool CReversibleObject::Init
 	//モデルレンダラーを初期化
 	m_modelRender[enFront]->Init(filePath_front, D3D12_CULL_MODE_NONE);
 	m_modelRender[enBack]->Init(filePath_back, D3D12_CULL_MODE_NONE);
+	m_modelRender[enFront]->SetShadowReceiverFlag(false);
+	m_modelRender[enBack]->SetShadowReceiverFlag(false);
+
 	//タイプを設定
 	m_reversibleType[enFront] = type_front;
 	m_reversibleType[enBack] = type_back;

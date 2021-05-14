@@ -4,15 +4,21 @@
 //コンストラクタ
 CTips::CTips()
 {
+	//「TipsのUI」のスプライトレンダラーの生成と初期化
 	m_tipsUISR = NewGO<CSpriteRender>(0);
+	const float tipsUIX = 400.0f;
+	const float tipsUIY = 260.0f;
 	m_tipsUISR->Init("Assets/image/Tips_UI.DDS",
 		512.0f * 1.5f, 256.0f * 0.8f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-	m_tipsUISR->SetPosition({ 400.0f, 240.0f + 20.0f, 0.0f});
+	m_tipsUISR->SetPosition({ tipsUIX, tipsUIY, 0.0f});
 	m_tipsUISR->SetPostRenderFlag(true);
+
 	//「Tips」のフォントレンダーの生成と初期化
 	m_tipsFR = NewGO<CFontRender>(0);
-	m_tipsFR->Init(L"Tips", 
-		{ 200.0f,330.0f },			//座標
+	const float tipsX = 200.0f;
+	const float tipsY = 330.0f;
+	m_tipsFR->Init(L"T ip s", 
+		{ tipsX,tipsY },			//座標
 		{ 1.0f,1.0f,0.0f,1.0f },	//カラー
 		0.0f,						//回転
 		0.8f						//拡大
@@ -22,10 +28,12 @@ CTips::CTips()
 
 	//Tipsの文章を表示するフォントレンダラーの生成と初期化
 	m_sentenceFR = NewGO<CFontRender>(0);
-	m_sentenceFR->Init(L"", { 220.0f,270.0f });
+	const float sentenceDistX = 20.0f;
+	const float sentenceDistY = -50.0f;
+	m_sentenceFR->Init(L"", { tipsX + sentenceDistX,tipsY + sentenceDistY });
 	//ポストレンダラーで描画する
 	m_sentenceFR->SetPostRenderFlag(true);
-	m_sentenceFR->SetScale(0.8f);
+	m_sentenceFR->SetScale(0.7f);
 
 	//テキストの初期化
 	InitText();
@@ -173,42 +181,87 @@ void CTips::LoadText(const int objectType, const char* fileName)
 
 	//ファイルの文字を入れておく文字
 	char c;
+	//改行する文字数
+	const int newLineNum = 12;
+	//改行するか？
+	bool newLineFlag = true;
+
 	//ファイルを一文字ずつ読み取る
 	//EOFまで読み続ける
 	while ((c = fgetc(fp)) != EOF)
 	{
+		//文字数をカウントする関数は1バイト目で判定してるから、
+		//まずバッファに次の文字を入れて、改行するの文字数の一つ多い
+		//文字数になったら、m_textに改行を入れてから次の文字を入れる
+
+		//ロードした文字に改行があるか？
+		if (c == '\n')
+			//あったら、もうこれ以上改行しないようにする
+			newLineFlag = false;
+
+		//改行するか？
+		if (newLineFlag)
+		{
+			//改行する
+
+			//バッファ
+			char buf[m_maxTextSize];
+			//バッファに前フレームまでのロードしたテキストをコピー
+			strncpy(buf, m_text[objectType], maxSize);
+			//バッファに次の文字を入れる
+			strncat(buf, &c, sizeof(char));
+			//バッファの文字数が、改行する文字数の一つ多い文字数か？
+			if (u8len(buf) % (newLineNum + 1) == 0)
+				//多い場合
+				//m_textに改行を入れる
+				strncat(m_text[objectType], "\n", sizeof(char));
+		}
+
 		//ロードした文章を、データメンバに保持しておく
 		strncat(m_text[objectType], &c, sizeof(char));
+
 	}
 
 	//ファイルを閉じる
 	fclose(fp);
-	//std::string utf8String = m_text[objectType];
-	//setlocale(LC_CTYPE, "");
-	//std::string MultiString = utf8_to_multi_cppapi(utf8String);
-	//printf(m_text[objectType], MultiString.c_str());
 }
-std::string wide_to_multi_capi(std::wstring const& src)
+
+//u8len関数（UTF8の文字数をカウントする関数）
+int u8len(const char* str)
 {
-	std::size_t converted{};
-	std::vector<char> dest(src.size() * sizeof(wchar_t) + 1, '\0');
-	if (::_wcstombs_s_l(&converted, dest.data(), dest.size(), src.data(), _TRUNCATE, ::_create_locale(LC_ALL, "jpn")) != 0) {
-		throw std::system_error{ errno, std::system_category() };
+	int cnt = 0;
+	while (*str != '\0') {
+		cnt++;
+		str += u8mb(*str);
 	}
-	dest.resize(std::char_traits<char>::length(dest.data()));
-	dest.shrink_to_fit();
-	return std::string(dest.begin(), dest.end());
+	return cnt;
 }
-std::wstring utf8_to_wide_cppapi(std::string const& src)
+
+//u8mb関数：UTF-8文字の1バイト目を判定して文字のバイト数を返す関数
+int u8mb(const char chr)
 {
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	return converter.from_bytes(src);
+	int byt = 1;
+	if ((chr & 0x80) == 0x00) { //1byte文字は何もしない（[byt = 1]のまま）
+	}
+	else if ((chr & 0xE0) == 0xC0) { //2byte文字
+		byt = 2;
+	}
+	else if ((chr & 0xF0) == 0xE0) { //3byte文字
+		byt = 3;
+	}
+	else if ((chr & 0xF8) == 0xF0) { //4byte文字
+		byt = 4;
+	}
+	else if ((chr & 0xFC) == 0xF8) { //5byte文字
+		byt = 5;
+	}
+	else if ((chr & 0xFE) == 0xFC) { //6byte文字
+		byt = 6;
+	}
+	return byt;
 }
-std::string utf8_to_multi_cppapi(std::string const& src)
-{
-	auto const wide = utf8_to_wide_cppapi(src);
-	return wide_to_multi_capi(wide);
-}
+
+
 
 /// <summary>
 /// ロード済みのオブジェクトタイプのテキストをセットする

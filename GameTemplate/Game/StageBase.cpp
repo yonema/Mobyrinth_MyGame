@@ -40,11 +40,14 @@ bool IStageBase::Start()
 	m_sky->SetScale(1000.0f);
 
 
+
 	//キャパシティを表示するスプライトの生成と初期化
 	m_capacityDisplaySR = NewGO<CSpriteRender>(0);
+	const float capacityX = -490.0f;
+	const float capacityY = 270.0f;
 	m_capacityDisplaySR->Init
-	("Assets/image/Capacity_display.DDS", 512.0f * 1.0f, 256.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-	m_capacityDisplaySR->SetPosition({ -490.0f, 240.0f,0.0f });
+	("Assets/image/Capacity_display.DDS", 512.0f * 1.1f, 256.0f * 1.1f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+	m_capacityDisplaySR->SetPosition({ capacityX, capacityY,0.0f });
 	m_capacityDisplaySR->SetPostRenderFlag(true);
 	//タイトル画面か？
 	if (m_titlePlayer)
@@ -68,14 +71,17 @@ bool IStageBase::Start()
 	Vector3 fontColor;
 	fontColor = { 214.0f,85.0f,0.0f };
 	fontColor.Normalize();
+	const float capacityNumX = -615.0f;
+	const float capacityNumY = 332.5f;
 	m_roNumFR[0]->Init(L"",
-		{ -600.0f,300.0f }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
+		{ capacityNumX,capacityNumY }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
 		0.0f, scale, { 0.5f,0.5f });
 	fontColor = { 99.0f,97.0f,99.0f };
 	fontColor.Normalize();
 	fontColor.Scale(0.1);
+	const float capacityNumDiff = 70.0f;
 	m_roNumFR[1]->Init(L"", 
-		{ -600.0f,240.0f }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
+		{ capacityNumX,capacityNumY - capacityNumDiff }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
 		0.0f, scale, { 0.5f,0.5f });
 	//タイトル画面か？
 	if (m_titlePlayer)
@@ -662,9 +668,9 @@ void IStageBase::Update()
 	const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
 	//テキストをセット
 	std::wstring wString = L"あ";
-	swprintf(text, L"表:%d/%d", num[0], maxNum[0]);
+	swprintf(text, L"表:%d /%d", num[0], maxNum[0]);
 	m_roNumFR[0]->SetText(text);
-	swprintf(text, L"裏:%d/%d", num[1], maxNum[1]);
+	swprintf(text, L"裏:%d /%d", num[1], maxNum[1]);
 	m_roNumFR[1]->SetText(text);
 
 

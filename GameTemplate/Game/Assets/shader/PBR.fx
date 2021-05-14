@@ -355,6 +355,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//アルベドカラー(拡散反射光)。
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
 	
+	return albedoColor;
 
 	//スペキュラカラー(鏡面反射光)。
 	float3 specColor = g_specularMap.SampleLevel(g_sampler, psIn.uv, 0).rgb;

@@ -6,7 +6,7 @@ bool CUFO::PureVirtualStart()
 {
 	//ƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[‚Ì¶¬‚Æ‰Šú‰»
 	m_modelRender = NewGO<CModelRender>(0);
-	m_modelRender->Init("Assets/modelData/UFO.tkm");
+	m_modelRender->Init("Assets/modelData/UFO2.tkm");
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 

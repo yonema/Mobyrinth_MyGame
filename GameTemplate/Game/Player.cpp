@@ -26,9 +26,10 @@ bool Player::Start()
 	//モデルレンダラーの初期化をする
 	//この時にアニメーションクリップを一緒に引数に渡しておく
 	m_modelRender->Init
-		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips,enAnimClip_Num,enModelUpAxisZ);
+		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips,1,enModelUpAxisZ);
 		/*("Assets/modelData/player.tkm");*/
-
+	m_modelRender->SetShadowCasterFlag(false);
+	m_modelRender->SetShadowReceiverFlag(false);
 	/////////////////////////////////////////////////////////////
 	//ここまで
 	/////////////////////////////////////////////////////////////
