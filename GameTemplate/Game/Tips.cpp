@@ -73,6 +73,18 @@ void CTips::InitText()
 		case enBar:		//バール
 			LoadText(objectType, "bar");
 			break;
+		case enKey:		//鍵
+			LoadText(objectType, "key");
+			break;
+		case enPadlock:	//南京錠
+			LoadText(objectType, "padlock");
+			break;
+		case enLeftType://左
+			LoadText(objectType, "left");
+			break;
+		case enRightType://右
+			LoadText(objectType, "right");
+			break;
 		case enBigFire:		//炎
 			LoadText(objectType, "bigFire");
 			break;
@@ -82,14 +94,26 @@ void CTips::InitText()
 		case enGoal:		//ゴール
 			LoadText(objectType, "goal");
 			break;
+		case enNotHavePadlock:	//持てない南京錠
+			LoadText(objectType, "notHavePadlock");
+			break;
 		case enBox:			//箱
 			LoadText(objectType, "box");
 			break;
 		case enOneway:		//一方通行
 			LoadText(objectType, "oneWay");
 			break;
+		case enTransparentSwitch:	//一方通行
+			LoadText(objectType, "switch");
+			break;
+		case enReverseAll:	//全反転
+			LoadText(objectType, "reverseAll");
+			break;
 		case enUFOCapture:	//UFOに捕まった
 			LoadText(objectType, "UFOCapture");
+			break;
+		case enUFOLandingPoint:	//UFOに捕まった
+			LoadText(objectType, "UFOLandingPoint");
 			break;
 		default:		//デフォルト
 			LoadText(objectType, "empty");
