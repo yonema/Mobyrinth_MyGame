@@ -57,6 +57,7 @@ private:	//データメンバ
 	char m_text[enObjectTypeNum][m_maxTextSize];	//ロードしたTipsの文章
 };
 
-std::string wide_to_multi_capi(std::wstring const& src);
-std::wstring utf8_to_wide_cppapi(std::string const& src);
-std::string utf8_to_multi_cppapi(std::string const& src);
+//u8len関数（UTF8の文字数をカウントする関数）
+int u8len(const char* str);
+//u8mb関数：UTF-8文字の1バイト目を判定して文字のバイト数を返す関数
+int u8mb(const char chr);

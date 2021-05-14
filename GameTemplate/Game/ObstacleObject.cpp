@@ -49,6 +49,7 @@ bool CObstacleObject::Init(const char* filePath, int objectType)
 	m_modelRender = NewGO<CModelRender>(0);
 	//モデルレンダラーを初期化
 	m_modelRender->Init(filePath, D3D12_CULL_MODE_NONE);
+	m_modelRender->SetShadowReceiverFlag(false);
 	//オブジェクトのタイプを設定する
 	SetObjectType(objectType);
 
