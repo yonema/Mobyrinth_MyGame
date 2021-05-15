@@ -42,7 +42,7 @@ bool IStageBase::Start()
 
 
 	//キャパシティを表示するスプライトの生成と初期化
-	m_capacityDisplaySR = NewGO<CSpriteRender>(0);
+	m_capacityDisplaySR = NewGO<CSpriteRender>(1);
 	const float capacityX = -490.0f;
 	const float capacityY = 270.0f;
 	m_capacityDisplaySR->Init
@@ -123,6 +123,11 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	//プレイヤーのポインタ
 	Player* pPlayer;
 
+	//スイッチのポインタ
+	OOTransparentSwitch* switchObject = nullptr;
+	int TransparentNum = 0;
+
+
 	//レベルをロードする
 	m_level.Init(tklFilePath, [&](LevelObjectData& objData)
 		{//ロードするレベル一つ一つにクエリを行う
@@ -198,6 +203,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObject->SetPosition(objData.position);
 				RObject->SetFrontOrBack(CReversibleObject::enBack);
 				RObject->SetTransparentObject();
+				TransparentNum++;
 				return true;
 			}
 			//bird_fish
@@ -276,6 +282,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enFront);
 			RObject->SetTransparentObject();
+			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -286,6 +293,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enBack);
 			RObject->SetTransparentObject();
+			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -340,6 +348,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enFront);
 			RObject->SetTransparentObject();
+			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -350,6 +359,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enBack);
 			RObject->SetTransparentObject();
+			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -394,6 +404,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			m_goal = NewGO<OOgoal>(0, "goal");
 			m_goal->SetPosition(objData.position);
 			m_goal->SetTransparentObject();
+			TransparentNum++;
 			return true;
 			}
 			//bigFire
@@ -411,6 +422,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			OObject = NewGO<OObigFire>(0, "bigFire");
 			OObject->SetPosition(objData.position);
 			OObject->SetTransparentObject();
+			TransparentNum++;
 			return true;
 			}
 			//wall
@@ -444,6 +456,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			OObject = NewGO<OObox>(0, "box");
 			OObject->SetPosition(objData.position);
 			OObject->SetTransparentObject();
+			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -457,9 +470,9 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 			else if (objData.EqualObjectName(L"switch") == true)
 			{
-				OOTransparentSwitch* OObject;
-				OObject = NewGO<OOTransparentSwitch>(0, "transparentSwitch");
-				OObject->SetPosition(objData.position);
+				//OOTransparentSwitch* OObject;
+				switchObject = NewGO<OOTransparentSwitch>(0, "transparentSwitch");
+				switchObject->SetPosition(objData.position);
 				return true;
 			}
 			//oneway
@@ -565,6 +578,14 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
 	m_startDirecting->SetWayPointRot
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
+
+	//スイッチが生成されていたか？
+	if (switchObject)
+	{
+		//されている
+
+		switchObject->SetTimerFRNum(TransparentNum);
+	}
 
 
 	return;

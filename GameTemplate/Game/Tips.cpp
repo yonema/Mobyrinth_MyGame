@@ -5,7 +5,7 @@
 CTips::CTips()
 {
 	//「TipsのUI」のスプライトレンダラーの生成と初期化
-	m_tipsUISR = NewGO<CSpriteRender>(0);
+	m_tipsUISR = NewGO<CSpriteRender>(1);
 	const float tipsUIX = 400.0f;
 	const float tipsUIY = 260.0f;
 	m_tipsUISR->Init("Assets/image/Tips_UI.DDS",
@@ -14,7 +14,7 @@ CTips::CTips()
 	m_tipsUISR->SetPostRenderFlag(true);
 
 	//「Tips」のフォントレンダーの生成と初期化
-	m_tipsFR = NewGO<CFontRender>(0);
+	m_tipsFR = NewGO<CFontRender>(1);
 	const float tipsX = 200.0f;
 	const float tipsY = 330.0f;
 	m_tipsFR->Init(L"T ip s", 
@@ -27,7 +27,7 @@ CTips::CTips()
 	m_tipsFR->SetPostRenderFlag(true);
 
 	//Tipsの文章を表示するフォントレンダラーの生成と初期化
-	m_sentenceFR = NewGO<CFontRender>(0);
+	m_sentenceFR = NewGO<CFontRender>(1);
 	const float sentenceDistX = 20.0f;
 	const float sentenceDistY = -50.0f;
 	m_sentenceFR->Init(L"", { tipsX + sentenceDistX,tipsY + sentenceDistY });
