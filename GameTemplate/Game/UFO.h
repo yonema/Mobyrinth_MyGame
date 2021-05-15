@@ -4,6 +4,7 @@
 #include "SpotLight.h"
 #include "UFOLandingPoint.h"
 #include "ReversibleObject.h"
+#include "SoundCue.h"
 
 /// <summary>
 /// UFOクラス
@@ -33,6 +34,9 @@ public:		//メンバ関数
 	{
 		m_moveSpeed = m_defaultSpeed;
 	}
+
+	void UFOmove();		//UFOの移動SE範囲
+	void UFOyellowlight();	//UFOの黄色いライトSE範囲
 
 private:	//privateなメンバ関数
 
@@ -88,6 +92,9 @@ private:	//データメンバ
 	bool m_getOnStageFlag = true;			//ステージの上に乗る処理を行うか？
 	float m_ufoAngle = 0.0f;				//UFOの回転の角度
 	float m_ufoAngleSpeed = 100.0f;			//UFOの回転するスピー度
+	CSoundCue* m_UFOmoveSE = nullptr;		//UFOmoveSEのサウンドキュー
+	CSoundCue* m_UFOcarrymoveSE = nullptr;	//UFOcarrymoveSEのサウンドキュー
+	CSoundCue* m_UFOyellowlightSE = nullptr;	//UFOyellowlightSEのサウンドキュー
 
 	//デバック用
 private:

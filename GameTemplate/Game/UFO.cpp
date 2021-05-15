@@ -63,6 +63,27 @@ bool CUFO::PureVirtualStart()
 	//他のレベルオブジェクトと衝突しなくする
 	SetFlagIsHit(false);
 
+	//UFOmoveSEのサウンドキューを生成する
+	m_UFOmoveSE = NewGO<CSoundCue>(0);
+	//UFOmoveSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_UFOmoveSE->Init(L"Assets/sound/UFOmove.wav");
+	//音量調節
+	m_UFOmoveSE->SetVolume(0.5f);
+
+	//UFOcarrymoveSEのサウンドキューを生成する
+	m_UFOcarrymoveSE = NewGO<CSoundCue>(0);
+	//UFOcarrymoveSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_UFOcarrymoveSE->Init(L"Assets/sound/UFOcarrymove.wav");
+	//音量調節
+	m_UFOcarrymoveSE->SetVolume(0.5f);
+
+	//UFOyellowlightのサウンドキューを生成する
+	m_UFOyellowlightSE = NewGO<CSoundCue>(0);
+	//UFOyellowlightのサウンドキューを、waveファイルを指定して初期化する。
+	m_UFOyellowlightSE->Init(L"Assets/sound/UFOyellowlight.wav");
+	//音量調節
+	m_UFOyellowlightSE->SetVolume(0.5f);
+
 #ifdef MY_DEBUG
 	//デバック用
 	//後で消す
@@ -86,6 +107,7 @@ bool CUFO::PureVirtualStart()
 	//スポットライトの位置を見るためのモデル
 	m_dbgSpotLigPos = NewGO<CModelRender>(0);
 	m_dbgSpotLigPos->Init("Assets/modelData/dbgBox.tkm");
+
 #endif
 	//デバック用ここまで
 
@@ -109,6 +131,16 @@ CUFO::~CUFO()
 
 	//UFOの着地点の破棄
 	DeleteGO(m_ufoLandingPoint);
+
+	//UFOmoveSEの破棄
+	DeleteGO(m_UFOmoveSE);
+
+	//UFOcarrymoveSEの破棄
+	DeleteGO(m_UFOcarrymoveSE);
+
+	//UFOyellowlightSEの破棄
+	DeleteGO(m_UFOyellowlightSE);
+
 #ifdef MY_DEBUG
 	//デバック用
 	//後で消す
@@ -190,6 +222,58 @@ void CUFO::PureVirtualUpdate()
 	//デバック用ここまで
 }
 
+//プレイヤーがUFOに近づくと音を鳴らす
+void CUFO::UFOmove()
+{
+	Vector3 distance = m_position - m_pPlayer->GetPosition();
+	const float MaxDist = 1500;
+	const float DistLen = distance.Length();
+
+	if (DistLen < MaxDist) {
+		float Le = MaxDist - DistLen;
+		float SubLe = Le / MaxDist;
+		float Vo = 2.0f * SubLe;
+
+		//UFOmoveSEをループ再生をオンで再生する。
+		m_UFOmoveSE->Play(true);
+
+		//音量調節
+		m_UFOmoveSE->SetVolume(Vo);
+
+	}
+	else {
+		if (m_UFOmoveSE->IsPlaying()) {
+			m_UFOmoveSE->Stop();
+		}
+	}
+}
+
+//プレイヤーがUFOyellowlightに近づくと音を鳴らす
+void CUFO::UFOyellowlight()
+{
+	Vector3 distance = m_position - m_pPlayer->GetPosition();
+	const float MaxDist = 1500;
+	const float DistLen = distance.Length();
+
+	if (DistLen < MaxDist) {
+		float Le = MaxDist - DistLen;
+		float SubLe = Le / MaxDist;
+		float Vo = 2.0f * SubLe;
+
+		//UFOyellowlightSEをループ再生をオンで再生する。
+		m_UFOyellowlightSE->Play(true);
+
+		//音量調節
+		m_UFOyellowlightSE->SetVolume(Vo);
+
+	}
+	else {
+		if (m_UFOyellowlightSE->IsPlaying()) {
+			m_UFOyellowlightSE->Stop();
+		}
+	}
+}
+
 //プレイヤーを探す処理
 void CUFO::Search()
 {
@@ -227,6 +311,8 @@ void CUFO::Search()
 		m_ufoLight->SetEmissionColor({ 1.5f,1.5f,0.0f,1.0f });
 		//UFOの光線を半透明にする
 		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+		//UFOyellowlightSE
+		UFOyellowlight();
 
 		//プレイヤーを衝突しているか？
 		if (IsHitPlayer())
@@ -258,6 +344,10 @@ void CUFO::Search()
 			//タイマーを初期化する
 			m_timer = 0.0f;
 
+			//UFOyellowSEが鳴っていたら止める
+			if (m_UFOyellowlightSE->IsPlaying()) {
+				m_UFOyellowlightSE->Stop();
+			}
 		}
 	}
 	else
@@ -273,6 +363,10 @@ void CUFO::Search()
 		m_ufoLight->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の透明にする
 		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		//UFOyellowSEが鳴っていたら止める
+		if(m_UFOyellowlightSE->IsPlaying()) {
+			m_UFOyellowlightSE->Stop();
+		}
 
 	}
 }
@@ -554,6 +648,11 @@ void CUFO::Transport()
 		//タイマーを初期化する
 		m_timer = 0.0f;
 		m_ufoAngleSpeed = 100.0f;
+
+		//UFOcarrymoveSEが鳴っていたら止める
+		if (m_UFOcarrymoveSE->IsPlaying()) {
+			m_UFOcarrymoveSE->Stop();
+		}
 	}
 	else
 		//衝突していなかったら
@@ -567,6 +666,9 @@ void CUFO::Transport()
 	m_pPlayer->SetCapturedRotation(m_rotation);
 	m_pPlayer->SetLeftPointIndex(GetLeftWayPointIndex());
 	m_pPlayer->SetRightPointIndex(GetRightWayPointIndex());
+
+	//UFOcarrymoveSE
+	m_UFOcarrymoveSE->Play(true);
 }
 
 //着地の処理
@@ -810,12 +912,14 @@ void CUFO::Leave()
 		m_timer = 0.0f;
 		//プレイヤーをUFOに捕まっていない状態にする
 		m_pPlayer->SetCapturedUFOFlag(false);
+		if (m_UFOcarrymoveSE->IsPlaying()) {
+			m_UFOcarrymoveSE->Stop();
+		}
 	}
 	else
 		//切り替え時間より小さかったら
 		//タイマーを進める
 		m_timer += GameTime().GetFrameDeltaTime();
-
 }
 
 //移動処理
@@ -847,6 +951,8 @@ void CUFO::Move()
 	}
 	//自身の左側のウェイポイントを更新する
 	SetLeftWayPointIndex(nextIndex);
+	//UFOmoveSE
+	UFOmove();
 }
 
 //メビウスの輪のステージにイイ感じに合わせる処理
