@@ -147,6 +147,7 @@ float SpcFresnel(float f0, float u);
 float CookTrranceSpecular(float3 L, float3 V, float3 N, float3 N2, float metaric);
 float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V);
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin);
+float4 SpecialColor(float4 albedoColor);
 ////////////////////////////////////////////////
 // 関数定義。
 ////////////////////////////////////////////////
@@ -355,7 +356,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//アルベドカラー(拡散反射光)。
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
 	
-	return albedoColor;
+	return SpecialColor(albedoColor);
 
 	//スペキュラカラー(鏡面反射光)。
 	float3 specColor = g_specularMap.SampleLevel(g_sampler, psIn.uv, 0).rgb;
@@ -551,3 +552,17 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	return finalColor;
 }
 
+float4 SpecialColor(float4 albedoColor)
+{
+	float4 lig = albedoColor;
+	//環境光による底上げ。
+	//lig.xyz += ambientLight * albedoColor;
+
+	//自己発光色
+	//lig += albedoColor * emissionColor;
+	lig.xyz += emissionColor.xyz;
+	lig *= mulColor;
+
+	return lig;
+
+}
