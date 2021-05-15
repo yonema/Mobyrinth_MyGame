@@ -101,45 +101,48 @@ void GameCamera::StartDirectingCamera()
 
 void GameCamera::InGameCamera()
 {
-	if (m_pPlayer)
+	if (m_lookPlayerFlag)
 	{
-		//プレイヤーが見つかっていたら
+		if (m_pPlayer)
+		{
+			//プレイヤーが見つかっていたら
 
-		//注視点から視点へのベクトルを設定する
-		m_toCameraPos = { 0.0f,0.0f,1200.0f };
+			//注視点から視点へのベクトルを設定する
+			m_toCameraPos = { 0.0f,0.0f,1200.0f };
 			//if (m_titleMode)
 			//	m_toCameraPos = { 0.0f,600.0f,1200.0f };
-		const float upLen = 400.0f;
-		Vector3 upVec = { 0.0f,upLen,0.0f };
+			const float upLen = 400.0f;
+			Vector3 upVec = { 0.0f,upLen,0.0f };
 
 
 
-		//プレイヤーの回転を得る
-		const Quaternion qRot = (m_pPlayer->GetFinalWPRot());
-		//カメラへのベクトルを回す
-		qRot.Apply(m_toCameraPos);
-		//アップベクトル
-		Vector3 vecUp = g_vec3AxisY;
-		//アップベクトルを回す
-		qRot.Apply(vecUp);
+			//プレイヤーの回転を得る
+			const Quaternion qRot = (m_pPlayer->GetFinalWPRot());
+			//カメラへのベクトルを回す
+			qRot.Apply(m_toCameraPos);
+			//アップベクトル
+			Vector3 vecUp = g_vec3AxisY;
+			//アップベクトルを回す
+			qRot.Apply(vecUp);
 
-		qRot.Apply(upVec);
+			qRot.Apply(upVec);
 
-		if (!m_titleMode)
-			upVec = g_vec3Zero;
+			if (!m_titleMode)
+				upVec = g_vec3Zero;
 
-		//注視点を設定する
-		g_camera3D->SetTarget(m_pPlayer->GetPosition() + upVec);
-		//視点を設定する
-		g_camera3D->SetPosition(m_pPlayer->GetPosition() + m_toCameraPos + upVec);
-		//アップ軸を設定する
-		g_camera3D->SetUp(vecUp);
-	}
-	else
-	{
-		//プレイヤーが見つかっていなかったら
-		//プレイヤーを探す
-		m_pPlayer = FindGO<Player>("Player");
+			//注視点を設定する
+			g_camera3D->SetTarget(m_pPlayer->GetPosition() + upVec);
+			//視点を設定する
+			g_camera3D->SetPosition(m_pPlayer->GetPosition() + m_toCameraPos + upVec);
+			//アップ軸を設定する
+			g_camera3D->SetUp(vecUp);
+		}
+		else
+		{
+			//プレイヤーが見つかっていなかったら
+			//プレイヤーを探す
+			m_pPlayer = FindGO<Player>("Player");
+		}
 	}
 
 
