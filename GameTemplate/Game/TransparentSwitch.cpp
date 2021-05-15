@@ -40,7 +40,21 @@ bool OOTransparentSwitch::StartSub()
 	//非表示にする
 	m_modelRender->Deactivate();
 
+	//カメラを探す	//これは確実に見つける
+	m_gameCamera = FindGO<GameCamera>("GameCamera");
 
+	//UFOを探す	//こっちは見つかるか分からない。
+	m_ufo = FindGO<CUFO>("UFO");
+
+	//フェードに使うスプライトの生成と初期化
+	m_fadeSR = NewGO<CSpriteRender>(0);
+	m_fadeSR->Init("Assets/Image/black.DDS", 1280.0f, 780.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+	m_fadeSR->SetPosition({ 0.0f,0.0f,0.0f });
+	m_fadeSR->SetPostRenderFlag(true);
+	//透明にしておく
+	m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+	//非表示にする
+	m_fadeSR->Deactivate();
 
 	return true;
 }
@@ -61,6 +75,12 @@ OOTransparentSwitch::~OOTransparentSwitch()
 //アップデート関数
 void OOTransparentSwitch::UpdateSub()
 {
+
+	if (m_switchingFlag)
+	{
+		Switching();
+		return;
+	}
 	//リセットタイマーが０になったとき
 	//透明オブジェクトをすべて持ち上げられないようにする。
 	//透明オブジェクトを持っている場合、そのオブジェクトを持っていない状態にする。
@@ -120,57 +140,213 @@ void OOTransparentSwitch::UpdateSub()
 		//透明オブジェクトをすべて持ち上げられるようにする。
 		//スイッチのオブジェクトの範囲内でAボタンが押されたとき
 		if (IsHitPlayer() && g_pad[0]->IsTrigger(enButtonA)) {
-			m_flagSwitchOn = true;
+
+			//切り替え中フラグを立てる
+			m_switchingFlag = true;
+			//切り替え中タイマーを初期化する
+			m_switchingTimer = 0.0f;
+
+			//プレイヤーを操作不能にする
+			m_pPlayer->SetOperationFlag(false);
+
+			//UFOがあるか？
+			if (m_ufo)
+				//あるとき
+				//UFOを動かなくする
+				m_ufo->SetMoveSpeed(0.0f);
+
 			//リセットタイマーに開始する値を代入
 			m_resetTimer = m_resetTimerStartValue;
-
-
-			//タイマーのフォントを表示する
-			for (auto timerFR : m_timerFR)
-			{
-				timerFR->Activate();
-			}
-			//点滅タイマーを初期化する
-			m_blinkTimer = FLT_MAX;
-			//フォントのカラーを通常時のカラーにする
-			m_fontColor = m_normalColor;
-
-			//透明オブジェクトを実体にする。
-			ChangeEntity();
-
 			//押されていない時のモデルレンダラーを非表示にする
 			GetModelRender()->Deactivate();
 			//押されたときのモデルレンダラーを表示する
 			m_modelRender->Activate();
 
+			m_fadeSR->Activate();
+
 		}
 	}
 }
 
-/// <summary>
-/// タイマーのフォントが何個いるのか設定する
-/// </summary>
-/// <param name="num">何個</param>
-void OOTransparentSwitch::SetTimerFRNum(const int num)
+void OOTransparentSwitch::Switching()
 {
-	//サイズを指定する
-	m_timerFR.resize(num);
-	//タイマーのフォントのイテレーターを用意する
-	std::list<CFontRender*>::iterator itr = m_timerFR.begin();
+	const float startWaitTime = 0.5f;							//最初の待つ時間		 
+	const float startFadeOutTime = startWaitTime + 0.5f;		//最初のフェードアウト時間
+	const float startFadeWaitTime = startFadeOutTime + 0.5f;	//最初のフェード中間時間
+	const float startFadeInTime = startFadeWaitTime + 0.5f;		//最初のフェードイン時間
+	const float switchingTime = startFadeInTime + 2.0f;			//切り替え中時間
+	const float endFadeOutTime = switchingTime + 0.5f;			//終わりのフェードアウト時間
+	const float endFadeWaitTime = endFadeOutTime + 0.5f;		//終わりのフェード中間時間
+	const float endFadeInTime = endFadeWaitTime + 0.5f;			//終わりのフェードイン時間
 
-	//フォントのカラーを通常のカラーに設定する
-	m_fontColor = m_normalColor;
-
-	//指定した数、フォントを生成し、初期化する
-	for (; itr != m_timerFR.end(); itr++)
+	//切り替え中のタイマーの経過を調べる
+	if (m_switchingTimer < startWaitTime)
 	{
-		(*itr) = NewGO<CFontRender>(0);
-		(*itr)->Init(L"10", { 0.0f,0.0f }, m_fontColor);
-		(*itr)->SetPostRenderFlag(true);
-		//非表示にする
-		(*itr)->Deactivate();
+		//最初の待つ時間
+
+		//何もせずに待つ
 	}
+	else if (m_switchingTimer < startFadeOutTime)
+	{
+		//フェードアウトしていく
+
+		//アルファ値
+		float alphaValue = 1.0f;
+		//タイマーに経過具合によって補完
+		float timeScale = (m_switchingTimer - startWaitTime) / (startFadeOutTime - startWaitTime);
+		alphaValue *= timeScale;
+		//フェードを徐々に暗くしていく
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+	}
+	else if (m_switchingTimer < startFadeWaitTime)
+	{
+		//フェードアウトとフェードインの間
+		//何もせずに待つ
+
+		//フェードは真っ暗
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+
+		//カメラがプレイヤーを見なくする
+		m_gameCamera->SetLookPlayerFlag(false);
+		//カメラへの座標
+		Vector3 toCameraPos = { 0.0f,0.0f,3500.0f };
+		//カメラの始点を設定
+		m_gameCamera->SetPosition(toCameraPos);
+		//カメラの注視点を設定
+		m_gameCamera->SetTarget({ 0.0f,0.0f,0.0f });
+
+	}
+	else if (m_switchingTimer < startFadeInTime)
+	{
+		//フェードインしていく
+
+		//アルファ値
+		float alphaValue = 1.0f;
+		//タイマーに経過具合によって補完
+		float timeScale = (m_switchingTimer - startFadeWaitTime) / (startFadeInTime - startFadeWaitTime);
+		alphaValue -= 1.0f * timeScale;
+		//フェードを徐々に明るくしていく
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+	}
+	else if (m_switchingTimer < switchingTime)
+	{
+		//透明オブジェクトの切り替え中
+
+		//切り替え中時間の半分の時間
+		const float halfSwitchingTime = 
+			startFadeInTime + (switchingTime - startFadeInTime) / 2.0f;
+
+		//半分の時間より小さいか？
+		if (m_switchingTimer < halfSwitchingTime)
+		{
+			//小さいとき
+
+			//フェードを透明にする
+			m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		}
+		else
+		{
+			//大きいとき
+			
+			//一つ目のタイマーのフォントは有効化ではないか？
+			if (!(*m_timerFR.begin())->IsActive())
+			{
+				//有効化ではない
+
+				//タイマーのフォントを有効化する
+				for (auto timerFR : m_timerFR)
+				{
+					timerFR->Activate();
+				}
+				//点滅タイマーを初期化する
+				m_blinkTimer = FLT_MAX;
+				//フォントのカラーを通常時のカラーにする
+				m_fontColor = m_normalColor;
+
+				//透明オブジェクトを実体にする。
+				ChangeEntity();
+			}
+			else
+			{
+				//有効化である
+
+				//何もせずに待つ
+			}
+		}
+	}
+	else if (m_switchingTimer < endFadeOutTime)
+	{
+		//フェードアウトしていく
+
+		//アルファ値
+		float alphaValue = 1.0f;
+		//タイマーに経過具合によって補完
+		float timeScale = (m_switchingTimer - switchingTime) / (endFadeOutTime - switchingTime);
+		alphaValue *= timeScale;
+		//フェードを徐々に暗くしていく
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+	}
+	else if (m_switchingTimer < endFadeWaitTime)
+	{
+		//フェードアウトとフェードインの間
+		//何もせずに待つ
+
+		//フェードは真っ暗
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		//カメラがプレイヤーを見るようにする
+		m_gameCamera->SetLookPlayerFlag(true);
+	}
+	else if (m_switchingTimer < endFadeInTime)
+	{
+		//フェードインしてく
+
+		//アルファ値
+		float alphaValue = 1.0f;
+		//タイマーに経過具合によって補完
+		float timeScale = (m_switchingTimer - endFadeWaitTime) / (endFadeInTime - endFadeWaitTime);
+		alphaValue -= 1.0f * timeScale;
+		//フェードを徐々に明るくしていく
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+
+		//タイマーのフォントの更新
+		UpdateTimerFR();
+	}
+	else
+	{
+		//終了
+
+		//切り替え中フラグを折る
+		m_switchingFlag = false;
+		//切り替え中のタイマーを初期化する
+		m_switchingTimer = 0.0f;
+		//フェードを透明にする
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		//フェードを非表示にする
+		m_fadeSR->Deactivate();
+
+		//スイッチオンフラグを立てる
+		m_flagSwitchOn = true;
+
+		//プレイヤーを操作可能にする
+		m_pPlayer->SetOperationFlag(true);
+
+		//UFOがあるか？
+		if (m_ufo)
+			//あるとき
+			//UFOを動かす
+			m_ufo->SetMoveSpeed();
+
+	}
+
+	//切り替え中か？
+	if (m_switchingFlag)
+		//切り替え中
+		//切り替え中タイマーを進める
+		m_switchingTimer += GameTime().GetFrameDeltaTime();
+
 }
+
+
 
 /// <summary>
 /// タイマーのフォントの更新
@@ -281,4 +457,29 @@ void OOTransparentSwitch::SetTimerFRParam
 	(*itr)->SetText(text);
 	//タイマーのフォントのカラーを設定する
 	(*itr)->SetColor(m_fontColor);
+}
+
+/// <summary>
+/// タイマーのフォントが何個いるのか設定する
+/// </summary>
+/// <param name="num">何個</param>
+void OOTransparentSwitch::SetTimerFRNum(const int num)
+{
+	//サイズを指定する
+	m_timerFR.resize(num);
+	//タイマーのフォントのイテレーターを用意する
+	std::list<CFontRender*>::iterator itr = m_timerFR.begin();
+
+	//フォントのカラーを通常のカラーに設定する
+	m_fontColor = m_normalColor;
+
+	//指定した数、フォントを生成し、初期化する
+	for (; itr != m_timerFR.end(); itr++)
+	{
+		(*itr) = NewGO<CFontRender>(0);
+		(*itr)->Init(L"10", { 0.0f,0.0f }, m_fontColor);
+		(*itr)->SetPostRenderFlag(true);
+		//非表示にする
+		(*itr)->Deactivate();
+	}
 }
