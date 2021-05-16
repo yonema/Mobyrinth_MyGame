@@ -38,7 +38,7 @@ private:	//privateなメンバ関数
 	/// </summary>
 	/// <param name="num">表側と裏側のアイテムの数</param>
 	/// <param name="maxNum">表側と裏側のアイテムの最大数</param>
-	void CheckDirecting(const int* num, const int* maxNum);
+	void CheckDirecting(const int* num);
 
 	//演出の割り振り
 	void Directing();
@@ -87,10 +87,14 @@ private:	//データメンバ
 
 	CSpriteRender* m_capacityDisplaySR = nullptr;	//キャパシティを表示するスプライト
 	CFontRender* m_RONumFR[enFrontAndBackSideNum];	//表側と裏側にあるアイテムの数のフォント
+	CFontRender* m_capacityFR[enFrontAndBackSideNum];	//キャパシティのフォント
+	Vector2 m_capacityPos[enFrontAndBackSideNum];	//キャパシティのフォントの座標
 	Vector4 m_normalFontColor[enFrontAndBackSideNum];	//フォントのカラー
 	int m_oldRONum[enFrontAndBackSideNum];			//前回の表側と裏側にあるアイテムの数
+	bool m_firstFrame = true;						//最初のフレームか？
 	bool m_titleFlag = false;						//タイトルか？
 	int m_directingState[enFrontAndBackSideNum] = { enNormal };	//演出のステート
 	float m_timer[enFrontAndBackSideNum] = { 0.0f };	//タイマー
+	int m_maxCapacityNum[enFrontAndBackSideNum] = { 5,5 };	//キャパシティの最大値
 };
 
