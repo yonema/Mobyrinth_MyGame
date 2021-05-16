@@ -43,6 +43,7 @@ private:	//データメンバ
 	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
 	Effect* m_obujectefk = nullptr;  //全反転する場所のエフェクト
 	float i = 0.0f;					 //エフェクトのループ再生ようのタイマー
+	Effect* m_reverseall2 = nullptr;  //全反転する場所にプレイヤーが触れた時のエフェクト
 
 private:	//デバック用
 

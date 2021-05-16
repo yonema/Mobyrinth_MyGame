@@ -88,6 +88,14 @@ bool OOTransparentSwitch::StartSub()
 	//音量調節
 	m_invalidationSE->SetVolume(0.5f);
 
+	//m_activationエフェクトの作成
+	m_activation = NewGO<Effect>(0);
+	m_activation->Init(u"Assets/effect2/activation.efk");
+	float scale = 200.0f;								//小さいので大きくしておく
+	m_activation->SetScale({ scale ,scale ,scale });
+	m_activation->SetPosition(m_position);				//座標を渡す
+	m_activation->SetRotation(m_rotation);
+
 	return true;
 }
 
@@ -458,7 +466,6 @@ void OOTransparentSwitch::UpdateTimerFR()
 
 		//イテレーターを進める
 		itr++;
-
 	}
 }
 

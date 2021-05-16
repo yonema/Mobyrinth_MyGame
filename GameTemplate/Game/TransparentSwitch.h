@@ -5,6 +5,7 @@
 #include "GameCamera.h"
 #include "UFO.h"
 #include "SoundCue.h"
+#include "effect/Effect.h"
 
 class OOTransparentSwitch : public CObstacleObject
 {
@@ -83,6 +84,7 @@ public: //Set関数
 
 			//イテレーターを進める
 			itr++;
+
 		}
 	}
 
@@ -127,5 +129,6 @@ private: //メンバ変数
 	CSoundCue* m_buttonpushSE = nullptr;		//m_buttonpushSEのサウンドキュー
 	CSoundCue* m_activationSE = nullptr;		//m_activationSEのサウンドキュー
 	CSoundCue* m_invalidationSE = nullptr;		//m_invalidationSEのサウンドキュー
+	Effect* m_activation = nullptr;				//オブジェクトが有効化した時のエフェクト
 };
 

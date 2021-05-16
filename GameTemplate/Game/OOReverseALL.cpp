@@ -29,7 +29,7 @@ bool OOReverseALL::StartSub()
 	//音量調節
 	m_changeSE->SetVolume(0.5f);
 
-	//エフェクトの作成
+	//m_obujectefkエフェクトの作成
 	m_obujectefk = NewGO<Effect>(0);
 	m_obujectefk->Init(u"Assets/effect/reverseall.efk");
 	float scale = 200.0f;								//小さいので大きくしておく
@@ -37,6 +37,14 @@ bool OOReverseALL::StartSub()
 	m_obujectefk->SetPosition(m_position);				//座標を渡す
 	m_obujectefk->SetRotation(m_rotation);
 	m_obujectefk->Play();								//再生
+
+	//m_reverseall2エフェクトの作成
+	m_reverseall2 = NewGO<Effect>(0);
+	m_reverseall2->Init(u"Assets/effect2/reverseall2.efk");
+	float scale2 = 30.0f;								//小さいので大きくしておく
+	m_reverseall2->SetScale({ scale2 ,scale2 ,scale2 });
+	m_reverseall2->SetPosition(m_position);				//座標を渡す
+	m_reverseall2->SetRotation(m_rotation);
 
 	//デバック用
 #ifdef MY_DEBUG
@@ -58,7 +66,11 @@ bool OOReverseALL::StartSub()
 //デストラクタ
 OOReverseALL::~OOReverseALL()
 {
+	//m_objectefkの削除
 	DeleteGO(m_obujectefk);
+
+	//m_reverseall2を削除
+	DeleteGO(m_reverseall2);
 
 	//m_changeSEを削除
 	DeleteGO(m_changeSE);
@@ -135,6 +147,8 @@ void OOReverseALL::BeforeHitPlayer()
 		m_playerHitPosition = m_pPlayer->GetPosition();
 		//アップデートステートをプレイヤーと衝突時の状態へ
 		m_updateState = enHitPlayer;
+
+		
 	}
 	else
 	{
@@ -203,11 +217,12 @@ void OOReverseALL::AfterHitPlayer()
 			if (revers)
 				revers->AllReverse();
 		}
+		//changeSEをループ再生をオフで再生する。
+		m_changeSE->Play(false);
 
+		m_reverseall2->Play();								//再生
 	}
 
-	//changeSEをループ再生をオフで再生する。
-	m_changeSE->Play(false);
 
 	//衝突前のプレイヤーの座標を保持
 	m_playerBeforePosition = m_pPlayer->GetPosition();

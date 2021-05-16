@@ -36,6 +36,14 @@ bool CReversibleObject::PureVirtualStart()
 	//OBBの方向ベクトルの長さを設定
 	GetOBB().SetDirectionLength(obbSize);
 
+	//m_reverseall2エフェクトの作成
+	m_reverseall2 = NewGO<Effect>(0);
+	m_reverseall2->Init(u"Assets/effect2/reverseall2.efk");
+	float scale2 = 30.0f;								//小さいので大きくしておく
+	m_reverseall2->SetScale({ scale2 ,scale2 ,scale2 });
+	m_reverseall2->SetPosition(m_position);				//座標を渡す
+	m_reverseall2->SetRotation(m_rotation);
+
 
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
@@ -132,6 +140,9 @@ void CReversibleObject::AllReverse()
 
 	//現在の表か裏の、逆の設定にする
 	SetFrontOrBack(!m_frontOrBack);
+
+	m_reverseall2->Play();								//再生
+
 }
 
 /// <summary>
