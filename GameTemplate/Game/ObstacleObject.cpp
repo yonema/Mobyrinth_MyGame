@@ -9,7 +9,7 @@ bool CObstacleObject::PureVirtualStart()
 	COBBWorld::GetInstance()->AddOBB(&GetOBB());
 
 	//モデルの回転を、現在の場所とイイ感じに合わせる
-	CheckWayPoint();
+	//CheckWayPoint();
 
 	CheckFrontOrBackSide(false);
 

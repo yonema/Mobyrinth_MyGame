@@ -8,12 +8,6 @@ bool ROwire_string::StartSub()
 	Init("Assets/modelData/wire.tkm", enWire,
 		"Assets/modelData/string.tkm", enString);
 
-	//OBBのサイズを設定
-	Vector3 obbSize;
-	obbSize = { 200.0f,200.0f,400.0f };
-	//OBBの方向ベクトルの長さを設定
-	GetOBB().SetDirectionLength(obbSize);
-
 	return true;
 }
 

@@ -41,7 +41,7 @@ bool Player::Start()
 	m_onWayPosition = m_position;
 
 	//ステージのメビウスの輪の参照を得る
-	m_mobius = FindGO<Mobius>("Mobius");
+	m_mobius = CLevelObjectManager::GetInstance()->GetMobius();
 
 
 	//初期化処理

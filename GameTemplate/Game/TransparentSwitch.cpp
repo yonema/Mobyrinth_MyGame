@@ -20,6 +20,10 @@ OOTransparentSwitch::OOTransparentSwitch()
 
 	//点滅時のフォントのカラーを設定
 	m_blinkColor = { 1.0f,0.0f,0.0f,1.0f };
+
+
+	//ウェイポイントからの奥行の距離を設定
+	SetZPosLen(100.0f);
 }
 //スタート関数
 bool OOTransparentSwitch::StartSub()
@@ -55,6 +59,12 @@ bool OOTransparentSwitch::StartSub()
 	m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 	//非表示にする
 	m_fadeSR->Deactivate();
+
+	//OBBのサイズを設定
+	Vector3 obbSize;
+	obbSize = { 100.0f,200.0f,600.0f };
+	//OBBの方向ベクトルの長さを設定
+	GetOBB().SetDirectionLength(obbSize);
 
 	return true;
 }

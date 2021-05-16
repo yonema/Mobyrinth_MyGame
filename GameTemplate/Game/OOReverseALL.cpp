@@ -19,6 +19,9 @@ bool OOReverseALL::StartSub()
 	GetOBB().SetDirectionLength({ 10.0f,400.0f,400.0f });
 	GetOBB().SetPivot({ 0.5f,0.0f,0.5f });
 
+	//オブジェクトと当たらないようにする
+	SetFlagIsHit(false);
+
 	//changeSEのサウンドキューを生成する
 	m_changeSE = NewGO<CSoundCue>(0);
 	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
