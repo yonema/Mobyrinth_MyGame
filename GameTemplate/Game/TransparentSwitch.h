@@ -4,6 +4,7 @@
 #include "SpriteRender.h"
 #include "GameCamera.h"
 #include "UFO.h"
+#include "SoundCue.h"
 
 class OOTransparentSwitch : public CObstacleObject
 {
@@ -124,5 +125,6 @@ private: //メンバ変数
 	bool m_switchingFlag = false;				//スイッチの切り替え中か？
 	float m_switchingTimer = 0.0f;				//スイッチの切り替え中のタイマー
 	CSpriteRender* m_fadeSR = nullptr;			//フェードイン、アウトで使うスプライトレンダラー
+	CSoundCue* m_buttonpushSE = nullptr;		//m_buttonpushSEのサウンドキュー
 };
 

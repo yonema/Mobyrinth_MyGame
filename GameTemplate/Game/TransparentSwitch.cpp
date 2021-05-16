@@ -66,6 +66,14 @@ bool OOTransparentSwitch::StartSub()
 	//OBBの方向ベクトルの長さを設定
 	GetOBB().SetDirectionLength(obbSize);
 
+	
+	//m_buttonpushSEのサウンドキューを生成する
+	m_buttonpushSE = NewGO<CSoundCue>(0);
+	//m_buttonpushSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_buttonpushSE->Init(L"Assets/sound/buttonpush.wav");
+	//音量調節
+	m_buttonpushSE->SetVolume(0.5f);
+
 	return true;
 }
 
@@ -173,6 +181,9 @@ void OOTransparentSwitch::UpdateSub()
 			m_modelRender->Activate();
 
 			m_fadeSR->Activate();
+
+			//m_buttonpushSEをループ再生をオフで再生する。
+			m_buttonpushSE->Play(false);
 
 		}
 	}
