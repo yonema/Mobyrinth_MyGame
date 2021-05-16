@@ -43,6 +43,9 @@
 //「UFO」
 #include "UFO.h"
 
+//サウンド
+#include "SoundCue.h"
+
 
 /// <summary>
 ///	ステージベースクラス
@@ -184,6 +187,8 @@ private:	//データメンバ
 	CTipsController* m_tipsController = nullptr;	//Tipsのコントロ―ルクラス
 	CFontRender* m_roNumFR[2];						//表側と裏側にある反転オブジェクトの数
 	CSpriteRender* m_capacityDisplaySR = nullptr;	//キャパシティを表示するスプライト
+	CSoundCue* m_goalSE = nullptr;					//m_goalSEのサウンドキュー
+	int m_goalSEcount = 0;							//m_goalSEのサポート
 
 };
 

@@ -84,6 +84,20 @@ bool CUFO::PureVirtualStart()
 	//音量調節
 	m_UFOyellowlightSE->SetVolume(0.5f);
 
+	//UFOdiscoverySEのサウンドキューを生成する
+	m_UFOdiscoverySE = NewGO<CSoundCue>(0);
+	//UFOdiscoverySEのサウンドキューを、waveファイルを指定して初期化する。
+	m_UFOdiscoverySE->Init(L"Assets/sound/UFOdiscovery.wav");
+	//音量調節
+	m_UFOdiscoverySE->SetVolume(0.5f);
+
+	//UFOdiscoverySEのサウンドキューを生成する
+	m_UFOredlightSE = NewGO<CSoundCue>(0);
+	//UFOredlightのサウンドキューを、waveファイルを指定して初期化する。
+	m_UFOredlightSE->Init(L"Assets/sound/UFOredlight.wav");
+	//音量調節
+	m_UFOredlightSE->SetVolume(0.5f);
+
 #ifdef MY_DEBUG
 	//デバック用
 	//後で消す
@@ -140,6 +154,12 @@ CUFO::~CUFO()
 
 	//UFOyellowlightSEの破棄
 	DeleteGO(m_UFOyellowlightSE);
+
+	//UFOredightSEの破棄
+	DeleteGO(m_UFOredlightSE);
+
+	//UFOdiscoverySEの破棄
+	DeleteGO(m_UFOdiscoverySE);
 
 #ifdef MY_DEBUG
 	//デバック用
@@ -348,6 +368,11 @@ void CUFO::Search()
 			if (m_UFOyellowlightSE->IsPlaying()) {
 				m_UFOyellowlightSE->Stop();
 			}
+			//UFOdiscoverySEをループ再生をオフで再生する。
+			m_UFOdiscoverySE->Play(false);
+
+			//UFOredlightSEをループ再生をオフで再生する。
+			m_UFOredlightSE->Play(false);
 		}
 	}
 	else

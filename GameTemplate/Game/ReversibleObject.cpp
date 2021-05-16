@@ -18,8 +18,12 @@ bool CReversibleObject::PureVirtualStart()
 	//音量調節
 	m_changeSE->SetVolume(0.5f);
 
-
-
+	//throwSEのサウンドキューを生成する
+	m_throwSE = NewGO<CSoundCue>(0);
+	//throwSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_throwSE->Init(L"Assets/sound/throw.wav");
+	//音量調節
+	m_throwSE->SetVolume(0.5f);
 
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
@@ -39,6 +43,12 @@ CReversibleObject::~CReversibleObject()
 
 	//表側か裏側かの反転オブジェクトの数を減算する
 	CLevelObjectManager::GetInstance()->RemoveReversibleObjectNum(GetFrontOrBackSide());
+
+	//m_changeSEの削除
+	DeleteGO(m_changeSE);
+
+	//m_throwSEの削除
+	DeleteGO(m_throwSE);
 
 }
 
@@ -92,6 +102,9 @@ void CReversibleObject::Reverse()
 
 	//changeSEをループ再生をオフで再生する。
 	m_changeSE->Play(false);
+
+	//throwSEをループ再生をオフで再生する。
+	m_throwSE->Play(false);
 	
 }
 

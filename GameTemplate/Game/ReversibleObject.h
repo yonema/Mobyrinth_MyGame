@@ -303,6 +303,7 @@ private:	//データメンバ
 	Vector3 test = { 0.0f,0.0f,0.0f };
 
 	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
+	CSoundCue* m_throwSE = nullptr;  //m_throwSEのサウンドキュー
 
 	bool m_changeObject = true;
 

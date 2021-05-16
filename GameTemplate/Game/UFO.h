@@ -95,6 +95,8 @@ private:	//データメンバ
 	CSoundCue* m_UFOmoveSE = nullptr;		//UFOmoveSEのサウンドキュー
 	CSoundCue* m_UFOcarrymoveSE = nullptr;	//UFOcarrymoveSEのサウンドキュー
 	CSoundCue* m_UFOyellowlightSE = nullptr;	//UFOyellowlightSEのサウンドキュー
+	CSoundCue* m_UFOredlightSE = nullptr;	//UFOredlightSEのサウンドキュー
+	CSoundCue* m_UFOdiscoverySE = nullptr;	//UFOdiscoverySEのサウンドキュー
 
 	//デバック用
 private:

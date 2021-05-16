@@ -7,6 +7,7 @@
 #include "MyCharacterController.h"
 #include "SoundCue.h"
 #include "GameTime.h"
+#include "SoundCue.h"
 
 class CReversibleObject;
 
@@ -421,6 +422,10 @@ private:	//データメンバ
 
 	bool m_capturedUFOFlag = false;				//UFOにキャプチャされているか？
 	bool m_fallFlag = false;					//落下中か？
+
+	CSoundCue* m_fallstartSE = nullptr;			//m_fallstartSEのサウンドキュー
+	int m_fallcount = 0;						//fallSEサポート
+	int m_falltimer = 0;						//fallSEサポート
 
 public://デバック用
 	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため

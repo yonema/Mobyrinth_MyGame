@@ -22,7 +22,7 @@ bool OOReverseALL::StartSub()
 	//changeSEのサウンドキューを生成する
 	m_changeSE = NewGO<CSoundCue>(0);
 	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_changeSE->Init(L"Assets/sound/change.wav");
+	m_changeSE->Init(L"Assets/sound/allchange.wav");
 	//音量調節
 	m_changeSE->SetVolume(0.5f);
 
@@ -56,6 +56,10 @@ bool OOReverseALL::StartSub()
 OOReverseALL::~OOReverseALL()
 {
 	DeleteGO(m_obujectefk);
+
+	//m_changeSEを削除
+	DeleteGO(m_changeSE);
+
 #ifdef MY_DEBUG
 	//デバック用
 	//後で消す

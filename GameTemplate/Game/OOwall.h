@@ -1,5 +1,6 @@
 #pragma once
 #include "ObstacleObject.h"
+#include "SoundCue.h"
 class ROrunning_stop;
 
 /// <summary>
@@ -10,6 +11,7 @@ class OOwall :public CObstacleObject
 {
 public:		//自動で呼ばれるメンバ関数
 	bool StartSub() override final;	//スタート関数
+	~OOwall();						//デストラクタ
 	void UpdateSub()override final;	//アップデート関数
 
 public:		//メンバ関数
@@ -50,6 +52,8 @@ public:		//メンバ関数
 		return m_pRun_stop;
 	}
 
+	void MoveSE();
+
 private:	//privateなメンバ関数
 
 	/// <summary>
@@ -64,5 +68,6 @@ private:	//データメンバ
 	Vector3 m_endPosition = g_vec3Zero;		//移動先の終端位置
 	ROrunning_stop* m_pRun_stop = nullptr;	//稼働、停止オブジェクトのポインタ
 	bool m_firstUpdateFlag = true;			//一回目のアップデートか？
+	CSoundCue* m_wallmoveSE = nullptr;	//wallmoveSEのサウンドキュー
 };
 
