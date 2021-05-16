@@ -8,11 +8,7 @@ bool ROkey_padlock::StartSub()
 	Init("Assets/modelData/key.tkm", enKey,
 		"Assets/modelData/padlock.tkm", enPadlock);
 
-	//OBBのサイズを設定
-	Vector3 obbSize;
-	obbSize = { 200.0f,200.0f,400.0f };
-	//OBBの方向ベクトルの長さを設定
-	GetOBB().SetDirectionLength(obbSize);
+
 
 	//padlockbreakSEのサウンドキューを生成する
 	m_padlockbreakSE = NewGO<CSoundCue>(0);

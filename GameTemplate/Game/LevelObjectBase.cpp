@@ -5,6 +5,8 @@
 //後で消す
 int ILevelObjectBase::objectNumber = 0;
 #endif
+
+
 //スタート関数
 bool ILevelObjectBase::Start()
 {
@@ -18,6 +20,7 @@ bool ILevelObjectBase::Start()
 
 	//OBBを初期化する
 	InitOBB();
+
 
 #ifdef MY_DEBUG
 	//デバック用
@@ -76,7 +79,7 @@ void ILevelObjectBase::InitOBB()
 /// <summary>
 /// 近くのウェイポイントを探して、イイ感じに回転する関数
 /// </summary>
-void ILevelObjectBase::CheckWayPoint()
+void ILevelObjectBase::CheckWayPoint(const bool checkRotaton, const bool checkPosition)
 {
 	//LevelObjectManagerからウェイポイントの情報を持ってくる
 	//ウェイポイントの「場所」を持ってくる
@@ -177,7 +180,10 @@ void ILevelObjectBase::CheckWayPoint()
 	m_lpIndex = lpIndex;
 	m_rpIndex = rpIndex;
 	
-	CheckRotation();
+	if (checkRotaton)
+		CheckRotation();
+	if (checkPosition)
+		CheckPosition();
 }
 
 void ILevelObjectBase::CheckRotation()
@@ -193,7 +199,7 @@ void ILevelObjectBase::CheckRotation()
 	//左のウェイポイントから右のウェイポイントへのベクトル
 	Vector3 lpToRpLen = (*wayPointPosVec)[m_rpIndex] - (*wayPointPosVec)[m_lpIndex];
 
-	//左のウェイポイントからプレイヤーへのベクトル
+	//左のウェイポイントから自身へのベクトル
 	Vector3 lpToPosLen = m_position - (*wayPointPosVec)[m_lpIndex];
 
 	//自身が左右のウェイポイントの間のどれくらいの位置にいるかで
@@ -211,6 +217,34 @@ void ILevelObjectBase::CheckRotation()
 		m_startRotation.w == g_quatIdentity.w) {
 		m_startRotation = m_rotation;
 	}
+}
+
+void ILevelObjectBase::CheckPosition()
+{
+	Vector3 onWayPosition;
+	//LevelObjectManagerからウェイポイントの情報を持ってくる
+	//ウェイポイントの「場所」を持ってくる
+	const std::vector<Vector3>* wayPointPosVec
+		= CLevelObjectManager::GetInstance()->GetWayPointPos();
+	//左のウェイポイントから右のウェイポイントへのベクトル
+	Vector3 lpToRpVec = (*wayPointPosVec)[m_rpIndex] - (*wayPointPosVec)[m_lpIndex];
+	lpToRpVec.Normalize();
+	//左のウェイポイントから自身へのベクトル
+	const Vector3 lpToPosVec = m_position - (*wayPointPosVec)[m_lpIndex];
+
+	const float projectionLen = Dot(lpToRpVec, lpToPosVec);
+
+	Vector3 correctionPos = lpToRpVec;
+	correctionPos.Scale(projectionLen);
+	correctionPos += (*wayPointPosVec)[m_lpIndex];
+
+	Vector3 zVec = g_vec3Back;
+	m_rotation.Apply(zVec);
+	zVec.Scale(m_zPosLen);
+	correctionPos += zVec;
+
+	m_position = correctionPos;
+
 }
 
 /// <summary>

@@ -130,6 +130,15 @@ public://publicなメンバ関数
 	}
 
 	/// <summary>
+	/// スタン中か？を得る
+	/// </summary>
+	/// <returns>スタン中か？</returns>
+	const bool GetStunFlag()const
+	{
+		return m_stunFlag;
+	}
+
+	/// <summary>
 	/// プレイヤーがオブジェクトを持っているかどうかを設定する
 	/// 持っている場合はtrueを渡す
 	/// </summary>

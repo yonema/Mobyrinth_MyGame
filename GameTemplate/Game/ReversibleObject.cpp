@@ -1,13 +1,18 @@
 #include "stdafx.h"
 #include "ReversibleObject.h"
 
-
+//コンストラクタ
+CReversibleObject::CReversibleObject()
+{
+	//ウェイポイントからの奥行の距離を設定
+	SetZPosLen(100.0f);
+}
 
 //スタート関数
 bool CReversibleObject::PureVirtualStart()
 {
 	//モデルの回転を、現在の場所とイイ感じに合わせる
-	CheckWayPoint();
+	//CheckWayPoint();
 	//自身が表側にあるか裏側にあるかを調べる
 	CheckFrontOrBackSide();
 
@@ -18,7 +23,11 @@ bool CReversibleObject::PureVirtualStart()
 	//音量調節
 	m_changeSE->SetVolume(0.5f);
 
-
+	//OBBのサイズを設定
+	Vector3 obbSize;
+	obbSize = { 200.0f,200.0f,600.0f };
+	//OBBの方向ベクトルの長さを設定
+	GetOBB().SetDirectionLength(obbSize);
 
 
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
@@ -261,7 +270,9 @@ void CReversibleObject::CheckPlayer()
 		{
 			//プレイヤーが別のオブジェクトを持っていなかったら
 			//かつ、UFOに捕まっていなかったら
-			if (!m_pPlayer->GetHoldObject() && !m_pPlayer->GetCapturedUFOFlag())
+			//かつ、スタン中ではなかったら
+			if (!m_pPlayer->GetHoldObject() && !m_pPlayer->GetCapturedUFOFlag() && 
+				!m_pPlayer->GetStunFlag())
 			{
 				//ステートをプレイヤーに持たれている状態へ
 				m_objectState = enHeldPlayer;
@@ -353,23 +364,28 @@ void CReversibleObject::HeldPlayer()
 			//左に移動しているから、右に弾く
 			m_leftOrRight = enRight;
 	}
-	//弾かれる状態ではない
-	//オブジェクトを裏側に投げて、オブジェクトの性質を反転させる。
-	else if (g_pad[0]->IsTrigger(enButtonA))
+	else if (!m_pPlayer->GetStunFlag())
 	{
-		//プレイヤーの回転を保持する
-		m_throwRot = m_pPlayer->GetFinalWPRot();
+		//弾かれる状態ではない
+		//かつ、プレイヤーがスタン中ではない
 
-		//ステートを下に投げる状態へ
-		m_objectState = enThrownDown;
-		m_objectAction = enThrownDown;
-	}
-	//オブジェクトをプレイヤーの足元に置く。
-	else if (g_pad[0]->IsTrigger(enButtonB))
-	{
-		//ステートをキャンセル状態へ
-		m_objectState = enCancel;
-		m_objectAction = enCancel;
+		//オブジェクトを裏側に投げて、オブジェクトの性質を反転させる。
+		if (g_pad[0]->IsTrigger(enButtonA))
+		{
+			//プレイヤーの回転を保持する
+			m_throwRot = m_pPlayer->GetFinalWPRot();
+
+			//ステートを下に投げる状態へ
+			m_objectState = enThrownDown;
+			m_objectAction = enThrownDown;
+		}
+		//オブジェクトをプレイヤーの足元に置く。
+		else if (g_pad[0]->IsTrigger(enButtonB))
+		{
+			//ステートをキャンセル状態へ
+			m_objectState = enCancel;
+			m_objectAction = enCancel;
+		}
 	}
 	//オブジェクトを横に投げる処理
 	//else if (g_pad[0]->IsTrigger(enButtonX))
@@ -658,7 +674,7 @@ void CReversibleObject::Repelled()
 	}
 
 	//ウェイポイントと回転の更新
-	CheckWayPoint();
+	CheckWayPoint(true, false);
 
 	//タイマーが切り替え時間より小さいか？
 	if (m_timer < switchingTimer)
