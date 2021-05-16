@@ -11,6 +11,9 @@
 //Tips用
 #include "TipsController.h"
 
+//キャパシティのUI
+#include "CapacityUI.h"
+
 
 //レベルのロードで必要
 #include "Level.h"
@@ -182,8 +185,7 @@ private:	//データメンバ
 	bool m_wipeInFlag = false;						//ワイプインする？
 
 	CTipsController* m_tipsController = nullptr;	//Tipsのコントロ―ルクラス
-	CFontRender* m_roNumFR[2];						//表側と裏側にある反転オブジェクトの数
-	CSpriteRender* m_capacityDisplaySR = nullptr;	//キャパシティを表示するスプライト
+	CCapacityUI* m_capacityUI = nullptr;			//キャパシティのUIクラス
 
 };
 

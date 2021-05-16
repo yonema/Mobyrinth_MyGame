@@ -293,6 +293,7 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
+    <ClCompile Include="CapacityUI.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="OOoneway.cpp" />
     <ClCompile Include="ROleft_right.cpp" />
@@ -432,6 +433,7 @@
     <ClInclude Include="..\..\MiniEngine\TResourceBank.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="Bloom.h" />
+    <ClInclude Include="CapacityUI.h" />
     <ClInclude Include="CaslFile.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="ObjectType.h" />
