@@ -241,6 +241,24 @@ public:		//ここのメンバ関数を主に使う
 		return m_levelObjects;
 	}
 
+	/// <summary>
+	/// ステージのメビウスの輪の参照を得る
+	/// </summary>
+	/// <returns>メビウスの輪の参照</returns>
+	Mobius* GetMobius()const
+	{
+		return m_mobius;
+	}
+
+	/// <summary>
+	/// ステージのメビウスの輪の参照を設定する
+	/// </summary>
+	/// <param name="mobius">メビウスの輪の参照</param>
+	void SetMobius(Mobius* mobius)
+	{
+		m_mobius = mobius;
+	}
+
 public:	//列挙体
 	/// <summary>
 	/// 表側か裏側か
@@ -263,6 +281,7 @@ private:	//データメンバ
 	int m_reversibleObjectNum[enFrontOrBackSideNum] = { 0,0 };
 	//反転オブジェクトの、表側と裏側のそれぞれの最大数
 	int m_reversibleObjectMaxNum[enFrontOrBackSideNum] = { 0,0 };
+	Mobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
 };
 
 

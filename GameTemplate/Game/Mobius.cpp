@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Mobius.h"
+#include "LevelObjectManager.h"
+
 
 //スタート関数
 bool Mobius::Start()
@@ -20,5 +22,7 @@ Mobius::~Mobius()
 {
 	//モデルレンダラーの破棄
 	DeleteGO(m_modelRender);
+	//マネージャーにメビウスの輪が消去されたと伝える
+	CLevelObjectManager::GetInstance()->SetMobius(nullptr);
 }
 

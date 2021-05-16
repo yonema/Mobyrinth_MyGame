@@ -129,7 +129,10 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	std::size_t vecSize = 0;
 
 	//プレイヤーのポインタ
-	Player* pPlayer;
+	Player* pPlayer = nullptr;
+
+	//ステージのメビウスの輪のポインタ
+	Mobius* mobius = nullptr;
 
 	//スイッチのポインタ
 	OOTransparentSwitch* switchObject = nullptr;
@@ -162,7 +165,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			}
 			else if (objData.EqualObjectName(L"Mobius") == true)
 			{
-				Mobius* mobius;
 				mobius = NewGO<Mobius>(0, "Mobius");
 				mobius->SetPosition(objData.position);
 				mobius->SetRotation(objData.rotation);
@@ -566,6 +568,8 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		});
 
 
+	//ステージのメビウスの輪をマネージャーに登録
+	CLevelObjectManager::GetInstance()->SetMobius(mobius);
 	//プレイヤーをマネージャーに登録
 	CLevelObjectManager::GetInstance()->SetPlayer(pPlayer);
 	//ロードしたレベルにあったウェイポイントをマネージャーに登録する

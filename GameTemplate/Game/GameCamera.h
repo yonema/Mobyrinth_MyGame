@@ -23,27 +23,54 @@ public:	//インライン関数
 	{
 		m_startDirectingZoomInCamera = b;
 	}
+
+	/// <summary>
+	/// ズームが終了した
+	/// </summary>
 	void FinishZoom()
 	{
 		m_zoomFinished = true;
 	}
+
+	/// <summary>
+	/// カメラの注視点を設定する
+	/// </summary>
+	/// <param name="target"></param>
 	void SetTarget(const Vector3& target)
 	{
 		g_camera3D->SetTarget(target);
 	}
+
+	/// <summary>
+	/// カメラの視点を設定する
+	/// </summary>
+	/// <param name="pos"></param>
 	void SetPosition(const Vector3& pos)
 	{
 		g_camera3D->SetPosition(pos);
 	}
 
+	/// <summary>
+	/// タイトルモードにする
+	/// </summary>
 	void TitleMode()
 	{
 		m_titleMode = true;
 	}
-private:
-	Player* m_pPlayer = nullptr;	//プレイヤーのポインタ
-	Vector3 m_toCameraPos;				//注視点から視点へのベクトル
 
+	/// <summary>
+	/// プレイヤーを見るか？を設定する
+	/// </summary>
+	/// <param name="lookPlayerFlag">プレイヤーを見るか？</param>
+	void SetLookPlayerFlag(const bool lookPlayerFlag)
+	{
+		m_lookPlayerFlag = lookPlayerFlag;
+	}
+
+private:	//データメンバ
+	Player* m_pPlayer = nullptr;	//プレイヤーのポインタ
+	Vector3 m_toCameraPos;			//注視点から視点へのベクトル
+	bool m_lookPlayerFlag = true;	//プレイヤーを見るか？
 	StartDirecting* m_startDirecting = nullptr;
 	bool m_startDirectingZoomInCamera = false; //カメラを寄せる処理のフラグ
 

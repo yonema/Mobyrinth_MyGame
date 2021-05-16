@@ -1,6 +1,9 @@
 #pragma once
 #include "ObstacleObject.h"
 #include "FontRender.h"
+#include "SpriteRender.h"
+#include "GameCamera.h"
+#include "UFO.h"
 
 class OOTransparentSwitch : public CObstacleObject
 {
@@ -104,6 +107,8 @@ private:	//privateなメンバ関数
 	void SetTimerFRParam
 	(std::list<CFontRender*>::iterator itr, const ILevelObjectBase* levelObject);
 
+	void Switching();
+
 private: //メンバ変数
 	float m_resetTimer = 0.0f; //オブジェクトの状態をリセットするまでのカウントに使用するリセットタイマー
 	float m_resetTimerStartValue = 10.0f; //リセットタイマーが作動したときの値を保存する変数
@@ -114,6 +119,10 @@ private: //メンバ変数
 	Vector4 m_blinkColor;						//点滅時のフォントのカラー
 	float m_blinkTimer = FLT_MAX;				//点滅タイマー、最初は最大値を入れておく
 	CModelRender* m_modelRender = nullptr;		//ボタンが押されたとき用のモデルレンダラー
-
+	GameCamera* m_gameCamera = nullptr;			//カメラのポインタ
+	CUFO* m_ufo = nullptr;						//UFOのポインタ
+	bool m_switchingFlag = false;				//スイッチの切り替え中か？
+	float m_switchingTimer = 0.0f;				//スイッチの切り替え中のタイマー
+	CSpriteRender* m_fadeSR = nullptr;			//フェードイン、アウトで使うスプライトレンダラー
 };
 

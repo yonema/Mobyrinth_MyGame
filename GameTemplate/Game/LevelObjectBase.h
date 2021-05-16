@@ -38,11 +38,23 @@ public:		//オーバーライドしてほしいメンバ関数
 	virtual void SwitchReverse(const bool frontOrBack = 0) {};
 
 protected:	//ここのメンバ関数を主に使う
+
 	/// <summary>
 	/// 近くのウェイポイントを探して、イイ感じに回転する関数
 	/// </summary>
-	void CheckWayPoint();
+	/// <param name="checkRotaton">回転チェックを行うか？</param>
+	/// <param name="checkPosition">座標チェックを行うか？</param>
+	void CheckWayPoint(const bool checkRotaton = true, const bool checkPosition = true);
+
+	/// <summary>
+	/// 現在の座標に合わせた回転にする
+	/// </summary>
 	void CheckRotation();
+
+	/// <summary>
+	/// ウェイポイントにそろえた座標にする
+	/// </summary>
+	void CheckPosition();
 
 public:		//ここのメンバ関数を主に使う
 
@@ -221,6 +233,15 @@ public:		//ここのメンバ関数を主に使う
 	/// </summary>
 	/// <param name="reversibleObject">反転オブジェクトか？</param>
 	void CheckFrontOrBackSide(const bool reversibleObject = true);
+	
+	/// <summary>
+	/// ウェイポイントからの奥行の距離を設定
+	/// </summary>
+	/// <param name="zPosLen">奥行の距離</param>
+	void SetZPosLen(const float zPosLen)
+	{
+		m_zPosLen = zPosLen;
+	}
 
 private:	//privateなメンバ関数
 
@@ -244,8 +265,7 @@ private:	//データメンバ
 	int m_rpIndex = 0;
 	int m_frontOrBackSide = CLevelObjectManager::enNone;	//自身が表側にあるか裏側にあるか
 	bool m_lock = false;					//ロック中か？、Tips表示や全反転をロックする
-
-
+	float m_zPosLen = 0.0f;					//ウェイポイントからの奥行の距離
 	////////////////////////////////////////////////////////////
 	// 透明オブジェクト用の変数と関数
 	////////////////////////////////////////////////////////////
@@ -259,6 +279,10 @@ public: //Set関数
 		m_flagIsHit = b;
 	}
 
+	/// <summary>
+	/// 重なっているかの判定の処理を行うか確認するフラグの値を取得
+	/// </summary>
+	/// <returns>m_flagIsHitの値</returns>
 	const bool GetFlagIsHit()const
 	{
 		return m_flagIsHit;
@@ -341,14 +365,8 @@ public: //透明スイッチに使用する関数
 		return m_flagHeld;
 	}
 
-	/// <summary>
-	/// 重なっているかの判定の処理を行うか確認するフラグの値を取得
-	/// </summary>
-	/// <returns>m_flagIsHitの値</returns>
-	bool GetFlagIsHit()
-	{
-		return m_flagIsHit;
-	}
+
+
 
 	//void SetFlagHeldPlayer(bool b)
 	//{

@@ -9,9 +9,10 @@
 class CReversibleObject : public ILevelObjectBase
 {
 public:		//自動で呼ばれるメンバ関数
+	CReversibleObject();					//コンストラクタ
 	bool PureVirtualStart()override final;	//スタート関数
 	virtual ~CReversibleObject();			//デストラクタ
-	void PureVirtualUpdate()override final;			//アップデート関数
+	void PureVirtualUpdate()override final;	//アップデート関数
 
 public:
 	/// <summary>
