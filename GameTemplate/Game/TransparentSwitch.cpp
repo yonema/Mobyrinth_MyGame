@@ -74,6 +74,20 @@ bool OOTransparentSwitch::StartSub()
 	//音量調節
 	m_buttonpushSE->SetVolume(0.5f);
 
+	//m_activationSEのサウンドキューを生成する
+	m_activationSE = NewGO<CSoundCue>(0);
+	//m_activationSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_activationSE->Init(L"Assets/sound/activation.wav");
+	//音量調節
+	m_activationSE->SetVolume(0.5f);
+
+	//m_invalidationSEのサウンドキューを生成する
+	m_invalidationSE = NewGO<CSoundCue>(0);
+	//m_activationSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_invalidationSE->Init(L"Assets/sound/invalidation.wav");
+	//音量調節
+	m_invalidationSE->SetVolume(0.5f);
+
 	return true;
 }
 
@@ -88,6 +102,12 @@ OOTransparentSwitch::~OOTransparentSwitch()
 	{
 		DeleteGO(timerFR);
 	}
+
+	//m_activationSEの削除
+	DeleteGO(m_activationSE);
+
+	//m_buttonpushSEの削除
+	DeleteGO(m_buttonpushSE);
 }
 
 //アップデート関数
@@ -150,6 +170,9 @@ void OOTransparentSwitch::UpdateSub()
 			//押されたときのモデルレンダラーを非常時にする
 			m_modelRender->Deactivate();
 
+			//m_invalidationSEをループ再生をオフで再生する。
+			m_invalidationSE->Play(false);
+
 		}
 	}
 	//リセットタイマーが０のときに下の文の処理を作動させる。
@@ -184,7 +207,6 @@ void OOTransparentSwitch::UpdateSub()
 
 			//m_buttonpushSEをループ再生をオフで再生する。
 			m_buttonpushSE->Play(false);
-
 		}
 	}
 }
@@ -286,6 +308,8 @@ void OOTransparentSwitch::Switching()
 
 				//透明オブジェクトを実体にする。
 				ChangeEntity();
+				//m_activationSEをループ再生をオフで再生する。
+				m_activationSE->Play(false);
 			}
 			else
 			{
