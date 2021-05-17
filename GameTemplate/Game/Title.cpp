@@ -310,8 +310,22 @@ void Title::TitleScreen()
 		//ステージセレクト用のスプライトレンダラーを有効化して表示できるようにする
 		for (int i = 0; i < enStageNum; i++)
 		{
+			//ステージのアイコンを有効化する
 			m_stageName[i]->Activate();
-			m_stageClear[i]->Activate();
+			//一番高いクリアしたステージの番号より大きいか？
+			if (i > m_stageTitle->GetHighestClearStageNum() + 1)
+			{
+				//大きいとき
+				//カラーを薄暗くする
+				m_stageName[i]->SetMulColor({ 0.4f,0.4f,0.4f,1.0f });
+			}
+
+			//一番高いクリアしたステージの番号以下か？
+			if (i <= m_stageTitle->GetHighestClearStageNum())
+			{
+				//クリアしたアイコンを有効化する
+				m_stageClear[i]->Activate();
+			}
 		}
 
 		m_cursor->Activate();
@@ -358,10 +372,11 @@ void Title::StageSelect()
 		m_buttonFlag = false;
 		
 		//ステージセレクトのステートが特定の時のみ
-		//if (m_stageSelectState == enStage3 || m_stageSelectState == enStage6)
-		if (m_stageSelectState != (enStageNum - 1))
+		if (m_stageSelectState != (enStageNum - 1) && 
+			m_stageSelectState <= m_stageTitle->GetHighestClearStageNum())
 		{
-			//ステージセレクトのステートがステージ3かステージ6の時
+			//ステージセレクトのステートが最後まで行っていないとき、かつ
+			//一番高いクリアしたステージの番号以下の時
 
 			//ステージセレクトのステートを加算する
 			m_stageSelectState++;
@@ -386,10 +401,9 @@ void Title::StageSelect()
 		m_buttonFlag = false;
 		
 		//ステージセレクトのステートが特定の時のみ
-		//if (m_stageSelectState == enStage4 || m_stageSelectState == enStage7)
 		if (m_stageSelectState != enStage1)
 		{
-			//ステージセレクトのステートがステージ4かステージ7の時
+			//ステージセレクトのステートが一番小さいステージの番号ではない時
 
 			//ステージセレクトのステートを減算する
 			m_stageSelectState--;
@@ -413,32 +427,10 @@ void Title::StageSelect()
 		m_buttonFlag = false;
 
 		//ステージセレクトのステートが特定の時のみ
-		//if (m_stageSelectState != enStage3 && m_stageSelectState != enStage4 &&
-		//	m_stageSelectState != enStage9)
-		//{
-		//	//ステージセレクトのステートがステージ3かつステージ4かつステージ9ではない時
-
-		//	//さらにステージセレクトのステートで加算するか減算するか決める
-		//	if (m_stageSelectState == enStage5 || m_stageSelectState == enStage6)
-		//	{
-		//		//ステージセレクトのステートがステージ5かステージ6の時
-
-		//		//ステージセレクトのステートを減算する
-		//		m_stageSelectState--;
-		//	}
-		//	else
-		//	{
-		//		//ステージセレクトのステートがステージ4かステージ5以外の時
-
-		//		//ステージセレクトのステートを加算する
-		//		m_stageSelectState++;
-		//	}
-
-		//	//selectSEをループ再生をオフで再生する。
-		//	m_selectSE->Play(false);
-		//}
 		if (m_stageSelectState != enStage1)
 		{
+			//ステージセレクトのステートが一番小さいステージの番号ではない時
+
 			//ステージセレクトのステートを減算する
 			m_stageSelectState--;
 			//selectSEをループ再生をオフで再生する。
@@ -460,34 +452,12 @@ void Title::StageSelect()
 		//ボタンを押すことができないようにする（連続入力防止用）
 		m_buttonFlag = false;
 
-		////ステージセレクトのステートが特定の時のみ
-		//if (m_stageSelectState != enStage1 && m_stageSelectState != enStage6 &&
-		//	m_stageSelectState != enStage7)
-		//{
-		//	//ステージセレクトのステートがステージ1かつステージ6かつステージ7ではない時
-
-		//	//さらにステージセレクトのステートで加算するか減算するか決める
-		//	if (m_stageSelectState == enStage4 || m_stageSelectState == enStage5)
-		//	{
-		//		//ステージセレクトのステートがステージ4かステージ5の時
-
-		//		//ステージセレクトのステートを加算する
-		//		m_stageSelectState++;
-		//	}
-		//	else
-		//	{
-		//		//ステージセレクトのステートがステージ4かステージ5以外の時
-
-		//		//ステージセレクトのステートを減算する
-		//		m_stageSelectState--;
-		//	}
-
-		//	//selectSEをループ再生をオフで再生する。
-		//	m_selectSE->Play(false);
-		//}
-		if (m_stageSelectState != (enStageNum - 1))
+		//ステージセレクトのステートが特定の時のみ
+		if (m_stageSelectState != (enStageNum - 1) &&
+			m_stageSelectState <= m_stageTitle->GetHighestClearStageNum())
 		{
-			//ステージセレクトのステートがステージ3かステージ6の時
+			//ステージセレクトのステートが最後まで行っていないとき、かつ
+			//一番高いクリアしたステージの番号以下の時
 
 			//ステージセレクトのステートを加算する
 			m_stageSelectState++;
@@ -549,6 +519,28 @@ void Title::StageSelect()
 		m_blinkingFlag = false;
 		m_pressAButton->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 	}
+	//デバック用
+	//全部のステージが選べるようになる
+	else if (g_pad[0]->IsTrigger(enButtonStart) && g_pad[0]->IsTrigger(enButtonRB1))
+	{
+		m_stageTitle->SetHighestClearStageNum(8);
+		//ステージセレクト用のスプライトレンダラーを有効化して表示できるようにする
+		for (int i = 0; i < enStageNum; i++)
+		{
+			//ステージのアイコンを有効化する
+			m_stageName[i]->Activate();
+			m_stageName[i]->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+			//一番高いクリアしたステージの番号より大きいか？
+			if (i > m_stageTitle->GetHighestClearStageNum() + 1)
+			{
+				//大きいとき
+				//カラーを薄暗くする
+				m_stageName[i]->SetMulColor({ 0.4f,0.4f,0.4f,1.0f });
+			}
+		}
+
+	}
+	//デバック用ここまで
 
 
 	//カーソル用の画像の場所を設定する
@@ -580,39 +572,39 @@ void Title::StageDecision()
 		//ステージを生成
 		stage = NewGO<CStage>(0, "stage");
 		//ステージの初期化、レベルのファイルパスを指定する。
-		stage->Init("Assets/level/O_easy.tkl");
+		stage->Init("Assets/level/O_easy.tkl", m_stageSelectState);
 		break;
 	case enStage2:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/Y_easy.tkl");
+		stage->Init("Assets/level/Y_easy.tkl", m_stageSelectState);
 		break;
 	case enStage3:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/T_easy.tkl");
+		stage->Init("Assets/level/T_easy.tkl", m_stageSelectState);
 		break;
 	case enStage4:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/O_normal.tkl");
+		stage->Init("Assets/level/O_normal.tkl", m_stageSelectState);
 		break;
 	case enStage5:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/T_normal.tkl");
+		stage->Init("Assets/level/T_normal.tkl", m_stageSelectState);
 		break;
 	case enStage6:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/Y_normal.tkl");
+		stage->Init("Assets/level/Y_normal.tkl", m_stageSelectState);
 		break;
 	case enStage7:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/O_hard.tkl");
+		stage->Init("Assets/level/O_hard.tkl", m_stageSelectState);
 		break;
 	case enStage8:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/T_hard.tkl");
+		stage->Init("Assets/level/T_hard.tkl", m_stageSelectState);
 		break;
 	case enStage9:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/Y_hard.tkl");
+		stage->Init("Assets/level/Y_hard.tkl", m_stageSelectState);
 		break;
 	default:
 		break;

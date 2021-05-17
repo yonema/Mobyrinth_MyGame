@@ -105,6 +105,9 @@
     <Filter Include="MyCode\Tips">
       <UniqueIdentifier>{f2cd75c1-751f-4372-8ec1-413aab0a18ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\UI">
+      <UniqueIdentifier>{f680b8e9-0c4c-4d1c-83bd-a59ea22141be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -341,9 +344,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Pause.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="StageBase.cpp">
       <Filter>MyCode\stage</Filter>
     </ClCompile>
@@ -470,8 +470,14 @@
     <ClCompile Include="Stage.cpp">
       <Filter>MyCode\stage</Filter>
     </ClCompile>
-    <ClCompile Include="CapacityUI.cpp">
+    <ClCompile Include="Save.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CapacityUI.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Pause.cpp">
+      <Filter>MyCode\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -736,9 +742,6 @@
     <ClInclude Include="Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Pause.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="StageBase.h">
       <Filter>MyCode\stage</Filter>
     </ClInclude>
@@ -880,8 +883,14 @@
     <ClInclude Include="Stage.h">
       <Filter>MyCode\stage</Filter>
     </ClInclude>
-    <ClInclude Include="CapacityUI.h">
+    <ClInclude Include="Save.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CapacityUI.h">
+      <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause.h">
+      <Filter>MyCode\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,9 +5,10 @@
 /// 初期化関数、NewGOした後で必ずよんでね。
 /// </summary>
 /// <param name="levelFilePath">レベルのファイルパス</param>
-void CStage::Init(const char* levelFilePath)
+void CStage::Init(const char* levelFilePath, const int stageNum)
 {
 	sprintf(m_levelFilePath, levelFilePath);
+	SetStageNum(stageNum);
 }
 
 //スタート関数

@@ -160,14 +160,20 @@ void CCapacityUI::Update()
 	swprintf(text, L"%d", num[enBackSide]);
 	m_RONumFR[enBackSide]->SetText(text);
 
+	//最初のフレームっか？
 	if (m_firstFrame)
 	{
+		//最初のフレーム
+
+		//最初だけ、古い番号を更新
 		for (int i = 0; i < enFrontAndBackSideNum; i++)
 		{
 			m_oldRONum[i] = num[i];
 		}
+		//最初ではなくする
 		m_firstFrame = false;
 	}
+
 	//どの演出を起こすかチェックする
 	CheckDirecting(num);
 
@@ -186,8 +192,11 @@ void CCapacityUI::Update()
 /// <param name="maxNum">表側と裏側のアイテムの最大数</param>
 void CCapacityUI::CheckDirecting(const int* num)
 {
+	//どれかがオーバー中か？
 	if (m_directingState[enFrontSide] == enOver ||
 		m_directingState[enBackSide] == enOver)
+		//オーバー中なら
+		//ほかの演出はしない
 		return;
 
 	//表側と裏側両方調べる
@@ -218,6 +227,7 @@ void CCapacityUI::CheckDirecting(const int* num)
 		}
 	}
 
+	//どれかがオーバーの演出になったら、他の演出はキャンセルする
 	if (m_directingState[enFrontSide] == enOver)
 		m_directingState[enBackSide] = enNormal;
 	else if (m_directingState[enBackSide] == enOver)
@@ -270,6 +280,7 @@ void CCapacityUI::Increased(const int frontOrBackSide)
 	{
 		//最初の一回目
 
+		//通常の値に戻す
 		DefaultParam(frontOrBackSide);
 
 		//フォントのカラーを増えた時のカラーにする
@@ -360,6 +371,7 @@ void CCapacityUI::Decreased(const int frontOrBackSide)
 	{
 		//最初の一回目
 
+		//通常の値に戻す
 		DefaultParam(frontOrBackSide);
 
 		//フォントのカラーを減った時のカラーにする
@@ -379,39 +391,49 @@ void CCapacityUI::Decreased(const int frontOrBackSide)
 	{
 		//以内の時
 
+		//アクションタイムから分割されたタイム
 		const float separationTime = actionTime / 4.0f;
 
+		//タイマーと分割されたタイムに応じた状態
 		const int state = m_timer[frontOrBackSide] / separationTime;
 
+		//目的地への距離
 		const float destination = 10.0f;
 
+		//移動させる長さ
 		float moveLen = 0.0f;
 
+		//タイマーに応じた拡大
 		const float timeScale = 
 			(m_timer[frontOrBackSide] - separationTime * state) / separationTime;
 
-
+		//状態に応じて割り振る
 		switch (state)
 		{
 		case 0:
 		case 4:
+			//真ん中から左端に進む
 			moveLen = -destination * timeScale;
 			break;
 		case 1:
 		case 5:
+			//左端から真ん中へ進む
 			moveLen = -destination + destination * timeScale;
 			break;
 		case 2:
 		case 6:
+			//真ん中から右端へ進む
 			moveLen = destination * timeScale;
 			break;
 		case 3:
 		case 7:
+			//右端から真ん中へ進む
 			moveLen = destination - destination * timeScale;
 			break;
 
 		}
 
+		//数のフォントの座標を移動させる
 		numFontPos.x += moveLen;
 
 
@@ -420,7 +442,6 @@ void CCapacityUI::Decreased(const int frontOrBackSide)
 	{
 		//以外の時
 
-		//通常の座標に戻しておく
 
 	}
 
@@ -459,46 +480,67 @@ void CCapacityUI::Over(const int frontOrBackSide)
 	//フォントが特有の動きをする時間
 	const float actionTime = 0.5f;
 
+	//タイマーが0.0fか？、つまり最初の一回目のループか？
 	if (m_timer[frontOrBackSide] == 0.0f)
 	{
+		//最初の一回目
+
+		//通常の値に戻す
 		DefaultParam(frontOrBackSide);
 
-		//フォントのカラーを増えた時のカラーにする
+		//フォントのカラーをオーバー時のカラーにする
 		m_RONumFR[frontOrBackSide]->SetColor({ 1.0f,1.0f,0.0f,1.0f });
 		
 	}
+
+	//加える拡大
 	const float addScale = 0.8f;
+	//数のフォントの拡大
 	float numFontScale = m_defaultScale + addScale;
+	//数のフォントの座標
 	Vector2 numFontPosition = m_capacityPos[frontOrBackSide];
+	//X座標を合わセル
 	numFontPosition.x += m_diffCapacityToNum;
+
+	//タイマーがアクションタイム以内か？
 	if (m_timer[frontOrBackSide] <= actionTime)
 	{
+		//以内の時
 
-
+		//加える座標
 		Vector2 addPosition = { -20.0f,15.0f };
 
+		//2次元ベクトルを回す方法
 		//Vector2 bufPos = addPosition;
 		//addPosition.x = 
 		//	bufPos.x * std::cos(radian) - bufPos.y * std::sin(radian);
 		//addPosition.y =
 		//	bufPos.x * std::sin(radian) + bufPos.y * std::cos(radian);
+
+		//数のフォントの座標を加算する
 		numFontPosition.Add(addPosition);
 	}
 	else
 	{
+		//以外の時
+
+		//通常の値に戻す
+		//座標を初期化する
 		numFontPosition = m_capacityPos[frontOrBackSide];
 		numFontPosition.x += m_diffCapacityToNum;
+		//拡大を初期化する
 		numFontScale = m_defaultScale;
 		//フォントのカラーを初期化する
 		m_RONumFR[frontOrBackSide]->SetColor(m_defaultFontColor[frontOrBackSide]);
+
 		//m_RONumFR[frontOrBackSide]->SetScale(m_defaultScale);
 		////m_RONumFR[frontOrBackSide]->SetRotation(numFontRotation);
 		//m_RONumFR[frontOrBackSide]->SetPosition(numFontPosition);
 	}
 
-
+	//数のフォントの拡大を設定する
 	m_RONumFR[frontOrBackSide]->SetScale(numFontScale);
-	//m_RONumFR[frontOrBackSide]->SetRotation(numFontRotation);
+	//数のフォントの座標を設定する
 	m_RONumFR[frontOrBackSide]->SetPosition(numFontPosition);
 
 	//タイマーが切り替え時間以上か
@@ -530,15 +572,22 @@ void CCapacityUI::Over(const int frontOrBackSide)
 /// </summary>
 void CCapacityUI::DefaultParam(const int frontOrBackSide)
 {
-
+	//通常の座標を計算する
+	//キャパシティのUIの座標を持ってくる
 	Vector2 numFontPos = m_capacityPos[frontOrBackSide];
+	//X座標をそろえる
 	numFontPos.x += m_diffCapacityToNum;
+
+	//座標を初期化する
 	m_RONumFR[frontOrBackSide]->SetPosition(numFontPos);
 
+	//回転を初期化する
 	m_RONumFR[frontOrBackSide]->SetRotation(0.0f);
 
+	//拡大を初期化する
 	m_RONumFR[frontOrBackSide]->SetScale(m_defaultScale);
 
+	//カラーを初期化する
 	m_RONumFR[frontOrBackSide]->SetColor(m_defaultFontColor[frontOrBackSide]);
 
 }

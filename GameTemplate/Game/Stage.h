@@ -19,8 +19,9 @@ public:		//自動で呼ばれるメンバ関数
 		//ステージを生成し直す
 		CStage* stage = NewGO<CStage>(0);
 		//同じレベルのファイルパスで初期化する
-		stage->Init(GetLevelFilePath());
+		stage->Init(GetLevelFilePath(), GetHighestClearStageNum());
 	}
+
 
 public:		//メンバ関数
 
@@ -28,7 +29,7 @@ public:		//メンバ関数
 	/// 初期化関数、NewGOした後で必ずよんでね。
 	/// </summary>
 	/// <param name="levelFilePath">レベルのファイルパス</param>
-	void Init(const char* levelFilePath);
+	void Init(const char* levelFilePath, const int stageNum);
 
 	/// <summary>
 	/// レベルのファイルパスを得る
