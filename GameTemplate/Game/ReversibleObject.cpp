@@ -23,11 +23,26 @@ bool CReversibleObject::PureVirtualStart()
 	//音量調節
 	m_changeSE->SetVolume(0.5f);
 
+	//throwSEのサウンドキューを生成する
+	m_throwSE = NewGO<CSoundCue>(0);
+	//throwSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_throwSE->Init(L"Assets/sound/throw.wav");
+	//音量調節
+	m_throwSE->SetVolume(0.5f);
+
 	//OBBのサイズを設定
 	Vector3 obbSize;
 	obbSize = { 200.0f,200.0f,600.0f };
 	//OBBの方向ベクトルの長さを設定
 	GetOBB().SetDirectionLength(obbSize);
+
+	//m_reverseall2エフェクトの作成
+	m_reverseall2 = NewGO<Effect>(0);
+	m_reverseall2->Init(u"Assets/effect2/reverseall2.efk");
+	float scale2 = 30.0f;								//小さいので大きくしておく
+	m_reverseall2->SetScale({ scale2 ,scale2 ,scale2 });
+	m_reverseall2->SetPosition(m_position);				//座標を渡す
+	m_reverseall2->SetRotation(m_rotation);
 
 
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
@@ -48,6 +63,12 @@ CReversibleObject::~CReversibleObject()
 
 	//表側か裏側かの反転オブジェクトの数を減算する
 	CLevelObjectManager::GetInstance()->RemoveReversibleObjectNum(GetFrontOrBackSide());
+
+	//m_changeSEの削除
+	DeleteGO(m_changeSE);
+
+	//m_throwSEの削除
+	DeleteGO(m_throwSE);
 
 }
 
@@ -101,6 +122,9 @@ void CReversibleObject::Reverse()
 
 	//changeSEをループ再生をオフで再生する。
 	m_changeSE->Play(false);
+
+	//throwSEをループ再生をオフで再生する。
+	m_throwSE->Play(false);
 	
 }
 
@@ -116,6 +140,9 @@ void CReversibleObject::AllReverse()
 
 	//現在の表か裏の、逆の設定にする
 	SetFrontOrBack(!m_frontOrBack);
+
+	m_reverseall2->Play();								//再生
+
 }
 
 /// <summary>
@@ -533,10 +560,10 @@ void CReversibleObject::ThrownDown()
 		//キャパシティオーバーか？
 		//自分がいない側のキャパシティを調べる
 		//自分はまだそっち側にいないから、調整値に1を入れている
-		if (IsCapacityOver(frontOrBackSide, 1))
-			//キャパオーバーしてる
-			m_virticalRepelledFlag = true;
-		else
+		//if (IsCapacityOver(frontOrBackSide, 1))
+		//	//キャパオーバーしてる
+		//	m_virticalRepelledFlag = true;
+		//else
 			//キャパオーバーではない
 			//反転させる
 			Reverse();
@@ -730,35 +757,35 @@ void CReversibleObject::Query()
 	CheckFrontOrBackSide();
 
 	//オーバーライドしてほしい関数QuerySub()
-	QuerySub();
+	//QuerySub();
 
 
 	//オーバーラップをチェックする状態へ
-	m_objectState = enOverlap;
-	////キャパシティがオーバーしているか？
-	//if (!IsCapacityOver(GetFrontOrBackSide()))
-	//{
-	//	//オーバーしていない
-	//	//通常のクエリの処理
+	//m_objectState = enOverlap;
+	//キャパシティがオーバーしているか？
+	if (!IsCapacityOver(GetFrontOrBackSide()))
+	{
+		//オーバーしていない
+		//通常のクエリの処理
 
-	//	//オーバーライドしてほしい関数QuerySub()
-	//	QuerySub();
-	//	//オーバーラップをチェックする状態へ
-	//	m_objectState = enOverlap;
-	//}
-	//else
-	//{
-	//	//念のため書いてるけど、本来ここを通る前に、
-	//	//ThrownDown()でキャパシティオーバーを調べて
-	//	//オーバーしてたらRepelled()に行っているはず
+		//オーバーライドしてほしい関数QuerySub()
+		QuerySub();
+		//オーバーラップをチェックする状態へ
+		m_objectState = enOverlap;
+	}
+	else
+	{
+		//念のため書いてるけど、本来ここを通る前に、
+		//ThrownDown()でキャパシティオーバーを調べて
+		//オーバーしてたらRepelled()に行っているはず
 
-	//	//オーバーしている
+		//オーバーしている
 
-	//	//クエリせずに
-	//	//下に投げた時のオーバーラップ
-	//	m_objectState = enOverlapThrownDown;
-	//	test.Scale(-1.0f);
-	//}
+		//クエリせずに
+		//下に投げた時のオーバーラップ
+		m_objectState = enOverlapThrownDown;
+		test.Scale(-1.0f);
+	}
 }
 
 
@@ -926,10 +953,10 @@ void CReversibleObject::OverlapThrownDown()
 		//キャパシティオーバーか？
 		//自分がいない側のキャパシティを調べる
 		//自分はまだそっち側にいないから、調整値に1を入れている
-		if (IsCapacityOver(frontOrBackSide, 1))
-			//キャパオーバーしてる
-			m_virticalRepelledFlag = true;
-		else
+		//if (IsCapacityOver(frontOrBackSide, 1))
+		//	//キャパオーバーしてる
+		//	m_virticalRepelledFlag = true;
+		//else
 			//キャパオーバーではない
 			//反転させる
 			Reverse();

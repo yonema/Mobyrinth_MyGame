@@ -61,7 +61,10 @@ private:	//privateなメンバ関数
 	/// <param name="frontOrBackSide">表側か裏側か？</param>
 	void Over(const int frontOrBackSide);
 
-
+	/// <summary>
+	/// 通常の値に戻す
+	/// </summary>
+	void DefaultParam(const int frontOrBackSide);
 
 
 private:	//列挙型
@@ -89,12 +92,14 @@ private:	//データメンバ
 	CFontRender* m_RONumFR[enFrontAndBackSideNum];	//表側と裏側にあるアイテムの数のフォント
 	CFontRender* m_capacityFR[enFrontAndBackSideNum];	//キャパシティのフォント
 	Vector2 m_capacityPos[enFrontAndBackSideNum];	//キャパシティのフォントの座標
-	Vector4 m_normalFontColor[enFrontAndBackSideNum];	//フォントのカラー
+	float m_diffCapacityToNum = 0.0f;				//キャパシティからアイテムの数のフォントへの差
+	Vector4 m_defaultFontColor[enFrontAndBackSideNum];	//フォントのカラー
 	int m_oldRONum[enFrontAndBackSideNum];			//前回の表側と裏側にあるアイテムの数
 	bool m_firstFrame = true;						//最初のフレームか？
 	bool m_titleFlag = false;						//タイトルか？
 	int m_directingState[enFrontAndBackSideNum] = { enNormal };	//演出のステート
 	float m_timer[enFrontAndBackSideNum] = { 0.0f };	//タイマー
 	int m_maxCapacityNum[enFrontAndBackSideNum] = { 5,5 };	//キャパシティの最大値
+	float m_defaultScale = 1.0f;					//通常の拡大
 };
 

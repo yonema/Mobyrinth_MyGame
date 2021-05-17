@@ -1,6 +1,7 @@
 #pragma once
 #include "LevelObjectBase.h"
 #include "SoundCue.h"
+#include "effect/Effect.h"
 
 /// <summary>
 ///	リバーシブルオブジェクト（反転オブジェクト）
@@ -269,6 +270,7 @@ private:	//データメンバ
 	float m_timer = 0.0f;						//タイマー
 	Vector3 m_addPosition = g_vec3Zero;			//ポジションに加えるベクトル
 	bool m_virticalRepelledFlag = false;		//盾に弾かれるか？
+	Effect* m_reverseall2 = nullptr;			//全反転する場所にプレイヤーが触れた時のエフェクト
 	/// <summary>
 	/// オブジェクトの現在のステート（状態）
 	/// これでアップデート中の処理を割り振る
@@ -304,6 +306,7 @@ private:	//データメンバ
 	Vector3 test = { 0.0f,0.0f,0.0f };
 
 	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
+	CSoundCue* m_throwSE = nullptr;  //m_throwSEのサウンドキュー
 
 	bool m_changeObject = true;
 

@@ -12,14 +12,14 @@ bool Player::Start()
 	/////////////////////////////////////////////////////////
 
 	//アニメーションクリップの初期化
-	//Idleのアニメーションクリップをロードする
+	//walkのアニメーションクリップをロードする
 	m_animationClips[enAnimClip_Idle].Load("Assets/animData/walk.tka");
 	//ループ再生をtrueにする
 	m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
-	////Runのアニメーションクリップをロードする
-	//m_animationClips[enAnimClip_Run].Load("Assets/animData/walk.tka");
-	////ループ再生をtrueにする
-	//m_animationClips[enAnimClip_Run].SetLoopFlag(true);
+	////fallのアニメーションクリップをロードする
+	//m_animationClips[enAnimClip_Run].Load("Assets/animData/fall.tka");
+	////ループ再生をfalseにする
+	//m_animationClips[enAnimClip_Run].SetLoopFlag(false);
 
 	//モデルレンダラーを生成する
 	m_modelRender = NewGO<CModelRender>(0);
@@ -64,6 +64,13 @@ bool Player::Start()
 
 	//プレイヤーを照らすライトの方向
 	m_lightDirection = { 1.0f,-1.0f,0.0f };
+
+	//m_fallstartSEのサウンドキューを生成する
+	m_fallstartSE = NewGO<CSoundCue>(0);
+	//m_fallstartSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_fallstartSE->Init(L"Assets/sound/fallstart.wav");
+	//音量調節
+	m_fallstartSE->SetVolume(0.5f);
 
 	//デバック用
 	//後で消す
@@ -810,6 +817,7 @@ void Player::GameMove()
 	if (m_fallFlag == true)
 	{
 		Fall();
+
 		return;
 	}
 
@@ -941,6 +949,10 @@ void Player::Fall()
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_finalWPRot = g_quatIdentity;
+	if (m_fallcount < 1) {				//一度だけ呼ぶ
+		m_fallstartSE->Play(false);		//fallstartSEをループ再生をオフで再生する。
+		m_fallcount++;
+	}
 }
 
 

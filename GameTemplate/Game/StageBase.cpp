@@ -64,6 +64,14 @@ bool IStageBase::Start()
 		//Tipsをタイトルモードにする
 		m_tipsController->SetTitleMode();
 	}
+
+	//m_goalSEのサウンドキューを生成する
+	m_goalSE = NewGO<CSoundCue>(0);
+	//m_goalSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_goalSE->Init(L"Assets/sound/goal.wav");
+	//音量調節
+	m_goalSE->SetVolume(0.5f);
+
 	return StartSub();
 }
 
@@ -709,6 +717,11 @@ void IStageBase::Quit()
 /// </summary>
 void IStageBase::Goal()
 {
+	if (m_goalSEcount < 1) {				//一度だけ呼ぶ
+		m_goalSE->Play(false);			//m_goalSEをループ再生をオフで再生する。
+		m_goalSEcount++;
+	}
+	
 	m_player->GetPosition();
 	//ゴールした後の時間を計測する	//デルタタイムを掛ける
 	m_goalTimer += GameTime().GetFrameDeltaTime();

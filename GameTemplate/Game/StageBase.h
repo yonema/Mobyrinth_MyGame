@@ -46,6 +46,9 @@
 //「UFO」
 #include "UFO.h"
 
+//サウンド
+#include "SoundCue.h"
+
 
 /// <summary>
 ///	ステージベースクラス
@@ -186,6 +189,8 @@ private:	//データメンバ
 
 	CTipsController* m_tipsController = nullptr;	//Tipsのコントロ―ルクラス
 	CCapacityUI* m_capacityUI = nullptr;			//キャパシティのUIクラス
+	CSoundCue* m_goalSE = nullptr;					//m_goalSEのサウンドキュー
+	int m_goalSEcount = 0;							//m_goalSEのサポート
 
 };
 

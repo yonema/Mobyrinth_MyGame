@@ -38,7 +38,20 @@ bool OOwall::StartSub()
 	m_pRun_stop->SetFrontOrBack(CReversibleObject::enBack);	
 	//全反転しないようにと、Tipsを表示しないようにする
 	m_pRun_stop->SetLock(true);
+
+	//m_wallmoveSEのサウンドキューを生成する
+	m_wallmoveSE = NewGO<CSoundCue>(0);
+	//m_wallmoveSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_wallmoveSE->Init(L"Assets/sound/wallmove.wav");
+	//音量調節
+	m_wallmoveSE->SetVolume(0.5f);
+
 	return true;
+}
+
+OOwall::~OOwall()
+{
+	DeleteGO(m_wallmoveSE);
 }
 
 //アップデート関数
@@ -82,9 +95,37 @@ void OOwall::UpdateSub()
 		//カウンターを進める
 		m_moveTimer += GameTime().GetFrameDeltaTime();
 
+
+		MoveSE();
 	}
 
 	return;
+}
+
+//プレイヤーがUFOに近づくと音を鳴らす
+void OOwall::MoveSE()
+{
+	Vector3 distance = m_position - m_pPlayer->GetPosition();
+	const float MaxDist = 1500;
+	const float DistLen = distance.Length();
+
+	if (DistLen < MaxDist) {
+		float Le = MaxDist - DistLen;
+		float SubLe = Le / MaxDist;
+		float Vo = 2.0f * SubLe;
+
+		//UFOmoveSEをループ再生をオンで再生する。
+		m_wallmoveSE->Play(true);
+
+		//音量調節
+		m_wallmoveSE->SetVolume(Vo);
+
+	}
+	else {
+		if (m_wallmoveSE->IsPlaying()) {
+			m_wallmoveSE->Stop();
+		}
+	}
 }
 
 /// <summary>

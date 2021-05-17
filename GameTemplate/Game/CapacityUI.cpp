@@ -56,7 +56,7 @@ void CCapacityUI::InitFont()
 	}
 
 	//キャパシティからアイテムの数のフォントへの差
-	const float diffCapacityToNum = 100.0f;
+	m_diffCapacityToNum = 100.0f;
 	//テキスト用意
 	wchar_t text[256];
 	//現在の表側と裏側の反転オブジェクトの数を取得
@@ -66,13 +66,14 @@ void CCapacityUI::InitFont()
 	//＊＊表側のフォントの設定＊＊
 	//フォントの拡大
 	const float scale = 1.5f;
+	m_defaultScale = scale;
 	//フォントのカラー
 	Vector3 fontColor;
 	//表側のタイルの色
 	fontColor = { 214.0f,85.0f,0.0f };
 	//明るすぎるため正規化
 	fontColor.Normalize();
-	m_normalFontColor[enFrontSide] = fontColor;
+	m_defaultFontColor[enFrontSide] = fontColor;
 	//フォントのX座標
 	const float capacityNumX = -615.0f;
 	//フォントのY座標
@@ -87,7 +88,7 @@ void CCapacityUI::InitFont()
 		0.0f, scale, { 0.5f,0.5f });
 	//表側の数フォントの初期化
 	m_RONumFR[enFrontSide]->Init(L"",
-		{ capacityNumX + diffCapacityToNum,capacityNumY }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
+		{ capacityNumX + m_diffCapacityToNum,capacityNumY }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
 		0.0f, scale, { 0.5f,0.5f });
 
 
@@ -99,7 +100,7 @@ void CCapacityUI::InitFont()
 	fontColor.Normalize();
 	//色が一緒過ぎて見えにくかったから、暗くする
 	fontColor.Scale(0.1);
-	m_normalFontColor[enBackSide] = fontColor;
+	m_defaultFontColor[enBackSide] = fontColor;
 	//表側のフォントとのY座標の差
 	const float diffFrontToBackY = 70.0f;
 	m_capacityPos[enBackSide] = { capacityNumX ,capacityNumY - diffFrontToBackY };
@@ -112,7 +113,7 @@ void CCapacityUI::InitFont()
 		0.0f, scale, { 0.5f,0.5f });
 	//裏側の数のフォントの初期化
 	m_RONumFR[enBackSide]->Init(L"",
-		{ capacityNumX + diffCapacityToNum,capacityNumY - diffFrontToBackY },
+		{ capacityNumX + m_diffCapacityToNum,capacityNumY - diffFrontToBackY },
 		{ fontColor.x,fontColor.y,fontColor.z,1.0f },
 		0.0f, scale, { 0.5f,0.5f });
 
@@ -185,6 +186,10 @@ void CCapacityUI::Update()
 /// <param name="maxNum">表側と裏側のアイテムの最大数</param>
 void CCapacityUI::CheckDirecting(const int* num)
 {
+	if (m_directingState[enFrontSide] == enOver ||
+		m_directingState[enBackSide] == enOver)
+		return;
+
 	//表側と裏側両方調べる
 	for (int i = 0; i < enFrontAndBackSideNum; i++)
 	{
@@ -212,6 +217,11 @@ void CCapacityUI::CheckDirecting(const int* num)
 
 		}
 	}
+
+	if (m_directingState[enFrontSide] == enOver)
+		m_directingState[enBackSide] = enNormal;
+	else if (m_directingState[enBackSide] == enOver)
+		m_directingState[enFrontSide] = enNormal;
 }
 
 
@@ -251,18 +261,27 @@ void CCapacityUI::Directing()
 void CCapacityUI::Increased(const int frontOrBackSide)
 {
 	//切り替え時間
-	const float switchingTime = 2.0f;
+	const float switchingTime = 1.0f;
 	//フォントが特有の動きをする時間
-	const float actionTime = 1.0f;
+	const float actionTime = 0.7f;
 
 	//タイマーが0.0fか？、つまり最初の一回目のループか？
 	if (m_timer[frontOrBackSide] == 0.0f)
 	{
 		//最初の一回目
 
+		DefaultParam(frontOrBackSide);
+
 		//フォントのカラーを増えた時のカラーにする
-		m_RONumFR[frontOrBackSide]->SetColor({ 10.0f,0.0f,0.0f,1.0f });
+		m_RONumFR[frontOrBackSide]->SetColor({ 2.0f,0.0f,0.0f,1.0f });
+		
 	}
+
+	//数のフォントの座標
+	//現在の数のフォントの座標を取ってくる
+	Vector2 numFontPos = m_RONumFR[frontOrBackSide]->GetPosition();
+	//Y座標には最初の座標を入れておく
+	numFontPos.y = m_capacityPos[frontOrBackSide].y;
 
 	//タイマーがアクションタイム以内か？
 	if (m_timer[frontOrBackSide] <= actionTime)
@@ -286,16 +305,10 @@ void CCapacityUI::Increased(const int frontOrBackSide)
 		//二次式のyの値、今までの値で計算して、ここがはねている高さになる
 		const float y = a * pow(x, 2.0f) + b;
 
-		//数のフォントの座標
-		//現在の数のフォントの座標を取ってくる
-		Vector2 numFontPos = m_RONumFR[frontOrBackSide]->GetPosition();
-		//Y座標には最初の座標を入れておく
-		numFontPos.y = m_capacityPos[frontOrBackSide].y;
+
 		//はねる分だけ高くする
 		numFontPos.y += y;
 
-		//数のフォントの座標を設定する
-		m_RONumFR[frontOrBackSide]->SetPosition(numFontPos);
 	}
 	else
 	{
@@ -303,14 +316,11 @@ void CCapacityUI::Increased(const int frontOrBackSide)
 
 		//通常の座標に戻しておく
 
-		//数のフォントの座標
-		//現在の数のフォントの座標を取ってくる
-		Vector2 numFontPos = m_RONumFR[frontOrBackSide]->GetPosition();
-		//Y座標には最初の座標を入れておく
-		numFontPos.y = m_capacityPos[frontOrBackSide].y;
-		//数のフォントの座標を設定する
-		m_RONumFR[frontOrBackSide]->SetPosition(numFontPos);
 	}
+
+
+	//数のフォントの座標を設定する
+	m_RONumFR[frontOrBackSide]->SetPosition(numFontPos);
 
 	//タイマーが切り替え時間以上か
 	if (m_timer[frontOrBackSide] >= switchingTime)
@@ -320,7 +330,7 @@ void CCapacityUI::Increased(const int frontOrBackSide)
 		//タイマーを初期化する
 		m_timer[frontOrBackSide] = 0.0f;
 		//フォントのカラーを初期化する
-		m_RONumFR[frontOrBackSide]->SetColor(m_normalFontColor[frontOrBackSide]);
+		m_RONumFR[frontOrBackSide]->SetColor(m_defaultFontColor[frontOrBackSide]);
 		//演出のステートを通常にする
 		m_directingState[frontOrBackSide] = enNormal;
 	}
@@ -340,38 +350,45 @@ void CCapacityUI::Increased(const int frontOrBackSide)
 void CCapacityUI::Decreased(const int frontOrBackSide)
 {
 	//切り替え時間
-	const float switchingTime = 2.0f;
+	const float switchingTime = 1.0f;
 	//フォントが特有の動きをする時間
-	const float actionTime = 1.0f;
+	const float actionTime = 0.7f;
 
-	//キャパシティからアイテムか数のフォントへの差
-	const float diffCapacityToNum = 100.0f;
 
 	//タイマーが0.0fか？、つまり最初の一回目のループか？
 	if (m_timer[frontOrBackSide] == 0.0f)
 	{
 		//最初の一回目
 
+		DefaultParam(frontOrBackSide);
+
 		//フォントのカラーを減った時のカラーにする
-		m_RONumFR[frontOrBackSide]->SetColor({ 0.0f,0.0f,20.0f,1.0f });
+		m_RONumFR[frontOrBackSide]->SetColor({ 0.0f,0.0f,2.0f,1.0f });
+		
 	}
 
+
+	//数のフォントの座標
+//
+	Vector2 numFontPos = m_capacityPos[frontOrBackSide];
+	//X座標をそろえる
+	numFontPos.x += m_diffCapacityToNum;
 
 	//タイマーがアクションタイム以内か？
 	if (m_timer[frontOrBackSide] <= actionTime)
 	{
 		//以内の時
 
-		const float oneEightTime = actionTime / 4.0f;
+		const float separationTime = actionTime / 4.0f;
 
-		const int state = m_timer[frontOrBackSide] / oneEightTime;
+		const int state = m_timer[frontOrBackSide] / separationTime;
 
 		const float destination = 10.0f;
 
 		float moveLen = 0.0f;
 
 		const float timeScale = 
-			(m_timer[frontOrBackSide] - oneEightTime * state) / oneEightTime;
+			(m_timer[frontOrBackSide] - separationTime * state) / separationTime;
 
 
 		switch (state)
@@ -395,17 +412,9 @@ void CCapacityUI::Decreased(const int frontOrBackSide)
 
 		}
 
-
-
-		//数のフォントの座標
-		//
-		Vector2 numFontPos = m_capacityPos[frontOrBackSide];
-		//X座標をそろえる
-		numFontPos.x += diffCapacityToNum;
 		numFontPos.x += moveLen;
 
-		//数のフォントの座標を設定する
-		m_RONumFR[frontOrBackSide]->SetPosition(numFontPos);
+
 	}
 	else
 	{
@@ -413,12 +422,10 @@ void CCapacityUI::Decreased(const int frontOrBackSide)
 
 		//通常の座標に戻しておく
 
-		//数のフォントの座標
-		Vector2 numFontPos = m_capacityPos[frontOrBackSide];
-		numFontPos.x += diffCapacityToNum;
-		//数のフォントの座標を設定する
-		m_RONumFR[frontOrBackSide]->SetPosition(numFontPos);
 	}
+
+	//数のフォントの座標を設定する
+	m_RONumFR[frontOrBackSide]->SetPosition(numFontPos);
 
 	//タイマーが切り替え時間以上か
 	if (m_timer[frontOrBackSide] >= switchingTime)
@@ -428,7 +435,7 @@ void CCapacityUI::Decreased(const int frontOrBackSide)
 		//タイマーを初期化する
 		m_timer[frontOrBackSide] = 0.0f;
 		//フォントのカラーを初期化する
-		m_RONumFR[frontOrBackSide]->SetColor(m_normalFontColor[frontOrBackSide]);
+		m_RONumFR[frontOrBackSide]->SetColor(m_defaultFontColor[frontOrBackSide]);
 		//演出のステートを通常にする
 		m_directingState[frontOrBackSide] = enNormal;
 	}
@@ -448,10 +455,51 @@ void CCapacityUI::Decreased(const int frontOrBackSide)
 void CCapacityUI::Over(const int frontOrBackSide)
 {
 	//切り替え時間
-	const float switchingTime = 2.0f;
+	const float switchingTime = 1.1f;
+	//フォントが特有の動きをする時間
+	const float actionTime = 0.5f;
 
-	//フォントのカラーを増えた時のカラーにする
-	m_RONumFR[frontOrBackSide]->SetColor({ 10.0f,0.0f,0.0f,1.0f });
+	if (m_timer[frontOrBackSide] == 0.0f)
+	{
+		DefaultParam(frontOrBackSide);
+
+		//フォントのカラーを増えた時のカラーにする
+		m_RONumFR[frontOrBackSide]->SetColor({ 1.0f,1.0f,0.0f,1.0f });
+		
+	}
+	const float addScale = 0.8f;
+	float numFontScale = m_defaultScale + addScale;
+	Vector2 numFontPosition = m_capacityPos[frontOrBackSide];
+	numFontPosition.x += m_diffCapacityToNum;
+	if (m_timer[frontOrBackSide] <= actionTime)
+	{
+
+
+		Vector2 addPosition = { -20.0f,15.0f };
+
+		//Vector2 bufPos = addPosition;
+		//addPosition.x = 
+		//	bufPos.x * std::cos(radian) - bufPos.y * std::sin(radian);
+		//addPosition.y =
+		//	bufPos.x * std::sin(radian) + bufPos.y * std::cos(radian);
+		numFontPosition.Add(addPosition);
+	}
+	else
+	{
+		numFontPosition = m_capacityPos[frontOrBackSide];
+		numFontPosition.x += m_diffCapacityToNum;
+		numFontScale = m_defaultScale;
+		//フォントのカラーを初期化する
+		m_RONumFR[frontOrBackSide]->SetColor(m_defaultFontColor[frontOrBackSide]);
+		//m_RONumFR[frontOrBackSide]->SetScale(m_defaultScale);
+		////m_RONumFR[frontOrBackSide]->SetRotation(numFontRotation);
+		//m_RONumFR[frontOrBackSide]->SetPosition(numFontPosition);
+	}
+
+
+	m_RONumFR[frontOrBackSide]->SetScale(numFontScale);
+	//m_RONumFR[frontOrBackSide]->SetRotation(numFontRotation);
+	m_RONumFR[frontOrBackSide]->SetPosition(numFontPosition);
 
 	//タイマーが切り替え時間以上か
 	if (m_timer[frontOrBackSide] >= switchingTime)
@@ -461,9 +509,11 @@ void CCapacityUI::Over(const int frontOrBackSide)
 		//タイマーを初期化する
 		m_timer[frontOrBackSide] = 0.0f;
 		//フォントのカラーを初期化する
-		m_RONumFR[frontOrBackSide]->SetColor(m_normalFontColor[frontOrBackSide]);
+		m_RONumFR[frontOrBackSide]->SetColor(m_defaultFontColor[frontOrBackSide]);
 		//演出のステートを通常にする
 		m_directingState[frontOrBackSide] = enNormal;
+
+
 	}
 	else
 	{
@@ -472,4 +522,23 @@ void CCapacityUI::Over(const int frontOrBackSide)
 		//タイマーを進める
 		m_timer[frontOrBackSide] += GameTime().GetFrameDeltaTime();
 	}
+}
+
+
+/// <summary>
+/// 通常の値に戻す
+/// </summary>
+void CCapacityUI::DefaultParam(const int frontOrBackSide)
+{
+
+	Vector2 numFontPos = m_capacityPos[frontOrBackSide];
+	numFontPos.x += m_diffCapacityToNum;
+	m_RONumFR[frontOrBackSide]->SetPosition(numFontPos);
+
+	m_RONumFR[frontOrBackSide]->SetRotation(0.0f);
+
+	m_RONumFR[frontOrBackSide]->SetScale(m_defaultScale);
+
+	m_RONumFR[frontOrBackSide]->SetColor(m_defaultFontColor[frontOrBackSide]);
+
 }
