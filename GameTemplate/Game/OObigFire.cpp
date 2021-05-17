@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "OObigFire.h"
+#include "effect/Effect.h"
 
 //スタート関数
 bool OObigFire::StartSub()
@@ -34,6 +35,14 @@ bool OObigFire::StartSub()
 	//flameSEのサウンドキューを、waveファイルを指定して初期化する。
 	m_flameSE->Init(L"Assets/sound/flame.wav");
 
+	//m_flame_waterエフェクトの作成
+	m_flame_water = NewGO<Effect>(0);
+	m_flame_water->Init(u"Assets/effect/flame_water.efk");
+	float scale = 30.0f;								//小さいので大きくしておく
+	m_flame_water->SetScale({ scale ,scale ,scale });
+	m_flame_water->SetPosition(m_position);				//座標を渡す
+	m_flame_water->SetRotation(m_rotation);
+
 	return true;
 }
 
@@ -44,6 +53,7 @@ OObigFire::~OObigFire()
 	if (m_flameSE->IsPlaying()) {
 		m_flameSE->Stop();
 	}
+	
 }
 
 //アップデート関数
@@ -87,6 +97,7 @@ void OObigFire::Damage()
 			//だったらうまくいかない。
 		SetScale(g_vec3One * (m_hp + sizeComplement) / (m_maxHp + sizeComplement));
 	}
+	m_flame_water->Play();								//再生
 }
 
 //プレイヤーが炎に近づくと燃えてる音を出す

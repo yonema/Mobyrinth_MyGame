@@ -40,8 +40,8 @@ bool OOReverseALL::StartSub()
 
 	//m_reverseall2エフェクトの作成
 	m_reverseall2 = NewGO<Effect>(0);
-	m_reverseall2->Init(u"Assets/effect2/reverseall2.efk");
-	float scale2 = 30.0f;								//小さいので大きくしておく
+	m_reverseall2->Init(u"Assets/effect/reverseall2.efk");
+	float scale2 = 200.0f;								//小さいので大きくしておく
 	m_reverseall2->SetScale({ scale2 ,scale2 ,scale2 });
 	m_reverseall2->SetPosition(m_position);				//座標を渡す
 	m_reverseall2->SetRotation(m_rotation);
@@ -220,6 +220,13 @@ void OOReverseALL::AfterHitPlayer()
 		//changeSEをループ再生をオフで再生する。
 		m_changeSE->Play(false);
 
+		Vector3 upVec = g_vec3Up;
+		m_rotation.Apply(upVec);
+		//この値を変更して高さを調節する
+		const float upVecLne = 100.0f;
+		upVec.Scale(upVecLne);
+		m_reverseall2->SetPosition(m_position + upVec);		//座標を渡す
+		m_reverseall2->SetRotation(m_rotation);
 		m_reverseall2->Play();								//再生
 	}
 

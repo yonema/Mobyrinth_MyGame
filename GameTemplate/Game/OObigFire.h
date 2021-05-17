@@ -1,6 +1,7 @@
 #pragma once
 #include "ObstacleObject.h"
 #include "PointLight.h"
+#include "effect/Effect.h"
 
 /// <summary>
 /// 障害オブジェクト
@@ -22,7 +23,8 @@ private:
 	int m_hp = m_maxHp;						//現在のHP
 	CPointLight* m_pointLight = nullptr;	//ポイントライト
 
-	CSoundCue* m_flameSE = nullptr; //flameのサウンドキュー
+	CSoundCue* m_flameSE = nullptr;			//flameのサウンドキュー
+	Effect* m_flame_water = nullptr;		//炎と水の反応
 
 };
 
