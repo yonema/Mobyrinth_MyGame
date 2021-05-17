@@ -62,6 +62,15 @@ public:		//ここのメンバ関数を主に使う。
 	}
 
 	/// <summary>
+	/// 座標を取得する
+	/// </summary>
+	/// <returns>座標</returns>
+	const Vector2& GetPosition() const
+	{
+		return m_position;
+	}
+
+	/// <summary>
 	/// カラーを設定する。{1.0f,1.0f,1.0f,1.0f}が白色
 	/// </summary>
 	/// <param name="color">カラー</param>

@@ -567,10 +567,10 @@ void CReversibleObject::ThrownDown()
 		//キャパシティオーバーか？
 		//自分がいない側のキャパシティを調べる
 		//自分はまだそっち側にいないから、調整値に1を入れている
-		if (IsCapacityOver(frontOrBackSide, 1))
-			//キャパオーバーしてる
-			m_virticalRepelledFlag = true;
-		else
+		//if (IsCapacityOver(frontOrBackSide, 1))
+		//	//キャパオーバーしてる
+		//	m_virticalRepelledFlag = true;
+		//else
 			//キャパオーバーではない
 			//反転させる
 			Reverse();
@@ -764,35 +764,35 @@ void CReversibleObject::Query()
 	CheckFrontOrBackSide();
 
 	//オーバーライドしてほしい関数QuerySub()
-	QuerySub();
+	//QuerySub();
 
 
 	//オーバーラップをチェックする状態へ
-	m_objectState = enOverlap;
-	////キャパシティがオーバーしているか？
-	//if (!IsCapacityOver(GetFrontOrBackSide()))
-	//{
-	//	//オーバーしていない
-	//	//通常のクエリの処理
+	//m_objectState = enOverlap;
+	//キャパシティがオーバーしているか？
+	if (!IsCapacityOver(GetFrontOrBackSide()))
+	{
+		//オーバーしていない
+		//通常のクエリの処理
 
-	//	//オーバーライドしてほしい関数QuerySub()
-	//	QuerySub();
-	//	//オーバーラップをチェックする状態へ
-	//	m_objectState = enOverlap;
-	//}
-	//else
-	//{
-	//	//念のため書いてるけど、本来ここを通る前に、
-	//	//ThrownDown()でキャパシティオーバーを調べて
-	//	//オーバーしてたらRepelled()に行っているはず
+		//オーバーライドしてほしい関数QuerySub()
+		QuerySub();
+		//オーバーラップをチェックする状態へ
+		m_objectState = enOverlap;
+	}
+	else
+	{
+		//念のため書いてるけど、本来ここを通る前に、
+		//ThrownDown()でキャパシティオーバーを調べて
+		//オーバーしてたらRepelled()に行っているはず
 
-	//	//オーバーしている
+		//オーバーしている
 
-	//	//クエリせずに
-	//	//下に投げた時のオーバーラップ
-	//	m_objectState = enOverlapThrownDown;
-	//	test.Scale(-1.0f);
-	//}
+		//クエリせずに
+		//下に投げた時のオーバーラップ
+		m_objectState = enOverlapThrownDown;
+		test.Scale(-1.0f);
+	}
 }
 
 
@@ -960,10 +960,10 @@ void CReversibleObject::OverlapThrownDown()
 		//キャパシティオーバーか？
 		//自分がいない側のキャパシティを調べる
 		//自分はまだそっち側にいないから、調整値に1を入れている
-		if (IsCapacityOver(frontOrBackSide, 1))
-			//キャパオーバーしてる
-			m_virticalRepelledFlag = true;
-		else
+		//if (IsCapacityOver(frontOrBackSide, 1))
+		//	//キャパオーバーしてる
+		//	m_virticalRepelledFlag = true;
+		//else
 			//キャパオーバーではない
 			//反転させる
 			Reverse();

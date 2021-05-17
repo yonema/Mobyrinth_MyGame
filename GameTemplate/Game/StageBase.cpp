@@ -42,56 +42,17 @@ bool IStageBase::Start()
 
 
 	//キャパシティを表示するスプライトの生成と初期化
-	m_capacityDisplaySR = NewGO<CSpriteRender>(1);
-	const float capacityX = -490.0f;
-	const float capacityY = 270.0f;
-	m_capacityDisplaySR->Init
-	("Assets/image/Capacity_display.DDS", 512.0f * 1.1f, 256.0f * 1.1f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-	m_capacityDisplaySR->SetPosition({ capacityX, capacityY,0.0f });
-	m_capacityDisplaySR->SetPostRenderFlag(true);
-	//タイトル画面か？
-	if (m_titlePlayer)
-	{
-		//タイトル画面なら
-		//非表示にする
-		m_capacityDisplaySR->Deactivate();
-	}
+	m_capacityUI = NewGO<CCapacityUI>(0);
 
-
-
-	//表側と裏側の反転オブジェクトの数を表示する
-	//フォントレンダラーの初期化
-	for (int i = 0; i < 2; i++)
-	{
-		m_roNumFR[i] = NewGO<CFontRender>(1);
-		m_roNumFR[i]->SetPostRenderFlag(true);
-		CLevelObjectManager::GetInstance()->SetReversibleObjectMaxNum(i, 5);
-	}
-	const float scale = 1.5f;
-	Vector3 fontColor;
-	fontColor = { 214.0f,85.0f,0.0f };
-	fontColor.Normalize();
-	const float capacityNumX = -615.0f;
-	const float capacityNumY = 332.5f;
-	m_roNumFR[0]->Init(L"",
-		{ capacityNumX,capacityNumY }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
-		0.0f, scale, { 0.5f,0.5f });
-	fontColor = { 99.0f,97.0f,99.0f };
-	fontColor.Normalize();
-	fontColor.Scale(0.1);
-	const float capacityNumDiff = 70.0f;
-	m_roNumFR[1]->Init(L"", 
-		{ capacityNumX,capacityNumY - capacityNumDiff }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
-		0.0f, scale, { 0.5f,0.5f });
 	//タイトル画面か？
 	if (m_titlePlayer)
 	{
 		//タイトル画面なら
 
-		//非表示にする
-		m_roNumFR[0]->Deactivate();
-		m_roNumFR[1]->Deactivate();
+		//キャパシティのタイトルフラグを立てる
+		m_capacityUI->SetTitleFlag(true);
 	}
+
 
 	//Tipsコントローラーの生成
 	m_tipsController = NewGO<CTipsController>(0);
@@ -617,9 +578,8 @@ IStageBase::~IStageBase()
 	DeleteGO(m_loop_bgmStage1);
 	DeleteGO(m_loop_bgmStage2);
 
-	DeleteGO(m_roNumFR[0]);
-	DeleteGO(m_roNumFR[1]);
-	DeleteGO(m_capacityDisplaySR);
+	DeleteGO(m_capacityUI);
+
 
 	DeleteGO(m_tipsController);
 
@@ -693,18 +653,6 @@ void IStageBase::Update()
 			m_startDirecting->SetWipeEndFlag(true);
 		}
 	}
-
-	//テキスト用意
-	wchar_t text[256];
-	//現在の表側と裏側の反転オブジェクトの数を取得
-	const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
-	const int* maxNum = CLevelObjectManager::GetInstance()->GetReversibleObjectMaxNum();
-	//テキストをセット
-	std::wstring wString = L"あ";
-	swprintf(text, L"表:%d /%d", num[0], maxNum[0]);
-	m_roNumFR[0]->SetText(text);
-	swprintf(text, L"裏:%d /%d", num[1], maxNum[1]);
-	m_roNumFR[1]->SetText(text);
 
 
 

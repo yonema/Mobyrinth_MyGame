@@ -49,6 +49,41 @@ public:
 		float v[2];
 	};
 
+	void Scale(float s)
+	{
+		DirectX::XMVECTOR xmv = DirectX::XMLoadFloat2(&vec);
+		xmv = DirectX::XMVectorScale(xmv, s);
+		DirectX::XMStoreFloat2(&vec, xmv);
+	}
+
+	/// <summary>
+/// ベクトルの加算。
+/// </summary>
+/// <remarks>
+/// this += _v;
+/// </remarks>
+/// <param name="_v">加算されるベクトル。</param>
+	void Add(const Vector2& _v)
+	{
+		DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat2(&vec);
+		DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat2(&_v.vec);
+		DirectX::XMVECTOR xmvr = DirectX::XMVectorAdd(xmv0, xmv1);
+		DirectX::XMStoreFloat2(&vec, xmvr);
+	}
+	/// <summary>
+/// ベクトルの減算。
+/// </summary>
+/// <remarks>
+/// this -= _v;
+/// </remarks>
+	void Subtract(const Vector2& _v)
+	{
+		DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat2(&vec);
+		DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat2(&_v.vec);
+		DirectX::XMVECTOR xmvr = DirectX::XMVectorSubtract(xmv0, xmv1);
+		DirectX::XMStoreFloat2(&vec, xmvr);
+	}
+
 	/// <summary>
 	/// 線形補完。
 	/// </summary>
@@ -869,6 +904,15 @@ public:
 		int v[4];
 	};
 };
+
+static inline Vector2 operator*(const Vector2& v, float s)
+{
+	Vector2 result;
+	result = v;
+	result.Scale(s);
+	return result;
+}
+
 /// <summary>
 /// ベクトル同士の加算。
 /// </summary>
