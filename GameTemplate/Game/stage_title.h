@@ -12,6 +12,7 @@ public:
 		NewGO<stage_title>(0);
 	}
 
+
 private:	//データメンバ
 };
 

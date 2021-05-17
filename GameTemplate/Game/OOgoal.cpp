@@ -31,6 +31,12 @@ OOgoal::~OOgoal()
 //アップデート関数
 void OOgoal::UpdateSub()
 {
+	//ヒットフラグが折られているか？
+	if (!GetFlagIsHit())
+		//折られている
+		//何もせずにreturn
+		return;
+
 	//自身とプレイヤーが衝突したら
 	if (IsHitPlayer())
 	{

@@ -72,6 +72,9 @@ bool IStageBase::Start()
 	//音量調節
 	m_goalSE->SetVolume(0.5f);
 
+	//セーブデータをデータメンバに代入
+	m_highestClearStageNum = m_save.GetSaveData().highestClearStageNum;
+
 	return StartSub();
 }
 
@@ -683,6 +686,23 @@ void IStageBase::Clear()
 {
 	if (!WipeOut())
 		return;
+
+	//セーブデータの構造体
+	SSaveData saveData;
+	//今クリアしたステージの番号が
+	//セーブされている一番高いクリアしたステージの番号より大きいか？
+	if (m_save.GetSaveData().highestClearStageNum < m_stageNum)
+	{
+		//大きかったら
+
+		//セーブデータに今クリアしたステージの番号を代入する
+		saveData.highestClearStageNum = m_stageNum;
+		//セーブデータクラスにセーブデータを登録する
+		m_save.SetSaveData(saveData);
+	}
+	//セーブをする
+	m_save.SaveData();
+
 	//タイトルの戻る
 	GoTitle();
 	Release();	//リリース
