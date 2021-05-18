@@ -45,9 +45,10 @@ public: //Set関数
 
 			//モデルの参照を得てから、SetMulColor()を呼ぶ
 			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-
+			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.2f });
+			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.2f });
+			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetDrawOutLineFlag(true);
+			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetDrawOutLineFlag(true);
 			levelObjects[i]->TransparentSwitchOff();
 		}
 	}

@@ -75,7 +75,8 @@ struct SPSIn {
 	float3 biNormal 	: BINORMAL;		//従法線
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド空間でのピクセルの座標。
-	float4 posInLVP[Max_ShadowMap]: TEXCOORD2;
+	float4 posInProj	: TEXCOORD2;	//正規化スクリーン座標系の座標
+	float4 posInLVP[Max_ShadowMap]: TEXCOORD3;
 };
 
 ////////////////////////////////////////////////
@@ -136,6 +137,7 @@ Texture2D<float4> g_specularMap : register(t2);			//スペキュラマップ。
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 
 Texture2D<float4> g_shadowMap : register(t10);
+Texture2D<float4> g_depthTexture : register(t11);	//深度テクスチャ
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ///////////////////////////////////////////
@@ -148,6 +150,7 @@ float CookTrranceSpecular(float3 L, float3 V, float3 N, float3 N2, float metaric
 float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V);
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin);
 float4 SpecialColor(float4 albedoColor);
+bool IsOnOutLine(float4 posInProj);
 ////////////////////////////////////////////////
 // 関数定義。
 ////////////////////////////////////////////////
@@ -271,6 +274,43 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
     return skinning;
 }
 
+/// <summary>
+//	輪郭線を描画する
+/// </summary>
+bool IsOnOutLine(float4 posInProj)
+{
+	// 近傍8テクセルの深度値を計算して、エッジを抽出する
+	float2 uv = posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
+
+	float2 uvOffset[8] =
+	{
+		float2(	0.0f			,  1.0f / 720.0f),
+		float2(	0.0f			, -1.0f / 720.0f),
+		float2(	1.0f / 1280.0f	,			0.0f),
+		float2(-1.0f / 1280.0f	,			0.0f),
+		float2(	1.0f / 1280.0f	,  1.0f / 720.0f),
+		float2(-1.0f / 1280.0f	,  1.0f / 720.0f),
+		float2(	1.0f / 1280.0f	, -1.0f / 720.0f),
+		float2(-1.0f / 1280.0f	, -1.0f / 720.0f),
+	};
+
+	float depth = g_depthTexture.Sample(g_sampler, uv).x;
+
+	float depth2 = 0.0f;
+	for (int i = 0; i < 8; i++)
+	{
+		depth2 += g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).x;
+	}
+	depth2 /= 8.0f;
+
+	if (abs(depth - depth2) > 0.00005f)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 
 /// <summary>
 /// スキンなしメッシュ用の頂点シェーダーのエントリー関数。
@@ -340,6 +380,10 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		psIn.posInLVP[i].z = length(worldPos.xyz - shadowParam[i].lightPos) / 10000.0f;
 	}
 
+	// 頂点の正規化スクリーン座標系の座標をピクセルシェーダーに渡す
+	psIn.posInProj = psIn.pos;
+	psIn.posInProj.xy /= psIn.posInProj.w;
+
 
 	return psIn;
 }
@@ -356,6 +400,9 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//アルベドカラー(拡散反射光)。
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
 	
+	if (IsOnOutLine(psIn.posInProj))
+		return float4(0.0f, 0.0f, 0.0f, 1.0f);
+
 	return SpecialColor(albedoColor);
 
 	//スペキュラカラー(鏡面反射光)。
@@ -554,6 +601,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 float4 SpecialColor(float4 albedoColor)
 {
+
+
 	float4 lig = albedoColor;
 	//環境光による底上げ。
 	//lig.xyz += ambientLight * albedoColor;

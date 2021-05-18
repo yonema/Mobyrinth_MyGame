@@ -20,26 +20,15 @@ struct ModelInitData {
 	const char* m_vsSkinEntryPointFunc = "VSSkinMain";				//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
 	const char* m_psEntryPointFunc = "PSMain";						//ピクセルシェーダーのエントリーポイント。
 	const char* m_fxFilePath = nullptr;								//.fxファイルのファイルパス。
-	void* m_expandConstantBuffer = nullptr;							//ユーザー拡張の定数バッファ。
-	int m_expandConstantBufferSize = 0;								//ユーザー拡張の定数バッファのサイズ。
-	IShaderResource* m_expandShaderResoruceView = nullptr;			//ユーザー拡張のシェーダーリソース。
+	void* m_expandConstantBuffer[MeshParts::m_maxExCBNum] = { nullptr };	//ユーザー拡張の定数バッファ。
+	int m_expandConstantBufferSize[MeshParts::m_maxExCBNum] = { 0 };	//ユーザー拡張の定数バッファのサイズ。
+	IShaderResource* m_expandShaderResoruceView[MeshParts::m_maxExSRVNum] = { nullptr };	//ユーザー拡張のシェーダーリソース。
 	DXGI_FORMAT m_colorBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;	//レンダリングするカラーバッファのフォーマット。
 	Skeleton* m_skeleton = nullptr;									//スケルトン。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					//モデルの上方向。
 
 	D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK;
 
-	void* m_expandConstantBuffer2 = nullptr;						//ユーザー拡張の定数バッファ。
-	int m_expandConstantBufferSize2 = 0;							//ユーザー拡張の定数バッファのサイズ。
-
-	void* m_expandConstantBuffer3 = nullptr;						//ユーザー拡張の定数バッファ。
-	int m_expandConstantBufferSize3 = 0;							//ユーザー拡張の定数バッファのサイズ。
-
-	void* m_expandConstantBuffer4 = nullptr;						//ユーザー拡張の定数バッファ。
-	int m_expandConstantBufferSize4 = 0;							//ユーザー拡張の定数バッファのサイズ。
-
-	void* m_shadowConstantBuffer = nullptr;							//シャドウ用の定数バッファ
-	int m_shadowConstantBufferSize = 0;								//シャドウ用の定数バッファのサイズ
 };
 
 

@@ -27,6 +27,8 @@ void CModelRender::Init(
 	InitAnimation(animationClips, numAnimationClips);
 	SetShadowCasterFlag(true);
 	SetShadowReceiverFlag(true);
+
+	InitZPrepassModel();
 	//初期化完了
 	m_isInited = true;
 }
@@ -53,6 +55,9 @@ void CModelRender::Init(
 	m_model.Init(initData);
 	//アニメーションを初期化
 	InitAnimation(animationClips, numAnimationClips);
+
+	InitZPrepassModel();
+
 
 	//初期化完了
 	m_isInited = true;
@@ -112,38 +117,41 @@ void CModelRender::InitModel(const char* filePath, D3D12_CULL_MODE cullMode, EnM
 	//シェーダに渡すコンスタントバッファの設定
 
 	//ライト共通のデータの登録
-	initData.m_expandConstantBuffer =
+	initData.m_expandConstantBuffer[0] =
 		CLightManager::GetInstance()->GetLightParam();
-	initData.m_expandConstantBufferSize =
+	initData.m_expandConstantBufferSize[0] =
 		sizeof(*CLightManager::GetInstance()->GetLightParam());
 
 	//ディレクションライト達のデータの登録
-	initData.m_expandConstantBuffer2 = 
+	initData.m_expandConstantBuffer[1] =
 		CLightManager::GetInstance()->GetDirectionLigData();
-	initData.m_expandConstantBufferSize2 = 
+	initData.m_expandConstantBufferSize[1] =
 		sizeof(*CLightManager::GetInstance()->GetDirectionLigData()) *
 		CLightManager::GetMax_DirectionLight();
 
 	//ポイントライト達のデータの登録
-	initData.m_expandConstantBuffer3 =
+	initData.m_expandConstantBuffer[2] =
 		CLightManager::GetInstance()->GetPointLigData();
-	initData.m_expandConstantBufferSize3 =
+	initData.m_expandConstantBufferSize[2] =
 		sizeof(*CLightManager::GetInstance()->GetPointLigData()) *
 		CLightManager::GetMax_PointLight();
 
 	//スポットライト達のデータの登録
-	initData.m_expandConstantBuffer4 =
+	initData.m_expandConstantBuffer[3] =
 		CLightManager::GetInstance()->GetSpotLigData();
-	initData.m_expandConstantBufferSize4 =
+	initData.m_expandConstantBufferSize[3] =
 		sizeof(*CLightManager::GetInstance()->GetPointLigData()) *
 		CLightManager::GetMax_SpotLight();
 
 	//シャドウのデータの登録
-	initData.m_shadowConstantBuffer =
+	initData.m_expandConstantBuffer[4] =
 		g_shadowMap->GetShadowParam();
-	initData.m_shadowConstantBufferSize = 
+	initData.m_expandConstantBufferSize[4] =
 		sizeof(*g_shadowMap->GetShadowParam()) * g_max_shadowMap;
-	initData.m_expandShaderResoruceView = &g_shadowMap->GetShadowBlur();
+	initData.m_expandShaderResoruceView[0] = &g_shadowMap->GetShadowBlur();
+
+	//ZPrepassで作成された深度テクスチャの登録
+	initData.m_expandShaderResoruceView[1] = &g_graphicsEngine->GetZPrepassDepthTexture();
 
 	initData.m_cullMode = cullMode;
 
@@ -186,8 +194,8 @@ void CModelRender::InitShadowModel()
 	initShadowModelData.m_fxFilePath =
 		"Assets/shader/DrawShadowMap.fx";
 	//シャドウのパラーメータを定数バッファに渡す
-	initShadowModelData.m_expandConstantBuffer = (void*)g_shadowMap->GetShadowParam();
-	initShadowModelData.m_expandConstantBufferSize = sizeof(*g_shadowMap->GetShadowParam());
+	initShadowModelData.m_expandConstantBuffer[0] = (void*)g_shadowMap->GetShadowParam();
+	initShadowModelData.m_expandConstantBufferSize[0] = sizeof(*g_shadowMap->GetShadowParam());
 
 	initShadowModelData.m_colorBufferFormat = DXGI_FORMAT_R32G32_FLOAT;
 
@@ -202,6 +210,19 @@ void CModelRender::InitShadowModel()
 		m_scale
 	);
 
+}
+
+/// <summary>
+/// Zプリパス用のモデルを初期化
+/// </summary>
+void CModelRender::InitZPrepassModel()
+{
+	ModelInitData modelInitData;
+	modelInitData.m_tkmFilePath = m_tkmFilePath;
+	modelInitData.m_fxFilePath = "Assets/shader/ZPrepass.fx";
+	modelInitData.m_colorBufferFormat = DXGI_FORMAT_R32G32_FLOAT;
+
+	m_zprepassModel.Init(modelInitData);
 }
 
 
@@ -227,6 +248,17 @@ void CModelRender::Update()
 		//パラメータ更新
 		m_shadowModel.UpdateModel(m_position, m_rotation, m_scale);
 
+	//ZPrepass用モデルの更新
+	m_zprepassModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+}
+
+void CModelRender::UpdateWhenPaused()
+{
+	if (m_drawOutLineFlag)
+	{
+		// ZPrepassの描画パスにモデルを追加
+		g_graphicsEngine->Add3DModelToZPrepass(m_zprepassModel);
+	}
 }
 
 
@@ -236,6 +268,8 @@ void CModelRender::Render(RenderContext& rc)
 	//初期化されているか？
 	if (!m_isInited)
 		return;	//されていない場合は何もしない
+
+
 
 	//モデルを描画
 	m_model.Draw(rc);

@@ -921,5 +921,8 @@
     <FxCompile Include="Assets\shader\ufoLight.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\ZPrepass.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

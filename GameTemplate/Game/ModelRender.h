@@ -10,6 +10,7 @@ class CModelRender : public IGameObject
 public:		//自動で呼ばれるメンバ関数
 	void Update() override final;					//アップデート関数
 	void Render(RenderContext& rc) override final;	//描画用関数
+	void UpdateWhenPaused() override final;
 
 public:		//ここのメンバ関数を主に使う。
 	/// <summary>
@@ -119,6 +120,15 @@ public:		//ここのメンバ関数を主に使う。
 		m_model.SetMulColor(color);
 	}
 
+	/// <summary>
+	/// 輪郭線を描画するか？を設定する
+	/// </summary>
+	/// <param name="drawOutLineFlag">輪郭線を描画するか？</param>
+	void SetDrawOutLineFlag(const bool drawOutLineFlag)
+	{
+		m_drawOutLineFlag = drawOutLineFlag;
+	}
+
 	//モデルの参照を返す
 	Model& GetModel()
 	{
@@ -153,6 +163,11 @@ private:	//privateなメンバ関数
 	/// </summary>
 	void InitShadowModel();
 
+	/// <summary>
+	/// Zプリパス用のモデルを初期化
+	/// </summary>
+	void InitZPrepassModel();
+
 
 private://データメンバ
 	Model m_model;								//モデル表示処理
@@ -165,8 +180,9 @@ private://データメンバ
 	Vector3 m_scale = g_vec3One;				//拡大
 
 	CShadowModel m_shadowModel;					//シャドウを描画する用のモデル
-
+	Model m_zprepassModel;						// ZPrepassで描画されるモデル
 
 	bool m_isInited = false;					//初期化済み？
+	bool m_drawOutLineFlag = false;				//輪郭線を描画するか？
 };
 

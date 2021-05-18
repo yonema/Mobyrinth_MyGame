@@ -24,7 +24,7 @@ bool CSky::Start()
 	m_texture.InitFromDDSFile(L"Assets/modelData/preset/sky.dds");
 
 
-	initData.m_expandShaderResoruceView = &m_texture;
+	initData.m_expandShaderResoruceView[0] = &m_texture;
 
 	m_model.Init(initData);
 	m_model.UpdateWorldMatrix(m_position, g_quatIdentity, m_scale);

@@ -25,18 +25,10 @@ void MeshParts::InitFromTkmFile(
 	const char* vsSkinEntryPointFunc,
 	const char* psEntryPointFunc,
 	D3D12_CULL_MODE cullMode,
-	void* expandData,
-	int expandDataSize,
-	IShaderResource* expandShaderResourceView,
-	DXGI_FORMAT colorBufferFormat,
-	void* expandData2,
-	int expandDataSize2,
-	void* expandData3,
-	int expandDataSize3,
-	void* expandData4,
-	int expandDataSize4,
-	void* shadowParamData,
-	int shadowParamDataSize
+	void* const* expandData,
+	const int* expandDataSize,
+	IShaderResource* const* expandShaderResourceView,
+	DXGI_FORMAT colorBufferFormat
 )
 {
 	m_meshs.resize(tkmFile.GetNumMesh());
@@ -58,31 +50,18 @@ void MeshParts::InitFromTkmFile(
 	//共通定数バッファの作成。
 	m_commonConstantBuffer.Init(sizeof(SConstantBuffer), nullptr);
 	//ユーザー拡張用の定数バッファを作成。
-	if (expandData) {
-		m_expandConstantBuffer.Init(expandDataSize, nullptr);
-		m_expandData = expandData;
-	}
-	if (expandData2)
+	for (int i = 0; i < m_maxExCBNum; i++)
 	{
-		m_expandConstantBuffer2.Init(expandDataSize2, nullptr);
-		m_expandData2 = expandData2;
+		if (expandData[i]) {
+			m_expandConstantBuffer[i].Init(expandDataSize[i], nullptr);
+			m_expandData[i] = expandData[i];
+		}
 	}
-	if (expandData3)
+	
+	for (int i = 0; i < m_maxExSRVNum; i++)
 	{
-		m_expandConstantBuffer3.Init(expandDataSize3, nullptr);
-		m_expandData3 = expandData3;
+		m_expandShaderResourceView[i] = expandShaderResourceView[i];
 	}
-	if (expandData4)
-	{
-		m_expandConstantBuffer4.Init(expandDataSize4, nullptr);
-		m_expandData4 = expandData4;
-	}
-	if (shadowParamData)
-	{
-		m_shadowConstantBuffer.Init(shadowParamDataSize, nullptr);
-		m_shadowParamData = shadowParamData;
-	}
-	m_expandShaderResourceView = expandShaderResourceView;
 	//ディスクリプタヒープを作成。
 	CreateDescriptorHeaps();
 }
@@ -108,26 +87,21 @@ void MeshParts::CreateDescriptorHeaps()
 			descriptorHeap.RegistShaderResource(1, mesh->m_materials[matNo]->GetNormalMap());		//法線マップ。
 			descriptorHeap.RegistShaderResource(2, mesh->m_materials[matNo]->GetSpecularMap());		//スペキュラマップ。
 			descriptorHeap.RegistShaderResource(3, m_boneMatricesStructureBuffer);							//ボーンのストラクチャードバッファ。
-			if (m_expandShaderResourceView){
-				descriptorHeap.RegistShaderResource(EXPAND_SRV_REG__START_NO, *m_expandShaderResourceView);
+			
+			for (int i = 0; i < m_maxExSRVNum; i++)
+			{
+				if (m_expandShaderResourceView[i]) {
+					descriptorHeap.RegistShaderResource(EXPAND_SRV_REG__START_NO + i, *m_expandShaderResourceView[i]);
+				}
 			}
 			descriptorHeap.RegistConstantBuffer(0, m_commonConstantBuffer);
-			if (m_expandConstantBuffer.IsValid()) {
-				descriptorHeap.RegistConstantBuffer(1, m_expandConstantBuffer);
-			}
-			if (m_expandConstantBuffer2.IsValid()) {
-				descriptorHeap.RegistConstantBuffer(2, m_expandConstantBuffer2);
-			}
-			if (m_expandConstantBuffer3.IsValid()) {
-				descriptorHeap.RegistConstantBuffer(3, m_expandConstantBuffer3);
-			}
-			if (m_expandConstantBuffer4.IsValid()) {
-				descriptorHeap.RegistConstantBuffer(4, m_expandConstantBuffer4);
-			}
-			if (m_shadowConstantBuffer.IsValid())
+			for (int i = 0; i < m_maxExCBNum; i++)
 			{
-				descriptorHeap.RegistConstantBuffer(5, m_shadowConstantBuffer);
+				if (m_expandConstantBuffer[i].IsValid()) {
+					descriptorHeap.RegistConstantBuffer(i + 1, m_expandConstantBuffer[i]);
+				}
 			}
+
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
 			descriptorHeapNo++;
@@ -245,22 +219,13 @@ void MeshParts::Draw(
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);
 
-	if (m_expandData) {
-		m_expandConstantBuffer.CopyToVRAM(m_expandData);
-	}
-	if (m_expandData2) {
-		m_expandConstantBuffer2.CopyToVRAM(m_expandData2);
-	}
-	if (m_expandData3) {
-		m_expandConstantBuffer3.CopyToVRAM(m_expandData3);
-	}
-	if (m_expandData4) {
-		m_expandConstantBuffer4.CopyToVRAM(m_expandData4);
-	}
-	if (m_shadowParamData)
+	for (int i = 0; i < m_maxExCBNum; i++)
 	{
-		m_shadowConstantBuffer.CopyToVRAM(m_shadowParamData);
+		if (m_expandData[i]) {
+			m_expandConstantBuffer[i].CopyToVRAM(m_expandData[i]);
+		}
 	}
+
 	if (m_boneMatricesStructureBuffer.IsInited()) {
 		//ボーン行列を更新する。
 		m_boneMatricesStructureBuffer.Update(m_skeleton->GetBoneMatricesTopAddress());
