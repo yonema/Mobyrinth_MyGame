@@ -61,7 +61,8 @@ void Material::InitFromTkmMaterila(
 	const char* vsSkinEntryPointFunc,
 	const char* psEntryPointFunc,
 	DXGI_FORMAT colorBufferFormat,
-	D3D12_CULL_MODE cullMode)
+	D3D12_CULL_MODE cullMode,
+	const bool trans)
 {
 	//テクスチャをロード。
 	InitTexture(tkmMat);
@@ -83,10 +84,10 @@ void Material::InitFromTkmMaterila(
 		//シェーダーを初期化。
 		InitShaders(fxFilePath, vsEntryPointFunc, vsSkinEntryPointFunc, psEntryPointFunc);
 		//パイプラインステートを初期化。
-		InitPipelineState(colorBufferFormat, cullMode);
+		InitPipelineState(colorBufferFormat, cullMode, trans);
 	}
 }
-void Material::InitPipelineState(DXGI_FORMAT colorBufferFormat, D3D12_CULL_MODE cullMode)
+void Material::InitPipelineState(DXGI_FORMAT colorBufferFormat, D3D12_CULL_MODE cullMode, const bool trans)
 {
 	// 頂点レイアウトを定義する。
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -108,6 +109,7 @@ void Material::InitPipelineState(DXGI_FORMAT colorBufferFormat, D3D12_CULL_MODE 
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psModel->GetCompiledBlob());
 	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	psoDesc.BlendState.RenderTarget[0].BlendEnable = FALSE;
 	psoDesc.DepthStencilState.DepthEnable = TRUE;
 	psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	psoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
@@ -136,7 +138,7 @@ void Material::InitPipelineState(DXGI_FORMAT colorBufferFormat, D3D12_CULL_MODE 
 	//続いて半透明マテリアル用。
 	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinModel->GetCompiledBlob());
 	psoDesc.BlendState.IndependentBlendEnable = TRUE;
-	psoDesc.BlendState.RenderTarget[0].BlendEnable = TRUE;
+	psoDesc.BlendState.RenderTarget[0].BlendEnable = trans;
 	psoDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 	psoDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 	psoDesc.BlendState.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;

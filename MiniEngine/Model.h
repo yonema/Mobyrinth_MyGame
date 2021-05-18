@@ -28,6 +28,7 @@ struct ModelInitData {
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					//モデルの上方向。
 
 	D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK;
+	bool m_trans = true;
 
 };
 
@@ -145,6 +146,23 @@ public:
 		m_meshParts.SetMulColor(color);
 	}
 
+	/// <summary>
+	/// 輪郭線を描画するか？を設定
+	/// </summary>
+	/// <param name="outLineFlag">輪郭線を描画するか？</param>
+	void SetOutLineSeparation(const float outLineSeparation)
+	{
+		m_meshParts.SetOutLineSeparation(outLineSeparation);
+	}
+
+	/// <summary>
+	/// ステルスする？を設定する
+	/// </summary>
+	/// <param name="stealthFlag">ステルスする？</param>
+	void SetStealthFlag(const bool stealthFlag)
+	{
+		m_meshParts.SetStealthFlag(stealthFlag);
+	}
 
 private:
 

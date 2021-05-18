@@ -28,7 +28,8 @@ void MeshParts::InitFromTkmFile(
 	void* const* expandData,
 	const int* expandDataSize,
 	IShaderResource* const* expandShaderResourceView,
-	DXGI_FORMAT colorBufferFormat
+	DXGI_FORMAT colorBufferFormat,
+	const bool trans
 )
 {
 	m_meshs.resize(tkmFile.GetNumMesh());
@@ -43,7 +44,8 @@ void MeshParts::InitFromTkmFile(
 			vsSkinEntryPointFunc, 
 			psEntryPointFunc,
 			colorBufferFormat,
-			cullMode
+			cullMode,
+			trans
 		);
 		meshNo++;
 	});
@@ -116,7 +118,8 @@ void MeshParts::CreateMeshFromTkmMesh(
 	const char* vsSkinEntryPointFunc,
 	const char* psEntryPointFunc,
 	DXGI_FORMAT colorBufferFormat,
-	D3D12_CULL_MODE cullMode
+	D3D12_CULL_MODE cullMode,
+	const bool trans
 )
 {
 	//1. 頂点バッファを作成。
@@ -177,7 +180,8 @@ void MeshParts::CreateMeshFromTkmMesh(
 			vsSkinEntryPointFunc, 
 			psEntryPointFunc,
 			colorBufferFormat,
-			cullMode
+			cullMode,
+			trans
 		);
 		mesh->m_materials.push_back(mat);
 	}
@@ -216,6 +220,8 @@ void MeshParts::Draw(
 	cb.emissionColor = m_emissionColor;
 	cb.mulColor = m_mulColor;
 	cb.shadowReceiverFlag = shadowReceiverFlag;
+	cb.outLineSeparation = m_outLineSeparation;
+	cb.stealthFlag = m_stealthFlag;
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);
 

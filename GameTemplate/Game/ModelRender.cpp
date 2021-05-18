@@ -220,7 +220,8 @@ void CModelRender::InitZPrepassModel()
 	ModelInitData modelInitData;
 	modelInitData.m_tkmFilePath = m_tkmFilePath;
 	modelInitData.m_fxFilePath = "Assets/shader/ZPrepass.fx";
-	modelInitData.m_colorBufferFormat = DXGI_FORMAT_R32G32_FLOAT;
+	modelInitData.m_colorBufferFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	modelInitData.m_trans = false;
 
 	m_zprepassModel.Init(modelInitData);
 }

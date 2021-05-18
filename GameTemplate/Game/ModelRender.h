@@ -127,6 +127,25 @@ public:		//ここのメンバ関数を主に使う。
 	void SetDrawOutLineFlag(const bool drawOutLineFlag)
 	{
 		m_drawOutLineFlag = drawOutLineFlag;
+		m_model.SetOutLineSeparation(32.0f);
+	}
+
+	/// <summary>
+/// 輪郭線を描画するか？を設定
+/// </summary>
+/// <param name="outLineFlag">輪郭線を描画するか？</param>
+	void SetOutLineSeparation(const float outLineSeparation)
+	{
+		m_model.SetOutLineSeparation(outLineSeparation);
+	}
+
+	/// <summary>
+	/// ステルスする？を設定する
+	/// </summary>
+	/// <param name="stealthFlag">ステルスする？</param>
+	void SetStealthFlag(const bool stealthFlag)
+	{
+		m_model.SetStealthFlag(stealthFlag);
 	}
 
 	//モデルの参照を返す

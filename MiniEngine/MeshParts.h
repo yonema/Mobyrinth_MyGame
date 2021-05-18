@@ -50,7 +50,8 @@ public:
 		void* const* expandData,
 		const int* expandDataSize,
 		IShaderResource* const* expandShaderResourceView,
-		DXGI_FORMAT colorBufferFormat
+		DXGI_FORMAT colorBufferFormat,
+		const bool trans
 	);
 	/// <summary>
 	/// 描画。
@@ -111,6 +112,24 @@ public:
 		m_mulColor = color;
 	}
 
+	/// <summary>
+	/// 輪郭線を描画するか？を設定
+	/// </summary>
+	/// <param name="outLineFlag">輪郭線を描画するか？</param>
+	void SetOutLineSeparation(const float outLineSeparation)
+	{
+		m_outLineSeparation = outLineSeparation;
+	}
+
+	/// <summary>
+	/// ステルスする？を設定する
+	/// </summary>
+	/// <param name="stealthFlag">ステルスする？</param>
+	void SetStealthFlag(const bool stealthFlag)
+	{
+		m_stealthFlag = stealthFlag;
+	}
+
 public:
 
 	static const int m_maxExCBNum = 10;		//ユーザー拡張用の定数バッファの数
@@ -133,7 +152,8 @@ private:
 		const char* vsSkinEntryPointFunc,
 		const char* psEntryPointFunc,
 		DXGI_FORMAT colorBufferFormat,
-		D3D12_CULL_MODE cullMode
+		D3D12_CULL_MODE cullMode,
+		const bool trans
 	);
 
 	
@@ -152,7 +172,9 @@ private:
 		Matrix mProj;		//プロジェクション行列。
 		Vector4 emissionColor;	//自己発光色
 		Vector4 mulColor;		//乗算カラー
+		float outLineSeparation;	//輪郭線の区切りの長さ
 		int shadowReceiverFlag;	//シャドウレシーバー？
+		int stealthFlag;		//ステルスする？
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
 	ConstantBuffer m_expandConstantBuffer[m_maxExCBNum];					//ユーザー拡張用の定数バッファ
@@ -165,5 +187,6 @@ private:
 
 	Vector4 m_emissionColor = { 0.0f,0.0f,0.0f,0.0f };	//自己発光色
 	Vector4 m_mulColor = { 1.0f,1.0f,1.0f,1.0f };		//乗算カラー
-
+	float m_outLineSeparation = -1.0f;					//輪郭線を描画する？
+	bool m_stealthFlag = false;							//ステルスする？
 };
