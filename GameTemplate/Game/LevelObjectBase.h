@@ -4,33 +4,35 @@
 #include "Player.h"
 #include "OBB.h"
 #include "ObjectType.h"
+#include "FontRender.h"
 #include "effect/Effect.h"
 
-//�f�o�b�N�p
-//��ŏ���
+
+//デバック用
+//後で消す
 #include "ModelRender.h"
 
 /// <summary>
-/// ���x���I�u�W�F�N�g�̒��ۃN���X
-/// ReversibleObject��ObstacleObject�͂��̒��ۃN���X���p�����Ă���
+/// レベルオブジェクトの抽象クラス
+/// ReversibleObjectとObstacleObjectはこの抽象クラスを継承している
 /// </summary>
 class ILevelObjectBase : public IGameObject
 {
-public:		//�����ŌĂ΂�郁���o�֐�
-	bool Start()override final;				//�X�^�[�g�֐�
-	virtual ~ILevelObjectBase();			//�f�X�g���N�^
-	void Update()override final;			//�A�b�v�f�[�g�֐�
+public:		//自動で呼ばれるメンバ関数
+	bool Start()override final;				//スタート関数
+	virtual ~ILevelObjectBase();			//デストラクタ
+	void Update()override final;			//アップデート関数
 
-public:		//�I�[�o�[���C�h���Ăق��������o�֐�
-	virtual bool PureVirtualStart() = 0 {};		//�X�^�[�g�֐�
-	virtual void PureVirtualUpdate() = 0 {};	//�A�b�v�f�[�g�֐�
+public:		//オーバーライドしてほしいメンバ関数
+	virtual bool PureVirtualStart() = 0 {};		//スタート関数
+	virtual void PureVirtualUpdate() = 0 {};	//アップデート関数
 
 	/// <summary>5
-	/// �\��������ꍇ�́A�\�������̃��f���̎Q�Ƃ𓾂�B
-	/// �Ȃ��ꍇ�́A���ʂɃ��f���̎Q�Ƃ𓾂�
+	/// 表裏がある場合は、表か裏かのモデルの参照を得る。
+	/// ない場合は、普通にモデルの参照を得る
 	/// </summary>
-	/// <param name="frontOrBack">�\�������H�Ȃ��ꍇ�͊֌W�Ȃ�</param>
-	/// <returns>���f���̎Q��</returns>
+	/// <param name="frontOrBack">表か裏か？ない場合は関係ない</param>
+	/// <returns>モデルの参照</returns>
 	virtual CModelRender* GetModelRender(const int frontOrBack = 0)
 	{
 		return nullptr;
@@ -38,96 +40,96 @@ public:		//�I�[�o�[���C�h���Ăق��������o�֐�
 
 	virtual void SwitchReverse(const bool frontOrBack = 0) {};
 
-protected:	//�����̃����o�֐�����Ɏg��
+protected:	//ここのメンバ関数を主に使う
 
 	/// <summary>
-	/// �߂��̃E�F�C�|�C���g��T���āA�C�C�����ɉ�]����֐�
+	/// 近くのウェイポイントを探して、イイ感じに回転する関数
 	/// </summary>
-	/// <param name="checkRotaton">��]�`�F�b�N���s�����H</param>
-	/// <param name="checkPosition">���W�`�F�b�N���s�����H</param>
+	/// <param name="checkRotaton">回転チェックを行うか？</param>
+	/// <param name="checkPosition">座標チェックを行うか？</param>
 	void CheckWayPoint(const bool checkRotaton = true, const bool checkPosition = true);
 
 	/// <summary>
-	/// ���݂̍��W�ɍ��킹����]�ɂ���
+	/// 現在の座標に合わせた回転にする
 	/// </summary>
 	void CheckRotation();
 
 	/// <summary>
-	/// �E�F�C�|�C���g�ɂ��낦�����W�ɂ���
+	/// ウェイポイントにそろえた座標にする
 	/// </summary>
 	void CheckPosition();
 
-public:		//�����̃����o�֐�����Ɏg��
+public:		//ここのメンバ関数を主に使う
 
 	/// <summary>
-	///	�ꏊ��ݒ肷��
+	///	場所を設定する
 	/// </summary>
-	/// <param name="pos">�ꏊ</param>
+	/// <param name="pos">場所</param>
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
 	}
 
 	/// <summary>
-	/// �ꏊ���擾����
+	/// 場所を取得する
 	/// </summary>
-	/// <returns>�ꏊ</returns>
+	/// <returns>場所</returns>
 	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
 
 	/// <summary>
-	/// ��]��ݒ肷��
+	/// 回転を設定する
 	/// </summary>
-	/// <param name="rot">��]</param>
+	/// <param name="rot">回転</param>
 	void SetRotation(const Quaternion& rot)
 	{
 		m_rotation = rot;
 	}
 
 	/// <summary>
-	/// ��]���擾����
+	/// 回転を取得する
 	/// </summary>
-	/// <returns>��]</returns>
+	/// <returns>回転</returns>
 	const Quaternion& GetRotation()const
 	{
 		return m_rotation;
 	}
 
 	/// <summary>
-	/// �g���ݒ�
+	/// 拡大を設定
 	/// </summary>
-	/// <param name="scale">�g��</param>
+	/// <param name="scale">拡大</param>
 	void SetScale(const Vector3& scale)
 	{
 		m_scale = scale;
 	}
 
 	/// <summary>
-	/// �g����擾
+	/// 拡大を取得
 	/// </summary>
-	/// <returns>�g��</returns>
+	/// <returns>拡大</returns>
 	const Vector3& GetScale()const
 	{
 		return m_scale;
 	}
 
 	/// <summary>
-	/// �^�C�v��ݒ肷��
-	/// �^�C�v��ObjectType.h��EnObjectType���Q��
+	/// タイプを設定する
+	/// タイプはObjectType.hのEnObjectTypeを参照
 	/// </summary>
-	/// <param name="objectType">�^�C�v</param>
+	/// <param name="objectType">タイプ</param>
 	void SetObjectType(int objectType)
 	{
 		m_objectType = objectType;
 	}
 
 	/// <summary>
-	/// �^�C�v���擾����
-	/// �^�C�v��ObjectType.h��EnObjectType���Q��
+	/// タイプを取得する
+	/// タイプはObjectType.hのEnObjectTypeを参照
 	/// </summary>
-	/// <returns>�^�C�v</returns>
+	/// <returns>タイプ</returns>
 	const int GetObjectType()const
 	{
 		return m_objectType;
@@ -135,36 +137,36 @@ public:		//�����̃����o�֐�����Ɏg��
 
 
 	/// <summary>
-	/// ���b�N�����H�ݒ肷��B
-	/// Tips�\����S���]�����b�N����
+	/// ロック中か？設定する。
+	/// Tips表示や全反転をロックする
 	/// </summary>
-	/// <param name="lock">���b�N���邩�H</param>
+	/// <param name="lock">ロックするか？</param>
 	void SetLock(const bool lock)
 	{
 		m_lock = lock;
 	}
 
 	/// <summary>
-	/// ���b�N�����H�𓾂�
-	/// Tips�\����S���]�����b�N����Ă��邩�B
+	/// ロック中か？を得る
+	/// Tips表示や全反転がロックされているか。
 	/// </summary>
-	/// <returns>���b�N�����H</returns>
+	/// <returns>ロック中か？</returns>
 	const bool GetLock() const
 	{
 		return m_lock;
 	}
 
 	/// <summary>
-	/// OBB�̎Q�Ƃ�߂�
+	/// OBBの参照を戻す
 	/// </summary>
-	/// <returns>OBB�̎Q��</returns>
+	/// <returns>OBBの参照</returns>
 	COBB& GetOBB()
 	{
 		return m_obb;
 	}
 
 	/// <summary>
-	/// ����ł���t���O���擾
+	/// 死んでいるフラグを取得
 	/// </summary>
 	/// <returns></returns>
 	const bool GetIsDead()const
@@ -173,7 +175,7 @@ public:		//�����̃����o�֐�����Ɏg��
 	};
 
 	/// <summary>
-	/// LevelObjectManager�Ɏ���ł������ē`����
+	/// LevelObjectManagerに死んでいるよって伝える
 	/// </summary>
 	void Delete()
 	{
@@ -181,24 +183,24 @@ public:		//�����̃����o�֐�����Ɏg��
 	}
 
 	/// <summary>
-	/// ���g�ƃv���C���[�̓����蔻��
+	/// 自身とプレイヤーの当たり判定
 	/// </summary>
-	/// <returns>true���߂��Ă����瓖�����Ă���</returns>
+	/// <returns>trueが戻ってきたら当たっている</returns>
 	bool IsHitPlayer();
 
 	/// <summary>
-	/// ���g�̍����̃E�F�C�|�C���g�̃C���f�b�N�X��߂�
+	/// 自身の左側のウェイポイントのインデックスを戻す
 	/// </summary>
-	/// <returns>�����̃E�F�C�|�C���g�̃C���f�b�N�X</returns>
+	/// <returns>左側のウェイポイントのインデックス</returns>
 	const int GetLeftWayPointIndex() const
 	{
 		return m_lpIndex;
 	}
 
 	/// <summary>
-	/// ���g�̍����̃E�F�C�|�C���g�̃C���f�b�N�X��ݒ肷��
+	/// 自身の左側のウェイポイントのインデックスを設定する
 	/// </summary>
-	/// <param name="lpIndex">�����̃E�F�C�|�C���g�̃C���f�b�N�X</param>
+	/// <param name="lpIndex">左側のウェイポイントのインデックス</param>
 	void SetLeftWayPointIndex(const int lpIndex)
 	{
 		m_lpIndex = lpIndex;
@@ -211,7 +213,7 @@ public:		//�����̃����o�֐�����Ɏg��
 	}
 
 	/// <summary>
-	/// ���g�̉E���̃E�F�C�|�C���g�̃C���f�b�N�X��߂�
+	/// 自身の右側のウェイポイントのインデックスを戻す
 	/// </summary>
 	/// <returns></returns>
 	const int GetRightWayPointIndex() const
@@ -221,130 +223,144 @@ public:		//�����̃����o�֐�����Ɏg��
 	}
 
 	/// <summary>
-	/// �\���ɂ��邩�����ɂ��邩��߂�
+	/// 表側にあるか裏側にあるかを戻す
 	/// </summary>
-	/// <returns>�\����������</returns>
+	/// <returns>表側か裏側か</returns>
 	const int GetFrontOrBackSide() const
 	{
 		return m_frontOrBackSide;
 	}
 
 	/// <summary>
-	/// ���g���\���ɂ��邩�����ɂ��邩�𒲂ׂ�֐�
+	/// 自身が表側にあるか裏側にあるかを調べる関数
 	/// </summary>
-	/// <param name="reversibleObject">���]�I�u�W�F�N�g���H</param>
+	/// <param name="reversibleObject">反転オブジェクトか？</param>
 	void CheckFrontOrBackSide(const bool reversibleObject = true);
 	
 	/// <summary>
-	/// �E�F�C�|�C���g����̉��s�̋�����ݒ�
+	/// ウェイポイントからの奥行の距離を設定
 	/// </summary>
-	/// <param name="zPosLen">���s�̋���</param>
+	/// <param name="zPosLen">奥行の距離</param>
 	void SetZPosLen(const float zPosLen)
 	{
 		m_zPosLen = zPosLen;
 	}
 
-private:	//private�ȃ����o�֐�
+private:	//privateなメンバ関数
 
 	/// <summary>
-	/// OBB�̏������֐�
+	/// OBBの初期化関数
 	/// </summary>
 	void InitOBB();
 
-protected:	//protected�ȃf�[�^�����o	//����ܗǂ��Ȃ����Ǘ��֐��̂��߂�
-	Vector3 m_position = g_vec3Zero;		//�ꏊ
-	Quaternion m_rotation = g_quatIdentity;	//��]
-	Vector3 m_scale = g_vec3One;			//�g��
-	Player* m_pPlayer = nullptr;			//�v���C���[�̃|�C���^
+protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
+	Vector3 m_position = g_vec3Zero;		//場所
+	Quaternion m_rotation = g_quatIdentity;	//回転
+	Vector3 m_scale = g_vec3One;			//拡大
+	Player* m_pPlayer = nullptr;			//プレイヤーのポインタ
 
 
-private:	//�f�[�^�����o
-	int m_objectType = enEmpty;				//�^�C�v
-	bool m_isDead = false;					//����ł��邩�H
-	COBB m_obb;								//OBB�̓����蔻��
-	int m_lpIndex = 0;						//���g�̍����̃E�F�C�|�C���g�̃C���f�b�N�X
+private:	//データメンバ
+	int m_objectType = enEmpty;				//タイプ
+	bool m_isDead = false;					//死んでいるか？
+	COBB m_obb;								//OBBの当たり判定
+	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス
 	int m_rpIndex = 0;
-	int m_frontOrBackSide = CLevelObjectManager::enNone;	//���g���\���ɂ��邩�����ɂ��邩
-	bool m_lock = false;					//���b�N�����H�ATips�\����S���]�����b�N����
-	float m_zPosLen = 0.0f;					//�E�F�C�|�C���g����̉��s�̋���
+	int m_frontOrBackSide = CLevelObjectManager::enNone;	//自身が表側にあるか裏側にあるか
+	bool m_lock = false;					//ロック中か？、Tips表示や全反転をロックする
+	float m_zPosLen = 0.0f;					//ウェイポイントからの奥行の距離
 	////////////////////////////////////////////////////////////
-	// �����I�u�W�F�N�g�p�̕ϐ��Ɗ֐�
+	// 透明オブジェクト用の変数と関数
 	////////////////////////////////////////////////////////////
-public: //Set�֐�
+public: //Set関数
 	/// <summary>
-	/// �d�Ȃ��Ă��邩�̔���̏������s�����m�F����t���O�̒l��ύX����B
+	/// 重なっているかの判定の処理を行うか確認するフラグの値を変更する。
 	/// </summary>
-	/// <param name="b">�t���O�̒l</param>
+	/// <param name="b">フラグの値</param>
 	void SetFlagIsHit(const bool b)
 	{
 		m_flagIsHit = b;
 	}
 
 	/// <summary>
-	/// �d�Ȃ��Ă��邩�̔���̏������s�����m�F����t���O�̒l���擾
+	/// 重なっているかの判定の処理を行うか確認するフラグの値を取得
 	/// </summary>
-	/// <returns>m_flagIsHit�̒l</returns>
+	/// <returns>m_flagIsHitの値</returns>
 	const bool GetFlagIsHit()const
 	{
 		return m_flagIsHit;
 	}
 
 	/// <summary>
-	/// �����I�u�W�F�N�g�Ɏg�p����f�[�^������������B
+	/// 透明オブジェクトに使用するデータを初期化する。
 	/// </summary>
 	void SetTransparentObject()
 	{
-		//�����I�u�W�F�N�g����Ɏg�p����t���O��true�ɂ���B
+		//透明オブジェクト判定に使用するフラグをtrueにする。
 		m_flagTransparentObject = true;
-		//�I�u�W�F�N�g�̏d�Ȃ��Ă��锻����s��Ȃ��悤�ɂ���B
+		//オブジェクトの重なっている判定を行わないようにする。
 		m_flagIsHit = false;
-		//���Z�b�g���Ɏg�p����ʒu�A��]����������
+		//リセット時に使用する位置、回転情報を初期化
 		//m_startRotation = m_rotation;
 		m_startPosition = m_position;
 
-		//���Z�b�g���Ɏg�p����\������������
+		//リセット時に使用する表裏情報を初期化
 		m_startfrontOrBack = m_frontOrBack;
 		
+
+		//タイマーのフォントレンダラーの生成と初期化
+		m_timerFR = NewGO<CFontRender>(0);
+		m_timerFR->Init(L"10", { 0.0f,0.0f });
+		m_timerFR->SetPostRenderFlag(true);
+		//非表示にする
+		m_timerFR->Deactivate();
+
 		m_swichon = NewGO<Effect>(0);
 		m_swichon->Init(u"Assets/effect/activation.efk");
-		float scale = 100.0f;								//�������̂ő傫�����Ă���
+		float scale = 100.0f;								//小さいので大きくしておく
 		m_swichon->SetScale({ scale ,scale ,scale });
 
 
 		m_swichoff = NewGO<Effect>(0);
 		m_swichoff->Init(u"Assets/effect3/invalidation.efk");
-		float scale2 = 10.0f;								//�������̂ő傫�����Ă���
+		float scale2 = 10.0f;								//小さいので大きくしておく
 		m_swichoff->SetScale({ scale2 ,scale2 ,scale2 });
 
-		//�I�u�W�F�N�g�𔼓����ɂ���B
+
+		//オブジェクトを半透明にする。
 		//GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 		//GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-		//��L�̔������ɂ��鏈�������܂������Ȃ������ꍇ�A
-		//ChangeTransparent()�֐����g���Ă��������B
+		//上記の半透明にする処理がうまく動かなかった場合、
+		//ChangeTransparent()関数を使ってください。
 	}
 
 
-public: //�����X�C�b�`�Ɏg�p����֐�
+public: //透明スイッチに使用する関数
 	/// <summary>
-	/// �����X�C�b�`�������ꂽ�Ƃ��Ɏg�p�����֐�
+	/// 透明スイッチが押されたときに使用される関数
 	/// </summary>
 	void TransparentSwitchOn()
 	{
-		//�I�u�W�F�N�g�������グ����悤�ɂ���B
+		//オブジェクトを持ち上げられるようにする。
 		m_flagHeld = true;
-		//�I�u�W�F�N�g�̏Փ˔�����s���悤�ɂ���B
+		//オブジェクトの衝突判定を行うようにする。
 		m_flagIsHit = true;
 
-		//�I�u�W�F�N�g�̓����蔻���L���ɂ���B
+		//オブジェクトの当たり判定を有効にする。
 		m_obb.SetExceptionFlag(false);
+
+
+		//タイマーのフォントを表示する
+		m_timerFR->Activate();
 
 		m_swichon->SetPosition(m_position);
 		m_swichon->SetRotation(m_rotation);
 		m_swichon->Play();
+
 	}
 
 	/// <summary>
-	/// �����X�C�b�`�̌��ʂ��������Ƃ��Ɏg�p�����֐�
+	/// 透明スイッチの効果が消えたときに使用される関数
 	/// </summary>
 	void TransparentSwitchOff()
 	{
@@ -352,26 +368,31 @@ public: //�����X�C�b�`�Ɏg�p����֐�
 		m_swichoff->SetRotation(m_rotation);
 		m_swichoff->Play();
 
-		//�I�u�W�F�N�g�������グ���Ȃ��悤�ɂ���B
+		//オブジェクトを持ち上げられないようにする。
 		m_flagHeld = false;
-		//�I�u�W�F�N�g�̏Փ˔�����s��Ȃ��悤�ɂ���B
+		//オブジェクトの衝突判定を行わないようにする。
 		m_flagIsHit = false;
-		//�ʒu�A��]����������Ԃɖ߂��B
+		//位置、回転情報を初期状態に戻す。
 		m_rotation = m_startRotation;
 		m_position = m_startPosition;
-		//�\������������Ԃɖ߂��B
+		//表裏情報を初期状態に戻す。
 		m_frontOrBack = m_startfrontOrBack;
 		CheckWayPoint();
 		CheckFrontOrBackSide();
 		SwitchReverse(m_frontOrBack);
-		//�I�u�W�F�N�g�̓����蔻��𖳌��ɂ���B
+		//オブジェクトの当たり判定を無効にする。
 		m_obb.SetExceptionFlag(true);
+
+		//タイマーのフォントを非表示にする
+		m_timerFR->Deactivate();
+
+
 	}
 
 	/// <summary>
-	/// �I�u�W�F�N�g�����ݎ����グ���邩�̃t���O�̒l��������B
+	/// オブジェクトが現在持ち上げられるかのフラグの値を代入する。
 	/// </summary>
-	/// <param name="b">�I�u�W�F�N�g�����ݎ��Ă邩</param>
+	/// <param name="b">オブジェクトが現在持てるか</param>
 	void SetFlagHeld(bool b)
 	{
 		m_flagHeld = b;
@@ -400,65 +421,76 @@ public: //�����X�C�b�`�Ɏg�p����֐�
 		return m_flagTransparentObject;
 	}
 
+	/// <summary>
+	/// タイマーのフォントレンダラーの参照を戻す
+	/// </summary>
+	/// <returns>タイマーのフォントレンダラーの参照</returns>
+	CFontRender* GetTimerFR()
+	{
+		return m_timerFR;
+	}
 
-private: //�����o�ϐ�
-	bool m_flagTransparentObject = false; //�����I�u�W�F�N�g�ǂ����̃t���O
-	bool m_flagIsHit = true; //�d�Ȃ��Ă��邩�̔���̏������s�����m�F����t���O
-	bool m_flagHeld = true; //�I�u�W�F�N�g�����ݎ����グ���邩�̃t���O
-	//bool m_flagHeldPlayer = false; //���݂��̃I�u�W�F�N�g��������Ă��邩�̃t���O
+private: //メンバ変数
+	bool m_flagTransparentObject = false; //透明オブジェクトどうかのフラグ
+	bool m_flagIsHit = true; //重なっているかの判定の処理を行うか確認するフラグ
+	bool m_flagHeld = true; //オブジェクトが現在持ち上げられるかのフラグ
+	//bool m_flagHeldPlayer = false; //現在このオブジェクトが持たれているかのフラグ
 	
 
-	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //�I�u�W�F�N�g�̏����ʒu��ۑ�����ʒu���ϐ�
-	Quaternion m_startRotation = g_quatIdentity; //�I�u�W�F�N�g�̏�����]��ۑ������]���ϐ�
+	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //オブジェクトの初期位置を保存する位置情報変数
+	Quaternion m_startRotation = g_quatIdentity; //オブジェクトの初期回転を保存する回転情報変数
 
-	Effect* m_swichon = nullptr;					 //�X�C�b�`���������Ƃ��ɏo��G�t�F�N�g
-	Effect* m_swichoff = nullptr;					 //�X�C�b�`���߂�Ƃ��̃G�t�F�N�g
+	CFontRender* m_timerFR = nullptr;			//タイマーのフォントレンダラー
+
+	Effect* m_swichon = nullptr;					 //スイッチを押したときに出るエフェクト
+	Effect* m_swichoff = nullptr;					 //スイッチが戻るときのエフェクト
+
 
 	////////////////////////////////////////////////////////////
-	// ���]�I�u�W�F�N�g�p�̕ϐ��Ɗ֐��i�����I�u�W�F�N�g�̂��߂Ɉړ��j
+	// 反転オブジェクト用の変数と関数（透明オブジェクトのために移動）
 	////////////////////////////////////////////////////////////
 
-public:		//public�ȃf�[�^�����o
+public:		//publicなデータメンバ
 
 	/// <summary>
-	/// �\��������\���񋓑�
+	/// 表か裏かを表す列挙体
 	/// </summary>
 	enum EnFrontAndBack
 	{
-		enFront,			//�\���
-		enBack,				//�����
-		enFrontAndBackNum,	//�\���̐�
+		enFront,			//表状態
+		enBack,				//裏状態
+		enFrontAndBackNum,	//表裏の数
 	};
 
 protected:
-	bool m_frontOrBack = enFront;				//�\�������H
+	bool m_frontOrBack = enFront;				//表か裏か？
 	bool m_startfrontOrBack = enFront;
 
 
 
-	//�f�o�b�N�p
-	//��ŏ���
+	//デバック用
+	//後で消す
 private:
 #ifdef MY_DEBUG
-	int m_objectNumber = 0;		//���Ԗڂɍ��ꂽ�I�u�W�F�N�g���ێ�����
-	static int objectNumber;	//���Ԗڂɍ��ꂽ�I�u�W�F�N�g���J�E���g����
+	int m_objectNumber = 0;		//何番目に作られたオブジェクトか保持する
+	static int objectNumber;	//何番目に作られたオブジェクトかカウントする
 
-	static const int m_dbgOBBNum = 8;			//OBB�̒��_�̐�
-	CModelRender* m_dbgOBBVert[m_dbgOBBNum];	//OBB�̒��_�����邽�߂̃��f�������_���[
+	static const int m_dbgOBBNum = 8;			//OBBの頂点の数
+	CModelRender* m_dbgOBBVert[m_dbgOBBNum];	//OBBの頂点を見るためのモデルレンダラー
 #endif
-	//�f�o�b�N�p�����܂�
+	//デバック用ここまで
 };
 
 
 
-//��������N���X�O�֐�
+//ここからクラス外関数
 
 
 /// <summary>
-/// OBB���m�̓����蔻��
+/// OBB同士の当たり判定
 /// </summary>
-/// <param name="lhs">���x���I�u�W�F�N�g1</param>
-/// <param name="rhs">���x���I�u�W�F�N�g2</param>
-/// <returns>true���߂��Ă����瓖�����Ă���</returns>
+/// <param name="lhs">レベルオブジェクト1</param>
+/// <param name="rhs">レベルオブジェクト2</param>
+/// <returns>trueが戻ってきたら当たっている</returns>
 bool IsHitObject
 (ILevelObjectBase& lhs, ILevelObjectBase& rhs);

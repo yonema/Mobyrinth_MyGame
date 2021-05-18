@@ -47,18 +47,11 @@ public:
 		const char* vsSkinEntryPointFunc,
 		const char* psEntryPointFunc,
 		D3D12_CULL_MODE cullMode,
-		void* expandData,
-		int expandDataSize,
-		IShaderResource* expandShaderResourceView,
+		void* const* expandData,
+		const int* expandDataSize,
+		IShaderResource* const* expandShaderResourceView,
 		DXGI_FORMAT colorBufferFormat,
-		void* expandData2 = nullptr,
-		int expandDataSize2 = 0,
-		void* expandData3 = nullptr,
-		int expandDataSize3 = 0,
-		void* expandData4 = nullptr,
-		int expandDataSize4 = 0,
-		void* shadowParamData = nullptr,
-		int shadowParamDataSize = 0
+		const bool trans
 	);
 	/// <summary>
 	/// 描画。
@@ -119,6 +112,28 @@ public:
 		m_mulColor = color;
 	}
 
+	/// <summary>
+	/// 輪郭線を描画するか？を設定
+	/// </summary>
+	/// <param name="outLineFlag">輪郭線を描画するか？</param>
+	void SetOutLineFlag(const bool outLineFlag)
+	{
+		m_outLineFlag = outLineFlag;
+	}
+
+	/// <summary>
+	/// ステルスする？を設定する
+	/// </summary>
+	/// <param name="stealthFlag">ステルスする？</param>
+	void SetStealthFlag(const bool stealthFlag)
+	{
+		m_stealthFlag = stealthFlag;
+	}
+
+public:
+
+	static const int m_maxExCBNum = 10;		//ユーザー拡張用の定数バッファの数
+	static const int m_maxExSRVNum = 5;		//ユーザー拡張シェーダーリソースビューの数
 private:
 	/// <summary>
 	/// tkmメッシュからメッシュを作成。
@@ -137,7 +152,8 @@ private:
 		const char* vsSkinEntryPointFunc,
 		const char* psEntryPointFunc,
 		DXGI_FORMAT colorBufferFormat,
-		D3D12_CULL_MODE cullMode
+		D3D12_CULL_MODE cullMode,
+		const bool trans
 	);
 
 	
@@ -156,28 +172,21 @@ private:
 		Matrix mProj;		//プロジェクション行列。
 		Vector4 emissionColor;	//自己発光色
 		Vector4 mulColor;		//乗算カラー
+		float outLineFlag;		//輪郭線を描画する？
 		int shadowReceiverFlag;	//シャドウレシーバー？
+		int stealthFlag;		//ステルスする？
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
-	ConstantBuffer m_expandConstantBuffer;					//ユーザー拡張用の定数バッファ
-	IShaderResource* m_expandShaderResourceView = nullptr;	//ユーザー拡張シェーダーリソースビュー。
+	ConstantBuffer m_expandConstantBuffer[m_maxExCBNum];					//ユーザー拡張用の定数バッファ
+	IShaderResource* m_expandShaderResourceView[m_maxExSRVNum] = { nullptr };	//ユーザー拡張シェーダーリソースビュー。
 	StructuredBuffer m_boneMatricesStructureBuffer;	//ボーン行列の構造化バッファ。
 	std::vector< SMesh* > m_meshs;							//メッシュ。
 	std::vector< DescriptorHeap > m_descriptorHeap;		//ディスクリプタヒープ。
 	Skeleton* m_skeleton = nullptr;								//スケルトン。
-	void* m_expandData = nullptr;						//ユーザー拡張データ。
-
-	ConstantBuffer m_expandConstantBuffer2;					//ユーザー拡張用の定数バッファ
-	void* m_expandData2 = nullptr;						//ユーザー拡張データ。
-	ConstantBuffer m_expandConstantBuffer3;					//ユーザー拡張用の定数バッファ
-	void* m_expandData3 = nullptr;						//ユーザー拡張データ。
-	ConstantBuffer m_expandConstantBuffer4;					//ユーザー拡張用の定数バッファ
-	void* m_expandData4 = nullptr;						//ユーザー拡張データ。
-
-	ConstantBuffer m_shadowConstantBuffer;				//シャドウ用定数バッファ
-	void* m_shadowParamData = nullptr;					//シャドウ用データ
+	void* m_expandData[m_maxExCBNum] = { nullptr };			//ユーザー拡張データ。
 
 	Vector4 m_emissionColor = { 0.0f,0.0f,0.0f,0.0f };	//自己発光色
 	Vector4 m_mulColor = { 1.0f,1.0f,1.0f,1.0f };		//乗算カラー
-
+	bool m_outLineFlag = false;							//輪郭線を描画する？
+	bool m_stealthFlag = false;							//ステルスする？
 };

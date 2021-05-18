@@ -93,6 +93,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//シャドウイング
 		g_shadowMap->Draw(renderContext);
 
+		// ZPrepass
+		g_graphicsEngine->ZPrepass(renderContext);
+
 		//メインレンダリングターゲットをセットする
 		g_graphicsEngine->UseMainRenderTarget();
 
@@ -118,6 +121,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		//メインレンダリングターゲットの絵をフレームバッファーに描画する
 		g_graphicsEngine->CopyToFrameBuffer();
+
+		//登録されている3Dモデルをクリア
+		g_graphicsEngine->ClearModels();
 
 		//////////////////////////////////////////////////////////////
 		///	レンダリングの処理終了

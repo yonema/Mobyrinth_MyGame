@@ -4,121 +4,115 @@
 
 #include "TransparentSwitch.h"
 
-//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 OOTransparentSwitch::OOTransparentSwitch()
 {
-	//æ‚ÉƒJƒ‰[‚ğİ’è‚·‚é
+	//å…ˆã«ã‚«ãƒ©ãƒ¼ã‚’è¨­å®šã™ã‚‹
 
-	//M†‚ÌÂ‚ÌF
+	//ä¿¡å·ã®é’ã®è‰²
 	Vector3 color = { 71.0f,225.0f,241.0f };
-	//–¾‚é‚·‚¬‚é‚©‚ç³‹K‰»‚·‚é
+	//æ˜ã‚‹ã™ãã‚‹ã‹ã‚‰æ­£è¦åŒ–ã™ã‚‹
 	color.Normalize();
-	//‚±‚ñ‚Ç‚ÍˆÃ‚·‚¬‚é‚©‚ç‚¿‚å‚Á‚Æ–¾‚é‚­‚·‚é
+	//ã“ã‚“ã©ã¯æš—ã™ãã‚‹ã‹ã‚‰ã¡ã‚‡ã£ã¨æ˜ã‚‹ãã™ã‚‹
 	color.Scale(1.5f);
-	//’Êí‚ÌƒtƒHƒ“ƒg‚ÌƒJƒ‰[‚ğİ’è
+	//é€šå¸¸ã®ãƒ•ã‚©ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼ã‚’è¨­å®š
 	m_normalColor = { color.x,color.y,color.z,1.0f };
 
-	//“_–Å‚ÌƒtƒHƒ“ƒg‚ÌƒJƒ‰[‚ğİ’è
+	//ç‚¹æ»…æ™‚ã®ãƒ•ã‚©ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼ã‚’è¨­å®š
 	m_blinkColor = { 1.0f,0.0f,0.0f,1.0f };
 
 
-	//ƒEƒFƒCƒ|ƒCƒ“ƒg‚©‚ç‚Ì‰œs‚Ì‹——£‚ğİ’è
+	//ã‚¦ã‚§ã‚¤ãƒã‚¤ãƒ³ãƒˆã‹ã‚‰ã®å¥¥è¡Œã®è·é›¢ã‚’è¨­å®š
 	SetZPosLen(100.0f);
 }
-//ƒXƒ^[ƒgŠÖ”
+//ã‚¹ã‚¿ãƒ¼ãƒˆé–¢æ•°
 bool OOTransparentSwitch::StartSub()
 {
 	Init("Assets/modelData/transparentSwitch.tkm", enTransparentSwitch);
 
-	//OBBWorld‚É©g‚ÌOBB‚Ì“o˜^‚ğÁ‹‚³‚¹‚é
+	//OBBWorldã«è‡ªèº«ã®OBBã®ç™»éŒ²ã‚’æ¶ˆå»ã•ã›ã‚‹
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
 
-	//“§–¾ƒIƒuƒWƒFƒNƒg‚ğ”¼“§–¾‚É‚·‚éB
+	//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åŠé€æ˜ã«ã™ã‚‹ã€‚
 	ChangeTransparent();
 
-	//ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«—p‚Ìƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[‚Ì¶¬‚Æ‰Šú‰»
+	//ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ãç”¨ã®ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã®ç”Ÿæˆã¨åˆæœŸåŒ–
 	m_modelRender = NewGO<CModelRender>(0);
 	m_modelRender->Init("Assets/modelData/transparentSwitch2.tkm", D3D12_CULL_MODE_NONE);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
-	//”ñ•\¦‚É‚·‚é
+	//éè¡¨ç¤ºã«ã™ã‚‹
 	m_modelRender->Deactivate();
 
-	//ƒJƒƒ‰‚ğ’T‚·	//‚±‚ê‚ÍŠmÀ‚ÉŒ©‚Â‚¯‚é
+	//ã‚«ãƒ¡ãƒ©ã‚’æ¢ã™	//ã“ã‚Œã¯ç¢ºå®Ÿã«è¦‹ã¤ã‘ã‚‹
 	m_gameCamera = FindGO<GameCamera>("GameCamera");
 
-	//UFO‚ğ’T‚·	//‚±‚Á‚¿‚ÍŒ©‚Â‚©‚é‚©•ª‚©‚ç‚È‚¢B
+	//UFOã‚’æ¢ã™	//ã“ã£ã¡ã¯è¦‹ã¤ã‹ã‚‹ã‹åˆ†ã‹ã‚‰ãªã„ã€‚
 	m_ufo = FindGO<CUFO>("UFO");
 
-	//ƒtƒF[ƒh‚Ég‚¤ƒXƒvƒ‰ƒCƒg‚Ì¶¬‚Æ‰Šú‰»
+	//ãƒ•ã‚§ãƒ¼ãƒ‰ã«ä½¿ã†ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆã¨åˆæœŸåŒ–
 	m_fadeSR = NewGO<CSpriteRender>(0);
 	m_fadeSR->Init("Assets/Image/black.DDS", 1280.0f, 780.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 	m_fadeSR->SetPosition({ 0.0f,0.0f,0.0f });
 	m_fadeSR->SetPostRenderFlag(true);
-	//“§–¾‚É‚µ‚Ä‚¨‚­
+	//é€æ˜ã«ã—ã¦ãŠã
 	m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-	//”ñ•\¦‚É‚·‚é
+	//éè¡¨ç¤ºã«ã™ã‚‹
 	m_fadeSR->Deactivate();
 
-	//OBB‚ÌƒTƒCƒY‚ğİ’è
+	//OBBã®ã‚µã‚¤ã‚ºã‚’è¨­å®š
 	Vector3 obbSize;
 	obbSize = { 100.0f,200.0f,600.0f };
-	//OBB‚Ì•ûŒüƒxƒNƒgƒ‹‚Ì’·‚³‚ğİ’è
+	//OBBã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•ã‚’è¨­å®š
 	GetOBB().SetDirectionLength(obbSize);
 
 	
-	//m_buttonpushSE‚ÌƒTƒEƒ“ƒhƒLƒ…[‚ğ¶¬‚·‚é
+	//m_buttonpushSEã®ã‚µã‚¦ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼ã‚’ç”Ÿæˆã™ã‚‹
 	m_buttonpushSE = NewGO<CSoundCue>(0);
-	//m_buttonpushSE‚ÌƒTƒEƒ“ƒhƒLƒ…[‚ğAwaveƒtƒ@ƒCƒ‹‚ğw’è‚µ‚Ä‰Šú‰»‚·‚éB
+	//m_buttonpushSEã®ã‚µã‚¦ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼ã‚’ã€waveãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®šã—ã¦åˆæœŸåŒ–ã™ã‚‹ã€‚
 	m_buttonpushSE->Init(L"Assets/sound/buttonpush.wav");
-	//‰¹—Ê’²ß
+	//éŸ³é‡èª¿ç¯€
 	m_buttonpushSE->SetVolume(0.5f);
 
-	//m_activationSE‚ÌƒTƒEƒ“ƒhƒLƒ…[‚ğ¶¬‚·‚é
+	//m_activationSEã®ã‚µã‚¦ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼ã‚’ç”Ÿæˆã™ã‚‹
 	m_activationSE = NewGO<CSoundCue>(0);
-	//m_activationSE‚ÌƒTƒEƒ“ƒhƒLƒ…[‚ğAwaveƒtƒ@ƒCƒ‹‚ğw’è‚µ‚Ä‰Šú‰»‚·‚éB
+	//m_activationSEã®ã‚µã‚¦ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼ã‚’ã€waveãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®šã—ã¦åˆæœŸåŒ–ã™ã‚‹ã€‚
 	m_activationSE->Init(L"Assets/sound/activation.wav");
-	//‰¹—Ê’²ß
+	//éŸ³é‡èª¿ç¯€
 	m_activationSE->SetVolume(0.5f);
 
-	//m_invalidationSE‚ÌƒTƒEƒ“ƒhƒLƒ…[‚ğ¶¬‚·‚é
+	//m_invalidationSEã®ã‚µã‚¦ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼ã‚’ç”Ÿæˆã™ã‚‹
 	m_invalidationSE = NewGO<CSoundCue>(0);
-	//m_activationSE‚ÌƒTƒEƒ“ƒhƒLƒ…[‚ğAwaveƒtƒ@ƒCƒ‹‚ğw’è‚µ‚Ä‰Šú‰»‚·‚éB
+	//m_activationSEã®ã‚µã‚¦ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼ã‚’ã€waveãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®šã—ã¦åˆæœŸåŒ–ã™ã‚‹ã€‚
 	m_invalidationSE->Init(L"Assets/sound/invalidation.wav");
-	//‰¹—Ê’²ß
+	//éŸ³é‡èª¿ç¯€
 	m_invalidationSE->SetVolume(0.5f);
 
-	//m_activationƒGƒtƒFƒNƒg‚Ìì¬
+	//m_activationã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ä½œæˆ
 	m_activation = NewGO<Effect>(0);
 	m_activation->Init(u"Assets/effect2/activation.efk");
-	float scale = 200.0f;								//¬‚³‚¢‚Ì‚Å‘å‚«‚­‚µ‚Ä‚¨‚­
+	float scale = 200.0f;								//å°ã•ã„ã®ã§å¤§ããã—ã¦ãŠã
 	m_activation->SetScale({ scale ,scale ,scale });
-	m_activation->SetPosition(m_position);				//À•W‚ğ“n‚·
+	m_activation->SetPosition(m_position);				//åº§æ¨™ã‚’æ¸¡ã™
 	m_activation->SetRotation(m_rotation);
 
 	return true;
 }
 
-//ƒfƒXƒgƒ‰ƒNƒ^
+//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 OOTransparentSwitch::~OOTransparentSwitch()
 {
-	//ƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[‚Ì”jŠü
+	//ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã®ç ´æ£„
 	DeleteGO(m_modelRender);
 
-	//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚Ì”jŠü
-	for (auto timerFR : m_timerFR)
-	{
-		DeleteGO(timerFR);
-	}
-
-	//m_activationSE‚Ìíœ
+	//m_activationSEã®å‰Šé™¤
 	DeleteGO(m_activationSE);
 
-	//m_buttonpushSE‚Ìíœ
+	//m_buttonpushSEã®å‰Šé™¤
 	DeleteGO(m_buttonpushSE);
 }
 
-//ƒAƒbƒvƒf[ƒgŠÖ”
+//ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆé–¢æ•°
 void OOTransparentSwitch::UpdateSub()
 {
 
@@ -127,93 +121,87 @@ void OOTransparentSwitch::UpdateSub()
 		Switching();
 		return;
 	}
-	//ƒŠƒZƒbƒgƒ^ƒCƒ}[‚ª‚O‚É‚È‚Á‚½‚Æ‚«
-	//“§–¾ƒIƒuƒWƒFƒNƒg‚ğ‚·‚×‚Ä‚¿ã‚°‚ç‚ê‚È‚¢‚æ‚¤‚É‚·‚éB
-	//“§–¾ƒIƒuƒWƒFƒNƒg‚ğ‚Á‚Ä‚¢‚éê‡A‚»‚ÌƒIƒuƒWƒFƒNƒg‚ğ‚Á‚Ä‚¢‚È‚¢ó‘Ô‚É‚·‚éB
-	//“§–¾ƒIƒuƒWƒFƒNƒg‚ğ‰ŠúˆÊ’u‚É–ß‚·B
+	//ãƒªã‚»ãƒƒãƒˆã‚¿ã‚¤ãƒãƒ¼ãŒï¼ã«ãªã£ãŸã¨ã
+	//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã™ã¹ã¦æŒã¡ä¸Šã’ã‚‰ã‚Œãªã„ã‚ˆã†ã«ã™ã‚‹ã€‚
+	//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã£ã¦ã„ã‚‹å ´åˆã€ãã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã£ã¦ã„ãªã„çŠ¶æ…‹ã«ã™ã‚‹ã€‚
+	//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸä½ç½®ã«æˆ»ã™ã€‚
 	if (m_flagSwitchOn == true) {
 		m_resetTimer -= GameTime().GetFrameDeltaTime();
 
-		//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌXV
+		//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®æ›´æ–°
 		UpdateTimerFR();
 		///--m_resetTimer;
 
 		if (m_resetTimer <= 0.0f) {
 			m_flagSwitchOn = false;
 
-			//‚±‚±‚É“§–¾ƒIƒuƒWƒFƒNƒg‚Ìˆ—‚ğ’Ç‰Á‚·‚éB
-			//”z’u‚µ‚Ä‚ ‚é‚·‚×‚Ä‚ÌƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ÌQÆ‚ÌƒxƒNƒ^[
+			//ã“ã“ã«é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‡¦ç†ã‚’è¿½åŠ ã™ã‚‹ã€‚
+			//é…ç½®ã—ã¦ã‚ã‚‹ã™ã¹ã¦ã®ãƒ¬ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‚ç…§ã®ãƒ™ã‚¯ã‚¿ãƒ¼
 			//std::vector<ILevelObjectBase*> levelObjects =
 			//	CLevelObjectManager::GetInstance()->GetLevelObjects();
 
-			////ƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚½‚¿‚ğˆê‚Â‚¸‚Âæ‚èo‚·
+			////ãƒ¬ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŸã¡ã‚’ä¸€ã¤ãšã¤å–ã‚Šå‡ºã™
 			//for (auto lo : levelObjects)
 			//{
-			//	//©•ª©g‚Ì‚ÍƒXƒLƒbƒv
+			//	//è‡ªåˆ†è‡ªèº«ã®æ™‚ã¯ã‚¹ã‚­ãƒƒãƒ—
 			//	if (lo == this)
 			//		continue;
 
-			//	//“§–¾ƒIƒuƒWƒFƒNƒg‚Ìê‡
+			//	//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å ´åˆ
 			//	if (GetFlagTransparentObject() == true)
 			//	{
-			//		//‚±‚±‚ÉƒIƒuƒWƒFƒNƒg‚É‘Î‚·‚éˆ—
+			//		//ã“ã“ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¯¾ã™ã‚‹å‡¦ç†
 			//		lo->TransparentSwitchOff();
 
-			//		//ƒIƒuƒWƒFƒNƒg‚ğ‚Á‚Ä‚¢‚éê‡
+			//		//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã£ã¦ã„ã‚‹å ´åˆ
 			//		lo->SetFlagHeldPlayer(false);
 			//	}
 			//}
 
-			//“§–¾ƒIƒuƒWƒFƒNƒg‚ğ”¼“§–¾‚É‚·‚éB
+			//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åŠé€æ˜ã«ã™ã‚‹ã€‚
 			ChangeTransparent();
 
-			//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ğ”ñ•\¦‚É‚·‚é
-			for (auto timerFR : m_timerFR)
-			{
-				timerFR->Deactivate();
-			}
-
-			//‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢‚Ìƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[‚ğ•\¦‚·‚é
+			//æŠ¼ã•ã‚Œã¦ã„ãªã„æ™‚ã®ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹
 			GetModelRender()->Activate();
-			//‰Ÿ‚³‚ê‚½‚Æ‚«‚Ìƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[‚ğ”ñí‚É‚·‚é
+			//æŠ¼ã•ã‚ŒãŸã¨ãã®ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚’éå¸¸æ™‚ã«ã™ã‚‹
 			m_modelRender->Deactivate();
 
-			//m_invalidationSE‚ğƒ‹[ƒvÄ¶‚ğƒIƒt‚ÅÄ¶‚·‚éB
+			//m_invalidationSEã‚’ãƒ«ãƒ¼ãƒ—å†ç”Ÿã‚’ã‚ªãƒ•ã§å†ç”Ÿã™ã‚‹ã€‚
 			m_invalidationSE->Play(false);
 
 		}
 	}
-	//ƒŠƒZƒbƒgƒ^ƒCƒ}[‚ª‚O‚Ì‚Æ‚«‚É‰º‚Ì•¶‚Ìˆ—‚ğì“®‚³‚¹‚éB
+	//ãƒªã‚»ãƒƒãƒˆã‚¿ã‚¤ãƒãƒ¼ãŒï¼ã®ã¨ãã«ä¸‹ã®æ–‡ã®å‡¦ç†ã‚’ä½œå‹•ã•ã›ã‚‹ã€‚
 	else if (m_flagSwitchOn == false) {
-		//ƒXƒCƒbƒ`‚ª‰Ÿ‚³‚ê‚½‚Æ‚«
-		//“§–¾ƒIƒuƒWƒFƒNƒg‚ğ‚·‚×‚Ä‚¿ã‚°‚ç‚ê‚é‚æ‚¤‚É‚·‚éB
-		//ƒXƒCƒbƒ`‚ÌƒIƒuƒWƒFƒNƒg‚Ì”ÍˆÍ“à‚ÅAƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«
+		//ã‚¹ã‚¤ãƒƒãƒãŒæŠ¼ã•ã‚ŒãŸã¨ã
+		//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã™ã¹ã¦æŒã¡ä¸Šã’ã‚‰ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹ã€‚
+		//ã‚¹ã‚¤ãƒƒãƒã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç¯„å›²å†…ã§Aãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ã
 		if (IsHitPlayer() && g_pad[0]->IsTrigger(enButtonA)) {
 
-			//Ø‚è‘Ö‚¦’†ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+			//åˆ‡ã‚Šæ›¿ãˆä¸­ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 			m_switchingFlag = true;
-			//Ø‚è‘Ö‚¦’†ƒ^ƒCƒ}[‚ğ‰Šú‰»‚·‚é
+			//åˆ‡ã‚Šæ›¿ãˆä¸­ã‚¿ã‚¤ãƒãƒ¼ã‚’åˆæœŸåŒ–ã™ã‚‹
 			m_switchingTimer = 0.0f;
 
-			//ƒvƒŒƒCƒ„[‚ğ‘€ì•s”\‚É‚·‚é
+			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ“ä½œä¸èƒ½ã«ã™ã‚‹
 			m_pPlayer->SetOperationFlag(false);
 
-			//UFO‚ª‚ ‚é‚©H
+			//UFOãŒã‚ã‚‹ã‹ï¼Ÿ
 			if (m_ufo)
-				//‚ ‚é‚Æ‚«
-				//UFO‚ğ“®‚©‚È‚­‚·‚é
+				//ã‚ã‚‹ã¨ã
+				//UFOã‚’å‹•ã‹ãªãã™ã‚‹
 				m_ufo->SetMoveSpeed(0.0f);
 
-			//ƒŠƒZƒbƒgƒ^ƒCƒ}[‚ÉŠJn‚·‚é’l‚ğ‘ã“ü
+			//ãƒªã‚»ãƒƒãƒˆã‚¿ã‚¤ãƒãƒ¼ã«é–‹å§‹ã™ã‚‹å€¤ã‚’ä»£å…¥
 			m_resetTimer = m_resetTimerStartValue;
-			//‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢‚Ìƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[‚ğ”ñ•\¦‚É‚·‚é
+			//æŠ¼ã•ã‚Œã¦ã„ãªã„æ™‚ã®ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚’éè¡¨ç¤ºã«ã™ã‚‹
 			GetModelRender()->Deactivate();
-			//‰Ÿ‚³‚ê‚½‚Æ‚«‚Ìƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[‚ğ•\¦‚·‚é
+			//æŠ¼ã•ã‚ŒãŸã¨ãã®ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹
 			m_modelRender->Activate();
 
 			m_fadeSR->Activate();
 
-			//m_buttonpushSE‚ğƒ‹[ƒvÄ¶‚ğƒIƒt‚ÅÄ¶‚·‚éB
+			//m_buttonpushSEã‚’ãƒ«ãƒ¼ãƒ—å†ç”Ÿã‚’ã‚ªãƒ•ã§å†ç”Ÿã™ã‚‹ã€‚
 			m_buttonpushSE->Play(false);
 		}
 	}
@@ -221,180 +209,176 @@ void OOTransparentSwitch::UpdateSub()
 
 void OOTransparentSwitch::Switching()
 {
-	const float startWaitTime = 0.5f;							//Å‰‚Ì‘Ò‚ÂŠÔ		 
-	const float startFadeOutTime = startWaitTime + 0.5f;		//Å‰‚ÌƒtƒF[ƒhƒAƒEƒgŠÔ
-	const float startFadeWaitTime = startFadeOutTime + 0.5f;	//Å‰‚ÌƒtƒF[ƒh’†ŠÔŠÔ
-	const float startFadeInTime = startFadeWaitTime + 0.5f;		//Å‰‚ÌƒtƒF[ƒhƒCƒ“ŠÔ
-	const float switchingTime = startFadeInTime + 2.0f;			//Ø‚è‘Ö‚¦’†ŠÔ
-	const float endFadeOutTime = switchingTime + 0.5f;			//I‚í‚è‚ÌƒtƒF[ƒhƒAƒEƒgŠÔ
-	const float endFadeWaitTime = endFadeOutTime + 0.5f;		//I‚í‚è‚ÌƒtƒF[ƒh’†ŠÔŠÔ
-	const float endFadeInTime = endFadeWaitTime + 0.5f;			//I‚í‚è‚ÌƒtƒF[ƒhƒCƒ“ŠÔ
+	const float startWaitTime = 0.5f;							//æœ€åˆã®å¾…ã¤æ™‚é–“		 
+	const float startFadeOutTime = startWaitTime + 0.5f;		//æœ€åˆã®ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆæ™‚é–“
+	const float startFadeWaitTime = startFadeOutTime + 0.5f;	//æœ€åˆã®ãƒ•ã‚§ãƒ¼ãƒ‰ä¸­é–“æ™‚é–“
+	const float startFadeInTime = startFadeWaitTime + 0.5f;		//æœ€åˆã®ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³æ™‚é–“
+	const float switchingTime = startFadeInTime + 2.0f;			//åˆ‡ã‚Šæ›¿ãˆä¸­æ™‚é–“
+	const float endFadeOutTime = switchingTime + 0.5f;			//çµ‚ã‚ã‚Šã®ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆæ™‚é–“
+	const float endFadeWaitTime = endFadeOutTime + 0.5f;		//çµ‚ã‚ã‚Šã®ãƒ•ã‚§ãƒ¼ãƒ‰ä¸­é–“æ™‚é–“
+	const float endFadeInTime = endFadeWaitTime + 0.5f;			//çµ‚ã‚ã‚Šã®ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³æ™‚é–“
 
-	//Ø‚è‘Ö‚¦’†‚Ìƒ^ƒCƒ}[‚ÌŒo‰ß‚ğ’²‚×‚é
+	//åˆ‡ã‚Šæ›¿ãˆä¸­ã®ã‚¿ã‚¤ãƒãƒ¼ã®çµŒéã‚’èª¿ã¹ã‚‹
 	if (m_switchingTimer < startWaitTime)
 	{
-		//Å‰‚Ì‘Ò‚ÂŠÔ
+		//æœ€åˆã®å¾…ã¤æ™‚é–“
 
-		//‰½‚à‚¹‚¸‚É‘Ò‚Â
+		//ä½•ã‚‚ã›ãšã«å¾…ã¤
 	}
 	else if (m_switchingTimer < startFadeOutTime)
 	{
-		//ƒtƒF[ƒhƒAƒEƒg‚µ‚Ä‚¢‚­
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã—ã¦ã„ã
 
-		//ƒAƒ‹ƒtƒ@’l
+		//ã‚¢ãƒ«ãƒ•ã‚¡å€¤
 		float alphaValue = 1.0f;
-		//ƒ^ƒCƒ}[‚ÉŒo‰ß‹ï‡‚É‚æ‚Á‚Ä•âŠ®
+		//ã‚¿ã‚¤ãƒãƒ¼ã«çµŒéå…·åˆã«ã‚ˆã£ã¦è£œå®Œ
 		float timeScale = (m_switchingTimer - startWaitTime) / (startFadeOutTime - startWaitTime);
 		alphaValue *= timeScale;
-		//ƒtƒF[ƒh‚ğ™X‚ÉˆÃ‚­‚µ‚Ä‚¢‚­
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’å¾ã€…ã«æš—ãã—ã¦ã„ã
 		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < startFadeWaitTime)
 	{
-		//ƒtƒF[ƒhƒAƒEƒg‚ÆƒtƒF[ƒhƒCƒ“‚ÌŠÔ
-		//‰½‚à‚¹‚¸‚É‘Ò‚Â
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã¨ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã®é–“
+		//ä½•ã‚‚ã›ãšã«å¾…ã¤
 
-		//ƒtƒF[ƒh‚Í^‚ÁˆÃ
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã¯çœŸã£æš—
 		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 
-		//ƒJƒƒ‰‚ªƒvƒŒƒCƒ„[‚ğŒ©‚È‚­‚·‚é
+		//ã‚«ãƒ¡ãƒ©ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹ãªãã™ã‚‹
 		m_gameCamera->SetLookPlayerFlag(false);
-		//ƒJƒƒ‰‚Ö‚ÌÀ•W
+		//ã‚«ãƒ¡ãƒ©ã¸ã®åº§æ¨™
 		Vector3 toCameraPos = { 0.0f,0.0f,3500.0f };
-		//ƒJƒƒ‰‚Ìn“_‚ğİ’è
+		//ã‚«ãƒ¡ãƒ©ã®å§‹ç‚¹ã‚’è¨­å®š
 		m_gameCamera->SetPosition(toCameraPos);
-		//ƒJƒƒ‰‚Ì’‹“_‚ğİ’è
+		//ã‚«ãƒ¡ãƒ©ã®æ³¨è¦–ç‚¹ã‚’è¨­å®š
 		m_gameCamera->SetTarget({ 0.0f,0.0f,0.0f });
 
 	}
 	else if (m_switchingTimer < startFadeInTime)
 	{
-		//ƒtƒF[ƒhƒCƒ“‚µ‚Ä‚¢‚­
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã—ã¦ã„ã
 
-		//ƒAƒ‹ƒtƒ@’l
+		//ã‚¢ãƒ«ãƒ•ã‚¡å€¤
 		float alphaValue = 1.0f;
-		//ƒ^ƒCƒ}[‚ÉŒo‰ß‹ï‡‚É‚æ‚Á‚Ä•âŠ®
+		//ã‚¿ã‚¤ãƒãƒ¼ã«çµŒéå…·åˆã«ã‚ˆã£ã¦è£œå®Œ
 		float timeScale = (m_switchingTimer - startFadeWaitTime) / (startFadeInTime - startFadeWaitTime);
 		alphaValue -= 1.0f * timeScale;
-		//ƒtƒF[ƒh‚ğ™X‚É–¾‚é‚­‚µ‚Ä‚¢‚­
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’å¾ã€…ã«æ˜ã‚‹ãã—ã¦ã„ã
 		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < switchingTime)
 	{
-		//“§–¾ƒIƒuƒWƒFƒNƒg‚ÌØ‚è‘Ö‚¦’†
+		//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆ‡ã‚Šæ›¿ãˆä¸­
 
-		//Ø‚è‘Ö‚¦’†ŠÔ‚Ì”¼•ª‚ÌŠÔ
+		//åˆ‡ã‚Šæ›¿ãˆä¸­æ™‚é–“ã®åŠåˆ†ã®æ™‚é–“
 		const float halfSwitchingTime = 
 			startFadeInTime + (switchingTime - startFadeInTime) / 2.0f;
 
-		//”¼•ª‚ÌŠÔ‚æ‚è¬‚³‚¢‚©H
+		//åŠåˆ†ã®æ™‚é–“ã‚ˆã‚Šå°ã•ã„ã‹ï¼Ÿ
 		if (m_switchingTimer < halfSwitchingTime)
 		{
-			//¬‚³‚¢‚Æ‚«
+			//å°ã•ã„ã¨ã
 
-			//ƒtƒF[ƒh‚ğ“§–¾‚É‚·‚é
+			//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’é€æ˜ã«ã™ã‚‹
 			m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 		}
 		else
 		{
-			//‘å‚«‚¢‚Æ‚«
+			//å¤§ãã„ã¨ã
 			
-			//ˆê‚Â–Ú‚Ìƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚Í—LŒø‰»‚Å‚Í‚È‚¢‚©H
-			if (!(*m_timerFR.begin())->IsActive())
+			//ä¸€ã¤ç›®ã®ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã¯æœ‰åŠ¹åŒ–ã§ã¯ãªã„ã‹ï¼Ÿ
+			if (!m_timerFRIsActive)
 			{
-				//—LŒø‰»‚Å‚Í‚È‚¢
+				//æœ‰åŠ¹åŒ–ã§ã¯ãªã„
 
-				//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ğ—LŒø‰»‚·‚é
-				for (auto timerFR : m_timerFR)
-				{
-					timerFR->Activate();
-				}
-				//“_–Åƒ^ƒCƒ}[‚ğ‰Šú‰»‚·‚é
+
+				//ç‚¹æ»…ã‚¿ã‚¤ãƒãƒ¼ã‚’åˆæœŸåŒ–ã™ã‚‹
 				m_blinkTimer = FLT_MAX;
-				//ƒtƒHƒ“ƒg‚ÌƒJƒ‰[‚ğ’Êí‚ÌƒJƒ‰[‚É‚·‚é
+				//ãƒ•ã‚©ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼ã‚’é€šå¸¸æ™‚ã®ã‚«ãƒ©ãƒ¼ã«ã™ã‚‹
 				m_fontColor = m_normalColor;
 
-				//“§–¾ƒIƒuƒWƒFƒNƒg‚ğÀ‘Ì‚É‚·‚éB
+				//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å®Ÿä½“ã«ã™ã‚‹ã€‚
 				ChangeEntity();
-				//m_activationSE‚ğƒ‹[ƒvÄ¶‚ğƒIƒt‚ÅÄ¶‚·‚éB
+				//m_activationSEã‚’ãƒ«ãƒ¼ãƒ—å†ç”Ÿã‚’ã‚ªãƒ•ã§å†ç”Ÿã™ã‚‹ã€‚
 				m_activationSE->Play(false);
 			}
 			else
 			{
-				//—LŒø‰»‚Å‚ ‚é
+				//æœ‰åŠ¹åŒ–ã§ã‚ã‚‹
 
-				//‰½‚à‚¹‚¸‚É‘Ò‚Â
+				//ä½•ã‚‚ã›ãšã«å¾…ã¤
 			}
 		}
 	}
 	else if (m_switchingTimer < endFadeOutTime)
 	{
-		//ƒtƒF[ƒhƒAƒEƒg‚µ‚Ä‚¢‚­
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã—ã¦ã„ã
 
-		//ƒAƒ‹ƒtƒ@’l
+		//ã‚¢ãƒ«ãƒ•ã‚¡å€¤
 		float alphaValue = 1.0f;
-		//ƒ^ƒCƒ}[‚ÉŒo‰ß‹ï‡‚É‚æ‚Á‚Ä•âŠ®
+		//ã‚¿ã‚¤ãƒãƒ¼ã«çµŒéå…·åˆã«ã‚ˆã£ã¦è£œå®Œ
 		float timeScale = (m_switchingTimer - switchingTime) / (endFadeOutTime - switchingTime);
 		alphaValue *= timeScale;
-		//ƒtƒF[ƒh‚ğ™X‚ÉˆÃ‚­‚µ‚Ä‚¢‚­
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’å¾ã€…ã«æš—ãã—ã¦ã„ã
 		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < endFadeWaitTime)
 	{
-		//ƒtƒF[ƒhƒAƒEƒg‚ÆƒtƒF[ƒhƒCƒ“‚ÌŠÔ
-		//‰½‚à‚¹‚¸‚É‘Ò‚Â
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã¨ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã®é–“
+		//ä½•ã‚‚ã›ãšã«å¾…ã¤
 
-		//ƒtƒF[ƒh‚Í^‚ÁˆÃ
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã¯çœŸã£æš—
 		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-		//ƒJƒƒ‰‚ªƒvƒŒƒCƒ„[‚ğŒ©‚é‚æ‚¤‚É‚·‚é
+		//ã‚«ãƒ¡ãƒ©ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹ã‚‹ã‚ˆã†ã«ã™ã‚‹
 		m_gameCamera->SetLookPlayerFlag(true);
 	}
 	else if (m_switchingTimer < endFadeInTime)
 	{
-		//ƒtƒF[ƒhƒCƒ“‚µ‚Ä‚­
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã—ã¦ã
 
-		//ƒAƒ‹ƒtƒ@’l
+		//ã‚¢ãƒ«ãƒ•ã‚¡å€¤
 		float alphaValue = 1.0f;
-		//ƒ^ƒCƒ}[‚ÉŒo‰ß‹ï‡‚É‚æ‚Á‚Ä•âŠ®
+		//ã‚¿ã‚¤ãƒãƒ¼ã«çµŒéå…·åˆã«ã‚ˆã£ã¦è£œå®Œ
 		float timeScale = (m_switchingTimer - endFadeWaitTime) / (endFadeInTime - endFadeWaitTime);
 		alphaValue -= 1.0f * timeScale;
-		//ƒtƒF[ƒh‚ğ™X‚É–¾‚é‚­‚µ‚Ä‚¢‚­
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’å¾ã€…ã«æ˜ã‚‹ãã—ã¦ã„ã
 		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 
-		//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌXV
+		//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®æ›´æ–°
 		UpdateTimerFR();
 	}
 	else
 	{
-		//I—¹
+		//çµ‚äº†
 
-		//Ø‚è‘Ö‚¦’†ƒtƒ‰ƒO‚ğÜ‚é
+		//åˆ‡ã‚Šæ›¿ãˆä¸­ãƒ•ãƒ©ã‚°ã‚’æŠ˜ã‚‹
 		m_switchingFlag = false;
-		//Ø‚è‘Ö‚¦’†‚Ìƒ^ƒCƒ}[‚ğ‰Šú‰»‚·‚é
+		//åˆ‡ã‚Šæ›¿ãˆä¸­ã®ã‚¿ã‚¤ãƒãƒ¼ã‚’åˆæœŸåŒ–ã™ã‚‹
 		m_switchingTimer = 0.0f;
-		//ƒtƒF[ƒh‚ğ“§–¾‚É‚·‚é
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’é€æ˜ã«ã™ã‚‹
 		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-		//ƒtƒF[ƒh‚ğ”ñ•\¦‚É‚·‚é
+		//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’éè¡¨ç¤ºã«ã™ã‚‹
 		m_fadeSR->Deactivate();
 
-		//ƒXƒCƒbƒ`ƒIƒ“ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+		//ã‚¹ã‚¤ãƒƒãƒã‚ªãƒ³ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 		m_flagSwitchOn = true;
 
-		//ƒvƒŒƒCƒ„[‚ğ‘€ì‰Â”\‚É‚·‚é
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ“ä½œå¯èƒ½ã«ã™ã‚‹
 		m_pPlayer->SetOperationFlag(true);
 
-		//UFO‚ª‚ ‚é‚©H
+		//UFOãŒã‚ã‚‹ã‹ï¼Ÿ
 		if (m_ufo)
-			//‚ ‚é‚Æ‚«
-			//UFO‚ğ“®‚©‚·
+			//ã‚ã‚‹ã¨ã
+			//UFOã‚’å‹•ã‹ã™
 			m_ufo->SetMoveSpeed();
 
 	}
 
-	//Ø‚è‘Ö‚¦’†‚©H
+	//åˆ‡ã‚Šæ›¿ãˆä¸­ã‹ï¼Ÿ
 	if (m_switchingFlag)
-		//Ø‚è‘Ö‚¦’†
-		//Ø‚è‘Ö‚¦’†ƒ^ƒCƒ}[‚ği‚ß‚é
+		//åˆ‡ã‚Šæ›¿ãˆä¸­
+		//åˆ‡ã‚Šæ›¿ãˆä¸­ã‚¿ã‚¤ãƒãƒ¼ã‚’é€²ã‚ã‚‹
 		m_switchingTimer += GameTime().GetFrameDeltaTime();
 
 }
@@ -402,158 +386,130 @@ void OOTransparentSwitch::Switching()
 
 
 /// <summary>
-/// ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌXV
+/// ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®æ›´æ–°
 /// </summary>
 void OOTransparentSwitch::UpdateTimerFR()
 {
-	//ƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ğæ‚Á‚Ä‚­‚é
+	//ãƒ¬ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–ã£ã¦ãã‚‹
 	std::vector<ILevelObjectBase*> levelObjects
 		= CLevelObjectManager::GetInstance()->GetLevelObjects();
 
-	//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌƒCƒeƒŒ[ƒ^[
-	std::list<CFontRender*>::iterator itr = m_timerFR.begin();
 
-	//“_–Å‚µn‚ß‚éƒ^ƒCƒ€
+	//ç‚¹æ»…ã—å§‹ã‚ã‚‹ã‚¿ã‚¤ãƒ 
 	const float blinkStartTime = 3.1f;
 
-	//“_–Å‚µn‚ß‚éƒ^ƒCƒ€‚æ‚èƒ^ƒCƒ}[‚ª¬‚³‚¢‚©H
+	//ç‚¹æ»…ã—å§‹ã‚ã‚‹ã‚¿ã‚¤ãƒ ã‚ˆã‚Šã‚¿ã‚¤ãƒãƒ¼ãŒå°ã•ã„ã‹ï¼Ÿ
 	if (m_resetTimer <= blinkStartTime)
 	{
-		//¬‚³‚¢
-		//“_–Å‚³‚¹‚é
+		//å°ã•ã„
+		//ç‚¹æ»…ã•ã›ã‚‹
 
-		//“_–Å‚·‚éƒ^ƒCƒ€
+		//ç‚¹æ»…ã™ã‚‹ã‚¿ã‚¤ãƒ 
 		const float blinkTime = 0.1f;
 
-		//“_–Åƒ^ƒCƒ}[‚ª“_–Å‚·‚éƒ^ƒCƒ€‚æ‚è‘å‚«‚¢‚©H
+		//ç‚¹æ»…ã‚¿ã‚¤ãƒãƒ¼ãŒç‚¹æ»…ã™ã‚‹ã‚¿ã‚¤ãƒ ã‚ˆã‚Šå¤§ãã„ã‹ï¼Ÿ
 		if (m_blinkTimer > blinkTime)
 		{
-			//‘å‚«‚©‚Á‚½‚ç
-			//“_–Å‚³‚¹‚é
+			//å¤§ãã‹ã£ãŸã‚‰
+			//ç‚¹æ»…ã•ã›ã‚‹
 
-			//ƒtƒHƒ“ƒg‚ÌƒJƒ‰[‚Í’Êí‚ÌƒJƒ‰[‚©H
+			//ãƒ•ã‚©ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼ã¯é€šå¸¸ã®ã‚«ãƒ©ãƒ¼ã‹ï¼Ÿ
 			if (m_fontColor.x == m_normalColor.x)
-				//’Êí‚ÌƒJƒ‰[‚È‚ç
-				//“_–Å‚ÌƒJƒ‰[‚É‚·‚é
+				//é€šå¸¸ã®ã‚«ãƒ©ãƒ¼ãªã‚‰
+				//ç‚¹æ»…æ™‚ã®ã‚«ãƒ©ãƒ¼ã«ã™ã‚‹
 				m_fontColor = m_blinkColor;
 			else
-				//ˆá‚¤‚È‚ç
-				//’Êí‚ÌƒJƒ‰[‚É‚·‚é
+				//é•ã†ãªã‚‰
+				//é€šå¸¸ã®ã‚«ãƒ©ãƒ¼ã«ã™ã‚‹
 				m_fontColor = m_normalColor;
 
-			//“_–Åƒ^ƒCƒ}[‚ğ0.0f‚É‚·‚é
+			//ç‚¹æ»…ã‚¿ã‚¤ãƒãƒ¼ã‚’0.0fã«ã™ã‚‹
 			m_blinkTimer = 0.0f;
 		}
 		else
 		{
-			//¬‚³‚¢‚Æ‚«
+			//å°ã•ã„ã¨ã
 
-			//“_–Åƒ^ƒCƒ}[‚ği‚ß‚é
+			//ç‚¹æ»…ã‚¿ã‚¤ãƒãƒ¼ã‚’é€²ã‚ã‚‹
 			m_blinkTimer += GameTime().GetFrameDeltaTime();
 		}
 	}
 
-	//‘S‚Ä‚ÌƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ÉŒŸõ
+	//å…¨ã¦ã®ãƒ¬ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«æ¤œç´¢
 	for (int i = 0; i < levelObjects.size(); i++)
 	{
-		//“§–¾ƒIƒuƒWƒFƒNƒg‚Å‚Í‚È‚¢ê‡AŸ‚ÌƒIƒuƒWƒFƒNƒg‚ğŒŸõ
+		//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ã¯ãªã„å ´åˆã€æ¬¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¤œç´¢
 		if (levelObjects[i]->GetFlagTransparentObject() == false) {
 			continue;
 		}
 
-		//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚Ìƒpƒ‰ƒ[ƒ^[‚ğİ’è‚·‚é
-		SetTimerFRParam(itr, levelObjects[i]);
+		//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’è¨­å®šã™ã‚‹
+		SetTimerFRParam(levelObjects[i]);
 
-		//ƒCƒeƒŒ[ƒ^[‚ği‚ß‚é
-		itr++;
+
 	}
 }
 
 /// <summary>
-/// ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚Ìƒpƒ‰ƒ[ƒ^[‚ğİ’è‚·‚é
+/// ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’è¨­å®šã™ã‚‹
 /// </summary>
-/// <param name="itr">ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌƒCƒeƒŒ[ƒ^[</param>
-/// <param name="levelObject">‘Î‰‚·‚é“§–¾ƒIƒuƒWƒFƒNƒg</param>
+/// <param name="itr">ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ãƒ¼</param>
+/// <param name="levelObject">å¯¾å¿œã™ã‚‹é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ</param>
 void OOTransparentSwitch::SetTimerFRParam
-(std::list<CFontRender*>::iterator itr, const ILevelObjectBase* levelObject)
+(ILevelObjectBase* levelObject)
 {
-	//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌÀ•W
+	//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®åº§æ¨™
 	Vector2 timerPos;
-	//‘Î‰‚·‚é“§–¾ƒIƒuƒWƒFƒNƒg‚Ì‰ñ“]‚ğ‚Á‚Ä‚­‚é
+	//å¯¾å¿œã™ã‚‹é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å›è»¢ã‚’æŒã£ã¦ãã‚‹
 	Quaternion qRot = levelObject->GetRotation();
-	//ƒAƒbƒvƒxƒNƒgƒ‹
+	//ã‚¢ãƒƒãƒ—ãƒ™ã‚¯ãƒˆãƒ«
 	Vector3 upVec = g_vec3Up;
-	//‰ñ“]‚Å‰ñ‚·
+	//å›è»¢ã§å›ã™
 	qRot.Apply(upVec);
-	//ƒAƒbƒvƒxƒNƒgƒ‹‚Ì’·‚³
+	//ã‚¢ãƒƒãƒ—ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•
 	const float upLen = 300.0f;
-	//ƒAƒbƒvƒxƒNƒgƒ‹‚ğŠg‘å‚·‚é
+	//ã‚¢ãƒƒãƒ—ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ‹¡å¤§ã™ã‚‹
 	upVec.Scale(upLen);
-	//ƒtƒHƒ“ƒg‚Íƒsƒ{ƒbƒg‚ªŒø‚¢‚Ä‚È‚¢‚©‚ç©•ª‚Å‚¸‚ç‚·
+	//ãƒ•ã‚©ãƒ³ãƒˆã¯ãƒ”ãƒœãƒƒãƒˆãŒåŠ¹ã„ã¦ãªã„ã‹ã‚‰è‡ªåˆ†ã§ãšã‚‰ã™
 	const Vector2 offset = { -40.0f,40.0f };
-	//ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“À•W‚Ö•ÏŠ·‚·‚é
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã¸å¤‰æ›ã™ã‚‹
 	g_camera3D->CalcScreenPositionFromWorldPosition
 	(timerPos, levelObject->GetPosition() + upVec);
-	//ƒsƒ{ƒbƒg‚Ì•ª‚¸‚ç‚·
+	//ãƒ”ãƒœãƒƒãƒˆã®åˆ†ãšã‚‰ã™
 	timerPos.x += offset.x;
 	timerPos.y += offset.y;
-	//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌÀ•W‚ğİ’è‚·‚é
-	(*itr)->SetPosition(timerPos);
+	//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®åº§æ¨™ã‚’è¨­å®šã™ã‚‹
+	levelObject->GetTimerFR()->SetPosition(timerPos);
 
-	//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚Éİ’è‚·‚éƒeƒLƒXƒg
+	//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã«è¨­å®šã™ã‚‹ãƒ†ã‚­ã‚¹ãƒˆ
 	wchar_t text[32];
-	//‚»‚Ì‚Ü‚Üƒ^ƒCƒ}[‚ğ“ü‚ê‚é‚Æ0.9•b`0.0•b‚ÌŠÔ‚¸‚Á‚Æ0‚ª•\¦‚³‚ê‚Ä‚µ‚Ü‚¤‚Ì‚Å
-	//1.0f‰ÁZ‚µ‚ÄA0‚à‚¿‚å‚Á‚Æ‚Í•\¦‚µ‚½‚¢‚©‚ç0.1fŒ¸Z‚·‚é
+	//ãã®ã¾ã¾ã‚¿ã‚¤ãƒãƒ¼ã‚’å…¥ã‚Œã‚‹ã¨0.9ç§’ï½0.0ç§’ã®é–“ãšã£ã¨0ãŒè¡¨ç¤ºã•ã‚Œã¦ã—ã¾ã†ã®ã§
+	//1.0fåŠ ç®—ã—ã¦ã€0ã‚‚ã¡ã‚‡ã£ã¨ã¯è¡¨ç¤ºã—ãŸã„ã‹ã‚‰0.1fæ¸›ç®—ã™ã‚‹
 	swprintf_s(text, L"%d", static_cast<int>(m_resetTimer + 0.9f));
-	//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÉƒeƒLƒXƒg‚ğİ’è‚·‚é
-	(*itr)->SetText(text);
-	//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌƒJƒ‰[‚ğİ’è‚·‚é
-	(*itr)->SetColor(m_fontColor);
+	//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã«ãƒ†ã‚­ã‚¹ãƒˆã‚’è¨­å®šã™ã‚‹
+	levelObject->GetTimerFR()->SetText(text);
+	//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼ã‚’è¨­å®šã™ã‚‹
+	levelObject->GetTimerFR()->SetColor(m_fontColor);
 }
 
 /// <summary>
-/// ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ª‰½ŒÂ‚¢‚é‚Ì‚©İ’è‚·‚é
-/// </summary>
-/// <param name="num">‰½ŒÂ</param>
-void OOTransparentSwitch::SetTimerFRNum(const int num)
-{
-	//ƒTƒCƒY‚ğw’è‚·‚é
-	m_timerFR.resize(num);
-	//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌƒCƒeƒŒ[ƒ^[‚ğ—pˆÓ‚·‚é
-	std::list<CFontRender*>::iterator itr = m_timerFR.begin();
-
-	//ƒtƒHƒ“ƒg‚ÌƒJƒ‰[‚ğ’Êí‚ÌƒJƒ‰[‚Éİ’è‚·‚é
-	m_fontColor = m_normalColor;
-
-	//w’è‚µ‚½”AƒtƒHƒ“ƒg‚ğ¶¬‚µA‰Šú‰»‚·‚é
-	for (; itr != m_timerFR.end(); itr++)
-	{
-		(*itr) = NewGO<CFontRender>(0);
-		(*itr)->Init(L"10", { 0.0f,0.0f }, m_fontColor);
-		(*itr)->SetPostRenderFlag(true);
-		//”ñ•\¦‚É‚·‚é
-		(*itr)->Deactivate();
-	}
-}
-
-/// <summary>
-	/// ƒIƒuƒWƒFƒNƒg‚ğ”¼“§–¾‚É‚·‚é
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åŠé€æ˜ã«ã™ã‚‹
 	/// </summary>
 void OOTransparentSwitch::ChangeTransparent()
 {
-	//ƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ğæ‚Á‚Ä‚­‚é
+	//ãƒ¬ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–ã£ã¦ãã‚‹
 	std::vector<ILevelObjectBase*> levelObjects
 		= CLevelObjectManager::GetInstance()->GetLevelObjects();
-	//‘S‚Ä‚ÌƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ÉŒŸõ
+	//å…¨ã¦ã®ãƒ¬ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«æ¤œç´¢
 	for (int i = 0; i < levelObjects.size(); i++)
 	{
-		//“§–¾ƒIƒuƒWƒFƒNƒg‚Å‚Í‚È‚¢ê‡AŸ‚ÌƒIƒuƒWƒFƒNƒg‚ğŒŸõ
+		//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ã¯ãªã„å ´åˆã€æ¬¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¤œç´¢
 		if (levelObjects[i]->GetFlagTransparentObject() == false) {
 			continue;
 		}
 
-		//ƒ‚ƒfƒ‹‚ÌQÆ‚ğ“¾‚Ä‚©‚çASetMulColor()‚ğŒÄ‚Ô
-		//Obstacle‚Ìê‡‚Í–³‘Ê‚É“ñ‰ñŒÄ‚Î‚ê‚é‚¯‚ÇA‰ä–‚µ‚æ‚¤B
+		//ãƒ¢ãƒ‡ãƒ«ã®å‚ç…§ã‚’å¾—ã¦ã‹ã‚‰ã€SetMulColor()ã‚’å‘¼ã¶
+		//Obstacleã®å ´åˆã¯ç„¡é§„ã«äºŒå›å‘¼ã°ã‚Œã‚‹ã‘ã©ã€æˆ‘æ…¢ã—ã‚ˆã†ã€‚
 		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 
@@ -562,39 +518,40 @@ void OOTransparentSwitch::ChangeTransparent()
 }
 
 /// <summary>
-	/// ƒIƒuƒWƒFƒNƒg‚ğÀ‘Ì‚É‚·‚é
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å®Ÿä½“ã«ã™ã‚‹
 	/// </summary>
 void OOTransparentSwitch::ChangeEntity()
 {
-	//ƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ğæ‚Á‚Ä‚­‚é
+	//ãƒ¬ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–ã£ã¦ãã‚‹
 	std::vector<ILevelObjectBase*> levelObjects
 		= CLevelObjectManager::GetInstance()->GetLevelObjects();
 
-	//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌƒCƒeƒŒ[ƒ^[
+	//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ãƒ¼
 	std::list<CFontRender*>::iterator itr = m_timerFR.begin();
 
-	//‘S‚Ä‚ÌƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ÉŒŸõ
+	//å…¨ã¦ã®ãƒ¬ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«æ¤œç´¢
 	for (int i = 0; i < levelObjects.size(); i++)
 	{
-		//“§–¾ƒIƒuƒWƒFƒNƒg‚Å‚Í‚È‚¢ê‡AŸ‚ÌƒIƒuƒWƒFƒNƒg‚ğŒŸõ
+		//é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ã¯ãªã„å ´åˆã€æ¬¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¤œç´¢
 		if (levelObjects[i]->GetFlagTransparentObject() == false) {
 			continue;
 		}
 
-		//ƒ‚ƒfƒ‹‚ÌQÆ‚ğ“¾‚Ä‚©‚çASetMulColor()‚ğŒÄ‚Ô
-		//Obstacle‚Ìê‡‚Í–³‘Ê‚É“ñ‰ñŒÄ‚Î‚ê‚é‚¯‚ÇA‰ä–‚µ‚æ‚¤B
+		//ãƒ¢ãƒ‡ãƒ«ã®å‚ç…§ã‚’å¾—ã¦ã‹ã‚‰ã€SetMulColor()ã‚’å‘¼ã¶
+		//Obstacleã®å ´åˆã¯ç„¡é§„ã«äºŒå›å‘¼ã°ã‚Œã‚‹ã‘ã©ã€æˆ‘æ…¢ã—ã‚ˆã†ã€‚
 		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 
 		levelObjects[i]->TransparentSwitchOn();
 
-		//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚Ìƒpƒ‰ƒ[ƒ^‚ğİ’è‚·‚é
+		//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¨­å®šã™ã‚‹
 		SetTimerFRParam(itr, levelObjects[i]);
 
 
 
-		//ƒCƒeƒŒ[ƒ^[‚ği‚ß‚é
+		//ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ãƒ¼ã‚’é€²ã‚ã‚‹
 		itr++;
 
 	}
 }
+
