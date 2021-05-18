@@ -510,24 +510,33 @@ void OOTransparentSwitch::ChangeTransparent()
 
 		//モデルの参照を得てから、SetMulColor()を呼ぶ
 		//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		//オブジェクトの輪郭線を書くようにする
+		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetDrawOutLineFlag(true);
+		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetDrawOutLineFlag(true);
 
 		levelObjects[i]->TransparentSwitchOff();
+
+		//フォントのカラーを通常のカラーに設定する
+		m_fontColor = m_normalColor;
+		levelObjects[i]->GetTimerFR()->SetColor(m_fontColor);
 	}
+
+	//タイマーのフォントを無効化した
+	m_timerFRIsActive = false;
+
 }
 
 /// <summary>
-	/// オブジェクトを実体にする
-	/// </summary>
+/// オブジェクトを実体にする
+/// </summary>
 void OOTransparentSwitch::ChangeEntity()
 {
 	//レベルオブジェクトを取ってくる
 	std::vector<ILevelObjectBase*> levelObjects
 		= CLevelObjectManager::GetInstance()->GetLevelObjects();
 
-	//タイマーのフォントのイテレーター
-	std::list<CFontRender*>::iterator itr = m_timerFR.begin();
 
 	//全てのレベルオブジェクトに検索
 	for (int i = 0; i < levelObjects.size(); i++)
@@ -541,17 +550,18 @@ void OOTransparentSwitch::ChangeEntity()
 		//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
 		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		//オブジェクトの輪郭線を書かないようにする
+		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetDrawOutLineFlag(false);
+		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetDrawOutLineFlag(false);
 
 		levelObjects[i]->TransparentSwitchOn();
 
-		//タイマーのフォントのパラメータを設定する
-		SetTimerFRParam(itr, levelObjects[i]);
-
-
-
-		//イテレーターを進める
-		itr++;
+		//タイマーのフォントのパラメーターを更新する
+		SetTimerFRParam(levelObjects[i]);
 
 	}
+
+	//タイマーのフォントを有効化した
+	m_timerFRIsActive = true;
 }
 
