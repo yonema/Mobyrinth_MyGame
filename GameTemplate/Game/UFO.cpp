@@ -633,8 +633,6 @@ void CUFO::Transport()
 				m_leftOrRight = enRight;
 			}
 		}
-
-
 	}
 
 	//最初に運ぶ前に少し停止する時間
@@ -692,7 +690,7 @@ void CUFO::Transport()
 	m_pPlayer->SetLeftPointIndex(GetLeftWayPointIndex());
 	m_pPlayer->SetRightPointIndex(GetRightWayPointIndex());
 
-	//UFOcarrymoveSE
+	//UFOcarrymoveSEをループ再生オンで再生する
 	m_UFOcarrymoveSE->Play(true);
 }
 
@@ -937,6 +935,7 @@ void CUFO::Leave()
 		m_timer = 0.0f;
 		//プレイヤーをUFOに捕まっていない状態にする
 		m_pPlayer->SetCapturedUFOFlag(false);
+
 		if (m_UFOcarrymoveSE->IsPlaying()) {
 			m_UFOcarrymoveSE->Stop();
 		}

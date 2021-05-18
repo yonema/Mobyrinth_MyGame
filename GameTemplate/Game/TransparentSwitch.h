@@ -9,134 +9,71 @@
 
 class OOTransparentSwitch : public CObstacleObject
 {
-public:		//ƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚Ù‚µ‚¢ƒƒ“ƒoŠÖ”
-	virtual bool StartSub();	//ƒXƒ^[ƒgŠÖ”
-	virtual void UpdateSub();	//ƒAƒbƒvƒf[ƒgŠÖ”
+public:		//ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã»ã—ã„ãƒ¡ãƒ³ãƒé–¢æ•°
+	virtual bool StartSub();	//ã‚¹ã‚¿ãƒ¼ãƒˆé–¢æ•°
+	virtual void UpdateSub();	//ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆé–¢æ•°
 
 public:
-	OOTransparentSwitch();		//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	~OOTransparentSwitch();		//ƒfƒXƒgƒ‰ƒNƒ^
+	OOTransparentSwitch();		//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	~OOTransparentSwitch();		//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 
-public: //SetŠÖ”
+public: //Seté–¢æ•°
 	/// <summary>
-	/// ƒŠƒZƒbƒgƒ^ƒCƒ}[‚ªì“®‚µ‚½‚Æ‚«‚Ì’l‚ğ•ÏX
+	/// ãƒªã‚»ãƒƒãƒˆã‚¿ã‚¤ãƒãƒ¼ãŒä½œå‹•ã—ãŸã¨ãã®å€¤ã‚’å¤‰æ›´
 	/// </summary>
-	/// <param name="i">ƒŠƒZƒbƒgƒ^ƒCƒ}[‚ªì“®‚µ‚½‚Æ‚«‚Ì’l</param>
+	/// <param name="i">ãƒªã‚»ãƒƒãƒˆã‚¿ã‚¤ãƒãƒ¼ãŒä½œå‹•ã—ãŸã¨ãã®å€¤</param>
 	void SetResetTimerStartValue(float f)
 	{
 		m_resetTimerStartValue = f;
 	}
 
 	/// <summary>
-	/// ƒIƒuƒWƒFƒNƒg‚ğ”¼“§–¾‚É‚·‚é
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åŠé€æ˜ã«ã™ã‚‹
 	/// </summary>
-	void ChangeTransparent()
-	{
-		//ƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ğæ‚Á‚Ä‚­‚é
-		std::vector<ILevelObjectBase*> levelObjects
-			= CLevelObjectManager::GetInstance()->GetLevelObjects();
-		//‘S‚Ä‚ÌƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ÉŒŸõ
-		for (int i = 0; i < levelObjects.size(); i++)
-		{
-			//“§–¾ƒIƒuƒWƒFƒNƒg‚Å‚Í‚È‚¢ê‡AŸ‚ÌƒIƒuƒWƒFƒNƒg‚ğŒŸõ
-			if (levelObjects[i]->GetFlagTransparentObject() == false) {
-				continue;
-			}
-
-			//ƒ‚ƒfƒ‹‚ÌQÆ‚ğ“¾‚Ä‚©‚çASetMulColor()‚ğŒÄ‚Ô
-			//Obstacle‚Ìê‡‚Í–³‘Ê‚É“ñ‰ñŒÄ‚Î‚ê‚é‚¯‚ÇA‰ä–‚µ‚æ‚¤B
-			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-			//ƒIƒuƒWƒFƒNƒg‚Ì—ÖŠsü‚ğ‘‚­‚æ‚¤‚É‚·‚é
-			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetDrawOutLineFlag(true);
-			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetDrawOutLineFlag(true);
-
-			levelObjects[i]->TransparentSwitchOff();
-
-			//ƒtƒHƒ“ƒg‚ÌƒJƒ‰[‚ğ’Êí‚ÌƒJƒ‰[‚Éİ’è‚·‚é
-			m_fontColor = m_normalColor;
-			levelObjects[i]->GetTimerFR()->SetColor(m_fontColor);
-		}
-
-		//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ğ–³Œø‰»‚µ‚½
-		m_timerFRIsActive = false;
-
-	}
+	void ChangeTransparent();
 
 	/// <summary>
-	/// ƒIƒuƒWƒFƒNƒg‚ğÀ‘Ì‚É‚·‚é
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å®Ÿä½“ã«ã™ã‚‹
 	/// </summary>
-	void ChangeEntity()
-	{
-		//ƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ğæ‚Á‚Ä‚­‚é
-		std::vector<ILevelObjectBase*> levelObjects
-			= CLevelObjectManager::GetInstance()->GetLevelObjects();
-
-
-		//‘S‚Ä‚ÌƒŒƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ÉŒŸõ
-		for (int i = 0; i < levelObjects.size(); i++)
-		{
-			//“§–¾ƒIƒuƒWƒFƒNƒg‚Å‚Í‚È‚¢ê‡AŸ‚ÌƒIƒuƒWƒFƒNƒg‚ğŒŸõ
-			if (levelObjects[i]->GetFlagTransparentObject() == false) {
-				continue;
-			}
-
-			//ƒ‚ƒfƒ‹‚ÌQÆ‚ğ“¾‚Ä‚©‚çASetMulColor()‚ğŒÄ‚Ô
-			//Obstacle‚Ìê‡‚Í–³‘Ê‚É“ñ‰ñŒÄ‚Î‚ê‚é‚¯‚ÇA‰ä–‚µ‚æ‚¤B
-			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-			//ƒIƒuƒWƒFƒNƒg‚Ì—ÖŠsü‚ğ‘‚©‚È‚¢‚æ‚¤‚É‚·‚é
-			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetDrawOutLineFlag(false);
-			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetDrawOutLineFlag(false);
-
-			levelObjects[i]->TransparentSwitchOn();
-
-			//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚Ìƒpƒ‰ƒ[ƒ^[‚ğXV‚·‚é
-			SetTimerFRParam(levelObjects[i]);
-		}
-
-		//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ğ—LŒø‰»‚µ‚½
-		m_timerFRIsActive = true;
-
-	}
+	void ChangeEntity();
 
 
 
-private:	//private‚Èƒƒ“ƒoŠÖ”
+private:	//privateãªãƒ¡ãƒ³ãƒé–¢æ•°
 
 	/// <summary>
-	/// ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌXV
+	/// ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®æ›´æ–°
 	/// </summary>
 	void UpdateTimerFR();
 
 	/// <summary>
-	/// ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚Ìƒpƒ‰ƒ[ƒ^[‚ğİ’è‚·‚é
+	/// ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	/// <param name="itr">ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ÌƒCƒeƒŒ[ƒ^[</param>
-	/// <param name="levelObject">‘Î‰‚·‚é“§–¾ƒIƒuƒWƒFƒNƒg</param>
+	/// <param name="itr">ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ãƒ¼</param>
+	/// <param name="levelObject">å¯¾å¿œã™ã‚‹é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ</param>
 	void SetTimerFRParam
 	(ILevelObjectBase* levelObject);
 
 	void Switching();
 
-private: //ƒƒ“ƒo•Ï”
-	float m_resetTimer = 0.0f; //ƒIƒuƒWƒFƒNƒg‚Ìó‘Ô‚ğƒŠƒZƒbƒg‚·‚é‚Ü‚Å‚ÌƒJƒEƒ“ƒg‚Ég—p‚·‚éƒŠƒZƒbƒgƒ^ƒCƒ}[
-	float m_resetTimerStartValue = 10.0f; //ƒŠƒZƒbƒgƒ^ƒCƒ}[‚ªì“®‚µ‚½‚Æ‚«‚Ì’l‚ğ•Û‘¶‚·‚é•Ï”
-	bool m_flagSwitchOn = false; //ƒXƒCƒbƒ`‚ª‰Ÿ‚³‚ê‚ÄA“§–¾ƒIƒuƒWƒFƒNƒg‚ğ‚¿ã‚°‚ç‚ê‚éó‘Ô‚É‚È‚Á‚Ä‚¢‚é‚©‚Ìƒtƒ‰ƒO
-	bool m_timerFRIsActive = false;				//ƒ^ƒCƒ}[‚ÌƒtƒHƒ“ƒg‚ªƒAƒNƒeƒBƒu‚©H
-	Vector4 m_fontColor;						//ƒtƒHƒ“ƒg‚ÌƒJƒ‰[
-	Vector4 m_normalColor;						//’Êí‚ÌƒtƒHƒ“ƒg‚ÌƒJƒ‰[
-	Vector4 m_blinkColor;						//“_–Å‚ÌƒtƒHƒ“ƒg‚ÌƒJƒ‰[
-	float m_blinkTimer = FLT_MAX;				//“_–Åƒ^ƒCƒ}[AÅ‰‚ÍÅ‘å’l‚ğ“ü‚ê‚Ä‚¨‚­
-	CModelRender* m_modelRender = nullptr;		//ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«—p‚Ìƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[
-	GameCamera* m_gameCamera = nullptr;			//ƒJƒƒ‰‚Ìƒ|ƒCƒ“ƒ^
-	CUFO* m_ufo = nullptr;						//UFO‚Ìƒ|ƒCƒ“ƒ^
-	bool m_switchingFlag = false;				//ƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦’†‚©H
-	float m_switchingTimer = 0.0f;				//ƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦’†‚Ìƒ^ƒCƒ}[
-	CSpriteRender* m_fadeSR = nullptr;			//ƒtƒF[ƒhƒCƒ“AƒAƒEƒg‚Åg‚¤ƒXƒvƒ‰ƒCƒgƒŒƒ“ƒ_ƒ‰[
-	CSoundCue* m_buttonpushSE = nullptr;		//m_buttonpushSE‚ÌƒTƒEƒ“ƒhƒLƒ…[
-	CSoundCue* m_activationSE = nullptr;		//m_activationSE‚ÌƒTƒEƒ“ƒhƒLƒ…[
-	CSoundCue* m_invalidationSE = nullptr;		//m_invalidationSE‚ÌƒTƒEƒ“ƒhƒLƒ…[
-	Effect* m_activation = nullptr;				//ƒIƒuƒWƒFƒNƒg‚ª—LŒø‰»‚µ‚½‚ÌƒGƒtƒFƒNƒg
+private: //ãƒ¡ãƒ³ãƒå¤‰æ•°
+	float m_resetTimer = 0.0f; //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®çŠ¶æ…‹ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã¾ã§ã®ã‚«ã‚¦ãƒ³ãƒˆã«ä½¿ç”¨ã™ã‚‹ãƒªã‚»ãƒƒãƒˆã‚¿ã‚¤ãƒãƒ¼
+	float m_resetTimerStartValue = 10.0f; //ãƒªã‚»ãƒƒãƒˆã‚¿ã‚¤ãƒãƒ¼ãŒä½œå‹•ã—ãŸã¨ãã®å€¤ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
+	bool m_flagSwitchOn = false; //ã‚¹ã‚¤ãƒƒãƒãŒæŠ¼ã•ã‚Œã¦ã€é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã¡ä¸Šã’ã‚‰ã‚Œã‚‹çŠ¶æ…‹ã«ãªã£ã¦ã„ã‚‹ã‹ã®ãƒ•ãƒ©ã‚°
+	bool m_timerFRIsActive = false;				//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ã‚©ãƒ³ãƒˆãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹ï¼Ÿ
+	Vector4 m_fontColor;						//ãƒ•ã‚©ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼
+	Vector4 m_normalColor;						//é€šå¸¸ã®ãƒ•ã‚©ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼
+	Vector4 m_blinkColor;						//ç‚¹æ»…æ™‚ã®ãƒ•ã‚©ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼
+	float m_blinkTimer = FLT_MAX;				//ç‚¹æ»…ã‚¿ã‚¤ãƒãƒ¼ã€æœ€åˆã¯æœ€å¤§å€¤ã‚’å…¥ã‚Œã¦ãŠã
+	CModelRender* m_modelRender = nullptr;		//ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ãç”¨ã®ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼
+	GameCamera* m_gameCamera = nullptr;			//ã‚«ãƒ¡ãƒ©ã®ãƒã‚¤ãƒ³ã‚¿
+	CUFO* m_ufo = nullptr;						//UFOã®ãƒã‚¤ãƒ³ã‚¿
+	bool m_switchingFlag = false;				//ã‚¹ã‚¤ãƒƒãƒã®åˆ‡ã‚Šæ›¿ãˆä¸­ã‹ï¼Ÿ
+	float m_switchingTimer = 0.0f;				//ã‚¹ã‚¤ãƒƒãƒã®åˆ‡ã‚Šæ›¿ãˆä¸­ã®ã‚¿ã‚¤ãƒãƒ¼
+	CSpriteRender* m_fadeSR = nullptr;			//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã€ã‚¢ã‚¦ãƒˆã§ä½¿ã†ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼
+	CSoundCue* m_buttonpushSE = nullptr;		//m_buttonpushSEã®ã‚µã‚¦ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼
+	CSoundCue* m_activationSE = nullptr;		//m_activationSEã®ã‚µã‚¦ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼
+	CSoundCue* m_invalidationSE = nullptr;		//m_invalidationSEã®ã‚µã‚¦ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼
+	Effect* m_activation = nullptr;				//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæœ‰åŠ¹åŒ–ã—ãŸæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 };
 
