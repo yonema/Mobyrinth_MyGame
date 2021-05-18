@@ -45,6 +45,9 @@ bool ILevelObjectBase::Start()
 //デストラクタ
 ILevelObjectBase::~ILevelObjectBase()
 {
+	//m_swichon削除
+	DeleteGO(m_swichon);
+
 #ifdef MY_DEBUG
 	//デバック用
 	//後で消す

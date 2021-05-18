@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "OObigFire.h"
-#include "effect/Effect.h"
 
 //スタート関数
 bool OObigFire::StartSub()
@@ -38,9 +37,14 @@ bool OObigFire::StartSub()
 	//m_flame_waterエフェクトの作成
 	m_flame_water = NewGO<Effect>(0);
 	m_flame_water->Init(u"Assets/effect/flame_water.efk");
-	float scale = 30.0f;								//小さいので大きくしておく
+	float scale = 200.0f;								//小さいので大きくしておく
 	m_flame_water->SetScale({ scale ,scale ,scale });
-	m_flame_water->SetPosition(m_position);				//座標を渡す
+	Vector3 upVec = g_vec3Up;
+	m_rotation.Apply(upVec);
+	//この値を変更して高さを調節する
+	const float upVecLne = 100.0f;
+	upVec.Scale(upVecLne);
+	m_flame_water->SetPosition(m_position + upVec);		//座標を渡す
 	m_flame_water->SetRotation(m_rotation);
 
 	return true;
@@ -50,10 +54,16 @@ bool OObigFire::StartSub()
 OObigFire::~OObigFire()
 {
 	DeleteGO(m_pointLight);
+
+
 	if (m_flameSE->IsPlaying()) {
-		m_flameSE->Stop();
+		DeleteGO(m_flameSE);
 	}
-	
+
+	if (m_flame_water->IsPlay()) {
+		DeleteGO(m_flame_water);
+	}
+
 }
 
 //アップデート関数

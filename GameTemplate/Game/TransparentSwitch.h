@@ -30,63 +30,12 @@ public: //Set関数
 	/// <summary>
 	/// オブジェクトを半透明にする
 	/// </summary>
-	void ChangeTransparent()
-	{
-		//レベルオブジェクトを取ってくる
-		std::vector<ILevelObjectBase*> levelObjects
-			= CLevelObjectManager::GetInstance()->GetLevelObjects();
-		//全てのレベルオブジェクトに検索
-		for (int i = 0; i < levelObjects.size(); i++)
-		{
-			//透明オブジェクトではない場合、次のオブジェクトを検索
-			if (levelObjects[i]->GetFlagTransparentObject() == false) {
-				continue;
-			}
-
-			//モデルの参照を得てから、SetMulColor()を呼ぶ
-			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-
-			levelObjects[i]->TransparentSwitchOff();
-		}
-	}
+	void ChangeTransparent();
 
 	/// <summary>
 	/// オブジェクトを実体にする
 	/// </summary>
-	void ChangeEntity()
-	{
-		//レベルオブジェクトを取ってくる
-		std::vector<ILevelObjectBase*> levelObjects
-			= CLevelObjectManager::GetInstance()->GetLevelObjects();
-
-		//タイマーのフォントのイテレーター
-		std::list<CFontRender*>::iterator itr = m_timerFR.begin();
-
-		//全てのレベルオブジェクトに検索
-		for (int i = 0; i < levelObjects.size(); i++)
-		{
-			//透明オブジェクトではない場合、次のオブジェクトを検索
-			if (levelObjects[i]->GetFlagTransparentObject() == false) {
-				continue;
-			}
-
-			//モデルの参照を得てから、SetMulColor()を呼ぶ
-			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-
-			levelObjects[i]->TransparentSwitchOn();
-
-			//タイマーのフォントのパラメータを設定する
-			SetTimerFRParam(itr, levelObjects[i]);
-
-			//イテレーターを進める
-			itr++;
-
-		}
-	}
+	void ChangeEntity();
 
 	/// <summary>
 	/// タイマーのフォントが何個いるのか設定する

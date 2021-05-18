@@ -94,7 +94,7 @@ private:	//データメンバ
 	float m_ufoAngleSpeed = 100.0f;			//UFOの回転するスピー度
 	CSoundCue* m_UFOmoveSE = nullptr;		//UFOmoveSEのサウンドキュー
 	CSoundCue* m_UFOcarrymoveSE = nullptr;	//UFOcarrymoveSEのサウンドキュー
-	CSoundCue* m_UFOyellowlightSE = nullptr;	//UFOyellowlightSEのサウンドキュー
+	CSoundCue* m_UFOyellowlightSE = nullptr;//UFOyellowlightSEのサウンドキュー
 	CSoundCue* m_UFOredlightSE = nullptr;	//UFOredlightSEのサウンドキュー
 	CSoundCue* m_UFOdiscoverySE = nullptr;	//UFOdiscoverySEのサウンドキュー
 

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "OBB.h"
 #include "ObjectType.h"
+#include "effect/Effect.h"
 
 //デバック用
 //後で消す
@@ -304,6 +305,16 @@ public: //Set関数
 		//リセット時に使用する表裏情報を初期化
 		m_startfrontOrBack = m_frontOrBack;
 		
+		m_swichon = NewGO<Effect>(0);
+		m_swichon->Init(u"Assets/effect/activation.efk");
+		float scale = 100.0f;								//小さいので大きくしておく
+		m_swichon->SetScale({ scale ,scale ,scale });
+
+
+		m_swichoff = NewGO<Effect>(0);
+		m_swichoff->Init(u"Assets/effect3/invalidation.efk");
+		float scale2 = 10.0f;								//小さいので大きくしておく
+		m_swichoff->SetScale({ scale2 ,scale2 ,scale2 });
 
 		//オブジェクトを半透明にする。
 		//GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
@@ -326,6 +337,10 @@ public: //透明スイッチに使用する関数
 
 		//オブジェクトの当たり判定を有効にする。
 		m_obb.SetExceptionFlag(false);
+
+		m_swichon->SetPosition(m_position);
+		m_swichon->SetRotation(m_rotation);
+		m_swichon->Play();
 	}
 
 	/// <summary>
@@ -333,6 +348,10 @@ public: //透明スイッチに使用する関数
 	/// </summary>
 	void TransparentSwitchOff()
 	{
+		m_swichoff->SetPosition(m_position);
+		m_swichoff->SetRotation(m_rotation);
+		m_swichoff->Play();
+
 		//オブジェクトを持ち上げられないようにする。
 		m_flagHeld = false;
 		//オブジェクトの衝突判定を行わないようにする。
@@ -345,10 +364,8 @@ public: //透明スイッチに使用する関数
 		CheckWayPoint();
 		CheckFrontOrBackSide();
 		SwitchReverse(m_frontOrBack);
-
 		//オブジェクトの当たり判定を無効にする。
 		m_obb.SetExceptionFlag(true);
-
 	}
 
 	/// <summary>
@@ -389,10 +406,13 @@ private: //メンバ変数
 	bool m_flagIsHit = true; //重なっているかの判定の処理を行うか確認するフラグ
 	bool m_flagHeld = true; //オブジェクトが現在持ち上げられるかのフラグ
 	//bool m_flagHeldPlayer = false; //現在このオブジェクトが持たれているかのフラグ
+	
 
 	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //オブジェクトの初期位置を保存する位置情報変数
 	Quaternion m_startRotation = g_quatIdentity; //オブジェクトの初期回転を保存する回転情報変数
 
+	Effect* m_swichon = nullptr;					 //スイッチを押したときに出るエフェクト
+	Effect* m_swichoff = nullptr;					 //スイッチが戻るときのエフェクト
 
 	////////////////////////////////////////////////////////////
 	// 反転オブジェクト用の変数と関数（透明オブジェクトのために移動）
