@@ -3,6 +3,7 @@
 #include "PointLight.h"
 #include "Sky.h"
 #include "effect/Effect.h"
+#include "FontRender.h"
 
 
 class testModel : public IGameObject
@@ -29,5 +30,10 @@ private:
 	CModelRender* m_skyModel = nullptr;
 
 	Effect* m_effect = nullptr;
+
+	CFontRender* m_fontRender = nullptr;
+	CFontRender* m_fontRender2 = nullptr;
+
+	float m_fontAngle = 0.0f;;
 };
 

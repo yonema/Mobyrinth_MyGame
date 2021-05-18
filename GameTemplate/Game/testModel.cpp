@@ -65,6 +65,18 @@ bool testModel::Start()
 	m_effect->SetScale({ scalef ,scalef ,scalef });
 	m_effect->SetPosition({ 0.0f,0.0f,-100.0f });
 	m_effect->SetRotation(qRot2);
+
+
+	m_fontRender = NewGO<CFontRender>(1);
+	m_fontRender->Init(L"5");
+	m_fontRender->SetPostRenderFlag(true);
+	m_fontRender->SetScale(2.0f);
+
+	
+	m_fontRender2 = NewGO<CFontRender>(1);
+	m_fontRender2->Init(L"5");
+	m_fontRender2->SetPostRenderFlag(true);
+	m_fontRender2->SetScale(2.0f);
 	return true;
 }
 
@@ -78,6 +90,25 @@ void testModel::Update()
 		//Ä¶ŠJŽnB
 		m_effect->Play();
 	}
+
+	m_fontAngle += 3.0f;
+	if (m_fontAngle > 360.0f)
+		m_fontAngle = m_fontAngle - 360.0f;
+	//m_fontAngle = 45.0f;
+	Vector2 numFontPosition = { 0.0f,0.0f };
+	Vector2 addPosition = { 0.0f,20.0f };
+	addPosition.Scale((m_fontAngle - (90.0f * static_cast<int>(m_fontAngle / 90.0f))) / 90.0f * (1 + static_cast<int>(m_fontAngle / 90.0f)));
+	Vector2 bufPos = addPosition;
+	const float radian = Math::DegToRad(m_fontAngle);
+	addPosition.x =
+		bufPos.x * std::cos(radian) - bufPos.y * std::sin(radian);
+	addPosition.y =
+		bufPos.x * std::sin(radian) + bufPos.y * std::cos(radian);
+	numFontPosition.Add(addPosition);
+	//m_fontRender2->SetRotation(radian);
+	m_fontRender2->SetPosition(numFontPosition);
+	//m_fontRender->SetRotation(radian);
+	//m_fontRender->SetPosition(numFontPosition);
 
 }
 

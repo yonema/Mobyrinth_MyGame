@@ -11,6 +11,13 @@
 //Tips用
 #include "TipsController.h"
 
+//キャパシティのUI用
+#include "CapacityUI.h"
+
+//セーブデータ用
+#include "Save.h"
+
+
 
 //レベルのロードで必要
 #include "Level.h"
@@ -131,6 +138,24 @@ public: //インライン関数
 		m_wipeInFlag = wipeInFlag;
 	}
 
+	/// <summary>
+	/// 一番高いクリアしたステージの番号を戻す
+	/// </summary>
+	/// <returns> 一番高いクリアしたステージ</returns>
+	const int GetHighestClearStageNum() const
+	{
+		return m_highestClearStageNum;
+	}
+
+	/// <summary>
+	/// 一番高いクリアしたステージの番号を設定する
+	/// </summary>
+	/// <returns> 一番高いクリアしたステージ</returns>
+	void SetHighestClearStageNum(const int clearStageNum)
+	{
+		m_highestClearStageNum = clearStageNum;
+	}
+
 protected:	//protectedなメンバ関数
 	/// <summary>
 	/// レベルのロード
@@ -146,6 +171,16 @@ protected:	//protectedなメンバ関数
 		DeleteGO(this);
 	}
 
+	/// <summary>
+	/// ステージの番号を設定する
+	/// </summary>
+	/// <param name="stageNum">ステージの番号</param>
+	void SetStageNum(const int stageNum)
+	{
+		m_stageNum = stageNum;
+	}
+
+
 protected:	//オーバーライドしてほしいメンバ関数
 
 	/// <summary>
@@ -159,6 +194,7 @@ protected:	//オーバーライドしてほしいメンバ関数
 	/// リトライした時の処理
 	/// </summary>
 	virtual void RetryStage() = 0 {};
+
 
 private:	//データメンバ
 	CLevel m_level;									//レベルロード用クラス
@@ -185,10 +221,14 @@ private:	//データメンバ
 	bool m_wipeInFlag = false;						//ワイプインする？
 
 	CTipsController* m_tipsController = nullptr;	//Tipsのコントロ―ルクラス
-	CFontRender* m_roNumFR[2];						//表側と裏側にある反転オブジェクトの数
-	CSpriteRender* m_capacityDisplaySR = nullptr;	//キャパシティを表示するスプライト
+	CCapacityUI* m_capacityUI = nullptr;			//キャパシティのUIクラス
 	CSoundCue* m_goalSE = nullptr;					//m_goalSEのサウンドキュー
 	int m_goalSEcount = 0;							//m_goalSEのサポート
+
+	CSave m_save;									//セーブデータクラス
+	int m_highestClearStageNum = -1;				//一番高いクリアステージ
+	int m_stageNum = -1;							//ステージの番号
+	
 
 };
 
