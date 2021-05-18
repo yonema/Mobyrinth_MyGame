@@ -116,9 +116,9 @@ public:
 	/// 輪郭線を描画するか？を設定
 	/// </summary>
 	/// <param name="outLineFlag">輪郭線を描画するか？</param>
-	void SetOutLineSeparation(const float outLineSeparation)
+	void SetOutLineFlag(const bool outLineFlag)
 	{
-		m_outLineSeparation = outLineSeparation;
+		m_outLineFlag = outLineFlag;
 	}
 
 	/// <summary>
@@ -172,7 +172,7 @@ private:
 		Matrix mProj;		//プロジェクション行列。
 		Vector4 emissionColor;	//自己発光色
 		Vector4 mulColor;		//乗算カラー
-		float outLineSeparation;	//輪郭線の区切りの長さ
+		float outLineFlag;		//輪郭線を描画する？
 		int shadowReceiverFlag;	//シャドウレシーバー？
 		int stealthFlag;		//ステルスする？
 	};
@@ -187,6 +187,6 @@ private:
 
 	Vector4 m_emissionColor = { 0.0f,0.0f,0.0f,0.0f };	//自己発光色
 	Vector4 m_mulColor = { 1.0f,1.0f,1.0f,1.0f };		//乗算カラー
-	float m_outLineSeparation = -1.0f;					//輪郭線を描画する？
+	bool m_outLineFlag = false;							//輪郭線を描画する？
 	bool m_stealthFlag = false;							//ステルスする？
 };

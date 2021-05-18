@@ -45,12 +45,22 @@ public: //Set関数
 
 			//モデルの参照を得てから、SetMulColor()を呼ぶ
 			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.2f });
-			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.2f });
+			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+			//オブジェクトの輪郭線を書くようにする
 			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetDrawOutLineFlag(true);
 			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetDrawOutLineFlag(true);
+
 			levelObjects[i]->TransparentSwitchOff();
+
+			//フォントのカラーを通常のカラーに設定する
+			m_fontColor = m_normalColor;
+			levelObjects[i]->GetTimerFR()->SetColor(m_fontColor);
 		}
+
+		//タイマーのフォントを無効化した
+		m_timerFRIsActive = false;
+
 	}
 
 	/// <summary>
@@ -62,8 +72,6 @@ public: //Set関数
 		std::vector<ILevelObjectBase*> levelObjects
 			= CLevelObjectManager::GetInstance()->GetLevelObjects();
 
-		//タイマーのフォントのイテレーター
-		std::list<CFontRender*>::iterator itr = m_timerFR.begin();
 
 		//全てのレベルオブジェクトに検索
 		for (int i = 0; i < levelObjects.size(); i++)
@@ -77,23 +85,22 @@ public: //Set関数
 			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
 			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+			//オブジェクトの輪郭線を書かないようにする
+			levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetDrawOutLineFlag(false);
+			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetDrawOutLineFlag(false);
 
 			levelObjects[i]->TransparentSwitchOn();
 
-			//タイマーのフォントのパラメータを設定する
-			SetTimerFRParam(itr, levelObjects[i]);
-
-			//イテレーターを進める
-			itr++;
-
+			//タイマーのフォントのパラメーターを更新する
+			SetTimerFRParam(levelObjects[i]);
 		}
+
+		//タイマーのフォントを有効化した
+		m_timerFRIsActive = true;
+
 	}
 
-	/// <summary>
-	/// タイマーのフォントが何個いるのか設定する
-	/// </summary>
-	/// <param name="num">何個</param>
-	void SetTimerFRNum(const int num);
+
 
 private:	//privateなメンバ関数
 
@@ -108,7 +115,7 @@ private:	//privateなメンバ関数
 	/// <param name="itr">タイマーのフォントのイテレーター</param>
 	/// <param name="levelObject">対応する透明オブジェクト</param>
 	void SetTimerFRParam
-	(std::list<CFontRender*>::iterator itr, const ILevelObjectBase* levelObject);
+	(ILevelObjectBase* levelObject);
 
 	void Switching();
 
@@ -116,7 +123,7 @@ private: //メンバ変数
 	float m_resetTimer = 0.0f; //オブジェクトの状態をリセットするまでのカウントに使用するリセットタイマー
 	float m_resetTimerStartValue = 10.0f; //リセットタイマーが作動したときの値を保存する変数
 	bool m_flagSwitchOn = false; //スイッチが押されて、透明オブジェクトを持ち上げられる状態になっているかのフラグ
-	std::list<CFontRender*> m_timerFR;			//タイマーのフォント
+	bool m_timerFRIsActive = false;				//タイマーのフォントがアクティブか？
 	Vector4 m_fontColor;						//フォントのカラー
 	Vector4 m_normalColor;						//通常のフォントのカラー
 	Vector4 m_blinkColor;						//点滅時のフォントのカラー

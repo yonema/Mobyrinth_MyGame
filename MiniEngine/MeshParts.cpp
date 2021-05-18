@@ -220,7 +220,7 @@ void MeshParts::Draw(
 	cb.emissionColor = m_emissionColor;
 	cb.mulColor = m_mulColor;
 	cb.shadowReceiverFlag = shadowReceiverFlag;
-	cb.outLineSeparation = m_outLineSeparation;
+	cb.outLineFlag = m_outLineFlag;
 	cb.stealthFlag = m_stealthFlag;
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);

@@ -150,9 +150,9 @@ public:
 	/// —ÖŠsü‚ğ•`‰æ‚·‚é‚©H‚ğİ’è
 	/// </summary>
 	/// <param name="outLineFlag">—ÖŠsü‚ğ•`‰æ‚·‚é‚©H</param>
-	void SetOutLineSeparation(const float outLineSeparation)
+	void SetOutLineFlag(const float outLineFlag)
 	{
-		m_meshParts.SetOutLineSeparation(outLineSeparation);
+		m_meshParts.SetOutLineFlag(outLineFlag);
 	}
 
 	/// <summary>

@@ -91,7 +91,7 @@ cbuffer ModelCb : register(b0){
 	float4x4 mProj;
 	float4 emissionColor;
 	float4 mulColor;
-	float outLineSeparation;
+	int outLineFlag;
 	int shadowReceiverFlag;
 	int stealthFlag;
 };
@@ -283,7 +283,7 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
 /// </summary>
 bool IsOnOutLine(float4 posInProj)
 {
-	if (outLineSeparation < 0.0f)
+	if (!outLineFlag)
 		return false;
 
 
@@ -317,6 +317,7 @@ bool IsOnOutLine(float4 posInProj)
 		return true;
 	}
 
+	//あった方とない方どっちがいいかな？
 	//float3 normal = g_depthTexture.Sample(g_sampler, uv).yzw;
 	//float3 normal2 = normal;
 

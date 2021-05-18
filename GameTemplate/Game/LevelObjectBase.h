@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "OBB.h"
 #include "ObjectType.h"
+#include "FontRender.h"
 
 //デバック用
 //後で消す
@@ -304,6 +305,12 @@ public: //Set関数
 		//リセット時に使用する表裏情報を初期化
 		m_startfrontOrBack = m_frontOrBack;
 		
+		//タイマーのフォントレンダラーの生成と初期化
+		m_timerFR = NewGO<CFontRender>(0);
+		m_timerFR->Init(L"10", { 0.0f,0.0f });
+		m_timerFR->SetPostRenderFlag(true);
+		//非表示にする
+		m_timerFR->Deactivate();
 
 		//オブジェクトを半透明にする。
 		//GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
@@ -326,6 +333,9 @@ public: //透明スイッチに使用する関数
 
 		//オブジェクトの当たり判定を有効にする。
 		m_obb.SetExceptionFlag(false);
+
+		//タイマーのフォントを表示する
+		m_timerFR->Activate();
 	}
 
 	/// <summary>
@@ -348,6 +358,9 @@ public: //透明スイッチに使用する関数
 
 		//オブジェクトの当たり判定を無効にする。
 		m_obb.SetExceptionFlag(true);
+
+		//タイマーのフォントを非表示にする
+		m_timerFR->Deactivate();
 
 	}
 
@@ -383,6 +396,14 @@ public: //透明スイッチに使用する関数
 		return m_flagTransparentObject;
 	}
 
+	/// <summary>
+	/// タイマーのフォントレンダラーの参照を戻す
+	/// </summary>
+	/// <returns>タイマーのフォントレンダラーの参照</returns>
+	CFontRender* GetTimerFR()
+	{
+		return m_timerFR;
+	}
 
 private: //メンバ変数
 	bool m_flagTransparentObject = false; //透明オブジェクトどうかのフラグ
@@ -392,7 +413,7 @@ private: //メンバ変数
 
 	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //オブジェクトの初期位置を保存する位置情報変数
 	Quaternion m_startRotation = g_quatIdentity; //オブジェクトの初期回転を保存する回転情報変数
-
+	CFontRender* m_timerFR = nullptr;			//タイマーのフォントレンダラー
 
 	////////////////////////////////////////////////////////////
 	// 反転オブジェクト用の変数と関数（透明オブジェクトのために移動）

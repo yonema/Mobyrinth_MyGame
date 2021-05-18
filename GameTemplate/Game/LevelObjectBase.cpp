@@ -54,6 +54,8 @@ ILevelObjectBase::~ILevelObjectBase()
 	}
 	//デバック用ここまで
 #endif
+
+	DeleteGO(m_timerFR);
 	//LevelObjectManagerにオブジェクトが破棄されたことを伝える
 	CLevelObjectManager::GetInstance()->RemoveObject(this);
 }

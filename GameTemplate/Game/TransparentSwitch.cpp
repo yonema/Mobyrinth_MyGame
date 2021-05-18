@@ -105,12 +105,6 @@ OOTransparentSwitch::~OOTransparentSwitch()
 	//モデルレンダラーの破棄
 	DeleteGO(m_modelRender);
 
-	//タイマーのフォントの破棄
-	for (auto timerFR : m_timerFR)
-	{
-		DeleteGO(timerFR);
-	}
-
 	//m_activationSEの削除
 	DeleteGO(m_activationSE);
 
@@ -166,12 +160,6 @@ void OOTransparentSwitch::UpdateSub()
 
 			//透明オブジェクトを半透明にする。
 			ChangeTransparent();
-
-			//タイマーのフォントを非表示にする
-			for (auto timerFR : m_timerFR)
-			{
-				timerFR->Deactivate();
-			}
 
 			//押されていない時のモデルレンダラーを表示する
 			GetModelRender()->Activate();
@@ -300,15 +288,11 @@ void OOTransparentSwitch::Switching()
 			//大きいとき
 			
 			//一つ目のタイマーのフォントは有効化ではないか？
-			if (!(*m_timerFR.begin())->IsActive())
+			if (!m_timerFRIsActive)
 			{
 				//有効化ではない
 
-				//タイマーのフォントを有効化する
-				for (auto timerFR : m_timerFR)
-				{
-					timerFR->Activate();
-				}
+
 				//点滅タイマーを初期化する
 				m_blinkTimer = FLT_MAX;
 				//フォントのカラーを通常時のカラーにする
@@ -410,8 +394,6 @@ void OOTransparentSwitch::UpdateTimerFR()
 	std::vector<ILevelObjectBase*> levelObjects
 		= CLevelObjectManager::GetInstance()->GetLevelObjects();
 
-	//タイマーのフォントのイテレーター
-	std::list<CFontRender*>::iterator itr = m_timerFR.begin();
 
 	//点滅し始めるタイム
 	const float blinkStartTime = 3.1f;
@@ -462,10 +444,9 @@ void OOTransparentSwitch::UpdateTimerFR()
 		}
 
 		//タイマーのフォントのパラメーターを設定する
-		SetTimerFRParam(itr, levelObjects[i]);
+		SetTimerFRParam(levelObjects[i]);
 
-		//イテレーターを進める
-		itr++;
+
 	}
 }
 
@@ -475,7 +456,7 @@ void OOTransparentSwitch::UpdateTimerFR()
 /// <param name="itr">タイマーのフォントのイテレーター</param>
 /// <param name="levelObject">対応する透明オブジェクト</param>
 void OOTransparentSwitch::SetTimerFRParam
-(std::list<CFontRender*>::iterator itr, const ILevelObjectBase* levelObject)
+(ILevelObjectBase* levelObject)
 {
 	//タイマーのフォントの座標
 	Vector2 timerPos;
@@ -498,7 +479,7 @@ void OOTransparentSwitch::SetTimerFRParam
 	timerPos.x += offset.x;
 	timerPos.y += offset.y;
 	//タイマーのフォントの座標を設定する
-	(*itr)->SetPosition(timerPos);
+	levelObject->GetTimerFR()->SetPosition(timerPos);
 
 	//タイマーのフォントに設定するテキスト
 	wchar_t text[32];
@@ -506,32 +487,8 @@ void OOTransparentSwitch::SetTimerFRParam
 	//1.0f加算して、0もちょっとは表示したいから0.1f減算する
 	swprintf_s(text, L"%d", static_cast<int>(m_resetTimer + 0.9f));
 	//タイマーのフォントにテキストを設定する
-	(*itr)->SetText(text);
+	levelObject->GetTimerFR()->SetText(text);
 	//タイマーのフォントのカラーを設定する
-	(*itr)->SetColor(m_fontColor);
+	levelObject->GetTimerFR()->SetColor(m_fontColor);
 }
 
-/// <summary>
-/// タイマーのフォントが何個いるのか設定する
-/// </summary>
-/// <param name="num">何個</param>
-void OOTransparentSwitch::SetTimerFRNum(const int num)
-{
-	//サイズを指定する
-	m_timerFR.resize(num);
-	//タイマーのフォントのイテレーターを用意する
-	std::list<CFontRender*>::iterator itr = m_timerFR.begin();
-
-	//フォントのカラーを通常のカラーに設定する
-	m_fontColor = m_normalColor;
-
-	//指定した数、フォントを生成し、初期化する
-	for (; itr != m_timerFR.end(); itr++)
-	{
-		(*itr) = NewGO<CFontRender>(0);
-		(*itr)->Init(L"10", { 0.0f,0.0f }, m_fontColor);
-		(*itr)->SetPostRenderFlag(true);
-		//非表示にする
-		(*itr)->Deactivate();
-	}
-}
