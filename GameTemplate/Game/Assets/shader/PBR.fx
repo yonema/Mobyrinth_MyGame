@@ -318,16 +318,16 @@ bool IsOnOutLine(float4 posInProj)
 	}
 
 	//あった方とない方どっちがいいかな？
-	//float3 normal = g_depthTexture.Sample(g_sampler, uv).yzw;
-	//float3 normal2 = normal;
+	float3 normal = g_depthTexture.Sample(g_sampler, uv).yzw;
+	float3 normal2 = normal;
 
-	//for (int i = 0; i < 8; i++)
-	//{
-	//	normal2 = g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).yzw;
-	//	float inner = dot(normal, normal2);
-	//	if (inner < 0.5f)
-	//		return true;
-	//}
+	for (int i = 0; i < 8; i++)
+	{
+		normal2 = g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).yzw;
+		float inner = dot(normal, normal2);
+		if (inner < 0.5f)
+			return true;
+	}
 
 
 
