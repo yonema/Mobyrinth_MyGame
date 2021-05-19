@@ -96,6 +96,9 @@ bool OOTransparentSwitch::StartSub()
 	m_activation->SetPosition(m_position);				//座標を渡す
 	m_activation->SetRotation(m_rotation);
 
+	//ポーズを探す
+	m_pause = FindGO<CPause>("Pause");
+
 	return true;
 }
 
@@ -191,6 +194,9 @@ void OOTransparentSwitch::UpdateSub()
 				//あるとき
 				//UFOを動かなくする
 				m_ufo->SetMoveSpeed(0.0f);
+
+			//ポーズできなくする
+			m_pause->SetCanPause(false);
 
 			//リセットタイマーに開始する値を代入
 			m_resetTimer = m_resetTimerStartValue;
@@ -372,6 +378,9 @@ void OOTransparentSwitch::Switching()
 			//あるとき
 			//UFOを動かす
 			m_ufo->SetMoveSpeed();
+
+		//ポーズできるようにする
+		m_pause->SetCanPause(true);
 
 	}
 

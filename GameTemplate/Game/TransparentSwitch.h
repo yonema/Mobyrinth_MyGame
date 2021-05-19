@@ -6,6 +6,8 @@
 #include "UFO.h"
 #include "SoundCue.h"
 #include "effect/Effect.h"
+#include "Pause.h"
+
 
 class OOTransparentSwitch : public CObstacleObject
 {
@@ -75,5 +77,6 @@ private: //メンバ変数
 	CSoundCue* m_activationSE = nullptr;		//m_activationSEのサウンドキュー
 	CSoundCue* m_invalidationSE = nullptr;		//m_invalidationSEのサウンドキュー
 	Effect* m_activation = nullptr;				//オブジェクトが有効化した時のエフェクト
+	CPause* m_pause = nullptr;					//ポーズクラスのポインタ
 };
 

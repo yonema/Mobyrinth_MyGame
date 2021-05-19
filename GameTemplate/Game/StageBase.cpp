@@ -434,7 +434,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			else if (objData.EqualObjectName(L"switch") == true)
 			{
 				OOTransparentSwitch* OObject;
-				OObject = NewGO<OOTransparentSwitch>(0, "transparentSwitch");
+				OObject = NewGO<OOTransparentSwitch>(1, "transparentSwitch");
 				OObject->SetPosition(objData.position);
 				return true;
 			}
