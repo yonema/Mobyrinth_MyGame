@@ -567,12 +567,6 @@ void OOTransparentSwitch::ChangeEntity()
 
 		//タイマーのフォントのパラメーターを更新する
 		SetTimerFRParam(levelObjects[i]);
-		//タイマーのフォントのパラメータを設定する
-		SetTimerFRParam(itr, levelObjects[i]);
-
-		//イテレーターを進める
-		itr++;
-
 	}
 
 	//タイマーのフォントを有効化した
