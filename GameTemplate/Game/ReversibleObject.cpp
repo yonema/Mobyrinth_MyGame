@@ -422,6 +422,8 @@ void CReversibleObject::HeldPlayer()
 		{
 			//プレイヤーの回転を保持する
 			m_throwRot = m_pPlayer->GetFinalWPRot();
+			//プレイヤーを投げている状態にする
+			m_pPlayer->SetThrowing(true);
 
 			//ステートを下に投げる状態へ
 			m_objectState = enThrownDown;
