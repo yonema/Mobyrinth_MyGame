@@ -335,6 +335,10 @@ private:	//データメンバ
 	//メインレンダリングターゲットの絵をフレームバッファにコピーするためのスプライト
 	Sprite m_copyToFrameBufferSprite;
 	int m_refreshRate = 59;
+	std::vector< Model* > m_zprepassModels;		// ZPrepassの描画パスで描画されるモデルのリスト
+	RenderTarget m_zprepassRenderTarget;		// ZPrepass描画用のレンダリングターゲット
+
+
 public:		//メンバ関数
 	/// <summary>
 	/// メインレンダリングターゲットの取得。
@@ -379,6 +383,34 @@ public:		//メンバ関数
 		m_refreshRate = rate;
 	};
 	
+	/// <summary>
+	/// ZPrepassの描画パスにモデルを追加
+	/// </summary>
+	/// <param name="model"></param>
+	void Add3DModelToZPrepass(Model& model)
+	{
+		m_zprepassModels.push_back(&model);
+	}
+
+	/// <summary>
+	/// 登録されている3Dモデルをクリア
+	/// </summary>
+	void ClearModels();
+
+	/// <summary>
+	/// ZPrepassで作成された深度テクスチャを取得
+	/// </summary>
+	/// <returns></returns>
+	Texture& GetZPrepassDepthTexture()
+	{
+		return m_zprepassRenderTarget.GetRenderTargetTexture();
+	}
+
+	/// <summary>
+	/// ZPrepass
+	/// </summary>
+	/// <param name="rc">レンダリングコンテキスト</param>
+	void ZPrepass(RenderContext& rc);
 
 private:	//privateなメンバ関数
 	/// <summary>
@@ -391,6 +423,11 @@ private:	//privateなメンバ関数
 	/// フレームバッファにコピーするスプライトの初期化
 	/// </summary>
 	void InitCopyToFrameBufferSprite();
+
+	/// <summary>
+	/// ZPrepass用のレンダリングターゲットを初期化
+	/// </summary>
+	void InitZPrepassRenderTarget();
 };
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。

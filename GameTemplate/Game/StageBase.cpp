@@ -98,9 +98,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	//ステージのメビウスの輪のポインタ
 	Mobius* mobius = nullptr;
 
-	//スイッチのポインタ
-	OOTransparentSwitch* switchObject = nullptr;
-	int TransparentNum = 0;
 
 
 	//レベルをロードする
@@ -177,7 +174,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObject->SetPosition(objData.position);
 				RObject->SetFrontOrBack(CReversibleObject::enBack);
 				RObject->SetTransparentObject();
-				TransparentNum++;
 				return true;
 			}
 			//bird_fish
@@ -256,7 +252,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enFront);
 			RObject->SetTransparentObject();
-			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -267,7 +262,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enBack);
 			RObject->SetTransparentObject();
-			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -322,7 +316,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enFront);
 			RObject->SetTransparentObject();
-			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -333,7 +326,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			RObject->SetPosition(objData.position);
 			RObject->SetFrontOrBack(CReversibleObject::enBack);
 			RObject->SetTransparentObject();
-			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -378,7 +370,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			m_goal = NewGO<OOgoal>(0, "goal");
 			m_goal->SetPosition(objData.position);
 			m_goal->SetTransparentObject();
-			TransparentNum++;
 			return true;
 			}
 			//bigFire
@@ -396,7 +387,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			OObject = NewGO<OObigFire>(0, "bigFire");
 			OObject->SetPosition(objData.position);
 			OObject->SetTransparentObject();
-			TransparentNum++;
 			return true;
 			}
 			//wall
@@ -430,7 +420,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			OObject = NewGO<OObox>(0, "box");
 			OObject->SetPosition(objData.position);
 			OObject->SetTransparentObject();
-			TransparentNum++;
 			//スイッチの処理
 			return true;
 			}
@@ -444,9 +433,9 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 			else if (objData.EqualObjectName(L"switch") == true)
 			{
-				//OOTransparentSwitch* OObject;
-				switchObject = NewGO<OOTransparentSwitch>(0, "transparentSwitch");
-				switchObject->SetPosition(objData.position);
+				OOTransparentSwitch* OObject;
+				OObject = NewGO<OOTransparentSwitch>(1, "transparentSwitch");
+				OObject->SetPosition(objData.position);
 				return true;
 			}
 			//oneway
@@ -555,13 +544,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	m_startDirecting->SetWayPointRot
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
 
-	//スイッチが生成されていたか？
-	if (switchObject)
-	{
-		//されている
-
-		switchObject->SetTimerFRNum(TransparentNum);
-	}
 
 
 	return;

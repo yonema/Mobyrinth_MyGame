@@ -75,7 +75,9 @@ struct SPSIn {
 	float3 biNormal 	: BINORMAL;		//従法線
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド空間でのピクセルの座標。
-	float4 posInLVP[Max_ShadowMap]: TEXCOORD2;
+	float4 posInProj	: TEXCOORD2;	//正規化スクリーン座標系の座標
+	float3 objPos		: TEXCOORD3;
+	float4 posInLVP[Max_ShadowMap]: TEXCOORD4;
 };
 
 ////////////////////////////////////////////////
@@ -89,7 +91,9 @@ cbuffer ModelCb : register(b0){
 	float4x4 mProj;
 	float4 emissionColor;
 	float4 mulColor;
+	int outLineFlag;
 	int shadowReceiverFlag;
+	int stealthFlag;
 };
 
 //LightManager用の定数バッファ
@@ -136,6 +140,7 @@ Texture2D<float4> g_specularMap : register(t2);			//スペキュラマップ。
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 
 Texture2D<float4> g_shadowMap : register(t10);
+Texture2D<float4> g_depthTexture : register(t11);	//深度テクスチャ
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ///////////////////////////////////////////
@@ -148,6 +153,8 @@ float CookTrranceSpecular(float3 L, float3 V, float3 N, float3 N2, float metaric
 float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V);
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin);
 float4 SpecialColor(float4 albedoColor);
+bool IsOnOutLine(float4 posInProj);
+float SimplexNoise(float3 x);
 ////////////////////////////////////////////////
 // 関数定義。
 ////////////////////////////////////////////////
@@ -271,6 +278,93 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
     return skinning;
 }
 
+/// <summary>
+//	輪郭線を描画する
+/// </summary>
+bool IsOnOutLine(float4 posInProj)
+{
+	if (!outLineFlag)
+		return false;
+
+
+	// 近傍8テクセルの深度値を計算して、エッジを抽出する
+	float2 uv = posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
+
+	float thickness = 4.0f;
+	float2 uvOffset[8] =
+	{
+		float2(	0.0f				,  thickness / 720.0f),
+		float2(	0.0f				, -thickness / 720.0f),
+		float2(	thickness / 1280.0f	,				 0.0f),
+		float2(-thickness / 1280.0f	,				 0.0f),
+		float2(	thickness / 1280.0f	,  thickness / 720.0f),
+		float2(-thickness / 1280.0f	,  thickness / 720.0f),
+		float2(	thickness / 1280.0f	, -thickness / 720.0f),
+		float2(-thickness / 1280.0f	, -thickness / 720.0f),
+	};
+	Texture2D<float4> depthTex = g_depthTexture;
+	float depth = depthTex.Sample(g_sampler, uv).x;
+
+	float depth2 = 0.0f;
+	for (int i = 0; i < 8; i++)
+	{
+		depth2 += depthTex.Sample(g_sampler, uv + uvOffset[i]).x;
+	}
+	depth2 /= 8.0f;
+
+	if (abs(depth - depth2) > 0.00005f)
+	{
+		return true;
+	}
+
+	//あった方とない方どっちがいいかな？
+	float3 normal = g_depthTexture.Sample(g_sampler, uv).yzw;
+	float3 normal2 = normal;
+
+	for (int i = 0; i < 8; i++)
+	{
+		normal2 = g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).yzw;
+		float inner = dot(normal, normal2);
+		if (inner < 0.5f)
+			return true;
+	}
+
+
+
+
+	return false;
+}
+
+// ハッシュ関数
+float hash(float n)
+{
+	return frac(sin(n) * 43758.5453);
+}
+
+// 3次元ベクトルからシンプレックスノイズを生成する関数
+float SimplexNoise(float3 x)
+{
+	// The noise function returns a value in the range -1.0f -> 1.0f
+	float3 p = floor(x);
+	float3 f = frac(x);
+
+	f = f * f * (3.0 - 2.0 * f);
+	float n = p.x + p.y * 57.0 + 113.0 * p.z;
+
+	return lerp(lerp(lerp(hash(n + 0.0), hash(n + 1.0), f.x),
+		lerp(hash(n + 57.0), hash(n + 58.0), f.x), f.y),
+		lerp(lerp(hash(n + 113.0), hash(n + 114.0), f.x),
+			lerp(hash(n + 170.0), hash(n + 171.0), f.x), f.y), f.z);
+}
+
+static const int pattern[4][4] =
+{
+	{0,32,8,40},
+	{48,16,56,24},
+	{12,44,4,36},
+	{60,28,52,20},
+};
+
 
 /// <summary>
 /// スキンなしメッシュ用の頂点シェーダーのエントリー関数。
@@ -312,6 +406,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		m = mWorld;
 	}
 
+	psIn.objPos = vsIn.pos;
 	//オブジェクト座標をワールド座標に変換
 	psIn.pos = mul(m, vsIn.pos);
 	//ワールド座標を保持しておく
@@ -340,6 +435,9 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		psIn.posInLVP[i].z = length(worldPos.xyz - shadowParam[i].lightPos) / 10000.0f;
 	}
 
+	// 頂点の正規化スクリーン座標系の座標をピクセルシェーダーに渡す
+	psIn.posInProj = psIn.pos;
+
 
 	return psIn;
 }
@@ -349,6 +447,8 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
+	psIn.posInProj.xy /= psIn.posInProj.w;
+
 	//法線を計算。
 	float3 normal = GetNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
 	float3 normal2 = psIn.normal;
@@ -356,6 +456,41 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//アルベドカラー(拡散反射光)。
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
 	
+	//輪郭を描画するか？
+	if (IsOnOutLine(psIn.posInProj))
+	{
+		
+		//区切り
+		float separation =32.0f;
+		// ピクセルのX座標を64で割った余りがワイプサイズ以下なら表示しない。
+		float t = (int)fmod(abs(psIn.objPos.x), separation);
+
+
+		float kill = 8.0f;// separation / 2.0f;
+		//if ((t - kill) < 0)
+		//{
+		//	return float4(0.0f, 0.0f, 0.0f, 1.0f);
+		//	t = (int)fmod(abs(psIn.objPos.y), separation);
+		//	if ((t - kill) < 0)
+		//	{
+		//		t = (int)fmod(abs(psIn.objPos.z), separation);
+		//		if ((t - kill) < 0)
+		//			return float4(0.0f, 0.0f, 0.0f, 1.0f);
+
+		//	}
+
+
+		//}
+
+		int x = (int)fmod(abs(psIn.pos.x), 4.0f);
+		int y = (int)fmod(abs(psIn.pos.y), 4.0f);
+
+		int dither = pattern[x][y];
+
+		if (dither >= 50)
+			return float4(0.0f, 0.0f, 0.0f, 1.0f);
+	}
+
 	return SpecialColor(albedoColor);
 
 	//スペキュラカラー(鏡面反射光)。
@@ -554,6 +689,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 float4 SpecialColor(float4 albedoColor)
 {
+
+
 	float4 lig = albedoColor;
 	//環境光による底上げ。
 	//lig.xyz += ambientLight * albedoColor;
@@ -562,6 +699,17 @@ float4 SpecialColor(float4 albedoColor)
 	//lig += albedoColor * emissionColor;
 	lig.xyz += emissionColor.xyz;
 	lig *= mulColor;
+
+	if (stealthFlag == 1)
+	{
+		// step-5 シンプレックスノイズを利用して、UV座標をずらしてシーンテクスチャを貼り付ける
+
+		//float2 uv = psIn.posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
+
+		//float uOffset = SimplexNoise(float3(uv, 0.0f) * 256.0f) * 0.02f;
+
+		//float4 stealth = g_sceneTexture.Sample(g_sampler, uv + uOffset);
+	}
 
 	return lig;
 

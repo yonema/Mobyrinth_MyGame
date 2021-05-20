@@ -28,7 +28,7 @@ bool Player::Start()
 	m_modelRender->Init
 		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips,1,enModelUpAxisZ);
 		/*("Assets/modelData/player.tkm");*/
-	m_modelRender->SetShadowCasterFlag(false);
+	m_modelRender->SetShadowCasterFlag(true);
 	m_modelRender->SetShadowReceiverFlag(false);
 	/////////////////////////////////////////////////////////////
 	//ここまで

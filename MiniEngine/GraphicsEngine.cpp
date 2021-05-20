@@ -109,6 +109,22 @@ void GraphicsEngine::InitCopyToFrameBufferSprite()
 	m_copyToFrameBufferSprite.Update(g_vec3Zero, g_quatIdentity, { -1.0f,1.0f,1.0f });
 }
 
+/// <summary>
+/// ZPrepass用のレンダリングターゲットを初期化
+/// </summary>
+void GraphicsEngine::InitZPrepassRenderTarget()
+{
+	m_zprepassRenderTarget.Create(
+		g_graphicsEngine->GetFrameBufferWidth(),
+		g_graphicsEngine->GetFrameBufferHeight(),
+		1,
+		1,
+		DXGI_FORMAT_R32G32B32A32_FLOAT,
+		DXGI_FORMAT_D32_FLOAT
+	);
+
+}
+
 bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 {
 
@@ -237,6 +253,10 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 
 	//シャドウマップの初期化
 	m_shadowMap.Init();
+
+	// ZPrepass用のレンダリングターゲットを初期化
+	InitZPrepassRenderTarget();
+
 	//ポストエフェクトの初期化
 	m_postEffect.Init();
 	//
@@ -583,6 +603,36 @@ void GraphicsEngine::CopyToFrameBuffer()
 	m_copyToFrameBufferSprite.Draw(m_renderContext);
 }
 
+/// <summary>
+/// ZPrepass
+/// </summary>
+/// <param name="rc">レンダリングコンテキスト</param>
+void GraphicsEngine::ZPrepass(RenderContext& rc)
+{
+	// まず、レンダリングターゲットとして設定できるようになるまで待つ
+	rc.WaitUntilToPossibleSetRenderTarget(m_zprepassRenderTarget);
+
+	// レンダリングターゲットを設定
+	rc.SetRenderTargetAndViewport(m_zprepassRenderTarget);
+
+	// レンダリングターゲットをクリア
+	rc.ClearRenderTargetView(m_zprepassRenderTarget);
+
+	for (auto& model : m_zprepassModels)
+	{
+		model->Draw(rc);
+	}
+
+	rc.WaitUntilFinishDrawingToRenderTarget(m_zprepassRenderTarget);
+}
+
+/// <summary>
+/// 登録されている3Dモデルをクリア
+/// </summary>
+void GraphicsEngine:: ClearModels()
+{
+	m_zprepassModels.clear();
+}
 
 void GraphicsEngine::EndRender()
 {

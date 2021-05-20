@@ -580,7 +580,7 @@ void Title::StageDecision()
 		break;
 	case enStage3:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/T_easy.tkl", m_stageSelectState);
+		stage->Init("Assets/level/T_hard.tkl", m_stageSelectState);
 		break;
 	case enStage4:
 		stage = NewGO<CStage>(0, "stage");
@@ -600,7 +600,7 @@ void Title::StageDecision()
 		break;
 	case enStage8:
 		stage = NewGO<CStage>(0, "stage");
-		stage->Init("Assets/level/T_hard.tkl", m_stageSelectState);
+		stage->Init("Assets/level/T_easy.tkl", m_stageSelectState);
 		break;
 	case enStage9:
 		stage = NewGO<CStage>(0, "stage");

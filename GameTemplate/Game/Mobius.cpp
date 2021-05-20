@@ -12,7 +12,7 @@ bool Mobius::Start()
 	m_modelRender->Init("Assets/modelData/Mobius.tkm");
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
-	m_modelRender->SetShadowCasterFlag(false);
+	m_modelRender->SetShadowCasterFlag(true);
 
 	return true;
 }

@@ -48,6 +48,10 @@ ILevelObjectBase::~ILevelObjectBase()
 	//m_swichon削除
 	DeleteGO(m_swichon);
 
+	//フォントのタイマーの破棄
+	if (m_timerFR)
+		DeleteGO(m_timerFR);
+
 #ifdef MY_DEBUG
 	//デバック用
 	//後で消す
@@ -57,6 +61,7 @@ ILevelObjectBase::~ILevelObjectBase()
 	}
 	//デバック用ここまで
 #endif
+
 	//LevelObjectManagerにオブジェクトが破棄されたことを伝える
 	CLevelObjectManager::GetInstance()->RemoveObject(this);
 }
