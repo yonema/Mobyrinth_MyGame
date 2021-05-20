@@ -13,6 +13,7 @@ bool CObstacleObject::PureVirtualStart()
 
 	CheckFrontOrBackSide(false);
 
+
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
 }
@@ -52,6 +53,7 @@ bool CObstacleObject::Init(const char* filePath, int objectType)
 	m_modelRender->SetShadowReceiverFlag(false);
 	//オブジェクトのタイプを設定する
 	SetObjectType(objectType);
+	m_modelRender->SetDrawOutLineFlag(true);
 
 	return true;
 }

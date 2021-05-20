@@ -141,6 +141,7 @@ StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 
 Texture2D<float4> g_shadowMap : register(t10);
 Texture2D<float4> g_depthTexture : register(t11);	//深度テクスチャ
+Texture2D<float4> g_toonMap : register(t12);		//トゥーンシェーダー用マップ
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ///////////////////////////////////////////
@@ -366,6 +367,30 @@ static const int pattern[4][4] =
 };
 
 
+// トゥーンシェーダー
+float4 ToonShader(float4 albedoColor, float3 N, float3 L)
+{
+	//ハーフランバート拡散反射によるライティングの計算
+	float p = dot(N * -1.0f, L);
+	p = p * 0.5f + 0.5f;
+	p = p * p;
+
+	//計算結果よりトゥーンシェーダー用のテクスチャから色をフェッチする
+	float4 Col = g_toonMap.Sample(g_sampler, float2(p, 0.0f));
+	albedoColor.xyz *= Col.xyz;
+	albedoColor.xyz += ambientLight * albedoColor.xyz;
+	return albedoColor;
+}
+
+float4 ToonShader2(float4 albedoColor, float ligScale)
+{
+	//計算結果よりトゥーンシェーダー用のテクスチャから色をフェッチする
+	float4 Col = g_toonMap.Sample(g_sampler, float2(ligScale, 0.0f));
+	albedoColor.xyz *= Col.xyz;
+	albedoColor.xyz += ambientLight * albedoColor.xyz;
+	return albedoColor;
+}
+
 /// <summary>
 /// スキンなしメッシュ用の頂点シェーダーのエントリー関数。
 /// </summary>
@@ -490,7 +515,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		if (dither >= 50)
 			return float4(0.0f, 0.0f, 0.0f, 1.0f);
 	}
-
+	float lightScale = 0.0f;
+	//return ToonShader(albedoColor, normal, directionLight[0].direction);
 
 	//スペキュラカラー(鏡面反射光)。
 	float3 specColor = g_specularMap.SampleLevel(g_sampler, psIn.uv, 0).rgb;
@@ -516,7 +542,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		float3 lambertDiffuse = directionLight[dirligNo].color * NdotL;
 		//最終的な拡散反射光を計算する。
 		float3 diffuse = albedoColor * diffuseFromFresnel * lambertDiffuse;
-
+		float3 diffuseScale = diffuseFromFresnel * lambertDiffuse;
 		//クックトランスモデルを利用した鏡面反射率を計算する。
 
 		//クックトランスモデルの鏡面反射率を計算する。
@@ -529,7 +555,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		//鏡面反射率を使って、拡散反射光と鏡面反射光を合成する。
 		//鏡面反射率が高ければ、拡散反射は弱くなる。
 		lig += diffuse * (1.0f - specTerm) + spec;
-
+		lightScale += diffuseScale * (1.0f - specTerm) + spec;
 	}
 
 	//ポイントライトを計算
@@ -557,7 +583,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		float3 lambertDiffuse = pointLight[ptLigNo].ptColor * NdotL;
 		//最終的な拡散反射光を計算する。
 		float3 diffuse = albedoColor * diffuseFromFresnel * lambertDiffuse;
-
+		float3 diffuseScale = diffuseFromFresnel * lambertDiffuse;
 
 		//クックトランスモデルを利用した鏡面反射率を計算する。
 
@@ -571,6 +597,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		//鏡面反射率を使って、拡散反射光と鏡面反射光を合成する。
 		//鏡面反射率が高ければ、拡散反射は弱くなる。
 		lig += (diffuse * (1.0f - specTerm) + spec) * affect;
+		lightScale += diffuseScale * (1.0f - specTerm) + spec;
 
 	}
 
@@ -599,7 +626,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		float3 lambertDiffuse = spotLight[spLigNo].color * NdotL;
 		//最終的な拡散反射光を計算する。
 		float3 diffuse = albedoColor * diffuseFromFresnel * lambertDiffuse;
-
+		float diffuseScale = diffuseFromFresnel * lambertDiffuse;
 
 		//クックトランスモデルを利用した鏡面反射率を計算する。
 
@@ -613,7 +640,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		//鏡面反射率を使って、拡散反射光と鏡面反射光を合成する。
 		//鏡面反射率が高ければ、拡散反射は弱くなる。
 		float3 diffuseAndSpec = (diffuse * (1.0f - specTerm) + spec) * affect;
-
+		float3 diffuseAndSpecScale = (diffuseScale * (1.0f - specTerm) + spec) * affect;
 		// 入射光と射出方向の角度を求める
 		// dot()を利用して内積を求める
 		float angle = dot(ligDir, spotLight[spLigNo].direction);
@@ -634,12 +661,14 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		// 影響の仕方を指数関数的にする。
 		affect = pow(affect, 0.5f);
 		diffuseAndSpec *= affect;
-
+		diffuseAndSpecScale *= affect;
 
 		lig += diffuseAndSpec;
-
+		lightScale += diffuseAndSpecScale;
 
 	}
+
+	return ToonShader2(albedoColor, lightScale);
 
 	//環境光による底上げ。
 	lig += ambientLight * albedoColor;

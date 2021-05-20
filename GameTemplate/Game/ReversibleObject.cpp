@@ -51,6 +51,9 @@ bool CReversibleObject::PureVirtualStart()
 	m_reverseall2->SetPosition(m_position);				//座標を渡す
 	m_reverseall2->SetRotation(m_rotation);
 
+
+
+
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
 }
@@ -114,7 +117,8 @@ bool CReversibleObject::Init
 	//今が表の状態か裏の状態か設定する
 	SetObjectType(m_reversibleType[m_frontOrBack]);
 	SetFrontOrBack(m_frontOrBack);
-
+	m_modelRender[0]->SetDrawOutLineFlag(true);
+	m_modelRender[1]->SetDrawOutLineFlag(true);
 	return true;
 }
 

@@ -15,6 +15,7 @@ bool OOoneway::StartSub()
 	m_canPassMR->SetPosition(m_position);
 	m_canPassMR->SetRotation(m_rotation);
 	m_canPassMR->SetScale(m_scale);
+	m_canPassMR->SetDrawOutLineFlag(true);
 	m_canPassMR->Deactivate();
 
 	
@@ -24,6 +25,7 @@ bool OOoneway::StartSub()
 	m_rightCanPassMR->SetPosition(m_position);
 	m_rightCanPassMR->SetRotation(m_rotation);
 	m_rightCanPassMR->SetScale(m_scale);
+	m_rightCanPassMR->SetDrawOutLineFlag(true);
 	m_rightCanPassMR->Deactivate();
 
 	//通れる時のモデルの生成と初期化
@@ -32,6 +34,7 @@ bool OOoneway::StartSub()
 	m_rightMR->SetPosition(m_position);
 	m_rightMR->SetRotation(m_rotation);
 	m_rightMR->SetScale(m_scale);
+	m_rightMR->SetDrawOutLineFlag(true);
 	m_rightMR->Deactivate();
 
 	//左向きか？
@@ -146,8 +149,10 @@ void OOoneway::UpdateSub()
 
 			//左向きの通れるモデルを有効化
 			m_canPassMR->Activate();
+			//m_canPassMR->SetDrawOutLineFlag(true);
 			//右向きの通れるモデルを無効化
 			m_rightCanPassMR->Deactivate();
+			//m_rightCanPassMR->SetDrawOutLineFlag(false);
 		}
 		else
 		{
@@ -155,13 +160,17 @@ void OOoneway::UpdateSub()
 
 			//左向きの通れるモデルを無効化
 			m_canPassMR->Deactivate();
+			//m_canPassMR->SetDrawOutLineFlag(false);
 			//右向きの通れるモデルを有効化
 			m_rightCanPassMR->Activate();
+			//m_rightCanPassMR->SetDrawOutLineFlag(true);
 		}
 
 		//通れないモデルを無効化
 		GetModelRender()->Deactivate();
+		//GetModelRender()->SetDrawOutLineFlag(false);
 		m_rightMR->Deactivate();
+		//m_rightMR->SetDrawOutLineFlag(false);
 
 	}
 	else
@@ -177,8 +186,10 @@ void OOoneway::UpdateSub()
 
 			//左向きの通れないモデルを有効化
 			GetModelRender()->Activate();
+			//GetModelRender()->SetDrawOutLineFlag(true);
 			//右向きの通れないモデルを無効化
 			m_rightMR->Deactivate();
+			//m_rightMR->SetDrawOutLineFlag(false);
 		}
 		else
 		{
@@ -186,13 +197,17 @@ void OOoneway::UpdateSub()
 
 			//左向きの通れないモデルを無効化
 			GetModelRender()->Deactivate();
+			//GetModelRender()->SetDrawOutLineFlag(false);
 			//右向きの通れないモデルを有効化
 			m_rightMR->Activate();
+			//m_rightMR->SetDrawOutLineFlag(true);
 		}
 
 		//通れるモデルを無効化
 		m_canPassMR->Deactivate();
+		//m_canPassMR->SetDrawOutLineFlag(false);
 		m_rightCanPassMR->Deactivate();
+		//m_rightCanPassMR->SetDrawOutLineFlag(false);
 	}
 
 
