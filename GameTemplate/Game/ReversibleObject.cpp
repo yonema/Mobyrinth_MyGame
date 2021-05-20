@@ -36,14 +36,20 @@ bool CReversibleObject::PureVirtualStart()
 	//OBBの方向ベクトルの長さを設定
 	GetOBB().SetDirectionLength(obbSize);
 
+	//m_capacity_overSEのサウンドキューを生成する
+	m_capacity_overSE = NewGO<CSoundCue>(0);
+	//m_capacity_overSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_capacity_overSE->Init(L"Assets/sound/capacity_over.wav");
+	//音量調節
+	m_capacity_overSE->SetVolume(0.5f);
+
 	//m_reverseall2エフェクトの作成
 	m_reverseall2 = NewGO<Effect>(0);
 	m_reverseall2->Init(u"Assets/effect/reverseall2.efk");
-	float scale2 = 200.0f;								//小さいので大きくしておく
+	float scale2 = 50.0f;								//小さいので大きくしておく
 	m_reverseall2->SetScale({ scale2 ,scale2 ,scale2 });
 	m_reverseall2->SetPosition(m_position);				//座標を渡す
 	m_reverseall2->SetRotation(m_rotation);
-
 
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
@@ -69,6 +75,8 @@ CReversibleObject::~CReversibleObject()
 
 	//m_throwSEの削除
 	DeleteGO(m_throwSE);
+
+	//m_capacity_over
 
 }
 
@@ -908,6 +916,8 @@ void CReversibleObject::OverlapThrownDown()
 		m_rotation.Multiply(m_throwRot);
 		//カウンターを調節する時間にカウンターの最大値を入れる
 		counterAdjust = maxThrowCounter;
+
+		m_capacity_overSE->Play(false);		//再生
 	}
 
 	//半分の時間が過ぎたら下に下げる

@@ -41,7 +41,7 @@ bool OOReverseALL::StartSub()
 	//m_reverseall2エフェクトの作成
 	m_reverseall2 = NewGO<Effect>(0);
 	m_reverseall2->Init(u"Assets/effect/reverseall2.efk");
-	float scale2 = 200.0f;								//小さいので大きくしておく
+	float scale2 = 50.0f;								//小さいので大きくしておく
 	m_reverseall2->SetScale({ scale2 ,scale2 ,scale2 });
 	m_reverseall2->SetPosition(m_position);				//座標を渡す
 	m_reverseall2->SetRotation(m_rotation);

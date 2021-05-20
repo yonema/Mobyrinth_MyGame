@@ -591,8 +591,6 @@ void OOTransparentSwitch::ChangeEntity()
 		//タイマーのフォントのパラメータを設定する
 		SetTimerFRParam(itr, levelObjects[i]);
 
-
-
 		//イテレーターを進める
 		itr++;
 

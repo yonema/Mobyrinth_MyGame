@@ -306,14 +306,14 @@ public: //Set関数
 		m_startfrontOrBack = m_frontOrBack;
 		
 		m_swichon = NewGO<Effect>(0);
-		m_swichon->Init(u"Assets/effect/activation.efk");
-		float scale = 100.0f;								//小さいので大きくしておく
+		m_swichon->Init(u"Assets/effect2/activation.efk");
+		float scale = 70.0f;								//小さいので大きくしておく
 		m_swichon->SetScale({ scale ,scale ,scale });
 
 
 		m_swichoff = NewGO<Effect>(0);
-		m_swichoff->Init(u"Assets/effect3/invalidation.efk");
-		float scale2 = 10.0f;								//小さいので大きくしておく
+		m_swichoff->Init(u"Assets/effect2/activation.efk");
+		float scale2 = 70.0f;								//小さいので大きくしておく
 		m_swichoff->SetScale({ scale2 ,scale2 ,scale2 });
 
 		//オブジェクトを半透明にする。
@@ -330,6 +330,10 @@ public: //透明スイッチに使用する関数
 	/// </summary>
 	void TransparentSwitchOn()
 	{
+		m_swichon->SetPosition(m_position);
+		m_swichon->SetRotation(m_rotation);
+		m_swichon->Play();
+
 		//オブジェクトを持ち上げられるようにする。
 		m_flagHeld = true;
 		//オブジェクトの衝突判定を行うようにする。
@@ -337,10 +341,7 @@ public: //透明スイッチに使用する関数
 
 		//オブジェクトの当たり判定を有効にする。
 		m_obb.SetExceptionFlag(false);
-
-		m_swichon->SetPosition(m_position);
-		m_swichon->SetRotation(m_rotation);
-		m_swichon->Play();
+		
 	}
 
 	/// <summary>
