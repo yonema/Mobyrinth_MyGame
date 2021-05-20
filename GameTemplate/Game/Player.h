@@ -372,9 +372,16 @@ private:	//データメンバ
 	/// アニメーションクリップ。
 	/// </summary>
 	enum EnAnimationClip {
-		enAnimClip_Idle,	//歩きのアニメーションクリップ
-		enAnimClip_Run,		//走りのアニメーションクリップ
-		enAnimClip_Num,		//アニメーションクリップの総数
+		enAnimClip_idle,		//アイドル状態のアニメーションクリップ
+		enAnimClip_walk,		//歩きのアニメーションクリップ
+		enAnimClip_run,			//走りのアニメーションクリップ
+		enAnimClip_carry,		//持ち上げるアニメーションクリップ
+		enAnimClip_carryIdle,	//持っているアイドル状態のアニメーションクリップ
+		enAnimClip_carryWalk,	//持ちながら歩くアニメーションクリップ
+		enAnimClip_carryRun,	//持ちながら走るアニメーションクリップ
+		enAnimClip_throw,		//投げるアニメーションクリップ
+		enAnimClip_fall,		//落ちるアニメーションクリップ
+		enAnimClip_Num,			//アニメーションクリップの総数
 	};
 
 	AnimationClip m_animationClips[enAnimClip_Num];	//アニメーションクリップ。

@@ -11,26 +11,58 @@ bool Player::Start()
 	//お試しプレイヤー
 	/////////////////////////////////////////////////////////
 
+	CReversibleObject::SetHeldUpLen(300.0f);
+
+
 	//アニメーションクリップの初期化
-	//walkのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_Idle].Load("Assets/animData/walk.tka");
+	//idleのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_idle].Load("Assets/animData/idle.tka");
 	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
-	////fallのアニメーションクリップをロードする
-	//m_animationClips[enAnimClip_Run].Load("Assets/animData/fall.tka");
-	////ループ再生をfalseにする
-	//m_animationClips[enAnimClip_Run].SetLoopFlag(false);
+	m_animationClips[enAnimClip_idle].SetLoopFlag(true);
+	//walkのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_walk].Load("Assets/animData/walk.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_walk].SetLoopFlag(true);
+	//runのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_run].Load("Assets/animData/run.tka");
+	//ループ再生をfalseにする
+	m_animationClips[enAnimClip_run].SetLoopFlag(true);
+	//carryのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_carry].Load("Assets/animData/carry.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_carry].SetLoopFlag(false);
+	//carryIdleのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_carryIdle].Load("Assets/animData/carryidle.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_carryIdle].SetLoopFlag(true);
+	//carryWalkのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_carryWalk].Load("Assets/animData/carrywalk.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_carryWalk].SetLoopFlag(true);
+	//carryRunのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_carryRun].Load("Assets/animData/carryrun.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_carryRun].SetLoopFlag(true);
+	//throwのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_throw].Load("Assets/animData/throw.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_throw].SetLoopFlag(false);
+	//fallのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_fall].Load("Assets/animData/fall.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_fall].SetLoopFlag(false);
+
 
 	//モデルレンダラーを生成する
 	m_modelRender = NewGO<CModelRender>(0);
 	//モデルレンダラーの初期化をする
 	//この時にアニメーションクリップを一緒に引数に渡しておく
 	m_modelRender->Init
-		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips,1,enModelUpAxisZ);
+		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips, enAnimClip_Num,enModelUpAxisZ);
 		/*("Assets/modelData/player.tkm");*/
 	m_modelRender->SetShadowCasterFlag(true);
 	m_modelRender->SetShadowReceiverFlag(false);
-
+	m_modelRender->PlayAnimation(enAnimClip_idle);
 	//m_modelRender->SetDrawOutLineFlag(true);
 	/////////////////////////////////////////////////////////////
 	//ここまで
