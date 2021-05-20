@@ -10,6 +10,8 @@ bool CUFO::PureVirtualStart()
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 
+	m_modelRender->SetDrawOutLineFlag(true);
+
 	//アップベクトルを現在の回転に合わせる
 	m_rotation.Apply(m_upVec);
 	//ウェイポイント上の座標を更新する
@@ -50,9 +52,12 @@ bool CUFO::PureVirtualStart()
 	ModelInitData ufoLigInitData;
 	ufoLigInitData.m_tkmFilePath = "Assets/modelData/ufoLight.tkm";
 	ufoLigInitData.m_fxFilePath = "Assets/shader/ufoLight.fx";
+	//ZPrepassで作成された深度テクスチャの登録
+	ufoLigInitData.m_expandShaderResoruceView[1] = &g_graphicsEngine->GetZPrepassDepthTexture();
 	m_ufoLight->Init(ufoLigInitData);
 	m_ufoLight->SetPosition(m_position + up);
 	m_ufoLight->SetRotation(m_rotation);
+	m_ufoLight->SetDrawOutLineFlag(false);
 	//最初は見えないように透明にする
 	m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 
@@ -333,6 +338,9 @@ void CUFO::Search()
 		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 		//UFOyellowlightSE
 		UFOyellowlight();
+		//輪郭線を書くようにする
+		m_ufoLight->SetDrawOutLineFlag(true);
+
 
 		//プレイヤーを衝突しているか？
 		if (IsHitPlayer())
@@ -351,6 +359,8 @@ void CUFO::Search()
 			m_ufoLight->SetEmissionColor({ 3.0f,0.0f,0.0f,1.0f });
 			//UFOの光線を半透明にする
 			m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+			//輪郭線を書くようにする
+			m_ufoLight->SetDrawOutLineFlag(true);
 			
 			//プレイヤーをUFOに捕まった状態にする
 			m_pPlayer->SetCapturedUFOFlag(true);
@@ -388,6 +398,8 @@ void CUFO::Search()
 		m_ufoLight->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の透明にする
 		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		//輪郭線を書かないようにする
+		m_ufoLight->SetDrawOutLineFlag(false);
 		//UFOyellowSEが鳴っていたら止める
 		if(m_UFOyellowlightSE->IsPlaying()) {
 			m_UFOyellowlightSE->Stop();
@@ -559,6 +571,8 @@ void CUFO::Transport()
 		m_ufoLight->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線を透明にする
 		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		//輪郭線を書かないようにする
+		m_ufoLight->SetDrawOutLineFlag(false);
 
 		//ウェイポイントの最大値
 		const int maxWayPoint = 31;

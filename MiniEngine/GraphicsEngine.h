@@ -337,6 +337,7 @@ private:	//データメンバ
 	int m_refreshRate = 59;
 	std::vector< Model* > m_zprepassModels;		// ZPrepassの描画パスで描画されるモデルのリスト
 	RenderTarget m_zprepassRenderTarget;		// ZPrepass描画用のレンダリングターゲット
+	Texture m_toonMapTexture;
 
 
 public:		//メンバ関数
@@ -411,6 +412,15 @@ public:		//メンバ関数
 	/// </summary>
 	/// <param name="rc">レンダリングコンテキスト</param>
 	void ZPrepass(RenderContext& rc);
+
+	/// <summary>
+	/// トゥーンマップ用テクスチャを取得
+	/// </summary>
+	/// <returns></returns>
+	Texture& GetToonMapTexture()
+	{
+		return m_toonMapTexture;
+	}
 
 private:	//privateなメンバ関数
 	/// <summary>

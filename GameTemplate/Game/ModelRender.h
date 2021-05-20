@@ -1,6 +1,7 @@
 #pragma once
 #include "LightManager.h"
 #include "ShadowModel.h"
+#include "GameTime.h"
 
 /// <summary>
 /// ƒ‚ƒfƒ‹•`‰æƒNƒ‰ƒX

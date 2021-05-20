@@ -30,6 +30,8 @@ bool Player::Start()
 		/*("Assets/modelData/player.tkm");*/
 	m_modelRender->SetShadowCasterFlag(true);
 	m_modelRender->SetShadowReceiverFlag(false);
+
+	//m_modelRender->SetDrawOutLineFlag(true);
 	/////////////////////////////////////////////////////////////
 	//ここまで
 	/////////////////////////////////////////////////////////////

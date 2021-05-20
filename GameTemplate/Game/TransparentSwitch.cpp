@@ -41,6 +41,7 @@ bool OOTransparentSwitch::StartSub()
 	m_modelRender->Init("Assets/modelData/transparentSwitch2.tkm", D3D12_CULL_MODE_NONE);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+	m_modelRender->SetDrawOutLineFlag(true);
 	//非表示にする
 	m_modelRender->Deactivate();
 
