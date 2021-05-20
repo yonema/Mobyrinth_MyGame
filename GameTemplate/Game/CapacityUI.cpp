@@ -10,6 +10,13 @@ bool CCapacityUI::Start()
 	//フォントの初期化
 	InitFont();
 
+	//m_capacity_overのサウンドキューを生成する
+	m_capacity_over = NewGO<CSoundCue>(0);
+	//m_buttonpushSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_capacity_over->Init(L"Assets/sound/capacity_over.wav");
+	//音量調節
+	m_capacity_over->SetVolume(0.5f);
+
 	return true;
 
 }
@@ -490,6 +497,8 @@ void CCapacityUI::Over(const int frontOrBackSide)
 
 		//フォントのカラーをオーバー時のカラーにする
 		m_RONumFR[frontOrBackSide]->SetColor({ 1.0f,1.0f,0.0f,1.0f });
+
+		m_capacity_over->Play(false);		//再生
 		
 	}
 
