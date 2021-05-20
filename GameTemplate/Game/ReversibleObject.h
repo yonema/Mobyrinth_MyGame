@@ -271,6 +271,7 @@ private:	//データメンバ
 	Vector3 m_addPosition = g_vec3Zero;			//ポジションに加えるベクトル
 	bool m_virticalRepelledFlag = false;		//盾に弾かれるか？
 	Effect* m_reverseall2 = nullptr;			//全反転
+	CSoundCue* m_capacity_overSE = nullptr;		//capacity_overのSE
 	/// <summary>
 	/// オブジェクトの現在のステート（状態）
 	/// これでアップデート中の処理を割り振る
