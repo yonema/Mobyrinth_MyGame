@@ -28,6 +28,21 @@ public:		//メンバ関数
 		{
 			m_sideOBB[i].SetExceptionFlag(true);
 		}
+
+		if (m_leftOrRight == enLeft)
+		{
+			if (m_rightCanPassMR)
+				m_rightCanPassMR->Deactivate();
+			if (GetModelRender())
+				GetModelRender()->Activate();
+		}
+		else 
+		{
+			if (m_rightCanPassMR)
+				m_rightCanPassMR->Activate();
+			if (GetModelRender())
+				GetModelRender()->Deactivate();
+		}
 	}
 
 public:		//publicな列挙型
@@ -47,6 +62,10 @@ private:	//データメンバ
 	COBB m_sideOBB[enLeftAndRightNum];	//両サイドのOBB
 	int m_leftOrRight = enLeft;			//左か右か？
 	CModelRender* m_canPassMR = nullptr;	//通れる時のモデル
+	CModelRender* m_rightCanPassMR = nullptr;		//右側時のモデル
+	CModelRender* m_rightMR = nullptr;		//通れない右側時のモデル
+
+
 
 private:	//デバック用
 #ifdef MY_DEBUG
