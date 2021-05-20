@@ -130,6 +130,16 @@ public:
 	/// <returns>ワールド空間でのフットステップの移動量。</returns>
 	Vector3 CalcFootstepDeltaValueInWorldSpace(Quaternion rotation, Vector3 scale) const;
 
+	/// <summary>
+	/// 多分、アニメーションがどのくらい再生したのか、
+	/// 再生率を戻す。0.0f～1.0fの範囲で、1.0fで最後まで再生している。
+	/// </summary>
+	/// <returns>再生率</returns>
+	const float GetInterpolateTime() const
+	{
+		return m_interpolateTime;
+	}
+
 private:
 	void PlayCommon(AnimationClip* nextClip, float interpolateTime)
 	{

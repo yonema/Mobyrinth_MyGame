@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "ReversibleObject.h"
+float CReversibleObject::m_heldUpLen = 100.0f;
+
 
 //コンストラクタ
 CReversibleObject::CReversibleObject()
@@ -420,6 +422,8 @@ void CReversibleObject::HeldPlayer()
 		{
 			//プレイヤーの回転を保持する
 			m_throwRot = m_pPlayer->GetFinalWPRot();
+			//プレイヤーを投げている状態にする
+			m_pPlayer->SetThrowing(true);
 
 			//ステートを下に投げる状態へ
 			m_objectState = enThrownDown;
@@ -465,11 +469,13 @@ void CReversibleObject::ThrownDown()
 
 	//下方向のベクトルを保持する
 	Vector3 dir = g_vec3Down;
-
 	//プレイヤーの回転で下方向のべクトルを回す
 	m_throwRot.Apply(dir);
+	Vector3 addDir = dir;
 	//ベクトルを伸ばす
-	dir.Scale(400.0f);
+	dir.Scale(200.0f);
+	addDir.Scale(m_heldUpLen * 2.0f);
+	dir += addDir;
 
 	test = dir;
 	test.Scale(0.9f);

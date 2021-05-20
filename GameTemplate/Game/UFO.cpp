@@ -302,6 +302,17 @@ void CUFO::UFOyellowlight()
 //プレイヤーを探す処理
 void CUFO::Search()
 {
+	//if (g_pad[0]->IsPress(enButtonA))
+	//{
+	//	m_moveSpeed = m_defaultSpeed;
+	//}
+	//else if (g_pad[0]->IsPress(enButtonB))
+	//{
+	//	m_moveSpeed = -m_defaultSpeed;
+	//}
+	//else
+	//	m_moveSpeed = 0.0f;
+
 	//スピードが0.0fなら探さない
 	if (m_moveSpeed == 0.0f)
 		return;
@@ -321,7 +332,7 @@ void CUFO::Search()
 		//タイマーを0に戻す
 		m_timer = 0.0f;
 	}
-
+	//m_searchFlag = true;
 	//探索中か？
 	if (m_searchFlag)
 	{
