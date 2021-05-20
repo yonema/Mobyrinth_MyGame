@@ -21,7 +21,8 @@ void ROleft_right::QuerySub()
 	if (GetObjectType() == enLeftType)
 	{
 
-		ObjectReverse();
+		//左右反転させるか？
+		bool reverseFlag = true;
 
 		//障害オブジェクトの「一方通行」をクエリ
 		QueryLOs<OOoneway>(enOneway, [&](OOoneway* oneway) -> bool
@@ -31,16 +32,27 @@ void ROleft_right::QuerySub()
 				{
 					//「一方通行」の向きを左向きにする
 					oneway->SetLeftOrRight(OOoneway::enLeft);
+					reverseFlag = false;
+					//自身は破棄する
+					DeleteGO(this);
+					//行動できなくする
+					m_actionFlag = false;
 				}
+
 				//trueを戻す
 				return true;
 			}
 		);
+
+		if (reverseFlag)
+			ObjectReverse();
 	}
 	//自身が「右」の時
 	else if (GetObjectType() == enRightType)
 	{
-		ObjectReverse();
+
+		//左右反転させるか？
+		bool reverseFlag = true;
 
 		//障害オブジェクトの「一方通行」をクエリ
 		QueryLOs<OOoneway>(enOneway, [&](OOoneway* oneway) -> bool
@@ -50,11 +62,19 @@ void ROleft_right::QuerySub()
 				{
 					//「一方通行」の向きを右向きにする
 					oneway->SetLeftOrRight(OOoneway::enRight);
+					reverseFlag = false;
+					//自身は破棄する
+					DeleteGO(this);
+					//行動できなくする
+					m_actionFlag = false;
 				}
 				//trueを戻す
 				return true;
 			}
 		);
+
+		if (reverseFlag)
+			ObjectReverse();
 	}
 }
 
@@ -85,12 +105,12 @@ void ROleft_right::ObjectReverse()
 				//可能
 
 				//左右反転する方向
-				float xScale = 1.0f;
+				Vector3 scale = lo->GetScale();
 				if (GetObjectType() == enRightType)
 					//右向きなら、左右反転させる
-					xScale *= -1.0f;
+					scale.x *= -1.0f;
 				//衝突したオブジェクトのスケールを設定する
-				lo->SetScale({ xScale,1.0f,1.0f });
+				lo->SetScale(scale);
 				//自身は破棄する
 				DeleteGO(this);
 				//行動できなくする
