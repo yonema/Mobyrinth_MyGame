@@ -252,6 +252,9 @@ void CReversibleObject::PureVirtualUpdate()
 		case enCheckPlayer:	//プレイヤーに持たれるかどうか調べる
 			CheckPlayer();
 			break;
+		case enLiftedPlayer:
+			LiftedPlayer();
+			break;
 		case enHeldPlayer:	//プレイヤーに持たれている状態
 			HeldPlayer();
 			break;
@@ -322,15 +325,131 @@ void CReversibleObject::CheckPlayer()
 			if (!m_pPlayer->GetHoldObject() && !m_pPlayer->GetCapturedUFOFlag() && 
 				!m_pPlayer->GetStunFlag())
 			{
-				//ステートをプレイヤーに持たれている状態へ
-				m_objectState = enHeldPlayer;
+				//ステートをプレイヤーに持ち上げられている状態へ
+				m_objectState = enLiftedPlayer;
 				//プレイヤーをオブジェクトを持ってる状態にする
 				m_pPlayer->SetHoldObject(true, this);
 				//オブジェクトが重なっているかを判定する処理を動かすフラグをtrueにする
 				m_flagOverlap = true;
+				m_timer = 0.0f;
 			}
 		}
 	}
+}
+
+
+/// <summary>
+/// プレイヤーに持ち上げられ中の状態の関数
+/// 持ち上げ終わったらHeldPlayerへステート（状態）移行
+/// </summary>
+void CReversibleObject::LiftedPlayer()
+{
+	//切り合え時間
+	const float switchingTime = 0.45f;
+	
+	//次の座標
+	Vector3 nextPos = m_pPlayer->GetPosition();
+	//y座標の調整値。開始位置を少し低くする
+	const float yPosAdjustment = 50.0f;
+	nextPos.y -= yPosAdjustment;
+
+	//X軸に加えるベクトル
+	Vector3 addVecX = g_vec3Right;
+	//プレイヤーの向きが右向きなら
+	if (m_pPlayer->GetEnLeftOrRight() == enRight)
+		//逆向きのベクトルにする
+		addVecX = g_vec3Left;
+
+	//Y軸に加えるベクトル
+	Vector3 addVecY = g_vec3Up;
+
+	//プレイヤーの回転
+	Quaternion playerQRot = m_pPlayer->GetFinalWPRot();
+	//モデルの回転をプレイヤーの回転にする
+	m_rotation = playerQRot;
+	//加えるベクトルをプレイヤーの回転で回転させる
+	playerQRot.Apply(addVecX);
+	playerQRot.Apply(addVecY);
+
+	//X軸に加えるベクトルの大きさ
+	float addVecXScale = 150.0f;
+	//Y軸に加えるベクトルの大きさ
+	float addVecYScale = m_heldUpLen + yPosAdjustment;
+
+	//タイマーが切明時間より小さいか
+	if (m_timer < switchingTime)
+	{
+		//小さい時
+
+		//切り替え時間の半分の時間
+		const float halfSwitchingTime = switchingTime / 2.0f;
+
+		//動く前に少しモデルの移動を待つ時間
+		const float waitTime = 0.1f;
+
+		//タイマーによる拡大
+		float timeScale = 1.0f;
+
+		//タイマーが待つ時間より大きかったら
+		if (m_timer > waitTime)
+		{
+			//タイマーに応じて徐々に大きくする
+			timeScale = (m_timer - waitTime) / (switchingTime - waitTime);
+			//Y軸に移動するベクトルを大きくする
+			addVecYScale *= timeScale;
+			addVecY.Scale(addVecYScale);
+		}
+		else
+		{
+			//大きいとき、待ち時間中の時
+
+			//Y軸の移動を0にする
+			addVecY.Scale(0.0f);
+		}
+
+		//タイマーが半分の時間より大きいか？
+		if (m_timer >= halfSwitchingTime)
+		{
+			//大きいとき
+
+			//タイマーに応じて拡大する、徐々に小さくする
+			timeScale = 1.0f - (m_timer - halfSwitchingTime) / (switchingTime - halfSwitchingTime);
+			//X軸に移動するベクトルを徐々に小さくする
+			addVecXScale *= timeScale;
+			addVecX.Scale(addVecXScale);
+		}
+		else
+		{
+			//小さいとき
+
+			//X軸に移動するベクトルを最大にしておく
+			addVecX.Scale(addVecXScale);
+		}
+
+		//移動する座標にベクトルを進める
+		nextPos += addVecX;
+		nextPos += addVecY;
+
+		//タイマーを進める
+		m_timer += GameTime().GetFrameDeltaTime();
+	}
+	else
+	{
+		//大きいとき
+
+		//Y軸に加えるベクトルを最大値にする
+		addVecY.Scale(addVecYScale);
+		//次の座標にベクトルを加える
+		nextPos += addVecY;
+		//タイマーを初期化する
+		m_timer = 0.0f;
+		//ステートをプレイヤーに持たれている状態へ
+		m_objectState = enHeldPlayer;
+	}
+
+	//座標を次の座標にする
+	m_position = nextPos;
+
 }
 
 

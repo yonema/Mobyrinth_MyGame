@@ -728,7 +728,7 @@ void IStageBase::Goal()
 	m_goalTimer += GameTime().GetFrameDeltaTime();
 
 	//一定時間たったら
-	if (m_goalTimer >= 3.0f)
+	if (m_goalTimer >= 6.0f)
 	{
 		//クリアする
 		Clear();
