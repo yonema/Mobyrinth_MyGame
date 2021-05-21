@@ -49,7 +49,7 @@ void StartDirecting::Update()
 	// ここから下が、ステージ開始時の演出の処理
 	//////////
 
-	if (CheckAButton == true) {
+	if (CheckAButton == true && m_checkStartDirecting == true) {
 		FallPlayer();
 	}
 
