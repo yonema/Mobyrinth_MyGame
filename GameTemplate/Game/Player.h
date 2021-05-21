@@ -395,6 +395,9 @@ private://privateなメンバ関数
 	/// </summary>
 	void AnimationController();
 
+	//SEの制御
+	void SoundController();
+
 
 private:	//データメンバ
 
@@ -477,6 +480,7 @@ private:	//データメンバ
 	int m_fallcount = 0;						//fallSEサポート
 	int m_falltimer = 0;						//fallSEサポート
 	CSoundCue* m_walkSE = nullptr;				//m_walkSEのサウンドキュー
+	CSoundCue* m_runSE = nullptr;				//m_runSEのサウンドキュー
 
 public://デバック用
 	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため

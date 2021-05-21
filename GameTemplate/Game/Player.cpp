@@ -104,6 +104,20 @@ bool Player::Start()
 	//音量調節
 	m_fallstartSE->SetVolume(0.5f);
 
+	//m_walkSEのサウンドキューを生成する
+	m_walkSE = NewGO<CSoundCue>(0);
+	//m_walkSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_walkSE->Init(L"Assets/sound/walk.wav");
+	//音量調節
+	m_walkSE->SetVolume(1.0f);
+
+	//m_runSEのサウンドキューを生成する
+	m_runSE = NewGO<CSoundCue>(0);
+	//m_runSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_runSE->Init(L"Assets/sound/run.wav");
+	//音量調節
+	m_runSE->SetVolume(1.0f);
+
 	//デバック用
 	//後で消す
 
@@ -141,6 +155,10 @@ Player::~Player()
 {
 	//プレイヤーのモデルレンダラーの破棄
 	DeleteGO(m_modelRender);
+
+	DeleteGO(m_walkSE);
+
+	DeleteGO(m_runSE);
 
 	//デバック用
 	//後で消す
@@ -906,6 +924,9 @@ void Player::GameMove()
 	//アニメーションの制御
 	AnimationController();
 
+	//SEの制御
+	SoundController();
+
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
@@ -1092,7 +1113,36 @@ void Player::AnimationController()
 	m_modelRender->PlayAnimation(m_animState);
 }
 
+void Player::SoundController()
+{
+	switch (m_animState)
+	{
+	case enAnimClip_walk:
+	case enAnimClip_carryWalk:
+		if (m_runSE->IsPlaying()) {
+			m_runSE->Stop();
+		}
+		m_walkSE->Play(true);
+		break;
 
+	case enAnimClip_run:
+	case enAnimClip_carryRun:
+		if (m_walkSE->IsPlaying()) {
+			m_walkSE->Stop();
+		}
+		m_runSE->Play(true);
+		break;
+
+	default:
+		if (m_walkSE->IsPlaying()) {
+			m_walkSE->Stop();
+		}
+		if (m_runSE->IsPlaying()) {
+			m_runSE->Stop();
+		}
+		break;
+	}
+}
 
 /// <summary>
 /// ウェイポイントの「場所」を取得
