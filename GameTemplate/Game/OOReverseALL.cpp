@@ -91,8 +91,9 @@ OOReverseALL::~OOReverseALL()
 void OOReverseALL::UpdateSub()
 {
 	//エフェクト再生までのタイマー
-	i++;
-	if (i == 121.0f) {				//120フレームでエフェクトが終わるので121から始める
+	i += GameTime().GetFrameDeltaTime();
+
+	if (i >= 2.0f) {				//120フレームでエフェクトが終わるのでから始める
 		m_obujectefk->Play();
 		i = 0;
 	}

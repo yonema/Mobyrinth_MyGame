@@ -7,9 +7,6 @@
 //スタート関数
 bool Player::Start()
 {
-	/////////////////////////////////////////////////////////
-	//お試しプレイヤー
-	/////////////////////////////////////////////////////////
 
 	CReversibleObject::SetHeldUpLen(330.0f);
 
@@ -44,11 +41,11 @@ bool Player::Start()
 	//ループ再生をtrueにする
 	m_animationClips[enAnimClip_carryRun].SetLoopFlag(true);
 	//throwのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_throw_l].Load("Assets/animData/throw.tka");
+	m_animationClips[enAnimClip_throw_l].Load("Assets/animData/throwL.tka");
 	//ループ再生をtrueにする
 	m_animationClips[enAnimClip_throw_l].SetLoopFlag(false);
 	//throwのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_throw_r].Load("Assets/animData/throw.tka");
+	m_animationClips[enAnimClip_throw_r].Load("Assets/animData/throwR.tka");
 	//ループ再生をtrueにする
 	m_animationClips[enAnimClip_throw_r].SetLoopFlag(false);
 	//fallのアニメーションクリップをロードする
@@ -68,9 +65,6 @@ bool Player::Start()
 	m_modelRender->SetShadowReceiverFlag(false);
 	m_modelRender->PlayAnimation(enAnimClip_idle);
 	//m_modelRender->SetDrawOutLineFlag(true);
-	/////////////////////////////////////////////////////////////
-	//ここまで
-	/////////////////////////////////////////////////////////////
 
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
