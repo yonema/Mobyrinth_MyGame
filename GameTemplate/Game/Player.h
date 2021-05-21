@@ -70,6 +70,23 @@ public://publicなメンバ関数
 		return m_position;
 	}
 
+	const float& GetPositionX()const
+	{
+		return m_position.x;
+	}
+
+	const float& GetPositionY()const
+	{
+		return m_position.y;
+	}
+
+	const float& GetPositionZ()const
+	{
+		return m_position.z;
+	}
+
+
+
 	/// <summary>
 	/// ウェイポイントの「場所」を取得
 	/// </summary>

@@ -9,6 +9,10 @@ bool GameCamera::Start()
 	//注視点から視点へのベクトルを設定する
 	m_toCameraPos = { 0.0f,0.0f,1000.0f };
 
+	//開始演出用のベクトル
+	m_toCameraPos = { 0.0f,0.0f,4000.0f };
+
+
 
 	if (m_pPlayer)
 	{
@@ -41,13 +45,34 @@ bool GameCamera::Start()
 
 	g_camera3D->SetUp(vecUp);
 
+
+	//フェードに使うスプライトの生成と初期化
+	m_fadeSR = NewGO<CSpriteRender>(0);
+	m_fadeSR->Init("Assets/Image/black.DDS", 1280.0f, 780.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+	m_fadeSR->SetPosition({ 0.0f,0.0f,0.0f });
+	m_fadeSR->SetPostRenderFlag(true);
+	//透明にしておく
+	m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+	//非表示にする
+	//m_fadeSR->Deactivate();
+
+
+	//開始演出用の位置情報
+	g_camera3D->SetPosition(m_toCameraPos);
+	g_camera3D->SetTarget({ 0.0f,0.0f,0.0f });
+
 	return true;
 }
 
 void GameCamera::Update()
 {
 	if (m_startDirecting->GetStartDirecting() == true) {
-		StartDirectingCamera();
+		if (m_startDirecting->GetCheckAButton() == false) {
+			StartDirectingCamera();
+		}
+		if (m_startDirectingZoomInCamera == true) {
+			FadeDirectingCamera();
+		}
 	}
 	else {
 		InGameCamera();
@@ -56,40 +81,62 @@ void GameCamera::Update()
 
 void GameCamera::StartDirectingCamera()
 {
+	if (m_startDirecting->GetStartDirecting() == false || !m_wipeEndFlag) {
+		return;
+	}
+
+	//ちょっと待ってから演出を開始する
+	if (m_startTimer < /*0.5f*/0.5f)
+	{
+		m_startTimer += GameTime().GetFrameDeltaTime();
+		return;
+	}
+
+
+
+	if (m_flagRotationCamera == true) {
+		const Quaternion qRot = { 0.0f,0.005f,0.0f,1.0f };
+		//カメラへのベクトルを回す
+		qRot.Apply(m_toCameraPos);
+		//ステージ全体が見渡せる設定
+		g_camera3D->SetPosition(m_toCameraPos);
+		g_camera3D->SetTarget({ 0.0f,0.0f,0.0f });
+	}
+
+
 	if (m_startDirecting) {
+		//ステージの周りを回転する。
 		if (m_startDirectingZoomInCamera == false) {
-			//注視点から視点へのベクトルを設定する
-			m_toCameraPos = { 0.0f,0.0f,2000.0f };
+			//処理的にマジックナンバーになるけど、時間がないのでこのままでいきます。
+			m_test = m_test + 0.0017f;
 
-			//const Quaternion qRot = (m_startDirecting->GetFinalWPRot());
-			//qRot.Apply(m_toCameraPos);
-			//Vector3 vecUp = g_vec3AxisY;
-			//qRot.Apply(vecUp);
-
-			g_camera3D->SetTarget(m_startDirecting->GetPosition());
-
-			g_camera3D->SetPosition(m_startDirecting->GetPosition() + m_toCameraPos);
-
-			//g_camera3D->SetUp(vecUp);
+			if (m_test >= 1.0f || g_pad[0]->IsTrigger(enButtonA) == true) {
+				m_startDirectingZoomInCamera = true;
+			}
 
 		}
+		//キャラクターの位置にカメラを合わせる。
 		else {
-			if (m_zoomFinished == false) {
-				Vector3 differenceCameraPos = { 0.0f,0.0f,1000.0f / m_startDirecting->GetStartDirectingTime() };
-				//Vector3 cameraPos1 = { 0.0f,0.0f,2000.0f };
-				//Vector3 cameraPos2= { 0.0f,0.0f,1000.0f };
+			
 
-				m_toCameraPos = m_toCameraPos - differenceCameraPos;
+			//此処から下は、多分使わない。
 
-				g_camera3D->SetTarget(m_startDirecting->GetPosition());
+			//if (m_zoomFinished == false) {
+			//	Vector3 differenceCameraPos = { 0.0f,0.0f,1000.0f / m_startDirecting->GetStartDirectingTime() };
+			//	//Vector3 cameraPos1 = { 0.0f,0.0f,2000.0f };
+			//	//Vector3 cameraPos2= { 0.0f,0.0f,1000.0f };
 
-				g_camera3D->SetPosition(m_startDirecting->GetPosition() + m_toCameraPos);
-			}
-			else
-			{
-				g_camera3D->SetTarget({ 0.0f,1800.0f,0.0f });
-				g_camera3D->SetPosition({ 0.0f,1800.0f,1200.0f });
-			}
+			//	m_toCameraPos = m_toCameraPos - differenceCameraPos;
+
+			//	g_camera3D->SetTarget(m_startDirecting->GetPosition());
+
+			//	g_camera3D->SetPosition(m_startDirecting->GetPosition() + m_toCameraPos);
+			//}
+			//else
+			//{
+			//	g_camera3D->SetTarget({ 0.0f,1800.0f,0.0f });
+			//	g_camera3D->SetPosition({ 0.0f,1800.0f,1200.0f });
+			//}
 		}
 	}
 	else {
@@ -97,6 +144,70 @@ void GameCamera::StartDirectingCamera()
 		//ステージ開始時の演出を探す
 		m_startDirecting = FindGO<StartDirecting>("StartDirecting");
 	}
+}
+
+void GameCamera::FadeDirectingCamera()
+{
+	const float startWaitTime = 0.5f;							//最初の待つ時間		 
+	const float startFadeOutTime = startWaitTime + 0.5f;		//最初のフェードアウト時間
+	const float startFadeWaitTime = startFadeOutTime + 0.5f;	//最初のフェード中間時間
+	const float startFadeInTime = startFadeWaitTime + 0.5f;		//最初のフェードイン時間
+
+	//切り替え中のタイマーの経過を調べる
+	if (m_switchingTimer < startWaitTime)
+	{
+		//最初の待つ時間
+		int test = 10;
+		//何もせずに待つ
+	}
+	else if (m_switchingTimer < startFadeOutTime)
+	{
+		//フェードアウトしていく
+
+		//アルファ値
+		float alphaValue = 1.0f;
+		//タイマーに経過具合によって補完
+		float timeScale = (m_switchingTimer - startWaitTime) / (startFadeOutTime - startWaitTime);
+		alphaValue *= timeScale;
+		//フェードを徐々に暗くしていく
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+	}
+	else if (m_switchingTimer < startFadeWaitTime)
+	{
+		//フェードアウトとフェードインの間
+		//何もせずに待つ
+
+		//カメラがステージの周りを回転しないようにする。
+		m_flagRotationCamera = false;
+
+		//フェードは真っ暗
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+	}
+	else if (m_switchingTimer < startFadeInTime)
+	{
+		//フェードインしていく
+
+		//Aボタンを押した扱いにする。
+		m_startDirecting->SetCheckAButton(true);
+
+		//カメラがプレイヤーを見るようにする。
+		/*SetTarget(m_pPlayer->GetPosition());
+		SetPosition({ m_pPlayer->GetPositionX(),
+					m_pPlayer->GetPositionY(),
+					m_pPlayer->GetPositionZ() + 1200.0f });*/
+
+		//アルファ値
+		float alphaValue = 1.0f;
+		//タイマーに経過具合によって補完
+		float timeScale = (m_switchingTimer - startFadeWaitTime) / (startFadeInTime - startFadeWaitTime);
+		alphaValue -= 1.0f * timeScale;
+		//フェードを徐々に明るくしていく
+		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+	}
+
+
+
+	m_switchingTimer += GameTime().GetFrameDeltaTime();
 }
 
 void GameCamera::InGameCamera()

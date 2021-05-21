@@ -549,10 +549,10 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	//ステージ開始時の演出時のカメラの注視点の座標を設定する
 	m_startDirecting->SetPosition(pPlayer->GetPosition());
 	//ウェイポイントをステージ開始時の演出に設定する
-	m_startDirecting->SetWayPointPos
+	/*m_startDirecting->SetWayPointPos
 	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
 	m_startDirecting->SetWayPointRot
-	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
+	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());*/
 
 
 
@@ -646,7 +646,7 @@ void IStageBase::Update()
 		if (!m_wipeInFlag)
 		{
 			g_sceneChange->WipeEnd();
-			m_startDirecting->SetWipeEndFlag(true);
+			m_gameCamea->SetWipeEndFlag(true);
 		}
 	}
 

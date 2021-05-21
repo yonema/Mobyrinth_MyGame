@@ -1,4 +1,5 @@
 #pragma once
+#include "SpriteRender.h"
 #include "Player.h"
 #include "StartDirecting.h"
 
@@ -13,6 +14,10 @@ private:
 	/// ステージ開始時のカメラ
 	/// </summary>
 	void StartDirectingCamera();
+	/// <summary>
+	/// ステージ開始時のカメラのフェード
+	/// </summary>
+	void FadeDirectingCamera();
 	/// <summary>
 	/// ゲーム中のカメラ
 	/// </summary>
@@ -86,5 +91,25 @@ private:	//データメンバ
 	bool m_zoomFinished = false;	//Zoomが終わったか
 
 	bool m_titleMode = false;		//タイトル画面か？
+
+
+
+	float m_switchingTimer = 0.0f;				//スイッチの切り替え中のタイマー
+	CSpriteRender* m_fadeSR = nullptr;			//フェードイン、アウトで使うスプライトレンダラー
+	float m_test = 0.0f;
+	bool m_flagRotationCamera = true; //カメラがステージの周りを回転しているかのフラグ
+	bool m_wipeEndFlag = false;			//ワイプが終わった？
+	float m_startTimer = 0;				//演出開始までのタイマー
+
+
+public:
+	/// <summary>
+	/// ワイプが終わったかを設定
+	/// </summary>
+	/// <param name="wipeEndFlag">ワイプが終わった？</param>
+	void SetWipeEndFlag(const bool wipeEndFlag)
+	{
+		m_wipeEndFlag = wipeEndFlag;
+	}
 };
 
