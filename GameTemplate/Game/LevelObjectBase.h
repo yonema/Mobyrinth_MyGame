@@ -369,9 +369,23 @@ public: //透明スイッチに使用する関数
 	/// </summary>
 	void TransparentSwitchOff()
 	{
-		m_swichoff->SetPosition(m_position);
-		m_swichoff->SetRotation(m_rotation);
-		m_swichoff->Play();
+		//スイッチが有効か？
+		if (m_switchValid)
+		{
+			//有効
+
+			//エフェクトを再生する
+			m_swichoff->SetPosition(m_position);
+			m_swichoff->SetRotation(m_rotation);
+			m_swichoff->Play();
+		}
+		else
+		{
+			//有効じゃない
+
+			//有効にする
+			m_switchValid = true;
+		}
 
 		//オブジェクトを持ち上げられないようにする。
 		m_flagHeld = false;
@@ -449,6 +463,7 @@ private: //メンバ変数
 
 	Effect* m_swichon = nullptr;					 //スイッチを押したときに出るエフェクト
 	Effect* m_swichoff = nullptr;					 //スイッチが戻るときのエフェクト
+	bool m_switchValid = false;						//スイッチが有効か？
 
 
 	////////////////////////////////////////////////////////////

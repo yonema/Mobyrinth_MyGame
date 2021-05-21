@@ -312,6 +312,15 @@ public://publicなメンバ関数
 	}
 
 	/// <summary>
+	/// 落ちているか？を取得
+	/// </summary>
+	/// <returns>落ちているか？</returns>
+	const bool GetFallFalg() const
+	{
+		return m_fallFlag;
+	}
+
+	/// <summary>
 	/// OBBの参照を戻す
 	/// </summary>
 	/// <returns>OBBの参照</returns>

@@ -22,7 +22,7 @@ bool OOgoal::StartSub()
 	m_effect->SetRotation(m_rotation);
 	const float scale = 50.0f;
 	m_effect->SetScale({ scale ,scale ,scale });
-	m_effect->Play();
+	//m_effect->Play();
 
 
 	//OBBWorldに自身のOBBの登録を消去させる
@@ -65,6 +65,10 @@ void OOgoal::UpdateSub()
 		m_timer += GameTime().GetFrameDeltaTime();
 	}
 
+	//落下中か？
+	if (m_pPlayer->GetFallFalg())
+		//落下中はゴール判定を取らない
+		return;
 
 	//自身とプレイヤーが衝突したら
 	if (IsHitPlayer())
