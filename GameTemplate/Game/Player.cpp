@@ -13,7 +13,7 @@ bool Player::Start()
 
 	//アニメーションクリップの初期化
 	//walkのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_Idle].Load("Assets/animData/walk.tka");
+	m_animationClips[enAnimClip_Idle].Load("Assets/animData/run.tka");
 	//ループ再生をtrueにする
 	m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
 	////fallのアニメーションクリップをロードする
