@@ -276,8 +276,8 @@ void StartDirecting::FallPlayer()
 	m_player->SetFallFlag(true);
 	Vector3 fallpos = m_player->GetPosition();
 	fallpos.y -= 1200.0f * GameTime().GetFrameDeltaTime();
-	if (fallpos.y <= 1800.0f) {
-		fallpos.y = 1800.0f;
+	if (fallpos.y <= 1660.0f) {
+		fallpos.y = 1660.0f;
 
 		if (m_fallTimer > 1.0f) {
 			m_player->SetFallFlag(false);

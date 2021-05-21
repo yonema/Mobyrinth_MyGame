@@ -8,6 +8,7 @@
 #include "SoundCue.h"
 #include "GameTime.h"
 #include "SoundCue.h"
+#include "effect/Effect.h"
 
 class GameCamera;
 class CReversibleObject;
@@ -452,6 +453,7 @@ private:	//データメンバ
 	AnimationClip m_goalAnimationClips[1];	//アニメーションクリップ。
 	float m_goalTimer = 0.0f;						//ゴールの時のタイマー
 	GameCamera* m_gameCamera = nullptr;				//ゲームカメラ
+	Effect* m_goalEffect = nullptr;					//ゴール時のエフェクト
 
 	/// <summary>
 	/// プレイヤーが右を向いているか左を向いているか
@@ -461,7 +463,7 @@ private:	//データメンバ
 		enLeft,		//左
 		enRight,	//右
 	};
-	int m_leftOrRight = enRight;			//キャラクターの左右の向き
+	int m_leftOrRight = enLeft;				//キャラクターの左右の向き
 
 	float m_padLStickXF = 0.0f;				//パッドの左スティックのX軸の入力情報
 

@@ -40,6 +40,17 @@ bool IStageBase::Start()
 	m_sky->SetScale(1000.0f);
 
 
+	//フォントレンダラーの生成
+	m_goalSR = NewGO<CSpriteRender>(10);
+	//初期化
+	m_goalSR->Init
+	("Assets/Image/Clear.DDS", 1024.0f, 512.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+	m_goalSR->SetPosition({ 0.0f,250.0f,0.0f });
+	m_goalSR->SetPostRenderFlag(true);
+
+	//無効化する
+	m_goalSR->Deactivate();
+
 
 	//キャパシティを表示するスプライトの生成と初期化
 	m_capacityUI = NewGO<CCapacityUI>(0);
@@ -556,6 +567,7 @@ IStageBase::~IStageBase()
 	DeleteGO(m_pause);
 	DeleteGO(m_sky);
 	DeleteGO(m_startDirecting);
+	DeleteGO(m_goalSR);
 
 	DeleteGO(m_bgmStage1);
 	DeleteGO(m_bgmStage2);
@@ -721,6 +733,8 @@ void IStageBase::Goal()
 	if (m_goalSEcount < 1) {				//一度だけ呼ぶ
 		m_goalSE->Play(false);			//m_goalSEをループ再生をオフで再生する。
 		m_goalSEcount++;
+		m_goalSR->Activate();
+
 	}
 	
 	m_player->GetPosition();
@@ -728,7 +742,7 @@ void IStageBase::Goal()
 	m_goalTimer += GameTime().GetFrameDeltaTime();
 
 	//一定時間たったら
-	if (m_goalTimer >= 6.0f)
+	if (m_goalTimer >= 4.0f)
 	{
 		//クリアする
 		Clear();
