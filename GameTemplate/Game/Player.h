@@ -476,6 +476,7 @@ private:	//データメンバ
 	CSoundCue* m_fallstartSE = nullptr;			//m_fallstartSEのサウンドキュー
 	int m_fallcount = 0;						//fallSEサポート
 	int m_falltimer = 0;						//fallSEサポート
+	CSoundCue* m_walkSE = nullptr;				//m_walkSEのサウンドキュー
 
 public://デバック用
 	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため
