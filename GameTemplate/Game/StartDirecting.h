@@ -13,26 +13,26 @@ public:
 	~StartDirecting();
 	void Update() override final;
 
-	void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>* const posMap);
-	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
+	//void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>* const posMap);
+	//void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
 
 private:
-	/// <summary>
-	/// ウェイポイントの更新処理
-	/// </summary>
-	void CheckWayPoint();
-	/// <summary>
-	/// 移動処理
-	/// </summary>
-	void Move();
-	/// <summary>
-	/// ステージに乗る
-	/// </summary>
-	void GetOnStage();
-	/// <summary>
-	/// モデルの回転処理
-	/// </summary>
-	void Rotation();
+	///// <summary>
+	///// ウェイポイントの更新処理
+	///// </summary>
+	//void CheckWayPoint();
+	///// <summary>
+	///// 移動処理
+	///// </summary>
+	//void Move();
+	///// <summary>
+	///// ステージに乗る
+	///// </summary>
+	//void GetOnStage();
+	///// <summary>
+	///// モデルの回転処理
+	///// </summary>
+	//void Rotation();
 	/// <summary>
 	/// プレイヤーの演出時の落下処理
 	/// </summary>
@@ -114,7 +114,7 @@ private:
 	int m_leftOrRight = enRight;	//キャラクターの左右の向き
 
 private:
-	bool m_checkStartDirecting = true; //ステージ開始時の演出をしているかどうか。
+	bool m_checkStartDirecting = true; //ステージ開始時の演出をしているかどうか。（GameCameraクラスで使用）
 	bool checkZoomIn = false; //カメラのズーム処理のフラグ
 	int countZoomIn = 0; //カメラのズーム中のカウント
 	Vector3 m_startPosition = g_vec3Zero; //演出に使用する注視点座標の開始位置
@@ -125,5 +125,21 @@ private:
 	float m_startTimer = 0;				//演出開始までのタイマー
 
 	float m_fallTimer = 0.0f;			//落下後から開始までの時間
+	
+	bool CheckAButton = false; //Aボタンを押したかの確認
+
+
+public:
+	bool GetCheckAButton()
+	{
+		return CheckAButton;
+	}
+
+	void SetCheckAButton(bool b)
+	{
+		CheckAButton = b;
+	}
+
+
 };
 
