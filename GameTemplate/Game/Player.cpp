@@ -1013,7 +1013,7 @@ void Player::GameMove()
 /// </summary>
 void Player::CapturedUFO()
 {
-	m_modelRender->PlayAnimation(enAnimClip_fall);
+	m_modelRender->PlayAnimation(enAnimClip_idle);
 
 	//ウェイポイントの更新処理
 	//CheckWayPoint();
