@@ -172,9 +172,15 @@ private:	//privateなメンバ関数
 
 	/// <summary>
 	/// プレイヤーに持たれるかどうか調べる関数
-	/// 持たれたらHeldPlayerへステート（状態）移行
+	/// 持たれたらLiftedPlayerへステート（状態）移行
 	/// </summary>
 	void CheckPlayer();
+
+	/// <summary>
+	/// プレイヤーに持ち上げられ中の状態の関数
+	/// 持ち上げ終わったらHeldPlayerへステート（状態）移行
+	/// </summary>
+	void LiftedPlayer();
 
 	/// <summary>
 	/// プレイヤーに持たれている状態の関数。
@@ -279,6 +285,7 @@ private:	//データメンバ
 	enum EnObjectState
 	{
 		enCheckPlayer,	//プレイヤーに持たれるかどうか調べる
+		enLiftedPlayer,	//プレイヤーに持ち上げられ中の状態
 		enHeldPlayer,	//プレイヤーに持たれている状態
 		enThrownDown,	//持っているオブジェクトを下に投げる関数
 		enCancel,		//持っているオブジェクトをその場に置く

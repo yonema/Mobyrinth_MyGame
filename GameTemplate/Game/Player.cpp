@@ -3,6 +3,7 @@
 #include "LightManager.h"
 #include "LevelObjectManager.h"
 #include "ReversibleObject.h"
+#include "GameCamera.h"
 
 //スタート関数
 bool Player::Start()
@@ -75,6 +76,17 @@ bool Player::Start()
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+
+	//ゴール用のモデルの生成と初期化
+	m_goalPlayerMR = NewGO<CModelRender>(0);
+	m_goalAnimationClips[0].Load("Assets/animData/goal.tka");
+	m_goalAnimationClips[0].SetLoopFlag(false);
+	m_goalPlayerMR->Init
+	("Assets/modelData/player2.tkm", D3D12_CULL_MODE_BACK, m_goalAnimationClips, 1, enModelUpAxisZ);
+	m_goalPlayerMR->Deactivate();
+
+	m_gameCamera = FindGO<GameCamera>("GameCamera");
+
 	//ウェイポイント上の座標にキャラの座標を入れておく
 	m_onWayPosition = m_position;
 
@@ -147,6 +159,7 @@ Player::~Player()
 {
 	//プレイヤーのモデルレンダラーの破棄
 	DeleteGO(m_modelRender);
+	DeleteGO(m_goalPlayerMR);
 
 	//デバック用
 	//後で消す
@@ -879,10 +892,21 @@ void Player::GameMove()
 		return;
 	}
 
+	//ゴール状態か？
+	if (m_isGoal)
+	{
+		//ゴール状態
+		Goal();
+
+		return;
+	}
+
 
 
 	//ゲームパッドの左スティックのX軸の入力情報を取得
 	m_padLStickXF = g_pad[0]->GetLStickXF();
+	if (m_throwing || m_lifting)
+		m_padLStickXF = 0.0f;
 
 	//左右の向きを設定
 	if (m_padLStickXF < 0.0f)
@@ -967,6 +991,8 @@ void Player::GameMove()
 /// </summary>
 void Player::CapturedUFO()
 {
+	m_modelRender->PlayAnimation(enAnimClip_fall);
+
 	//ウェイポイントの更新処理
 	//CheckWayPoint();
 	m_onWayPosition = m_position;
@@ -1008,6 +1034,43 @@ void Player::Fall()
 
 
 /// <summary>
+/// ゴールしている時の処理
+/// </summary>
+void Player::Goal()
+{
+	if (!m_goalPlayerMR->IsActive())
+	{
+		m_gameCamera->SetLookPlayerFlag(false);
+		m_goalPlayerMR->Activate();
+		m_modelRender->Deactivate();
+		m_goalPlayerMR->SetPosition(m_position);
+		m_goalPlayerMR->SetRotation(m_finalWPRot);
+		m_goalTimer = 0.0f;
+	}
+
+	const float cameraMoveTime = 0.5f;
+
+	if (m_goalTimer < cameraMoveTime)
+	{
+		
+		Vector3 cameraToPlayerVec = m_position - m_gameCamera->GetPosition();
+		cameraToPlayerVec.Normalize();
+		cameraToPlayerVec.Scale(20.0f);
+		m_gameCamera->SetPosition(m_gameCamera->GetPosition() + cameraToPlayerVec);
+		m_goalTimer += GameTime().GetFrameDeltaTime();
+	}
+	else
+	{
+		m_goalPlayerMR->PlayAnimation(0);
+
+	}
+
+
+
+}
+
+
+/// <summary>
 ///	アニメーションを制御する
 /// </summary>
 void Player::AnimationController()
@@ -1021,17 +1084,28 @@ void Player::AnimationController()
 	}
 	else if (m_lifting)
 	{
+
+		if (m_animState == enAnimClip_carry)
+		{
+			//アニメーションが一定割合再生したら
+			if (m_modelRender->GetInterpolateTime() >= 0.5f)
+				//持ち上げ中ではなくする
+				m_lifting = false;
+		}
+
 		//持ち上げ中
 		//持ち上げ中のアニメーション
 		m_animState = enAnimClip_carry;
-
-		//アニメーションが一定割合再生したら
-		if (m_modelRender->GetInterpolateTime() >= 1.0f)
-			//持ち上げ中ではなくする
-			m_lifting = false;
 	}
 	else if (m_throwing)
 	{
+		if (m_animState == enAnimClip_throw_l || m_animState == enAnimClip_throw_r)
+		{
+			//アニメーションが一定割合再生したら
+			if (m_modelRender->GetInterpolateTime() >= 0.8f)
+				//投げ中ではなくする
+				m_throwing = false;
+		}
 		//投げ中
 		//右向きか左向きか？
 		if (m_leftOrRight == enLeft)
@@ -1043,10 +1117,7 @@ void Player::AnimationController()
 			//右向きの時の投げるアニメーション
 			m_animState = enAnimClip_throw_r;
 
-		//アニメーションが一定割合再生したら
-		if (m_modelRender->GetInterpolateTime() >= 0.8f)
-			//投げ中ではなくする
-			m_throwing = false;
+
 	}
 	else if (m_isDush)
 	{

@@ -291,7 +291,7 @@ void CCapacityUI::Increased(const int frontOrBackSide)
 		DefaultParam(frontOrBackSide);
 
 		//フォントのカラーを増えた時のカラーにする
-		m_RONumFR[frontOrBackSide]->SetColor({ 2.0f,0.0f,0.0f,1.0f });
+		m_RONumFR[frontOrBackSide]->SetColor({ 1.0f,1.0f,0.0f,1.0f });
 		
 	}
 
@@ -496,7 +496,7 @@ void CCapacityUI::Over(const int frontOrBackSide)
 		DefaultParam(frontOrBackSide);
 
 		//フォントのカラーをオーバー時のカラーにする
-		m_RONumFR[frontOrBackSide]->SetColor({ 1.0f,1.0f,0.0f,1.0f });
+		m_RONumFR[frontOrBackSide]->SetColor({ 2.0f,0.0f,0.0f,1.0f });
 
 		m_capacity_over->Play(false);		//再生
 		
