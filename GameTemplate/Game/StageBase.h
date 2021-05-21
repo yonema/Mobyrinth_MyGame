@@ -229,6 +229,7 @@ private:	//データメンバ
 	int m_highestClearStageNum = -1;				//一番高いクリアステージ
 	int m_stageNum = -1;							//ステージの番号
 	
+	CSpriteRender* m_goalSR = nullptr;				//ゴールのスプライト
 
 };
 

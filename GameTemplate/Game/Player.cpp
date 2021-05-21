@@ -79,6 +79,9 @@ bool Player::Start()
 	("Assets/modelData/player2.tkm", D3D12_CULL_MODE_BACK, m_goalAnimationClips, 1, enModelUpAxisZ);
 	m_goalPlayerMR->Deactivate();
 
+	m_goalEffect = NewGO<Effect>(0);
+	m_goalEffect->Init(u"Assets/effect2/goal.efk");
+
 	m_gameCamera = FindGO<GameCamera>("GameCamera");
 
 	//ウェイポイント上の座標にキャラの座標を入れておく
@@ -168,6 +171,7 @@ Player::~Player()
 	//プレイヤーのモデルレンダラーの破棄
 	DeleteGO(m_modelRender);
 	DeleteGO(m_goalPlayerMR);
+	DeleteGO(m_goalEffect);
 
 	DeleteGO(m_walkSE);
 
@@ -851,6 +855,7 @@ void Player::Update()
 void Player::TitleMove()
 {
 	m_padLStickXF = 1.0f;
+	m_leftOrRight = enRight;
 	m_modelRender->PlayAnimation(enAnimClip_walk);
 	//ウェイポイントの更新処理
 	CheckWayPoint();
@@ -1060,6 +1065,11 @@ void Player::Goal()
 		m_modelRender->Deactivate();
 		m_goalPlayerMR->SetPosition(m_position);
 		m_goalPlayerMR->SetRotation(m_finalWPRot);
+		m_goalEffect->SetPosition(m_position);
+		m_goalEffect->SetRotation(m_finalWPRot);
+		const float effecScale = 150.0f;
+		m_goalEffect->SetScale({ effecScale,effecScale,effecScale });
+		m_goalEffect->Play();
 		m_goalTimer = 0.0f;
 	}
 
@@ -1067,11 +1077,16 @@ void Player::Goal()
 
 	if (m_goalTimer < cameraMoveTime)
 	{
-		
+		Vector3 targetUp = m_upVec;
+		const float upVecLen = 200.0f;
+		const float timeScale = m_goalTimer / cameraMoveTime;
+		targetUp.Scale(upVecLen * timeScale);
 		Vector3 cameraToPlayerVec = m_position - m_gameCamera->GetPosition();
 		cameraToPlayerVec.Normalize();
-		cameraToPlayerVec.Scale(20.0f);
+		cameraToPlayerVec.Scale(100.0f);
+		cameraToPlayerVec.Scale(GameTime().GetFrameDeltaTime());
 		m_gameCamera->SetPosition(m_gameCamera->GetPosition() + cameraToPlayerVec);
+		m_gameCamera->SetTarget(m_position + targetUp);
 		m_goalTimer += GameTime().GetFrameDeltaTime();
 	}
 	else
