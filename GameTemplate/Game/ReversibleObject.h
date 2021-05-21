@@ -144,7 +144,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 持ち上げた時の、上に持ち上げるベクトルの長さを設定
 	/// </summary>
 	/// <param name="heldUpLen"></param>
-	void SetHeldUpLen(const float heldUpLen)
+	static void SetHeldUpLen(const float heldUpLen)
 	{
 		m_heldUpLen = heldUpLen;
 	}
@@ -165,7 +165,7 @@ public:		//ここのメンバ関数を主に使う
 	int GetEnCheckPlayer()
 	{
 		return enCheckPlayer;
-	}
+	};
 
 
 private:	//privateなメンバ関数
@@ -266,7 +266,7 @@ private:	//データメンバ
 	float m_throwCounter = 0.0f;						//投げている時のカウンター
 	Quaternion m_throwRot = g_quatIdentity;		//下に投げるときの回転
 
-	float m_heldUpLen = 100.0f;					//持ち上げた時の、上に持ち上げるベクトルの長さ
+	static float m_heldUpLen;					//持ち上げた時の、上に持ち上げるベクトルの長さ
 	float m_timer = 0.0f;						//タイマー
 	Vector3 m_addPosition = g_vec3Zero;			//ポジションに加えるベクトル
 	bool m_virticalRepelledFlag = false;		//盾に弾かれるか？

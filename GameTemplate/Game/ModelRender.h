@@ -1,6 +1,7 @@
 #pragma once
 #include "LightManager.h"
 #include "ShadowModel.h"
+#include "GameTime.h"
 
 /// <summary>
 /// モデル描画クラス
@@ -146,6 +147,17 @@ public:		//ここのメンバ関数を主に使う。
 	{
 		return m_model;
 	}
+
+	/// <summary>
+	/// 多分、アニメーションがどのくらい再生したのか、
+	/// 再生率を戻す。0.0f～1.0fの範囲で、1.0fで最後まで再生している。
+	/// </summary>
+	/// <returns>再生率</returns>
+	const float GetInterpolateTime() const
+	{
+		return m_animationPtr->GetInterpolateTime();
+	}
+
 private:	//privateなメンバ関数
 
 	/// <summary>

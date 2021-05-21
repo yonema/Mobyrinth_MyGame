@@ -14,7 +14,7 @@ bool CUFOLandingPoint::StartSub()
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
 
 	//自己発光色を設定
-	SetEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
+	//SetEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
 
 	//OBBのパラメーターを設定する
 	GetOBB().SetDirectionLength({ 2000.0f,750.0f,500.0f });

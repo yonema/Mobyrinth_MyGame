@@ -141,6 +141,7 @@ StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 
 Texture2D<float4> g_shadowMap : register(t10);
 Texture2D<float4> g_depthTexture : register(t11);	//深度テクスチャ
+TextureCube<float4> g_skyCubeMap : register(t12);
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ///////////////////////////////////////////
@@ -152,8 +153,8 @@ float SpcFresnel(float f0, float u);
 float CookTrranceSpecular(float3 L, float3 V, float3 N, float3 N2, float metaric);
 float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V);
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin);
-float4 SpecialColor(float4 albedoColor);
-bool IsOnOutLine(float4 posInProj);
+float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal);
+bool IsOnOutLine(float4 posInProj,float thickness);
 float SimplexNoise(float3 x);
 ////////////////////////////////////////////////
 // 関数定義。
@@ -281,7 +282,7 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
 /// <summary>
 //	輪郭線を描画する
 /// </summary>
-bool IsOnOutLine(float4 posInProj)
+bool IsOnOutLine(float4 posInProj, float thickness)
 {
 	if (!outLineFlag)
 		return false;
@@ -290,7 +291,7 @@ bool IsOnOutLine(float4 posInProj)
 	// 近傍8テクセルの深度値を計算して、エッジを抽出する
 	float2 uv = posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
 
-	float thickness = 4.0f;
+	//float thickness = 2.0f;
 	float2 uvOffset[8] =
 	{
 		float2(	0.0f				,  thickness / 720.0f),
@@ -426,6 +427,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	//UV
 	psIn.uv = vsIn.uv;
 
+
 	for (int i = 0; i < numShadow; i++)
 	{
 		//ライトビュースクリーン空間の座標を計算する。
@@ -447,6 +449,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
+	float3 viewNormal = normalize(mul(mView, psIn.normal));
 	psIn.posInProj.xy /= psIn.posInProj.w;
 
 	//法線を計算。
@@ -455,9 +458,17 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//アルベドカラー、スペキュラカラー、金属度をサンプリングする。
 	//アルベドカラー(拡散反射光)。
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
+
+	bool ditherFlag = false;
+	if (mulColor.w < 1.0f)
+		ditherFlag = true;
+
+	float thickness =2.0f;
+	if (ditherFlag)
+		thickness = 4.0f;
 	
 	//輪郭を描画するか？
-	if (IsOnOutLine(psIn.posInProj))
+	if (IsOnOutLine(psIn.posInProj, thickness))
 	{
 		
 		//区切り
@@ -481,16 +492,23 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 
 		//}
+		if (ditherFlag)
+		{
+			int x = (int)fmod(abs(psIn.pos.x), 4.0f);
+			int y = (int)fmod(abs(psIn.pos.y), 4.0f);
 
-		int x = (int)fmod(abs(psIn.pos.x), 4.0f);
-		int y = (int)fmod(abs(psIn.pos.y), 4.0f);
+			int dither = pattern[x][y];
 
-		int dither = pattern[x][y];
-
-		if (dither >= 50)
+			if (dither >= 30)
+				return float4(0.0f, 0.0f, 0.0f, 1.0f);
+		}
+		else
 			return float4(0.0f, 0.0f, 0.0f, 1.0f);
+
+
 	}
 
+	return SpecialColor(albedoColor, viewNormal, normal);
 
 	//スペキュラカラー(鏡面反射光)。
 	float3 specColor = g_specularMap.SampleLevel(g_sampler, psIn.uv, 0).rgb;
@@ -686,7 +704,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	return finalColor;
 }
 
-float4 SpecialColor(float4 albedoColor)
+float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal)
 {
 
 
@@ -699,16 +717,13 @@ float4 SpecialColor(float4 albedoColor)
 	lig.xyz += emissionColor.xyz;
 	lig *= mulColor;
 
-	if (stealthFlag == 1)
-	{
-		// step-5 シンプレックスノイズを利用して、UV座標をずらしてシーンテクスチャを貼り付ける
+	float4 color = g_skyCubeMap.Sample(g_sampler, normal * -1.0f);
 
-		//float2 uv = psIn.posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
-
-		//float uOffset = SimplexNoise(float3(uv, 0.0f) * 256.0f) * 0.02f;
-
-		//float4 stealth = g_sceneTexture.Sample(g_sampler, uv + uOffset);
-	}
+	//リム
+	//輪郭を光らせる
+	float limPower = pow( 1.0f - abs(viewNormal.z), 5.0f );
+	lig.xyz += color * limPower * 0.8f;
+	
 
 	return lig;
 

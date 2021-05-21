@@ -11,25 +11,63 @@ bool Player::Start()
 	//お試しプレイヤー
 	/////////////////////////////////////////////////////////
 
+	CReversibleObject::SetHeldUpLen(330.0f);
+
+
 	//アニメーションクリップの初期化
-	//walkのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_Idle].Load("Assets/animData/run.tka");
+	//idleのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_idle].Load("Assets/animData/idle.tka");
 	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_Idle].SetLoopFlag(true);
-	////fallのアニメーションクリップをロードする
-	//m_animationClips[enAnimClip_Run].Load("Assets/animData/fall.tka");
-	////ループ再生をfalseにする
-	//m_animationClips[enAnimClip_Run].SetLoopFlag(false);
+	m_animationClips[enAnimClip_idle].SetLoopFlag(true);
+	//walkのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_walk].Load("Assets/animData/walk.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_walk].SetLoopFlag(true);
+	//runのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_run].Load("Assets/animData/run.tka");
+	//ループ再生をfalseにする
+	m_animationClips[enAnimClip_run].SetLoopFlag(true);
+	//carryのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_carry].Load("Assets/animData/carry.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_carry].SetLoopFlag(false);
+	//carryIdleのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_carryIdle].Load("Assets/animData/carryidle.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_carryIdle].SetLoopFlag(true);
+	//carryWalkのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_carryWalk].Load("Assets/animData/carrywalk.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_carryWalk].SetLoopFlag(true);
+	//carryRunのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_carryRun].Load("Assets/animData/carryrun.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_carryRun].SetLoopFlag(true);
+	//throwのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_throw_l].Load("Assets/animData/throw.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_throw_l].SetLoopFlag(false);
+	//throwのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_throw_r].Load("Assets/animData/throw.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_throw_r].SetLoopFlag(false);
+	//fallのアニメーションクリップをロードする
+	m_animationClips[enAnimClip_fall].Load("Assets/animData/fall.tka");
+	//ループ再生をtrueにする
+	m_animationClips[enAnimClip_fall].SetLoopFlag(false);
+
 
 	//モデルレンダラーを生成する
 	m_modelRender = NewGO<CModelRender>(0);
 	//モデルレンダラーの初期化をする
 	//この時にアニメーションクリップを一緒に引数に渡しておく
 	m_modelRender->Init
-		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips,1,enModelUpAxisZ);
+		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips, enAnimClip_num,enModelUpAxisZ);
 		/*("Assets/modelData/player.tkm");*/
 	m_modelRender->SetShadowCasterFlag(true);
 	m_modelRender->SetShadowReceiverFlag(false);
+	m_modelRender->PlayAnimation(enAnimClip_idle);
+	//m_modelRender->SetDrawOutLineFlag(true);
 	/////////////////////////////////////////////////////////////
 	//ここまで
 	/////////////////////////////////////////////////////////////
@@ -398,7 +436,10 @@ void Player::Move()
 		//ゲームパッドのR1ボタンの入力情報を取得(ダッシュ状態)
 		if (g_pad[0]->IsPress(enButtonRB1) == true) {
 			moveLen = 3000.0f;
+			m_isDush = true;
 		}
+		else
+			m_isDush = false;
 
 
 		if (m_padLStickXF < 0.0f)
@@ -785,7 +826,7 @@ void Player::Update()
 void Player::TitleMove()
 {
 	m_padLStickXF = 1.0f;
-
+	m_modelRender->PlayAnimation(enAnimClip_walk);
 	//ウェイポイントの更新処理
 	CheckWayPoint();
 	//移動処理
@@ -822,6 +863,7 @@ void Player::GameMove()
 	}
 
 	if (m_operationFlag == false) {
+		m_modelRender->PlayAnimation(enAnimClip_idle);
 		return;
 	}
 
@@ -867,7 +909,8 @@ void Player::GameMove()
 		//スタン中のステージの上に乗る処理
 		StunGetOnStage();
 
-
+	//アニメーションの制御
+	AnimationController();
 
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
@@ -940,12 +983,20 @@ void Player::CapturedUFO()
 	UpdateLightData();
 }
 
+/// <summary>
+/// スタートの落ちるときの処理
+/// </summary>
 void Player::Fall()
 {
+	m_modelRender->PlayAnimation(enAnimClip_fall);
 	//Rotation();
 	//モデルの場所と回転を設定
 	m_myCharaCon.SetPosition(m_position);
 	m_onWayPosition = m_position;
+	Quaternion qRot;
+	qRot.SetRotationDegY(90.0f);
+	m_rotation = g_quatIdentity;
+	m_rotation.Multiply(qRot);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_finalWPRot = g_quatIdentity;
@@ -953,6 +1004,98 @@ void Player::Fall()
 		m_fallstartSE->Play(false);		//fallstartSEをループ再生をオフで再生する。
 		m_fallcount++;
 	}
+}
+
+
+/// <summary>
+///	アニメーションを制御する
+/// </summary>
+void Player::AnimationController()
+{
+	//アニメーションを選択
+	if (m_stunFlag)
+	{
+		//スタン中
+		//アイドル状態のアニメーション
+		m_animState = enAnimClip_idle;
+	}
+	else if (m_lifting)
+	{
+		//持ち上げ中
+		//持ち上げ中のアニメーション
+		m_animState = enAnimClip_carry;
+
+		//アニメーションが一定割合再生したら
+		if (m_modelRender->GetInterpolateTime() >= 1.0f)
+			//持ち上げ中ではなくする
+			m_lifting = false;
+	}
+	else if (m_throwing)
+	{
+		//投げ中
+		//右向きか左向きか？
+		if (m_leftOrRight == enLeft)
+			//左向き
+			//左向きの時の投げるアニメーション
+			m_animState = enAnimClip_throw_l;
+		else
+			//右向き
+			//右向きの時の投げるアニメーション
+			m_animState = enAnimClip_throw_r;
+
+		//アニメーションが一定割合再生したら
+		if (m_modelRender->GetInterpolateTime() >= 0.8f)
+			//投げ中ではなくする
+			m_throwing = false;
+	}
+	else if (m_isDush)
+	{
+		//ダッシュ中
+		//走るアニメーション
+		m_animState = enAnimClip_run;
+	}
+	else if (m_padLStickXF != 0.0f)
+	{
+		//歩きで移動中
+		//歩きのアニメーション
+		m_animState = enAnimClip_walk;
+	}
+	else
+	{
+		//どれでもない時
+		//アイドル状態のアニメーション
+		m_animState = enAnimClip_idle;
+	}
+
+
+	//何か物を持っている状態か？	//持っている場合は上書き
+	if (m_holdObject)
+	{
+		//持っている
+
+		//持っている状態でのアニメーションを割り振る
+		switch (m_animState)
+		{
+		case enAnimClip_idle:
+			//アイドル状態の時は、運んでいる時のアイドル状態のアニメーション
+			m_animState = enAnimClip_carryIdle;
+			break;
+		case enAnimClip_walk:
+			//歩いている時は、運んでいる時の歩いているアニメーション
+			m_animState = enAnimClip_carryWalk;
+			break;
+		case enAnimClip_run:
+			//走っている時は、運んでいる時の走っているアニメーション
+			m_animState = enAnimClip_carryRun;
+			break;
+		default:
+			//どれでもない時は、そのままのアニメーション
+			break;
+		}
+	}
+
+	//選択されたアニメーションを流す
+	m_modelRender->PlayAnimation(m_animState);
 }
 
 

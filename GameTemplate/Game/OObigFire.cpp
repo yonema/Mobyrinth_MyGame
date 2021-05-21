@@ -70,6 +70,11 @@ OObigFire::~OObigFire()
 void OObigFire::UpdateSub()
 {
 	Burn();
+
+	if (GetFlagIsHit())
+		m_pointLight->SetColor({ 500.0f,1.0f,1.0f,1.0f });
+	else
+		m_pointLight->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 }
 
 //ƒ_ƒ[ƒW‚ğó‚¯‚é
