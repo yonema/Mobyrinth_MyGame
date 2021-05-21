@@ -450,7 +450,7 @@ private:	//データメンバ
 	Quaternion m_capturedRotation = m_rotation;		//カメラに渡す回転
 	Vector3 m_capturedPosition = m_position;			//カメラに渡す座標
 	CModelRender* m_goalPlayerMR = nullptr;			//ゴール時のプレイヤーのモデル
-	AnimationClip m_goalAnimationClips[1];	//アニメーションクリップ。
+	AnimationClip m_goalAnimationClips[2];	//アニメーションクリップ。
 	float m_goalTimer = 0.0f;						//ゴールの時のタイマー
 	GameCamera* m_gameCamera = nullptr;				//ゲームカメラ
 	Effect* m_goalEffect = nullptr;					//ゴール時のエフェクト

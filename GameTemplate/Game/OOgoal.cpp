@@ -16,6 +16,15 @@ bool OOgoal::StartSub()
 	//無効化する
 	//m_spriteRender->Deactivate();
 
+	m_effect = NewGO<Effect>(0);
+	m_effect->Init(u"Assets/effect/wing.efk");
+	m_effect->SetPosition(m_position);
+	m_effect->SetRotation(m_rotation);
+	const float scale = 50.0f;
+	m_effect->SetScale({ scale ,scale ,scale });
+	m_effect->Play();
+
+
 	//OBBWorldに自身のOBBの登録を消去させる
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
 
@@ -33,9 +42,29 @@ void OOgoal::UpdateSub()
 {
 	//ヒットフラグが折られているか？
 	if (!GetFlagIsHit())
+	{
 		//折られている
-		//何もせずにreturn
+		
+		m_effect->Deactivate();
 		return;
+	}
+
+	if (!m_effect->IsActive())
+	{
+		m_effect->Activate();
+	}
+	const float m_rePlayTime = 1.5;
+	if (m_timer >= m_rePlayTime)
+	{
+		//m_effect->Play();
+
+		m_timer = 0.0f;
+	}
+	else
+	{
+		m_timer += GameTime().GetFrameDeltaTime();
+	}
+
 
 	//自身とプレイヤーが衝突したら
 	if (IsHitPlayer())
@@ -46,8 +75,8 @@ void OOgoal::UpdateSub()
 		//m_spriteRender->Activate();
 		//プレイヤーをゴール状態にする
 		m_pPlayer->SetGoal(true);
-		//自身のインスタンスを破棄
-		DeleteGO(this);
+		//モデルを見えなくする
+		GetModelRender()->Deactivate();
 	}
 
 }

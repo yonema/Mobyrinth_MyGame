@@ -73,10 +73,12 @@ bool Player::Start()
 
 	//ゴール用のモデルの生成と初期化
 	m_goalPlayerMR = NewGO<CModelRender>(0);
-	m_goalAnimationClips[0].Load("Assets/animData/goal.tka");
-	m_goalAnimationClips[0].SetLoopFlag(false);
+	m_goalAnimationClips[0].Load("Assets/animData/goalidle.tka");
+	m_goalAnimationClips[0].SetLoopFlag(true);
+	m_goalAnimationClips[1].Load("Assets/animData/goal.tka");
+	m_goalAnimationClips[1].SetLoopFlag(false);
 	m_goalPlayerMR->Init
-	("Assets/modelData/player2.tkm", D3D12_CULL_MODE_BACK, m_goalAnimationClips, 1, enModelUpAxisZ);
+	("Assets/modelData/player2.tkm", D3D12_CULL_MODE_BACK, m_goalAnimationClips, 2, enModelUpAxisZ);
 	m_goalPlayerMR->Deactivate();
 
 	m_goalEffect = NewGO<Effect>(0);
@@ -1091,7 +1093,7 @@ void Player::Goal()
 	}
 	else
 	{
-		m_goalPlayerMR->PlayAnimation(0);
+		m_goalPlayerMR->PlayAnimation(1);
 
 	}
 
