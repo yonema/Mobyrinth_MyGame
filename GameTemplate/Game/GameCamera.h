@@ -51,6 +51,15 @@ public:	//インライン関数
 	}
 
 	/// <summary>
+	/// カメラの視点を取得する
+	/// </summary>
+	/// <returns>カメラの視点</returns>
+	const Vector3 GetPosition() const
+	{
+		return g_camera3D->GetPosition();
+	}
+
+	/// <summary>
 	/// タイトルモードにする
 	/// </summary>
 	void TitleMode()

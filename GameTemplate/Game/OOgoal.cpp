@@ -44,6 +44,10 @@ void OOgoal::UpdateSub()
 		m_isGoal = true;
 		//フォントレンダラーを有効化する
 		m_spriteRender->Activate();
+		//プレイヤーをゴール状態にする
+		m_pPlayer->SetGoal(true);
+		//自身のインスタンスを破棄
+		DeleteGO(this);
 	}
 
 }

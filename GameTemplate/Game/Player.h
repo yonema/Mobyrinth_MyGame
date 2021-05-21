@@ -9,6 +9,7 @@
 #include "GameTime.h"
 #include "SoundCue.h"
 
+class GameCamera;
 class CReversibleObject;
 
 
@@ -319,6 +320,15 @@ public://publicなメンバ関数
 		m_lifting = lifting;
 	}
 
+	/// <summary>
+	/// ゴールしたか？を設定
+	/// </summary>
+	/// <param name="isGoal">ゴールしたか？</param>
+	void SetGoal(const bool isGoal)
+	{
+		m_isGoal = isGoal;
+	}
+
 
 private://privateなメンバ関数
 
@@ -391,6 +401,11 @@ private://privateなメンバ関数
 	void Fall();
 
 	/// <summary>
+	/// ゴールしている時の処理
+	/// </summary>
+	void Goal();
+
+	/// <summary>
 	///	アニメーションを制御する
 	/// </summary>
 	void AnimationController();
@@ -423,6 +438,7 @@ private:	//データメンバ
 	bool m_isDush = false;							//走り状態か？
 	bool m_throwing = false;						//投げ中か？
 	bool m_lifting = false;							//持ち上げ中か？
+	bool m_isGoal = false;							//ゴールしたか？
 	Vector3 m_moveSpeed = g_vec3Zero;				//キャラクターの移動スピード
 	Vector3 m_position = g_vec3Zero;				//キャラクターの座標
 	Vector3 m_onWayPosition = g_vec3Zero;			//道の上の座標
@@ -432,6 +448,11 @@ private:	//データメンバ
 	CReversibleObject* m_reversibleObject = nullptr;	//持っている反転オブジェクトのポインタ
 	Quaternion m_capturedRotation = m_rotation;		//カメラに渡す回転
 	Vector3 m_capturedPosition = m_position;			//カメラに渡す座標
+	CModelRender* m_goalPlayerMR = nullptr;			//ゴール時のプレイヤーのモデル
+	AnimationClip m_goalAnimationClips[1];	//アニメーションクリップ。
+	float m_goalTimer = 0.0f;						//ゴールの時のタイマー
+	GameCamera* m_gameCamera = nullptr;				//ゲームカメラ
+
 	/// <summary>
 	/// プレイヤーが右を向いているか左を向いているか
 	/// </summary>
