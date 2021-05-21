@@ -894,9 +894,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Assets\shader\myModel.fx">
-      <Filter>Assets\shader</Filter>
-    </FxCompile>
     <FxCompile Include="Assets\shader\sprite.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
@@ -922,6 +919,12 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\ZPrepass.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\toonShader.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\model2.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

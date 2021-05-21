@@ -7,13 +7,53 @@ bool OOoneway::StartSub()
 	//モデルの初期化とタイプの設定
 	Init("Assets/modelData/oneway.tkm", enOneway);
 
+	GetModelRender()->Deactivate();
+
 	//通れる時のモデルの生成と初期化
 	m_canPassMR = NewGO<CModelRender>(0);
 	m_canPassMR->Init("Assets/modelData/oneway2.tkm", D3D12_CULL_MODE_NONE);
 	m_canPassMR->SetPosition(m_position);
 	m_canPassMR->SetRotation(m_rotation);
 	m_canPassMR->SetScale(m_scale);
+	m_canPassMR->SetDrawOutLineFlag(true);
 	m_canPassMR->Deactivate();
+
+	
+	//通れる時のモデルの生成と初期化
+	m_rightCanPassMR = NewGO<CModelRender>(0);
+	m_rightCanPassMR->Init("Assets/modelData/oneway2_r.tkm", D3D12_CULL_MODE_NONE);
+	m_rightCanPassMR->SetPosition(m_position);
+	m_rightCanPassMR->SetRotation(m_rotation);
+	m_rightCanPassMR->SetScale(m_scale);
+	m_rightCanPassMR->SetDrawOutLineFlag(true);
+	m_rightCanPassMR->Deactivate();
+
+	//通れる時のモデルの生成と初期化
+	m_rightMR = NewGO<CModelRender>(0);
+	m_rightMR->Init("Assets/modelData/oneway_r.tkm", D3D12_CULL_MODE_NONE);
+	m_rightMR->SetPosition(m_position);
+	m_rightMR->SetRotation(m_rotation);
+	m_rightMR->SetScale(m_scale);
+	m_rightMR->SetDrawOutLineFlag(true);
+	m_rightMR->Deactivate();
+
+	//左向きか？
+	if (m_leftOrRight == enLeft)
+	{
+		//左向き
+
+		//左向き（通常の向き）の通れないモデルを有効化
+		GetModelRender()->Activate();
+	}
+	else
+	{
+		//右向き
+
+		//右向き（反対向き）の通れないモデルを有効化
+		m_rightMR->Activate();
+
+	}
+	
 
 	//OBBのサイズを設定
 	Vector3 obbSize;
@@ -77,6 +117,8 @@ OOoneway::~OOoneway()
 {
 
 	DeleteGO(m_canPassMR);
+	DeleteGO(m_rightCanPassMR);
+	DeleteGO(m_rightMR);
 	//両サイドのOBBをOBBワールドから解除する
 	for (int i = 0; i < enLeftAndRightNum; i++)
 	{
@@ -99,16 +141,73 @@ void OOoneway::UpdateSub()
 		//向いている時は
 		//通れる
 		m_sideOBB[m_leftOrRight].SetExceptionFlag(true);
+
+		//左向きか？
+		if (m_leftOrRight == enLeft)
+		{
+			//左向き
+
+			//左向きの通れるモデルを有効化
+			m_canPassMR->Activate();
+			//m_canPassMR->SetDrawOutLineFlag(true);
+			//右向きの通れるモデルを無効化
+			m_rightCanPassMR->Deactivate();
+			//m_rightCanPassMR->SetDrawOutLineFlag(false);
+		}
+		else
+		{
+			//右向き
+
+			//左向きの通れるモデルを無効化
+			m_canPassMR->Deactivate();
+			//m_canPassMR->SetDrawOutLineFlag(false);
+			//右向きの通れるモデルを有効化
+			m_rightCanPassMR->Activate();
+			//m_rightCanPassMR->SetDrawOutLineFlag(true);
+		}
+
+		//通れないモデルを無効化
 		GetModelRender()->Deactivate();
-		m_canPassMR->Activate();
+		//GetModelRender()->SetDrawOutLineFlag(false);
+		m_rightMR->Deactivate();
+		//m_rightMR->SetDrawOutLineFlag(false);
+
 	}
 	else
 	{
 		//向いていない時は
 		//通れない
 		m_sideOBB[m_leftOrRight].SetExceptionFlag(false);
-		GetModelRender()->Activate();
+
+		//左向きか？
+		if (m_leftOrRight == enLeft)
+		{
+			//左向き
+
+			//左向きの通れないモデルを有効化
+			GetModelRender()->Activate();
+			//GetModelRender()->SetDrawOutLineFlag(true);
+			//右向きの通れないモデルを無効化
+			m_rightMR->Deactivate();
+			//m_rightMR->SetDrawOutLineFlag(false);
+		}
+		else
+		{
+			//右向き
+
+			//左向きの通れないモデルを無効化
+			GetModelRender()->Deactivate();
+			//GetModelRender()->SetDrawOutLineFlag(false);
+			//右向きの通れないモデルを有効化
+			m_rightMR->Activate();
+			//m_rightMR->SetDrawOutLineFlag(true);
+		}
+
+		//通れるモデルを無効化
 		m_canPassMR->Deactivate();
+		//m_canPassMR->SetDrawOutLineFlag(false);
+		m_rightCanPassMR->Deactivate();
+		//m_rightCanPassMR->SetDrawOutLineFlag(false);
 	}
 
 
@@ -118,5 +217,16 @@ void OOoneway::UpdateSub()
 		m_canPassMR->SetRotation(m_rotation);
 		m_canPassMR->SetScale(m_scale);
 	}
-
+	if (m_rightCanPassMR->IsActive())
+	{
+		m_rightCanPassMR->SetPosition(m_position);
+		m_rightCanPassMR->SetRotation(m_rotation);
+		m_rightCanPassMR->SetScale(m_scale);
+	}
+	if (m_rightMR->IsActive())
+	{
+		m_rightMR->SetPosition(m_position);
+		m_rightMR->SetRotation(m_rotation);
+		m_rightMR->SetScale(m_scale);
+	}
 }

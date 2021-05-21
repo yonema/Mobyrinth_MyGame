@@ -147,6 +147,7 @@ public://publicなメンバ関数
 	void SetHoldObject(const bool holdFlag, CReversibleObject* reversibeObject = nullptr)
 	{
 		m_holdObject = holdFlag;
+		m_lifting = holdFlag;
 		if (m_holdObject)
 			m_reversibleObject = reversibeObject;
 		else
@@ -282,6 +283,10 @@ public://publicなメンバ関数
 		return m_capturedUFOFlag;
 	}
 
+	/// <summary>
+	/// 落ちているか？を設定
+	/// </summary>
+	/// <param name="fallFlag">落ちているか？</param>
 	void SetFallFlag(const bool fallFlag)
 	{
 		m_fallFlag = fallFlag;
@@ -294,6 +299,24 @@ public://publicなメンバ関数
 	COBB& GetOBB()
 	{
 		return m_myCharaCon.GetOBB();
+	}
+
+	/// <summary>
+	/// 投げているか？を設定
+	/// </summary>
+	/// <param name="throwing">投げているか？</param>
+	void SetThrowing(const bool throwing)
+	{
+		m_throwing = throwing;
+	}
+
+	/// <summary>
+	/// 持ち上げ中か？を設定
+	/// </summary>
+	/// <param name="lifting">持ち上げ中か？</param>
+	void SetLifting(const bool lifting) 
+	{
+		m_lifting = lifting;
 	}
 
 
@@ -362,8 +385,15 @@ private://privateなメンバ関数
 	/// </summary>
 	void CapturedUFO();
 
-
+	/// <summary>
+	/// スタートの落ちるときの処理
+	/// </summary>
 	void Fall();
+
+	/// <summary>
+	///	アニメーションを制御する
+	/// </summary>
+	void AnimationController();
 
 
 private:	//データメンバ
@@ -372,13 +402,24 @@ private:	//データメンバ
 	/// アニメーションクリップ。
 	/// </summary>
 	enum EnAnimationClip {
-		enAnimClip_Idle,	//歩きのアニメーションクリップ
-		enAnimClip_Run,		//走りのアニメーションクリップ
-		enAnimClip_Num,		//アニメーションクリップの総数
+		enAnimClip_idle,		//アイドル状態のアニメーションクリップ
+		enAnimClip_walk,		//歩きのアニメーションクリップ
+		enAnimClip_run,			//走りのアニメーションクリップ
+		enAnimClip_carry,		//持ち上げるアニメーションクリップ
+		enAnimClip_carryIdle,	//持っているアイドル状態のアニメーションクリップ
+		enAnimClip_carryWalk,	//持ちながら歩くアニメーションクリップ
+		enAnimClip_carryRun,	//持ちながら走るアニメーションクリップ
+		enAnimClip_throw_l,		//投げるアニメーションクリップ
+		enAnimClip_throw_r,		//投げるアニメーションクリップ
+		enAnimClip_fall,		//落ちるアニメーションクリップ
+		enAnimClip_num,			//アニメーションクリップの総数
 	};
 
-	AnimationClip m_animationClips[enAnimClip_Num];	//アニメーションクリップ。
-
+	AnimationClip m_animationClips[enAnimClip_num];	//アニメーションクリップ。
+	int m_animState;								//アニメーションの状態
+	bool m_isDush = false;							//走り状態か？
+	bool m_throwing = false;						//投げ中か？
+	bool m_lifting = false;							//持ち上げ中か？
 	Vector3 m_moveSpeed = g_vec3Zero;				//キャラクターの移動スピード
 	Vector3 m_position = g_vec3Zero;				//キャラクターの座標
 	Vector3 m_onWayPosition = g_vec3Zero;			//道の上の座標

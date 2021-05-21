@@ -2,6 +2,7 @@
 #include "SpriteRender.h"
 #include "FontRender.h"
 #include "LevelObjectManager.h"
+#include "SoundCue.h"
 
 /// <summary>
 /// キャパシティのUI表示クラス
@@ -101,5 +102,6 @@ private:	//データメンバ
 	float m_timer[enFrontAndBackSideNum] = { 0.0f };	//タイマー
 	int m_maxCapacityNum[enFrontAndBackSideNum] = { 5,5 };	//キャパシティの最大値
 	float m_defaultScale = 1.0f;					//通常の拡大
+	CSoundCue* m_capacity_over = nullptr;			//キャパオーバーの音
 };
 

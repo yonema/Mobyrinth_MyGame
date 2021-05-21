@@ -107,7 +107,7 @@ void CModelRender::InitModel(const char* filePath, D3D12_CULL_MODE cullMode, EnM
 	//tkmファイルのファイルパスを指定する。
 	initData.m_tkmFilePath = filePath;
 	//シェーダーファイルのファイルパスを指定する。
-	initData.m_fxFilePath = "Assets/shader/PBR.fx";
+	initData.m_fxFilePath = "Assets/shader/model2.fx";
 	//スケルトンを指定する。
 	if (m_skeletonPtr)	//スケルトンが初期化されていたら
 		initData.m_skeleton = m_skeletonPtr.get();
@@ -152,6 +152,9 @@ void CModelRender::InitModel(const char* filePath, D3D12_CULL_MODE cullMode, EnM
 
 	//ZPrepassで作成された深度テクスチャの登録
 	initData.m_expandShaderResoruceView[1] = &g_graphicsEngine->GetZPrepassDepthTexture();
+
+
+	initData.m_expandShaderResoruceView[2] = &g_graphicsEngine->GetToonMapTexture();
 
 	initData.m_cullMode = cullMode;
 
@@ -222,7 +225,7 @@ void CModelRender::InitZPrepassModel()
 	modelInitData.m_fxFilePath = "Assets/shader/ZPrepass.fx";
 	modelInitData.m_colorBufferFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	modelInitData.m_trans = false;
-
+	modelInitData.m_cullMode = D3D12_CULL_MODE_NONE;
 	m_zprepassModel.Init(modelInitData);
 }
 
@@ -240,7 +243,7 @@ void CModelRender::Update()
 		m_skeletonPtr->Update(m_model.GetWorldMatrix());
 	//アニメーションを進める。
 	if (m_animationPtr)	//アニメーションが初期化されていたら
-		m_animationPtr->Progress(1.0f / 60.0f);
+		m_animationPtr->Progress(GameTime().GetFrameDeltaTime());
 	//モデルの座標更新
 	m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 

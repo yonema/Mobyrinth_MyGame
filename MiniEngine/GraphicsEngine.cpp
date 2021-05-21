@@ -261,6 +261,9 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_postEffect.Init();
 	//
 	m_sceneChange.Init();
+
+	m_toonMapTexture.InitFromDDSFile(L"Assets/modelData/preset/sky.dds" );
+
 	g_postEffect = &m_postEffect;
 	g_shadowMap = &m_shadowMap;
 	g_sceneChange = &m_sceneChange;

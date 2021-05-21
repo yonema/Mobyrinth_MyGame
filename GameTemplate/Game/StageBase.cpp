@@ -453,7 +453,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			OObject = NewGO<OOoneway>(0, "oneway");
 			OObject->SetPosition(objData.position);
 			OObject->SetLeftOrRight(OOoneway::enRight);
-			OObject->SetScale({ -1.0f,1.0f,1.0f });
 			return true;
 			}
 			//reverseAll
