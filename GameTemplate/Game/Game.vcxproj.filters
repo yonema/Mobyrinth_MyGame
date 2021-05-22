@@ -108,6 +108,9 @@
     <Filter Include="MyCode\UI">
       <UniqueIdentifier>{f680b8e9-0c4c-4d1c-83bd-a59ea22141be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\camera">
+      <UniqueIdentifier>{d40f695f-48a6-459d-b10c-404d22880b52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -259,9 +262,6 @@
     </ClCompile>
     <ClCompile Include="..\..\MiniEngine\font\Font.cpp">
       <Filter>MiniEngine\font</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCamera.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>ソース ファイル</Filter>
@@ -479,6 +479,12 @@
     <ClCompile Include="Pause.cpp">
       <Filter>MyCode\UI</Filter>
     </ClCompile>
+    <ClCompile Include="GameCamera.cpp">
+      <Filter>MyCode\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SpringCamera.cpp">
+      <Filter>MyCode\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -654,9 +660,6 @@
     </ClInclude>
     <ClInclude Include="..\..\ExEngine\gameObject\IGameobject.h">
       <Filter>ExEngine\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -892,6 +895,15 @@
     <ClInclude Include="Pause.h">
       <Filter>MyCode\UI</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCamera.h">
+      <Filter>MyCode\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SpringCamera.h">
+      <Filter>MyCode\camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">
@@ -927,5 +939,8 @@
     <FxCompile Include="Assets\shader\model2.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game.rc" />
   </ItemGroup>
 </Project>

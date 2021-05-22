@@ -2,6 +2,7 @@
 #include "SpriteRender.h"
 #include "Player.h"
 #include "StartDirecting.h"
+#include "SpringCamera.h"
 
 class GameCamera : public IGameObject
 {
@@ -82,24 +83,25 @@ public:	//インライン関数
 	}
 
 private:	//データメンバ
-	Player* m_pPlayer = nullptr;	//プレイヤーのポインタ
-	Vector3 m_toCameraPos;			//注視点から視点へのベクトル
-	bool m_lookPlayerFlag = true;	//プレイヤーを見るか？
+	Player* m_pPlayer = nullptr;				//プレイヤーのポインタ
+	Vector3 m_toCameraPos;						//注視点から視点へのベクトル
+	bool m_lookPlayerFlag = true;				//プレイヤーを見るか？
 	StartDirecting* m_startDirecting = nullptr;
-	bool m_startDirectingZoomInCamera = false; //カメラを寄せる処理のフラグ
+	bool m_startDirectingZoomInCamera = false;	//カメラを寄せる処理のフラグ
 
-	bool m_zoomFinished = false;	//Zoomが終わったか
+	bool m_zoomFinished = false;				//Zoomが終わったか
 
-	bool m_titleMode = false;		//タイトル画面か？
+	bool m_titleMode = false;					//タイトル画面か？
 
 
 
 	float m_switchingTimer = 0.0f;				//スイッチの切り替え中のタイマー
 	CSpriteRender* m_fadeSR = nullptr;			//フェードイン、アウトで使うスプライトレンダラー
 	float m_test = 0.0f;
-	bool m_flagRotationCamera = true; //カメラがステージの周りを回転しているかのフラグ
-	bool m_wipeEndFlag = false;			//ワイプが終わった？
-	float m_startTimer = 0;				//演出開始までのタイマー
+	bool m_flagRotationCamera = true;			//カメラがステージの周りを回転しているかのフラグ
+	bool m_wipeEndFlag = false;					//ワイプが終わった？
+	float m_startTimer = 0;						//演出開始までのタイマー
+	CSpringCamera m_springCamera;				//ばねカメラ
 
 
 public:

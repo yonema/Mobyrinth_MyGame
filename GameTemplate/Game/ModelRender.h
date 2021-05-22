@@ -74,7 +74,7 @@ public:		//ここのメンバ関数を主に使う。
 	/// </summary>
 	/// <param name="animNo">登録してあるアニメーションクリップの番号</param>
 	/// <param name="interpolateTime">補完時間（単位：秒）</param>
-	void PlayAnimation(int animNo, float interpolateTime = 0.0f)
+	void PlayAnimation(int animNo, float interpolateTime = 0.2f)
 	{
 		m_animationPtr->Play(animNo, interpolateTime);
 	}

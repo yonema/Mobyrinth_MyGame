@@ -295,6 +295,7 @@
     <ClCompile Include="CaslFile.cpp" />
     <ClCompile Include="CapacityUI.cpp" />
     <ClCompile Include="Save.cpp" />
+    <ClCompile Include="SpringCamera.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="OOoneway.cpp" />
     <ClCompile Include="ROleft_right.cpp" />
@@ -436,7 +437,9 @@
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CapacityUI.h" />
     <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Save.h" />
+    <ClInclude Include="SpringCamera.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="OOoneway.h" />
@@ -567,6 +570,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
