@@ -464,13 +464,14 @@ void Player::Move()
 	//通常の移動処理
 	if (!m_stunFlag)
 	{
+		m_isDush = false;
 		//ゲームパッドのR1ボタンの入力情報を取得(ダッシュ状態)
 		if (g_pad[0]->IsPress(enButtonRB1) == true) {
 			moveLen = 3000.0f;
-			m_isDush = true;
+			if (m_padLStickXF != 0.0f)
+				m_isDush = true;
 		}
-		else
-			m_isDush = false;
+
 
 
 		if (m_padLStickXF < 0.0f)
@@ -858,7 +859,12 @@ void Player::TitleMove()
 {
 	m_padLStickXF = 1.0f;
 	m_leftOrRight = enRight;
-	m_modelRender->PlayAnimation(enAnimClip_walk);
+
+	if (m_isDush)
+		m_modelRender->PlayAnimation(enAnimClip_run);
+	else
+		m_modelRender->PlayAnimation(enAnimClip_walk);
+
 	//ウェイポイントの更新処理
 	CheckWayPoint();
 	//移動処理

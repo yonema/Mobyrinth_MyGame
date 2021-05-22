@@ -12,27 +12,28 @@ bool GameCamera::Start()
 	//開始演出用のベクトル
 	m_toCameraPos = { 0.0f,0.0f,4000.0f };
 
-
+	//ばねカメラの初期化
+	m_springCamera.Init(*g_camera3D, 5000.0f, false, 0.0f);
 
 	if (m_pPlayer)
 	{
 		//プレイヤーが見つかったら
 		//プレイヤーの位置をもとにカメラの場所を決める
-		g_camera3D->SetPosition(m_pPlayer->GetPosition() + m_toCameraPos);
-		g_camera3D->SetTarget(m_pPlayer->GetPosition());
+		m_springCamera.SetPosition(m_pPlayer->GetPosition() + m_toCameraPos);
+		m_springCamera.SetTarget(m_pPlayer->GetPosition());
 	}
 	else
 	{
 		//見つからなかったら
 		//デフォルトの位置にする
-		g_camera3D->SetPosition({ 0.0f,1800.0f,1000.0f });
-		g_camera3D->SetTarget({ 0.0f,1800.0f,0.0f });
+		m_springCamera.SetPosition({ 0.0f,1800.0f,1000.0f });
+		m_springCamera.SetTarget({ 0.0f,1800.0f,0.0f });
 	}
 
 
 	//近平面、遠平面の設定
-	g_camera3D->SetNear(0.5f);
-	g_camera3D->SetFar(50000.0f);
+	m_springCamera.SetNear(0.5f);
+	m_springCamera.SetFar(50000.0f);
 
 	//ステージ開始時の演出を探す
 	m_startDirecting = FindGO<StartDirecting>("StartDirecting");
@@ -43,7 +44,7 @@ bool GameCamera::Start()
 	Vector3 vecUp = g_vec3AxisY;
 	//qRot.Apply(vecUp);
 
-	g_camera3D->SetUp(vecUp);
+	m_springCamera.SetUp(vecUp);
 
 
 	//フェードに使うスプライトの生成と初期化
@@ -58,8 +59,8 @@ bool GameCamera::Start()
 
 
 	//開始演出用の位置情報
-	g_camera3D->SetPosition(m_toCameraPos);
-	g_camera3D->SetTarget({ 0.0f,0.0f,0.0f });
+	m_springCamera.SetPosition(m_toCameraPos);
+	m_springCamera.SetTarget({ 0.0f,0.0f,0.0f });
 
 	return true;
 }
@@ -82,6 +83,7 @@ void GameCamera::Update()
 void GameCamera::StartDirectingCamera()
 {
 	if (m_startDirecting->GetStartDirecting() == false || !m_wipeEndFlag) {
+		m_springCamera.Update();
 		return;
 	}
 
@@ -99,8 +101,8 @@ void GameCamera::StartDirectingCamera()
 		//カメラへのベクトルを回す
 		qRot.Apply(m_toCameraPos);
 		//ステージ全体が見渡せる設定
-		g_camera3D->SetPosition(m_toCameraPos);
-		g_camera3D->SetTarget({ 0.0f,0.0f,0.0f });
+		m_springCamera.SetPosition(m_toCameraPos);
+		m_springCamera.SetTarget({ 0.0f,0.0f,0.0f });
 	}
 
 
@@ -144,6 +146,8 @@ void GameCamera::StartDirectingCamera()
 		//ステージ開始時の演出を探す
 		m_startDirecting = FindGO<StartDirecting>("StartDirecting");
 	}
+
+	m_springCamera.Update();
 }
 
 void GameCamera::FadeDirectingCamera()
@@ -242,11 +246,11 @@ void GameCamera::InGameCamera()
 				upVec = g_vec3Zero;
 
 			//注視点を設定する
-			g_camera3D->SetTarget(m_pPlayer->GetPosition() + upVec);
+			m_springCamera.SetTarget(m_pPlayer->GetPosition() + upVec);
 			//視点を設定する
-			g_camera3D->SetPosition(m_pPlayer->GetPosition() + m_toCameraPos + upVec);
+			m_springCamera.SetPosition(m_pPlayer->GetPosition() + m_toCameraPos + upVec);
 			//アップ軸を設定する
-			g_camera3D->SetUp(vecUp);
+			m_springCamera.SetUp(vecUp);
 		}
 		else
 		{
@@ -256,6 +260,6 @@ void GameCamera::InGameCamera()
 		}
 	}
 
-
+	m_springCamera.Update();
 	return;
 }
