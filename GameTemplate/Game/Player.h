@@ -373,6 +373,12 @@ private://privateなメンバ関数
 	void CheckWayPoint();
 
 	/// <summary>
+	/// ウェイポイントステートから
+	/// 左側のウェイポイントと右側のウェイポイントを計算する
+	/// </summary>
+	void CalcLeftAndRightWayPoint();
+
+	/// <summary>
 	/// 移動処理
 	/// </summary>
 	void Move();

@@ -240,19 +240,12 @@ void Player::CheckWayPoint()
 	/// そしてm_maxWayPointStateはm_wayPointStateの最大数を表す。
 	/// m_maxWayPointStateが31だったらm_wayPointStateは31まで存在する。
 	
-
 	//1.プレイヤー自身の左右のウェイポイントを設定する
 	//m_wayPointStateをもとにウェイポイントを設定する。
-	m_rpIndex = m_wayPointState;	//右のウェイポイントはとm_wayPointStateは同じ値
-	m_lpIndex = m_rpIndex + 1;		//左のウェイポイントは右のウェイポイントの1つ上の値
+	CalcLeftAndRightWayPoint();
 
-	if (m_lpIndex > m_maxWayPointState)
-	{
-		//左のウェイポイントがMAXより大きかったら
-		//一周したということだから、スタートの0にする
-		m_lpIndex = 0;
-	}
-
+	//更新前のウェイポイントステートを保持しておく
+	int oldWayPointState = m_wayPointState;
 
 	//2.m_wayPointStateの更新。
 
@@ -427,8 +420,36 @@ void Player::CheckWayPoint()
 	//	}
 	//}
 
+
+	//更新前と更新後のウェイポイントステートは違っているか？
+	if (m_wayPointState != oldWayPointState)
+	{
+		//違ってたら
+		//もう一度左側と右側のウェイポイントを計算する
+		CalcLeftAndRightWayPoint();
+	}
+
 	return;
 
+}
+
+/// <summary>
+/// ウェイポイントステートから
+/// 左側のウェイポイントと右側のウェイポイントを計算する
+/// </summary>
+void Player::CalcLeftAndRightWayPoint()
+{
+	//1.プレイヤー自身の左右のウェイポイントを設定する
+	//m_wayPointStateをもとにウェイポイントを設定する。
+	m_rpIndex = m_wayPointState;	//右のウェイポイントはとm_wayPointStateは同じ値
+	m_lpIndex = m_rpIndex + 1;		//左のウェイポイントは右のウェイポイントの1つ上の値
+
+	if (m_lpIndex > m_maxWayPointState)
+	{
+		//左のウェイポイントがMAXより大きかったら
+		//一周したということだから、スタートの0にする
+		m_lpIndex = 0;
+	}
 }
 
 
