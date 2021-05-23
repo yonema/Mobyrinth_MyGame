@@ -312,6 +312,9 @@ void StartDirecting::FallPlayer()
 			m_fallTimer += GameTime().GetFrameDeltaTime();
 		}
 	}
+	//カメラをリフレッシュして、一時的にばねカメラを無効にし、
+	//一気にカメラを移動できるようにする
+	m_gameCamera->Refresh();
 	m_player->SetPosition(fallpos);
 	m_gameCamera->SetTarget(m_player->GetPosition());
 	m_gameCamera->SetPosition({ m_player->GetPositionX(),

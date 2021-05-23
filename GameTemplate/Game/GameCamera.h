@@ -47,7 +47,7 @@ public:	//インライン関数
 	/// <param name="target"></param>
 	void SetTarget(const Vector3& target)
 	{
-		g_camera3D->SetTarget(target);
+		m_springCamera.SetTarget(target);
 	}
 
 	/// <summary>
@@ -56,7 +56,7 @@ public:	//インライン関数
 	/// <param name="pos"></param>
 	void SetPosition(const Vector3& pos)
 	{
-		g_camera3D->SetPosition(pos);
+		m_springCamera.SetPosition(pos);
 	}
 
 	/// <summary>
@@ -65,7 +65,7 @@ public:	//インライン関数
 	/// <returns>カメラの視点</returns>
 	const Vector3 GetPosition() const
 	{
-		return g_camera3D->GetPosition();
+		return m_springCamera.GetPosition();
 	}
 
 	/// <summary>
@@ -83,6 +83,17 @@ public:	//インライン関数
 	void SetLookPlayerFlag(const bool lookPlayerFlag)
 	{
 		m_lookPlayerFlag = lookPlayerFlag;
+	}
+
+	/// <summary>
+	/// リフレッシュ
+	/// この関数を呼び出すと、バネの移動がリフレッシュされて、Update関数を呼び出すとカメラの位置が
+	/// 即座に目標視点と目標注視点に移動します。シーンが切り替わってカメラを一気に切り替えたいときなどに
+	/// 使用してください。
+	/// </summary>
+	void Refresh()
+	{
+		m_springCamera.Refresh();
 	}
 
 private:	//データメンバ

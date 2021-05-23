@@ -254,6 +254,10 @@ void OOTransparentSwitch::Switching()
 
 		//カメラがプレイヤーを見なくする
 		m_gameCamera->SetLookPlayerFlag(false);
+
+		//カメラをリフレッシュして、一時的にばねカメラを無効にし、
+		//一気にカメラを移動できるようにする
+		m_gameCamera->Refresh();
 		//カメラへの座標
 		Vector3 toCameraPos = { 0.0f,0.0f,3500.0f };
 		//カメラの始点を設定
@@ -339,6 +343,10 @@ void OOTransparentSwitch::Switching()
 		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 		//カメラがプレイヤーを見るようにする
 		m_gameCamera->SetLookPlayerFlag(true);
+
+		//カメラをリフレッシュして、一時的にばねカメラを無効にし、
+		//一気にカメラを移動できるようにする
+		m_gameCamera->Refresh();
 	}
 	else if (m_switchingTimer < endFadeInTime)
 	{
