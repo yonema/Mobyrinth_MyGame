@@ -1087,39 +1087,77 @@ void Player::Fall()
 /// </summary>
 void Player::Goal()
 {
+	//ゴール用のモデルが非アクティブ状態だったら
+	//つまり最初の一回だけ呼ばれる
 	if (!m_goalPlayerMR->IsActive())
 	{
-		m_gameCamera->SetLookPlayerFlag(false);
+		//ゴール用のモデルをアクティブ状態
 		m_goalPlayerMR->Activate();
+		//通常のモデルを非アクティブ状態にする
 		m_modelRender->Deactivate();
+		//ゴール用のモデルの座標を更新する
 		m_goalPlayerMR->SetPosition(m_position);
+		//ゴール用のモデルの回転を更新する
 		m_goalPlayerMR->SetRotation(m_finalWPRot);
+
+		//ゴール時のエフェクトの座標を更新する
 		m_goalEffect->SetPosition(m_position);
+		//ゴール時のエフェクトの回転を更新する
 		m_goalEffect->SetRotation(m_finalWPRot);
+		//ゴール時のエフェクトの拡大
 		const float effecScale = 150.0f;
+		//ゴール時のエフェクトの拡大を更新する
 		m_goalEffect->SetScale({ effecScale,effecScale,effecScale });
+		//ゴール時のエフェクトを再生する
 		m_goalEffect->Play();
+
+		//ゴール時のタイマーを初期化する
 		m_goalTimer = 0.0f;
+		//カメラをプレイヤーを追いかけないようにする
+		m_gameCamera->SetLookPlayerFlag(false);
 	}
 
+	//カメラが動く時間
 	const float cameraMoveTime = 0.5f;
 
+	//ゴール時のタイマーがカメラが動く時間より小さいか？
 	if (m_goalTimer < cameraMoveTime)
 	{
+		//小さいとき
+
+		//注視点のアップベクトル
 		Vector3 targetUp = m_upVec;
+		//アップベクトルの長さ
 		const float upVecLen = 200.0f;
+		//タイマーに応じた拡大率	//徐々に大きくする
 		const float timeScale = m_goalTimer / cameraMoveTime;
+		//注視点のアップベクトルを拡大する	//徐々に大きくする
 		targetUp.Scale(upVecLen * timeScale);
+
+		//カメラからプレイヤーへのベクトル
 		Vector3 cameraToPlayerVec = m_position - m_gameCamera->GetPosition();
+		//正規化する
 		cameraToPlayerVec.Normalize();
+		//カメラからプレイヤーへのベクトルの長さ
+		const float cameraToPlayerLen = 100.0f;
+		//カメラからプレイヤーへのベクトルを拡大する
 		cameraToPlayerVec.Scale(100.0f);
+		//デルタタイムを掛けておく
 		cameraToPlayerVec.Scale(GameTime().GetFrameDeltaTime());
-		m_gameCamera->SetPosition(m_gameCamera->GetPosition() + cameraToPlayerVec);
+		
+		//カメラの注視点を更新
 		m_gameCamera->SetTarget(m_position + targetUp);
+		//カメラの視点を更新
+		m_gameCamera->SetPosition(m_gameCamera->GetPosition() + cameraToPlayerVec);
+
+		//ゴール時のタイマーを進める
 		m_goalTimer += GameTime().GetFrameDeltaTime();
 	}
 	else
 	{
+		//大きいとき
+
+		//ゴール時のモデルのアニメーションを再生する
 		m_goalPlayerMR->PlayAnimation(1);
 
 	}
@@ -1146,8 +1184,8 @@ void Player::AnimationController()
 
 		if (m_animState == enAnimClip_carry)
 		{
-			//アニメーションが一定割合再生したら
-			if (m_modelRender->GetInterpolateTime() >= 0.5f)
+			//アニメーションの再生が終了したら
+			if (!m_modelRender->IsPlayingAnimation())
 				//持ち上げ中ではなくする
 				m_lifting = false;
 		}
@@ -1160,8 +1198,8 @@ void Player::AnimationController()
 	{
 		if (m_animState == enAnimClip_throw_l || m_animState == enAnimClip_throw_r)
 		{
-			//アニメーションが一定割合再生したら
-			if (m_modelRender->GetInterpolateTime() >= 0.8f)
+			//アニメーションの再生が終了したら
+			if (!m_modelRender->IsPlayingAnimation())
 				//投げ中ではなくする
 				m_throwing = false;
 		}

@@ -149,14 +149,14 @@ public:		//ここのメンバ関数を主に使う。
 	}
 
 	/// <summary>
-	/// 多分、アニメーションがどのくらい再生したのか、
-	/// 再生率を戻す。0.0f～1.0fの範囲で、1.0fで最後まで再生している。
+	/// アニメーションの再生中？
 	/// </summary>
-	/// <returns>再生率</returns>
-	const float GetInterpolateTime() const
+	/// <returns></returns>
+	const bool IsPlayingAnimation() const
 	{
-		return m_animationPtr->GetInterpolateTime();
+		return m_animationPtr->IsPlaying();
 	}
+
 
 private:	//privateなメンバ関数
 

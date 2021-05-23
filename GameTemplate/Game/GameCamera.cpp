@@ -78,12 +78,14 @@ void GameCamera::Update()
 	else {
 		InGameCamera();
 	}
+
+	//ばねカメラの更新
+	m_springCamera.Update();
 }
 
 void GameCamera::StartDirectingCamera()
 {
 	if (m_startDirecting->GetStartDirecting() == false || !m_wipeEndFlag) {
-		m_springCamera.Update();
 		return;
 	}
 
@@ -147,7 +149,6 @@ void GameCamera::StartDirectingCamera()
 		m_startDirecting = FindGO<StartDirecting>("StartDirecting");
 	}
 
-	m_springCamera.Update();
 }
 
 void GameCamera::FadeDirectingCamera()
@@ -209,7 +210,9 @@ void GameCamera::FadeDirectingCamera()
 		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 
-
+	//カメラをリフレッシュして、一時的にばねカメラを無効にし、
+	//一気にカメラを移動できるようにする
+	m_springCamera.Refresh();
 
 	m_switchingTimer += GameTime().GetFrameDeltaTime();
 }
@@ -260,6 +263,6 @@ void GameCamera::InGameCamera()
 		}
 	}
 
-	m_springCamera.Update();
+
 	return;
 }
