@@ -1146,8 +1146,8 @@ void Player::AnimationController()
 
 		if (m_animState == enAnimClip_carry)
 		{
-			//アニメーションが一定割合再生したら
-			if (m_modelRender->GetInterpolateTime() >= 0.5f)
+			//アニメーションの再生が終了したら
+			if (!m_modelRender->IsPlayingAnimation())
 				//持ち上げ中ではなくする
 				m_lifting = false;
 		}
@@ -1160,8 +1160,8 @@ void Player::AnimationController()
 	{
 		if (m_animState == enAnimClip_throw_l || m_animState == enAnimClip_throw_r)
 		{
-			//アニメーションが一定割合再生したら
-			if (m_modelRender->GetInterpolateTime() >= 0.8f)
+			//アニメーションの再生が終了したら
+			if (!m_modelRender->IsPlayingAnimation())
 				//投げ中ではなくする
 				m_throwing = false;
 		}

@@ -4,13 +4,16 @@
 #include "StartDirecting.h"
 #include "SpringCamera.h"
 
+/// <summary>
+/// ゲーム内カメラクラス
+/// </summary>
 class GameCamera : public IGameObject
 {
-public:
-	bool Start()override final;
-	void Update()override final;
+public:		//自動で呼ばれるメンバ関数
+	bool Start()override final;		//スタート関数
+	void Update()override final;	//アップデート関数
 
-private:
+private:	//メンバ関数
 	/// <summary>
 	/// ステージ開始時のカメラ
 	/// </summary>
