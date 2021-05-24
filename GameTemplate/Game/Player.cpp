@@ -124,14 +124,14 @@ bool Player::Start()
 	//m_walkSEのサウンドキューを生成する
 	m_walkSE = NewGO<CSoundCue>(0);
 	//m_walkSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_walkSE->Init(L"Assets/sound/walk.wav");
+	m_walkSE->Init(L"Assets/sound/walk2.wav");
 	//音量調節
 	m_walkSE->SetVolume(1.0f);
 
 	//m_runSEのサウンドキューを生成する
 	m_runSE = NewGO<CSoundCue>(0);
 	//m_runSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_runSE->Init(L"Assets/sound/run.wav");
+	m_runSE->Init(L"Assets/sound/run2.wav");
 	//音量調節
 	m_runSE->SetVolume(1.0f);
 
