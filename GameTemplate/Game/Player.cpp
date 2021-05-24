@@ -1091,6 +1091,12 @@ void Player::Goal()
 	//つまり最初の一回だけ呼ばれる
 	if (!m_goalPlayerMR->IsActive())
 	{
+		if (m_walkSE->IsPlaying()) {
+			m_walkSE->Stop();
+		}
+		if (m_runSE->IsPlaying()) {
+			m_runSE->Stop();
+		}
 		//ゴール用のモデルをアクティブ状態
 		m_goalPlayerMR->Activate();
 		//通常のモデルを非アクティブ状態にする
