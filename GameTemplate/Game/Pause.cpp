@@ -5,7 +5,7 @@
 bool CPause::Start()
 {
 	//画像の表示
-	m_level2D.Init("Assets/level2D/Pause.casl", [&](Level2DObjectData& objdata)
+	m_level2D.Init("Assets/level2D/Pause_2.casl", [&](Level2DObjectData& objdata)
 		{
 			//名前が一致でフックする
 			//カーソル
@@ -185,9 +185,8 @@ void CPause::UpdateOnlyPaused()
 	Decision();
 
 
-
 	//カーソル用の画像の場所を設定する
-	m_cursor->SetPosition({ -360.0f,
+	m_cursor->SetPosition({ m_cursor->GetPositionX(),
 							m_choices[m_pauseState]->GetPositionY() + 25,
 							0.0f });
 

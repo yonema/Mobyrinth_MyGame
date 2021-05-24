@@ -922,6 +922,8 @@ void Player::GameMove()
 	}
 
 	if (m_operationFlag == false) {
+		//アニメーションの遷移をリセットする
+		AnimationReset();
 		m_modelRender->PlayAnimation(enAnimClip_idle);
 		return;
 	}
@@ -1040,6 +1042,8 @@ void Player::GameMove()
 /// </summary>
 void Player::CapturedUFO()
 {
+	//アニメーションの遷移をリセットする
+	AnimationReset();
 	m_modelRender->PlayAnimation(enAnimClip_idle);
 
 	//ウェイポイントの更新処理
@@ -1063,6 +1067,8 @@ void Player::CapturedUFO()
 /// </summary>
 void Player::Fall()
 {
+	//アニメーションの遷移をリセットする
+	AnimationReset();
 	m_modelRender->PlayAnimation(enAnimClip_fall);
 	//Rotation();
 	//モデルの場所と回転を設定
@@ -1270,6 +1276,18 @@ void Player::AnimationController()
 
 	//選択されたアニメーションを流す
 	m_modelRender->PlayAnimation(m_animState);
+}
+
+/// <summary>
+/// アニメーションの遷移をリセットする
+/// </summary>
+void Player::AnimationReset()
+{
+	//持ち上げ中ではなくする
+	m_lifting = false;
+
+	//投げ中ではなくする
+	m_throwing = false;
 }
 
 void Player::SoundController()

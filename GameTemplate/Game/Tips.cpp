@@ -19,7 +19,8 @@ CTips::CTips()
 	const float tipsY = 330.0f;
 	m_tipsFR->Init(L"T ip s", 
 		{ tipsX,tipsY },			//座標
-		{ 1.0f,1.0f,0.0f,1.0f },	//カラー
+		//{ 1.0f,1.0f,0.0f,1.0f },	//カラー
+		{ 1.0f,1.0f,1.0f,1.0f },	//カラー
 		0.0f,						//回転
 		0.8f						//拡大
 	);
