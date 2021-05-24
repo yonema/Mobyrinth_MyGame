@@ -77,9 +77,10 @@ void CCapacityUI::InitFont()
 	//フォントのカラー
 	Vector3 fontColor;
 	//表側のタイルの色
-	fontColor = { 214.0f,85.0f,0.0f };
+	//fontColor = { 214.0f,85.0f,0.0f };
 	//明るすぎるため正規化
 	fontColor.Normalize();
+	fontColor = { 1.0f,1.0f,1.0f };
 	m_defaultFontColor[enFrontSide] = fontColor;
 	//フォントのX座標
 	const float capacityNumX = -615.0f;
@@ -102,11 +103,12 @@ void CCapacityUI::InitFont()
 	//＊＊裏側のフォントの設定＊＊
 	//フォントのカラー
 	//裏側のタイルの色
-	fontColor = { 99.0f,97.0f,99.0f };
+	//fontColor = { 99.0f,97.0f,99.0f };
 	//明るすぎるため正規化
 	fontColor.Normalize();
 	//色が一緒過ぎて見えにくかったから、暗くする
 	fontColor.Scale(0.1);
+	fontColor = { 1.0f,1.0f,1.0f };
 	m_defaultFontColor[enBackSide] = fontColor;
 	//表側のフォントとのY座標の差
 	const float diffFrontToBackY = 70.0f;

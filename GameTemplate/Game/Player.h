@@ -443,6 +443,11 @@ private://privateなメンバ関数
 	/// </summary>
 	void AnimationController();
 
+	/// <summary>
+	/// アニメーションの遷移をリセットする
+	/// </summary>
+	void AnimationReset();
+
 	//SEの制御
 	void SoundController();
 
