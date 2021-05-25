@@ -47,6 +47,13 @@ bool OObigFire::StartSub()
 	m_flame_water->SetPosition(m_position + upVec);		//座標を渡す
 	m_flame_water->SetRotation(m_rotation);
 
+	//m_flame_waterSEのサウンドキューを生成する
+	m_flame_waterSE = NewGO<CSoundCue>(0);
+	//m_flame_waterSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_flame_waterSE->Init(L"Assets/sound/flame_water.wav");
+	//音量調節
+	m_flame_waterSE->SetVolume(1.0f);
+
 	return true;
 }
 
@@ -113,7 +120,8 @@ void OObigFire::Damage()
 		SetScale(g_vec3One * (m_hp + sizeComplement) / (m_maxHp + sizeComplement));
 	}
 	m_flame_water->Play();								//再生
-}
+	m_flame_waterSE->Play(false);						//再生
+}	
 
 //プレイヤーが炎に近づくと燃えてる音を出す
 void OObigFire::Burn()

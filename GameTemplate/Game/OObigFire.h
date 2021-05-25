@@ -25,6 +25,7 @@ private:
 
 	CSoundCue* m_flameSE = nullptr;			//flameのサウンドキュー
 	Effect* m_flame_water = nullptr;		//炎と水の反応
+	CSoundCue* m_flame_waterSE = nullptr;	//炎と水の反応
 
 };
 
