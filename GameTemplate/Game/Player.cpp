@@ -128,6 +128,12 @@ bool Player::Start()
 	//音量調節
 	m_walkSE->SetVolume(1.0f);
 
+	//炎に当たったときのサウンドの生成と初期化
+	m_flameHitSE = NewGO<CSoundCue>(0);
+	m_flameHitSE->Init(L"Assets/sound/flameHit.wav");
+	//音量調節
+	m_flameHitSE->SetVolume(1.0f);
+
 	//m_runSEのサウンドキューを生成する
 	m_runSE = NewGO<CSoundCue>(0);
 	//m_runSEのサウンドキューを、waveファイルを指定して初期化する。
@@ -178,6 +184,8 @@ Player::~Player()
 	DeleteGO(m_walkSE);
 
 	DeleteGO(m_runSE);
+
+	DeleteGO(m_flameHitSE);
 
 	//デバック用
 	//後で消す
@@ -598,8 +606,8 @@ void Player::StunMove()
 	if (m_blinkTimer < blinkInterval)
 	{
 		//少し白く光らせる
-		float color = 0.3f;
-		m_modelRender->SetEmissionColor({ color,color,color,color });
+		float color = 0.2f;
+		m_modelRender->SetEmissionColor({ 1.5f,color,color,color });
 	}
 	//点滅タイマーが、点滅の間隔の2倍より小さかったら
 	else if (m_blinkTimer < blinkInterval * 2)
@@ -786,6 +794,8 @@ void Player::CheckHitOBBTag()
 
 			m_hitOBB = m_myCharaCon.GetHitOBB();
 			COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
+
+			m_flameHitSE->Play(false);
 		}
 
 	}
