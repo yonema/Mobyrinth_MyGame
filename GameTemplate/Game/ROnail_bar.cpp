@@ -8,9 +8,18 @@ bool ROnail_bar::StartSub()
 	Init("Assets/modelData/nail.tkm", enNail,
 		"Assets/modelData/hammer.tkm", enBar);
 
-
+	//壊れるときのサウンドの生成と初期化
+	m_brokenSE = NewGO<CSoundCue>(0);
+	m_brokenSE->Init(L"Assets/sound/boxBreak.wav");
+	m_brokenSE->SetVolume(0.3f);
 
 	return true;
+}
+
+//デストラクタ
+ROnail_bar::~ROnail_bar()
+{
+	DeleteGO(m_brokenSE);
 }
 
 /// <summary>
@@ -63,6 +72,9 @@ void ROnail_bar::QuerySub()
 						DeleteGO(this);
 						//行動できないようにする
 						m_actionFlag = false;
+
+						//壊れるときのサウンドの再生
+						m_brokenSE->Play(false);
 					}
 				}
 				return true;
