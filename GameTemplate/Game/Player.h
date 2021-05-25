@@ -541,6 +541,7 @@ private:	//データメンバ
 	int m_falltimer = 0;						//fallSEサポート
 	CSoundCue* m_walkSE = nullptr;				//m_walkSEのサウンドキュー
 	CSoundCue* m_runSE = nullptr;				//m_runSEのサウンドキュー
+	CSoundCue* m_flameHitSE = nullptr;			//炎と当たったときのサウンド
 
 public://デバック用
 	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため
