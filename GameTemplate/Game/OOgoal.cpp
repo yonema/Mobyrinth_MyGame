@@ -79,8 +79,9 @@ void OOgoal::UpdateSub()
 		//m_spriteRender->Activate();
 		//プレイヤーをゴール状態にする
 		m_pPlayer->SetGoal(true);
-		//モデルを見えなくする
-		GetModelRender()->Deactivate();
+		////モデルを見えなくする
+		//GetModelRender()->Deactivate();
+		DeleteGO(this);
 	}
 
 }
