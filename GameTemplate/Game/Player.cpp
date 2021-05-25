@@ -1042,6 +1042,12 @@ void Player::GameMove()
 /// </summary>
 void Player::CapturedUFO()
 {
+	if (m_walkSE->IsPlaying()) {
+			m_walkSE->Stop();
+		}
+	if (m_runSE->IsPlaying()) {
+		m_runSE->Stop();
+	}
 	//アニメーションの遷移をリセットする
 	AnimationReset();
 	m_modelRender->PlayAnimation(enAnimClip_idle);

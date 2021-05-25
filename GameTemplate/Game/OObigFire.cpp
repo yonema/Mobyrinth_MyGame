@@ -134,13 +134,13 @@ void OObigFire::Burn()
 		float Le = MaxDist - DistLen;
 		float SubLe = Le / MaxDist;
 		float Vo = 2.0f * SubLe;
-
+		
 		//flameSEをループ再生をオンで再生する。
 		m_flameSE->Play(true);
-
+		
 		//音量調節
 		m_flameSE->SetVolume(Vo);
-
+		
 	}
 	else {
 		if (m_flameSE->IsPlaying()) {
