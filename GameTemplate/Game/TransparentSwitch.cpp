@@ -216,6 +216,8 @@ void OOTransparentSwitch::UpdateSub()
 			//切り替え中タイマーを初期化する
 			m_switchingTimer = 0.0f;
 
+			
+
 			//プレイヤーを操作不能にする
 			m_pPlayer->SetOperationFlag(false);
 

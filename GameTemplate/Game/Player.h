@@ -194,6 +194,12 @@ public://publicなメンバ関数
 
 	void SetOperationFlag(const bool b)
 	{
+		if (m_walkSE->IsPlaying()) {
+			m_walkSE->Stop();
+		}
+		if (m_runSE->IsPlaying()) {
+			m_runSE->Stop();
+		}
 		m_operationFlag = b;
 	}
 	void SetTitleMove(const bool b)
