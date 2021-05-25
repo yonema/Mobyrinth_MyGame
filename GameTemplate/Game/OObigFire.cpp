@@ -52,7 +52,7 @@ bool OObigFire::StartSub()
 	//m_flame_waterSEのサウンドキューを、waveファイルを指定して初期化する。
 	m_flame_waterSE->Init(L"Assets/sound/flame_water.wav");
 	//音量調節
-	m_flame_waterSE->SetVolume(1.0f);
+	m_flame_waterSE->SetVolume(2.0f);
 
 	return true;
 }
@@ -62,15 +62,10 @@ OObigFire::~OObigFire()
 {
 	DeleteGO(m_pointLight);
 
+	DeleteGO(m_flameSE);
 
-	if (m_flameSE->IsPlaying()) {
-		DeleteGO(m_flameSE);
-	}
-
-	if (m_flame_water->IsPlay()) {
-		DeleteGO(m_flame_water);
-	}
-
+	DeleteGO(m_flame_water);
+	
 }
 
 //アップデート関数

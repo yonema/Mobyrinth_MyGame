@@ -1072,8 +1072,14 @@ void Player::Fall()
 	m_modelRender->PlayAnimation(enAnimClip_fall);
 	//Rotation();
 	//モデルの場所と回転を設定
-	m_myCharaCon.SetPosition(m_position);
-	m_onWayPosition = m_position;
+	
+	//ウェイポイント上の座標
+	Vector3 onWayPos = m_position;
+	//高さが1800未満にならないようにする
+	if (onWayPos.y < 1800.0f)
+		onWayPos.y = 1800.0f;
+	m_myCharaCon.SetPosition(onWayPos);
+	m_onWayPosition = onWayPos;
 	Quaternion qRot;
 	qRot.SetRotationDegY(90.0f);
 	m_rotation = g_quatIdentity;
