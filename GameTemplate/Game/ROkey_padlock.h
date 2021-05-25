@@ -16,6 +16,7 @@ public:		//自動で呼ばれるメンバ関数
 	/// </summary>
 	void QuerySub()override final;
 
+private:	//データメンバ
 	CSoundCue* m_padlockbreakSE = nullptr; //padlockbreakSEのサウンドキュー
 };
 

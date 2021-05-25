@@ -78,5 +78,8 @@ private: //メンバ変数
 	CSoundCue* m_invalidationSE = nullptr;		//m_invalidationSEのサウンドキュー
 	Effect* m_activation = nullptr;				//オブジェクトが有効化した時のエフェクト
 	CPause* m_pause = nullptr;					//ポーズクラスのポインタ
+	CSoundCue* m_timerSC = nullptr;				//タイマーのサウンドキュー
+	CSoundCue* m_timerWarningSC = nullptr;		//警告タイマーのサウンドキュー
+
 };
 

@@ -27,7 +27,7 @@ bool OOReverseALL::StartSub()
 	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
 	m_changeSE->Init(L"Assets/sound/allchange.wav");
 	//音量調節
-	m_changeSE->SetVolume(0.5f);
+	m_changeSE->SetVolume(1.0f);
 
 	//m_obujectefkエフェクトの作成
 	m_obujectefk = NewGO<Effect>(0);
