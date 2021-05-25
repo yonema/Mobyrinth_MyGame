@@ -739,6 +739,9 @@ void CReversibleObject::Cancel()
 
 	//ステートをクエリへ移行する
 	m_objectState = enQuery;
+
+	//移動先でオブジェクト同士が重なったときの処理を設定
+	m_objectAction = enRepelled;
 }
 
 /// <summary>
