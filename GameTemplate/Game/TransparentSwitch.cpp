@@ -99,6 +99,16 @@ bool OOTransparentSwitch::StartSub()
 
 	//ポーズを探す
 	m_pause = FindGO<CPause>("Pause");
+	
+	//タイマーのサウンドの生成と初期化
+	m_timerSC = NewGO<CSoundCue>(0);
+	m_timerSC->Init(L"Assets/sound/timer.wav");
+	m_timerSC->SetVolume(1.0f);
+
+	//警告タイマーのサウンドの生成と初期化
+	m_timerWarningSC = NewGO<CSoundCue>(0);
+	m_timerWarningSC->Init(L"Assets/sound/timer_warning.wav");
+	m_timerWarningSC->SetVolume(1.0f);
 
 	return true;
 }
@@ -114,6 +124,12 @@ OOTransparentSwitch::~OOTransparentSwitch()
 
 	//m_buttonpushSEの削除
 	DeleteGO(m_buttonpushSE);
+
+	//タイマーのサウンドの削除
+	DeleteGO(m_timerSC);
+
+	//警告タイマーのサウンドの削除
+	DeleteGO(m_timerWarningSC);
 }
 
 //アップデート関数
@@ -136,31 +152,33 @@ void OOTransparentSwitch::UpdateSub()
 		UpdateTimerFR();
 		///--m_resetTimer;
 
+		//警告のタイム
+		const float warningTime = 3.1f;
+
+		//タイマーが警告のタイム以下か？
+		if (m_resetTimer <= warningTime)
+		{
+			//以下の時
+
+			//警告タイマーのサウンドを流す
+			m_timerWarningSC->Play(true);
+
+			//通常のタイマーのサウンドが流れていたら
+			if (m_timerSC->IsPlaying())
+				//停止する
+				m_timerSC->Stop();
+		}
+		else 
+		{
+			//より大きい
+
+			//通常のタイマーのサウンドを流す
+			m_timerSC->Play(true);
+		}
+
 		if (m_resetTimer <= 0.0f) {
 			m_flagSwitchOn = false;
 
-			//ここに透明オブジェクトの処理を追加する。
-			//配置してあるすべてのレベルオブジェクトの参照のベクター
-			//std::vector<ILevelObjectBase*> levelObjects =
-			//	CLevelObjectManager::GetInstance()->GetLevelObjects();
-
-			////レベルオブジェクトたちを一つずつ取り出す
-			//for (auto lo : levelObjects)
-			//{
-			//	//自分自身の時はスキップ
-			//	if (lo == this)
-			//		continue;
-
-			//	//透明オブジェクトの場合
-			//	if (GetFlagTransparentObject() == true)
-			//	{
-			//		//ここにオブジェクトに対する処理
-			//		lo->TransparentSwitchOff();
-
-			//		//オブジェクトを持っている場合
-			//		lo->SetFlagHeldPlayer(false);
-			//	}
-			//}
 
 			//透明オブジェクトを半透明にする。
 			ChangeTransparent();
@@ -177,6 +195,17 @@ void OOTransparentSwitch::UpdateSub()
 	}
 	//リセットタイマーが０のときに下の文の処理を作動させる。
 	else if (m_flagSwitchOn == false) {
+
+		//タイマーのサウンドが流れていたら
+		if (m_timerSC->IsPlaying())
+			//タイマーのサウンドを停止する
+			m_timerSC->Stop();
+		//警告タイマーのサウンドが流れていたら
+		if (m_timerWarningSC->IsPlaying())
+			//警告タイマーのサウンドを停止する
+			m_timerWarningSC->Stop();
+
+
 		//スイッチが押されたとき
 		//透明オブジェクトをすべて持ち上げられるようにする。
 		//スイッチのオブジェクトの範囲内でAボタンが押されたとき

@@ -15,7 +15,7 @@ bool ROkey_padlock::StartSub()
 	//padlockbreakSEのサウンドキューを、waveファイルを指定して初期化する。
 	m_padlockbreakSE->Init(L"Assets/sound/padlockbreak.wav");
 	//音量調節
-	m_padlockbreakSE->SetVolume(0.5f);
+	m_padlockbreakSE->SetVolume(1.0f);
 
 	return true;
 }
