@@ -650,8 +650,6 @@ void IStageBase::Update()
 		}
 	}
 
-
-
 	return;
 }
 
@@ -751,6 +749,15 @@ void IStageBase::Goal()
 
 void IStageBase::CheckGoal()
 {
+
+	//アニメーションの初期化でエラーが出るのを調べる用のコード
+	//デバック用
+	//後で消す
+	////ゴールしていたら、ゴールの処理をする
+	//Goal();
+	//return;
+	//デバック用ここまで
+
 	//ゴールがアクティブなら
 	if (m_goal)
 	{

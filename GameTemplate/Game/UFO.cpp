@@ -22,17 +22,17 @@ bool CUFO::PureVirtualStart()
 	GetOBB().SetDirectionLength({ 10.0f,200.0f,400.0f });
 
 	//上向きのスポットライトの生成と初期化
-	m_spotLightUp = NewGO<CSpotLight>(0);
+	//m_spotLightUp = NewGO<CSpotLight>(0);
 	//アップベクトル
 	Vector3 up = m_upVec;
 	//イイ感じに伸ばす
 	up.Scale(300.0f);
 	//上向きのスポットライトのパラメータを設定
-	m_spotLightUp->SetPosition(m_position + up);
-	m_spotLightUp->SetColor({ 300.0f, 300.0f, 0.0f, 0.0f });
-	m_spotLightUp->SetRange(500.0f);
-	m_spotLightUp->SetAngle(/*90.0f*/3.14f * 0.5f);
-	m_spotLightUp->SetDirection(g_vec3Down);
+	//m_spotLightUp->SetPosition(m_position + up);
+	//m_spotLightUp->SetColor({ 300.0f, 300.0f, 0.0f, 0.0f });
+	//m_spotLightUp->SetRange(500.0f);
+	//m_spotLightUp->SetAngle(/*90.0f*/3.14f * 0.5f);
+	//m_spotLightUp->SetDirection(g_vec3Down);
 
 
 	//下向きのスポットライトの生成と初期化
@@ -40,12 +40,12 @@ bool CUFO::PureVirtualStart()
 	//イイ感じに伸ばす
 	up.Scale(500.0f);
 	//下向きのスポットライトのパラメータを設定
-	m_spotLightDown = NewGO<CSpotLight>(0);
+	/*m_spotLightDown = NewGO<CSpotLight>(0);
 	m_spotLightDown->SetPosition(m_position + up);
 	m_spotLightDown->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	m_spotLightDown->SetRange(500.0f);
 	m_spotLightDown->SetDirection(g_vec3Down);
-	m_spotLightDown->SetAngle(3.14f * 0.25f);
+	m_spotLightDown->SetAngle(3.14f * 0.25f);*/
 
 	//UFOの光線のモデルの生成と初期化
 	m_ufoLight = NewGO<CModelRender>(1);
@@ -143,8 +143,8 @@ CUFO::~CUFO()
 	DeleteGO(m_modelRender);
 
 	//スポットライトの破棄
-	DeleteGO(m_spotLightUp);
-	DeleteGO(m_spotLightDown);
+	//DeleteGO(m_spotLightUp);
+	//DeleteGO(m_spotLightDown);
 	//UFOの光線のモデルの破棄
 	DeleteGO(m_ufoLight);
 
@@ -341,8 +341,8 @@ void CUFO::Search()
 		//黄色に光る
 		//m_modelRender->SetEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
 		//上下のスポットライトを光らせる
-		m_spotLightUp->SetColor({ 450.0f,450.0f,0.0f,1.0f });
-		m_spotLightDown->SetColor({ 450.0f,450.0f,0.0f,1.0f });
+		//m_spotLightUp->SetColor({ 450.0f,450.0f,0.0f,1.0f });
+		//m_spotLightDown->SetColor({ 450.0f,450.0f,0.0f,1.0f });
 		//UFOの光線を光らせる
 		m_ufoLight->SetEmissionColor({ 1.5f,1.5f,0.0f,1.0f });
 		//UFOの光線を半透明にする
@@ -364,8 +364,8 @@ void CUFO::Search()
 			//赤色に光る
 			//m_modelRender->SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
 			//上下のスポットライトを光らせる
-			m_spotLightUp->SetColor({ 900.0f,0.0f,0.0f,1.0f });
-			m_spotLightDown->SetColor({ 900.0f,0.0f,0.0f,1.0f });
+			//m_spotLightUp->SetColor({ 900.0f,0.0f,0.0f,1.0f });
+			//m_spotLightDown->SetColor({ 900.0f,0.0f,0.0f,1.0f });
 			//UFOの光線を光らせる
 			m_ufoLight->SetEmissionColor({ 3.0f,0.0f,0.0f,1.0f });
 			//UFOの光線を半透明にする
@@ -403,8 +403,8 @@ void CUFO::Search()
 		//光らない
 		//m_modelRender->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//上下のスポットライトの光を消す
-		m_spotLightUp->SetColor({ 0.0f,0.0f,0.0f,1.0f });
-		m_spotLightDown->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+		//m_spotLightUp->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+		//m_spotLightDown->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の光を消す
 		m_ufoLight->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の透明にする
@@ -576,8 +576,8 @@ void CUFO::Transport()
 		//UFOの回転速度を2倍にする
 		m_ufoAngleSpeed = 200.0f;
 		//上下のスポットライトの光を消す
-		m_spotLightUp->SetColor({ 0.0f,0.0f,0.0f,1.0f });
-		m_spotLightDown->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+		//m_spotLightUp->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+		//m_spotLightDown->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の光を消す
 		m_ufoLight->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線を透明にする
@@ -762,7 +762,9 @@ void CUFO::Landing()
 	qRot.Multiply(m_rotation);
 	
 	//プレイヤーの基点は足元だけど、お腹らへんを中心に回すためのオフセット
-	Vector3 offSet = g_vec3Left;
+	Vector3 offSet = /*g_vec3Left*/g_vec3Right;
+	//自身の回転で回す
+	m_rotation.Apply(offSet);
 	//プレイヤーの高さの半分
 	const float playerHalfHeight = 150.0f;
 	offSet.Scale(playerHalfHeight);
@@ -1083,18 +1085,18 @@ void CUFO::UpdateLight()
 	upVec.Scale(300.0f);
 	//照らす位置
 	//m_spotLightUp->SetAngle(10.0f);
-	m_spotLightUp->SetPosition(m_position + upVec);
+	//m_spotLightUp->SetPosition(m_position + upVec);
 	m_ufoLight->SetPosition(m_position);
 	m_ufoLight->SetRotation(m_rotation);
 	//照らす方向
-	m_spotLightUp->SetDirection(m_upVec);
+	//m_spotLightUp->SetDirection(m_upVec);
 
 	upVec = m_upVec;
 	upVec.Scale(500.0f);
-	m_spotLightDown->SetPosition(m_position + upVec);
+	//m_spotLightDown->SetPosition(m_position + upVec);
 	Vector3 downVec = m_upVec;
 	downVec.Scale(-1.0f);
-	m_spotLightDown->SetDirection(downVec);
+	//m_spotLightDown->SetDirection(downVec);
 
 
 

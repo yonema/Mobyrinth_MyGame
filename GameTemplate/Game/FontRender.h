@@ -116,6 +116,14 @@ public:		//ここのメンバ関数を主に使う。
 	{
 		m_postRenderFlag = flag;
 	}
+
+
+	void SetShadowParam(const bool isDrawShadow, const float shadowOffset, const Vector4& shadowColor)
+	{
+		m_font.SetShadowParam(isDrawShadow, shadowOffset, shadowColor);
+	}
+
+
 private:
 	static const int m_maxTextSize = 256;
 private:	//データメンバ

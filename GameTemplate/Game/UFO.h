@@ -85,8 +85,8 @@ private:	//データメンバ
 	int m_updateState = enSearch;			//アップデートのステート（状態）
 	int m_searchFlag = true;				//プレイヤーを探しているか？
 	float m_timer = 0.0f;					//タイマー
-	CSpotLight* m_spotLightUp = nullptr;	//スポットライト
-	CSpotLight* m_spotLightDown = nullptr;	//スポットライト
+	//CSpotLight* m_spotLightUp = nullptr;	//スポットライト
+	//CSpotLight* m_spotLightDown = nullptr;	//スポットライト
 	CModelRender* m_ufoLight = nullptr;		//UFOのライト
 	CUFOLandingPoint* m_ufoLandingPoint = nullptr;	//着地点クラス
 	bool m_getOnStageFlag = true;			//ステージの上に乗る処理を行うか？

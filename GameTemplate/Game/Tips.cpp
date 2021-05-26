@@ -26,6 +26,7 @@ CTips::CTips()
 	);
 	//ポストレンダラーで描画する
 	m_tipsFR->SetPostRenderFlag(true);
+	m_tipsFR->SetShadowParam(true, 0.4f, { 0.0f,0.0f,0.0f,1.0f });
 
 	//Tipsの文章を表示するフォントレンダラーの生成と初期化
 	m_sentenceFR = NewGO<CFontRender>(1);
@@ -35,6 +36,7 @@ CTips::CTips()
 	//ポストレンダラーで描画する
 	m_sentenceFR->SetPostRenderFlag(true);
 	m_sentenceFR->SetScale(0.7f);
+	m_sentenceFR->SetShadowParam(true, 0.4f, { 0.0f,0.0f,0.0f,1.0f });
 
 	//テキストの初期化
 	InitText();

@@ -240,7 +240,7 @@ const float CSceneChange::GetWipeSizeMax(const int wipeType) const
 const bool CSceneChange::IsWipeFinished() const
 {
 	//最後までワイプしたか？
-	bool isFinished = false;
+	bool isFinished = !m_wipeFlag;
 
 	//現在のワイプのサイズが、
 	//現在のワイプの種類の最大のサイズより
