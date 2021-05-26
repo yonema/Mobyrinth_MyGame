@@ -33,6 +33,8 @@ bool OObigFire::StartSub()
 	m_flameSE = NewGO<CSoundCue>(0);
 	//flameSEのサウンドキューを、waveファイルを指定して初期化する。
 	m_flameSE->Init(L"Assets/sound/flame.wav");
+	//音量調節
+	m_flameSE->SetVolume(0.3f);
 
 	//m_flame_waterエフェクトの作成
 	m_flame_water = NewGO<Effect>(0);

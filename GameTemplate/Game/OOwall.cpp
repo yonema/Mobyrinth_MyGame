@@ -44,7 +44,7 @@ bool OOwall::StartSub()
 	//m_wallmoveSEのサウンドキューを、waveファイルを指定して初期化する。
 	m_wallmoveSE->Init(L"Assets/sound/wallmove.wav");
 	//音量調節
-	m_wallmoveSE->SetVolume(0.5f);
+	m_wallmoveSE->SetVolume(0.1f);
 
 	return true;
 }
