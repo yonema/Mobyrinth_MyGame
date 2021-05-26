@@ -110,7 +110,7 @@ private:	//データメンバ
 
 
 	float m_switchingTimer = 0.0f;				//スイッチの切り替え中のタイマー
-	CSpriteRender* m_fadeSR = nullptr;			//フェードイン、アウトで使うスプライトレンダラー
+	//CSpriteRender* m_fadeSR = nullptr;			//フェードイン、アウトで使うスプライトレンダラー
 	float m_test = 0.0f;
 	bool m_flagRotationCamera = true;			//カメラがステージの周りを回転しているかのフラグ
 	bool m_wipeEndFlag = false;					//ワイプが終わった？

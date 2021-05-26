@@ -72,7 +72,7 @@ private: //メンバ変数
 	CUFO* m_ufo = nullptr;						//UFOのポインタ
 	bool m_switchingFlag = false;				//スイッチの切り替え中か？
 	float m_switchingTimer = 0.0f;				//スイッチの切り替え中のタイマー
-	CSpriteRender* m_fadeSR = nullptr;			//フェードイン、アウトで使うスプライトレンダラー
+	//CSpriteRender* m_fadeSR = nullptr;			//フェードイン、アウトで使うスプライトレンダラー
 	CSoundCue* m_buttonpushSE = nullptr;		//m_buttonpushSEのサウンドキュー
 	CSoundCue* m_activationSE = nullptr;		//m_activationSEのサウンドキュー
 	CSoundCue* m_invalidationSE = nullptr;		//m_invalidationSEのサウンドキュー

@@ -2,6 +2,11 @@
 #include "SceneChange.h"
 #include "GameTime.h"
 
+//デストラクタ
+CSceneChange::~CSceneChange()
+{
+
+}
 //初期化関数
 void CSceneChange::Init()
 {
@@ -10,6 +15,9 @@ void CSceneChange::Init()
 
 	//スプライトの初期化
 	InitSprite();
+
+	//フェードの初期化
+	InitFade();
 
 	//乱数の初期化
 	srand((unsigned int)time(NULL));
@@ -91,6 +99,22 @@ void CSceneChange::InitSprite()
 	m_backSprite.Update(g_vec3Zero, g_quatIdentity, { -1.0f,1.0f,1.0f });
 }
 
+/// <summary>
+/// フェードの初期化
+/// </summary>
+void CSceneChange::InitFade()
+{
+	SpriteInitData fadeSpriteInitData;
+	fadeSpriteInitData.m_ddsFilePath[0] = "Assets/Image/black.DDS";
+	fadeSpriteInitData.m_width = 1280.0f;
+	fadeSpriteInitData.m_height = 780.0f;
+	fadeSpriteInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
+	fadeSpriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+
+	m_fadeSprite.Init(fadeSpriteInitData);
+	m_fadeSprite.SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+}
+
 //パラメータのアップデート関数
 void CSceneChange::UpdateParam()
 {
@@ -106,6 +130,8 @@ void CSceneChange::UpdateParam()
 		m_wipeParam.wipeSize += m_wipeSpeed * m_deltaTime;
 	}
 }
+
+
 
 //描画関数
 void CSceneChange::Draw(RenderContext& renderContext)
@@ -141,6 +167,8 @@ void CSceneChange::Draw(RenderContext& renderContext)
 		m_backSprite.Draw(renderContext);
 
 	m_finalSprite.Draw(renderContext);
+
+	m_fadeSprite.Draw(renderContext);
 
 	//メインレンダリングターゲットへの書き込み終了待ち
 	renderContext.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
