@@ -216,7 +216,12 @@ void OOReverseALL::AfterHitPlayer()
 			//CReversibleObjectなら反転させる
 			CReversibleObject* revers = dynamic_cast<CReversibleObject*>(levelObjects[i]);
 			if (revers)
-				revers->AllReverse();
+			{
+				//透明オブジェクトでは無かったら
+				if (revers->GetFlagIsHit())
+					//反転させる
+					revers->AllReverse();
+			}
 		}
 		//changeSEをループ再生をオフで再生する。
 		m_changeSE->Play(false);

@@ -2,7 +2,7 @@
 #include "SpringCamera.h"
 
 
-float dampingK = 35.0f;
+float dampingK = 70.0f;
 		float CalcSpringScalar(
 			float positionNow,
 			float positionTarget,

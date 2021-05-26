@@ -7,6 +7,9 @@
 /// </summary>
 class CSceneChange
 {
+public:
+	~CSceneChange();				//デストラクタ
+
 public:		//グラフィックエンジンで呼ばれるメンバ関数
 	void Init();					//初期化関数
 	void UpdateParam();				//パラメータのアップデート関数
@@ -156,6 +159,12 @@ public:		//メンバ関数
 	/// <returns>最後までワイプしたか？</returns>
 	const bool IsWipeFinished() const;
 
+
+	Sprite* GetFadeSprite()
+	{
+		return &m_fadeSprite;
+	}
+
 private:	//privateなメンバ関数
 
 	/// <summary>
@@ -167,6 +176,11 @@ private:	//privateなメンバ関数
 	/// スプライトの初期化
 	/// </summary>
 	void InitSprite();
+
+	/// <summary>
+	/// フェードの初期化
+	/// </summary>
+	void InitFade();
 
 public:		//列挙型
 
@@ -247,4 +261,5 @@ private:	//データメンバ
 	bool m_wipeFlag = false;		//ワイプするか？
 	float m_wipeSpeed = 120.0f;		//ワイプのスピード
 	float m_deltaTime = 0.0f;		//デルタタイム
+	Sprite m_fadeSprite;			//フェードイン、アウトで使うスプライトレンダラー
 };

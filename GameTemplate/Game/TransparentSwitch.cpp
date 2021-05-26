@@ -51,15 +51,15 @@ bool OOTransparentSwitch::StartSub()
 	//UFOを探す	//こっちは見つかるか分からない。
 	m_ufo = FindGO<CUFO>("UFO");
 
-	//フェードに使うスプライトの生成と初期化
-	m_fadeSR = NewGO<CSpriteRender>(0);
-	m_fadeSR->Init("Assets/Image/black.DDS", 1280.0f, 780.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-	m_fadeSR->SetPosition({ 0.0f,0.0f,0.0f });
-	m_fadeSR->SetPostRenderFlag(true);
-	//透明にしておく
-	m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-	//非表示にする
-	m_fadeSR->Deactivate();
+	////フェードに使うスプライトの生成と初期化
+	//m_fadeSR = NewGO<CSpriteRender>(0);
+	//m_fadeSR->Init("Assets/Image/black.DDS", 1280.0f, 780.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+	//m_fadeSR->SetPosition({ 0.0f,0.0f,0.0f });
+	//m_fadeSR->SetPostRenderFlag(true);
+	////透明にしておく
+	//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+	////非表示にする
+	//m_fadeSR->Deactivate();
 
 	//OBBのサイズを設定
 	Vector3 obbSize;
@@ -130,6 +130,10 @@ OOTransparentSwitch::~OOTransparentSwitch()
 
 	//警告タイマーのサウンドの削除
 	DeleteGO(m_timerWarningSC);
+
+	DeleteGO(m_invalidationSE);
+
+	DeleteGO(m_activation);
 }
 
 //アップデート関数
@@ -237,7 +241,7 @@ void OOTransparentSwitch::UpdateSub()
 			//押されたときのモデルレンダラーを表示する
 			m_modelRender->Activate();
 
-			m_fadeSR->Activate();
+			//m_fadeSR->Activate();
 
 			//m_buttonpushSEをループ再生をオフで再生する。
 			m_buttonpushSE->Play(false);
@@ -273,7 +277,8 @@ void OOTransparentSwitch::Switching()
 		float timeScale = (m_switchingTimer - startWaitTime) / (startFadeOutTime - startWaitTime);
 		alphaValue *= timeScale;
 		//フェードを徐々に暗くしていく
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < startFadeWaitTime)
 	{
@@ -281,7 +286,9 @@ void OOTransparentSwitch::Switching()
 		//何もせずに待つ
 
 		//フェードは真っ暗
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+
 
 		//カメラがプレイヤーを見なくする
 		m_gameCamera->SetLookPlayerFlag(false);
@@ -307,7 +314,8 @@ void OOTransparentSwitch::Switching()
 		float timeScale = (m_switchingTimer - startFadeWaitTime) / (startFadeInTime - startFadeWaitTime);
 		alphaValue -= 1.0f * timeScale;
 		//フェードを徐々に明るくしていく
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < switchingTime)
 	{
@@ -323,7 +331,8 @@ void OOTransparentSwitch::Switching()
 			//小さいとき
 
 			//フェードを透明にする
-			m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+			//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+			g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 		}
 		else
 		{
@@ -363,7 +372,8 @@ void OOTransparentSwitch::Switching()
 		float timeScale = (m_switchingTimer - switchingTime) / (endFadeOutTime - switchingTime);
 		alphaValue *= timeScale;
 		//フェードを徐々に暗くしていく
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < endFadeWaitTime)
 	{
@@ -371,7 +381,8 @@ void OOTransparentSwitch::Switching()
 		//何もせずに待つ
 
 		//フェードは真っ暗
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 		//カメラがプレイヤーを見るようにする
 		m_gameCamera->SetLookPlayerFlag(true);
 
@@ -389,7 +400,8 @@ void OOTransparentSwitch::Switching()
 		float timeScale = (m_switchingTimer - endFadeWaitTime) / (endFadeInTime - endFadeWaitTime);
 		alphaValue -= 1.0f * timeScale;
 		//フェードを徐々に明るくしていく
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 
 		//タイマーのフォントの更新
 		UpdateTimerFR();
@@ -403,9 +415,10 @@ void OOTransparentSwitch::Switching()
 		//切り替え中のタイマーを初期化する
 		m_switchingTimer = 0.0f;
 		//フェードを透明にする
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 		//フェードを非表示にする
-		m_fadeSR->Deactivate();
+		//m_fadeSR->Deactivate();
 
 		//スイッチオンフラグを立てる
 		m_flagSwitchOn = true;

@@ -47,15 +47,15 @@ bool GameCamera::Start()
 	m_springCamera.SetUp(vecUp);
 
 
-	//フェードに使うスプライトの生成と初期化
-	m_fadeSR = NewGO<CSpriteRender>(0);
-	m_fadeSR->Init("Assets/Image/black.DDS", 1280.0f, 780.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-	m_fadeSR->SetPosition({ 0.0f,0.0f,0.0f });
-	m_fadeSR->SetPostRenderFlag(true);
-	//透明にしておく
-	m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-	//非表示にする
-	//m_fadeSR->Deactivate();
+	////フェードに使うスプライトの生成と初期化
+	//m_fadeSR = NewGO<CSpriteRender>(0);
+	//m_fadeSR->Init("Assets/Image/black.DDS", 1280.0f, 780.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+	//m_fadeSR->SetPosition({ 0.0f,0.0f,0.0f });
+	//m_fadeSR->SetPostRenderFlag(true);
+	////透明にしておく
+	//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+	////非表示にする
+	////m_fadeSR->Deactivate();
 
 
 	//開始演出用の位置情報
@@ -175,7 +175,8 @@ void GameCamera::FadeDirectingCamera()
 		float timeScale = (m_switchingTimer - startWaitTime) / (startFadeOutTime - startWaitTime);
 		alphaValue *= timeScale;
 		//フェードを徐々に暗くしていく
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < startFadeWaitTime)
 	{
@@ -186,7 +187,8 @@ void GameCamera::FadeDirectingCamera()
 		m_flagRotationCamera = false;
 
 		//フェードは真っ暗
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
 	else if (m_switchingTimer < startFadeInTime)
 	{
@@ -207,7 +209,8 @@ void GameCamera::FadeDirectingCamera()
 		float timeScale = (m_switchingTimer - startFadeWaitTime) / (startFadeInTime - startFadeWaitTime);
 		alphaValue -= 1.0f * timeScale;
 		//フェードを徐々に明るくしていく
-		m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 
 	//カメラをリフレッシュして、一時的にばねカメラを無効にし、
