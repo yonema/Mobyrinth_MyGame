@@ -130,7 +130,7 @@ void OObigFire::Burn()
 	if (DistLen < MaxDist) {
 		float Le = MaxDist - DistLen;
 		float SubLe = Le / MaxDist;
-		float Vo = 2.0f * SubLe;
+		float Vo = 0.8f * SubLe;
 		
 		//flameSEをループ再生をオンで再生する。
 		m_flameSE->Play(true);
