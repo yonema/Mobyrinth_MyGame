@@ -109,8 +109,8 @@ void CCapacityUI::InitFont()
 	//明るすぎるため正規化
 	fontColor.Normalize();
 	//色が一緒過ぎて見えにくかったから、暗くする
-	fontColor.Scale(0.1);
 	fontColor = { 1.0f,1.0f,1.0f };
+	fontColor.Scale(0.0);
 	m_defaultFontColor[enBackSide] = fontColor;
 	//表側のフォントとのY座標の差
 	const float diffFrontToBackY = 70.0f;

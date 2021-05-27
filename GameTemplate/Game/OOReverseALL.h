@@ -14,6 +14,7 @@ public:		//自動で呼ばれるメンバ関数
 	bool StartSub() override final;		//スタート関数
 	~OOReverseALL();					//デストラクタ
 	void UpdateSub() override final;	//アップデート関数
+	void UpdateWhenPaused()override final;	//ポーズ中でもいつでもアップデートする関数
 
 private:	//privateなメンバ関数
 

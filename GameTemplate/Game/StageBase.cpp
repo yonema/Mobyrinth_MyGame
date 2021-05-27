@@ -753,7 +753,7 @@ void IStageBase::CheckGoal()
 	//アニメーションの初期化でエラーが出るのを調べる用のコード
 	//デバック用
 	//後で消す
-	////ゴールしていたら、ゴールの処理をする
+	//ゴールしていたら、ゴールの処理をする
 	//Goal();
 	//return;
 	//デバック用ここまで
@@ -771,6 +771,8 @@ void IStageBase::CheckGoal()
 			m_pause->SetCanPause(false);
 		}
 	}
+
+	//Quit();
 }
 
 /// <summary>

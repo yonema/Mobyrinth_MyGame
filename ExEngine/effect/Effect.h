@@ -12,7 +12,7 @@ public:		//自動で呼ばれるメンバ関数
 	Effect();						//コンストラクタ
 	~Effect();						//デストラクタ
 	bool Start() override final;	//スタート関数
-	void Update() override final;	//アップデート関数
+	void UpdateWhenPaused() override final;	//アップデート関数
 
 public:		//メンバ関数
 	
@@ -84,7 +84,10 @@ public:		//メンバ関数
 		return EffectEngine::GetInstance()->IsPlay(m_handle);
 	}
 
-
+	void Stop()
+	{
+		EffectEngine::GetInstance()->Stop(m_handle);
+	}
 
 private:	//データメンバ
 	Effekseer::EffectRef m_effect;	//エフェクト
