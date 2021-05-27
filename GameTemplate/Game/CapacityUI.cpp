@@ -302,8 +302,8 @@ void CCapacityUI::Increased(const int frontOrBackSide)
 		DefaultParam(frontOrBackSide);
 
 		//フォントのカラーを増えた時のカラーにする
-		//if ()
-		m_RONumFR[frontOrBackSide]->SetColor({ 1.0f,1.0f,0.0f,1.0f });
+		if (m_playerFrontOrBackSide == frontOrBackSide)
+			m_RONumFR[frontOrBackSide]->SetColor({ 1.0f,1.0f,0.0f,1.0f });
 		
 	}
 
@@ -394,7 +394,8 @@ void CCapacityUI::Decreased(const int frontOrBackSide)
 		DefaultParam(frontOrBackSide);
 
 		//フォントのカラーを減った時のカラーにする
-		m_RONumFR[frontOrBackSide]->SetColor({ 0.0f,0.0f,2.0f,1.0f });
+		if (m_playerFrontOrBackSide == frontOrBackSide)
+			m_RONumFR[frontOrBackSide]->SetColor({ 0.0f,0.0f,2.0f,1.0f });
 		
 	}
 
@@ -625,6 +626,7 @@ void CCapacityUI::CheckActiveFontColor()
 		(0 <= lpIndex && lpIndex <= 8))
 	{
 		//表側
+		m_playerFrontOrBackSide = CLevelObjectManager::enFrontSide;
 		m_defaultFontColor[enFrontSide] = m_activeFontColor;
 		m_defaultFontColor[enBackSide] = m_inactiveFontColor;
 
@@ -632,6 +634,7 @@ void CCapacityUI::CheckActiveFontColor()
 	else if (9 <= lpIndex <= 24)
 	{
 		//裏側
+		m_playerFrontOrBackSide = CLevelObjectManager::enBackSide;
 		m_defaultFontColor[enFrontSide] = m_inactiveFontColor;
 		m_defaultFontColor[enBackSide] = m_activeFontColor;
 	}
