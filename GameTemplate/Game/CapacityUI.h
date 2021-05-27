@@ -109,5 +109,7 @@ private:	//データメンバ
 	float m_defaultScale = 1.0f;					//通常の拡大
 	CSoundCue* m_capacity_over = nullptr;			//キャパオーバーの音
 	Player* m_player = nullptr;						//プレイヤーのポインタ
+	//プレイヤーが表側にいるか裏側にいるか？
+	int m_playerFrontOrBackSide = CLevelObjectManager::enFrontSide;
 };
 
