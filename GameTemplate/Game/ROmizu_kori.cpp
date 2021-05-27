@@ -23,13 +23,17 @@ void ROmizu_kori::QuerySub()
 		//障害オブジェクトの「でかい火」をクエリ
 		QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
 			{
-				//自身と「でかい火」が衝突したら
-				if (IsHitObject(*this, *bigFire))
+				if (m_actionFlag)
 				{
-					//「でかい火」にダメージを与える
-					bigFire->Damage();
-					//自身は破棄する
-					DeleteGO(this);
+					//自身と「でかい火」が衝突したら
+					if (IsHitObject(*this, *bigFire))
+					{
+						//「でかい火」にダメージを与える
+						bigFire->Damage();
+						//自身は破棄する
+						DeleteGO(this);
+						m_actionFlag = false;
+					}
 				}
 				//trueを戻す
 				return true;
