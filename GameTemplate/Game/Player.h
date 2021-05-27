@@ -532,6 +532,7 @@ private:	//データメンバ
 	bool m_operationFlag = false; //操作できるかのフラグ
 	bool m_titleMove = false;
 	bool m_stunFlag = false;					//スタン状態（吹っ飛び状態）か？
+	bool m_stunLeftOrRight = enLeft;			//スタン中の吹っ飛ぶ方向
 	float m_stunTimer = 0.0f;					//スタンのタイマー
 	Vector3 m_stunMoveSpeed = g_vec3Zero;		//スタン中の吹っ飛ばすベクトル
 	Vector3 m_stunDownVec = g_vec3Zero;			//スタン中の重力
