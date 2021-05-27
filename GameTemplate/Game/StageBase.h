@@ -156,6 +156,24 @@ public: //インライン関数
 		m_highestClearStageNum = clearStageNum;
 	}
 
+	/// <summary>
+	/// スイッチのタイムを設定
+	/// </summary>
+	/// <param name="switchTime"></param>
+	void SetSwitchTime(const float switchTime)
+	{
+		m_switchTime = switchTime;
+	}
+
+	/// <summary>
+	/// スイッチのタイムの取得
+	/// </summary>
+	/// <returns></returns>
+	const float GetSwitchTime() const
+	{
+		return m_switchTime;
+	}
+
 protected:	//protectedなメンバ関数
 	/// <summary>
 	/// レベルのロード
@@ -230,6 +248,7 @@ private:	//データメンバ
 	int m_stageNum = -1;							//ステージの番号
 	
 	CSpriteRender* m_goalSR = nullptr;				//ゴールのスプライト
+	float m_switchTime = 10.0f;						//スイッチのタイム
 
 };
 

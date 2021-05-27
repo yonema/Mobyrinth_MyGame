@@ -447,6 +447,8 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				OOTransparentSwitch* OObject;
 				OObject = NewGO<OOTransparentSwitch>(1, "transparentSwitch");
 				OObject->SetPosition(objData.position);
+				//スイッチのタイマーを設定する
+				OObject->SetResetTimerStartValue(m_switchTime);
 				return true;
 			}
 			//oneway
