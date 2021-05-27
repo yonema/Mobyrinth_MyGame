@@ -87,16 +87,23 @@ OOReverseALL::~OOReverseALL()
 #endif
 }
 
-//アップデート関数
-void OOReverseALL::UpdateSub()
+//ポーズ中でもいつでもアップデートする関数
+void OOReverseALL::UpdateWhenPaused()
 {
-	//エフェクト再生までのタイマー
+		//エフェクト再生までのタイマー
 	i += GameTime().GetFrameDeltaTime();
 
 	if (i >= 2.0f) {				//120フレームでエフェクトが終わるのでから始める
 		m_obujectefk->Play();
 		i = 0;
 	}
+}
+
+
+//アップデート関数
+void OOReverseALL::UpdateSub()
+{
+
 	//アップデートステートで処理を振り分ける
 	//switch (m_updateState)
 	//{
