@@ -17,6 +17,9 @@ bool CCapacityUI::Start()
 	//音量調節
 	m_capacity_over->SetVolume(0.5f);
 
+	//プレイヤーを探す
+	m_player = FindGO<Player>("Player");
+
 	return true;
 
 }
@@ -84,6 +87,7 @@ void CCapacityUI::InitFont()
 	fontColor.Normalize();
 	fontColor = { 1.0f,1.0f,1.0f };
 	m_defaultFontColor[enFrontSide] = fontColor;
+	m_activeFontColor = fontColor;
 	//フォントのX座標
 	const float capacityNumX = -615.0f;
 	//フォントのY座標
@@ -112,6 +116,7 @@ void CCapacityUI::InitFont()
 	fontColor = { 1.0f,1.0f,1.0f };
 	fontColor.Scale(0.0);
 	m_defaultFontColor[enBackSide] = fontColor;
+	m_inactiveFontColor = fontColor;
 	//表側のフォントとのY座標の差
 	const float diffFrontToBackY = 70.0f;
 	m_capacityPos[enBackSide] = { capacityNumX ,capacityNumY - diffFrontToBackY };
@@ -171,7 +176,7 @@ void CCapacityUI::Update()
 	swprintf(text, L"%d", num[enBackSide]);
 	m_RONumFR[enBackSide]->SetText(text);
 
-	//最初のフレームっか？
+	//最初のフレームか？
 	if (m_firstFrame)
 	{
 		//最初のフレーム
@@ -187,6 +192,8 @@ void CCapacityUI::Update()
 
 	//どの演出を起こすかチェックする
 	CheckDirecting(num);
+
+	CheckActiveFontColor();
 
 
 	//今の表と裏の数を、前の表と裏の数に代入する
@@ -603,4 +610,39 @@ void CCapacityUI::DefaultParam(const int frontOrBackSide)
 	//カラーを初期化する
 	m_RONumFR[frontOrBackSide]->SetColor(m_defaultFontColor[frontOrBackSide]);
 
+}
+
+
+void CCapacityUI::CheckActiveFontColor()
+{
+	//プレイヤーのウェイポイント
+	const int lpIndex = m_player->GetLeftPointIndex();
+
+
+	//左側のウェイポイントを調べて表側か裏側か調べる
+	if ((25 <= lpIndex && lpIndex <= 31) ||
+		(0 <= lpIndex && lpIndex <= 8))
+	{
+		//表側
+		m_defaultFontColor[enFrontSide] = m_activeFontColor;
+		m_defaultFontColor[enBackSide] = m_inactiveFontColor;
+
+	}
+	else if (9 <= lpIndex <= 24)
+	{
+		//裏側
+		m_defaultFontColor[enFrontSide] = m_inactiveFontColor;
+		m_defaultFontColor[enBackSide] = m_activeFontColor;
+	}
+	
+	for (int frontOrBack = 0; frontOrBack < enFrontAndBackSideNum; frontOrBack++)
+	{
+		if (m_directingState[frontOrBack] == enNormal)
+		{
+			m_RONumFR[frontOrBack]->SetColor(m_defaultFontColor[frontOrBack]);
+			m_RONumFR[frontOrBack]->SetColor(m_defaultFontColor[frontOrBack]);
+		}
+		m_capacityFR[frontOrBack]->SetColor(m_defaultFontColor[frontOrBack]);
+		m_capacityFR[frontOrBack]->SetColor(m_defaultFontColor[frontOrBack]);
+	}
 }

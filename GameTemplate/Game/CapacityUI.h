@@ -3,6 +3,7 @@
 #include "FontRender.h"
 #include "LevelObjectManager.h"
 #include "SoundCue.h"
+#include "Player.h"
 
 /// <summary>
 /// キャパシティのUI表示クラス
@@ -67,6 +68,8 @@ private:	//privateなメンバ関数
 	/// </summary>
 	void DefaultParam(const int frontOrBackSide);
 
+	void CheckActiveFontColor();
+
 
 private:	//列挙型
 	
@@ -95,6 +98,8 @@ private:	//データメンバ
 	Vector2 m_capacityPos[enFrontAndBackSideNum];	//キャパシティのフォントの座標
 	float m_diffCapacityToNum = 0.0f;				//キャパシティからアイテムの数のフォントへの差
 	Vector4 m_defaultFontColor[enFrontAndBackSideNum];	//フォントのカラー
+	Vector4 m_activeFontColor;						//プレイヤーがいる側のフォントのカラー
+	Vector4 m_inactiveFontColor;					//プレイヤーがいない側のフォントのカラー
 	int m_oldRONum[enFrontAndBackSideNum];			//前回の表側と裏側にあるアイテムの数
 	bool m_firstFrame = true;						//最初のフレームか？
 	bool m_titleFlag = false;						//タイトルか？
@@ -103,5 +108,6 @@ private:	//データメンバ
 	int m_maxCapacityNum[enFrontAndBackSideNum] = { 5,5 };	//キャパシティの最大値
 	float m_defaultScale = 1.0f;					//通常の拡大
 	CSoundCue* m_capacity_over = nullptr;			//キャパオーバーの音
+	Player* m_player = nullptr;						//プレイヤーのポインタ
 };
 
