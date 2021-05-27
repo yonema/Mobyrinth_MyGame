@@ -172,7 +172,7 @@ bool CLevelObjectManager::QueryLevelAllObjects(ILevelObjectBase& thisObject, con
 {
 	for (auto lo : m_levelObjects) {
 		//自分自身じゃないとき
-		if (lo->GetObjectType() != objectType) {
+		if (lo != &thisObject) {
 			//重なっているオブジェクトがある。
 			if (IsHitObject(thisObject, *lo)) {
 				return true;

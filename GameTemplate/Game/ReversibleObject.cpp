@@ -554,6 +554,14 @@ void CReversibleObject::HeldPlayer()
 			//ステートをキャンセル状態へ
 			m_objectState = enCancel;
 			m_objectAction = enCancel;
+
+			//ウェイポイント
+			if (m_pPlayer->GetLeftPointIndex() == 8 ||
+				m_pPlayer->GetLeftPointIndex() == 24)
+				m_leftOrRight = enRight;
+			else
+				m_leftOrRight = enLeft;
+
 		}
 	}
 	//オブジェクトを横に投げる処理
@@ -737,11 +745,23 @@ void CReversibleObject::Cancel()
 	//プレイヤーがオブジェクトを持っていないようにする
 	m_pPlayer->SetHoldObject(false);
 
+	//キャンセルの時、重なったら弾かれる処理
 	//ステートをクエリへ移行する
 	m_objectState = enQuery;
 
 	//移動先でオブジェクト同士が重なったときの処理を設定
 	m_objectAction = enRepelled;
+
+
+	//キャンセルの時何もしない処理
+	////ステートをプレイヤーに持たれるかどうか調べる状態にする
+	//m_objectState = enCheckPlayer;
+
+	////ウェイポイントの場所を更新する
+	//CheckWayPoint();
+
+	////表側か裏側かを更新する
+	//CheckFrontOrBackSide();
 }
 
 /// <summary>
@@ -922,14 +942,14 @@ void CReversibleObject::Query()
 	}
 	else
 	{
-		//念のため書いてるけど、本来ここを通る前に、
-		//ThrownDown()でキャパシティオーバーを調べて
-		//オーバーしてたらRepelled()に行っているはず
 
 		//オーバーしている
 
 		//クエリせずに
 		//下に投げた時のオーバーラップ
+		if (m_objectAction == enRepelled)
+			m_objectState = enRepelled;
+		else
 		m_objectState = enOverlapThrownDown;
 		test.Scale(-1.0f);
 	}
