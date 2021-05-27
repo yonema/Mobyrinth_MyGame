@@ -302,6 +302,7 @@ void CCapacityUI::Increased(const int frontOrBackSide)
 		DefaultParam(frontOrBackSide);
 
 		//フォントのカラーを増えた時のカラーにする
+		//if ()
 		m_RONumFR[frontOrBackSide]->SetColor({ 1.0f,1.0f,0.0f,1.0f });
 		
 	}
