@@ -66,6 +66,11 @@ bool OOReverseALL::StartSub()
 //デストラクタ
 OOReverseALL::~OOReverseALL()
 {
+	//エフェクトが再生中なら
+	if (m_obujectefk->IsPlay())
+		//停止する
+		m_obujectefk->Stop();
+
 	//m_objectefkの削除
 	DeleteGO(m_obujectefk);
 
