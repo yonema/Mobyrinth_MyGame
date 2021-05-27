@@ -277,8 +277,13 @@ void Player::CheckWayPoint()
 	//m_dbgDot1 = LpDotPlayer;
 	//m_dbgDot2 = RpDotPlayer;
 	//デバック用ここまで
+
+	//スタン中か？
 	if (!m_stunFlag)
 	{
+		//スタン中ではない
+
+
 		//OBBで調べる
 		//if (m_padLStickXF < 0.0f &&
 		//	CollisionOBBs(m_myCharaCon.GetOBB(), m_wayPointOBB[m_lpIndex]))
@@ -339,6 +344,9 @@ void Player::CheckWayPoint()
 	}
 	else
 	{
+		//スタン中
+
+
 		//OBBで調べる
 		//if (m_leftOrRight == enRight &&
 		//	CollisionOBBs(m_myCharaCon.GetOBB(), m_wayPointOBB[m_lpIndex]))
@@ -373,7 +381,7 @@ void Player::CheckWayPoint()
 		{
 			//今のウェイポイントの間にいる
 		}
-		else if (LpDotPlayer <= f && m_leftOrRight == enRight)
+		else if (LpDotPlayer <= f && !m_stunLeftOrRight == enRight)
 		{
 			//今のウェイポイントの間から、左側に出ていった
 			m_wayPointState += 1;
@@ -384,7 +392,7 @@ void Player::CheckWayPoint()
 				m_wayPointState = 0;
 			}
 		}
-		else if (RpDotPlayer >= -f && m_leftOrRight == enLeft)
+		else if (RpDotPlayer >= -f && !m_stunLeftOrRight == enLeft)
 		{
 			//今のウェイポイントの間から、右側から出ていった
 			//m_wayPointStateを減算して右に進める。
@@ -549,16 +557,16 @@ void Player::StunMove()
 		//OBBへのベクトルと、右向きのベクトルの内積
 		float hitOBBDotRight = Dot(playerToHitOBB, rightVec);
 		//左に飛ばされるか、右に飛ばされるか
-		int leftOrRight = enLeft;
+		m_stunLeftOrRight = enLeft;
 		if (hitOBBDotRight >= 0.0f)
 		{
 			//内積が正だったら
 			//反対側にする
-			leftOrRight = enRight;
+			m_stunLeftOrRight = enRight;
 		}
 		//最終的に吹っ飛ばされる先の座標を取ってくる
 		m_stunMoveSpeed = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
-		(m_rpIndex, m_onWayPosition, 1000.0f, leftOrRight);
+		(m_rpIndex, m_onWayPosition, 1000.0f, m_stunLeftOrRight);
 		//デバック用
 		//後で消す
 		//m_dbgStunMoveModel->SetPosition(m_stunMoveSpeed);
@@ -1212,6 +1220,8 @@ void Player::AnimationController()
 		//スタン中
 		//アイドル状態のアニメーション
 		m_animState = enAnimClip_idle;
+		//アニメーションの遷移をリセットする
+		AnimationReset();
 	}
 	else if (m_lifting)
 	{
