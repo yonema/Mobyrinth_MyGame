@@ -18,6 +18,8 @@ public:		//自動で呼ばれるメンバ関数
 	{
 		//ステージを生成し直す
 		CStage* stage = NewGO<CStage>(0);
+		//スイッチのタイムを設定する
+		stage->SetSwitchTime(GetSwitchTime());
 		//同じレベルのファイルパスで初期化する
 		stage->Init(GetLevelFilePath(), GetHighestClearStageNum());
 	}
