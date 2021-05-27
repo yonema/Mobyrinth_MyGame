@@ -162,7 +162,7 @@ void GameCamera::FadeDirectingCamera()
 	if (m_switchingTimer < startWaitTime)
 	{
 		//最初の待つ時間
-		int test = 10;
+
 		//何もせずに待つ
 	}
 	else if (m_switchingTimer < startFadeOutTime)
@@ -215,7 +215,7 @@ void GameCamera::FadeDirectingCamera()
 
 	//カメラをリフレッシュして、一時的にばねカメラを無効にし、
 	//一気にカメラを移動できるようにする
-	m_springCamera.Refresh();
+	//m_springCamera.Refresh();
 
 	m_switchingTimer += GameTime().GetFrameDeltaTime();
 }
