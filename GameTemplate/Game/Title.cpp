@@ -213,6 +213,18 @@ Title::~Title()
 //アップデート関数
 void Title::Update()
 {
+	//アニメーションの初期化でエラーが出るのを調べる用のコード
+	//デバック用
+	//後で消す
+	//if (m_stageState == enStartTitle)
+	//	//ランダムワイプアウトをする
+	//	g_sceneChange->RandomWipeOut();
+
+	//m_stageState = enStageDecision;
+	//m_stageSelectState = enStage1;
+	//デバック用ここまで
+
+
 	//現在のステージのステート（状態）で処理を振り分ける
 	switch (m_stageState)
 	{
@@ -269,12 +281,15 @@ void Title::StartTitle()
 
 	m_title->SetMulColor({ 1.0f,1.0f,1.0f,m_countStartTitle / 120.0f });
 
-	if (m_countStartTitle == 120 || g_pad[0]->IsTrigger(enButtonA)) {
-		m_stageState = enTitleScreen;
-		//ここでタイトルアイコンの位置を設定する。
-		m_title->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-		//ボタンを押すことができないようにする（連続入力防止用）
-		m_buttonFlag = false;
+	if (g_sceneChange->IsWipeFinished())
+	{
+		if (m_countStartTitle == 120 || g_pad[0]->IsTrigger(enButtonA)) {
+			m_stageState = enTitleScreen;
+			//ここでタイトルアイコンの位置を設定する。
+			m_title->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+			//ボタンを押すことができないようにする（連続入力防止用）
+			m_buttonFlag = false;
+		}
 	}
 }
 

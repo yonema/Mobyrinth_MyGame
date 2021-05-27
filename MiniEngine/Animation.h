@@ -144,8 +144,10 @@ private:
 	void PlayCommon(AnimationClip* nextClip, float interpolateTime)
 	{
 		int index = GetLastAnimationControllerIndex();
-		if (m_animationPlayController[index].GetAnimClip() == nextClip) {
-			return;
+		if (index != -1) {
+			if (m_animationPlayController[index].GetAnimClip() == nextClip) {
+				return;
+			}
 		}
 		if (interpolateTime == 0.0f) {
 			//ï‚äÆÇ»ÇµÅB

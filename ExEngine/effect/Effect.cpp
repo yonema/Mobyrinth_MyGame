@@ -23,7 +23,7 @@ bool Effect::Start()
 }
 
 //アップデート関数
-void Effect::Update()
+void Effect::UpdateWhenPaused()
 {
 	EffectEngine::GetInstance()->UpdateEffectWorldMatrix(
 		m_handle,
