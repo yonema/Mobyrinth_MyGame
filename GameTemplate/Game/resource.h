@@ -2,6 +2,14 @@
 // Microsoft Visual C++ generated include file.
 // Used by Game.rc
 
+#define IDI_TEST 107
+#define IDI_SMALL 108
+
+#ifndef IDC_STATIC
+#define IDC_STATIC -1
+#endif
+
+
 // 新しいオブジェクトの次の既定値
 // 
 #ifdef APSTUDIO_INVOKED
@@ -12,3 +20,4 @@
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
+
