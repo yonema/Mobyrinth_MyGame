@@ -198,6 +198,15 @@ protected:	//protectedなメンバ関数
 		m_stageNum = stageNum;
 	}
 
+	/// <summary>
+	/// ステージの番号を取得する
+	/// </summary>
+	/// <returns>ステージの番号</returns>
+	const int GetStageNum() const
+	{
+		return m_stageNum;
+	}
+
 
 protected:	//オーバーライドしてほしいメンバ関数
 

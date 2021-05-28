@@ -595,11 +595,12 @@ void Title::StageDecision()
 		break;
 	case enStage3:
 		stage = NewGO<CStage>(0, "stage");
-		stage->SetSwitchTime(12.0f);
 		stage->Init("Assets/level/O_normal.tkl", m_stageSelectState);
 		break;
 	case enStage4:
 		stage = NewGO<CStage>(0, "stage");
+		//このステージはスイッチのタイムを12秒に設定する
+		stage->SetSwitchTime(12.0f);
 		stage->Init("Assets/level/T_hard.tkl", m_stageSelectState);
 		break;
 	case enStage5:

@@ -6,7 +6,7 @@ bool CObstacleObject::PureVirtualStart()
 {
 	//OBBWorldに自身のOBBを登録する
 	//これによってPlayerが通れなくなる
-	COBBWorld::GetInstance()->AddOBB(&GetOBB());
+	//COBBWorld::GetInstance()->AddOBB(&GetOBB());
 
 	//モデルの回転を、現在の場所とイイ感じに合わせる
 	//CheckWayPoint();
