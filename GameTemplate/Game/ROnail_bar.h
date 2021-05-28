@@ -23,5 +23,6 @@ private:	//データメンバ
 	//一度に複数のオブジェクトを破棄することを防ぐためのフラグ
 	bool m_actionFlag = true;			//行動できるか？
 	CSoundCue* m_brokenSE = nullptr;	//壊れた時のサウンド
+	Effect* m_effect = nullptr;			//壊れた時のエフェクト
 };
 

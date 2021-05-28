@@ -13,6 +13,13 @@ bool ROnail_bar::StartSub()
 	m_brokenSE->Init(L"Assets/sound/boxBreak.wav");
 	m_brokenSE->SetVolume(0.3f);
 
+	//壊れるときのエフェクトの生成と初期化
+	m_effect = NewGO<Effect>(0);
+	m_effect->Init(u"Assets/effect/flame_water.efk");
+	float scale = 200.0f;
+	m_effect->SetScale({ scale,scale ,scale });
+
+
 	return true;
 }
 
@@ -20,6 +27,7 @@ bool ROnail_bar::StartSub()
 ROnail_bar::~ROnail_bar()
 {
 	DeleteGO(m_brokenSE);
+	DeleteGO(m_effect);
 }
 
 /// <summary>
@@ -75,6 +83,20 @@ void ROnail_bar::QuerySub()
 
 						//壊れるときのサウンドの再生
 						m_brokenSE->Play(false);
+
+						//アップベクトル
+						Vector3 upVec = g_vec3Up;
+						//アップベクトルを自身の回転で回す
+						m_rotation.Apply(upVec);
+						//この値を変更して高さを調節する
+						const float upVecLne = 100.0f;
+						upVec.Scale(upVecLne);
+						//エフェクトの座標を回転を調節する
+						m_effect->SetPosition(m_position + upVec);		//座標を渡す
+						m_effect->SetRotation(m_rotation);
+						//エフェクトの再生
+						m_effect->Play();
+
 					}
 				}
 				return true;
