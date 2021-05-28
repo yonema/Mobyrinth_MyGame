@@ -139,116 +139,143 @@ OOTransparentSwitch::~OOTransparentSwitch()
 //アップデート関数
 void OOTransparentSwitch::UpdateSub()
 {
-
+	//スイッチの切り替え中か？
 	if (m_switchingFlag)
 	{
+		//切り替え中
+
+		//透明、実体化を切り替える処理
 		Switching();
 		return;
 	}
-	//リセットタイマーが０になったとき
-	//透明オブジェクトをすべて持ち上げられないようにする。
-	//透明オブジェクトを持っている場合、そのオブジェクトを持っていない状態にする。
-	//透明オブジェクトを初期位置に戻す。
-	if (m_flagSwitchOn == true) {
-		m_resetTimer -= GameTime().GetFrameDeltaTime();
 
-		//タイマーのフォントの更新
-		UpdateTimerFR();
-		///--m_resetTimer;
+	//スイッチのタイマーをカウントするか
+	if (m_timerCountFlag)
+	{
+		//カウントをする
 
-		//警告のタイム
-		const float warningTime = 3.1f;
 
-		//タイマーが警告のタイム以下か？
-		if (m_resetTimer <= warningTime)
-		{
-			//以下の時
+		//リセットタイマーが０になったとき
+		//透明オブジェクトをすべて持ち上げられないようにする。
+		//透明オブジェクトを持っている場合、そのオブジェクトを持っていない状態にする。
+		//透明オブジェクトを初期位置に戻す。
+		if (m_flagSwitchOn == true) {
+			m_resetTimer -= GameTime().GetFrameDeltaTime();
 
-			//警告タイマーのサウンドを流す
-			m_timerWarningSC->Play(true);
+			//タイマーのフォントの更新
+			UpdateTimerFR();
+			///--m_resetTimer;
 
-			//通常のタイマーのサウンドが流れていたら
+			//警告のタイム
+			const float warningTime = 3.1f;
+
+			//タイマーが警告のタイム以下か？
+			if (m_resetTimer <= warningTime)
+			{
+				//以下の時
+
+				//警告タイマーのサウンドを流す
+				m_timerWarningSC->Play(true);
+
+				//通常のタイマーのサウンドが流れていたら
+				if (m_timerSC->IsPlaying())
+					//停止する
+					m_timerSC->Stop();
+			}
+			else
+			{
+				//より大きい
+
+				//通常のタイマーのサウンドを流す
+				m_timerSC->Play(true);
+			}
+
+			if (m_resetTimer <= 0.0f) {
+				m_flagSwitchOn = false;
+
+
+				//透明オブジェクトを半透明にする。
+				ChangeTransparent();
+
+				//押されていない時のモデルレンダラーを表示する
+				GetModelRender()->Activate();
+				//押されたときのモデルレンダラーを非常時にする
+				m_modelRender->Deactivate();
+
+				//m_invalidationSEをループ再生をオフで再生する。
+				m_invalidationSE->Play(false);
+
+			}
+		}
+		//リセットタイマーが０のときに下の文の処理を作動させる。
+		else if (m_flagSwitchOn == false) {
+
+			//タイマーのサウンドが流れていたら
 			if (m_timerSC->IsPlaying())
-				//停止する
+				//タイマーのサウンドを停止する
 				m_timerSC->Stop();
-		}
-		else 
-		{
-			//より大きい
-
-			//通常のタイマーのサウンドを流す
-			m_timerSC->Play(true);
-		}
-
-		if (m_resetTimer <= 0.0f) {
-			m_flagSwitchOn = false;
+			//警告タイマーのサウンドが流れていたら
+			if (m_timerWarningSC->IsPlaying())
+				//警告タイマーのサウンドを停止する
+				m_timerWarningSC->Stop();
 
 
-			//透明オブジェクトを半透明にする。
-			ChangeTransparent();
+			//スイッチが押されたとき
+			//透明オブジェクトをすべて持ち上げられるようにする。
+			//スイッチのオブジェクトの範囲内でAボタンが押されたとき
+			if (IsHitPlayer() && g_pad[0]->IsTrigger(enButtonA)) {
 
-			//押されていない時のモデルレンダラーを表示する
-			GetModelRender()->Activate();
-			//押されたときのモデルレンダラーを非常時にする
-			m_modelRender->Deactivate();
+				//切り替え中フラグを立てる
+				m_switchingFlag = true;
+				//切り替え中タイマーを初期化する
+				m_switchingTimer = 0.0f;
 
-			//m_invalidationSEをループ再生をオフで再生する。
-			m_invalidationSE->Play(false);
 
+
+				//プレイヤーを操作不能にする
+				m_pPlayer->SetOperationFlag(false);
+
+				//UFOがあるか？
+				if (m_ufo)
+					//あるとき
+					//UFOを動かなくする
+					m_ufo->SetMoveSpeed(0.0f);
+
+				//ポーズできなくする
+				m_pause->SetCanPause(false);
+
+				//リセットタイマーに開始する値を代入
+				m_resetTimer = m_resetTimerStartValue;
+				//押されていない時のモデルレンダラーを非表示にする
+				GetModelRender()->Deactivate();
+				//押されたときのモデルレンダラーを表示する
+				m_modelRender->Activate();
+
+				//m_fadeSR->Activate();
+
+				//m_buttonpushSEをループ再生をオフで再生する。
+				m_buttonpushSE->Play(false);
+			}
 		}
 	}
-	//リセットタイマーが０のときに下の文の処理を作動させる。
-	else if (m_flagSwitchOn == false) {
+	else
+	{
+		//カウントをしない
 
 		//タイマーのサウンドが流れていたら
 		if (m_timerSC->IsPlaying())
-			//タイマーのサウンドを停止する
+			//止める
 			m_timerSC->Stop();
 		//警告タイマーのサウンドが流れていたら
 		if (m_timerWarningSC->IsPlaying())
-			//警告タイマーのサウンドを停止する
+			//止める
 			m_timerWarningSC->Stop();
-
-
-		//スイッチが押されたとき
-		//透明オブジェクトをすべて持ち上げられるようにする。
-		//スイッチのオブジェクトの範囲内でAボタンが押されたとき
-		if (IsHitPlayer() && g_pad[0]->IsTrigger(enButtonA)) {
-
-			//切り替え中フラグを立てる
-			m_switchingFlag = true;
-			//切り替え中タイマーを初期化する
-			m_switchingTimer = 0.0f;
-
-			
-
-			//プレイヤーを操作不能にする
-			m_pPlayer->SetOperationFlag(false);
-
-			//UFOがあるか？
-			if (m_ufo)
-				//あるとき
-				//UFOを動かなくする
-				m_ufo->SetMoveSpeed(0.0f);
-
-			//ポーズできなくする
-			m_pause->SetCanPause(false);
-
-			//リセットタイマーに開始する値を代入
-			m_resetTimer = m_resetTimerStartValue;
-			//押されていない時のモデルレンダラーを非表示にする
-			GetModelRender()->Deactivate();
-			//押されたときのモデルレンダラーを表示する
-			m_modelRender->Activate();
-
-			//m_fadeSR->Activate();
-
-			//m_buttonpushSEをループ再生をオフで再生する。
-			m_buttonpushSE->Play(false);
-		}
 	}
 }
 
+/// <summary>
+/// 透明、実体化を切り替える処理
+/// </summary>
 void OOTransparentSwitch::Switching()
 {
 	const float startWaitTime = 0.5f;							//最初の待つ時間		 

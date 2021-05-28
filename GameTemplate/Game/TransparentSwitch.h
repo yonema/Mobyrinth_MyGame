@@ -39,6 +39,14 @@ public: //Set関数
 	/// </summary>
 	void ChangeEntity();
 
+	/// <summary>
+	/// スイッチのタイマーがカウントするか？を設定する
+	/// </summary>
+	/// <param name="timerCountFlag">タイマーがカウントするか？</param>
+	void SetTimerCountFlag(const bool timerCountFlag)
+	{
+		m_timerCountFlag = timerCountFlag;
+	}
 
 
 private:	//privateなメンバ関数
@@ -56,6 +64,9 @@ private:	//privateなメンバ関数
 	void SetTimerFRParam
 	(ILevelObjectBase* levelObject);
 
+	/// <summary>
+	/// 透明、実体化を切り替える処理
+	/// </summary>
 	void Switching();
 
 private: //メンバ変数
@@ -80,6 +91,6 @@ private: //メンバ変数
 	CPause* m_pause = nullptr;					//ポーズクラスのポインタ
 	CSoundCue* m_timerSC = nullptr;				//タイマーのサウンドキュー
 	CSoundCue* m_timerWarningSC = nullptr;		//警告タイマーのサウンドキュー
-
+	bool m_timerCountFlag = true;				//スイッチのタイマーがカウントするか？
 };
 
