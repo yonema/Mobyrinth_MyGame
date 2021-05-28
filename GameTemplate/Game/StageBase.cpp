@@ -493,9 +493,8 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			//UFO
 			else if (objData.EqualObjectName(L"UFO") == true)
 			{
-			CUFO* bject;
-			bject = NewGO<CUFO>(0, "UFO");
-			bject->SetPosition(objData.position);
+			m_ufo = NewGO<CUFO>(0, "UFO");
+			m_ufo->SetPosition(objData.position);
 			return true;
 			}
 
@@ -771,6 +770,11 @@ void IStageBase::CheckGoal()
 
 			//ゴールしたらポーズができないようにする
 			m_pause->SetCanPause(false);
+
+			//UFOがあったら
+			if (m_ufo)
+				//動かなくして、プレイヤーを探さないようにする
+				m_ufo->SetMoveSpeed(0.0f);
 		}
 	}
 

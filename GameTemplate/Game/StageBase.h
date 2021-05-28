@@ -231,6 +231,8 @@ private:	//データメンバ
 	CSky* m_sky = nullptr;							//空クラスのポインタ
 	float m_goalTimer = 0;							//ゴールした後の待ち時間をはかる
 
+	CUFO* m_ufo = nullptr;							//UFOのポインタ
+
 	GameCamera* m_gameCamea = nullptr;				//ゲームカメラ
 
 	StartDirecting* m_startDirecting = nullptr;
