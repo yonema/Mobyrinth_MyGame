@@ -444,11 +444,10 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 			else if (objData.EqualObjectName(L"switch") == true)
 			{
-				OOTransparentSwitch* OObject;
-				OObject = NewGO<OOTransparentSwitch>(1, "transparentSwitch");
-				OObject->SetPosition(objData.position);
+				m_switch = NewGO<OOTransparentSwitch>(1, "transparentSwitch");
+				m_switch->SetPosition(objData.position);
 				//スイッチのタイマーを設定する
-				OObject->SetResetTimerStartValue(m_switchTime);
+				m_switch->SetResetTimerStartValue(m_switchTime);
 				return true;
 			}
 			//oneway
@@ -775,6 +774,10 @@ void IStageBase::CheckGoal()
 			if (m_ufo)
 				//動かなくして、プレイヤーを探さないようにする
 				m_ufo->SetMoveSpeed(0.0f);
+			//スイッチがあったら
+			if (m_switch)
+				//タイマーがカウントしなくなるようにする
+				m_switch->SetTimerCountFlag(false);
 		}
 	}
 

@@ -232,6 +232,7 @@ private:	//データメンバ
 	float m_goalTimer = 0;							//ゴールした後の待ち時間をはかる
 
 	CUFO* m_ufo = nullptr;							//UFOのポインタ
+	OOTransparentSwitch* m_switch = nullptr;		//スイッチのポインタ
 
 	GameCamera* m_gameCamea = nullptr;				//ゲームカメラ
 
