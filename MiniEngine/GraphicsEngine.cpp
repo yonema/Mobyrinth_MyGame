@@ -652,11 +652,13 @@ void GraphicsEngine::EndRender()
 	ID3D12CommandList* ppCommandLists[] = { m_commandList };
 	m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
-	// Present the frame.
-	if (m_refreshRate >= 100)
+	//FPX_FIX Present the frame.
+	/*if (m_refreshRate >= 100)
 		m_swapChain->Present(2, 0);
 	else
-		m_swapChain->Present(1, 0);
+		m_swapChain->Present(1, 0);*/
+		// ‚’¼“¯Šú‚ğ‘Ò‚½‚È‚¢‚æ‚¤‚É‚·‚éB
+	m_swapChain->Present(0, 0);
 
 	m_directXTKGfxMemroy->GarbageCollect();
 	//•`‰æŠ®—¹‘Ò‚¿B

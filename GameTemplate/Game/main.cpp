@@ -132,6 +132,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//レンダリング終了
 		g_engine->EndFrame();
 
+		//スピンロックを行う。
+		int restTime = 0;
+		do {
+			stopWatch.Stop();
+			restTime = 16 - (int)stopWatch.GetElapsedMillisecond();
+		} while (restTime > 0);
+
 		//ストップウォッチの計測終了
 		stopWatch.Stop();
 
