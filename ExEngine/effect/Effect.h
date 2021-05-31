@@ -84,6 +84,9 @@ public:		//メンバ関数
 		return EffectEngine::GetInstance()->IsPlay(m_handle);
 	}
 
+	/// <summary>
+	/// エフェクトを停止する
+	/// </summary>
 	void Stop()
 	{
 		EffectEngine::GetInstance()->Stop(m_handle);
