@@ -55,7 +55,7 @@ bool Mobius::Start()
 	//ZPrepassで作成された深度テクスチャの登録
 	initData.m_expandShaderResoruceView[1] = &g_graphicsEngine->GetZPrepassDepthTexture();
 
-	initData.m_expandShaderResoruceView[2] = &g_graphicsEngine->GetToonMapTexture();
+	initData.m_expandShaderResoruceView[2] = &g_graphicsEngine->GetSkyCubeMapTexture();
 
 
 	//モデルレンダラーの初期化

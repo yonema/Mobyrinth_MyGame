@@ -558,11 +558,7 @@ void Title::StageSelect()
 	//デバック用ここまで
 
 
-	//カーソル用の画像の場所を設定する
-	//m_cursor->SetPosition({ -400.0f,m_stageName[m_stageSelectState]->GetPositionY(),0.0f });
- // 	m_cursor->SetPosition({ m_stageName[m_stageSelectState]->GetPositionX() - 100.0f,
-	//						m_stageName[m_stageSelectState]->GetPositionY() + 100.0f,
-	//						0.0f });
+
 	m_cursor->SetPosition
 	(m_stageName[m_stageSelectState]->GetPosition() + m_stageIconToCursorVec);
 }

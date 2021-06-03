@@ -329,121 +329,156 @@ private:
 	//追加
 private:	//データメンバ
 	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット	
-	CPostEffect m_postEffect;			//ポストエフェクト
-	CShadowMap m_shadowMap;				//シャドウマップ
-	CSceneChange m_sceneChange;			//場面転換
 	//メインレンダリングターゲットの絵をフレームバッファにコピーするためのスプライト
 	Sprite m_copyToFrameBufferSprite;
-	int m_refreshRate = 59;
+	int m_refreshRate = 59;						//垂直同期に使うリフレッシュレート
 	std::vector< Model* > m_zprepassModels;		// ZPrepassの描画パスで描画されるモデルのリスト
 	RenderTarget m_zprepassRenderTarget;		// ZPrepass描画用のレンダリングターゲット
-	Texture m_toonMapTexture;
-
+	Texture m_skyCubeTexture;					//スカイキューブのテクスチャ
+	CPostEffect m_postEffect;					//ポストエフェクト
+	CShadowMap m_shadowMap;						//シャドウマップ
+	CSceneChange m_sceneChange;					//場面転換
 
 public:		//メンバ関数
-	/// <summary>
-	/// メインレンダリングターゲットの取得。
-	/// </summary>
-	/// <returns>メインレンダリングターゲット</returns>
+
+	/**
+	 * @brief メインレンダリングターゲットの取得。
+	 * @return メインレンダリングターゲット
+	*/
 	RenderTarget& GetMainRenderTarget()
 	{
 		return m_mainRenderTarget;
 	}
 
-	/// <summary>
-	/// フレームバッファに描画するときのビューポートを取得。
-	/// </summary>
-	/// <returns>ビューポート</returns>
+	/**
+	 * @brief フレームバッファに描画するときのビューポートを取得。
+	 * @return ビューポート
+	*/
 	D3D12_VIEWPORT& GetFrameBufferViewport()
 	{
 		return m_viewport;
 	}
 
-	/// <summary>
-	/// メインレンダーターゲットを使用できるようにする
-	/// </summary>
+	/**
+	 * @brief メインレンダーターゲットを使用できるようにする
+	*/
 	void UseMainRenderTarget();
 
-	/// <summary>
-	/// メインレンダーターゲットの書き込み終了待ち
-	/// </summary>
+	/**
+	 * @brief メインレンダーターゲットの書き込み終了待ち
+	*/
 	void WaitDrawingMainRenderTarget();
 
-	/// <summary>
-	/// 場面転換の描画
-	/// </summary>
+	/**
+	 * @brief 場面転換の描画
+	*/
 	void SceneChangeRender();
 
-	/// <summary>
-	/// メインレンダリングターゲットの絵をフレームバッファーにコピーする
-	/// </summary>
+
+	/**
+	 * @brief メインレンダリングターゲットの絵をフレームバッファーにコピーする
+	*/
 	void CopyToFrameBuffer();
 
+	/**
+	 * @brief 垂直同期のリフレッシュレートの設定
+	 * @param rate リフレッシュレート
+	 * @note スピンロックでFPSを固定したため、今は使っていない。
+	*/
 	void SetRefreshRate(const int rate)
 	{
 		m_refreshRate = rate;
 	};
 	
-	/// <summary>
-	/// ZPrepassの描画パスにモデルを追加
-	/// </summary>
-	/// <param name="model"></param>
+	/**
+	 * @brief ZPrepassの描画パスにモデルを追加
+	 * @param [in,out] モデル
+	*/
 	void Add3DModelToZPrepass(Model& model)
 	{
 		m_zprepassModels.push_back(&model);
 	}
 
-	/// <summary>
-	/// 登録されている3Dモデルをクリア
-	/// </summary>
-	void ClearModels();
+	/**
+	 * @brief ZPrepassに登録されている3Dモデルをクリア
+	*/
+	void ClearZPrepassModels();
 
-	/// <summary>
-	/// ZPrepassで作成された深度テクスチャを取得
-	/// </summary>
-	/// <returns></returns>
+	/**
+	 * @brief ZPrepassで作られた深度値のテクスチャを取得
+	 * @return 深度値のテクスチャ
+	*/
 	Texture& GetZPrepassDepthTexture()
 	{
 		return m_zprepassRenderTarget.GetRenderTargetTexture();
 	}
 
-	/// <summary>
-	/// ZPrepass
-	/// </summary>
-	/// <param name="rc">レンダリングコンテキスト</param>
+	/**
+	 * @brief ZPrepass
+	 * @details モデルたちの深度値を書き込む
+	 * @param [in,out] rc レンダリングコンテキスト
+	*/
 	void ZPrepass(RenderContext& rc);
 
-	/// <summary>
-	/// トゥーンマップ用テクスチャを取得
-	/// </summary>
-	/// <returns></returns>
-	Texture& GetToonMapTexture()
+
+	/**
+	 * @brief スカイキューブ用のテクスチャを取得
+	 * @return スカイキューブ用のテクスチャ
+	*/
+	Texture& GetSkyCubeTexture()
 	{
-		return m_toonMapTexture;
+		return m_skyCubeTexture;
+	}
+
+	/**
+	 * @brief ポストエフェクトを描画する
+	 * @param [in,out] rc レンダリングコンテキスト
+	*/
+	void DrawPostEffect(RenderContext& rc)
+	{
+		m_postEffect.Draw(rc);
+	}
+
+	/**
+	 * @brief シャドウマップの参照を得る
+	 * @return シャドウマップの参照
+	*/
+	CShadowMap& GetShadowMap()
+	{
+		return m_shadowMap;
+	}
+
+
+	/**
+	 * @brief 場面転換の参照を得る
+	 * @return 場面転換の参照
+	*/
+	CSceneChange& GetSceneChange()
+	{
+		return m_sceneChange;
 	}
 
 private:	//privateなメンバ関数
-	/// <summary>
-	/// メインレンダーターゲットの初期化
-	/// </summary>
-	/// <returns>初期化できたか？</returns>
-	bool InitMainRenderTarget();
 
-	/// <summary>
-	/// フレームバッファにコピーするスプライトの初期化
-	/// </summary>
+	/**
+	 * @brief メインレンダーターゲットの初期化
+	 * @return 初期化できたか？
+	*/
+	const bool InitMainRenderTarget();
+
+	/**
+	 * @brief フレームバッファにコピーするスプライトの初期化
+	*/
 	void InitCopyToFrameBufferSprite();
 
-	/// <summary>
-	/// ZPrepass用のレンダリングターゲットを初期化
-	/// </summary>
+	/**
+	 * @brief ZPrepass用のレンダリングターゲットを初期化
+	*/
 	void InitZPrepassRenderTarget();
+
 };
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。
 extern Camera* g_camera3D;					//3Dカメラ。
-extern CPostEffect* g_postEffect;			//ポストエフェクト
-extern CShadowMap* g_shadowMap;				//シャドウマップ
-extern CSceneChange* g_sceneChange;			//場面転換
 
 

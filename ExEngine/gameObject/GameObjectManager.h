@@ -7,6 +7,8 @@
 #include "gameObject/IGameObject.h"
 #include <functional>
 #include <vector>
+#include "../../GameTemplate/Game/PriorityList.h"
+
 
 
 /// <summary>

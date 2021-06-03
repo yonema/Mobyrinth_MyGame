@@ -154,7 +154,7 @@ void CModelRender::InitModel(const char* filePath, D3D12_CULL_MODE cullMode, EnM
 	initData.m_expandShaderResoruceView[1] = &g_graphicsEngine->GetZPrepassDepthTexture();
 
 
-	initData.m_expandShaderResoruceView[2] = &g_graphicsEngine->GetToonMapTexture();
+	initData.m_expandShaderResoruceView[2] = &g_graphicsEngine->GetSkyCubeMapTexture();
 
 	initData.m_cullMode = cullMode;
 

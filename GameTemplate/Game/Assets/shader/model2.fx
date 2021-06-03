@@ -139,9 +139,9 @@ Texture2D<float4> g_specularMap : register(t2);			//スペキュラマップ。
 														//rgbにスペキュラカラー、aに金属度。
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 
-Texture2D<float4> g_shadowMap : register(t10);
+Texture2D<float4> g_shadowMap : register(t10);		//シャドウマップ
 Texture2D<float4> g_depthTexture : register(t11);	//深度テクスチャ
-TextureCube<float4> g_skyCubeMap : register(t12);
+TextureCube<float4> g_skyCubeMap : register(t12);	//スカイキューブ
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ///////////////////////////////////////////
@@ -284,7 +284,9 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
 /// </summary>
 bool IsOnOutLine(float4 posInProj, float thickness)
 {
+	//輪郭線を引くか？
 	if (!outLineFlag)
+		//引かないなら、falseを戻す
 		return false;
 
 
@@ -303,36 +305,49 @@ bool IsOnOutLine(float4 posInProj, float thickness)
 		float2(	thickness / 1280.0f	, -thickness / 720.0f),
 		float2(-thickness / 1280.0f	, -thickness / 720.0f),
 	};
+	//深度テクスチャ
 	Texture2D<float4> depthTex = g_depthTexture;
+	//現在のピクセルの深度を出す
 	float depth = depthTex.Sample(g_sampler, uv).x;
 
 	float depth2 = 0.0f;
 	for (int i = 0; i < 8; i++)
 	{
+		// 近傍8テクセルの深度値を加算して
 		depth2 += depthTex.Sample(g_sampler, uv + uvOffset[i]).x;
 	}
+	//平均を取る
 	depth2 /= 8.0f;
 
+	//周りの深度値と現在のピクセルの深度値が一定より大きかったら
 	if (abs(depth - depth2) > 0.00005f)
 	{
+		//輪郭線を引く
 		return true;
 	}
 
+
 	//あった方とない方どっちがいいかな？
+	//法線の内積から輪郭線を引くか決める
+
+	//現在のピクセルの、頂点の法線を出す
 	float3 normal = g_depthTexture.Sample(g_sampler, uv).yzw;
 	float3 normal2 = normal;
 
 	for (int i = 0; i < 8; i++)
 	{
+		// 近傍8テクセルの頂点の法線をだして
 		normal2 = g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).yzw;
+		//どれか一つでも頂点の内積が一定より小さかったら
 		float inner = dot(normal, normal2);
 		if (inner < 0.5f)
+			//輪郭線を引く
 			return true;
 	}
 
 
 
-
+	//輪郭線を引かない
 	return false;
 }
 

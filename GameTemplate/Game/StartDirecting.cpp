@@ -317,9 +317,9 @@ void StartDirecting::FallPlayer()
 	m_gameCamera->Refresh();
 	m_player->SetPosition(fallpos);
 	m_gameCamera->SetTarget(m_player->GetPosition());
-	m_gameCamera->SetPosition({ m_player->GetPositionX(),
-								m_player->GetPositionY(),
-								m_player->GetPositionZ() + 1200.0f });
+	m_gameCamera->SetPosition({ m_player->GetPosition().x,
+								m_player->GetPosition().y,
+								m_player->GetPosition().z + 1200.0f });
 }
 
 

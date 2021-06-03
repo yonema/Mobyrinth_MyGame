@@ -5,6 +5,7 @@
 #include "ReversibleObject.h"
 #include "GameCamera.h"
 
+
 //スタート関数
 bool Player::Start()
 {
@@ -111,8 +112,6 @@ bool Player::Start()
 	//キャラクターコントローラーを初期化する
 	m_myCharaCon.Init(initData);
 
-	//プレイヤーを照らすライトの方向
-	m_lightDirection = { 1.0f,-1.0f,0.0f };
 
 	//m_fallstartSEのサウンドキューを生成する
 	m_fallstartSE = NewGO<CSoundCue>(0);
@@ -205,6 +204,175 @@ Player::~Player()
 	//}
 	//デバック用ここまで
 
+}
+
+//アップデート関数
+void Player::Update()
+{
+	if (m_titleMove == true) {
+		TitleMove();
+	}
+	else {
+		GameMove();
+	}
+}
+
+void Player::TitleMove()
+{
+	m_padLStickXF = 1.0f;
+	m_leftOrRight = enRight;
+
+	if (m_isDush)
+		m_modelRender->PlayAnimation(enAnimClip_run);
+	else
+		m_modelRender->PlayAnimation(enAnimClip_walk);
+
+	//ウェイポイントの更新処理
+	CheckWayPoint();
+	//移動処理
+	Move();
+	//モデルの回転処理
+	Rotation();
+
+	//タイトルの時の移動は遅くする
+	const float titleMoveSpeed = 0.5f;
+	//デルタタイムを掛ける
+	//m_onWayPosition += m_moveSpeed * titleMoveSpeed * GameTime().GetFrameDeltaTime();
+	m_onWayPosition = 
+		m_myCharaCon.Execute(m_moveSpeed * titleMoveSpeed, GameTime().GetFrameDeltaTime());
+	GetOnStage();
+
+	//ライトのデータを更新する
+	UpdateLightData();
+
+	//モデルの場所と回転を更新する
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+}
+
+void Player::GameMove()
+{
+	if (m_fallFlag == true)
+	{
+		Fall();
+
+		return;
+	}
+
+	if (m_operationFlag == false) {
+		//アニメーションの遷移をリセットする
+		AnimationReset();
+		m_modelRender->PlayAnimation(enAnimClip_idle);
+		return;
+	}
+
+	//UFOに捕まっているか？
+	if (m_capturedUFOFlag == true)
+	{
+		//捕まっていたら
+
+		//捕まっている時の処理
+		CapturedUFO();
+
+		//そのままreturn
+		return;
+	}
+
+	//ゴール状態か？
+	if (m_isGoal)
+	{
+		//ゴール状態
+		Goal();
+
+		return;
+	}
+
+
+
+	//ゲームパッドの左スティックのX軸の入力情報を取得
+	m_padLStickXF = g_pad[0]->GetLStickXF();
+	if (m_throwing || m_lifting)
+		m_padLStickXF = 0.0f;
+
+	//左右の向きを設定
+	if (m_padLStickXF < 0.0f)
+		m_leftOrRight = enLeft;		//左向き
+	else if (m_padLStickXF > 0.0f)
+		m_leftOrRight = enRight;	//右向き
+
+	//ウェイポイントの更新処理
+	CheckWayPoint();
+	//移動処理
+	Move();
+	//モデルの回転処理
+	Rotation();
+
+	//道の上の座標を移動させる	//デルタタイムを掛ける
+	m_onWayPosition = m_myCharaCon.Execute(m_moveSpeed, GameTime().GetFrameDeltaTime());
+	//衝突したOBBのタグを調べる
+	CheckHitOBBTag();
+
+	//ステージ（メビウスの輪）の上に乗る処理
+	if (!m_stunFlag)
+		GetOnStage();
+	else
+		//スタン中のステージの上に乗る処理
+		StunGetOnStage();
+
+	//アニメーションの制御
+	AnimationController();
+
+	//SEの制御
+	SoundController();
+
+	//モデルの場所と回転を設定
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+	//OBBの場所と回転を設定
+	m_myCharaCon.SetRotation(m_rotation);
+
+
+	////左右の向き
+	//if (!m_stunFlag)
+	//{
+	//	if (m_padLStickXF < 0.0f)
+	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_lpIndex]);	//左向き
+	//	else if (m_padLStickXF > 0.0f)
+	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_rpIndex]);
+	//}
+	//else
+	//{
+	//	if (m_leftOrRight == enLeft)
+	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_rpIndex]);
+	//	else
+	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_lpIndex]);
+	//}
+
+	//ライトのデータを更新する
+	UpdateLightData();
+
+	//デバック用
+	//後で消す
+
+	////OBBの頂点の座標の配列の先頭アドレスを取得
+	//Vector3* boxVertex = m_myCharaCon.GetOBB().GetBoxVertex();
+	////OBBの頂点の数だけ繰り返す
+	//for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
+	//{
+	//	//OBBの頂点を見るためのモデルの場所を設定
+	//	m_dbgObbModel[i]->SetPosition(boxVertex[i]);
+	//	m_dbgObbModel[i]->SetRotation(m_rotation);
+	//}
+	//for (int i = 0; i < 32; i++)
+	//{
+	//	Vector3* vertPos2 = m_wayPointOBB[i].GetBoxVertex();
+	//	for (int j = 0; j < 8; j++)
+	//	{
+	//		m_dbgObbModel2[i][j]->SetPosition(vertPos2[j]);
+	//		m_dbgObbModel2[i][j]->SetRotation((*m_wayPointRot)[i]);
+	//	}
+	//}
+	//デバックここまで
 }
 
 /// <summary>
@@ -844,7 +1012,7 @@ void Player::UpdateLightData()
 void Player::SetShadowParam()
 {
 	//ライトの照らす方向
-	Vector3 dir = m_lightDirection;
+	Vector3 dir = LIGHT_DIRECTION;
 	//プレイヤー回転で方向をまわす
 	m_finalWPRot.Apply(dir);
 	//シャドウのつくるライトのパラメータを設定
@@ -874,7 +1042,7 @@ void Player::SetDirectionLight()
 	}
 
 	//ライトの照らす方向
-	Vector3 dir = m_lightDirection;
+	Vector3 dir = LIGHT_DIRECTION;
 	//プレイヤー回転で方向をまわす
 	m_finalWPRot.Apply(dir);
 	//ディレクションライトの方向を
@@ -883,177 +1051,8 @@ void Player::SetDirectionLight()
 
 }
 
-//アップデート関数
-void Player::Update()
-{
-	if (m_titleMove == true) {
-		TitleMove();
-	}
-	else {
-		GameMove();
-	}
-}
-
-void Player::TitleMove()
-{
-	m_padLStickXF = 1.0f;
-	m_leftOrRight = enRight;
-
-	if (m_isDush)
-		m_modelRender->PlayAnimation(enAnimClip_run);
-	else
-		m_modelRender->PlayAnimation(enAnimClip_walk);
-
-	//ウェイポイントの更新処理
-	CheckWayPoint();
-	//移動処理
-	Move();
-	//モデルの回転処理
-	Rotation();
-
-	//タイトルの時の移動は遅くする
-	const float titleMoveSpeed = 0.5f;
-	//デルタタイムを掛ける
-	//m_onWayPosition += m_moveSpeed * titleMoveSpeed * GameTime().GetFrameDeltaTime();
-	m_onWayPosition = 
-		m_myCharaCon.Execute(m_moveSpeed * titleMoveSpeed, GameTime().GetFrameDeltaTime());
-	GetOnStage();
-
-	//ライトのデータを更新する
-	UpdateLightData();
 
 
-	//モデルの場所と回転を更新する
-	m_modelRender->SetPosition(m_position);
-	m_modelRender->SetRotation(m_rotation);
-
-
-}
-
-void Player::GameMove()
-{
-	if (m_fallFlag == true)
-	{
-		Fall();
-
-		return;
-	}
-
-	if (m_operationFlag == false) {
-		//アニメーションの遷移をリセットする
-		AnimationReset();
-		m_modelRender->PlayAnimation(enAnimClip_idle);
-		return;
-	}
-
-	//UFOに捕まっているか？
-	if (m_capturedUFOFlag == true)
-	{
-		//捕まっていたら
-
-		//捕まっている時の処理
-		CapturedUFO();
-
-		//そのままreturn
-		return;
-	}
-
-	//ゴール状態か？
-	if (m_isGoal)
-	{
-		//ゴール状態
-		Goal();
-
-		return;
-	}
-
-
-
-	//ゲームパッドの左スティックのX軸の入力情報を取得
-	m_padLStickXF = g_pad[0]->GetLStickXF();
-	if (m_throwing || m_lifting)
-		m_padLStickXF = 0.0f;
-
-	//左右の向きを設定
-	if (m_padLStickXF < 0.0f)
-		m_leftOrRight = enLeft;		//左向き
-	else if (m_padLStickXF > 0.0f)
-		m_leftOrRight = enRight;	//右向き
-
-	//ウェイポイントの更新処理
-	CheckWayPoint();
-	//移動処理
-	Move();
-	//モデルの回転処理
-	Rotation();
-
-	//道の上の座標を移動させる	//デルタタイムを掛ける
-	m_onWayPosition = m_myCharaCon.Execute(m_moveSpeed, GameTime().GetFrameDeltaTime());
-	//衝突したOBBのタグを調べる
-	CheckHitOBBTag();
-
-	//ステージ（メビウスの輪）の上に乗る処理
-	if (!m_stunFlag)
-		GetOnStage();
-	else
-		//スタン中のステージの上に乗る処理
-		StunGetOnStage();
-
-	//アニメーションの制御
-	AnimationController();
-
-	//SEの制御
-	SoundController();
-
-	//モデルの場所と回転を設定
-	m_modelRender->SetPosition(m_position);
-	m_modelRender->SetRotation(m_rotation);
-	//OBBの場所と回転を設定
-	m_myCharaCon.SetRotation(m_rotation);
-
-
-	////左右の向き
-	//if (!m_stunFlag)
-	//{
-	//	if (m_padLStickXF < 0.0f)
-	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_lpIndex]);	//左向き
-	//	else if (m_padLStickXF > 0.0f)
-	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_rpIndex]);
-	//}
-	//else
-	//{
-	//	if (m_leftOrRight == enLeft)
-	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_rpIndex]);
-	//	else
-	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_lpIndex]);
-	//}
-
-	//ライトのデータを更新する
-	UpdateLightData();
-
-	//デバック用
-	//後で消す
-
-	////OBBの頂点の座標の配列の先頭アドレスを取得
-	//Vector3* boxVertex = m_myCharaCon.GetOBB().GetBoxVertex();
-	////OBBの頂点の数だけ繰り返す
-	//for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
-	//{
-	//	//OBBの頂点を見るためのモデルの場所を設定
-	//	m_dbgObbModel[i]->SetPosition(boxVertex[i]);
-	//	m_dbgObbModel[i]->SetRotation(m_rotation);
-	//}
-	//for (int i = 0; i < 32; i++)
-	//{
-	//	Vector3* vertPos2 = m_wayPointOBB[i].GetBoxVertex();
-	//	for (int j = 0; j < 8; j++)
-	//	{
-	//		m_dbgObbModel2[i][j]->SetPosition(vertPos2[j]);
-	//		m_dbgObbModel2[i][j]->SetRotation((*m_wayPointRot)[i]);
-	//	}
-	//}
-	//デバックここまで
-}
 
 /// <summary>
 /// UFOに捕まっている時の処理
@@ -1383,116 +1382,5 @@ void Player::SetWayPointRot
 	m_wayPointRot = rotMap;
 }
 
-void Player::SetWayPointOBB()
-{
-	int vecSize = m_wayPointPos->size();
-	m_wayPointOBB.resize(vecSize);
-	for (int i = 0; i < vecSize; i++)
-	{
-		SInitOBBData initOBBData;
-		initOBBData.position = (*m_wayPointPos)[i];
-		initOBBData.rotation = (*m_wayPointRot)[i];
-		initOBBData.width = 10.0f;
-		initOBBData.length = 400.0f;
-		initOBBData.height = 600.0f;
-		initOBBData.pivot = { 0.5f,0.0f,0.5f };
-		m_wayPointOBB[i].Init(initOBBData);
 
-		Vector3* vert = m_wayPointOBB[i].GetBoxVertex();
-		int vertNum = m_wayPointOBB[i].GetBoxVertexNum();
 
-		//for (int v = 0; v < vertNum; v++)
-		//{
-		//	m_dbgObbModel2[i][v] = NewGO<CModelRender>(0);
-		//	m_dbgObbModel2[i][v]->Init("Assets/modelData/dbgBox.tkm");
-		//	m_dbgObbModel2[i][v]->SetPosition(vert[v]);
-		//	m_dbgObbModel2[i][v]->SetRotation(initOBBData.rotation);
-		//}
-
-	}
-}
-
-//デバック用
-//後で消す
-////デバック用のフォントを表示するため
-//void Player::PostRender(RenderContext& rc)
-//{
-//	//テキスト用意
-//	wchar_t text[256];
-//
-//	//描画開始
-//	m_font.Begin(rc);
-//
-//	//ウェイポイントステートの表示
-//	swprintf(text, L"wayPointState:%02d", m_wayPointState);
-//	//描画
-//	m_font.Draw(text,
-//		{ -600.0f, 300.0f },
-//		{ 0.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//
-//	//プレイヤーの左右のウェイポイントの表示
-//	//左側のウェイポイント
-//	swprintf(text, L"[%02d]", m_lpIndex);
-//	m_font.Draw(text,
-//		{ -110.0f, 50.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//	//右側のウェイポイント
-//	swprintf(text, L"[%02d]", m_rpIndex);
-//	m_font.Draw(text,
-//		{ 10.0f,50.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//
-//	//ステージとの当たり判定
-//	swprintf(text, L"Hit%d", m_dbgHit);
-//	m_font.Draw(text,
-//		{ 110.0f, 150.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//	//ステージとプレイヤーのポジションとの補完率
-//	swprintf(text, L"rate%05f", m_mobius->GetModel()->getDbg());
-//	m_font.Draw(text,
-//		{ 110.0f, 120.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//
-//
-//	//ウェイポイントの切り替え
-//	swprintf(text, L"Right:%02.2f", m_dbgDot1);
-//	m_font.Draw(text,
-//		{ -310.0f, 150.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//	swprintf(text, L"Left:%02.2f", m_dbgDot2);
-//	m_font.Draw(text,
-//		{ -310.0f, 120.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//
-//
-//	//描画終了
-//	m_font.End(rc);
-//}

@@ -1,4 +1,5 @@
 #pragma once
+#include "PlayerConstData.h"
 #include "LightData.h"
 #include "DirectionLight.h"
 #include "ModelRender.h"
@@ -10,6 +11,9 @@
 #include "SoundCue.h"
 #include "effect/Effect.h"
 
+//Playerの定数データを使えるようにする
+using namespace PlayerConstData;
+
 class GameCamera;
 class CReversibleObject;
 
@@ -20,149 +24,133 @@ class CReversibleObject;
 /// </summary>
 class Player : public IGameObject
 {
-public://publicなメンバ関数
+public:		//自動で呼ばれるメンバ関数
 	bool Start() override final;	//スタート関数
 	~Player();						//デストラクタ
 	void Update() override final;	//アップデート関数
 
-	/// <summary>
-	/// プレイヤーの座標を設定
-	/// </summary>
-	/// <param name="pos">場所</param>
+public:		//メンバ関数
+
+	/**
+	 * @brief プレイヤーの座標を設定
+	 * @param [in] pos 
+	*/
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
 	}
 
-	/// <summary>
-	/// プレイヤーの回転を設定
-	/// </summary>
-	/// <param name="rot">回転</param>
-	void SetRotation(const Quaternion& rot)
-	{
-		m_rotation = rot;
-	}
-
-	/// <summary>
-	/// プレイヤーの回転を得る
-	/// </summary>
-	/// <returns>回転</returns>
-	const Quaternion& GetRotation() const
-	{
-		return m_rotation;
-	}
-
-	/// <summary>
-	/// プレイヤーの拡大を設定する
-	/// </summary>
-	/// <param name="scale"></param>
-	void SetScale(const Vector3& scale)
-	{
-		m_modelRender->SetScale(scale);
-	}
-
-	/// <summary>
-	/// プレイヤーの座標を取得
-	/// </summary>
-	/// <returns>場所</returns>
+	/**
+	 * @brief プレイヤーの座標を取得
+	 * @return 座標
+	*/
 	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
 
-	const float& GetPositionX()const
+	/**
+	 * @brief プレイヤーの回転を設定
+	 * @param [in] rot 回転
+	*/
+	void SetRotation(const Quaternion& rot)
 	{
-		return m_position.x;
+		m_rotation = rot;
 	}
 
-	const float& GetPositionY()const
+	/**
+	 * @brief プレイヤーの回転を得る
+	 * @return 回転
+	*/
+	const Quaternion& GetRotation() const
 	{
-		return m_position.y;
+		return m_rotation;
 	}
 
-	const float& GetPositionZ()const
+	/**
+	 * @brief プレイヤーの拡大を設定する
+	 * @param scale 
+	*/
+	void SetScale(const Vector3& scale)
 	{
-		return m_position.z;
+		m_modelRender->SetScale(scale);
 	}
 
 
-
-	/// <summary>
-	/// ウェイポイントの「場所」を取得
-	/// </summary>
-	/// <param name="vecSize">ウェイポイントのサイズ</param>
-	/// <param name="posMap">場所のベクター</param>
+	/**
+	 * @brief ウェイポイントの「座標」を取得
+	 * @param [in] vecSize ウェイポイントのサイズ
+	 * @param [in] posMap 座標のベクター
+	*/
 	void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>*const posMap);
 
-	/// <summary>
-	/// ウェイポイントの「回転」を取得
-	/// </summary>
-	/// <param name="vecSize">ウェイポイントのサイズ</param>
-	/// <param name="rotMap">回転のベクター</param>
+	/**
+	 * @brief ウェイポイントの「回転」を取得
+	 * @param [in] vecSize ウェイポイントのサイズ
+	 * @param [in] rotMap 回転のベクター
+	*/
 	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
 
-	//ウェイポイント用のOBBを設定
-	void SetWayPointOBB();
 
-	/// <summary>
-	/// 補完済みの最終的なウェイポイントの回転を取得
-	/// </summary>
-	/// <returns>補完済みの最終的なウェイポイントの回転</returns>
+	/**
+	 * @brief 補完済みの最終的なウェイポイントの回転を取得
+	 * @return 補完済みの最終的なウェイポイントの回転
+	*/
 	const Quaternion& GetFinalWPRot()const
 	{
 		return m_finalWPRot;
 	}
 
-	/// <summary>
-	///	UFOにキャプチャされ中の回転を得る
-	/// </summary>
-	/// <returns>UFOにキャプチャされ中の回転</returns>
+	/**
+	 * @brief UFOにキャプチャされ中の回転を得る
+	 * @return UFOにキャプチャされ中の回転
+	*/
 	const Quaternion& GetCapturedRotation() const
 	{
 		return m_capturedRotation;
 	}
 	
-	/// <summary>
-	/// UFOにキャプチャされ中の回転を設定する
-	/// </summary>
-	/// <param name="qRot">UFOにキャプチャされ中の回転</param>
+	/**
+	 * @brief UFOにキャプチャされ中の回転を設定する
+	 * @param [in] qRot UFOにキャプチャされ中の回転
+	*/
 	void SetCapturedRotation(const Quaternion& qRot)
 	{
 		m_capturedRotation = qRot;
 	}
 
-	/// <summary>
-	/// UFOにキャプチャされ中の座標を得る
-	/// </summary>
-	/// <returns>UFOにキャプチャされ中の座標</returns>
+	/**
+	 * @brief UFOにキャプチャされ中の座標を得る
+	 * @return UFOにキャプチャされ中の座標
+	*/
 	const Vector3& GetCapturedPosition() const
 	{
 		return m_capturedPosition;
 	}
 
-	/// <summary>
-	/// UFOにキャプチャされ中の座標を設定する
-	/// </summary>
-	/// <param name="position">UFOにキャプチャされ中の座標</param>
+	/**
+	 * @brief UFOにキャプチャされ中の座標を設定する
+	 * @param [in] position UFOにキャプチャされ中の座標
+	*/
 	void SetCapturedPosition(const Vector3 position)
 	{
 		m_capturedPosition = position;
 	}
 
-	/// <summary>
-	/// スタン中か？を得る
-	/// </summary>
-	/// <returns>スタン中か？</returns>
+	/**
+	 * @brief スタン中か？を得る
+	 * @return スタン中か？
+	*/
 	const bool GetStunFlag()const
 	{
 		return m_stunFlag;
 	}
 
-	/// <summary>
-	/// プレイヤーがオブジェクトを持っているかどうかを設定する
-	/// 持っている場合はtrueを渡す
-	/// </summary>
-	/// <param name="holdFlag">オブジェクトを持っているか？</param>
+	/**
+	 * @brief プレイヤーがオブジェクトを持っているかどうかを設定する。
+	 * @param [in] holdFlag オブジェクトを持っているか？
+	 * @param [in] reversibeObject 持たれる反転オブジェクト
+	*/
 	void SetHoldObject(const bool holdFlag, CReversibleObject* reversibeObject = nullptr)
 	{
 		m_holdObject = holdFlag;
@@ -173,190 +161,207 @@ public://publicなメンバ関数
 			m_reversibleObject = nullptr;
 	}
 
-	/// <summary>
-	/// プレイヤーがオブジェクトを持っているかどうかを調べる
-	/// 持っている場合はtrueが戻ってくる
-	/// </summary>
-	/// <returns>オブジェクトを持っているか</returns>
+	/**
+	 * @brief プレイヤーがオブジェクトを持っているかどうかを調べる
+	 * @return オブジェクトを持っているか？
+	 * @retval true 持っている
+	 * @retval false 持っていない
+	*/
 	const bool GetHoldObject()const
 	{
 		return m_holdObject;
 	}
 
-	/// <summary>
-	/// 持っている反転オブジェクトの参照を得る
-	/// </summary>
-	/// <returns>持っている反転オブジェクトの参照</returns>
+	/**
+	 * @brief 持っている反転オブジェクトの参照を得る
+	 * @return 持っている反転オブジェクトの参照
+	*/
 	CReversibleObject* GetReversibleObject()
 	{
 		return m_reversibleObject;
 	}
 
-	void SetOperationFlag(const bool b)
+	/**
+	 * @brief プレイヤーを操作できるか？
+	 * @param [in] operationFlag 操作できるか？
+	*/
+	void SetOperationFlag(const bool operationFlag)
 	{
+		//歩くSEが流れていたら
 		if (m_walkSE->IsPlaying()) {
+			//SEを止める
 			m_walkSE->Stop();
 		}
+		//走るSEが流れていたら
 		if (m_runSE->IsPlaying()) {
+			//SEを止める
 			m_runSE->Stop();
 		}
-		m_operationFlag = b;
+		//プレイヤーを操作できるか？を設定
+		m_operationFlag = operationFlag;
 	}
-	void SetTitleMove(const bool b)
+
+	/**
+	 * @brief タイトルか？を設定する
+	 * @param [in] titleMove 
+	*/
+	void SetTitleMove(const bool titleMove)
 	{
-		m_titleMove = b;
+		m_titleMove = titleMove;
 	}
 
 
-	/// <summary>
-	/// プレイヤーの現在のUpベクトルを得る
-	/// </summary>
-	/// <returns>Upベクトル</returns>
+	/**
+	 * @brief プレイヤーの現在のUpベクトルを得る
+	 * @return Upベクトル
+	*/
 	const Vector3& GetUpVec()const
 	{
 		return m_upVec;
 	}
 
-	/// <summary>
-	/// 現在のプレイヤーの左側のウェイポイントの番号を得る
-	/// </summary>
-	/// <returns>左側のウェイポイントの番号</returns>
+	/**
+	 * @brief 現在のプレイヤーの左側のウェイポイントの番号を得る
+	 * @return 左側のウェイポイントの番号
+	*/
 	const int GetLeftPointIndex()const
 	{
 		return m_lpIndex;
 	}
 
-	/// <summary>
-	/// プレイヤーの左側のウェイポイントを設定する
-	/// </summary>
-	/// <param name="lpIndex">左側のウェイポイント</param>
+	/**
+	 * @brief プレイヤーの左側のウェイポイントを設定する
+	 * @param [in] lpIndex 左側のウェイポイント
+	*/
 	void SetLeftPointIndex(const int lpIndex)
 	{
 		m_lpIndex = lpIndex;
 	}
 
-	/// <summary>
-	/// 現在のプレイヤーの右側のウェイポイントの番号を得る
-	/// </summary>
-	/// <returns>右側のウェイポイントの番号</returns>
+	/**
+	 * @brief 現在のプレイヤーの右側のウェイポイントの番号を得る
+	 * @return 右側のウェイポイント
+	*/
 	const int GetRightPointIndex()const
 	{
 		return m_rpIndex;
 	}
 
-	/// <summary>
-	/// プレイヤーの右側のウェイポイントを設定する
-	/// </summary>
-	/// <param name="lpIndex">右側のウェイポイント</param>
+	/**
+	 * @brief プレイヤーの右側のウェイポイントを設定する
+	 * @param [in] rpIndex 右側のウェイポイント
+	*/
 	void SetRightPointIndex(const int rpIndex)
 	{
 		m_rpIndex = rpIndex;
 	}
 
-	/// <summary>
-	/// 引数で渡された番号のウェイポイントの場所を戻す
-	/// </summary>
-	/// <param name="index">ウェイポイントの番号</param>
-	/// <returns>ウェイポイントの場所</returns>
+	/**
+	 * @brief 引数で渡された番号のウェイポイントの座標を戻す
+	 * @param [in] index ウェイポイントの番号
+	 * @return ウェイポイントの座標
+	*/
 	const Vector3& GerWayPointPos(const int index)
 	{
 		return (*m_wayPointPos)[index];
 	}
 
-	/// <summary>
-	/// キャラクターが左と右どちらを向いているか調べる
-	/// </summary>
-	/// <returns>enLeft（0）かenRight（1）</returns>
+	/**
+	 * @brief キャラクターが左と右どちらを向いているか調べる
+	 * @return 右か左か
+	 * @retval 0 enLeft
+	 * @retval 1 enRight
+	*/
 	const int GetEnLeftOrRight()const
 	{
 		return m_leftOrRight;
 	}
 
-	/// <summary>
-	/// 自身がどのウェイポイントにいるか表すステートを戻す関数
-	/// </summary>
-	/// <returns>ウェイポイントのステート</returns>
+	/**
+	 * @brief 自身がどのウェイポイントにいるか表すステートを戻す関数
+	 * @return ウェイポイントの番号
+	*/
 	const int GetWayPointState()const
 	{
 		return m_wayPointState;
 	}
 
-	/// <summary>
-	/// 自身がどのウェイポイントにいるか表すステートを設定
-	/// </summary>
-	/// <param name="wayPointState">ウェイポイントのステート</param>
+	/**
+	 * @brief 自身がどのウェイポイントにいるか表すステートを設定
+	 * @param [in] wayPointState ウェイポイントのステート
+	*/
 	void SetWayPointState(const int wayPointState)
 	{
 		m_wayPointState = wayPointState;
 	}
 
-	/// <summary>
-	/// UFOに捕まっているか？を設定
-	/// </summary>
-	/// <param name="captured">UFOに捕まっているか？</param>
+	/**
+	 * @brief UFOに捕まっているか？を設定
+	 * @param [in] captured UFOに捕まっているか？
+	*/
 	void SetCapturedUFOFlag(const bool captured)
 	{
 		m_capturedUFOFlag = captured;
 	}
 
-	/// <summary>
-	/// UFOに捕まっているか？を取得
-	/// </summary>
-	/// <returns>UFOに捕まっているか？</returns>
+	/**
+	 * @brief UFOに捕まっているか？を取得
+	 * @return UFOに捕まっているか？
+	*/
 	const bool GetCapturedUFOFlag()const
 	{
 		return m_capturedUFOFlag;
 	}
 
-	/// <summary>
-	/// 落ちているか？を設定
-	/// </summary>
-	/// <param name="fallFlag">落ちているか？</param>
+	/**
+	 * @brief 落ちているか？を設定
+	 * @param [in] fallFlag 落ちているか？
+	*/
 	void SetFallFlag(const bool fallFlag)
 	{
 		m_fallFlag = fallFlag;
 	}
 
-	/// <summary>
-	/// 落ちているか？を取得
-	/// </summary>
-	/// <returns>落ちているか？</returns>
+	/**
+	 * @brief 落ちているか？を取得
+	 * @return 落ちているか？
+	*/
 	const bool GetFallFalg() const
 	{
 		return m_fallFlag;
 	}
 
-	/// <summary>
-	/// OBBの参照を戻す
-	/// </summary>
-	/// <returns>OBBの参照</returns>
+	/**
+	 * @brief OBBの参照を戻す
+	 * @return OBBの参照
+	*/
 	COBB& GetOBB()
 	{
 		return m_myCharaCon.GetOBB();
 	}
 
-	/// <summary>
-	/// 投げているか？を設定
-	/// </summary>
-	/// <param name="throwing">投げているか？</param>
+	/**
+	 * @brief 投げているか？を設定
+	 * @param [in] throwing 投げているか？
+	*/
 	void SetThrowing(const bool throwing)
 	{
 		m_throwing = throwing;
 	}
 
-	/// <summary>
-	/// 持ち上げ中か？を設定
-	/// </summary>
-	/// <param name="lifting">持ち上げ中か？</param>
+	/**
+	 * @brief 持ち上げ中か？を設定
+	 * @param [in] lifting 持ち上げ中か？
+	*/
 	void SetLifting(const bool lifting) 
 	{
 		m_lifting = lifting;
 	}
 
-	/// <summary>
-	/// ゴールしたか？を設定
-	/// </summary>
-	/// <param name="isGoal">ゴールしたか？</param>
+	/**
+	 * @brief ゴールしたか？を設定
+	 * @param [in] isGoal ゴールしたか？
+	*/
 	void SetGoal(const bool isGoal)
 	{
 		m_isGoal = isGoal;
@@ -365,105 +370,114 @@ public://publicなメンバ関数
 
 private://privateなメンバ関数
 
+	/**
+	 * @brief タイトル中の動き
+	*/
 	void TitleMove();
+
+	/**
+	 * @brief ゲーム中の動き
+	*/
 	void GameMove();
 
-	/// <summary>
-	/// プレイヤーの初期設定
-	/// </summary>
+	/**
+	 * @brief プレイヤーの初期設定
+	*/
 	void Init();
 
-	/// <summary>
-	/// ウェイポイントの更新処理
-	/// </summary>
+	/**
+	 * @brief ウェイポイントの更新処理
+	*/
 	void CheckWayPoint();
 
-	/// <summary>
-	/// ウェイポイントステートから
-	/// 左側のウェイポイントと右側のウェイポイントを計算する
-	/// </summary>
+	/**
+	 * @brief ウェイポイントステートから
+	 * 左側のウェイポイントと右側のウェイポイントを計算する
+	*/
 	void CalcLeftAndRightWayPoint();
 
-	/// <summary>
-	/// 移動処理
-	/// </summary>
+	/**
+	 * @brief 移動処理
+	*/
 	void Move();
 
-	/// <summary>
-	/// スタン中の移動処理
-	/// </summary>
+	/**
+	 * @brief スタン中の移動処理
+	*/
 	void StunMove();
 
-	/// <summary>
-	/// ステージに乗る
-	/// </summary>
+	/**
+	 * @brief ステージに乗る
+	*/
 	void GetOnStage();
 
-	/// <summary>
-	/// スタン中のステージに乗る処理
-	/// </summary>
+	/**
+	 * @brief スタン中のステージに乗る処理
+	*/
 	void StunGetOnStage();
 
-	/// <summary>
-	/// モデルの回転処理
-	/// </summary>
+	/**
+	 * @brief モデルの回転処理
+	*/
 	void Rotation();
 
-	/// <summary>
-	/// 衝突したOBBのタグを調べる
-	/// </summary>
+	/**
+	 * @brief 衝突したOBBのタグを調べる
+	*/
 	void CheckHitOBBTag();
 
-	/// <summary>
-	/// ライトのデータを更新する
-	/// </summary>
+	/**
+	 * @brief ライトのデータを更新する
+	*/
 	void UpdateLightData();
 
-	/// <summary>
-	/// プレイヤーを照らす影を生成するライトを更新する
-	/// </summary>
+	/**
+	 * @brief プレイヤーを照らす影を生成するライトを更新する
+	*/
 	void SetShadowParam();
 
-	/// <summary>
-	/// ディレクションライトを更新する
-	/// </summary>
+	/**
+	 * @brief ディレクションライトを更新する
+	*/
 	void SetDirectionLight();
 
-	/// <summary>
-	/// UFOに捕まっている時の処理
-	/// </summary>
+	/**
+	 * @brief UFOに捕まっている時の処理
+	*/
 	void CapturedUFO();
 
-	/// <summary>
-	/// スタートの落ちるときの処理
-	/// </summary>
+	/**
+	 * @brief スタートの落ちるときの処理
+	*/
 	void Fall();
 
-	/// <summary>
-	/// ゴールしている時の処理
-	/// </summary>
+	/**
+	 * @brief ゴールしている時の処理
+	*/
 	void Goal();
 
-	/// <summary>
-	///	アニメーションを制御する
-	/// </summary>
+	/**
+	 * @brief アニメーションを制御する
+	*/
 	void AnimationController();
 
-	/// <summary>
-	/// アニメーションの遷移をリセットする
-	/// </summary>
+	/**
+	 * @brief アニメーションの遷移をリセットする
+	*/
 	void AnimationReset();
 
-	//SEの制御
+	/**
+	 * @brief SEの制御
+	*/
 	void SoundController();
 
-
-private:	//データメンバ
-
-	/// <summary>
-	/// アニメーションクリップ。
-	/// </summary>
-	enum EnAnimationClip {
+private:	//定数
+	
+	/**
+	 * @brief アニメーションクリップ。
+	*/
+	enum EnAnimationClip 
+	{
 		enAnimClip_idle,		//アイドル状態のアニメーションクリップ
 		enAnimClip_walk,		//歩きのアニメーションクリップ
 		enAnimClip_run,			//走りのアニメーションクリップ
@@ -477,44 +491,111 @@ private:	//データメンバ
 		enAnimClip_num,			//アニメーションクリップの総数
 	};
 
-	AnimationClip m_animationClips[enAnimClip_num];	//アニメーションクリップ。
-	int m_animState;								//アニメーションの状態
-	bool m_isDush = false;							//走り状態か？
-	bool m_throwing = false;						//投げ中か？
-	bool m_lifting = false;							//持ち上げ中か？
-	bool m_isGoal = false;							//ゴールしたか？
-	Vector3 m_moveSpeed = g_vec3Zero;				//キャラクターの移動スピード
-	Vector3 m_position = g_vec3Zero;				//キャラクターの座標
-	Vector3 m_onWayPosition = g_vec3Zero;			//道の上の座標
-	Quaternion m_rotation = g_quatIdentity;			//キャラクターの回転
-	Vector3 m_upVec = g_vec3Up;						//プレイヤーのUpベクトル
-	bool m_holdObject = false;						//オブジェクトを持っているか？
-	CReversibleObject* m_reversibleObject = nullptr;	//持っている反転オブジェクトのポインタ
-	Quaternion m_capturedRotation = m_rotation;		//カメラに渡す回転
-	Vector3 m_capturedPosition = m_position;			//カメラに渡す座標
-	CModelRender* m_goalPlayerMR = nullptr;			//ゴール時のプレイヤーのモデル
-	AnimationClip m_goalAnimationClips[2];	//アニメーションクリップ。
-	float m_goalTimer = 0.0f;						//ゴールの時のタイマー
-	GameCamera* m_gameCamera = nullptr;				//ゲームカメラ
-	Effect* m_goalEffect = nullptr;					//ゴール時のエフェクト
+	/**
+	 * @brief ゴール時のアニメーションクリップ
+	*/
+	enum EnGoalAnimationClip
+	{
+		enGoalAnimClip_idle,	//アイドル状態のアニメーションクリップ
+		enGoalAnimClip_goal,	//ゴール時のアニメーションクリップ
+		enGoalAnimClip_num,		//ゴール時のアニメーションクリップの数
+	};
 
-	/// <summary>
-	/// プレイヤーが右を向いているか左を向いているか
-	/// </summary>
+	/**
+	 * @brief プレイヤーが右を向いているか左を向いているか
+	*/
 	enum EnLeftOrRight
 	{
 		enLeft,		//左
 		enRight,	//右
 	};
-	int m_leftOrRight = enLeft;				//キャラクターの左右の向き
 
-	float m_padLStickXF = 0.0f;				//パッドの左スティックのX軸の入力情報
+private:	//データメンバ
 
-	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
+	/*
+	* モデル、アニメーションデータ
+	*/
+	CModelRender* m_modelRender = nullptr;					//モデルレンダラー
+	AnimationClip m_animationClips[enAnimClip_num];			//アニメーションクリップ。
+	CModelRender* m_goalPlayerMR = nullptr;					//ゴール時のプレイヤーのモデル
+	AnimationClip m_goalAnimationClips[enGoalAnimClip_num];	//アニメーションクリップ。
+
+	/*
+	* キャラクターのトランスフォーム
+	*/
+	Vector3 m_moveSpeed = g_vec3Zero;		//キャラクターの移動スピード
+	Vector3 m_position = g_vec3Zero;		//キャラクターの座標
+	Quaternion m_rotation = g_quatIdentity;	//キャラクターの回転
+
+	/*
+	* 移動関連
+	*/
 	CMyCharacterController m_myCharaCon;	//myキャラクターコントローラー
-	Mobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
+	float m_padLStickXF = 0.0f;				//パッドの左スティックのX軸の入力情報
+	Vector3 m_onWayPosition = g_vec3Zero;	//道の上の座標
+	Vector3 m_upVec = g_vec3Up;				//プレイヤーのUpベクトル
+
+	/*
+	* 状態
+	*/
+	int m_animState;									//アニメーションの状態
+	int m_leftOrRight = enLeft;							//キャラクターの左右の向き
+	CReversibleObject* m_reversibleObject = nullptr;	//持っている反転オブジェクトのポインタ
+
+	/*
+	* フラグ
+	*/
+	bool m_isDush = false;						//走り状態か？
+	bool m_throwing = false;					//投げ中か？
+	bool m_lifting = false;						//持ち上げ中か？
+	bool m_isGoal = false;						//ゴールしたか？
+	bool m_holdObject = false;					//オブジェクトを持っているか？
+	bool m_operationFlag = false;				//操作できるか？
+	bool m_titleMove = false;					//タイトルか？
+	bool m_stunFlag = false;					//スタン状態（吹っ飛び状態）か？
+	bool m_capturedUFOFlag = false;				//UFOにキャプチャされているか？
+	bool m_fallFlag = false;					//落下中か？
+
+
+	/*
+	* スタン関連
+	*/
+	bool m_stunLeftOrRight = enLeft;		//スタン中の吹っ飛ぶ方向
+	float m_stunTimer = 0.0f;				//スタンのタイマー
+	Vector3 m_stunMoveSpeed = g_vec3Zero;	//スタン中の吹っ飛ばすベクトル
+	Vector3 m_stunDownVec = g_vec3Zero;		//スタン中の重力
+	bool m_stunMoveFlag = true;				//スタン中に吹っ飛び中か？
+	float m_blinkTimer = 0.0f;				//スタン状態にモデルを点滅させるタイマー
+	COBB* m_hitOBB = nullptr;				//衝突したOBBのポインタ
+
+	/*
+	* キャプチャ関連
+	*/
+	Quaternion m_capturedRotation = m_rotation;		//キャプチャ中にカメラに渡す回転
+	Vector3 m_capturedPosition = m_position;		//キャプチャ中にカメラに渡す座標
+
+	/*
+	* ゴール関連
+	*/
+	float m_goalTimer = 0.0f;						//ゴールの時のタイマー
+	Effect* m_goalEffect = nullptr;					//ゴール時のエフェクト
+
+	/*
+	* SE関連
+	*/
+	CSoundCue* m_fallstartSE = nullptr;	//m_fallstartSEのサウンドキュー
+	int m_fallcount = 0;				//fallSEサポート
+	int m_falltimer = 0;				//fallSEサポート
+	CSoundCue* m_walkSE = nullptr;		//m_walkSEのサウンドキュー
+	CSoundCue* m_runSE = nullptr;		//m_runSEのサウンドキュー
+	CSoundCue* m_flameHitSE = nullptr;	//炎と当たったときのサウンド
+
+	/*
+	* 別のところで生成されるオブジェクト
+	*/
+	Mobius* m_mobius = nullptr;							//ステージのメビウスの輪のポインタ
 	CDirectionLight* m_gameDirectionLight = nullptr;	//ディレクションライトのポインタ
-	Vector3 m_lightDirection = g_vec3Zero;	//ライトの照らす方向
+	GameCamera* m_gameCamera = nullptr;					//ゲームカメラ
 
 	/// <summary>
 	/// ウェイポイント関連のデータメンバ
@@ -527,42 +608,5 @@ private:	//データメンバ
 	int m_maxWayPointState = 0;					//ウェイポイントステートの最大の値
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
 	std::vector<COBB> m_wayPointOBB;			//ウェイポイント用のOBB
-
-
-	bool m_operationFlag = false; //操作できるかのフラグ
-	bool m_titleMove = false;
-	bool m_stunFlag = false;					//スタン状態（吹っ飛び状態）か？
-	bool m_stunLeftOrRight = enLeft;			//スタン中の吹っ飛ぶ方向
-	float m_stunTimer = 0.0f;					//スタンのタイマー
-	Vector3 m_stunMoveSpeed = g_vec3Zero;		//スタン中の吹っ飛ばすベクトル
-	Vector3 m_stunDownVec = g_vec3Zero;			//スタン中の重力
-	bool m_stunMoveFlag = true;					//スタン中に吹っ飛び中か？
-	float m_blinkTimer = 0.0f;					//スタン状態にモデルを点滅させるタイマー
-	COBB* m_hitOBB = nullptr;					//衝突したOBBのポインタ
-
-	bool m_capturedUFOFlag = false;				//UFOにキャプチャされているか？
-	bool m_fallFlag = false;					//落下中か？
-
-	CSoundCue* m_fallstartSE = nullptr;			//m_fallstartSEのサウンドキュー
-	int m_fallcount = 0;						//fallSEサポート
-	int m_falltimer = 0;						//fallSEサポート
-	CSoundCue* m_walkSE = nullptr;				//m_walkSEのサウンドキュー
-	CSoundCue* m_runSE = nullptr;				//m_runSEのサウンドキュー
-	CSoundCue* m_flameHitSE = nullptr;			//炎と当たったときのサウンド
-
-public://デバック用
-	//void PostRender(RenderContext& rc)override final;	//デバック用のフォントを表示するため
-	//Font m_font;							//フォントを表示するためのクラス
-	//CModelRender* m_dbgModel = nullptr;		//プレイヤーとステージとの当たり判定を
-	//CModelRender* m_dbgModel2 = nullptr;	//取るためのレイの視点と終点とステージとの
-	//CModelRender* m_dbgModel3 = nullptr;	//交差点を見るためのモデル
-	//bool m_dbgHit = false;					//上のレイが当たっているか表示するための変数
-
-	//float m_dbgDot1 = 0.0f;			//左側のウェイポイントとプレイヤーの内積を入れる
-	//float m_dbgDot2 = 0.0f;			//右側のウェイポイントとプレイヤーの内積を入れる
-
-	//CModelRender* m_dbgObbModel[8] = { nullptr };	//OBBの頂点を見るためのモデル
-	//CModelRender* m_dbgObbModel2[32][8];
-	//CModelRender* m_dbgStunMoveModel = nullptr;
 };
 

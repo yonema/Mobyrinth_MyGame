@@ -197,11 +197,6 @@ void GameCamera::FadeDirectingCamera()
 		//Aボタンを押した扱いにする。
 		m_startDirecting->SetCheckAButton(true);
 
-		//カメラがプレイヤーを見るようにする。
-		/*SetTarget(m_pPlayer->GetPosition());
-		SetPosition({ m_pPlayer->GetPositionX(),
-					m_pPlayer->GetPositionY(),
-					m_pPlayer->GetPositionZ() + 1200.0f });*/
 
 		//アルファ値
 		float alphaValue = 1.0f;

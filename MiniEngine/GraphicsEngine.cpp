@@ -4,9 +4,7 @@
 GraphicsEngine* g_graphicsEngine = nullptr;	//グラフィックスエンジン
 Camera* g_camera2D = nullptr;				//2Dカメラ。
 Camera* g_camera3D = nullptr;				//3Dカメラ。
-CPostEffect* g_postEffect = nullptr;		//ポストエフェクト
-CShadowMap* g_shadowMap = nullptr;			//シャドウマップ
-CSceneChange* g_sceneChange = nullptr;		//場面転換
+
 
 GraphicsEngine::~GraphicsEngine()
 {
@@ -67,11 +65,11 @@ void GraphicsEngine::WaitDraw()
 	}
 }
 
-/// <summary>
-/// メインレンダーターゲットの初期化
-/// </summary>
-/// <returns>初期化できたか？</returns>
-bool GraphicsEngine::InitMainRenderTarget()
+/**
+ * @brief メインレンダーターゲットの初期化
+ * @return 初期化できたか？
+*/
+const bool GraphicsEngine::InitMainRenderTarget()
 {
 	bool ret =
 		m_mainRenderTarget.Create(
@@ -87,9 +85,9 @@ bool GraphicsEngine::InitMainRenderTarget()
 	return ret;
 }
 
-/// <summary>
-/// フレームバッファにコピーするスプライトの初期化
-/// </summary>
+/**
+ * @brief フレームバッファにコピーするスプライトの初期化
+*/
 void GraphicsEngine::InitCopyToFrameBufferSprite()
 {
 	// mainRenderTargetのテクスチャをフレームバッファーに貼り付けるためのスプライトを初期化する
@@ -109,11 +107,12 @@ void GraphicsEngine::InitCopyToFrameBufferSprite()
 	m_copyToFrameBufferSprite.Update(g_vec3Zero, g_quatIdentity, { -1.0f,1.0f,1.0f });
 }
 
-/// <summary>
-/// ZPrepass用のレンダリングターゲットを初期化
-/// </summary>
+/**
+ * @brief ZPrepass用のレンダリングターゲットを初期化
+*/
 void GraphicsEngine::InitZPrepassRenderTarget()
 {
+	//レンダリングターゲットの生成
 	m_zprepassRenderTarget.Create(
 		g_graphicsEngine->GetFrameBufferWidth(),
 		g_graphicsEngine->GetFrameBufferHeight(),
@@ -262,11 +261,9 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	//
 	m_sceneChange.Init();
 
-	m_toonMapTexture.InitFromDDSFile(L"Assets/modelData/preset/sky.dds" );
+	m_skyCubeTexture.InitFromDDSFile(L"Assets/modelData/preset/sky.dds" );
 
-	g_postEffect = &m_postEffect;
-	g_shadowMap = &m_shadowMap;
-	g_sceneChange = &m_sceneChange;
+
 
 	return true;
 }
@@ -582,9 +579,9 @@ void GraphicsEngine::WaitDrawingMainRenderTarget()
 	m_renderContext.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
 }
 
-/// <summary>
-/// 場面転換の描画
-/// </summary>
+/**
+ * @brief 場面転換の描画
+*/
 void GraphicsEngine::SceneChangeRender()
 {
 	//パラメータのアップデート
@@ -593,9 +590,9 @@ void GraphicsEngine::SceneChangeRender()
 	m_sceneChange.Draw(m_renderContext);
 }
 
-/// <summary>
-/// メインレンダリングターゲットの絵をフレームバッファーにコピーする
-/// </summary>
+/**
+ * @brief メインレンダリングターゲットの絵をフレームバッファーにコピーする
+*/
 void GraphicsEngine::CopyToFrameBuffer()
 {
 	// メインレンダリングターゲットの絵をフレームバッファーにコピー
@@ -606,10 +603,11 @@ void GraphicsEngine::CopyToFrameBuffer()
 	m_copyToFrameBufferSprite.Draw(m_renderContext);
 }
 
-/// <summary>
-/// ZPrepass
-/// </summary>
-/// <param name="rc">レンダリングコンテキスト</param>
+/**
+ * @brief ZPrepass
+ * @details モデルたちの深度値を書き込む
+ * @param [in,out] rc レンダリングコンテキスト
+*/
 void GraphicsEngine::ZPrepass(RenderContext& rc)
 {
 	// まず、レンダリングターゲットとして設定できるようになるまで待つ
@@ -629,10 +627,10 @@ void GraphicsEngine::ZPrepass(RenderContext& rc)
 	rc.WaitUntilFinishDrawingToRenderTarget(m_zprepassRenderTarget);
 }
 
-/// <summary>
-/// 登録されている3Dモデルをクリア
-/// </summary>
-void GraphicsEngine:: ClearModels()
+/**
+ * @brief ZPrepassに登録されている3Dモデルをクリア
+*/
+void GraphicsEngine::ClearZPrepassModels()
 {
 	m_zprepassModels.clear();
 }

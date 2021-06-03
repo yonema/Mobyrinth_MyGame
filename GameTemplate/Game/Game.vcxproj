@@ -437,6 +437,8 @@
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CapacityUI.h" />
     <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="PlayerConstData.h" />
+    <ClInclude Include="PriorityList.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="SpringCamera.h" />

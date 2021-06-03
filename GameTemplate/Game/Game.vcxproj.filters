@@ -904,6 +904,12 @@
     <ClInclude Include="SpringCamera.h">
       <Filter>MyCode\camera</Filter>
     </ClInclude>
+    <ClInclude Include="PriorityList.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerConstData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">
