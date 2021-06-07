@@ -111,6 +111,9 @@
     <Filter Include="MyCode\camera">
       <UniqueIdentifier>{d40f695f-48a6-459d-b10c-404d22880b52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Player">
+      <UniqueIdentifier>{60751a51-0b44-4768-b1ac-a9aaa1d2ccd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -341,9 +344,6 @@
     <ClCompile Include="TklFile.cpp">
       <Filter>MyCode\TKLevel</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="StageBase.cpp">
       <Filter>MyCode\stage</Filter>
     </ClCompile>
@@ -484,6 +484,9 @@
     </ClCompile>
     <ClCompile Include="SpringCamera.cpp">
       <Filter>MyCode\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>MyCode\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -742,9 +745,6 @@
     <ClInclude Include="TklFile.h">
       <Filter>MyCode\TKLevel</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="StageBase.h">
       <Filter>MyCode\stage</Filter>
     </ClInclude>
@@ -907,9 +907,6 @@
     <ClInclude Include="PriorityData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerConstData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjectNameData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -921,6 +918,12 @@
     </ClInclude>
     <ClInclude Include="TitleNameData.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerConstData.h">
+      <Filter>MyCode\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

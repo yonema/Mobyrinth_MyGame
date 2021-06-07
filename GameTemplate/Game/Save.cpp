@@ -14,10 +14,15 @@ CSave::CSave()
 void CSave::SaveData()
 {
 	//ファイルをバイナリで上書きモードで開く
-	auto fp = fopen("Assets/saveData/saveData.dat", "wb");
+	auto fp = fopen(SAVE_DATA_FILEPATH, MODE_WRITE_BINARY);
 
 	//セーブデータの一番高いクリアしたステージの番号をファイルに書き込む
-	fwrite(&m_saveData.highestClearStageNum, sizeof(m_saveData.highestClearStageNum), 1, fp);
+	fwrite(
+		&m_saveData.highestClearStageNum,
+		sizeof(m_saveData.highestClearStageNum),
+		1,
+		fp
+	);
 
 	//ファイルを閉じる
 	fclose(fp);
@@ -31,7 +36,7 @@ void CSave::SaveData()
 const bool CSave::LoadData()
 {
 	//ファイルをバイナリで読み込みモードで開く
-	auto fp = fopen("Assets/saveData/saveData.dat", "rb");
+	auto fp = fopen(SAVE_DATA_FILEPATH, MODE_READ_BINARY);
 
 	//開けたか？
 	if (!fp)
