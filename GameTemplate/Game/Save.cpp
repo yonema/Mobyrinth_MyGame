@@ -27,6 +27,7 @@ void CSave::SaveData()
 	//ƒtƒ@ƒCƒ‹‚ð•Â‚¶‚é
 	fclose(fp);
 
+	return;
 }
 
 /// <summary>
