@@ -7,6 +7,9 @@
 #include "gameObject/IGameObject.h"
 #include <functional>
 #include <vector>
+#include "../../GameTemplate/Game/PriorityData.h"
+#include "../../GameTemplate/Game/GameObjectNameData.h"
+
 
 
 /// <summary>

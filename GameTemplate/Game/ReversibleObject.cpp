@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ReversibleObject.h"
-float CReversibleObject::m_heldUpLen = 100.0f;
+float CReversibleObject::m_heldUpLen = 330.0f;
 
 
 //コンストラクタ

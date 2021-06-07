@@ -39,15 +39,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CStopWatch stopWatch;
 
 	//ゲームのインスタンスを生成する
-	Game* game = NewGO<Game>(0, "Game");
+	Game* game = NewGO<Game>(PRIORITY_FIRST, "Game");
 
-	//シャドウ生成
-	g_shadowMap->CreateShadowMap({ 1.0f,-1.0f,-1.0f }, 1000.0f);
-	//ディレクションライトの生成
+	//シャドウの生成と初期化
+	g_graphicsEngine->GetShadowMap().CreateShadowMap(
+		shadowConstData::SHADOW_INIT_DIRECTION,
+		shadowConstData::SHADOW_INIT_LENGTH
+	);
+
+	//ディレクションライトの生成と初期化
 	CDirectionLight* gameDirectionLight = nullptr;
-	gameDirectionLight = NewGO<CDirectionLight>(0, "GameDirectionLight");
-	gameDirectionLight->SetDirection({ 1.0f,-1.0f,-1.0f });
-	gameDirectionLight->SetColor({ 3.0f,3.0f,3.0f,1.0f });
+	gameDirectionLight = NewGO<CDirectionLight>(PRIORITY_FIRST, "GameDirectionLight");
+	gameDirectionLight->SetDirection(directionLightConstData::DIRECTIONLIG_INIT_DIRECTION);
+	gameDirectionLight->SetColor(directionLightConstData::DIRECTIONLIG_INIT_COLOR);
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
@@ -91,7 +95,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//////////////////////////////////////////////////////////////
 
 		//シャドウイング
-		g_shadowMap->Draw(renderContext);
+		g_graphicsEngine->GetShadowMap().Draw(renderContext);
 
 		// ZPrepass
 		g_graphicsEngine->ZPrepass(renderContext);
@@ -114,7 +118,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		g_graphicsEngine->WaitDrawingMainRenderTarget();
 
 		//ポストエフェクト
-		g_postEffect->Draw(renderContext);
+		g_graphicsEngine->DrawPostEffect(renderContext);
 
 		//場面転換の2D演出
 		g_graphicsEngine->SceneChangeRender();
@@ -123,7 +127,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		g_graphicsEngine->CopyToFrameBuffer();
 
 		//登録されている3Dモデルをクリア
-		g_graphicsEngine->ClearModels();
+		g_graphicsEngine->ClearZPrepassModels();
 
 		//////////////////////////////////////////////////////////////
 		///	レンダリングの処理終了
@@ -132,6 +136,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//レンダリング終了
 		g_engine->EndFrame();
 
+
+		//FPS固定の処理
 		//スピンロックを行う。
 		int restTime = 0;
 		do {

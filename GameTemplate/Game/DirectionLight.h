@@ -2,6 +2,17 @@
 #include "LightData.h"
 #include "LightManager.h"
 
+/**
+ * @brief CDirectionLightを初期化するときの定数値
+*/
+namespace directionLightConstData
+{
+	//ライトの方向の初期値
+	const Vector3 DIRECTIONLIG_INIT_DIRECTION = { 1.0f,-1.0f,-1.0f };
+	//ライトのカラーの初期値
+	const Vector4 DIRECTIONLIG_INIT_COLOR = { 3.0f,3.0f,3.0f,1.0f };
+}
+
 /// <summary>
 /// ディレクションライトクラス
 /// </summary>

@@ -1044,7 +1044,7 @@ void CUFO::GetOnStage()
 	{
 		//メビウスの輪（ステージ）が見つかっていなかったら
 		//探してreturnする
-		m_mobius = FindGO<Mobius>("Mobius");
+		m_mobius = FindGO<CMobius>("Mobius");
 		return;
 	}
 }

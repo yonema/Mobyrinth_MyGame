@@ -75,21 +75,6 @@ SPSIn VSSkinMain(SVSIn vsIn)
 }
 
 
-//// モデル用の頂点シェーダーのエントリーポイント
-//SPSIn VSMain(SVSIn vsIn, uniform bool hasSkin)
-//{
-//    SPSIn psIn;
-//
-//    psIn.pos = mul(mWorld, vsIn.pos); // モデルの頂点をワールド座標系に変換
-//    psIn.pos = mul(mView, psIn.pos); // ワールド座標系からカメラ座標系に変換
-//    psIn.depth.z = psIn.pos.z;
-//    psIn.pos = mul(mProj, psIn.pos); // カメラ座標系からスクリーン座標系に変換
-//    psIn.depth.x = psIn.pos.z / psIn.pos.w;
-//    psIn.depth.y = saturate( psIn.pos.w / 1000.0f );
-//    
-//    return psIn;
-//}
-
 /// <summary>
 /// 頂点シェーダーのコア関数。
 /// </summary>
@@ -120,8 +105,6 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
     psIn.depth.y = saturate(psIn.pos.w / 1000.0f);  //yにはカメラ空間での正規化されたZ値
 
     //頂点法線
-    //psIn.normal = normalize(mul(m, vsIn.normal));
-    //psIn.normal.x = vsIn.normal.x * 5.0f + vsIn.normal.y * 1.0f + vsIn.normal.z;
     psIn.normal = vsIn.normal;
 	return psIn;
 }
@@ -130,6 +113,8 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 // モデル用のピクセルシェーダーのエントリーポイント
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
+    //xにプロジェクション空間での深度値。
+    //y,z,wには頂点の法線情報が入る。
     return float4( psIn.depth.x, psIn.normal.x, psIn.normal.y, psIn.normal.z);
 }
 

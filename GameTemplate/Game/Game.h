@@ -13,15 +13,16 @@ public:		//自動で呼ばれるメンバ関数
 
 	//デバック用
 	//後で消す
-	//void PostRender(RenderContext& rc)override final;	//一番上に描画する関数
+#ifdef MY_DEBUG
+public:
+	//デバック用
+	//後で消す
 	void Update()override final;						//アップデート関数
 
 
 private:	//データメンバ
-
-	//デバック用
-	//後で消す
 	std::vector<ILevelObjectBase*> m_lb;	//ILevelObjectBaseの情報を受け取る。
+#endif
 
 };
 

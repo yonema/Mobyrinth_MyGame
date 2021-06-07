@@ -1,9 +1,14 @@
 #pragma once
-#include "Player.h"
-
+#include "LeftOrRightData.h"
 
 //レベルオブジェクトの抽象クラス
 class ILevelObjectBase;
+
+//プレイヤークラス
+class Player;
+
+//ステージのメビウスの輪クラス
+class CMobius;
 
 
 /// <summary>
@@ -75,14 +80,14 @@ public:		//ここのメンバ関数を主に使う
 	/// </summary>
 	/// <param name="vecSize">ウェイポイントのサイズ</param>
 	/// <param name="posMap">場所のマップ</param>
-	void InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap);
+	void InitWayPointPos(std::map<int, Vector3>& posMap);
 
 	/// <summary>
 	/// ウェイポイントの「回転」を初期化
 	/// </summary>
 	/// <param name="vecSize">ウェイポイントのサイズ</param>
 	/// <param name="rotMap">回転のマップ</param>
-	void InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap);
+	void InitWayPointRot(std::map<int, Quaternion>& rotMap);
 
 	/// <summary>
 	/// ウェイポイントの「場所」の参照を得る
@@ -245,7 +250,7 @@ public:		//ここのメンバ関数を主に使う
 	/// ステージのメビウスの輪の参照を得る
 	/// </summary>
 	/// <returns>メビウスの輪の参照</returns>
-	Mobius* GetMobius()const
+	CMobius* GetMobius()const
 	{
 		return m_mobius;
 	}
@@ -254,7 +259,7 @@ public:		//ここのメンバ関数を主に使う
 	/// ステージのメビウスの輪の参照を設定する
 	/// </summary>
 	/// <param name="mobius">メビウスの輪の参照</param>
-	void SetMobius(Mobius* mobius)
+	void SetMobius(CMobius* mobius)
 	{
 		m_mobius = mobius;
 	}
@@ -281,7 +286,7 @@ private:	//データメンバ
 	int m_reversibleObjectNum[enFrontOrBackSideNum] = { 0,0 };
 	//反転オブジェクトの、表側と裏側のそれぞれの最大数
 	int m_reversibleObjectMaxNum[enFrontOrBackSideNum] = { 0,0 };
-	Mobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
+	CMobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
 };
 
 

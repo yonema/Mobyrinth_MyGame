@@ -145,16 +145,16 @@ void CModelRender::InitModel(const char* filePath, D3D12_CULL_MODE cullMode, EnM
 
 	//シャドウのデータの登録
 	initData.m_expandConstantBuffer[4] =
-		g_shadowMap->GetShadowParam();
+		g_graphicsEngine->GetShadowMap().GetShadowParam();
 	initData.m_expandConstantBufferSize[4] =
-		sizeof(*g_shadowMap->GetShadowParam()) * g_max_shadowMap;
-	initData.m_expandShaderResoruceView[0] = &g_shadowMap->GetShadowBlur();
+		sizeof(*g_graphicsEngine->GetShadowMap().GetShadowParam()) * g_max_shadowMap;
+	initData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetShadowMap().GetShadowBlur();
 
 	//ZPrepassで作成された深度テクスチャの登録
 	initData.m_expandShaderResoruceView[1] = &g_graphicsEngine->GetZPrepassDepthTexture();
 
 
-	initData.m_expandShaderResoruceView[2] = &g_graphicsEngine->GetToonMapTexture();
+	initData.m_expandShaderResoruceView[2] = &g_graphicsEngine->GetSkyCubeTexture();
 
 	initData.m_cullMode = cullMode;
 
@@ -197,8 +197,8 @@ void CModelRender::InitShadowModel()
 	initShadowModelData.m_fxFilePath =
 		"Assets/shader/DrawShadowMap.fx";
 	//シャドウのパラーメータを定数バッファに渡す
-	initShadowModelData.m_expandConstantBuffer[0] = (void*)g_shadowMap->GetShadowParam();
-	initShadowModelData.m_expandConstantBufferSize[0] = sizeof(*g_shadowMap->GetShadowParam());
+	initShadowModelData.m_expandConstantBuffer[0] = (void*)g_graphicsEngine->GetShadowMap().GetShadowParam();
+	initShadowModelData.m_expandConstantBufferSize[0] = sizeof(*g_graphicsEngine->GetShadowMap().GetShadowParam());
 
 	initShadowModelData.m_colorBufferFormat = DXGI_FORMAT_R32G32_FLOAT;
 

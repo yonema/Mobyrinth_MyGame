@@ -186,8 +186,8 @@ void CPause::UpdateOnlyPaused()
 
 
 	//カーソル用の画像の場所を設定する
-	m_cursor->SetPosition({ m_cursor->GetPositionX(),
-							m_choices[m_pauseState]->GetPositionY() + 25,
+	m_cursor->SetPosition({ m_cursor->GetPosition().x,
+							m_choices[m_pauseState]->GetPosition().y + 25,
 							0.0f });
 
 

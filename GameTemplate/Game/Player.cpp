@@ -1,90 +1,32 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "LightManager.h"
-#include "LevelObjectManager.h"
 #include "ReversibleObject.h"
 #include "GameCamera.h"
+
+
 
 //スタート関数
 bool Player::Start()
 {
+	//アニメーションの初期化
+	InitAnimation();
 
-	CReversibleObject::SetHeldUpLen(330.0f);
+	//モデルの初期化
+	InitModel();
 
+	//キャラクターコントローラーの初期化
+	InitMyCharacterController();
+	
+	//エフェクトの初期化
+	InitEffect();
 
-	//アニメーションクリップの初期化
-	//idleのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_idle].Load("Assets/animData/idle.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_idle].SetLoopFlag(true);
-	//walkのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_walk].Load("Assets/animData/walk.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_walk].SetLoopFlag(true);
-	//runのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_run].Load("Assets/animData/run.tka");
-	//ループ再生をfalseにする
-	m_animationClips[enAnimClip_run].SetLoopFlag(true);
-	//carryのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_carry].Load("Assets/animData/carry.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_carry].SetLoopFlag(false);
-	//carryIdleのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_carryIdle].Load("Assets/animData/carryidle.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_carryIdle].SetLoopFlag(true);
-	//carryWalkのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_carryWalk].Load("Assets/animData/carrywalk.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_carryWalk].SetLoopFlag(true);
-	//carryRunのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_carryRun].Load("Assets/animData/carryrun.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_carryRun].SetLoopFlag(true);
-	//throwのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_throw_l].Load("Assets/animData/throwL.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_throw_l].SetLoopFlag(false);
-	//throwのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_throw_r].Load("Assets/animData/throwR.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_throw_r].SetLoopFlag(false);
-	//fallのアニメーションクリップをロードする
-	m_animationClips[enAnimClip_fall].Load("Assets/animData/fall.tka");
-	//ループ再生をtrueにする
-	m_animationClips[enAnimClip_fall].SetLoopFlag(false);
+	//サウンドを初期化
+	InitSound();
 
 
-	//モデルレンダラーを生成する
-	m_modelRender = NewGO<CModelRender>(0);
-	//モデルレンダラーの初期化をする
-	//この時にアニメーションクリップを一緒に引数に渡しておく
-	m_modelRender->Init
-		("Assets/modelData/player.tkm", D3D12_CULL_MODE_BACK,m_animationClips, enAnimClip_num,enModelUpAxisZ);
-		/*("Assets/modelData/player.tkm");*/
-	m_modelRender->SetShadowCasterFlag(true);
-	m_modelRender->SetShadowReceiverFlag(false);
-	m_modelRender->PlayAnimation(enAnimClip_idle);
-	//m_modelRender->SetDrawOutLineFlag(true);
-
-	//モデルの場所と回転を設定
-	m_modelRender->SetPosition(m_position);
-	m_modelRender->SetRotation(m_rotation);
-
-	//ゴール用のモデルの生成と初期化
-	m_goalPlayerMR = NewGO<CModelRender>(0);
-	m_goalAnimationClips[0].Load("Assets/animData/goalidle.tka");
-	m_goalAnimationClips[0].SetLoopFlag(true);
-	m_goalAnimationClips[1].Load("Assets/animData/goal.tka");
-	m_goalAnimationClips[1].SetLoopFlag(false);
-	m_goalPlayerMR->Init
-	("Assets/modelData/player2.tkm", D3D12_CULL_MODE_BACK, m_goalAnimationClips, 2, enModelUpAxisZ);
-	m_goalPlayerMR->Deactivate();
-
-	m_goalEffect = NewGO<Effect>(0);
-	m_goalEffect->Init(u"Assets/effect2/goal.efk");
-
-	m_gameCamera = FindGO<GameCamera>("GameCamera");
+	//カメラを探す
+	m_gameCamera = FindGO<CGameCamera>(GetGameObjectName(EN_GO_TYPE_GAME_CAMERA));
 
 	//ウェイポイント上の座標にキャラの座標を入れておく
 	m_onWayPosition = m_position;
@@ -92,83 +34,6 @@ bool Player::Start()
 	//ステージのメビウスの輪の参照を得る
 	m_mobius = CLevelObjectManager::GetInstance()->GetMobius();
 
-
-	//初期化処理
-	Init();
-
-	//OBB初期化
-	//OBBの初期化用データ構造体
-	SInitOBBData initData;
-	//なんかいい感じのOBBの大きさにする
-	initData.width = 100.0f;
-	initData.length = 200.0f;
-	initData.height = 200.0f;
-	//Playerの場所と回転を入れる
-	initData.position = m_position;
-	initData.rotation = m_rotation;
-	//ピボットは底面の中央
-	initData.pivot = { 0.5f,0.0f,0.5f };
-	//キャラクターコントローラーを初期化する
-	m_myCharaCon.Init(initData);
-
-	//プレイヤーを照らすライトの方向
-	m_lightDirection = { 1.0f,-1.0f,0.0f };
-
-	//m_fallstartSEのサウンドキューを生成する
-	m_fallstartSE = NewGO<CSoundCue>(0);
-	//m_fallstartSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_fallstartSE->Init(L"Assets/sound/fallstart.wav");
-	//音量調節
-	m_fallstartSE->SetVolume(0.5f);
-
-	//m_walkSEのサウンドキューを生成する
-	m_walkSE = NewGO<CSoundCue>(0);
-	//m_walkSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_walkSE->Init(L"Assets/sound/walk2.wav");
-	//音量調節
-	m_walkSE->SetVolume(1.0f);
-
-	//炎に当たったときのサウンドの生成と初期化
-	m_flameHitSE = NewGO<CSoundCue>(0);
-	m_flameHitSE->Init(L"Assets/sound/flameHit.wav");
-	//音量調節
-	m_flameHitSE->SetVolume(1.0f);
-
-	//m_runSEのサウンドキューを生成する
-	m_runSE = NewGO<CSoundCue>(0);
-	//m_runSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_runSE->Init(L"Assets/sound/run2.wav");
-	//音量調節
-	m_runSE->SetVolume(1.0f);
-
-	//デバック用
-	//後で消す
-
-	////レイの視点と終点と交差点を見るためのデバック用モデルの生成
-	//m_dbgModel = NewGO<CModelRender>(0);
-	//m_dbgModel->Init("Assets/modelData/yuka.tkm");
-	//m_dbgModel2 = NewGO<CModelRender>(0);
-	//m_dbgModel2->Init("Assets/modelData/yuka.tkm");
-	//m_dbgModel3 = NewGO<CModelRender>(0);
-	//m_dbgModel3->Init("Assets/modelData/yuka.tkm");
-	
-	////OBBの頂点の座標の配列の先頭アドレスを取得
-	//Vector3* vertPos = m_myCharaCon.GetOBB().GetBoxVertex();
-	////OBBの頂点の数だけ繰り返す
-	//for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
-	//{
-	//	//OBBの頂点の座標を見るためのモデルの生成
-	//	m_dbgObbModel[i] = NewGO<CModelRender>(0);
-	//	m_dbgObbModel[i]->Init("Assets/modelData/dbgBox.tkm");
-	//	m_dbgObbModel[i]->SetPosition(vertPos[i]);
-	//}
-
-	//m_dbgStunMoveModel = NewGO<CModelRender>(0);
-	//m_dbgStunMoveModel->Init("Assets/modelData/dbgBox.tkm");
-	//m_dbgStunMoveModel->SetPosition(g_vec3Zero);
-
-
-	//デバック用ここまで
 
 	return true;
 }
@@ -178,42 +43,64 @@ Player::~Player()
 {
 	//プレイヤーのモデルレンダラーの破棄
 	DeleteGO(m_modelRender);
+	//ゴール時のプレイヤーのモデルレンダラーを破棄
 	DeleteGO(m_goalPlayerMR);
+	
+	//ゴール時のエフェクトを破棄
 	DeleteGO(m_goalEffect);
 
+	//落ちてくるときのSEを破棄
+	DeleteGO(m_fallstartSE);
+	//歩いているときのSEを破棄
 	DeleteGO(m_walkSE);
-
+	//走っているときのSEを破棄
 	DeleteGO(m_runSE);
-
+	//炎に当たったときのSEを破棄
 	DeleteGO(m_flameHitSE);
 
-	//デバック用
-	//後で消す
-	//DeleteGO(m_dbgModel);
-	//DeleteGO(m_dbgModel2);
-	//DeleteGO(m_dbgModel3);
-	//for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
-	//{
-	//	DeleteGO(m_dbgObbModel[i]);
-	//}
-	//for (int i = 0; i < 32; i++)
-	//{
-	//	for (int j = 0; j < 8; j++)
-	//	{
-	//		DeleteGO(m_dbgObbModel2[i][j]);
-	//	}
-	//}
-	//デバック用ここまで
-
+	return;
 }
 
-/// <summary>
-/// プレイヤーの初期設定
-/// </summary>
-void Player::Init()
+//アップデート関数
+void Player::Update()
 {
-	//ゲームパッドの左スティックのX軸の入力情報を取得
-	m_padLStickXF = 0.0f;
+	//タイトルか？
+	if (m_titleMove == true) {
+		//タイトル
+		//タイトル中の動きをする
+		TitleMove();
+	}
+	else {
+		//ゲーム中
+		//ゲーム中の動きをする
+		GameMove();
+	}
+
+	return;
+}
+
+/**
+ * @brief タイトル中の動き
+*/
+void Player::TitleMove()
+{
+	//入力情報を調べる
+	CheckInput();
+	//タイトルでのパッドの入力は定数
+	m_padLStickXF = TITLE_PAD_STICK_VALUE;
+	//タイトルでの向きは右向き
+	m_leftOrRight = EN_RIGHT;
+
+	//走り状態か？
+	if (m_isDush)
+		//走り状態
+		//走りのアニメーションを再生
+		m_modelRender->PlayAnimation(EN_ANIM_CLIP_RUN);
+	else
+		//走り状態ではない。
+		//歩きのアニメーションを再生
+		m_modelRender->PlayAnimation(EN_ANIM_CLIP_WALK);
+
 
 	//ウェイポイントの更新処理
 	CheckWayPoint();
@@ -222,21 +109,372 @@ void Player::Init()
 	//モデルの回転処理
 	Rotation();
 
-	//道の上の座標を移動させる	//デルタタイムを掛ける
-	m_onWayPosition += m_moveSpeed * GameTime().GetFrameDeltaTime();
+
+	//デルタタイムを掛ける
+	//キャラコンを使ってウェイポイント上の座標を進める
+	m_onWayPosition = 
+		m_myCharaCon.Execute(m_moveSpeed, GameTime().GetFrameDeltaTime());
+
+	//メビウスの輪の上に乗る処理
+	GetOnStage();
+
+	//ライトのデータを更新する
+	UpdateLightData();
+
+	//モデルの場所と回転を更新する
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+
+	return;
+}
+
+/**
+ * @brief ゲーム中の動き
+*/
+void Player::GameMove()
+{
+	//プレイヤーのフラグを調べる
+	//特定のフラグが立っているか
+	if (CheckFlag())
+	{
+		//立っていたら
+		//これ以降の処理を行わない
+		return;
+	}	
+
+	//入力情報を調べる
+	CheckInput();
+
+	//右向きか左向きかを調べる
+	CheckLeftOrRight();
+
+	//ウェイポイントの更新処理
+	CheckWayPoint();
+	//移動処理
+	Move();
+	//モデルの回転処理
+	Rotation();
+
+	//キャラコンを使ってウェイポイント上の座標を移動させる	//デルタタイムを掛ける
+	m_onWayPosition = 
+		m_myCharaCon.Execute(m_moveSpeed, GameTime().GetFrameDeltaTime());
+
+	//衝突したOBBのタグを調べる
+	CheckHitOBBTag();
 
 	//ステージ（メビウスの輪）の上に乗る処理
-	//GetOnStage();
+	GetOnStage();
+
+	//アニメーションの制御
+	AnimationController();
+
+	//SEの制御
+	SoundController();
+
+	//ライトのデータを更新する
+	UpdateLightData();
 
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+	//OBBの場所と回転を設定
+	m_myCharaCon.SetRotation(m_rotation);
+
+	return;
 }
 
 
-/// <summary>
-/// ウェイポイントの更新処理
-/// </summary>
+/**
+ * @brief アニメーションの初期化
+*/
+void Player::InitAnimation()
+{
+	/*
+	* 通常のモデルのアニメーションクリップの初期化
+	*/
+	//idleのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_IDLE].Load(GetAnimationFilPath(EN_ANIM_CLIP_IDLE));
+	//ループ再生をtrueにする
+	m_animationClips[EN_ANIM_CLIP_IDLE].SetLoopFlag(true);
+	//walkのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_WALK].Load(GetAnimationFilPath(EN_ANIM_CLIP_WALK));
+	//ループ再生をtrueにする
+	m_animationClips[EN_ANIM_CLIP_WALK].SetLoopFlag(true);
+	//runのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_RUN].Load(GetAnimationFilPath(EN_ANIM_CLIP_RUN));
+	//ループ再生をfalseにする
+	m_animationClips[EN_ANIM_CLIP_RUN].SetLoopFlag(true);
+	//carryのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_CARRY].Load(GetAnimationFilPath(EN_ANIM_CLIP_CARRY));
+	//ループ再生をtrueにする
+	m_animationClips[EN_ANIM_CLIP_CARRY].SetLoopFlag(false);
+	//carryIdleのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_CARRY_IDEL].Load(GetAnimationFilPath(EN_ANIM_CLIP_CARRY_IDEL));
+	//ループ再生をtrueにする
+	m_animationClips[EN_ANIM_CLIP_CARRY_IDEL].SetLoopFlag(true);
+	//carryWalkのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_CARRY_WALK].Load(GetAnimationFilPath(EN_ANIM_CLIP_CARRY_WALK));
+	//ループ再生をtrueにする
+	m_animationClips[EN_ANIM_CLIP_CARRY_WALK].SetLoopFlag(true);
+	//carryRunのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_CARRY_RUN].Load(GetAnimationFilPath(EN_ANIM_CLIP_CARRY_RUN));
+	//ループ再生をtrueにする
+	m_animationClips[EN_ANIM_CLIP_CARRY_RUN].SetLoopFlag(true);
+	//throwのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_THROW_L].Load(GetAnimationFilPath(EN_ANIM_CLIP_THROW_L));
+	//ループ再生をtrueにする
+	m_animationClips[EN_ANIM_CLIP_THROW_L].SetLoopFlag(false);
+	//throwのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_THROW_R].Load(GetAnimationFilPath(EN_ANIM_CLIP_THROW_R));
+	//ループ再生をtrueにする
+	m_animationClips[EN_ANIM_CLIP_THROW_R].SetLoopFlag(false);
+	//fallのアニメーションクリップをロードする
+	m_animationClips[EN_ANIM_CLIP_FALL].Load(GetAnimationFilPath(EN_ANIM_CLIP_FALL));
+	//ループ再生をtrueにする
+	m_animationClips[EN_ANIM_CLIP_FALL].SetLoopFlag(false);
+
+
+	/*
+	* ゴール時のモデルのアニメーションクリップの初期化
+	*/
+	//ゴール時のアイドル状態のアニメーションクリップをロードする
+	m_goalAnimationClips[EN_GOAL_ANIM_CLIP_IDLE].Load(GetGoalAnimationClip(EN_GOAL_ANIM_CLIP_IDLE));
+	//ループ再生をtrueにする
+	m_goalAnimationClips[EN_GOAL_ANIM_CLIP_IDLE].SetLoopFlag(true);
+	//ゴールのアニメーションクリップをロードする
+	m_goalAnimationClips[EN_GOAL_ANIM_CLIP_GOAL].Load(GetGoalAnimationClip(EN_GOAL_ANIM_CLIP_GOAL));
+	//ループ再生をfalseにする
+	m_goalAnimationClips[EN_GOAL_ANIM_CLIP_GOAL].SetLoopFlag(false);
+
+	return;
+}
+
+/**
+ * @brief モデルの初期化
+*/
+void Player::InitModel()
+{
+	//通常のモデルレンダラーを生成する
+	m_modelRender = NewGO<CModelRender>(PRIORITY_FIRST);
+	//通常のモデルレンダラーの初期化をする
+	//この時にアニメーションクリップを一緒に引数に渡しておく
+	m_modelRender->Init(
+		MODEL_FILEPATH_PLAYER,			//ファイルパス
+		D3D12_CULL_MODE_BACK,			//カリング設定
+		m_animationClips,				//アニメーションクリップ
+		EN_ANIM_CLIP_NUM,					//アニメーションクリップの数
+		enModelUpAxisZ					//アップ軸
+	);
+	//シャドウキャスター有効
+	m_modelRender->SetShadowCasterFlag(true);
+	//シャドウレシーバーを無効
+	m_modelRender->SetShadowReceiverFlag(false);
+	m_modelRender->PlayAnimation(EN_ANIM_CLIP_IDLE);
+	//モデルの場所と回転を設定
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->SetRotation(m_rotation);
+
+
+
+	//ゴール用のモデルの生成
+	m_goalPlayerMR = NewGO<CModelRender>(PRIORITY_FIRST);
+	//ゴール用のモデルの初期化
+	m_goalPlayerMR->Init
+	(
+		MODEL_FILEPATH_PLAYER_GOAL,		//ファイルパス
+		D3D12_CULL_MODE_BACK,			//カリング設定
+		m_goalAnimationClips,			//アニメーションクリップ
+		EN_GOAL_ANIM_CLIP_NUM,				//アニメーションクリップの数
+		enModelUpAxisZ					//アップ軸
+	);
+	//ゴール用のモデルを非表示にする
+	m_goalPlayerMR->Deactivate();
+
+	return;
+}
+
+/**
+ * @brief キャラクターコントローラーの初期化
+*/
+void Player::InitMyCharacterController()
+{
+	//OBB初期化
+	//OBBの初期化用データ構造体
+	SInitOBBData initData;
+	//なんかいい感じのOBBの大きさにする
+	initData.width = OBB_SIZE_PLAYER.x;
+	initData.height = OBB_SIZE_PLAYER.y;
+	initData.length = OBB_SIZE_PLAYER.z;
+	//Playerの場所と回転を入れる
+	initData.position = m_position;
+	initData.rotation = m_rotation;
+	//ピボットをデフォルトのピボットにする
+	initData.pivot = OBBConstData::DEFAULT_PIVOT;
+	//キャラクターコントローラーを初期化する
+	m_myCharaCon.Init(initData);
+
+	return;
+}
+
+/**
+ * @brief エフェクトの初期化
+*/
+void Player::InitEffect()
+{
+	//ゴール時のエフェクトの生成
+	m_goalEffect = NewGO<Effect>(PRIORITY_FIRST);
+	//初期化
+	m_goalEffect->Init(EFFECT_FILEPATH_GOAL);
+
+	return;
+}
+
+/**
+ * @brief サウンドを初期化
+*/
+void Player::InitSound()
+{
+	//m_fallstartSEのサウンドキューを生成する
+	m_fallstartSE = NewGO<CSoundCue>(PRIORITY_FIRST);
+	//m_fallstartSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_fallstartSE->Init(SE_FILEPATH_FALL_START);
+	//音量調節
+	m_fallstartSE->SetVolume(SE_VOLUME_FALL_START);
+
+	//m_walkSEのサウンドキューを生成する
+	m_walkSE = NewGO<CSoundCue>(PRIORITY_FIRST);
+	//m_walkSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_walkSE->Init(SE_FILEPATH_WALK);
+	//音量調節
+	m_walkSE->SetVolume(SE_VOLUME_WALK);
+
+	//m_runSEのサウンドキューを生成する
+	m_runSE = NewGO<CSoundCue>(PRIORITY_FIRST);
+	//m_runSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_runSE->Init(SE_FILEPATH_RUN);
+	//音量調節
+	m_runSE->SetVolume(SE_VOLUME_RUN);
+
+	//炎に当たったときのサウンドの生成と初期化
+	m_flameHitSE = NewGO<CSoundCue>(PRIORITY_FIRST);
+	m_flameHitSE->Init(SE_FILEPATH_FLAME_HIT);
+	//音量調節
+	m_flameHitSE->SetVolume(SE_VOLUME_FLAME_HIT);
+
+	return;
+}
+
+/**
+ * @brief フラグを調べる
+ * @return フラグが立っているか？
+ * @retval true 立っている
+ * @retval false 立っていない
+*/
+bool Player::CheckFlag()
+{
+	//プレイヤーが落ちている状態か？
+	if (m_fallFlag == true)
+	{
+		//落ちている
+		//落ちている時の処理
+		Fall();
+		//これ以降の処理を行わない
+		//フラグが立っていると戻す
+		return true;
+	}
+
+	//操作できるか？
+	if (m_operationFlag == false) {
+		//できない
+		//アニメーションの遷移をリセットする
+		AnimationReset();
+		//アイドル状態のアニメーションを再生する
+		m_modelRender->PlayAnimation(EN_ANIM_CLIP_IDLE);
+		//これ以降の処理を行わない
+		//フラグが立っていると戻す
+		return true;
+	}
+
+	//UFOに捕まっているか？
+	if (m_capturedUFOFlag == true)
+	{
+		//捕まっている
+		//捕まっている時の処理
+		CapturedUFO();
+		//これ以降の処理を行わない
+		//フラグが立っていると戻す
+		return true;
+	}
+
+	//ゴール状態か？
+	if (m_isGoal)
+	{
+		//ゴール状態
+		//ゴール状態の処理
+		Goal();
+		//これ以降の処理を行わない
+		//フラグが立っていると戻す
+		return true;
+	}
+
+	//フラグが立っていないと戻す
+	return false;
+}
+
+/**
+ * @brief 入力情報を調べる
+*/
+void Player::CheckInput()
+{
+	//ゲームパッドの左スティックのX軸の入力情報を取得
+	m_padLStickXF = g_pad[PAD_ONE]->GetLStickXF();
+
+	//投げ中または持ち上げ中は移動できないようにする
+	if (m_throwing || m_lifting)
+		m_padLStickXF = 0.0f;
+
+	//ゲームパッドのR1ボタンが押されているか？
+	if (g_pad[0]->IsPress(enButtonRB1))
+	{
+		//押されている
+		//ダッシュ状態
+		m_isDush = true;
+	}
+	else
+	{
+		//押されていない
+		//ダッシュ状態ではない
+		m_isDush = false;
+	}
+
+	return;
+}
+
+/**
+ * @brief 右向きか左向きかを調べる
+*/
+void Player::CheckLeftOrRight()
+{
+	//左右の向きを設定
+	//左スティックの入力値が正なら
+	if (m_padLStickXF < 0.0f)
+	{
+		//左向き
+		m_leftOrRight = EN_LEFT;
+	}
+	//左スティックの入力値が負なら
+	else if (m_padLStickXF > 0.0f)
+	{
+		//右向き
+		m_leftOrRight = EN_RIGHT;
+	}
+
+	return;
+}
+
+/**
+ * @brief ウェイポイントの更新処理
+*/
 void Player::CheckWayPoint()
 {
 	///
@@ -259,12 +497,15 @@ void Player::CheckWayPoint()
 
 	//左のウェイポイントから右のウェイポイントへのベクトル
 	Vector3 LpToRpVec = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
+	//正規化しておく
 	LpToRpVec.Normalize();
 	//左のウェイポイントからプレイヤーへのベクトル
-	Vector3 LpToPlayerVec = /*m_position*/m_onWayPosition - (*m_wayPointPos)[m_lpIndex];
+	Vector3 LpToPlayerVec = m_onWayPosition - (*m_wayPointPos)[m_lpIndex];
+	//正規化しておく
 	LpToPlayerVec.Normalize();
 	//右のウェイポイントからプレイヤーへのベクトル
-	Vector3 RpToPlayerVec = /*m_position*/m_onWayPosition - (*m_wayPointPos)[m_rpIndex];
+	Vector3 RpToPlayerVec = m_onWayPosition - (*m_wayPointPos)[m_rpIndex];
+	//正規化しておく
 	RpToPlayerVec.Normalize();
 
 	//左側の内積
@@ -272,53 +513,19 @@ void Player::CheckWayPoint()
 	//右側の内積
 	float RpDotPlayer = Dot(LpToRpVec, RpToPlayerVec);
 
-	//デバック用
-	//後で消す
-	//m_dbgDot1 = LpDotPlayer;
-	//m_dbgDot2 = RpDotPlayer;
-	//デバック用ここまで
 
 	//スタン中か？
 	if (!m_stunFlag)
 	{
 		//スタン中ではない
 
-
-		//OBBで調べる
-		//if (m_padLStickXF < 0.0f &&
-		//	CollisionOBBs(m_myCharaCon.GetOBB(), m_wayPointOBB[m_lpIndex]))
-		//{
-		//	//今のウェイポイントの間から、左側に出ていった
-		//	m_wayPointState += 1;
-		//	if (m_wayPointState > m_maxWayPointState)
-		//	{
-		//		//m_wayPointStateがMAXより大きかったら
-		//		//一周したということだから、スタートの0にする
-		//		m_wayPointState = 0;
-		//	}
-		//}
-		//else if (m_padLStickXF > 0.0f &&
-		//	CollisionOBBs(m_myCharaCon.GetOBB(), m_wayPointOBB[m_rpIndex]))
-		//{
-		//	//今のウェイポイントの間から、右側から出ていった
-		//	//m_wayPointStateを減算して右に進める。
-		//	m_wayPointState -= 1;
-		//	if (m_wayPointState < 0)
-		//	{
-		//		//m_wayPointStateが0より小さかったら
-		//		//一周したということだから、MAXの値にする
-		//		m_wayPointState = m_maxWayPointState;
-		//	}
-		//}
-
 		//内積で調べる
 		//左右のウェイポイントとの距離を調べる
-		float f = 0.35f;
-		if (LpDotPlayer > f && RpDotPlayer < -f)
+		if (LpDotPlayer > 0.0f && RpDotPlayer < 0.0f)
 		{
 			//今のウェイポイントの間にいる
 		}
-		else if (LpDotPlayer <= f && m_padLStickXF < 0.0f)
+		else if (LpDotPlayer <= 0.0f && m_padLStickXF < 0.0f)
 		{
 			//今のウェイポイントの間から、左側に出ていった
 			m_wayPointState += 1;
@@ -329,7 +536,7 @@ void Player::CheckWayPoint()
 				m_wayPointState = 0;
 			}
 		}
-		else if (RpDotPlayer >= -f && m_padLStickXF > 0.0f)
+		else if (RpDotPlayer >= 0.0f && m_padLStickXF > 0.0f)
 		{
 			//今のウェイポイントの間から、右側から出ていった
 			//m_wayPointStateを減算して右に進める。
@@ -346,42 +553,13 @@ void Player::CheckWayPoint()
 	{
 		//スタン中
 
-
-		//OBBで調べる
-		//if (m_leftOrRight == enRight &&
-		//	CollisionOBBs(m_myCharaCon.GetOBB(), m_wayPointOBB[m_lpIndex]))
-		//{
-		//	//今のウェイポイントの間から、左側に出ていった
-		//	m_wayPointState += 1;
-		//	if (m_wayPointState > m_maxWayPointState)
-		//	{
-		//		//m_wayPointStateがMAXより大きかったら
-		//		//一周したということだから、スタートの0にする
-		//		m_wayPointState = 0;
-		//	}
-		//}
-		//else if (m_leftOrRight == enLeft &&
-		//	CollisionOBBs(m_myCharaCon.GetOBB(), m_wayPointOBB[m_rpIndex]))
-		//{
-		//	//今のウェイポイントの間から、右側から出ていった
-		//	//m_wayPointStateを減算して右に進める。
-		//	m_wayPointState -= 1;
-		//	if (m_wayPointState < 0)
-		//	{
-		//		//m_wayPointStateが0より小さかったら
-		//		//一周したということだから、MAXの値にする
-		//		m_wayPointState = m_maxWayPointState;
-		//	}
-		//}
-
 		//内積で調べる
 		//左右のウェイポイントとの距離を調べる
-		float f = 0.35f;
-		if (LpDotPlayer > f && RpDotPlayer < -f)
+		if (LpDotPlayer > 0.0f && RpDotPlayer < 0.0f)
 		{
 			//今のウェイポイントの間にいる
 		}
-		else if (LpDotPlayer <= f && !m_stunLeftOrRight == enRight)
+		else if (LpDotPlayer <= 0.0f && !m_stunLeftOrRight == EN_RIGHT)
 		{
 			//今のウェイポイントの間から、左側に出ていった
 			m_wayPointState += 1;
@@ -392,7 +570,7 @@ void Player::CheckWayPoint()
 				m_wayPointState = 0;
 			}
 		}
-		else if (RpDotPlayer >= -f && !m_stunLeftOrRight == enLeft)
+		else if (RpDotPlayer >= 0.0f && !m_stunLeftOrRight == EN_LEFT)
 		{
 			//今のウェイポイントの間から、右側から出ていった
 			//m_wayPointStateを減算して右に進める。
@@ -405,37 +583,6 @@ void Player::CheckWayPoint()
 			}
 		}
 	}
-	
-	//左右のウェイポイントとの距離を調べる
-	//float f = 0.35f;
-	//if (LpDotPlayer > f && RpDotPlayer < -f)
-	//{
-	//	//今のウェイポイントの間にいる
-	//}
-	//else if (LpDotPlayer <= f && m_padLStickXF < 0.0f)
-	//{
-	//	//今のウェイポイントの間から、左側に出ていった
-	//	m_wayPointState += 1;
-	//	if (m_wayPointState > m_maxWayPointState)
-	//	{
-	//		//m_wayPointStateがMAXより大きかったら
-	//		//一周したということだから、スタートの0にする
-	//		m_wayPointState = 0;
-	//	}
-	//}
-	//else if (RpDotPlayer >= -f && m_padLStickXF > 0.0f)
-	//{
-	//	//今のウェイポイントの間から、右側から出ていった
-	//	//m_wayPointStateを減算して右に進める。
-	//	m_wayPointState -= 1;
-	//	if (m_wayPointState < 0)
-	//	{
-	//		//m_wayPointStateが0より小さかったら
-	//		//一周したということだから、MAXの値にする
-	//		m_wayPointState = m_maxWayPointState;
-	//	}
-	//}
-
 
 	//更新前と更新後のウェイポイントステートは違っているか？
 	if (m_wayPointState != oldWayPointState)
@@ -446,13 +593,12 @@ void Player::CheckWayPoint()
 	}
 
 	return;
-
 }
 
-/// <summary>
-/// ウェイポイントステートから
-/// 左側のウェイポイントと右側のウェイポイントを計算する
-/// </summary>
+/**
+ * @brief ウェイポイントステートから
+ * 左側のウェイポイントと右側のウェイポイントを計算する
+*/
 void Player::CalcLeftAndRightWayPoint()
 {
 	//1.プレイヤー自身の左右のウェイポイントを設定する
@@ -466,56 +612,59 @@ void Player::CalcLeftAndRightWayPoint()
 		//一周したということだから、スタートの0にする
 		m_lpIndex = 0;
 	}
+
+	return;
 }
 
-
-/// <summary>
-/// 移動処理
-/// </summary>
+/**
+ * @brief 移動処理
+*/
 void Player::Move()
 {
-	//移動する向きは毎フレーム計算した方がいいのかな？
-	//それとも、m_wayPointStateの切り替の時にした方がいいのかな？
-	//いや、今のやり方だと毎フレームやらなくてはいけない気がする
-
 	//1.左右への移動する方向を計算する。
 
-	//左へ移動する方向
+	//左へ移動するベクトル
 	Vector3 moveToLeft = (*m_wayPointPos)[m_lpIndex] - m_onWayPosition;
+	//正規化しておく
 	moveToLeft.Normalize();
-	//右へ移動する方向
+	//右へ移動するベクトル
 	Vector3 moveToRight = (*m_wayPointPos)[m_rpIndex] - m_onWayPosition;
+	//正規化しておく
 	moveToRight.Normalize();
 
 
 	//2.移動処理
 
-	//とりあえずの処理
+	//スピードをリセットする
 	//重力や、加速度、抵抗を実装するときは別のやり方で
 	m_moveSpeed = g_vec3Zero;
 
-	//移動する長さ
-	float moveLen = 1000.0f;
 
-
-	//通常の移動処理
+	//スタン中でないか？
 	if (!m_stunFlag)
 	{
-		m_isDush = false;
-		//ゲームパッドのR1ボタンの入力情報を取得(ダッシュ状態)
-		if (g_pad[0]->IsPress(enButtonRB1) == true) {
-			moveLen = 3000.0f;
-			if (m_padLStickXF != 0.0f)
-				m_isDush = true;
+		//スタン中ではない
+		//通常の移動処理
+
+		//移動する長さ
+		//歩くスピードを入れる
+		float moveLen = MOVE_SPEED_WALK;
+
+		//ダッシュ状態か？
+		if (m_isDush)
+		{
+			//ダッシュ状態
+			//走るスピードを入れる
+			moveLen = MOVE_SPEED_RUN;
 		}
 
 
-
+		//左右の入力情報を調べる
 		if (m_padLStickXF < 0.0f)
 		{
 			//左への移動の入力があったら
 			//左への移動の計算する
-			m_moveSpeed += moveToLeft * m_padLStickXF * -moveLen;
+			m_moveSpeed += moveToLeft * -m_padLStickXF * moveLen;
 		}
 		else if (m_padLStickXF > 0.0f)
 		{
@@ -524,26 +673,22 @@ void Player::Move()
 			m_moveSpeed += moveToRight * m_padLStickXF * moveLen;
 		}
 	}
-	//スタン中
 	else
 	{
+		//スタン中
 
 		//スタン中の移動処理
 		StunMove();
 	}
 
-
 	return;
 }
 
-/// <summary>
-/// スタン中の移動処理
-/// </summary>
+/**
+ * @brief スタン中の移動処理
+*/
 void Player::StunMove()
 {
-	//スタン状態の最大時間
-	const float maxTime = 3.0f;
-
 	//スタン中タイマーが0.0fの時
 	//つまりスタン中に、最初の一回ずつしか呼ばれない
 	if (m_stunTimer == 0.0f)
@@ -557,72 +702,68 @@ void Player::StunMove()
 		//OBBへのベクトルと、右向きのベクトルの内積
 		float hitOBBDotRight = Dot(playerToHitOBB, rightVec);
 		//左に飛ばされるか、右に飛ばされるか
-		m_stunLeftOrRight = enLeft;
+		m_stunLeftOrRight = EN_LEFT;
+		//内積が正か？
 		if (hitOBBDotRight >= 0.0f)
 		{
-			//内積が正だったら
+			//正だったら
 			//反対側にする
-			m_stunLeftOrRight = enRight;
+			m_stunLeftOrRight = EN_RIGHT;
 		}
 		//最終的に吹っ飛ばされる先の座標を取ってくる
-		m_stunMoveSpeed = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
-		(m_rpIndex, m_onWayPosition, 1000.0f, m_stunLeftOrRight);
-		//デバック用
-		//後で消す
-		//m_dbgStunMoveModel->SetPosition(m_stunMoveSpeed);
-		//デバック用ここまで
+		m_stunMoveSpeedHorizontal = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
+		(m_rpIndex, m_onWayPosition, MOVE_SPEED_STUN_HORIZONTAL, m_stunLeftOrRight);
 		//現在の座標から移動先のベクトルを出す
-		m_stunMoveSpeed -= m_onWayPosition;
-		//少し小さくする
-		m_stunMoveSpeed *= 0.7f;
+		m_stunMoveSpeedHorizontal -= m_onWayPosition;
 		//スタン中に吹っ飛び中のフラグを立てる
 		m_stunMoveFlag = true;
 		//現在のUpベクトルをとってくる
 		Vector3 upVec = m_upVec;
-		//大きくする
-		upVec.Scale(1000.0f);
+		//上方向に大きくする
+		upVec.Scale(MOVE_SPEED_STUN_UP);
 		//吹っ飛ぶときの上下に動くベクトルに上向きのベクトルを入れる
-		m_stunDownVec = upVec;
+		m_stunMoveSpeedVertical = upVec;
 	}
 
-	//吹っ飛び中のフラグが立っていたら
+	//吹っ飛び中のフラグが立っているか？
 	if (m_stunMoveFlag)
 	{
+		//吹っ飛び中のフラグが立っている
+
 		//下に加えるベクトル、現在のUpベクトルを入れる
 		Vector3 down = m_upVec;
 		//Upベクトルを下向き大きくする
-		down.Scale(-20.0f);
-		down.Scale(90.0f);
+		down.Scale(MOVE_ACCELERATION_STUN_DOWN);
 		//デルタタイムを掛ける
 		down.Scale(GameTime().GetFrameDeltaTime());
 		//吹っ飛び中の上下に動くベクトルに下向きのベクトルを加える
-		m_stunDownVec += down;
+		m_stunMoveSpeedVertical += down;
 	}
 	else
 	{
-		//吹っ飛び中のフラグが折れていたら
-		//吹っ飛ぶ力をゼロにする
-		m_stunMoveSpeed = g_vec3Zero;
-		m_stunDownVec = g_vec3Zero;
+		//吹っ飛び中のフラグが折れている
 
+		//吹っ飛ぶ力をゼロにする
+		m_stunMoveSpeedHorizontal = g_vec3Zero;
+		m_stunMoveSpeedVertical = g_vec3Zero;
 	}
 
 	//点滅処理
-	//点滅の間隔	//スタン状態の最大時間のうち24回切り替わるようにする
-	const float blinkInterval = maxTime / 24;
+
+	//点滅の間隔
+	//スタン状態の最大時間のうち一定回数切り替わるようにする
+	const float blinkInterval = TIME_STUN / NUMBER_OF_BLINKS_STUN;
 	//点滅タイマーが、点滅の間隔より小さかったら
 	if (m_blinkTimer < blinkInterval)
 	{
-		//少し白く光らせる
-		float color = 0.2f;
-		m_modelRender->SetEmissionColor({ 1.5f,color,color,color });
+		//点滅のカラーに光らせる
+		m_modelRender->SetEmissionColor(BLINK_COLOR_STUN);
 	}
 	//点滅タイマーが、点滅の間隔の2倍より小さかったら
 	else if (m_blinkTimer < blinkInterval * 2)
 	{
 		//元の明るさに戻す
-		float color = 0.0f;
-		m_modelRender->SetEmissionColor({ color,color,color,color });
+		m_modelRender->SetEmissionColor(g_vec4Black);
 	}
 	//点滅タイマーが、点滅の間隔の2倍を過ぎたら
 	else
@@ -637,7 +778,7 @@ void Player::StunMove()
 	m_stunTimer += GameTime().GetFrameDeltaTime();
 
 	//スタン中のタイマーが、スタン中の最大時間を過ぎたら
-	if (m_stunTimer >= maxTime)
+	if (m_stunTimer >= TIME_STUN)
 	{
 		//スタン中ではなくする
 		m_stunFlag = false;
@@ -650,77 +791,76 @@ void Player::StunMove()
 		//点滅タイマーをゼロにする
 		m_blinkTimer = 0.0f;
 		//明るさを元に戻す
-		m_modelRender->SetEmissionColor({ 0.0f,0.0f,0.0f,0.0f });
+		m_modelRender->SetEmissionColor(g_vec4Black);
 
 	}
 
 	//移動スピードにスタン中のスピードを加算する
-	m_moveSpeed += m_stunMoveSpeed + m_stunDownVec;
+	m_moveSpeed += m_stunMoveSpeedHorizontal + m_stunMoveSpeedVertical;
+
+	return;
 }
 
-
-/// <summary>
-/// ステージに乗る
-/// </summary>
+/**
+ * @brief ステージに乗る
+*/
 void Player::GetOnStage()
 {
+	//スタン中か？
+	if (m_stunFlag)
+	{
+		//スタン中
+		//スタン中のステージの上に乗る処理
+		StunGetOnStage();
+		//これ以降の処理は行わない
+		return;
+	}
+
 	//Upベクトルをイイ感じに伸ばす。
 	//伸ばした先がレイの始点となる
-	Vector3 upVec = m_upVec;
-	upVec.Scale(300.0f);
+	Vector3 intersectLine = m_upVec;
+	intersectLine.Scale(INTERSECT_LINE_FOR_MOBIUS_LEN);
 
+	//ステージのメビウスの輪が有効か？
 	if (m_mobius)
 	{
+		//有効
+
 		//メビウスの輪が見つかっていたら
 		//メビウスの輪のモデルのポリゴンと、レイの当たり判定を取る
-		if (m_mobius->GetModel()
-			->InIntersectLine(m_onWayPosition + upVec, m_onWayPosition - upVec))
+		if (m_mobius->GetModel()->InIntersectLine(
+			m_onWayPosition + intersectLine, m_onWayPosition - intersectLine
+		))
 		{
 			//ポリゴンとレイの交差点をを取ってきてモデルの座標に入れる
 			m_position = m_mobius->GetModel()->GetIntersectPos();
-			//デバック用
-			//後で消す
-			//m_dbgHit = true;
 		}
 		else
 		{
+			//交差しなかったらウェイポイント上の座標をそのまま入れる
 			m_position = m_onWayPosition;
-			//デバック用
-			//後で消す
-			//m_dbgHit = false;
 		}
 	}
 	else
 	{
-		//メビウスの輪（ステージ）が見つかっていなかったら
-		//探してreturnする
-		m_mobius = FindGO<Mobius>("Mobius");
-		return;
+		//無効
+
+		//メビウスの輪（ステージ）が見つかっていなかったら探す
+		m_mobius = FindGO<CMobius>(GetGameObjectName(EN_GO_TYPE_MOBIUS));
 	}
 
-
-	//デバック用
-	//後で消す
-	//レイの始点と終点と交差点を場所を入れる
-	//auto hitPos = m_mobius->GetModel()->GetIntersectPos();
-	//m_dbgModel->SetPosition(m_onWayPosition + upVec);
-	//m_dbgModel2->SetPosition(m_onWayPosition - upVec);
-	//m_dbgModel3->SetPosition(hitPos);
-	//デバック用ここまで
-
 	return;
-
 }
 
-/// <summary>
-/// スタン中のステージに乗る処理
-/// </summary>
+/**
+ * @brief スタン中のステージに乗る処理
+*/
 void Player::StunGetOnStage()
 {
 	//現在のUpべクトル
 	Vector3 upVec = m_upVec;
 	//レイの長さ分大きくする
-	upVec.Scale(300.0f);
+	upVec.Scale(INTERSECT_LINE_FOR_MOBIUS_LEN);
 
 	//メビウスの輪のモデルのポリゴンと、レイの当たり判定を取る
 	if (m_mobius->GetModel()
@@ -732,10 +872,10 @@ void Player::StunGetOnStage()
 		Vector3 intersectToOnWay = m_onWayPosition - intersectPos;
 		//正規化する
 		intersectToOnWay.Normalize();
-		//さっきのベクトルとUpベクトルとの内積
-		float vec1DotUp = Dot(intersectToOnWay, m_upVec);
+		//交差点からプレイヤーの道上のベクトルとUpベクトルとの内積
+		float intersectToOnWayDotUp = Dot(intersectToOnWay, m_upVec);
 		//内積が負なら
-		if (vec1DotUp <= 0.0f)
+		if (intersectToOnWayDotUp <= 0.0f)
 		{
 			//メビウスの輪よりプレイヤーの座標が下に来てしまったら
 			//プレイヤーの座標を交差点にする
@@ -746,11 +886,13 @@ void Player::StunGetOnStage()
 	}
 	//プレイヤーの場所を更新する
 	m_position = m_onWayPosition;
+
+	return;
 }
 
-/// <summary>
-/// モデルの回転処理
-/// </summary>
+/**
+ * @brief モデルの回転処理
+*/
 void Player::Rotation()
 {
 	//左のウェイポイントから右のウェイポイントへのベクトル
@@ -760,107 +902,168 @@ void Player::Rotation()
 	Vector3 lpToPlayerLen = m_onWayPosition - (*m_wayPointPos)[m_lpIndex];
 
 	//補完率
-	float ComplementRate = lpToPlayerLen.Length() / lpToRpLen.Length();
+	const float ComplementRate = lpToPlayerLen.Length() / lpToRpLen.Length();
 
 	//球面線形補完
-	m_finalWPRot.Slerp(ComplementRate, (*m_wayPointRot)[m_lpIndex], (*m_wayPointRot)[m_rpIndex]);
+	m_finalWPRot.Slerp(
+		ComplementRate, (*m_wayPointRot)[m_lpIndex], (*m_wayPointRot)[m_rpIndex]
+	);
 
 	//キャラクターの左右の向きに合わせて回転
-	if (m_leftOrRight == enLeft)
+	if (m_leftOrRight == EN_LEFT)
 	{
+		//左向き
 		m_rotation.SetRotationDegY(90.0f);
 	}
-	else if (m_leftOrRight == enRight)
+	else
 	{
+		//右向き
 		m_rotation.SetRotationDegY(-90.0f);
 	}
+
+	//補完済みの回転と掛け合わせる
 	m_rotation.Multiply(m_finalWPRot);
 
 	//プレイヤーのUpベクトルにYUpベクトルを入れる
 	m_upVec = g_vec3AxisY;
 	//Yupを補完済みの回転で回す
 	m_finalWPRot.Apply(m_upVec);
+	//正規化する
 	m_upVec.Normalize();
 
 	return;
 }
 
-/// <summary>
-/// 衝突したOBBのタグを調べる
-/// </summary>
+/**
+ * @brief 衝突したOBBのタグを調べる
+*/
 void Player::CheckHitOBBTag()
 {
+	//キャラコンから、衝突したOBBのタグを調べる
 	if (m_myCharaCon.GetTag() == COBB::enBigFire)
 	{
+		//炎衝突していたら
+
+		//すでに衝突中の炎でないか？
 		if (m_hitOBB != m_myCharaCon.GetHitOBB())
 		{
-			m_stunFlag = true;
-			m_stunTimer = 0.0f;
+			//新しく衝突した炎
 
-			if (m_hitOBB)
-				COBBWorld::GetInstance()->AddOBB(m_hitOBB);
-
-			m_hitOBB = m_myCharaCon.GetHitOBB();
-			COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
-
-			m_flameHitSE->Play(false);
+			//炎の衝突した時の処理
+			HitFlame();
 		}
 
 	}
 	else if (m_myCharaCon.GetTag() == COBB::enWall)
 	{
-		const COBB* hit = m_myCharaCon.GetHitOBB();
-		Vector3 vec = hit->GetPosition() - m_position;
-		vec.Normalize();
-		Vector3 up = m_upVec;
-		up.Normalize();
-		float vecDotUp = Dot(up, vec);
-		if (vecDotUp >= 0.8)
-		{
-			m_stunFlag = true;
-			if (m_hitOBB)
-				COBBWorld::GetInstance()->AddOBB(m_hitOBB);
-			m_hitOBB = m_myCharaCon.GetHitOBB();
-			COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
-		}
+		//壁と衝突していたら
+
+		//壁と衝突した時の処理
+		HitWall();
 	}
+
+	return;
 }
 
-/// <summary>
-/// ライトのデータを更新する
-/// </summary>
+/**
+ * @brief 炎と衝突した時の処理
+*/
+void Player::HitFlame()
+{
+	//スタンフラグを立てる
+	m_stunFlag = true;
+	//スタンタイマーを初期化する
+	m_stunTimer = 0.0f;
+
+	//前に衝突したOBBがまだ残っていたら
+	if (m_hitOBB)
+	{
+		//OBBをOBBワールドに登録しなおす
+		COBBWorld::GetInstance()->AddOBB(m_hitOBB);
+	}
+
+	//衝突したOBBを入れる
+	m_hitOBB = m_myCharaCon.GetHitOBB();
+	//衝突したOBBをOBBワールドから解除する
+	COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
+
+	//炎と衝突したSEをワンショット再生で再生する
+	m_flameHitSE->Play(false);
+
+	return;
+}
+
+/**
+ * @brief 壁と衝突した時の処理
+*/
+void Player::HitWall()
+{
+	//自身の座標から衝突したOBBの座標へのベクトル
+	Vector3 toHitOBBVec = m_myCharaCon.GetHitOBB()->GetPosition() - m_position;
+	//正規化する
+	toHitOBBVec.Normalize();
+	//自身のアップベクトル
+	Vector3 up = m_upVec;
+	//正規化しておく
+	up.Normalize();
+	//OBBの座標へのベクトルとアップベクトルとの内積を取る
+	float toHitOBBVecDotUp = Dot(up, toHitOBBVec);
+	//内積がしきい値以上なら
+	if (toHitOBBVecDotUp >= THRESHOLD_UNDER_WALL)
+	{
+		//壁の下にいる状態
+
+		//スタンフラグを立てる
+		m_stunFlag = true;
+		//前に衝突したOBBがまだ残っていたら
+		if (m_hitOBB)
+		{
+			//OBBをOBBワールドに登録しなおす
+			COBBWorld::GetInstance()->AddOBB(m_hitOBB);
+		}
+		//衝突したOBBを入れる
+		m_hitOBB = m_myCharaCon.GetHitOBB();
+		//衝突したOBBをOBBワールドから解除する
+		COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
+	}
+
+	return;
+}
+
+/**
+ * @brief ライトのデータを更新する
+*/
 void Player::UpdateLightData()
 {
 	//影を生成するライトの更新
 	SetShadowParam();
 	//ディレクションライトの更新
 	SetDirectionLight();
+
+	return;
 }
 
 
-/// <summary>
-/// プレイヤーを照らす影を生成するライトを更新する
-/// </summary>
+/**
+ * @brief プレイヤーを照らす影を生成するライトを更新する
+*/
 void Player::SetShadowParam()
 {
 	//ライトの照らす方向
-	Vector3 dir = m_lightDirection;
+	Vector3 dir = LIGHT_DIRECTION;
 	//プレイヤー回転で方向をまわす
 	m_finalWPRot.Apply(dir);
 	//シャドウのつくるライトのパラメータを設定
-	g_shadowMap->SetShadowParam(dir, 1000.0f, m_position);
+	g_graphicsEngine->GetShadowMap().SetShadowParam(
+		dir, shadowConstData::SHADOW_INIT_LENGTH, m_position
+	);
 
-	//デバック用
-	//後で消す
-	//dir.Normalize();
-	//dir.Scale(1000.0f);
-	//Vector3 pos = m_position - dir;
-	//m_dbgModel3->SetPosition(pos);
+	return;
 }
 
-/// <summary>
-/// ディレクションライトを更新する
-/// </summary>
+/**
+ * @brief ディレクションライトを更新する
+*/
 void Player::SetDirectionLight()
 {
 	//ディレクションライトが見つかっていなかったら
@@ -874,263 +1077,122 @@ void Player::SetDirectionLight()
 	}
 
 	//ライトの照らす方向
-	Vector3 dir = m_lightDirection;
+	Vector3 dir = LIGHT_DIRECTION;
 	//プレイヤー回転で方向をまわす
 	m_finalWPRot.Apply(dir);
-	//ディレクションライトの方向を
+	//ディレクションライトの方向を設定する
 	m_gameDirectionLight->SetDirection(dir);
 
-
+	return;
 }
 
-//アップデート関数
-void Player::Update()
-{
-	if (m_titleMove == true) {
-		TitleMove();
-	}
-	else {
-		GameMove();
-	}
-}
 
-void Player::TitleMove()
-{
-	m_padLStickXF = 1.0f;
-	m_leftOrRight = enRight;
-
-	if (m_isDush)
-		m_modelRender->PlayAnimation(enAnimClip_run);
-	else
-		m_modelRender->PlayAnimation(enAnimClip_walk);
-
-	//ウェイポイントの更新処理
-	CheckWayPoint();
-	//移動処理
-	Move();
-	//モデルの回転処理
-	Rotation();
-
-	//タイトルの時の移動は遅くする
-	const float titleMoveSpeed = 0.5f;
-	//デルタタイムを掛ける
-	//m_onWayPosition += m_moveSpeed * titleMoveSpeed * GameTime().GetFrameDeltaTime();
-	m_onWayPosition = 
-		m_myCharaCon.Execute(m_moveSpeed * titleMoveSpeed, GameTime().GetFrameDeltaTime());
-	GetOnStage();
-
-	//ライトのデータを更新する
-	UpdateLightData();
-
-
-	//モデルの場所と回転を更新する
-	m_modelRender->SetPosition(m_position);
-	m_modelRender->SetRotation(m_rotation);
-
-
-}
-
-void Player::GameMove()
-{
-	if (m_fallFlag == true)
-	{
-		Fall();
-
-		return;
-	}
-
-	if (m_operationFlag == false) {
-		//アニメーションの遷移をリセットする
-		AnimationReset();
-		m_modelRender->PlayAnimation(enAnimClip_idle);
-		return;
-	}
-
-	//UFOに捕まっているか？
-	if (m_capturedUFOFlag == true)
-	{
-		//捕まっていたら
-
-		//捕まっている時の処理
-		CapturedUFO();
-
-		//そのままreturn
-		return;
-	}
-
-	//ゴール状態か？
-	if (m_isGoal)
-	{
-		//ゴール状態
-		Goal();
-
-		return;
-	}
-
-
-
-	//ゲームパッドの左スティックのX軸の入力情報を取得
-	m_padLStickXF = g_pad[0]->GetLStickXF();
-	if (m_throwing || m_lifting)
-		m_padLStickXF = 0.0f;
-
-	//左右の向きを設定
-	if (m_padLStickXF < 0.0f)
-		m_leftOrRight = enLeft;		//左向き
-	else if (m_padLStickXF > 0.0f)
-		m_leftOrRight = enRight;	//右向き
-
-	//ウェイポイントの更新処理
-	CheckWayPoint();
-	//移動処理
-	Move();
-	//モデルの回転処理
-	Rotation();
-
-	//道の上の座標を移動させる	//デルタタイムを掛ける
-	m_onWayPosition = m_myCharaCon.Execute(m_moveSpeed, GameTime().GetFrameDeltaTime());
-	//衝突したOBBのタグを調べる
-	CheckHitOBBTag();
-
-	//ステージ（メビウスの輪）の上に乗る処理
-	if (!m_stunFlag)
-		GetOnStage();
-	else
-		//スタン中のステージの上に乗る処理
-		StunGetOnStage();
-
-	//アニメーションの制御
-	AnimationController();
-
-	//SEの制御
-	SoundController();
-
-	//モデルの場所と回転を設定
-	m_modelRender->SetPosition(m_position);
-	m_modelRender->SetRotation(m_rotation);
-	//OBBの場所と回転を設定
-	m_myCharaCon.SetRotation(m_rotation);
-
-
-	////左右の向き
-	//if (!m_stunFlag)
-	//{
-	//	if (m_padLStickXF < 0.0f)
-	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_lpIndex]);	//左向き
-	//	else if (m_padLStickXF > 0.0f)
-	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_rpIndex]);
-	//}
-	//else
-	//{
-	//	if (m_leftOrRight == enLeft)
-	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_rpIndex]);
-	//	else
-	//		m_myCharaCon.SetRotation((*m_wayPointRot)[m_lpIndex]);
-	//}
-
-	//ライトのデータを更新する
-	UpdateLightData();
-
-	//デバック用
-	//後で消す
-
-	////OBBの頂点の座標の配列の先頭アドレスを取得
-	//Vector3* boxVertex = m_myCharaCon.GetOBB().GetBoxVertex();
-	////OBBの頂点の数だけ繰り返す
-	//for (int i = 0; i < m_myCharaCon.GetOBB().GetBoxVertexNum(); i++)
-	//{
-	//	//OBBの頂点を見るためのモデルの場所を設定
-	//	m_dbgObbModel[i]->SetPosition(boxVertex[i]);
-	//	m_dbgObbModel[i]->SetRotation(m_rotation);
-	//}
-	//for (int i = 0; i < 32; i++)
-	//{
-	//	Vector3* vertPos2 = m_wayPointOBB[i].GetBoxVertex();
-	//	for (int j = 0; j < 8; j++)
-	//	{
-	//		m_dbgObbModel2[i][j]->SetPosition(vertPos2[j]);
-	//		m_dbgObbModel2[i][j]->SetRotation((*m_wayPointRot)[i]);
-	//	}
-	//}
-	//デバックここまで
-}
-
-/// <summary>
-/// UFOに捕まっている時の処理
-/// </summary>
+/**
+ * @brief UFOに捕まっている時の処理
+*/
 void Player::CapturedUFO()
 {
-	if (m_walkSE->IsPlaying()) {
-			m_walkSE->Stop();
-		}
-	if (m_runSE->IsPlaying()) {
+	//歩きのSEが再生されていたら
+	if (m_walkSE->IsPlaying()) 
+	{
+		//停止する
+		m_walkSE->Stop();
+	}
+	//走りのSEが再生されていたら
+	if (m_runSE->IsPlaying())
+	{
+		//停止する
 		m_runSE->Stop();
 	}
+
 	//アニメーションの遷移をリセットする
 	AnimationReset();
-	m_modelRender->PlayAnimation(enAnimClip_idle);
+	//アイドル状態のアニメーションを再生する
+	m_modelRender->PlayAnimation(EN_ANIM_CLIP_IDLE);
 
-	//ウェイポイントの更新処理
-	//CheckWayPoint();
+	//ウェイポイント上の座標とモデルの座標を同じにする
 	m_onWayPosition = m_position;
+	//キャラコンの座標とモデルの座標を同じにする
 	m_myCharaCon.GetOBB().SetPosition(m_position);
-	//モデルの回転処理
-	//Rotation();
 	//モデルの場所と回転を設定
 	m_modelRender->SetPosition(m_capturedPosition);
 	m_modelRender->SetRotation(m_capturedRotation);
+	//補完済みの回転をモデルの回転と同じにする
 	m_finalWPRot = m_rotation;
-	//OBBの場所と回転を設定
+	//キャラコンの回転とモデルの回転を同じにする
 	m_myCharaCon.SetRotation(m_rotation);
 	//ライトのデータを更新する
 	UpdateLightData();
+
+	return;
 }
 
-/// <summary>
-/// スタートの落ちるときの処理
-/// </summary>
+/**
+ * @brief スタートの落ちるときの処理
+*/
 void Player::Fall()
 {
-	//アニメーションの遷移をリセットする
-	AnimationReset();
-	m_modelRender->PlayAnimation(enAnimClip_fall);
-	//Rotation();
-	//モデルの場所と回転を設定
+
+	//落下中のカウンターが1未満のとき
+	//つまり最初の一回だけ呼ばれる
+	if (m_fallcount < 1)
+	{
+		//落下中のSEをワンショット再生で再生する
+		m_fallstartSE->Play(false);
+
+		//アニメーションの遷移をリセットする
+		AnimationReset();
+		//アイドル状態のアニメーションを再生する
+		m_modelRender->PlayAnimation(EN_ANIM_CLIP_FALL);
+
+		//落下中のカウンターを進める
+		m_fallcount++;
+	}
 	
 	//ウェイポイント上の座標
 	Vector3 onWayPos = m_position;
 	//高さが1800未満にならないようにする
-	if (onWayPos.y < 1800.0f)
-		onWayPos.y = 1800.0f;
-	m_myCharaCon.SetPosition(onWayPos);
+	if (onWayPos.y < MIN_HEIGHT_FALL)
+		onWayPos.y = MIN_HEIGHT_FALL;
+	//ウェイポイント上の座標を設定する
 	m_onWayPosition = onWayPos;
-	Quaternion qRot;
-	qRot.SetRotationDegY(90.0f);
-	m_rotation = g_quatIdentity;
-	m_rotation.Multiply(qRot);
+	//キャラコンの座標をウェイポイント上の座標と同じにする
+	m_myCharaCon.SetPosition(onWayPos);
+	//直角の回転を作る
+	Quaternion rightAngleYQRot;
+	rightAngleYQRot.SetRotationDegY(90.0f);
+	//モデルの回転を直角にする
+	m_rotation = rightAngleYQRot;
+	//モデルの座標と回転を設定する
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+	//補完済みの回転を初期化する
 	m_finalWPRot = g_quatIdentity;
-	if (m_fallcount < 1) {				//一度だけ呼ぶ
-		m_fallstartSE->Play(false);		//fallstartSEをループ再生をオフで再生する。
-		m_fallcount++;
-	}
+
+
+	return;
 }
 
 
-/// <summary>
-/// ゴールしている時の処理
-/// </summary>
+/**
+ * @brief ゴールしている時の処理
+*/
 void Player::Goal()
 {
 	//ゴール用のモデルが非アクティブ状態だったら
 	//つまり最初の一回だけ呼ばれる
 	if (!m_goalPlayerMR->IsActive())
 	{
-		if (m_walkSE->IsPlaying()) {
+		//歩きのSEが再生されていたら
+		if (m_walkSE->IsPlaying())
+		{
+			//停止する
 			m_walkSE->Stop();
 		}
-		if (m_runSE->IsPlaying()) {
+		//走りのSEが再生されていたら
+		if (m_runSE->IsPlaying())
+		{
+			//停止する
 			m_runSE->Stop();
 		}
 		//ゴール用のモデルをアクティブ状態
@@ -1146,10 +1208,8 @@ void Player::Goal()
 		m_goalEffect->SetPosition(m_position);
 		//ゴール時のエフェクトの回転を更新する
 		m_goalEffect->SetRotation(m_finalWPRot);
-		//ゴール時のエフェクトの拡大
-		const float effecScale = 150.0f;
 		//ゴール時のエフェクトの拡大を更新する
-		m_goalEffect->SetScale({ effecScale,effecScale,effecScale });
+		m_goalEffect->SetScale(EFFECT_SCALE_GOAL);
 		//ゴール時のエフェクトを再生する
 		m_goalEffect->Play();
 
@@ -1159,31 +1219,25 @@ void Player::Goal()
 		m_gameCamera->SetLookPlayerFlag(false);
 	}
 
-	//カメラが動く時間
-	const float cameraMoveTime = 0.5f;
 
 	//ゴール時のタイマーがカメラが動く時間より小さいか？
-	if (m_goalTimer < cameraMoveTime)
+	if (m_goalTimer < TIME_GOAL_CAMERA_MOVE)
 	{
 		//小さいとき
 
 		//注視点のアップベクトル
 		Vector3 targetUp = m_upVec;
-		//アップベクトルの長さ
-		const float upVecLen = 200.0f;
 		//タイマーに応じた拡大率	//徐々に大きくする
-		const float timeScale = m_goalTimer / cameraMoveTime;
+		const float timeScale = m_goalTimer / TIME_GOAL_CAMERA_MOVE;
 		//注視点のアップベクトルを拡大する	//徐々に大きくする
-		targetUp.Scale(upVecLen * timeScale);
+		targetUp.Scale(CAMERA_TRGET_UPVEC_LEN_GOAL * timeScale);
 
 		//カメラからプレイヤーへのベクトル
 		Vector3 cameraToPlayerVec = m_position - m_gameCamera->GetPosition();
 		//正規化する
 		cameraToPlayerVec.Normalize();
-		//カメラからプレイヤーへのベクトルの長さ
-		const float cameraToPlayerLen = 100.0f;
 		//カメラからプレイヤーへのベクトルを拡大する
-		cameraToPlayerVec.Scale(100.0f);
+		cameraToPlayerVec.Scale(CAMERA_TO_PLAYER_VEC_LEN_GOAL);
 		//デルタタイムを掛けておく
 		cameraToPlayerVec.Scale(GameTime().GetFrameDeltaTime());
 		
@@ -1204,79 +1258,93 @@ void Player::Goal()
 
 	}
 
-
-
+	return;
 }
 
 
-/// <summary>
-///	アニメーションを制御する
-/// </summary>
+/**
+ * @brief アニメーションを制御する
+*/
 void Player::AnimationController()
 {
 	//アニメーションを選択
+
+	//スタン中か？
 	if (m_stunFlag)
 	{
 		//スタン中
-		//アイドル状態のアニメーション
-		m_animState = enAnimClip_idle;
+		//アイドル状態のアニメーションにする
+		m_animState = EN_ANIM_CLIP_IDLE;
 		//アニメーションの遷移をリセットする
 		AnimationReset();
 	}
+	//持ち上げ中か？
 	else if (m_lifting)
 	{
+		//持ち上げ中
 
-		if (m_animState == enAnimClip_carry)
+		//アニメーションステートがが持ち上げ中か？
+		if (m_animState == EN_ANIM_CLIP_CARRY)
 		{
+			//持ち上げ中
 			//アニメーションの再生が終了したら
 			if (!m_modelRender->IsPlayingAnimation())
 				//持ち上げ中ではなくする
 				m_lifting = false;
 		}
 
-		//持ち上げ中
-		//持ち上げ中のアニメーション
-		m_animState = enAnimClip_carry;
+		//持ち上げ中のアニメーションにする
+		m_animState = EN_ANIM_CLIP_CARRY;
 	}
+	//投げ中か？
 	else if (m_throwing)
 	{
-		if (m_animState == enAnimClip_throw_l || m_animState == enAnimClip_throw_r)
+		//投げ中
+
+		//アニメーションステートが右向きか左向きの投げる状態だったら。
+		if (m_animState == EN_ANIM_CLIP_THROW_L || m_animState == EN_ANIM_CLIP_THROW_R)
 		{
+			//投げる状態
 			//アニメーションの再生が終了したら
 			if (!m_modelRender->IsPlayingAnimation())
 				//投げ中ではなくする
 				m_throwing = false;
 		}
-		//投げ中
+
 		//右向きか左向きか？
-		if (m_leftOrRight == enLeft)
+		if (m_leftOrRight == EN_LEFT)
+		{
 			//左向き
-			//左向きの時の投げるアニメーション
-			m_animState = enAnimClip_throw_l;
+			//左向きの時の投げるアニメーションにする
+			m_animState = EN_ANIM_CLIP_THROW_L;
+		}
 		else
+		{
 			//右向き
-			//右向きの時の投げるアニメーション
-			m_animState = enAnimClip_throw_r;
+			//右向きの時の投げるアニメーションにする
+			m_animState = EN_ANIM_CLIP_THROW_R;
+		}
 
 
 	}
+	//ダッシュ中か？
 	else if (m_isDush)
 	{
 		//ダッシュ中
-		//走るアニメーション
-		m_animState = enAnimClip_run;
+		//走るアニメーションにする
+		m_animState = EN_ANIM_CLIP_RUN;
 	}
 	else if (m_padLStickXF != 0.0f)
 	{
 		//歩きで移動中
-		//歩きのアニメーション
-		m_animState = enAnimClip_walk;
+		//歩きのアニメーションにする
+		m_animState = EN_ANIM_CLIP_WALK;
 	}
 	else
 	{
 		//どれでもない時
-		//アイドル状態のアニメーション
-		m_animState = enAnimClip_idle;
+		//アイドル状態のアニメーションにする
+		m_animState = EN_ANIM_CLIP_IDLE;
 	}
 
 
@@ -1288,17 +1356,17 @@ void Player::AnimationController()
 		//持っている状態でのアニメーションを割り振る
 		switch (m_animState)
 		{
-		case enAnimClip_idle:
+		case EN_ANIM_CLIP_IDLE:
 			//アイドル状態の時は、運んでいる時のアイドル状態のアニメーション
-			m_animState = enAnimClip_carryIdle;
+			m_animState = EN_ANIM_CLIP_CARRY_IDEL;
 			break;
-		case enAnimClip_walk:
+		case EN_ANIM_CLIP_WALK:
 			//歩いている時は、運んでいる時の歩いているアニメーション
-			m_animState = enAnimClip_carryWalk;
+			m_animState = EN_ANIM_CLIP_CARRY_WALK;
 			break;
-		case enAnimClip_run:
+		case EN_ANIM_CLIP_RUN:
 			//走っている時は、運んでいる時の走っているアニメーション
-			m_animState = enAnimClip_carryRun;
+			m_animState = EN_ANIM_CLIP_CARRY_RUN;
 			break;
 		default:
 			//どれでもない時は、そのままのアニメーション
@@ -1308,11 +1376,13 @@ void Player::AnimationController()
 
 	//選択されたアニメーションを流す
 	m_modelRender->PlayAnimation(m_animState);
+
+	return;
 }
 
-/// <summary>
-/// アニメーションの遷移をリセットする
-/// </summary>
+/**
+ * @brief アニメーションの遷移をリセットする
+*/
 void Player::AnimationReset()
 {
 	//持ち上げ中ではなくする
@@ -1320,179 +1390,101 @@ void Player::AnimationReset()
 
 	//投げ中ではなくする
 	m_throwing = false;
+
+	return;
 }
 
+/**
+ * @brief SEの制御
+*/
 void Player::SoundController()
 {
+	//アニメーションのステートでSEを制御する
 	switch (m_animState)
 	{
-	case enAnimClip_walk:
-	case enAnimClip_carryWalk:
-		if (m_runSE->IsPlaying()) {
+	case EN_ANIM_CLIP_WALK:
+	case EN_ANIM_CLIP_CARRY_WALK:
+		//歩き中か
+		//持ちながら歩いている時
+
+		//走りのSEが再生中か？
+		if (m_runSE->IsPlaying()) 
+		{
+			//再生中
+			//停止する。
 			m_runSE->Stop();
 		}
+		//歩きのSEをループ再生で再生する
 		m_walkSE->Play(true);
 		break;
 
-	case enAnimClip_run:
-	case enAnimClip_carryRun:
-		if (m_walkSE->IsPlaying()) {
+	case EN_ANIM_CLIP_RUN:
+	case EN_ANIM_CLIP_CARRY_RUN:
+		//走り中か
+		//持ちながら走っている時
+
+		//歩きのSEが再生中か？
+		if (m_walkSE->IsPlaying())
+		{
+			//再生中
+			//停止する
 			m_walkSE->Stop();
 		}
+		//走りのSEをループ再生で再生する
 		m_runSE->Play(true);
 		break;
 
 	default:
-		if (m_walkSE->IsPlaying()) {
+		//それ以外の時
+
+		//歩きのSEが再生中か？
+		if (m_walkSE->IsPlaying()) 
+		{
+			//再生中
+			//停止する
 			m_walkSE->Stop();
 		}
-		if (m_runSE->IsPlaying()) {
+		//歩きのSEが再生中か？
+		if (m_runSE->IsPlaying()) 
+		{
+			//再生中
+			//停止する
 			m_runSE->Stop();
 		}
 		break;
 	}
+
+	return;
 }
 
-/// <summary>
-/// ウェイポイントの「場所」を取得
-/// </summary>
-/// <param name="vecSize">ウェイポイントのサイズ</param>
-/// <param name="posMap">場所のベクター</param>
+/**
+ * @brief ウェイポイントの「座標」を取得
+ * @param posVec 座標のベクター
+*/
 void Player::SetWayPointPos
-(const std::size_t vecSize, std::vector<Vector3>*const posMap)
+(std::vector<Vector3>*const posVec)
 {
-	//ウェイポイントステートの最大の値を設定
-	m_maxWayPointState = vecSize - 1;
 	//m_wayPointPosにウェイポイントの「場所」を格納する
-	m_wayPointPos = posMap;
-	m_wayPointOBB.resize(m_wayPointPos->size());
+	m_wayPointPos = posVec;
+	//ウェイポイントステートの最大の値を設定
+	//ステートは0から始まるから、サイズより1小さくする
+	m_maxWayPointState = m_wayPointPos->size() - 1;
 	
 }
 
-/// <summary>
-/// ウェイポイントの「回転」を取得
-/// </summary>
-/// <param name="vecSize">ウェイポイントのサイズ</param>
-/// <param name="rotMap">回転のベクター</para
+/**
+ * @brief ウェイポイントの「回転」を取得
+ * @param rotVec 回転のベクター
+*/
 void Player::SetWayPointRot
-(const std::size_t vecSize, std::vector<Quaternion>* rotMap)
+(std::vector<Quaternion>* rotVec)
 {
-	//ウェイポイントステートの最大の値を設定
-	m_maxWayPointState = vecSize - 1;
 	//m_wayPointRotにウェイポイントの「回転」を格納する
-	m_wayPointRot = rotMap;
+	m_wayPointRot = rotVec;
+	//ウェイポイントステートの最大の値を設定
+	//ステートは0から始まるから、サイズより1小さくする
+	m_maxWayPointState = m_wayPointRot->size() - 1;
 }
 
-void Player::SetWayPointOBB()
-{
-	int vecSize = m_wayPointPos->size();
-	m_wayPointOBB.resize(vecSize);
-	for (int i = 0; i < vecSize; i++)
-	{
-		SInitOBBData initOBBData;
-		initOBBData.position = (*m_wayPointPos)[i];
-		initOBBData.rotation = (*m_wayPointRot)[i];
-		initOBBData.width = 10.0f;
-		initOBBData.length = 400.0f;
-		initOBBData.height = 600.0f;
-		initOBBData.pivot = { 0.5f,0.0f,0.5f };
-		m_wayPointOBB[i].Init(initOBBData);
 
-		Vector3* vert = m_wayPointOBB[i].GetBoxVertex();
-		int vertNum = m_wayPointOBB[i].GetBoxVertexNum();
 
-		//for (int v = 0; v < vertNum; v++)
-		//{
-		//	m_dbgObbModel2[i][v] = NewGO<CModelRender>(0);
-		//	m_dbgObbModel2[i][v]->Init("Assets/modelData/dbgBox.tkm");
-		//	m_dbgObbModel2[i][v]->SetPosition(vert[v]);
-		//	m_dbgObbModel2[i][v]->SetRotation(initOBBData.rotation);
-		//}
-
-	}
-}
-
-//デバック用
-//後で消す
-////デバック用のフォントを表示するため
-//void Player::PostRender(RenderContext& rc)
-//{
-//	//テキスト用意
-//	wchar_t text[256];
-//
-//	//描画開始
-//	m_font.Begin(rc);
-//
-//	//ウェイポイントステートの表示
-//	swprintf(text, L"wayPointState:%02d", m_wayPointState);
-//	//描画
-//	m_font.Draw(text,
-//		{ -600.0f, 300.0f },
-//		{ 0.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//
-//	//プレイヤーの左右のウェイポイントの表示
-//	//左側のウェイポイント
-//	swprintf(text, L"[%02d]", m_lpIndex);
-//	m_font.Draw(text,
-//		{ -110.0f, 50.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//	//右側のウェイポイント
-//	swprintf(text, L"[%02d]", m_rpIndex);
-//	m_font.Draw(text,
-//		{ 10.0f,50.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//
-//	//ステージとの当たり判定
-//	swprintf(text, L"Hit%d", m_dbgHit);
-//	m_font.Draw(text,
-//		{ 110.0f, 150.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//	//ステージとプレイヤーのポジションとの補完率
-//	swprintf(text, L"rate%05f", m_mobius->GetModel()->getDbg());
-//	m_font.Draw(text,
-//		{ 110.0f, 120.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//
-//
-//	//ウェイポイントの切り替え
-//	swprintf(text, L"Right:%02.2f", m_dbgDot1);
-//	m_font.Draw(text,
-//		{ -310.0f, 150.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//	swprintf(text, L"Left:%02.2f", m_dbgDot2);
-//	m_font.Draw(text,
-//		{ -310.0f, 120.0f },
-//		{ 1.0f,0.0f,0.0f,1.0f },
-//		0.0f,
-//		1.0f,
-//		{ 0.0f,0.0f }
-//	);
-//
-//
-//	//描画終了
-//	m_font.End(rc);
-//}

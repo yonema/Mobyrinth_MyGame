@@ -7,7 +7,7 @@
 /// <summary>
 /// ゲーム内カメラクラス
 /// </summary>
-class GameCamera : public IGameObject
+class CGameCamera : public IGameObject
 {
 public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;		//スタート関数

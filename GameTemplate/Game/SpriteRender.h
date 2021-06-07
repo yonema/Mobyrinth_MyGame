@@ -109,24 +109,6 @@ public:		//ここのメンバ関数を主に使う
 		return m_position;
 	}
 
-	/// <summary>
-	/// m_positionのx軸の値を返す。
-	/// </summary>
-	/// <returns>m_position.x</returns>
-	float GetPositionX()
-	{
-		return m_position.x;
-	}
-
-	/// <summary>
-	/// m_positionのy軸の値を返す。
-	/// </summary>
-	/// <returns>m_position.y</returns>
-	float GetPositionY()
-	{
-		return m_position.y;
-	}
-
 	float GetMulColorW()
 	{
 		return m_sprite.GetMulColorW();
