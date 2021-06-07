@@ -452,6 +452,7 @@
     <ClInclude Include="Tips.h" />
     <ClInclude Include="OOReverseALL.h" />
     <ClInclude Include="TipsController.h" />
+    <ClInclude Include="TitleNameData.h" />
     <ClInclude Include="UFO.h" />
     <ClInclude Include="UFOLandingPoint.h" />
     <ClInclude Include="GameTime.h" />

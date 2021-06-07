@@ -3,7 +3,7 @@
 
 
 //スタート関数
-bool Title::Start()
+bool CTitle::Start()
 {
 	//背景
 	m_stageTitle = NewGO<stage_title>(0, "stage_title");
@@ -188,7 +188,7 @@ bool Title::Start()
 }
 
 //デストラクタ
-Title::~Title()
+CTitle::~CTitle()
 {
 	DeleteGO(m_stageTitle);
 
@@ -211,7 +211,7 @@ Title::~Title()
 }
 
 //アップデート関数
-void Title::Update()
+void CTitle::Update()
 {
 	//アニメーションの初期化でエラーが出るのを調べる用のコード
 	//デバック用
@@ -260,7 +260,7 @@ void Title::Update()
 }
 
 //BGMの初期化
-void Title::InitBGM()
+void CTitle::InitBGM()
 {
 	//BGMのサウンドキューを生成する
 	m_bgmTitle = NewGO<CSoundCue>(0);
@@ -275,7 +275,7 @@ void Title::InitBGM()
 }
 
 //起動時の演出
-void Title::StartTitle()
+void CTitle::StartTitle()
 {
 	++m_countStartTitle;
 
@@ -294,7 +294,7 @@ void Title::StartTitle()
 }
 
 //タイトル画面
-void Title::TitleScreen()
+void CTitle::TitleScreen()
 {
 	//ボタンの入力を調べる
 	if (g_pad[0]->GetLStickYF() == 0.0f && !g_pad[0]->IsPressAnyKey())
@@ -368,7 +368,7 @@ void Title::TitleScreen()
 }
 
 //ステージセレクト
-void Title::StageSelect()
+void CTitle::StageSelect()
 {
 	//ボタンの入力を調べる
 	if (g_pad[0]->GetLStickXF() == 0.0f && g_pad[0]->GetLStickYF() == 0.0f &&
@@ -564,7 +564,7 @@ void Title::StageSelect()
 }
 
 //ステージを決定した時の処理
-void Title::StageDecision()
+void CTitle::StageDecision()
 {
 	//ワイプが終わるまで処理しない
 	if (!g_graphicsEngine->GetSceneChange().IsWipeFinished())

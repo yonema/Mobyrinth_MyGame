@@ -2,6 +2,13 @@
 #ifndef _TK_STOPWATCH_H_
 #define _TK_STOPWATCH_H_
 
+/**
+ * @brief ストップウォッチクラスの定数データ
+*/
+namespace STOP_WATCH_CONST_DATA
+{
+	const int MILLISECOND_FOR_LOCK_60FPS = 16;	//60FPSに固定するためのミリ秒
+}
 
 /*!
  *@brief	ストップウォッチクラス。

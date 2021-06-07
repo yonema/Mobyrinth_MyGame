@@ -796,7 +796,7 @@ bool IStageBase::WipeOut()
 void IStageBase::GoTitle()
 {
 	//タイトルを生成
-	Title* title = NewGO<Title>(0);
+	CTitle* title = NewGO<CTitle>(0);
 	//ワイプインするように設定する
 	title->SetWipeInFlag(true);
 }

@@ -7,22 +7,21 @@
 //背景
 #include "stage_title.h"
 #include "Mobius.h"
+
+//プレイヤー
 #include "Player.h"
 
 //ステージ
-//#include "stage_kari.h"
-//#include "stage_proto01.h"
-//#include "stage_proto02.h"
 #include "Stage.h"
 
 /// <summary>
 /// タイトルクラス
 /// </summary>
-class Title : public IGameObject
+class CTitle : public IGameObject
 {
 public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;		//スタート関数
-	~Title();						//デストラクタ
+	~CTitle();						//デストラクタ
 	void Update()override final;	//アップデート関数
 
 public:		//メンバ関数
