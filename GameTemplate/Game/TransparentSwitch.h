@@ -79,7 +79,7 @@ private: //メンバ変数
 	Vector4 m_blinkColor;						//点滅時のフォントのカラー
 	float m_blinkTimer = FLT_MAX;				//点滅タイマー、最初は最大値を入れておく
 	CModelRender* m_modelRender = nullptr;		//ボタンが押されたとき用のモデルレンダラー
-	GameCamera* m_gameCamera = nullptr;			//カメラのポインタ
+	CGameCamera* m_gameCamera = nullptr;			//カメラのポインタ
 	CUFO* m_ufo = nullptr;						//UFOのポインタ
 	bool m_switchingFlag = false;				//スイッチの切り替え中か？
 	float m_switchingTimer = 0.0f;				//スイッチの切り替え中のタイマー

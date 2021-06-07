@@ -23,7 +23,7 @@ bool IStageBase::Start()
 		WipeIn();
 
 	//ゲームカメラの作成
-	m_gameCamea = NewGO<GameCamera>(0, "GameCamera");
+	m_gameCamea = NewGO<CGameCamera>(0, "GameCamera");
 	//タイトル画面か？
 	if (m_titlePlayer)
 	{
@@ -100,14 +100,12 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	std::map<int, Vector3> posMap;
 	//ウェイポイントの「回転」を格納するマップ
 	std::map<int, Quaternion> rotMap;
-	//ウェイポイントの数
-	std::size_t vecSize = 0;
 
 	//プレイヤーのポインタ
 	Player* pPlayer = nullptr;
 
 	//ステージのメビウスの輪のポインタ
-	Mobius* mobius = nullptr;
+	CMobius* mobius = nullptr;
 
 
 
@@ -137,7 +135,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			}
 			else if (objData.EqualObjectName(L"Mobius") == true)
 			{
-				mobius = NewGO<Mobius>(0, "Mobius");
+				mobius = NewGO<CMobius>(0, "Mobius");
 				mobius->SetPosition(objData.position);
 				mobius->SetRotation(objData.rotation);
 				return true;
@@ -512,18 +510,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				//マップに入れる
 				posMap.insert(std::make_pair(num, objData.position));
 				rotMap.insert(std::make_pair(num, objData.rotation));
-				//ウェイポイントの数を加算
-				vecSize++;
-
-
-				//デバック用
-				//後で消す
-				//CModelRender* dbgModel;
-				//dbgModel = NewGO<CModelRender>(0, "waypoint");
-				//dbgModel->Init("Assets/modelData/yuka.tkm");
-				//dbgModel->SetPosition(objData.position);
-				//dbgModel->SetRotation(objData.rotation);
-				//デバック用ここまで
 
 				return true;
 			}
@@ -536,22 +522,18 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	//プレイヤーをマネージャーに登録
 	CLevelObjectManager::GetInstance()->SetPlayer(pPlayer);
 	//ロードしたレベルにあったウェイポイントをマネージャーに登録する
-	CLevelObjectManager::GetInstance()->InitWayPointPos(vecSize, posMap);
-	CLevelObjectManager::GetInstance()->InitWayPointRot(vecSize, rotMap);
+	CLevelObjectManager::GetInstance()->InitWayPointPos(posMap);
+	CLevelObjectManager::GetInstance()->InitWayPointRot(rotMap);
 
 	//ウェイポイントをプレイヤーに設定する
 	pPlayer->SetWayPointPos
-	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
+	(CLevelObjectManager::GetInstance()->GetWayPointPos());
 	pPlayer->SetWayPointRot
-	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());
+	(CLevelObjectManager::GetInstance()->GetWayPointRot());
 
 	//ステージ開始時の演出時のカメラの注視点の座標を設定する
 	m_startDirecting->SetPosition(pPlayer->GetPosition());
-	//ウェイポイントをステージ開始時の演出に設定する
-	/*m_startDirecting->SetWayPointPos
-	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointPos());
-	m_startDirecting->SetWayPointRot
-	(vecSize, CLevelObjectManager::GetInstance()->GetWayPointRot());*/
+
 
 
 
@@ -591,7 +573,7 @@ IStageBase::~IStageBase()
 			return true;
 		}
 	);
-	QueryGOs<Mobius>("Mobius", [&](Mobius* mobius)->bool
+	QueryGOs<CMobius>("Mobius", [&](CMobius* mobius)->bool
 		{
 			DeleteGO(mobius);
 			return true;
@@ -640,11 +622,11 @@ void IStageBase::Update()
 	if (m_wipeInFlag)
 	{
 		//ワイプが終了位置にいないか調べて、
-		m_wipeInFlag = !g_sceneChange->IsWipeFinished();
+		m_wipeInFlag = !g_graphicsEngine->GetSceneChange().IsWipeFinished();
 		//終了位置まで来ていたら、ワイプの終了させる
 		if (!m_wipeInFlag)
 		{
-			g_sceneChange->WipeEnd();
+			g_graphicsEngine->GetSceneChange().WipeEnd();
 			m_gameCamea->SetWipeEndFlag(true);
 		}
 	}
@@ -789,7 +771,7 @@ void IStageBase::CheckGoal()
 void IStageBase::WipeIn()
 {
 	//ワイプインする
-	g_sceneChange->WipeIn();
+	g_graphicsEngine->GetSceneChange().WipeIn();
 }
 
 /// <summary>
@@ -799,12 +781,12 @@ void IStageBase::WipeIn()
 bool IStageBase::WipeOut()
 {
 	//ワイプの状態が、開始位置なら
-	if (g_sceneChange->GetWipeSize() == 0.0f)
+	if (g_graphicsEngine->GetSceneChange().GetWipeSize() == 0.0f)
 		//ワイプアウトする
-		g_sceneChange->RandomWipeOut();
+		g_graphicsEngine->GetSceneChange().RandomWipeOut();
 
 	//ワイプが終わったかどうか？
-	return g_sceneChange->IsWipeFinished();
+	return g_graphicsEngine->GetSceneChange().IsWipeFinished();
 
 }
 

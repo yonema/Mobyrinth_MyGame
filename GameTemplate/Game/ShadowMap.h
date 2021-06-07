@@ -2,12 +2,14 @@
 #include "LightManager.h"
 
 /**
- * @brief CShadowMapを初期化するときのパラメータ
+ * @brief CShadowMapを初期化するときの定数値
 */
-namespace shadowInitParam
+namespace shadowConstData
 {
-	const Vector3 SHADOW_INIT_DIRECTION = { 1.0f,-1.0f,-1.0f };	//影を作るライトの方向の初期値
-	const float SHADOW_INIT_LENGTH = 1000.0f;					//影を作るライトの距離の初期値
+	//影を作るライトの方向の初期値
+	const Vector3 SHADOW_INIT_DIRECTION = { 1.0f,-1.0f,-1.0f };
+	//影を作るライトの距離の初期値
+	const float SHADOW_INIT_LENGTH = 1000.0f;
 }
 
 /// <summary>

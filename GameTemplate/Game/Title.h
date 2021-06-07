@@ -86,7 +86,7 @@ private:	//データメンバ
 	Vector3 m_stageIconToCursorVec = g_vec3Zero;	//ステージのアイコンからカーソルへのベクトル
 
 private: //背景
-	Mobius* m_mobius = nullptr;
+	CMobius* m_mobius = nullptr;
 	Player* m_player = nullptr;
 
 	stage_title* m_stageTitle = nullptr;

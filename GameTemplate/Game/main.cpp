@@ -43,15 +43,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//シャドウの生成と初期化
 	g_graphicsEngine->GetShadowMap().CreateShadowMap(
-		shadowInitParam::SHADOW_INIT_DIRECTION,
-		shadowInitParam::SHADOW_INIT_LENGTH
+		shadowConstData::SHADOW_INIT_DIRECTION,
+		shadowConstData::SHADOW_INIT_LENGTH
 	);
 
 	//ディレクションライトの生成と初期化
 	CDirectionLight* gameDirectionLight = nullptr;
 	gameDirectionLight = NewGO<CDirectionLight>(PRIORITY_FIRST, "GameDirectionLight");
-	gameDirectionLight->SetDirection(directionInitParam::DIRECTIONLIG_INIT_DIRECTION);
-	gameDirectionLight->SetColor(directionInitParam::DIRECTIONLIG_INIT_COLOR);
+	gameDirectionLight->SetDirection(directionLightConstData::DIRECTIONLIG_INIT_DIRECTION);
+	gameDirectionLight->SetColor(directionLightConstData::DIRECTIONLIG_INIT_COLOR);
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

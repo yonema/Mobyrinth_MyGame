@@ -1,4 +1,6 @@
 #pragma once
+#include "OBBConstData.h"
+using namespace OBBConstData;
 
 //COBBの初期化用の構造体
 struct SInitOBBData
@@ -8,7 +10,7 @@ struct SInitOBBData
 	float height = 1.0f;					//Yの辺の長さ
 	float length = 1.0f;					//Zの辺の長さ
 	Quaternion rotation = g_quatIdentity;	//回転
-	Vector3 pivot = { 0.5f, 0.5f, 0.5f };	//ピボット（基点）
+	Vector3 pivot = DEFAULT_PIVOT;			//ピボット（基点）
 };
 
 //int型が三つ入る構造体

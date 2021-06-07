@@ -4,11 +4,11 @@
 /// <summary>
 /// メビウスの輪クラス
 /// </summary>
-class Mobius : public IGameObject
+class CMobius : public IGameObject
 {
 public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;		//スタート関数
-	~Mobius();						//デストラクタ
+	~CMobius();						//デストラクタ
 
 public:		//ここのメンバ関数を主に使う。
 

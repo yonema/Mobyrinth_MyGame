@@ -234,7 +234,7 @@ private:	//データメンバ
 	CUFO* m_ufo = nullptr;							//UFOのポインタ
 	OOTransparentSwitch* m_switch = nullptr;		//スイッチのポインタ
 
-	GameCamera* m_gameCamea = nullptr;				//ゲームカメラ
+	CGameCamera* m_gameCamea = nullptr;				//ゲームカメラ
 
 	StartDirecting* m_startDirecting = nullptr;
 	bool m_startUpStartDirecting = true;

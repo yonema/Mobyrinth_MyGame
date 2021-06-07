@@ -904,10 +904,19 @@
     <ClInclude Include="SpringCamera.h">
       <Filter>MyCode\camera</Filter>
     </ClInclude>
-    <ClInclude Include="PriorityList.h">
+    <ClInclude Include="PriorityData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="PlayerConstData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectNameData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="OBBConstData.h">
+      <Filter>MyCode\OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="LeftOrRightData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

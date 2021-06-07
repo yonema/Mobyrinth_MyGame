@@ -9,12 +9,12 @@ bool StartDirecting::Start()
 {
 	m_position = { 0.0f,1740.0f,0.0f };
 	m_onWayPosition = m_position;
-	m_mobius = FindGO<Mobius>("Mobius");
+	m_mobius = FindGO<CMobius>("Mobius");
 
 	m_startPosition = m_position;
 
 	m_player = FindGO<Player>("Player");
-	m_gameCamera = FindGO<GameCamera>("GameCamera");
+	m_gameCamera = FindGO<CGameCamera>("GameCamera");
 
 
 	return true;
@@ -261,7 +261,7 @@ void StartDirecting::Update()
 //	}
 //	else
 //	{
-//		m_mobius = FindGO<Mobius>("Mobius");
+//		m_mobius = FindGO<CMobius>("Mobius");
 //	}
 //	auto hitPos = m_mobius->GetModel()->GetIntersectPos();
 //

@@ -2,7 +2,7 @@
 #include "GameCamera.h"
 class Player;
 
-bool GameCamera::Start()
+bool CGameCamera::Start()
 {
 	//プレイヤーを探す
 	m_pPlayer = FindGO<Player>("Player");
@@ -65,7 +65,7 @@ bool GameCamera::Start()
 	return true;
 }
 
-void GameCamera::Update()
+void CGameCamera::Update()
 {
 	if (m_startDirecting->GetStartDirecting() == true) {
 		if (m_startDirecting->GetCheckAButton() == false) {
@@ -83,7 +83,7 @@ void GameCamera::Update()
 	m_springCamera.Update();
 }
 
-void GameCamera::StartDirectingCamera()
+void CGameCamera::StartDirectingCamera()
 {
 	if (m_startDirecting->GetStartDirecting() == false || !m_wipeEndFlag) {
 		return;
@@ -151,7 +151,7 @@ void GameCamera::StartDirectingCamera()
 
 }
 
-void GameCamera::FadeDirectingCamera()
+void CGameCamera::FadeDirectingCamera()
 {
 	const float startWaitTime = 0.5f;							//最初の待つ時間		 
 	const float startFadeOutTime = startWaitTime + 0.5f;		//最初のフェードアウト時間
@@ -175,7 +175,7 @@ void GameCamera::FadeDirectingCamera()
 		float timeScale = (m_switchingTimer - startWaitTime) / (startFadeOutTime - startWaitTime);
 		alphaValue *= timeScale;
 		//フェードを徐々に暗くしていく
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < startFadeWaitTime)
@@ -188,7 +188,7 @@ void GameCamera::FadeDirectingCamera()
 
 		//フェードは真っ暗
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
 	else if (m_switchingTimer < startFadeInTime)
 	{
@@ -205,7 +205,7 @@ void GameCamera::FadeDirectingCamera()
 		alphaValue -= 1.0f * timeScale;
 		//フェードを徐々に明るくしていく
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 
 	//カメラをリフレッシュして、一時的にばねカメラを無効にし、
@@ -215,7 +215,7 @@ void GameCamera::FadeDirectingCamera()
 	m_switchingTimer += GameTime().GetFrameDeltaTime();
 }
 
-void GameCamera::InGameCamera()
+void CGameCamera::InGameCamera()
 {
 	if (m_lookPlayerFlag)
 	{

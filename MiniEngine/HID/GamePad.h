@@ -27,6 +27,18 @@ enum EnButton{
 	enButtonLB3,		//!<LB3ボタン。
 	enButtonNum,	//!<ボタンの数。
 };
+
+/**
+ * @brief パッドの番号
+*/
+enum PAD_NUMBER
+{
+	PAD_ONE = 0,	//一つ目のパッド
+	PAD_TWO = 1,	//二つ目のパッド
+	PAD_THREE = 2,	//三つ目のパッド
+	PAD_FOUR = 3,	//四つ目のパッド
+};
+
 /*!
 *@brief	パッド
 */

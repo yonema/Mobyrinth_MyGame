@@ -2,6 +2,8 @@
 #include "LevelObjectManager.h"
 #include "LevelObjectBase.h"
 #include "ReversibleObject.h"
+#include "Player.h"
+
 
 //インスタンスの初期化
 CLevelObjectManager* CLevelObjectManager::m_instance = nullptr;
@@ -27,12 +29,12 @@ CLevelObjectManager::~CLevelObjectManager()
 /// </summary>
 /// <param name="vecSize">ウェイポイントのサイズ</param>
 /// <param name="posMap">場所のマップ</param>
-void CLevelObjectManager::InitWayPointPos(const std::size_t vecSize, std::map<int, Vector3>& posMap)
+void CLevelObjectManager::InitWayPointPos(std::map<int, Vector3>& posMap)
 {
-	//vectorのサイズの確保
-	m_wayPointPos.resize(vecSize);
 	//ウェイポイントステートの最大の値を設定
-	m_vecSize = vecSize;
+	m_vecSize = posMap.size();
+	//vectorのサイズの確保
+	m_wayPointPos.resize(m_vecSize);
 	//m_wayPointPosにウェイポイントの「場所」を格納する
 	std::map<int, Vector3>::iterator it = posMap.begin();
 	for (int index = 0; it != posMap.end(); index++, it++)
@@ -47,12 +49,12 @@ void CLevelObjectManager::InitWayPointPos(const std::size_t vecSize, std::map<in
 /// </summary>
 /// <param name="vecSize">ウェイポイントのサイズ</param>
 /// <param name="rotMap">回転のマップ</param>
-void CLevelObjectManager::InitWayPointRot(const std::size_t vecSize, std::map<int, Quaternion>& rotMap)
+void CLevelObjectManager::InitWayPointRot(std::map<int, Quaternion>& rotMap)
 {
-	//vectorのサイズの確保
-	m_wayPointRot.resize(vecSize);
 	//ウェイポイントステートの最大の値を設定
-	m_vecSize = vecSize;
+	m_vecSize = rotMap.size();
+	//vectorのサイズの確保
+	m_wayPointRot.resize(m_vecSize);
 	//m_wayPointRotにウェイポイントの「回転」を格納する
 	std::map<int, Quaternion>::iterator it = rotMap.begin();
 	for (int index = 0; it != rotMap.end(); index++, it++)

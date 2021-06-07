@@ -46,7 +46,7 @@ bool OOTransparentSwitch::StartSub()
 	m_modelRender->Deactivate();
 
 	//カメラを探す	//これは確実に見つける
-	m_gameCamera = FindGO<GameCamera>("GameCamera");
+	m_gameCamera = FindGO<CGameCamera>("GameCamera");
 
 	//UFOを探す	//こっちは見つかるか分からない。
 	m_ufo = FindGO<CUFO>("UFO");
@@ -305,7 +305,7 @@ void OOTransparentSwitch::Switching()
 		alphaValue *= timeScale;
 		//フェードを徐々に暗くしていく
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < startFadeWaitTime)
 	{
@@ -314,7 +314,7 @@ void OOTransparentSwitch::Switching()
 
 		//フェードは真っ暗
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 
 
 		//カメラがプレイヤーを見なくする
@@ -342,7 +342,7 @@ void OOTransparentSwitch::Switching()
 		alphaValue -= 1.0f * timeScale;
 		//フェードを徐々に明るくしていく
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < switchingTime)
 	{
@@ -359,7 +359,7 @@ void OOTransparentSwitch::Switching()
 
 			//フェードを透明にする
 			//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-			g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+			g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 		}
 		else
 		{
@@ -400,7 +400,7 @@ void OOTransparentSwitch::Switching()
 		alphaValue *= timeScale;
 		//フェードを徐々に暗くしていく
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 	}
 	else if (m_switchingTimer < endFadeWaitTime)
 	{
@@ -409,7 +409,7 @@ void OOTransparentSwitch::Switching()
 
 		//フェードは真っ暗
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 		//カメラがプレイヤーを見るようにする
 		m_gameCamera->SetLookPlayerFlag(true);
 
@@ -428,7 +428,7 @@ void OOTransparentSwitch::Switching()
 		alphaValue -= 1.0f * timeScale;
 		//フェードを徐々に明るくしていく
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,alphaValue });
 
 		//タイマーのフォントの更新
 		UpdateTimerFR();
@@ -443,7 +443,7 @@ void OOTransparentSwitch::Switching()
 		m_switchingTimer = 0.0f;
 		//フェードを透明にする
 		//m_fadeSR->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-		g_sceneChange->GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		g_graphicsEngine->GetSceneChange().GetFadeSprite()->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 		//フェードを非表示にする
 		//m_fadeSR->Deactivate();
 

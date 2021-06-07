@@ -1,5 +1,6 @@
 #pragma once
 #include "PlayerConstData.h"
+#include "LevelObjectManager.h"
 #include "LightData.h"
 #include "DirectionLight.h"
 #include "ModelRender.h"
@@ -12,9 +13,9 @@
 #include "effect/Effect.h"
 
 //Playerの定数データを使えるようにする
-using namespace PlayerConstData;
+using namespace playerConstData;
 
-class GameCamera;
+class CGameCamera;
 class CReversibleObject;
 
 
@@ -79,17 +80,15 @@ public:		//メンバ関数
 
 	/**
 	 * @brief ウェイポイントの「座標」を取得
-	 * @param [in] vecSize ウェイポイントのサイズ
-	 * @param [in] posMap 座標のベクター
+	 * @param posVec 座標のベクター
 	*/
-	void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>*const posMap);
+	void SetWayPointPos(std::vector<Vector3>*const posVec);
 
 	/**
 	 * @brief ウェイポイントの「回転」を取得
-	 * @param [in] vecSize ウェイポイントのサイズ
-	 * @param [in] rotMap 回転のベクター
+	 * @param rotVec 回転のベクター
 	*/
-	void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
+	void SetWayPointRot(std::vector<Quaternion>* rotVec);
 
 
 	/**
@@ -381,9 +380,48 @@ private://privateなメンバ関数
 	void GameMove();
 
 	/**
-	 * @brief プレイヤーの初期設定
+	 * @brief アニメーションの初期化
 	*/
-	void Init();
+	void InitAnimation();
+
+	/**
+	 * @brief モデルの初期化
+	*/
+	void InitModel();
+
+	/**
+	 * @brief キャラクターコントローラーの初期化
+	*/
+	void InitMyCharacterController();
+
+
+	/**
+	 * @brief エフェクトの初期化
+	*/
+	void InitEffect();
+
+	/**
+	 * @brief サウンドを初期化
+	*/
+	void InitSound();
+
+	/**
+	 * @brief フラグを調べる
+	 * @return フラグが立っているか？
+	 * @retval true 立っている
+	 * @retval false 立っていない
+	*/
+	bool CheckFlag();
+
+	/**
+	 * @brief 入力情報を調べる
+	*/
+	void CheckInput();
+
+	/**
+	 * @brief 右向きか左向きかを調べる
+	*/
+	void CheckLeftOrRight();
 
 	/**
 	 * @brief ウェイポイントの更新処理
@@ -425,6 +463,16 @@ private://privateなメンバ関数
 	 * @brief 衝突したOBBのタグを調べる
 	*/
 	void CheckHitOBBTag();
+
+	/**
+	 * @brief 炎と衝突した時の処理
+	*/
+	void HitFlame();
+
+	/**
+	 * @brief 壁と衝突した時の処理
+	*/
+	void HitWall();
 
 	/**
 	 * @brief ライトのデータを更新する
@@ -471,44 +519,6 @@ private://privateなメンバ関数
 	*/
 	void SoundController();
 
-private:	//定数
-	
-	/**
-	 * @brief アニメーションクリップ。
-	*/
-	enum EnAnimationClip 
-	{
-		enAnimClip_idle,		//アイドル状態のアニメーションクリップ
-		enAnimClip_walk,		//歩きのアニメーションクリップ
-		enAnimClip_run,			//走りのアニメーションクリップ
-		enAnimClip_carry,		//持ち上げるアニメーションクリップ
-		enAnimClip_carryIdle,	//持っているアイドル状態のアニメーションクリップ
-		enAnimClip_carryWalk,	//持ちながら歩くアニメーションクリップ
-		enAnimClip_carryRun,	//持ちながら走るアニメーションクリップ
-		enAnimClip_throw_l,		//投げるアニメーションクリップ
-		enAnimClip_throw_r,		//投げるアニメーションクリップ
-		enAnimClip_fall,		//落ちるアニメーションクリップ
-		enAnimClip_num,			//アニメーションクリップの総数
-	};
-
-	/**
-	 * @brief ゴール時のアニメーションクリップ
-	*/
-	enum EnGoalAnimationClip
-	{
-		enGoalAnimClip_idle,	//アイドル状態のアニメーションクリップ
-		enGoalAnimClip_goal,	//ゴール時のアニメーションクリップ
-		enGoalAnimClip_num,		//ゴール時のアニメーションクリップの数
-	};
-
-	/**
-	 * @brief プレイヤーが右を向いているか左を向いているか
-	*/
-	enum EnLeftOrRight
-	{
-		enLeft,		//左
-		enRight,	//右
-	};
 
 private:	//データメンバ
 
@@ -516,9 +526,9 @@ private:	//データメンバ
 	* モデル、アニメーションデータ
 	*/
 	CModelRender* m_modelRender = nullptr;					//モデルレンダラー
-	AnimationClip m_animationClips[enAnimClip_num];			//アニメーションクリップ。
+	AnimationClip m_animationClips[EN_ANIM_CLIP_NUM];			//アニメーションクリップ。
 	CModelRender* m_goalPlayerMR = nullptr;					//ゴール時のプレイヤーのモデル
-	AnimationClip m_goalAnimationClips[enGoalAnimClip_num];	//アニメーションクリップ。
+	AnimationClip m_goalAnimationClips[EN_GOAL_ANIM_CLIP_NUM];	//アニメーションクリップ。
 
 	/*
 	* キャラクターのトランスフォーム
@@ -539,7 +549,7 @@ private:	//データメンバ
 	* 状態
 	*/
 	int m_animState;									//アニメーションの状態
-	int m_leftOrRight = enLeft;							//キャラクターの左右の向き
+	int m_leftOrRight = EN_LEFT;						//キャラクターの左右の向き
 	CReversibleObject* m_reversibleObject = nullptr;	//持っている反転オブジェクトのポインタ
 
 	/*
@@ -560,13 +570,13 @@ private:	//データメンバ
 	/*
 	* スタン関連
 	*/
-	bool m_stunLeftOrRight = enLeft;		//スタン中の吹っ飛ぶ方向
-	float m_stunTimer = 0.0f;				//スタンのタイマー
-	Vector3 m_stunMoveSpeed = g_vec3Zero;	//スタン中の吹っ飛ばすベクトル
-	Vector3 m_stunDownVec = g_vec3Zero;		//スタン中の重力
-	bool m_stunMoveFlag = true;				//スタン中に吹っ飛び中か？
-	float m_blinkTimer = 0.0f;				//スタン状態にモデルを点滅させるタイマー
-	COBB* m_hitOBB = nullptr;				//衝突したOBBのポインタ
+	bool m_stunLeftOrRight = EN_LEFT;				//スタン中の吹っ飛ぶ方向
+	float m_stunTimer = 0.0f;						//スタンのタイマー
+	Vector3 m_stunMoveSpeedHorizontal = g_vec3Zero;	//スタン中の横方向の移動速度
+	Vector3 m_stunMoveSpeedVertical = g_vec3Zero;	//スタン中の縦方向の移動速度
+	bool m_stunMoveFlag = true;						//スタン中に吹っ飛び中か？
+	float m_blinkTimer = 0.0f;						//スタン状態にモデルを点滅させるタイマー
+	COBB* m_hitOBB = nullptr;						//衝突したOBBのポインタ
 
 	/*
 	* キャプチャ関連
@@ -583,19 +593,18 @@ private:	//データメンバ
 	/*
 	* SE関連
 	*/
-	CSoundCue* m_fallstartSE = nullptr;	//m_fallstartSEのサウンドキュー
-	int m_fallcount = 0;				//fallSEサポート
-	int m_falltimer = 0;				//fallSEサポート
-	CSoundCue* m_walkSE = nullptr;		//m_walkSEのサウンドキュー
-	CSoundCue* m_runSE = nullptr;		//m_runSEのサウンドキュー
+	CSoundCue* m_fallstartSE = nullptr;	//落ちるときのサウンドキュー
+	int m_fallcount = 0;				//落ちるときのカウンター
+	CSoundCue* m_walkSE = nullptr;		//歩くときのサウンドキュー
+	CSoundCue* m_runSE = nullptr;		//走るときのサウンドキュー
 	CSoundCue* m_flameHitSE = nullptr;	//炎と当たったときのサウンド
 
 	/*
 	* 別のところで生成されるオブジェクト
 	*/
-	Mobius* m_mobius = nullptr;							//ステージのメビウスの輪のポインタ
+	CMobius* m_mobius = nullptr;							//ステージのメビウスの輪のポインタ
 	CDirectionLight* m_gameDirectionLight = nullptr;	//ディレクションライトのポインタ
-	GameCamera* m_gameCamera = nullptr;					//ゲームカメラ
+	CGameCamera* m_gameCamera = nullptr;					//ゲームカメラ
 
 	/// <summary>
 	/// ウェイポイント関連のデータメンバ
@@ -607,6 +616,5 @@ private:	//データメンバ
 	int m_wayPointState = 0;					//自身がどのウェイポイントにいるか表すステート
 	int m_maxWayPointState = 0;					//ウェイポイントステートの最大の値
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
-	std::vector<COBB> m_wayPointOBB;			//ウェイポイント用のOBB
 };
 

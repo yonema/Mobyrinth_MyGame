@@ -4,7 +4,7 @@
 #include "UFO.h"
 class ILevelObjectBase;
 class Player;
-class GameCamera;
+class CGameCamera;
 
 class StartDirecting : public IGameObject
 {
@@ -100,11 +100,11 @@ private:
 	int m_maxWayPointState = 0;		//ウェイポイントステートの最大の値
 	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
 
-	Mobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
+	CMobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
 	Player* m_player = nullptr;		//プレイヤーの初期化
 
-	GameCamera* m_gameCamera = nullptr;		//ゲームカメラの初期化
+	CGameCamera* m_gameCamera = nullptr;		//ゲームカメラの初期化
 
 	enum EnLeftOrRight
 	{
