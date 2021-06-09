@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "SpriteRender.h"
 
+
+using namespace spriteRenderConstData;
+
 //スタート関数
 bool CSpriteRender::Start()
 {

@@ -134,18 +134,22 @@ public:		//自動で呼ばれるメンバ関数
 
 public:		//メンバ関数
 
-	/// <summary>
-	/// スプライトに色を乗算する
-	/// </summary>
-	/// <param name="mulColor">乗算する色</param>
+	/**
+	 * @brief 乗算カラーを設定する
+	 * @param [in] mulColor 乗算カラー
+	*/
 	void SetMulColor(const Vector4& mulColor)
 	{
 		m_constantBufferCPU.mulColor = mulColor;
 	}
 
-	float GetMulColorW()
+	/**
+	 * @brief 乗算カラーを得る
+	 * @return 乗算カラー
+	*/
+	const Vector4& GetMulColor()
 	{
-		return m_constantBufferCPU.mulColor.w;
+		return m_constantBufferCPU.mulColor;
 	}
 
 

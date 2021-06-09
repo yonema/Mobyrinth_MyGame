@@ -8,6 +8,7 @@
 #include "StopWatch.h"
 #include "GameTime.h"
 #include "effect/effect.h"
+#include "TitleNameData.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -16,7 +17,7 @@
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	//ゲームの初期化。
-	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("メビリンス"));
+	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, titleNameData::TITLE_NAME);
 
 	//////////////////////////////////////
 	// ここから初期化を行うコードを記述する。
@@ -39,7 +40,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CStopWatch stopWatch;
 
 	//ゲームのインスタンスを生成する
-	Game* game = NewGO<Game>(PRIORITY_FIRST, "Game");
+	CGame* game = NewGO<CGame>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_GAME));
 
 	//シャドウの生成と初期化
 	g_graphicsEngine->GetShadowMap().CreateShadowMap(
@@ -47,10 +48,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		shadowConstData::SHADOW_INIT_LENGTH
 	);
 
+	//ゲーム全体を通して使う
 	//ディレクションライトの生成と初期化
 	CDirectionLight* gameDirectionLight = nullptr;
-	gameDirectionLight = NewGO<CDirectionLight>(PRIORITY_FIRST, "GameDirectionLight");
-	gameDirectionLight->SetDirection(directionLightConstData::DIRECTIONLIG_INIT_DIRECTION);
+	gameDirectionLight = NewGO<CDirectionLight>(
+		PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_GAME_DIRECTION_LIGHT)
+		);
+	gameDirectionLight->SetDirection(
+		directionLightConstData::DIRECTIONLIG_INIT_DIRECTION
+	);
 	gameDirectionLight->SetColor(directionLightConstData::DIRECTIONLIG_INIT_COLOR);
 
 	//////////////////////////////////////
@@ -142,7 +148,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		int restTime = 0;
 		do {
 			stopWatch.Stop();
-			restTime = 16 - (int)stopWatch.GetElapsedMillisecond();
+			restTime = STOP_WATCH_CONST_DATA::MILLISECOND_FOR_LOCK_60FPS - 
+				static_cast<int>(stopWatch.GetElapsedMillisecond());
 		} while (restTime > 0);
 
 		//ストップウォッチの計測終了

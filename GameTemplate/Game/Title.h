@@ -1,4 +1,5 @@
 #pragma once
+#include "TitleConstData.h"
 #include "FontRender.h"
 #include "SpriteRender.h"
 #include "Level2D.h"
@@ -7,25 +8,28 @@
 //背景
 #include "stage_title.h"
 #include "Mobius.h"
+//プレイヤー
 #include "Player.h"
-
 //ステージ
-//#include "stage_kari.h"
-//#include "stage_proto01.h"
-//#include "stage_proto02.h"
 #include "Stage.h"
 
-/// <summary>
-/// タイトルクラス
-/// </summary>
-class Title : public IGameObject
+
+/**
+ * @brief タイトルクラス
+*/
+class CTitle : public IGameObject
 {
 public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;		//スタート関数
-	~Title();						//デストラクタ
+	~CTitle();						//デストラクタ
 	void Update()override final;	//アップデート関数
 
 public:		//メンバ関数
+
+	/**
+	 * @brief ワイプインを行うか？を設定
+	 * @param [in] wipeInFlag ワイプインを行うか？
+	*/
 	void SetWipeInFlag(const bool wipeInFlag)
 	{
 		m_wipeInFlag = wipeInFlag;
@@ -33,84 +37,121 @@ public:		//メンバ関数
 
 private:	//privateなメンバ関数
 
-	void InitBGM();			//BGMの初期化
-	void TitleScreen();		//タイトル画面
-	void StartTitle();		//起動時の演出
-	void StageSelect();		//ステージセレクト
-	void StageDecision();	//ステージを決定した時の処理
-	void Release()			//自身のオブジェクトを破棄する関数
+	/**
+	 * @brief タイトルで使うスプライトの初期化
+	*/
+	void InitTitleSprite();
+
+	/**
+	 * @brief ステージセレクトで使うスプライトの初期化
+	*/
+	void InitStageSelectSprite();
+
+	/**
+	 * @brief SEの初期化
+	*/
+	void InitSE();
+
+	/**
+	 * @brief BGMの初期化
+	*/
+	void InitBGM();
+
+	/**
+	 * @brief タイトル画面
+	*/
+	void TitleScreen();
+
+	/**
+	 * @brief 起動時の演出
+	*/
+	void StartTitle();
+
+	/**
+	 * @brief ステージセレクト
+	*/
+	void StageSelect();
+
+	/**
+	 * @brief 次のステージを選択する
+	*/
+	void SelectNextStage();
+
+	/**
+	 * @brief 前のステージを選択する
+	*/
+	void SelectPrevStage();
+
+	/**
+	 * @brief ステージを決定した時の処理
+	*/
+	void StageDecision();
+
+	/**
+	 * @brief 自身のオブジェクトを破棄する関数
+	*/
+	void Release()
 	{
 		DeleteGO(this);
 	}
 
-private:	//列挙型
-
-	/// <summary>
-	/// ステージのステート（状態）
-	/// </summary>
-	enum EnState
-	{
-		enStartTitle,		//起動時演出の状態
-		enTitleScreen,		//タイトル画面の状態
-		enStageSelect,		//ステージセレクトの状態
-		enStageDecision,	//ステージを決定した状態
-	};
-	int m_stageState = enStartTitle;	//現在のステージのステート（状態）
-
-	/// <summary>
-	/// ステージの番号
-	/// 新しいステージを作った場合、ここに番号を追加
-	/// </summary>
-	enum EnStageList
-	{
-		enStage1,		//ステージ1
-		enStage2,		//ステージ2
-		enStage3,		//ステージ3
-		enStage4,		//ステージ4
-		enStage5,		//ステージ5
-		enStage6,		//ステージ6
-		enStage7,		//ステージ7
-		enStage8,		//ステージ8
-		enStage9,		//ステージ9
-		enStageNum,		//ステージの総数
-	};
-
 private:	//データメンバ
 
-	int m_stageSelectState = enStage1;	//現在のステージセレクトのステート
+	/*
+	* ステート関連
+	*/
+	//現在のステージのステート（状態）
+	int m_stageState = titleConstData::EN_START_TITLE;
+	//現在のステージセレクトのステート
+	int m_stageSelectState = titleConstData::EN_STAGE_1;
 
-	bool m_buttonFlag = true;				//ボタンを押すことができるか？
-											//（連続入力防止用）
-	CLevel2D m_level2D;						//スプライト用のレベルクラス
-	bool m_wipeInFlag = false;				//ワイプインするか？
-	Vector3 m_stageIconToCursorVec = g_vec3Zero;	//ステージのアイコンからカーソルへのベクトル
+	/*
+	* フラグ関連
+	*/
+	bool m_buttonFlag = true;	//ボタンを押すことができるか？
+								//（連続入力防止用）
+	bool m_wipeInFlag = false;	//ワイプインするか？
+	bool m_blinkingFlag = true;	//m_pressAButtonの透過処理に使用
 
-private: //背景
-	CMobius* m_mobius = nullptr;
-	Player* m_player = nullptr;
 
-	stage_title* m_stageTitle = nullptr;
+	//ステージのアイコンからカーソルへのベクトル
+	Vector3 m_stageIconToCursorVec = g_vec3Zero;
 
-private: //画像データ
-	CSpriteRender* m_title = nullptr;
-	CSpriteRender* m_pressAButton = nullptr;
-	CSpriteRender* m_cursor = nullptr;
-	CSpriteRender* m_stageName[enStageNum] = { nullptr };
-	CSpriteRender* m_stageClear[enStageNum] = { nullptr };
-	CSpriteRender* m_stageSelection = nullptr;
-	CSpriteRender* m_stageSelectionBase = nullptr;
+	int m_countStartTitle = 0;	//起動時演出の変数
 
-	bool m_blinkingFlag = true; //m_pressAButtonの透過処理に使用
 
-private: //BGMデータ
-	CSoundCue* m_bgmTitle = nullptr;				//BGMのサウンドキュー
-	bool m_initedBGM = false;						//BGMが初期化済みか？
+	/*
+	* 別の場所で生成されるオブジェクト
+	*/
+	Player* m_player = nullptr;				//プレイヤーのポインタ
+	CMobius* m_mobius = nullptr;			//メビウスの輪のステージ
+	CStage_title* m_stageTitle = nullptr;	//ステージタイトルクラス
 
-	CSoundCue* m_selectSE = nullptr;	//selectSEのサウンドキュー
-	CSoundCue* m_buttonASE = nullptr;	//buttonASEのサウンドキュー
-	CSoundCue* m_buttonBSE = nullptr;	//buttonBSEのサウンドキュー
 
-private: //起動時演出の変数
-	int m_countStartTitle = 0;
+	/*
+	* スプライト関連
+	*/
+	CLevel2D m_level2D;								//スプライト用のレベルクラス
+	CSpriteRender* m_title = nullptr;				//タイトルのスプライト
+	CSpriteRender* m_pressAButton = nullptr;		//「Aボタンをおしてね」のスプライト
+	CSpriteRender* m_cursor = nullptr;				//カーソルのスプライト
+	//ステージのアイコンのスプライト
+	CSpriteRender* m_stageIcon[titleConstData::EN_STAGE_NUM] = { nullptr };
+	//ステージクリアのスプライト
+	CSpriteRender* m_stageClear[titleConstData::EN_STAGE_NUM] = { nullptr };
+	CSpriteRender* m_stageSelection = nullptr;		//ステージセレクトのスプライト
+	CSpriteRender* m_stageSelectionBase = nullptr;	//ステージ選択背景のスプライト
+
+
+
+	/*
+	* サウンド関連
+	*/
+	CSoundCue* m_bgmTitle = nullptr;	//BGMのサウンドキュー
+	bool m_initedBGM = false;			//BGMが初期化済みか？
+	CSoundCue* m_selectSE = nullptr;	//カーソル移動のサウンドキュー
+	CSoundCue* m_buttonASE = nullptr;	//Aボタンのサウンドキュー
+	CSoundCue* m_buttonBSE = nullptr;	//Bボタンのサウンドキュー
+
 };
 

@@ -6,11 +6,13 @@ class ILevelObjectBase;
 class Player;
 class CGameCamera;
 
-class StartDirecting : public IGameObject
+//’S“–ŠO
+
+class CStartDirecting : public IGameObject
 {
 public:
 	bool Start() override final;
-	~StartDirecting();
+	~CStartDirecting();
 	void Update() override final;
 
 	//void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>* const posMap);

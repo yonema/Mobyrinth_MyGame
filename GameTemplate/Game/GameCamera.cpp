@@ -36,7 +36,7 @@ bool CGameCamera::Start()
 	m_springCamera.SetFar(50000.0f);
 
 	//ステージ開始時の演出を探す
-	m_startDirecting = FindGO<StartDirecting>("StartDirecting");
+	m_startDirecting = FindGO<CStartDirecting>("StartDirecting");
 
 	//カメラの上方向の修正
 	//const Quaternion qRot = (m_pPlayer->GetFinalWPRot());
@@ -146,7 +146,7 @@ void CGameCamera::StartDirectingCamera()
 	else {
 		//ステージ開始時の演出が見つかっていなかったら
 		//ステージ開始時の演出を探す
-		m_startDirecting = FindGO<StartDirecting>("StartDirecting");
+		m_startDirecting = FindGO<CStartDirecting>("StartDirecting");
 	}
 
 }

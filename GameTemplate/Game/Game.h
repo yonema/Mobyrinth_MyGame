@@ -5,11 +5,11 @@
 /// <summary>
 /// ゲームクラス
 /// </summary>
-class Game : public IGameObject
+class CGame : public IGameObject
 {
 public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;							//スタート関数
-	~Game();											//デストラクタ
+	~CGame();											//デストラクタ
 
 	//デバック用
 	//後で消す

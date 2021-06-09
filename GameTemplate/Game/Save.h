@@ -1,20 +1,32 @@
 #pragma once
 
 
-/// <summary>
-/// セーブデータの構造体
-/// </summary>
+/**
+ * @brief セーブデータの構造体
+*/
 struct SSaveData
 {
 	int highestClearStageNum;	//一番高いクリアしたステージの番号
 };
 
+/**
+ * @brief セーブクラスの定数データ
+*/
+namespace
+{
+	//セーブデータのファイルパス
+	const char* const SAVE_DATA_FILEPATH = "Assets/saveData/saveData.dat";
+	//バイナリファイルで書き込むモード
+	const char* const MODE_WRITE_BINARY = "wb";
+	//バイナリばいるで読み込むモード
+	const char* const MODE_READ_BINARY = "rb";		
+}
 
 
-/// <summary>
-/// セーブクラス
-/// コンストラクタでロードが入る
-/// </summary>
+/**
+ * @brief セーブクラス
+ * @note コンストラクタでロードが入る
+*/
 class CSave
 {
 public:		//自動で呼ばれるメンバ関数
@@ -22,9 +34,9 @@ public:		//自動で呼ばれるメンバ関数
 
 public:		//メンバ関数
 
-	/// <summary>
-	/// データメンバのセーブデータをセーブする
-	/// </summary>
+	/**
+	 * @brief データメンバのセーブデータをセーブする
+	*/
 	void SaveData();
 
 	/// <summary>

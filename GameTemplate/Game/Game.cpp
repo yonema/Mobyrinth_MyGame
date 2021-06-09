@@ -1,18 +1,14 @@
 #include "stdafx.h"
 #include "Game.h"
-#include "testModel.h"
 
 //#define SOUND_OFF	//定義されていたらサウンドをオフにする。
 
 //スタート関数
-bool Game::Start()
+bool CGame::Start()
 {
 	//タイトルを生成する
-	NewGO<Title>(0, "Title");
+	NewGO<CTitle>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_TITLE));
 
-	//デバック用
-	//後で消す
-	//NewGO<testModel>(0);
 
 #ifdef SOUND_OFF
 	//BGMの音量を消す
@@ -26,10 +22,10 @@ bool Game::Start()
 
 
 //デストラクタ
-Game::~Game()
+CGame::~CGame()
 {
 	//オブジェクトがないかもしれないからクエリしてあったら消す。
-	QueryGOs<Title>("Title", [&](Title* title)->bool
+	QueryGOs<CTitle>(GetGameObjectName(EN_GO_TYPE_TITLE), [&](CTitle* title)->bool
 		{
 			//タイトルを破棄
 			DeleteGO(title);
@@ -40,7 +36,7 @@ Game::~Game()
 //デバック用
 #ifdef MY_DEBUG
 //アップデート関数
-void Game::Update()
+void CGame::Update()
 {
 
 	//デバック用

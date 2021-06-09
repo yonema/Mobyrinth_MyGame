@@ -7,13 +7,18 @@ bool IStageBase::Start()
 {
 
 	//ステージ開始時の演出の作成
-	m_startDirecting = NewGO<StartDirecting>(0, "StartDirecting");
-	if (m_startUpStartDirecting == false) {
+	m_startDirecting = NewGO<CStartDirecting>(0, "StartDirecting");
+	//タイトル画面か？
+	if (m_isTitle) 
+	{
+		//タイトル画面
+		//開始時の演出を行わない
 		m_startDirecting->SetCheckStartDirecting(false);
 	}
 	else
 	{
-		//開始演出があるなら、ワイプインフラグを立てる
+		//ゲーム画面
+		//ゲーム画面では絶対ワイプインがある
 		m_wipeInFlag = true;
 	}
 
@@ -25,7 +30,7 @@ bool IStageBase::Start()
 	//ゲームカメラの作成
 	m_gameCamea = NewGO<CGameCamera>(0, "GameCamera");
 	//タイトル画面か？
-	if (m_titlePlayer)
+	if (m_isTitle)
 	{
 		//タイトル画面なら
 		//タイトルモードにする
@@ -56,7 +61,7 @@ bool IStageBase::Start()
 	m_capacityUI = NewGO<CCapacityUI>(0);
 
 	//タイトル画面か？
-	if (m_titlePlayer)
+	if (m_isTitle)
 	{
 		//タイトル画面なら
 
@@ -68,7 +73,7 @@ bool IStageBase::Start()
 	//Tipsコントローラーの生成
 	m_tipsController = NewGO<CTipsController>(0);
 	//タイトル画面か？
-	if (m_titlePlayer)
+	if (m_isTitle)
 	{
 		//タイトル画面なら
 
@@ -123,13 +128,13 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				//プレイヤーを作成する
 				pPlayer = NewGO<Player>(0, "Player");
 				//プレイヤーのポジションをロードしたオブジェクトと同じポジションにする
-				if (m_titlePlayer==false) {		//ゲーム画面の時
+				if (!m_isTitle) {		//ゲーム画面の時
 					pPlayer->SetPosition({ 0.0f,3000.0f,0.0f });	//	画面外に移動
 				}
 				else
 				pPlayer->SetPosition(objData.position);
 				//タイトル画面かどうかの確認
-				pPlayer->SetTitleMove(m_titlePlayer);
+				pPlayer->SetTitleMove(m_isTitle);
 				//フックしたため、trueを返す。
 				return true;
 			}
@@ -614,7 +619,7 @@ void IStageBase::Update()
 		InitBGM();
 	}
 
-	if (m_startBGM == true) {
+	if (!m_isTitle) {
 		BGMInteractive();
 	}
 
@@ -796,7 +801,7 @@ bool IStageBase::WipeOut()
 void IStageBase::GoTitle()
 {
 	//タイトルを生成
-	Title* title = NewGO<Title>(0);
+	CTitle* title = NewGO<CTitle>(0);
 	//ワイプインするように設定する
 	title->SetWipeInFlag(true);
 }
@@ -818,7 +823,7 @@ void IStageBase::InitBGM()
 	//BGMをループ再生をオンで再生する。
 	m_bgmStage1->Play(true);
 	//もしタイトル画面だった場合、BGM音量を０にする。
-	if (m_startBGM == false) {
+	if (m_isTitle) {
 		m_bgmStage1->SetVolume(0.0f);
 	}
 

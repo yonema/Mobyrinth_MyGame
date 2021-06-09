@@ -116,18 +116,16 @@ private:	//privateなメンバ関数
 	void InitBGM();
 
 public: //インライン関数
-	void SetStartUpStartDirecting(const bool b)
+
+	/**
+	 * @brief タイトルモードにする
+	 * @attention Start関数が呼ばれる前に呼ばないと意味がない。
+	*/
+	void TitleMode()
 	{
-		m_startUpStartDirecting = b;
+		m_isTitle = true;
 	}
-	void SetTitlePlayer(const bool b)
-	{
-		m_titlePlayer = b;
-	}
-	void SetStartBGM(const bool b)
-	{
-		m_startBGM = b;
-	}
+
 
 	/// <summary>
 	/// ワイプインするかどうかのフラグを設定
@@ -236,9 +234,9 @@ private:	//データメンバ
 
 	CGameCamera* m_gameCamea = nullptr;				//ゲームカメラ
 
-	StartDirecting* m_startDirecting = nullptr;
-	bool m_startUpStartDirecting = true;
-	bool m_titlePlayer = false;	
+	CStartDirecting* m_startDirecting = nullptr;	//開始演出クラス
+	bool m_isTitle = false;							//タイトル画面か？
+
 
 	CSoundCue* m_bgmStage1 = nullptr;				//BGMのサウンドキュー
 	CSoundCue* m_bgmStage2 = nullptr;				//BGMのサウンドキュー
@@ -246,7 +244,6 @@ private:	//データメンバ
 	CSoundCue* m_loop_bgmStage2 = nullptr;			//BGMのサウンドキュー
 	bool m_check_loop1 = false;						//ループ確認
 	bool m_check_loop2 = false;						//ループ確認
-	bool m_startBGM = true;							//タイトル画面のBGM再生のフラグ
 	bool m_initedBGM = false;						//BGMが初期化済みか？
 	bool m_wipeInFlag = false;						//ワイプインする？
 

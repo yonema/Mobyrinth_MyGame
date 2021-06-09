@@ -4,6 +4,8 @@
 #include "ReversibleObject.h"
 #include "GameCamera.h"
 
+//プレイヤーの定数データを使えるようにする
+using namespace playerConstData;
 
 
 //スタート関数
@@ -192,59 +194,39 @@ void Player::InitAnimation()
 	/*
 	* 通常のモデルのアニメーションクリップの初期化
 	*/
-	//idleのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_IDLE].Load(GetAnimationFilPath(EN_ANIM_CLIP_IDLE));
-	//ループ再生をtrueにする
-	m_animationClips[EN_ANIM_CLIP_IDLE].SetLoopFlag(true);
-	//walkのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_WALK].Load(GetAnimationFilPath(EN_ANIM_CLIP_WALK));
-	//ループ再生をtrueにする
-	m_animationClips[EN_ANIM_CLIP_WALK].SetLoopFlag(true);
-	//runのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_RUN].Load(GetAnimationFilPath(EN_ANIM_CLIP_RUN));
-	//ループ再生をfalseにする
-	m_animationClips[EN_ANIM_CLIP_RUN].SetLoopFlag(true);
-	//carryのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_CARRY].Load(GetAnimationFilPath(EN_ANIM_CLIP_CARRY));
-	//ループ再生をtrueにする
-	m_animationClips[EN_ANIM_CLIP_CARRY].SetLoopFlag(false);
-	//carryIdleのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_CARRY_IDEL].Load(GetAnimationFilPath(EN_ANIM_CLIP_CARRY_IDEL));
-	//ループ再生をtrueにする
-	m_animationClips[EN_ANIM_CLIP_CARRY_IDEL].SetLoopFlag(true);
-	//carryWalkのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_CARRY_WALK].Load(GetAnimationFilPath(EN_ANIM_CLIP_CARRY_WALK));
-	//ループ再生をtrueにする
-	m_animationClips[EN_ANIM_CLIP_CARRY_WALK].SetLoopFlag(true);
-	//carryRunのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_CARRY_RUN].Load(GetAnimationFilPath(EN_ANIM_CLIP_CARRY_RUN));
-	//ループ再生をtrueにする
-	m_animationClips[EN_ANIM_CLIP_CARRY_RUN].SetLoopFlag(true);
-	//throwのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_THROW_L].Load(GetAnimationFilPath(EN_ANIM_CLIP_THROW_L));
-	//ループ再生をtrueにする
-	m_animationClips[EN_ANIM_CLIP_THROW_L].SetLoopFlag(false);
-	//throwのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_THROW_R].Load(GetAnimationFilPath(EN_ANIM_CLIP_THROW_R));
-	//ループ再生をtrueにする
-	m_animationClips[EN_ANIM_CLIP_THROW_R].SetLoopFlag(false);
-	//fallのアニメーションクリップをロードする
-	m_animationClips[EN_ANIM_CLIP_FALL].Load(GetAnimationFilPath(EN_ANIM_CLIP_FALL));
-	//ループ再生をtrueにする
-	m_animationClips[EN_ANIM_CLIP_FALL].SetLoopFlag(false);
+	for (int animClipNo = 0; animClipNo < EN_ANIM_CLIP_NUM; animClipNo++)
+	{
+		//アニメーションのファイルパス
+		const char* filepath = nullptr;
+		//ループフラグ
+		bool loopFlag = true;
+		//通常のアニメーションのファイルパスとループフラグを取得
+		GetAnimationFilePath(animClipNo, &filepath, &loopFlag);
+		//アニメーションクリップをロードする
+		m_animationClips[animClipNo].Load(filepath);
+		//アニメーションのループフラグを設定する
+		m_animationClips[animClipNo].SetLoopFlag(loopFlag);
+	}
+
 
 
 	/*
 	* ゴール時のモデルのアニメーションクリップの初期化
 	*/
-	//ゴール時のアイドル状態のアニメーションクリップをロードする
-	m_goalAnimationClips[EN_GOAL_ANIM_CLIP_IDLE].Load(GetGoalAnimationClip(EN_GOAL_ANIM_CLIP_IDLE));
-	//ループ再生をtrueにする
-	m_goalAnimationClips[EN_GOAL_ANIM_CLIP_IDLE].SetLoopFlag(true);
-	//ゴールのアニメーションクリップをロードする
-	m_goalAnimationClips[EN_GOAL_ANIM_CLIP_GOAL].Load(GetGoalAnimationClip(EN_GOAL_ANIM_CLIP_GOAL));
-	//ループ再生をfalseにする
-	m_goalAnimationClips[EN_GOAL_ANIM_CLIP_GOAL].SetLoopFlag(false);
+	for (int animClipNo = 0; animClipNo < EN_GOAL_ANIM_CLIP_NUM; animClipNo++)
+	{
+		//アニメーションのファイルパス
+		const char* filepath = nullptr;
+		//ループフラグ
+		bool loopFlag = true;
+		//通常のアニメーションのファイルパスとループフラグを取得
+		GetGoalAnimationFilePath(animClipNo, &filepath, &loopFlag);
+		//アニメーションクリップをロードする
+		m_goalAnimationClips[animClipNo].Load(filepath);
+		//アニメーションのループフラグを設定する
+		m_goalAnimationClips[animClipNo].SetLoopFlag(loopFlag);
+	}
+
 
 	return;
 }
