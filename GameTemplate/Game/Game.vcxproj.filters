@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\system">
-      <UniqueIdentifier>{a9bb9230-eaa9-4c07-a610-f43e5384bb9c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\system">
       <UniqueIdentifier>{dbc0c16e-80e1-4c7c-8b01-c720c0baa9a8}</UniqueIdentifier>
     </Filter>
@@ -60,17 +57,11 @@
     <Filter Include="MyCode\Light">
       <UniqueIdentifier>{2efa8f18-1b64-413d-beb1-ddf66048d976}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\stage">
-      <UniqueIdentifier>{601d5414-83e1-4d04-8dcd-a30e3f7ea3c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyCode\TKLevel">
       <UniqueIdentifier>{032f7f6e-e194-4a13-9f89-d31220cffb6a}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyCode\Level2D">
       <UniqueIdentifier>{437ce050-c931-40a7-87d8-6bc3bc3e9b83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\graphic">
-      <UniqueIdentifier>{793b83cd-d84c-45cd-afdb-ba9fb86b617f}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyCode\Sound">
       <UniqueIdentifier>{a720ccce-87f3-4786-8ae6-fcc86e49d91b}</UniqueIdentifier>
@@ -83,12 +74,6 @@
     </Filter>
     <Filter Include="MyCode\OBB">
       <UniqueIdentifier>{83c4e268-35f0-47cb-9fab-54d205179755}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\graphic\PostEffect">
-      <UniqueIdentifier>{56d31043-f300-4720-914e-a65248a4ad80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\graphic\2D">
-      <UniqueIdentifier>{19573a5f-530e-43a4-a106-fbfa3f10b045}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyCode\Timer">
       <UniqueIdentifier>{70b6ee87-5725-4869-ab1d-15b0b3a1cae8}</UniqueIdentifier>
@@ -108,22 +93,58 @@
     <Filter Include="MyCode\UI">
       <UniqueIdentifier>{f680b8e9-0c4c-4d1c-83bd-a59ea22141be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\camera">
-      <UniqueIdentifier>{d40f695f-48a6-459d-b10c-404d22880b52}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyCode\Player">
       <UniqueIdentifier>{60751a51-0b44-4768-b1ac-a9aaa1d2ccd1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Sky">
+      <UniqueIdentifier>{7ef15367-2a47-4e6c-b438-9039a3a7e0e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Camera">
+      <UniqueIdentifier>{d40f695f-48a6-459d-b10c-404d22880b52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Graphic">
+      <UniqueIdentifier>{793b83cd-d84c-45cd-afdb-ba9fb86b617f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Graphic\PostEffect">
+      <UniqueIdentifier>{56d31043-f300-4720-914e-a65248a4ad80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Graphic\2D">
+      <UniqueIdentifier>{19573a5f-530e-43a4-a106-fbfa3f10b045}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Save">
+      <UniqueIdentifier>{3a362aab-e44b-4264-81c7-edfcbf8666de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Scene">
+      <UniqueIdentifier>{632dd05f-c09f-48e2-9aa2-d8c9f540d9f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Scene\Stage">
+      <UniqueIdentifier>{601d5414-83e1-4d04-8dcd-a30e3f7ea3c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Util">
+      <UniqueIdentifier>{f06f7f1c-a651-437f-b220-6e8f10b2d934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Graphic\Sprite">
+      <UniqueIdentifier>{b18bf9d7-bac1-4b7a-9e1d-2ac344ef8934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Graphic\Model">
+      <UniqueIdentifier>{2ec838c9-15fa-451c-b63a-9df218866bc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Graphic\Font">
+      <UniqueIdentifier>{184e57e7-be93-4732-9ca9-a7d3e53a88f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Scene\Title">
+      <UniqueIdentifier>{e962ce3b-508a-4452-89be-fc0c00f11489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\system">
+      <UniqueIdentifier>{a9bb9230-eaa9-4c07-a610-f43e5384bb9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Resource">
+      <UniqueIdentifier>{7a6bf443-7bd9-4184-8562-fc755c4d5e44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="system\system.cpp">
       <Filter>ソース ファイル\system</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\..\MiniEngine\GraphicsEngine.cpp">
       <Filter>MiniEngine</Filter>
@@ -266,9 +287,6 @@
     <ClCompile Include="..\..\MiniEngine\font\Font.cpp">
       <Filter>MiniEngine\font</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>MyCode\TKLevel</Filter>
     </ClCompile>
@@ -332,29 +350,14 @@
     <ClCompile Include="LightManager.cpp">
       <Filter>MyCode\Light</Filter>
     </ClCompile>
-    <ClCompile Include="stage_kari.cpp">
-      <Filter>MyCode\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="stage_proto01.cpp">
-      <Filter>MyCode\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="stage_proto02.cpp">
-      <Filter>MyCode\stage</Filter>
-    </ClCompile>
     <ClCompile Include="TklFile.cpp">
       <Filter>MyCode\TKLevel</Filter>
     </ClCompile>
     <ClCompile Include="StageBase.cpp">
-      <Filter>MyCode\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="StartDirecting.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyCode\Scene\Stage</Filter>
     </ClCompile>
     <ClCompile Include="stage_title.cpp">
-      <Filter>MyCode\stage</Filter>
+      <Filter>MyCode\Scene\Stage</Filter>
     </ClCompile>
     <ClCompile Include="CaslFile.cpp">
       <Filter>MyCode\Level2D</Filter>
@@ -364,15 +367,6 @@
     </ClCompile>
     <ClCompile Include="MapChip2D.cpp">
       <Filter>MyCode\Level2D</Filter>
-    </ClCompile>
-    <ClCompile Include="FontRender.cpp">
-      <Filter>MyCode\graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelRender.cpp">
-      <Filter>MyCode\graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteRender.cpp">
-      <Filter>MyCode\graphic</Filter>
     </ClCompile>
     <ClCompile Include="WaveFile.cpp">
       <Filter>MyCode\Sound</Filter>
@@ -393,13 +387,13 @@
       <Filter>MiniEngine</Filter>
     </ClCompile>
     <ClCompile Include="Bloom.cpp">
-      <Filter>MyCode\graphic\PostEffect</Filter>
+      <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="GaussianBlur.cpp">
-      <Filter>MyCode\graphic\PostEffect</Filter>
+      <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="PostEffect.cpp">
-      <Filter>MyCode\graphic\PostEffect</Filter>
+      <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="OBB.cpp">
       <Filter>MyCode\OBB</Filter>
@@ -410,23 +404,14 @@
     <ClCompile Include="MyCharacterController.cpp">
       <Filter>MyCode\OBB</Filter>
     </ClCompile>
-    <ClCompile Include="testModel.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowModel.cpp">
-      <Filter>MyCode\graphic</Filter>
-    </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>MyCode\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Sky.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="ShadowMap.cpp">
-      <Filter>MyCode\graphic\2D</Filter>
+      <Filter>MyCode\Graphic\2D</Filter>
     </ClCompile>
     <ClCompile Include="SceneChange.cpp">
-      <Filter>MyCode\graphic\2D</Filter>
+      <Filter>MyCode\Graphic\2D</Filter>
     </ClCompile>
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
@@ -468,10 +453,7 @@
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
     <ClCompile Include="Stage.cpp">
-      <Filter>MyCode\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Save.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyCode\Scene\Stage</Filter>
     </ClCompile>
     <ClCompile Include="CapacityUI.cpp">
       <Filter>MyCode\UI</Filter>
@@ -480,21 +462,51 @@
       <Filter>MyCode\UI</Filter>
     </ClCompile>
     <ClCompile Include="GameCamera.cpp">
-      <Filter>MyCode\camera</Filter>
+      <Filter>MyCode\Camera</Filter>
     </ClCompile>
     <ClCompile Include="SpringCamera.cpp">
-      <Filter>MyCode\camera</Filter>
+      <Filter>MyCode\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Sky.cpp">
+      <Filter>MyCode\Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="Save.cpp">
+      <Filter>MyCode\Save</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>MyCode\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRender.cpp">
+      <Filter>MyCode\Graphic\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelRender.cpp">
+      <Filter>MyCode\Graphic\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowModel.cpp">
+      <Filter>MyCode\Graphic\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="FontRender.cpp">
+      <Filter>MyCode\Graphic\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>MyCode\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StartDirecting.cpp">
+      <Filter>MyCode\Scene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>MyCode\Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>MyCode\Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
       <Filter>ヘッダー ファイル\system</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
       <Filter>MiniEngine</Filter>
@@ -664,9 +676,6 @@
     <ClInclude Include="..\..\ExEngine\gameObject\IGameobject.h">
       <Filter>ExEngine\physics</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>MyCode\TKLevel</Filter>
     </ClInclude>
@@ -733,29 +742,14 @@
     <ClInclude Include="ROwire_string.h">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
-    <ClInclude Include="stage_kari.h">
-      <Filter>MyCode\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="stage_proto01.h">
-      <Filter>MyCode\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="stage_proto02.h">
-      <Filter>MyCode\stage</Filter>
-    </ClInclude>
     <ClInclude Include="TklFile.h">
       <Filter>MyCode\TKLevel</Filter>
     </ClInclude>
     <ClInclude Include="StageBase.h">
-      <Filter>MyCode\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="StartDirecting.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\Scene\Stage</Filter>
     </ClInclude>
     <ClInclude Include="stage_title.h">
-      <Filter>MyCode\stage</Filter>
+      <Filter>MyCode\Scene\Stage</Filter>
     </ClInclude>
     <ClInclude Include="CaslFile.h">
       <Filter>MyCode\Level2D</Filter>
@@ -766,26 +760,11 @@
     <ClInclude Include="MapChip2D.h">
       <Filter>MyCode\Level2D</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteRender.h">
-      <Filter>MyCode\graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelRender.h">
-      <Filter>MyCode\graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="FontRender.h">
-      <Filter>MyCode\graphic</Filter>
-    </ClInclude>
     <ClInclude Include="WaveFile.h">
       <Filter>MyCode\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="Noncopyable.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="WaveFileBank.h">
       <Filter>MyCode\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Util.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SoundSource.h">
       <Filter>MyCode\Sound</Filter>
@@ -800,13 +779,13 @@
       <Filter>MiniEngine</Filter>
     </ClInclude>
     <ClInclude Include="Bloom.h">
-      <Filter>MyCode\graphic\PostEffect</Filter>
+      <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="GaussianBlur.h">
-      <Filter>MyCode\graphic\PostEffect</Filter>
+      <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="PostEffect.h">
-      <Filter>MyCode\graphic\PostEffect</Filter>
+      <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="OBB.h">
       <Filter>MyCode\OBB</Filter>
@@ -817,26 +796,17 @@
     <ClInclude Include="MyCharacterController.h">
       <Filter>MyCode\OBB</Filter>
     </ClInclude>
-    <ClInclude Include="testModel.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadowModel.h">
-      <Filter>MyCode\graphic</Filter>
-    </ClInclude>
     <ClInclude Include="PointLight.h">
       <Filter>MyCode\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Sky.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\..\MiniEngine\TResourceBank.h">
       <Filter>MiniEngine</Filter>
     </ClInclude>
     <ClInclude Include="ShadowMap.h">
-      <Filter>MyCode\graphic\2D</Filter>
+      <Filter>MyCode\Graphic\2D</Filter>
     </ClInclude>
     <ClInclude Include="SceneChange.h">
-      <Filter>MyCode\graphic\2D</Filter>
+      <Filter>MyCode\Graphic\2D</Filter>
     </ClInclude>
     <ClInclude Include="GameTime.h">
       <Filter>MyCode\Timer</Filter>
@@ -884,10 +854,7 @@
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
     <ClInclude Include="Stage.h">
-      <Filter>MyCode\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Save.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\Scene\Stage</Filter>
     </ClInclude>
     <ClInclude Include="CapacityUI.h">
       <Filter>MyCode\UI</Filter>
@@ -895,35 +862,77 @@
     <ClInclude Include="Pause.h">
       <Filter>MyCode\UI</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameCamera.h">
-      <Filter>MyCode\camera</Filter>
+      <Filter>MyCode\Camera</Filter>
     </ClInclude>
     <ClInclude Include="SpringCamera.h">
-      <Filter>MyCode\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="PriorityData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectNameData.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\Camera</Filter>
     </ClInclude>
     <ClInclude Include="OBBConstData.h">
       <Filter>MyCode\OBB</Filter>
-    </ClInclude>
-    <ClInclude Include="LeftOrRightData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleNameData.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>MyCode\Player</Filter>
     </ClInclude>
     <ClInclude Include="PlayerConstData.h">
       <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Sky.h">
+      <Filter>MyCode\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="Save.h">
+      <Filter>MyCode\Save</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>MyCode\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleNameData.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="PriorityData.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Noncopyable.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectNameData.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="LeftOrRightData.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRender.h">
+      <Filter>MyCode\Graphic\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderConstData.h">
+      <Filter>MyCode\Graphic\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelRender.h">
+      <Filter>MyCode\Graphic\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowModel.h">
+      <Filter>MyCode\Graphic\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="FontRender.h">
+      <Filter>MyCode\Graphic\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="StartDirecting.h">
+      <Filter>MyCode\Scene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>MyCode\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleConstData.h">
+      <Filter>MyCode\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>MyCode\Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -962,6 +971,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Game.rc" />
+    <ResourceCompile Include="Game.rc">
+      <Filter>MyCode\Resource</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

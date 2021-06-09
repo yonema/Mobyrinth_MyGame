@@ -12,7 +12,7 @@ namespace playerConstData
 	/**
 	* @brief 通常のアニメーションクリップ。
 	*/
-	static const enum EN_ANIMATION_CLIP
+	enum EN_ANIMATION_CLIP
 	{
 		EN_ANIM_CLIP_IDLE,		//アイドル状態のアニメーションクリップ
 		EN_ANIM_CLIP_WALK,		//歩きのアニメーションクリップ
@@ -30,87 +30,103 @@ namespace playerConstData
 	/**
 	 * @brief ゴール時のアニメーションクリップ
 	*/
-	static const enum EN_GOAL_ANIMATION_CLIP
+	enum EN_GOAL_ANIMATION_CLIP
 	{
 		EN_GOAL_ANIM_CLIP_IDLE,	//アイドル状態のアニメーションクリップ
 		EN_GOAL_ANIM_CLIP_GOAL,	//ゴール時のアニメーションクリップ
 		EN_GOAL_ANIM_CLIP_NUM,	//ゴール時のアニメーションクリップの数
 	};
 
+
 	/**
-	 * @brief 通常のアニメーションのファイルパス取得
+	 * @brief 通常のアニメーションのファイルパスとループフラグを取得
 	 * @param [in] clipNo アニメションクリップのナンバー
-	 * @return アニメーションのファイルパス
+	 * @param [out] filepath アニメーションのファイルパス
+	 * @param [out] loopFlag ループフラグ
 	*/
-	constexpr const char* const GetAnimationFilPath(const int clipNo)
+	constexpr void GetAnimationFilePath(const int clipNo, const char** filepath, bool* loopFlag)
 	{
-		//アニメーションクリップの番号に対応するファイルパスを戻す
+		//アニメーションクリップの番号に対応するファイルパスとループフラグを設定する
 		switch (clipNo)
 		{
 		case EN_GOAL_ANIM_CLIP_IDLE:
-			return "Assets/animData/idle.tka";
+			*filepath = "Assets/animData/idle.tka";
+			*loopFlag = true;
 			break;
 		case EN_ANIM_CLIP_WALK:
-			return  "Assets/animData/walk.tka";
+			*filepath = "Assets/animData/walk.tka";
+			*loopFlag = true;
 			break;
 		case EN_ANIM_CLIP_RUN:
-			return  "Assets/animData/run.tka";
+			*filepath = "Assets/animData/run.tka";
+			*loopFlag = true;
 			break;
 		case EN_ANIM_CLIP_CARRY:
-			return  "Assets/animData/carry.tka";
+			*filepath = "Assets/animData/carry.tka";
+			*loopFlag = false;
 			break;
 		case EN_ANIM_CLIP_CARRY_IDEL:
-			return  "Assets/animData/carryidle.tka";
+			*filepath = "Assets/animData/carryidle.tka";
+			*loopFlag = true;
 			break;
 		case EN_ANIM_CLIP_CARRY_WALK:
-			return  "Assets/animData/carrywalk.tka";
+			*filepath = "Assets/animData/carrywalk.tka";
+			*loopFlag = true;
 			break;
 		case EN_ANIM_CLIP_CARRY_RUN:
-			return  "Assets/animData/carryrun.tka";
+			*filepath = "Assets/animData/carryrun.tka";
+			*loopFlag = true;
 			break;
 		case EN_ANIM_CLIP_THROW_L:
-			return  "Assets/animData/throwL.tka";
+			*filepath = "Assets/animData/throwL.tka";
+			*loopFlag = false;
 			break;
 		case EN_ANIM_CLIP_THROW_R:
-			return  "Assets/animData/throwR.tka";
+			*filepath = "Assets/animData/throwR.tka";
+			*loopFlag = false;
 			break;
 		case EN_ANIM_CLIP_FALL:
-			return  "Assets/animData/fall.tka";
+			*filepath = "Assets/animData/fall.tka";
+			*loopFlag = false;
+			break;
+		default:
+			//どれでもなかったらエラー
+			MessageBoxA(
+				nullptr, "アニメーションのファイルパスが登録されていません", "エラー", MB_OK
+			);
 			break;
 		};
-
-		//どれでもなかったらエラー
-		MessageBoxA(
-			nullptr, "アニメーションのファイルパスが登録されていません", "エラー", MB_OK
-		);
-
-		return nullptr;
+		return;
 	}
 
 	/**
-	 * @brief ゴール時のアニメーションのファイルパスを取得
-	 * @param [in] clipNo アニメションクリップのナンバー
-	 * @return アニメーションのファイルパス
+	 * @brief 
+	 * @param [in] clipNo ゴール時のアニメーションのファイルパスとループフラグを取得
+	 * @param [out] filepath アニメーションのファイルパス
+	 * @param [out] loopFlag アニメーションのループフラグ
 	*/
-	constexpr const char* const GetGoalAnimationClip(const int clipNo)
+	constexpr void GetGoalAnimationFilePath(const int clipNo, const char** filepath, bool* loopFlag)
 	{
-		//アニメーションクリップの番号に対応するファイルパスを戻す
+		//アニメーションクリップの番号に対応するファイルパスとループフラグを設定する
 		switch (clipNo)
 		{
 		case EN_GOAL_ANIM_CLIP_IDLE:
-			return "Assets/animData/goalidle.tka";
+			*filepath = "Assets/animData/goalidle.tka";
+			*loopFlag = true;
 			break;
 		case EN_GOAL_ANIM_CLIP_GOAL:
-			return "Assets/animData/goal.tka";
+			*filepath = "Assets/animData/goal.tka";
+			*loopFlag = false;
+			break;
+		default:
+			//どれでもなかったらエラー
+			MessageBoxA(
+				nullptr, "アニメーションのファイルパスが登録されていません", "エラー", MB_OK
+			);
 			break;
 		}
 
-		//どれでもなかったらエラー
-		MessageBoxA(
-			nullptr, "アニメーションのファイルパスが登録されていません", "エラー", MB_OK
-		);
-
-		return nullptr;
+		return;
 	}
 
 

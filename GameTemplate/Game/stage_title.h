@@ -1,15 +1,17 @@
 #pragma once
 #include "StageBase.h"
 
-
-class stage_title : public IStageBase
+/**
+ * @brief タイトルステージクラス
+*/
+class CStage_title : public IStageBase
 {
 public:
 	bool StartSub() override final;
-	~stage_title();
+	~CStage_title();
 	void RetryStage()override final
 	{
-		NewGO<stage_title>(0);
+		NewGO<CStage_title>(0);
 	}
 
 

@@ -1,4 +1,6 @@
 #pragma once
+#include "SpriteRenderConstData.h"
+
 
 /// <summary>
 /// スプライト描画クラス
@@ -63,7 +65,7 @@ public:		//ここのメンバ関数を主に使う
 		m_scale = scale;
 		//座標系の関係で左右反転するから
 		//xの拡大を反転させる
-		m_scale.x *= -1.0f;
+		m_scale.x *= spriteRenderConstData::FLIP_HORIZONTAL;
 	}
 
 	/// <summary>
@@ -104,14 +106,18 @@ public:		//ここのメンバ関数を主に使う
 	/// m_positionの値を返す。
 	/// </summary>
 	/// <returns>m_position</returns>
-	Vector3 GetPosition()
+	const Vector3& GetPosition()
 	{
 		return m_position;
 	}
 
-	float GetMulColorW()
+	/**
+	 * @brief 乗算カラーを得る
+	 * @return 乗算カラー
+	*/
+	const Vector4& GetMulColor()
 	{
-		return m_sprite.GetMulColorW();
+		return m_sprite.GetMulColor();
 	}
 
 private:	//データメンバ
@@ -122,8 +128,8 @@ private:	//データメンバ
 	Quaternion m_rotation = g_quatIdentity;		//回転
 	//座標系の関係で左右反転するから
 	//xの拡大を反転させる
-	Vector3 m_scale = { -1.0f,1.0f,1.0f };		//拡大
-	Vector2 m_pivot = { 0.5f,0.5f };			//ピボット（基点）
+	Vector3 m_scale = spriteRenderConstData::DEFAULT_SCALE;	//拡大
+	Vector2 m_pivot = spriteRenderConstData::DEFAULT_PIVOT;	//ピボット（基点）
 	
 	bool m_postRenderFlag = false;				//PostRenderで描画するかどうか？
 };

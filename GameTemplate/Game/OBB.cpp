@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "OBB.h"
 
+//OBBの定数データを使えるようにする
+using namespace OBBConstData;
 
 //コンストラクタ
 COBB::COBB()

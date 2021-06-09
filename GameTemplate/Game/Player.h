@@ -12,8 +12,7 @@
 #include "SoundCue.h"
 #include "effect/Effect.h"
 
-//Playerの定数データを使えるようにする
-using namespace playerConstData;
+
 
 class CGameCamera;
 class CReversibleObject;
@@ -525,10 +524,12 @@ private:	//データメンバ
 	/*
 	* モデル、アニメーションデータ
 	*/
-	CModelRender* m_modelRender = nullptr;					//モデルレンダラー
-	AnimationClip m_animationClips[EN_ANIM_CLIP_NUM];			//アニメーションクリップ。
-	CModelRender* m_goalPlayerMR = nullptr;					//ゴール時のプレイヤーのモデル
-	AnimationClip m_goalAnimationClips[EN_GOAL_ANIM_CLIP_NUM];	//アニメーションクリップ。
+	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
+	//アニメーションクリップ。
+	AnimationClip m_animationClips[playerConstData::EN_ANIM_CLIP_NUM];
+	CModelRender* m_goalPlayerMR = nullptr;	//ゴール時のプレイヤーのモデル
+	//ゴール時のアニメーションクリップ。
+	AnimationClip m_goalAnimationClips[playerConstData::EN_GOAL_ANIM_CLIP_NUM];
 
 	/*
 	* キャラクターのトランスフォーム
@@ -602,9 +603,9 @@ private:	//データメンバ
 	/*
 	* 別のところで生成されるオブジェクト
 	*/
-	CMobius* m_mobius = nullptr;							//ステージのメビウスの輪のポインタ
+	CMobius* m_mobius = nullptr;						//ステージのメビウスの輪のポインタ
 	CDirectionLight* m_gameDirectionLight = nullptr;	//ディレクションライトのポインタ
-	CGameCamera* m_gameCamera = nullptr;					//ゲームカメラ
+	CGameCamera* m_gameCamera = nullptr;				//ゲームカメラ
 
 	/// <summary>
 	/// ウェイポイント関連のデータメンバ

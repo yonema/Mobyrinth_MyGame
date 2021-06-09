@@ -5,7 +5,9 @@
 #include "Player.h"
 #include "Pause.h"
 
-bool StartDirecting::Start()
+//担当外
+
+bool CStartDirecting::Start()
 {
 	m_position = { 0.0f,1740.0f,0.0f };
 	m_onWayPosition = m_position;
@@ -20,12 +22,12 @@ bool StartDirecting::Start()
 	return true;
 }
 
-StartDirecting::~StartDirecting()
+CStartDirecting::~CStartDirecting()
 {
 
 }
 
-void StartDirecting::Update()
+void CStartDirecting::Update()
 {
 	//カメラのターゲットを見えない形で動かして
 	//カメラを動かす。
@@ -287,7 +289,7 @@ void StartDirecting::Update()
 //	return;
 //}
 
-void StartDirecting::FallPlayer()
+void CStartDirecting::FallPlayer()
 {
 	m_player->SetFallFlag(true);
 	Vector3 fallpos = m_player->GetPosition();

@@ -100,7 +100,7 @@ private:	//データメンバ
 	Player* m_pPlayer = nullptr;				//プレイヤーのポインタ
 	Vector3 m_toCameraPos;						//注視点から視点へのベクトル
 	bool m_lookPlayerFlag = true;				//プレイヤーを見るか？
-	StartDirecting* m_startDirecting = nullptr;
+	CStartDirecting* m_startDirecting = nullptr;
 	bool m_startDirectingZoomInCamera = false;	//カメラを寄せる処理のフラグ
 
 	bool m_zoomFinished = false;				//Zoomが終わったか

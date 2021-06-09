@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Game.h"
-#include "testModel.h"
 
 //#define SOUND_OFF	//定義されていたらサウンドをオフにする。
 
@@ -10,9 +9,6 @@ bool CGame::Start()
 	//タイトルを生成する
 	NewGO<CTitle>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_TITLE));
 
-	//デバック用
-	//後で消す
-	//NewGO<testModel>(0);
 
 #ifdef SOUND_OFF
 	//BGMの音量を消す

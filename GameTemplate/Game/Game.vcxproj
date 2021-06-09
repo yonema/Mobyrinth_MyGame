@@ -351,9 +351,6 @@
     <ClCompile Include="ROnail_bar.cpp" />
     <ClCompile Include="ROrunning_stop.cpp" />
     <ClCompile Include="ROwire_string.cpp" />
-    <ClCompile Include="stage_kari.cpp" />
-    <ClCompile Include="stage_proto01.cpp" />
-    <ClCompile Include="stage_proto02.cpp" />
     <ClCompile Include="StageBase.cpp" />
     <ClCompile Include="stage_title.cpp" />
     <ClCompile Include="StartDirecting.cpp" />
@@ -366,7 +363,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
-    <ClCompile Include="testModel.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TklFile.cpp" />
     <ClCompile Include="TransparentSwitch.cpp" />
@@ -445,6 +441,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="SpringCamera.h" />
+    <ClInclude Include="SpriteRenderConstData.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="OOoneway.h" />
@@ -452,6 +449,7 @@
     <ClInclude Include="Tips.h" />
     <ClInclude Include="OOReverseALL.h" />
     <ClInclude Include="TipsController.h" />
+    <ClInclude Include="TitleConstData.h" />
     <ClInclude Include="TitleNameData.h" />
     <ClInclude Include="UFO.h" />
     <ClInclude Include="UFOLandingPoint.h" />
@@ -503,16 +501,12 @@
     <ClInclude Include="ROnail_bar.h" />
     <ClInclude Include="ROrunning_stop.h" />
     <ClInclude Include="ROwire_string.h" />
-    <ClInclude Include="stage_kari.h" />
-    <ClInclude Include="stage_proto01.h" />
-    <ClInclude Include="stage_proto02.h" />
     <ClInclude Include="StageBase.h" />
     <ClInclude Include="stage_title.h" />
     <ClInclude Include="StartDirecting.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="system\system.h" />
-    <ClInclude Include="testModel.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TklFile.h" />
     <ClInclude Include="TransparentSwitch.h" />
