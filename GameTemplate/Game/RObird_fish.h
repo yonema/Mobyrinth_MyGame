@@ -19,7 +19,7 @@ private:	//データメンバ
 	/// <summary>
 	/// もう一つの裏表のオブジェクトのモデルレンダラー
 	/// </summary>
-	CModelRender* m_otherModelRender[enFrontAndBackNum] = { nullptr };
-	int m_reversibleType[enFrontAndBackNum] = { enEmpty };				//オブジェクトのタイプ
+	CModelRender* m_otherModelRender[EN_FRONT_AND_BACK_NUM] = { nullptr };
+	int m_reversibleType[EN_FRONT_AND_BACK_NUM] = { enEmpty };				//オブジェクトのタイプ
 };
 

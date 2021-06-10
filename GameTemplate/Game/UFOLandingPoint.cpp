@@ -98,7 +98,7 @@ void CUFOLandingPoint::UpdateSideOBB()
 	//横幅
 	const float sideLen = 10.0f;
 	//左右へのベクトル
-	Vector3 sideVec[enLeftAndRightNum] = { g_vec3Left, g_vec3Right };
+	Vector3 sideVec[enLeftAndRightNum] = { g_VEC3_LEFT, g_VEC3_RIGHT };
 
 	//左と右の二回分繰り返す
 	for (int i = 0; i < enLeftAndRightNum; i++)

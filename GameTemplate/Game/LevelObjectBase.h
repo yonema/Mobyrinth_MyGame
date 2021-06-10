@@ -6,16 +6,12 @@
 #include "ObjectType.h"
 #include "FontRender.h"
 #include "effect/Effect.h"
-
-
-//デバック用
-//後で消す
 #include "ModelRender.h"
 
-/// <summary>
-/// レベルオブジェクトの抽象クラス
-/// ReversibleObjectとObstacleObjectはこの抽象クラスを継承している
-/// </summary>
+/**
+ * @brief レベルオブジェクトの抽象クラス
+ * @note ReversibleObjectとObstacleObjectはこの抽象クラスを継承している
+*/
 class ILevelObjectBase : public IGameObject
 {
 public:		//自動で呼ばれるメンバ関数
@@ -27,7 +23,7 @@ public:		//オーバーライドしてほしいメンバ関数
 	virtual bool PureVirtualStart() = 0 {};		//スタート関数
 	virtual void PureVirtualUpdate() = 0 {};	//アップデート関数
 
-	/// <summary>5
+	/// <summary>
 	/// 表裏がある場合は、表か裏かのモデルの参照を得る。
 	/// ない場合は、普通にモデルの参照を得る
 	/// </summary>
@@ -38,9 +34,16 @@ public:		//オーバーライドしてほしいメンバ関数
 		return nullptr;
 	}
 
+
+public:		//CReversibleObjectでオーバーライドしてほしいメンバ関数
+	/**
+	 * @brief スイッチの効果が切れた時、表と裏をもとに戻すために使う関数
+	 * @param [in] frontOrBack 表か裏か？
+	 * @retval 
+	*/
 	virtual void SwitchReverse(const bool frontOrBack = 0) {};
 
-protected:	//ここのメンバ関数を主に使う
+protected:	//protectedなメンバ関数
 
 	/// <summary>
 	/// 近くのウェイポイントを探して、イイ感じに回転する関数
@@ -59,7 +62,7 @@ protected:	//ここのメンバ関数を主に使う
 	/// </summary>
 	void CheckPosition();
 
-public:		//ここのメンバ関数を主に使う
+public:		//メンバ関数
 
 	/// <summary>
 	///	場所を設定する
@@ -254,11 +257,10 @@ private:	//privateなメンバ関数
 	void InitOBB();
 
 protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
-	Vector3 m_position = g_vec3Zero;		//場所
-	Quaternion m_rotation = g_quatIdentity;	//回転
-	Vector3 m_scale = g_vec3One;			//拡大
+	Vector3 m_position = g_VEC3_ZERO;		//場所
+	Quaternion m_rotation = g_QUAT_IDENTITY;	//回転
+	Vector3 m_scale = g_VEC3_ONE;			//拡大
 	Player* m_pPlayer = nullptr;			//プレイヤーのポインタ
-
 
 private:	//データメンバ
 	int m_objectType = enEmpty;				//タイプ
@@ -277,18 +279,18 @@ public: //Set関数
 	/// 重なっているかの判定の処理を行うか確認するフラグの値を変更する。
 	/// </summary>
 	/// <param name="b">フラグの値</param>
-	void SetFlagIsHit(const bool b)
+	void SetIsHitFlag(const bool b)
 	{
-		m_flagIsHit = b;
+		m_isHitFlag = b;
 	}
 
 	/// <summary>
 	/// 重なっているかの判定の処理を行うか確認するフラグの値を取得
 	/// </summary>
 	/// <returns>m_flagIsHitの値</returns>
-	const bool GetFlagIsHit()const
+	const bool GetIsHitFlag()const
 	{
-		return m_flagIsHit;
+		return m_isHitFlag;
 	}
 
 	/// <summary>
@@ -297,9 +299,9 @@ public: //Set関数
 	void SetTransparentObject()
 	{
 		//透明オブジェクト判定に使用するフラグをtrueにする。
-		m_flagTransparentObject = true;
+		m_transparentObjectFlag = true;
 		//オブジェクトの重なっている判定を行わないようにする。
-		m_flagIsHit = false;
+		m_isHitFlag = false;
 		//リセット時に使用する位置、回転情報を初期化
 		//m_startRotation = m_rotation;
 		m_startPosition = m_position;
@@ -328,8 +330,8 @@ public: //Set関数
 
 
 		//オブジェクトを半透明にする。
-		//GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-		//GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+		//GetModelRender(CReversibleObject::EN_FRONT)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+		//GetModelRender(CReversibleObject::EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 		//上記の半透明にする処理がうまく動かなかった場合、
 		//ChangeTransparent()関数を使ってください。
 	}
@@ -346,9 +348,9 @@ public: //透明スイッチに使用する関数
 		m_swichon->Play();
 
 		//オブジェクトを持ち上げられるようにする。
-		m_flagHeld = true;
+		m_heldFlag = true;
 		//オブジェクトの衝突判定を行うようにする。
-		m_flagIsHit = true;
+		m_isHitFlag = true;
 
 		//オブジェクトの当たり判定を有効にする。
 		m_obb.SetExceptionFlag(false);
@@ -388,9 +390,9 @@ public: //透明スイッチに使用する関数
 		}
 
 		//オブジェクトを持ち上げられないようにする。
-		m_flagHeld = false;
+		m_heldFlag = false;
 		//オブジェクトの衝突判定を行わないようにする。
-		m_flagIsHit = false;
+		m_isHitFlag = false;
 		//位置、回転情報を初期状態に戻す。
 		m_rotation = m_startRotation;
 		m_position = m_startPosition;
@@ -414,30 +416,18 @@ public: //透明スイッチに使用する関数
 	/// <param name="b">オブジェクトが現在持てるか</param>
 	void SetFlagHeld(bool b)
 	{
-		m_flagHeld = b;
+		m_heldFlag = b;
 	}
 
 	bool GetFlagHeld()
 	{
-		return m_flagHeld;
+		return m_heldFlag;
 	}
 
 
-
-
-	//void SetFlagHeldPlayer(bool b)
-	//{
-	//	m_flagHeldPlayer = b;
-	//}
-
-	//bool GetFlagHeldPlayer()
-	//{
-	//	return m_flagHeldPlayer;
-	//}
-
 	bool GetFlagTransparentObject()
 	{
-		return m_flagTransparentObject;
+		return m_transparentObjectFlag;
 	}
 
 	/// <summary>
@@ -450,14 +440,13 @@ public: //透明スイッチに使用する関数
 	}
 
 private: //メンバ変数
-	bool m_flagTransparentObject = false; //透明オブジェクトどうかのフラグ
-	bool m_flagIsHit = true; //重なっているかの判定の処理を行うか確認するフラグ
-	bool m_flagHeld = true; //オブジェクトが現在持ち上げられるかのフラグ
-	//bool m_flagHeldPlayer = false; //現在このオブジェクトが持たれているかのフラグ
+	bool m_transparentObjectFlag = false; //透明オブジェクトどうかのフラグ
+	bool m_isHitFlag = true; //重なっているかの判定の処理を行うか確認するフラグ
+	bool m_heldFlag = true; //オブジェクトが現在持ち上げられるかのフラグ
 	
 
-	Vector3 m_startPosition = { 0.0f,0.0f,0.0f }; //オブジェクトの初期位置を保存する位置情報変数
-	Quaternion m_startRotation = g_quatIdentity; //オブジェクトの初期回転を保存する回転情報変数
+	Vector3 m_startPosition = g_VEC3_ZERO; //オブジェクトの初期位置を保存する位置情報変数
+	Quaternion m_startRotation = g_QUAT_IDENTITY; //オブジェクトの初期回転を保存する回転情報変数
 
 	CFontRender* m_timerFR = nullptr;			//タイマーのフォントレンダラー
 
@@ -470,21 +459,9 @@ private: //メンバ変数
 	// 反転オブジェクト用の変数と関数（透明オブジェクトのために移動）
 	////////////////////////////////////////////////////////////
 
-public:		//publicなデータメンバ
-
-	/// <summary>
-	/// 表か裏かを表す列挙体
-	/// </summary>
-	enum EnFrontAndBack
-	{
-		enFront,			//表状態
-		enBack,				//裏状態
-		enFrontAndBackNum,	//表裏の数
-	};
-
 protected:
-	bool m_frontOrBack = enFront;				//表か裏か？
-	bool m_startfrontOrBack = enFront;
+	bool m_frontOrBack = EN_FRONT;				//表か裏か？
+	bool m_startfrontOrBack = EN_FRONT;
 
 
 

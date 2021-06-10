@@ -133,7 +133,7 @@ bool CLightManager::AddLight(CSpotLight* light)
 	m_spotLightsData[m_lightParam.numSpotLight].color
 		= { 0.0f,0.0f,0.0f,1.0f };
 	m_spotLightsData[m_lightParam.numSpotLight].range = 300.0f;
-	m_spotLightsData[m_lightParam.numSpotLight].direction = g_vec3Down;
+	m_spotLightsData[m_lightParam.numSpotLight].direction = g_VEC3_DOWN;
 	m_spotLightsData[m_lightParam.numSpotLight].angle = 45.0f;
 	//LightにManagerのスポットライトの参照を渡す
 	light->SetRawData(&m_spotLightsData[m_lightParam.numSpotLight]);

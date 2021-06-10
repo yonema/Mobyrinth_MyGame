@@ -41,7 +41,7 @@ public:		//ここのメンバ関数を主に使う。
 
 private:	//データメンバ
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
-	Vector3 m_position = g_vec3Zero;		//場所
-	Quaternion m_rotation = g_quatIdentity;	//回転
+	Vector3 m_position = g_VEC3_ZERO;		//場所
+	Quaternion m_rotation = g_QUAT_IDENTITY;	//回転
 };
 

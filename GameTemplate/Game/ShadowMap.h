@@ -37,7 +37,7 @@ public:		//メンバ関数
 	/// <param name="length">ライトがどれくらい離れているか</param>
 	/// <param name="target">ライトが照らす目標</param>
 	void CreateShadowMap
-	(const Vector3& direction, const float length = 500.0f, const Vector3& target = g_vec3Zero);
+	(const Vector3& direction, const float length = 500.0f, const Vector3& target = g_VEC3_ZERO);
 
 	/// <summary>
 	/// 影を生成するライトのパラメーター設定する
@@ -96,7 +96,7 @@ private:	//データメンバ
 	RenderTarget m_shadowMapRenderTarget;		//シャドウマップのレンダーターゲット
 	CGaussianBlur m_gaussianBlur;				//ガウシアンブラー
 	std::list<Model*> m_shadowModels;			//シャドウマップに描画するシャドウ用モデルのリスト
-	Vector3 m_targetPos = g_vec3Zero;			//シャドウライトの注視点
+	Vector3 m_targetPos = g_VEC3_ZERO;			//シャドウライトの注視点
 };
 
 

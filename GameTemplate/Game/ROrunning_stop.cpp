@@ -107,7 +107,7 @@ void ROrunning_stop::UpdateSub()
 		//壁の回転を得る
 		Quaternion qRot = m_pWall->GetRotation();
 		//アップベクトル
-		Vector3 upVec = g_vec3Up;
+		Vector3 upVec = g_VEC3_UP;
 		//アップベクトルに壁の回転を乗算する
 		qRot.Apply(upVec);
 		//正規化する

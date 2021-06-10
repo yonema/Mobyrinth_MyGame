@@ -174,14 +174,14 @@ private:
 
 	bool m_shadowReceiverFlag = false;		//シャドウレシーバー？
 
-	Vector3 m_intersectPos = g_vec3Zero;	//交差点
-	Vector3 m_lastStart = g_vec3Zero;
+	Vector3 m_intersectPos = g_VEC3_ZERO;	//交差点
+	Vector3 m_lastStart = g_VEC3_ZERO;
 
 	//デバック用
 	//後で消す
 	float m_dbg = 0.0f;	
-	Vector3 m_dbgV1 = g_vec3Zero;
-	Vector3 m_dbgV2 = g_vec3Zero;
+	Vector3 m_dbgV1 = g_VEC3_ZERO;
+	Vector3 m_dbgV2 = g_VEC3_ZERO;
 
 
 };

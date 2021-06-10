@@ -21,7 +21,7 @@ bool OOwall::StartSub()
 	//移動する距離の補正
 	const float moveLen = 200.0f;
 	//アップベクトル
-	Vector3 upVec = g_vec3Up;
+	Vector3 upVec = g_VEC3_UP;
 	//現在の自身の回転で、アップベクトルを回す
 	m_rotation.Apply(upVec);
 	//アップベクトル
@@ -35,7 +35,7 @@ bool OOwall::StartSub()
 	//停止で生成する
 	m_pRun_stop = NewGO<ROrunning_stop>(0);
 	m_pRun_stop->SetPosition(m_position);
-	m_pRun_stop->SetFrontOrBack(CReversibleObject::enBack);	
+	m_pRun_stop->SetFrontOrBack(CReversibleObject::EN_BACK);	
 	//全反転しないようにと、Tipsを表示しないようにする
 	m_pRun_stop->SetLock(true);
 

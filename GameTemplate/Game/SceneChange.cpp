@@ -96,7 +96,7 @@ void CSceneChange::InitSprite()
 	//後ろに映すスプライトを初期化
 	m_backSprite.Init(backSpriteInitData);
 	//後ろに映すスプライトのアップデート
-	m_backSprite.Update(g_vec3Zero, g_quatIdentity, { -1.0f,1.0f,1.0f });
+	m_backSprite.Update(g_VEC3_ZERO, g_QUAT_IDENTITY, { -1.0f,1.0f,1.0f });
 }
 
 /// <summary>

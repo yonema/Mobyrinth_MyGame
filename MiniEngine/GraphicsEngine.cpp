@@ -104,7 +104,7 @@ void GraphicsEngine::InitCopyToFrameBufferSprite()
 
 	// 初期化オブジェクトを使って、スプライトを初期化する
 	m_copyToFrameBufferSprite.Init(spriteInitData);
-	m_copyToFrameBufferSprite.Update(g_vec3Zero, g_quatIdentity, { -1.0f,1.0f,1.0f });
+	m_copyToFrameBufferSprite.Update(g_VEC3_ZERO, g_QUAT_IDENTITY, { -1.0f,1.0f,1.0f });
 }
 
 /**

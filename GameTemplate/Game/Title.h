@@ -115,7 +115,7 @@ private:	//データメンバ
 
 
 	//ステージのアイコンからカーソルへのベクトル
-	Vector3 m_stageIconToCursorVec = g_vec3Zero;
+	Vector3 m_stageIconToCursorVec = g_VEC3_ZERO;
 
 	int m_countStartTitle = 0;	//起動時演出の変数
 

@@ -226,7 +226,7 @@ void CStartDirecting::Update()
 //
 //	//とりあえずの処理
 //	//重力や、加速度、抵抗を実装するときは別のやり方で
-//	m_moveSpeed = g_vec3Zero;
+//	m_moveSpeed = g_VEC3_ZERO;
 //
 //	//カメラの移動スピード
 //	float moveLen = 1000.0f;
@@ -251,7 +251,7 @@ void CStartDirecting::Update()
 //
 //void StartDirecting::GetOnStage()
 //{
-//	m_upVec = g_vec3AxisY;
+//	m_upVec = g_VEC3_AXIS_Y;
 //	m_finalWPRot.Apply(m_upVec);
 //	m_upVec.Scale(150.0f);
 //	if (m_mobius)

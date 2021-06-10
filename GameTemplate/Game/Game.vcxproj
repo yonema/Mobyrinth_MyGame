@@ -433,6 +433,8 @@
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CapacityUI.h" />
     <ClInclude Include="CaslFile.h" />
+    <ClInclude Include="CommonData.h" />
+    <ClInclude Include="FrontOrBack.h" />
     <ClInclude Include="GameObjectNameData.h" />
     <ClInclude Include="LeftOrRightData.h" />
     <ClInclude Include="OBBConstData.h" />

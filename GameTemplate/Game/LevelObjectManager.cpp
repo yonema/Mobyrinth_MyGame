@@ -82,7 +82,7 @@ const Vector3 CLevelObjectManager::CalcWayPointNextPos
 		lpIndex = 0;
 	}
 
-	Vector3 addVec = g_vec3Zero;
+	Vector3 addVec = g_VEC3_ZERO;
 	int nextIndex = 0;
 	if (leftOrRight)
 	{

@@ -681,23 +681,23 @@ public:
 	}
 };
 
-const Vector2 g_vec2Zero = { 0.0f, 0.0f };
-const Vector3 g_vec3Zero = { 0.0f,  0.0f,  0.0f };
-const Vector3 g_vec3Right = { 1.0f,  0.0f,  0.0f };
-const Vector3 g_vec3Left = { -1.0f,  0.0f,  0.0f };
-const Vector3 g_vec3Up = { 0.0f,  1.0f,  0.0f };
-const Vector3 g_vec3Down = { 0.0f, -1.0f,  0.0f };
-const Vector3 g_vec3Front = { 0.0f,   0.0f,  1.0f };
-const Vector3 g_vec3Back = { 0.0f,   0.0f, -1.0f };
-const Vector3 g_vec3AxisX = { 1.0f,  0.0f,  0.0f };
-const Vector3 g_vec3AxisY = { 0.0f,  1.0f,  0.0f };
-const Vector3 g_vec3AxisZ = { 0.0f,  0.0f,  1.0f };
-const Vector3 g_vec3One = { 1.0f, 1.0f, 1.0f };
+const Vector2 g_VEC2_ZERO = { 0.0f, 0.0f };
+const Vector3 g_VEC3_ZERO = { 0.0f,  0.0f,  0.0f };
+const Vector3 g_VEC3_RIGHT = { 1.0f,  0.0f,  0.0f };
+const Vector3 g_VEC3_LEFT = { -1.0f,  0.0f,  0.0f };
+const Vector3 g_VEC3_UP = { 0.0f,  1.0f,  0.0f };
+const Vector3 g_VEC3_DOWN = { 0.0f, -1.0f,  0.0f };
+const Vector3 g_VEC3_FRONT = { 0.0f,   0.0f,  1.0f };
+const Vector3 g_VEC3_BACK = { 0.0f,   0.0f, -1.0f };
+const Vector3 g_VEC3_AXIS_X = { 1.0f,  0.0f,  0.0f };
+const Vector3 g_VEC3_AXIS_Y = { 0.0f,  1.0f,  0.0f };
+const Vector3 g_VEC3_AXIS_Z = { 0.0f,  0.0f,  1.0f };
+const Vector3 g_VEC3_ONE = { 1.0f, 1.0f, 1.0f };
 
 //追加
-const Vector4 g_vec4Black = { 0.0f,0.0f,0.0f,1.0f };		//黒色
-const Vector4 g_vec4Transparent = { 1.0f,1.0f,1.0f,0.0f };	//透明
-const Vector4 g_vec4Opacity = { 1.0f,1.0f,1.0f,1.0f };		//不透明
+const Vector4 g_VEC4_BLACK = { 0.0f,0.0f,0.0f,1.0f };		//黒色
+const Vector4 g_VEC4_TRANSPARENT = { 1.0f,1.0f,1.0f,0.0f };	//透明
+const Vector4 g_VEC4_OPACITY = { 1.0f,1.0f,1.0f,1.0f };		//不透明
 
 
 /// <summary>
@@ -725,7 +725,7 @@ public:
 	/// <param name="angle"></param>
 	void SetRotationX(float angle)
 	{
-		SetRotation(g_vec3AxisX, angle);
+		SetRotation(g_VEC3_AXIS_X, angle);
 	}
 	/// <summary>
 	/// X軸周りの回転クォータニオンを作成。
@@ -733,7 +733,7 @@ public:
 	/// <param name="angle">回転角度。単位Degree</param>
 	void SetRotationDegX(float angle)
 	{
-		SetRotationDeg(g_vec3AxisX, angle);
+		SetRotationDeg(g_VEC3_AXIS_X, angle);
 	}
 	/// <summary>
 	/// Y軸周りの回転クォータニオンを作成。
@@ -742,7 +742,7 @@ public:
 	/// <param name="angle"></param>
 	void SetRotationY(float angle)
 	{
-		SetRotation(g_vec3AxisY, angle);
+		SetRotation(g_VEC3_AXIS_Y, angle);
 	}
 	/// <summary>
 	/// Y軸周りの回転クォータニオンを作成。
@@ -750,7 +750,7 @@ public:
 	/// <param name="angle">回転角度。単位Degree</param>
 	void SetRotationDegY(float angle)
 	{
-		SetRotationDeg(g_vec3AxisY, angle);
+		SetRotationDeg(g_VEC3_AXIS_Y, angle);
 	}
 
 	/// <summary>
@@ -760,7 +760,7 @@ public:
 	/// <param name="angle"></param>
 	void SetRotationZ(float angle)
 	{
-		SetRotation(g_vec3AxisZ, angle);
+		SetRotation(g_VEC3_AXIS_Z, angle);
 	}
 	/// <summary>
 	/// Z軸周りの回転クォータニオンを作成。
@@ -768,7 +768,7 @@ public:
 	/// <param name="angle">回転角度。単位Degree</param>
 	void SetRotationDegZ(float angle)
 	{
-		SetRotationDeg(g_vec3AxisZ, angle);
+		SetRotationDeg(g_VEC3_AXIS_Z, angle);
 	}
 
 	
@@ -1027,4 +1027,4 @@ static inline Quaternion operator*(const Quaternion& q1, const Quaternion q2)
 	return qRet;
 }
 
-const Quaternion g_quatIdentity = { 0.0f,  0.0f, 0.0f, 1.0f };
+const Quaternion g_QUAT_IDENTITY = { 0.0f,  0.0f, 0.0f, 1.0f };

@@ -41,7 +41,7 @@ bool CGameCamera::Start()
 	//カメラの上方向の修正
 	//const Quaternion qRot = (m_pPlayer->GetFinalWPRot());
 	//qRot.Apply(m_toCameraPos);
-	Vector3 vecUp = g_vec3AxisY;
+	Vector3 vecUp = g_VEC3_AXIS_Y;
 	//qRot.Apply(vecUp);
 
 	m_springCamera.SetUp(vecUp);
@@ -237,14 +237,14 @@ void CGameCamera::InGameCamera()
 			//カメラへのベクトルを回す
 			qRot.Apply(m_toCameraPos);
 			//アップベクトル
-			Vector3 vecUp = g_vec3AxisY;
+			Vector3 vecUp = g_VEC3_AXIS_Y;
 			//アップベクトルを回す
 			qRot.Apply(vecUp);
 
 			qRot.Apply(upVec);
 
 			if (!m_titleMode)
-				upVec = g_vec3Zero;
+				upVec = g_VEC3_ZERO;
 
 			//注視点を設定する
 			m_springCamera.SetTarget(m_pPlayer->GetPosition() + upVec);

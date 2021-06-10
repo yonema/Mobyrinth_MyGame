@@ -20,7 +20,7 @@ bool OOReverseALL::StartSub()
 	GetOBB().SetPivot({ 0.5f,0.0f,0.5f });
 
 	//オブジェクトと当たらないようにする
-	SetFlagIsHit(false);
+	SetIsHitFlag(false);
 
 	//changeSEのサウンドキューを生成する
 	m_changeSE = NewGO<CSoundCue>(0);
@@ -224,13 +224,13 @@ void OOReverseALL::AfterHitPlayer()
 			//モデルの参照を得てから、SetMulColor()を呼ぶ
 			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
 			/*levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-			levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });*/
+			levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });*/
 			//CReversibleObjectなら反転させる
 			CReversibleObject* revers = dynamic_cast<CReversibleObject*>(levelObjects[i]);
 			if (revers)
 			{
 				//透明オブジェクトでは無かったら
-				if (revers->GetFlagIsHit())
+				if (revers->GetIsHitFlag())
 					//反転させる
 					revers->AllReverse();
 			}
@@ -238,7 +238,7 @@ void OOReverseALL::AfterHitPlayer()
 		//changeSEをループ再生をオフで再生する。
 		m_changeSE->Play(false);
 
-		Vector3 upVec = g_vec3Up;
+		Vector3 upVec = g_VEC3_UP;
 		m_rotation.Apply(upVec);
 		//この値を変更して高さを調節する
 		const float upVecLne = 100.0f;

@@ -125,7 +125,7 @@ private:	//データメンバ
 	SpriteInitData m_initData;					//スプライトの初期化データ。構造体。
 	
 	Vector3 m_position = { 100.0f,0.0f,0.0f };	//場所
-	Quaternion m_rotation = g_quatIdentity;		//回転
+	Quaternion m_rotation = g_QUAT_IDENTITY;		//回転
 	//座標系の関係で左右反転するから
 	//xの拡大を反転させる
 	Vector3 m_scale = spriteRenderConstData::DEFAULT_SCALE;	//拡大

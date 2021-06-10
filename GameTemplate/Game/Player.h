@@ -534,17 +534,17 @@ private:	//データメンバ
 	/*
 	* キャラクターのトランスフォーム
 	*/
-	Vector3 m_moveSpeed = g_vec3Zero;		//キャラクターの移動スピード
-	Vector3 m_position = g_vec3Zero;		//キャラクターの座標
-	Quaternion m_rotation = g_quatIdentity;	//キャラクターの回転
+	Vector3 m_moveSpeed = g_VEC3_ZERO;		//キャラクターの移動スピード
+	Vector3 m_position = g_VEC3_ZERO;		//キャラクターの座標
+	Quaternion m_rotation = g_QUAT_IDENTITY;	//キャラクターの回転
 
 	/*
 	* 移動関連
 	*/
 	CMyCharacterController m_myCharaCon;	//myキャラクターコントローラー
 	float m_padLStickXF = 0.0f;				//パッドの左スティックのX軸の入力情報
-	Vector3 m_onWayPosition = g_vec3Zero;	//道の上の座標
-	Vector3 m_upVec = g_vec3Up;				//プレイヤーのUpベクトル
+	Vector3 m_onWayPosition = g_VEC3_ZERO;	//道の上の座標
+	Vector3 m_upVec = g_VEC3_UP;				//プレイヤーのUpベクトル
 
 	/*
 	* 状態
@@ -573,8 +573,8 @@ private:	//データメンバ
 	*/
 	bool m_stunLeftOrRight = EN_LEFT;				//スタン中の吹っ飛ぶ方向
 	float m_stunTimer = 0.0f;						//スタンのタイマー
-	Vector3 m_stunMoveSpeedHorizontal = g_vec3Zero;	//スタン中の横方向の移動速度
-	Vector3 m_stunMoveSpeedVertical = g_vec3Zero;	//スタン中の縦方向の移動速度
+	Vector3 m_stunMoveSpeedHorizontal = g_VEC3_ZERO;	//スタン中の横方向の移動速度
+	Vector3 m_stunMoveSpeedVertical = g_VEC3_ZERO;	//スタン中の縦方向の移動速度
 	bool m_stunMoveFlag = true;						//スタン中に吹っ飛び中か？
 	float m_blinkTimer = 0.0f;						//スタン状態にモデルを点滅させるタイマー
 	COBB* m_hitOBB = nullptr;						//衝突したOBBのポインタ
@@ -616,6 +616,6 @@ private:	//データメンバ
 	int m_lpIndex = m_rpIndex + 1;				//左のウェイポイントのインデックス
 	int m_wayPointState = 0;					//自身がどのウェイポイントにいるか表すステート
 	int m_maxWayPointState = 0;					//ウェイポイントステートの最大の値
-	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
+	Quaternion m_finalWPRot = g_QUAT_IDENTITY;	//補完済みの最終的なウェイポイントの回転
 };
 

@@ -52,7 +52,7 @@ private:	//privateなオーバーライドしてほしいメンバ関数
 	virtual void QuerySub()
 	{
 		//重なっているかを判定しない場合、この関数の処理をしない
-		if (GetFlagIsHit() == false) {
+		if (GetIsHitFlag() == false) {
 			return;
 		}
 	};
@@ -81,8 +81,8 @@ protected:	//ここのメンバ関数を主に使う
 	/// <param name="color">自己発光色</param>
 	void SetEmissionColor(const Vector4& color)
 	{
-		m_modelRender[enFront]->SetEmissionColor(color);
-		m_modelRender[enBack]->SetEmissionColor(color);
+		m_modelRender[EN_FRONT]->SetEmissionColor(color);
+		m_modelRender[EN_BACK]->SetEmissionColor(color);
 	}
 
 public:
@@ -258,23 +258,23 @@ private:	//privateなメンバ関数
 //	/// </summary>
 //	enum EnFrontAndBack
 //	{
-//		enFront,			//表状態
-//		enBack,				//裏状態
-//		enFrontAndBackNum,	//表裏の数
+//		EN_FRONT,			//表状態
+//		EN_BACK,				//裏状態
+//		EN_FRONT_AND_BACK_NUM,	//表裏の数
 //	};
 
 private:	//データメンバ
-	//bool m_frontOrBack = enFront;				//表か裏か？
+	//bool m_frontOrBack = EN_FRONT;				//表か裏か？
 	bool m_bothModelactiveFlag = true;			//表裏両方の有効化フラグ
-	CModelRender* m_modelRender[enFrontAndBackNum] = { nullptr };	//モデルレンダラー
-	int m_reversibleType[enFrontAndBackNum] = { enEmpty };	//表と裏のオブジェクトのタイプ
+	CModelRender* m_modelRender[EN_FRONT_AND_BACK_NUM] = { nullptr };	//モデルレンダラー
+	int m_reversibleType[EN_FRONT_AND_BACK_NUM] = { enEmpty };	//表と裏のオブジェクトのタイプ
 
 	float m_throwCounter = 0.0f;						//投げている時のカウンター
-	Quaternion m_throwRot = g_quatIdentity;		//下に投げるときの回転
+	Quaternion m_throwRot = g_QUAT_IDENTITY;		//下に投げるときの回転
 
 	static float m_heldUpLen;					//持ち上げた時の、上に持ち上げるベクトルの長さ
 	float m_timer = 0.0f;						//タイマー
-	Vector3 m_addPosition = g_vec3Zero;			//ポジションに加えるベクトル
+	Vector3 m_addPosition = g_VEC3_ZERO;			//ポジションに加えるベクトル
 	bool m_virticalRepelledFlag = false;		//盾に弾かれるか？
 	Effect* m_reverseall2 = nullptr;			//全反転
 	CSoundCue* m_capacity_overSE = nullptr;		//capacity_overのSE

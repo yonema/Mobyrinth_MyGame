@@ -32,7 +32,7 @@ bool CSky::Start()
 	//モデルを初期化する
 	m_model.Init(initData);
 	//モデルを更新する
-	m_model.UpdateWorldMatrix(m_position, g_quatIdentity, m_scale);
+	m_model.UpdateWorldMatrix(m_position, g_QUAT_IDENTITY, m_scale);
 
 	return true;
 }
@@ -44,7 +44,7 @@ void CSky::Update()
 	if (m_isDirty)
 	{
 		//モデルを更新
-		m_model.UpdateWorldMatrix(m_position, g_quatIdentity, m_scale);
+		m_model.UpdateWorldMatrix(m_position, g_QUAT_IDENTITY, m_scale);
 
 		//ダーティフラグを折る
 		m_isDirty = false;

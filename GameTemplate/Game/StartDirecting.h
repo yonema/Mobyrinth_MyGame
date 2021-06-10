@@ -86,11 +86,11 @@ public:	//Get、Set関数
 
 
 private:
-	Vector3 m_position = g_vec3Zero; //演出に使用する注視点座標
-	Vector3 m_moveSpeed = g_vec3Zero;
-	Vector3 m_onWayPosition = g_vec3Zero;		//道の上の座標
-	Quaternion m_rotation = g_quatIdentity;
-	Vector3 m_upVec = g_vec3Up;
+	Vector3 m_position = g_VEC3_ZERO; //演出に使用する注視点座標
+	Vector3 m_moveSpeed = g_VEC3_ZERO;
+	Vector3 m_onWayPosition = g_VEC3_ZERO;		//道の上の座標
+	Quaternion m_rotation = g_QUAT_IDENTITY;
+	Vector3 m_upVec = g_VEC3_UP;
 
 	float m_padLStickXF = 0.0f;		//パッドの左スティックのX軸の入力情報
 
@@ -100,7 +100,7 @@ private:
 	int m_lpIndex = m_rpIndex + 1;	//左のウェイポイントのインデックス
 	int m_wayPointState = 0;		//自身がどのウェイポイントにいるか表すステート
 	int m_maxWayPointState = 0;		//ウェイポイントステートの最大の値
-	Quaternion m_finalWPRot = g_quatIdentity;	//補完済みの最終的なウェイポイントの回転
+	Quaternion m_finalWPRot = g_QUAT_IDENTITY;	//補完済みの最終的なウェイポイントの回転
 
 	CMobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
 
@@ -119,7 +119,7 @@ private:
 	bool m_checkStartDirecting = true; //ステージ開始時の演出をしているかどうか。（GameCameraクラスで使用）
 	bool checkZoomIn = false; //カメラのズーム処理のフラグ
 	int countZoomIn = 0; //カメラのズーム中のカウント
-	Vector3 m_startPosition = g_vec3Zero; //演出に使用する注視点座標の開始位置
+	Vector3 m_startPosition = g_VEC3_ZERO; //演出に使用する注視点座標の開始位置
 
 	const int startDirectingTime = 120; //カメラが寄る演出の時間
 

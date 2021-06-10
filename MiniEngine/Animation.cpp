@@ -88,7 +88,7 @@ void Animation::UpdateGlobalPose()
 	Quaternion* qGlobalPose = (Quaternion*)alloca(sizeof(Quaternion) * numBone);
 	Vector3* vGlobalPose = (Vector3*)alloca(sizeof(Vector3) * numBone);
 	Vector3* vGlobalScale = (Vector3*)alloca(sizeof(Vector3) * numBone);
-	m_footstepDeltaValue = g_vec3Zero;
+	m_footstepDeltaValue = g_VEC3_ZERO;
 	for (int i = 0; i < numBone; i++) {
 		qGlobalPose[i] = Quaternion::Identity;
 		vGlobalPose[i] = Vector3::Zero;

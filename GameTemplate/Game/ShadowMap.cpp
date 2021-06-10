@@ -69,7 +69,7 @@ void CShadowMap::CreateShadowMap
 		lightCamera.SetUp({ 1.0f,0.0f,0.0f });
 	else
 		//通常はYアップ
-		lightCamera.SetUp(g_vec3Up);
+		lightCamera.SetUp(g_VEC3_UP);
 
 	//ライトカメラを並行投影にする
 	lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Ortho);
@@ -120,7 +120,7 @@ void CShadowMap::Draw(RenderContext& renderContext)
 			lightCamera.SetUp({ 1.0f,0.0f,0.0f });
 		else
 			//通常はYアップ
-			lightCamera.SetUp(g_vec3Up);
+			lightCamera.SetUp(g_VEC3_UP);
 
 		//ライトカメラを並行投影にする
 		lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Ortho);
@@ -193,7 +193,7 @@ void CShadowMap::SetShadowParam
 		lightCamera.SetUp({ 1.0f,0.0f,0.0f });
 	else
 		//通常はYアップ
-		lightCamera.SetUp(g_vec3Up);
+		lightCamera.SetUp(g_VEC3_UP);
 
 	//ライトカメラを並行投影にする
 	lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Ortho);
