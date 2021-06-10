@@ -22,8 +22,8 @@ void AnimationPlayController::ChangeAnimationClip(AnimationClip* clip)
 	m_currentKeyFrameNo = 0;
 	m_time = 0.0f;
 	m_isPlaying = true;
-	m_footstepPos = g_vec3Zero;
-	m_footstepDeltaValue = g_vec3Zero;
+	m_footstepPos = g_VEC3_ZERO;
+	m_footstepDeltaValue = g_VEC3_ZERO;
 	//アニメーションイベントの発生フラグをすべてfalseにする。
 	auto& animEventArray = m_animationClip->GetAnimationEvent();
 	for (auto i = 0; i < m_animationClip->GetNumAnimationEvent(); i++) {
@@ -47,7 +47,7 @@ void AnimationPlayController::InvokeAnimationEvent(Animation* animation)
 
 void AnimationPlayController::StartLoop()
 {
-	m_footstepPos = g_vec3Zero;
+	m_footstepPos = g_VEC3_ZERO;
 	m_currentKeyFrameNo = 0;
 	m_time = 0.0f;
 	//アニメーションイベントをすべて未発生にする。

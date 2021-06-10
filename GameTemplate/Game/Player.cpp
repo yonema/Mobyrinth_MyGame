@@ -619,7 +619,7 @@ void Player::Move()
 
 	//スピードをリセットする
 	//重力や、加速度、抵抗を実装するときは別のやり方で
-	m_moveSpeed = g_vec3Zero;
+	m_moveSpeed = g_VEC3_ZERO;
 
 
 	//スタン中でないか？
@@ -678,7 +678,7 @@ void Player::StunMove()
 		//プレイヤーから衝突したOBBへのベクトル
 		Vector3 playerToHitOBB = m_hitOBB->GetPosition() - m_onWayPosition;
 		//右向きのベクトル
-		Vector3 rightVec = g_vec3Right;
+		Vector3 rightVec = g_VEC3_RIGHT;
 		//右向きのベクトルを回して、プレイヤーの右向きのベクトルにする
 		m_finalWPRot.Apply(rightVec);
 		//OBBへのベクトルと、右向きのベクトルの内積
@@ -726,8 +726,8 @@ void Player::StunMove()
 		//吹っ飛び中のフラグが折れている
 
 		//吹っ飛ぶ力をゼロにする
-		m_stunMoveSpeedHorizontal = g_vec3Zero;
-		m_stunMoveSpeedVertical = g_vec3Zero;
+		m_stunMoveSpeedHorizontal = g_VEC3_ZERO;
+		m_stunMoveSpeedVertical = g_VEC3_ZERO;
 	}
 
 	//点滅処理
@@ -745,7 +745,7 @@ void Player::StunMove()
 	else if (m_blinkTimer < blinkInterval * 2)
 	{
 		//元の明るさに戻す
-		m_modelRender->SetEmissionColor(g_vec4Black);
+		m_modelRender->SetEmissionColor(g_VEC4_BLACK);
 	}
 	//点滅タイマーが、点滅の間隔の2倍を過ぎたら
 	else
@@ -773,7 +773,7 @@ void Player::StunMove()
 		//点滅タイマーをゼロにする
 		m_blinkTimer = 0.0f;
 		//明るさを元に戻す
-		m_modelRender->SetEmissionColor(g_vec4Black);
+		m_modelRender->SetEmissionColor(g_VEC4_BLACK);
 
 	}
 
@@ -907,7 +907,7 @@ void Player::Rotation()
 	m_rotation.Multiply(m_finalWPRot);
 
 	//プレイヤーのUpベクトルにYUpベクトルを入れる
-	m_upVec = g_vec3AxisY;
+	m_upVec = g_VEC3_AXIS_Y;
 	//Yupを補完済みの回転で回す
 	m_finalWPRot.Apply(m_upVec);
 	//正規化する
@@ -1149,7 +1149,7 @@ void Player::Fall()
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	//補完済みの回転を初期化する
-	m_finalWPRot = g_quatIdentity;
+	m_finalWPRot = g_QUAT_IDENTITY;
 
 
 	return;

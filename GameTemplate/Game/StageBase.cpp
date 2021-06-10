@@ -161,7 +161,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROmizu_kori* RObject;
 				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"fire") == true)
@@ -169,7 +169,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROmizu_kori* RObject;
 				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"koori") == true)
@@ -177,7 +177,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROmizu_kori* RObject;
 				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 				return true;
 			}
 			//mizu_kori_switch
@@ -186,7 +186,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROmizu_kori* RObject;
 				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 				RObject->SetTransparentObject();
 				return true;
 			}
@@ -196,7 +196,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObird_fish* RObject;
 				RObject = NewGO<RObird_fish>(0, "bird_fish");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"fish") == true)
@@ -204,7 +204,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				RObird_fish* RObject;
 				RObject = NewGO<RObird_fish>(0, "bird_fish");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 				return true;
 			}
 			//running_stop
@@ -213,7 +213,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROrunning_stop* RObject;
 				RObject = NewGO<ROrunning_stop>(0, "running_stop");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"teishi") == true)
@@ -221,7 +221,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROrunning_stop* RObject;
 				RObject = NewGO<ROrunning_stop>(0, "running_stop");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 				return true;
 			}
 			//wire_string
@@ -230,7 +230,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROwire_string* RObject;
 				RObject = NewGO<ROwire_string>(0, "wire_string");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"string") == true)
@@ -238,7 +238,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROwire_string* RObject;
 				RObject = NewGO<ROwire_string>(0, "wire_string");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 				return true;
 			}
 			//nail_bar
@@ -247,7 +247,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROnail_bar* RObject;
 				RObject = NewGO<ROnail_bar>(0, "nail_bar");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"bar") == true)
@@ -255,7 +255,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROnail_bar* RObject;
 				RObject = NewGO<ROnail_bar>(0, "nail_bar");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 				return true;
 			}
 			//nail_bar_switch
@@ -264,7 +264,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			ROnail_bar* RObject;
 			RObject = NewGO<ROnail_bar>(0, "nail_bar");
 			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 			RObject->SetTransparentObject();
 			//スイッチの処理
 			return true;
@@ -274,7 +274,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			ROnail_bar* RObject;
 			RObject = NewGO<ROnail_bar>(0, "nail_bar");
 			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 			RObject->SetTransparentObject();
 			//スイッチの処理
 			return true;
@@ -285,7 +285,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROaxe_pickaxe* RObject;
 				RObject = NewGO<ROaxe_pickaxe>(0, "axe_pickaxe");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"pickaxe") == true)
@@ -293,7 +293,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROaxe_pickaxe* RObject;
 				RObject = NewGO<ROaxe_pickaxe>(0, "axe_pickaxe");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enBack);
+				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 				return true;
 			}
 			//keymold_empty
@@ -302,7 +302,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				ROkeymold_empty* RObject;
 				RObject = NewGO<ROkeymold_empty>(0, "keymold_empty");
 				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::enFront);
+				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 				return true;
 			}
 			//key_padlock
@@ -311,7 +311,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			ROkey_padlock* RObject;
 			RObject = NewGO<ROkey_padlock>(0, "key");
 			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 			return true;
 			}
 			else if (objData.EqualObjectName(L"padlock") == true)
@@ -319,7 +319,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			ROkey_padlock* RObject;
 			RObject = NewGO<ROkey_padlock>(0, "padlock");
 			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 			return true;
 			}
 			//keymold_padlock_switch
@@ -328,7 +328,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			ROkey_padlock* RObject;
 			RObject = NewGO<ROkey_padlock>(0, "key");
 			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 			RObject->SetTransparentObject();
 			//スイッチの処理
 			return true;
@@ -338,7 +338,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			ROkey_padlock* RObject;
 			RObject = NewGO<ROkey_padlock>(0, "padlock");
 			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 			RObject->SetTransparentObject();
 			//スイッチの処理
 			return true;
@@ -349,7 +349,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			ROleft_right* RObject;
 			RObject = NewGO<ROleft_right>(0, "left_right");
 			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::enFront);
+			RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 			return true;
 			}
 			else if (objData.EqualObjectName(L"right") == true)
@@ -357,7 +357,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			ROleft_right* RObject;
 			RObject = NewGO<ROleft_right>(0, "left_right");
 			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::enBack);
+			RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
 			return true;
 			}
 
@@ -484,7 +484,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			//RObird_fish* RObject;
 			//RObject = NewGO<RObird_fish>(0, "bird_fish");
 			//RObject->SetPosition(objData.position);
-			//RObject->SetFrontOrBack(CReversibleObject::enFront);
+			//RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
 			//return true;
 			//}
 

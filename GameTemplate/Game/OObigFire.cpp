@@ -16,7 +16,7 @@ bool OObigFire::StartSub()
 	//ポイントライトを生成
 	m_pointLight = NewGO<CPointLight>(0);
 	Vector3 ptLigPos = m_position;
-	Vector3 up = g_vec3Up;
+	Vector3 up = g_VEC3_UP;
 	m_rotation.Apply(up);
 	up.Scale(300.0f);
 	ptLigPos += up;
@@ -41,7 +41,7 @@ bool OObigFire::StartSub()
 	m_flame_water->Init(u"Assets/effect/flame_water.efk");
 	float scale = 200.0f;								//小さいので大きくしておく
 	m_flame_water->SetScale({ scale ,scale ,scale });
-	Vector3 upVec = g_vec3Up;
+	Vector3 upVec = g_VEC3_UP;
 	m_rotation.Apply(upVec);
 	//この値を変更して高さを調節する
 	const float upVecLne = 100.0f;
@@ -75,7 +75,7 @@ void OObigFire::UpdateSub()
 {
 	Burn();
 
-	if (GetFlagIsHit())
+	if (GetIsHitFlag())
 		m_pointLight->SetColor({ 500.0f,1.0f,1.0f,1.0f });
 	else
 		m_pointLight->SetColor({ 0.0f,0.0f,0.0f,1.0f });
@@ -112,9 +112,9 @@ void OObigFire::Damage()
 			//m_hp / m_maxHpより先にg_vec3One * m_hpが呼ばれ
 			//Vector3の演算子のオーバーライドの引数がfloat型だから
 			//m_hpが渡されるときに強制型変換が起きてfloat型になるから
-			//これがSetScale(g_vec3One * (m_hp / m_maxHp))
+			//これがSetScale(g_VEC3_ONE * (m_hp / m_maxHp))
 			//だったらうまくいかない。
-		SetScale(g_vec3One * (m_hp + sizeComplement) / (m_maxHp + sizeComplement));
+		SetScale(g_VEC3_ONE * (m_hp + sizeComplement) / (m_maxHp + sizeComplement));
 	}
 	m_flame_water->Play();								//再生
 	m_flame_waterSE->Play(false);						//再生

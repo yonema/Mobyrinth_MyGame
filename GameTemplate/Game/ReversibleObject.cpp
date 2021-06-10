@@ -67,7 +67,7 @@ CReversibleObject::~CReversibleObject()
 	Delete();
 
 	//表と裏のモデルを消去
-	for (int i = 0; i < enFrontAndBackNum; i++)
+	for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
 	{
 		DeleteGO(m_modelRender[i]);
 	}
@@ -103,19 +103,19 @@ bool CReversibleObject::Init
 	const char* filePath_back, const int type_back)
 {
 	//表と裏の分、モデルレンダラーを生成
-	for (int i = 0; i < enFrontAndBackNum; i++)
+	for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
 	{
 		m_modelRender[i] = NewGO<CModelRender>(0);
 	}
 	//モデルレンダラーを初期化
-	m_modelRender[enFront]->Init(filePath_front, D3D12_CULL_MODE_NONE);
-	m_modelRender[enBack]->Init(filePath_back, D3D12_CULL_MODE_NONE);
-	m_modelRender[enFront]->SetShadowReceiverFlag(false);
-	m_modelRender[enBack]->SetShadowReceiverFlag(false);
+	m_modelRender[EN_FRONT]->Init(filePath_front, D3D12_CULL_MODE_NONE);
+	m_modelRender[EN_BACK]->Init(filePath_back, D3D12_CULL_MODE_NONE);
+	m_modelRender[EN_FRONT]->SetShadowReceiverFlag(false);
+	m_modelRender[EN_BACK]->SetShadowReceiverFlag(false);
 
 	//タイプを設定
-	m_reversibleType[enFront] = type_front;
-	m_reversibleType[enBack] = type_back;
+	m_reversibleType[EN_FRONT] = type_front;
+	m_reversibleType[EN_BACK] = type_back;
 	//今が表の状態か裏の状態か設定する
 	SetObjectType(m_reversibleType[m_frontOrBack]);
 	SetFrontOrBack(m_frontOrBack);
@@ -155,7 +155,7 @@ void CReversibleObject::AllReverse()
 	//現在の表か裏の、逆の設定にする
 	SetFrontOrBack(!m_frontOrBack);
 
-	Vector3 upVec = g_vec3Up;
+	Vector3 upVec = g_VEC3_UP;
 	m_rotation.Apply(upVec);
 	//この値を変更して高さを調節する
 	const float upVecLne = 100.0f;
@@ -214,8 +214,8 @@ void CReversibleObject::SetBothModelActiveFlag(const bool activeFlag)
 	else
 	{
 		//両方を無効化する
-		m_modelRender[enFront]->Deactivate();
-		m_modelRender[enBack]->Deactivate();
+		m_modelRender[EN_FRONT]->Deactivate();
+		m_modelRender[EN_BACK]->Deactivate();
 	}
 	
 }
@@ -290,7 +290,7 @@ void CReversibleObject::PureVirtualUpdate()
 
 
 	//モデルレンダラーの更新
-	for (int i = 0; i < enFrontAndBackNum; i++)
+	for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
 	{
 		//モデルレンダラーの場所と回転と拡大
 		m_modelRender[i]->SetPosition(m_position);
@@ -354,14 +354,14 @@ void CReversibleObject::LiftedPlayer()
 	nextPos.y -= yPosAdjustment;
 
 	//X軸に加えるベクトル
-	Vector3 addVecX = g_vec3Right;
+	Vector3 addVecX = g_VEC3_RIGHT;
 	//プレイヤーの向きが右向きなら
 	if (m_pPlayer->GetEnLeftOrRight() == enRight)
 		//逆向きのベクトルにする
-		addVecX = g_vec3Left;
+		addVecX = g_VEC3_LEFT;
 
 	//Y軸に加えるベクトル
-	Vector3 addVecY = g_vec3Up;
+	Vector3 addVecY = g_VEC3_UP;
 
 	//プレイヤーの回転
 	Quaternion playerQRot = m_pPlayer->GetFinalWPRot();
@@ -495,7 +495,7 @@ void CReversibleObject::HeldPlayer()
 	//プレイヤーの回転を保持
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
 	//上方向ベクトルを保持
-	Vector3 up = g_vec3Up;
+	Vector3 up = g_VEC3_UP;
 	//上方向のベクトルをプレイヤーの回転で回す
 	qRot.Apply(up);
 	//ベクトルを伸ばす
@@ -514,7 +514,7 @@ void CReversibleObject::HeldPlayer()
 		//更新前から更新後の座標へのベクトル
 		Vector3 oldToNext = m_position - oldPosition;
 		//右へのベクトル
-		Vector3 rightVec = g_vec3Left;
+		Vector3 rightVec = g_VEC3_LEFT;
 		//自身の回転で右へのベクトルを回す
 		m_rotation.Apply(rightVec);
 		//更新前から更新後の座標へのベクトルと
@@ -595,7 +595,7 @@ void CReversibleObject::ThrownDown()
 	const float maxThrowCounter = 0.5f;
 
 	//下方向のベクトルを保持する
-	Vector3 dir = g_vec3Down;
+	Vector3 dir = g_VEC3_DOWN;
 	//プレイヤーの回転で下方向のべクトルを回す
 	m_throwRot.Apply(dir);
 	Vector3 addDir = dir;
@@ -734,7 +734,7 @@ void CReversibleObject::Cancel()
 	//プレイヤーの現在の回転を持ってくる
 	Quaternion qRot = m_pPlayer->GetFinalWPRot();
 	//UpベクトルにYUpベクトルを入れる
-	Vector3 up = g_vec3Up;
+	Vector3 up = g_VEC3_UP;
 	//Upベクトルを回す
 	qRot.Apply(up);
 	//Upベクトルを上に伸ばす
@@ -776,7 +776,7 @@ void CReversibleObject::Cancel()
 //	//左方向に投げる
 //	if (m_playerLeftOrRight == enLeft) {
 //		//オブジェクトが横方向に移動するベクトルの作成
-//		Vector3 dir = g_vec3Right;
+//		Vector3 dir = g_VEC3_RIGHT;
 //		m_throwRot.Apply(dir);
 //		dir.Scale(700.0f);
 //		m_position += dir * GameTime().GetFrameDeltaTime();
@@ -804,7 +804,7 @@ void CReversibleObject::Cancel()
 //	//右方向に投げる
 //	else if (m_playerLeftOrRight == enRight) {
 //		//オブジェクトが横方向に移動するベクトルの作成
-//		Vector3 dir = g_vec3Left;
+//		Vector3 dir = g_VEC3_LEFT;
 //		m_throwRot.Apply(dir);
 //		dir.Scale(700.0f);
 //		m_position += dir * GameTime().GetFrameDeltaTime();
@@ -1167,7 +1167,7 @@ const bool CReversibleObject::IsCapacityOver(const int frontOrBackSide, const in
 //	//左方向に投げる
 //	if (m_playerLeftOrRight == enLeft) {
 //		//オブジェクトが横方向に移動するベクトルの作成
-//		Vector3 dir = g_vec3Right;
+//		Vector3 dir = g_VEC3_RIGHT;
 //		m_throwRot.Apply(dir);
 //		dir.Scale(700.0f);
 //		m_position += dir * GameTime().GetFrameDeltaTime();
@@ -1195,7 +1195,7 @@ const bool CReversibleObject::IsCapacityOver(const int frontOrBackSide, const in
 //	//右方向に投げる
 //	else if (m_playerLeftOrRight == enRight) {
 //		//オブジェクトが横方向に移動するベクトルの作成
-//		Vector3 dir = g_vec3Left;
+//		Vector3 dir = g_VEC3_LEFT;
 //		m_throwRot.Apply(dir);
 //		dir.Scale(700.0f);
 //		m_position += dir * GameTime().GetFrameDeltaTime();

@@ -141,6 +141,15 @@
     <Filter Include="MyCode\Resource">
       <UniqueIdentifier>{7a6bf443-7bd9-4184-8562-fc755c4d5e44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\LevelObject\Mobius">
+      <UniqueIdentifier>{7b3468d2-be11-4f71-905f-47470c52806d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\CommonData">
+      <UniqueIdentifier>{5566feb7-bd2b-4e35-a094-428d1a132d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\CommonData\GameObject">
+      <UniqueIdentifier>{34db99e8-ddd2-4cf0-bece-34f414af101b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -425,9 +434,6 @@
     <ClCompile Include="..\..\ExEngine\effect\Effect.cpp">
       <Filter>ExEngine\effect</Filter>
     </ClCompile>
-    <ClCompile Include="Mobius.cpp">
-      <Filter>MyCode\LevelObject</Filter>
-    </ClCompile>
     <ClCompile Include="OOReverseALL.cpp">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
@@ -502,6 +508,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>MyCode\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Mobius.cpp">
+      <Filter>MyCode\LevelObject\Mobius</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -823,9 +832,6 @@
     <ClInclude Include="..\..\ExEngine\effect\Effect.h">
       <Filter>ExEngine\effect</Filter>
     </ClInclude>
-    <ClInclude Include="Mobius.h">
-      <Filter>MyCode\LevelObject</Filter>
-    </ClInclude>
     <ClInclude Include="OOReverseALL.h">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
@@ -889,22 +895,10 @@
     <ClInclude Include="Util.h">
       <Filter>MyCode\Util</Filter>
     </ClInclude>
-    <ClInclude Include="TitleNameData.h">
-      <Filter>MyCode\Util</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>MyCode\Util</Filter>
     </ClInclude>
-    <ClInclude Include="PriorityData.h">
-      <Filter>MyCode\Util</Filter>
-    </ClInclude>
     <ClInclude Include="Noncopyable.h">
-      <Filter>MyCode\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectNameData.h">
-      <Filter>MyCode\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="LeftOrRightData.h">
       <Filter>MyCode\Util</Filter>
     </ClInclude>
     <ClInclude Include="SpriteRender.h">
@@ -933,6 +927,27 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>MyCode\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Mobius.h">
+      <Filter>MyCode\LevelObject\Mobius</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleNameData.h">
+      <Filter>MyCode\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LeftOrRightData.h">
+      <Filter>MyCode\CommonData</Filter>
+    </ClInclude>
+    <ClInclude Include="FrontOrBack.h">
+      <Filter>MyCode\CommonData</Filter>
+    </ClInclude>
+    <ClInclude Include="PriorityData.h">
+      <Filter>MyCode\CommonData\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectNameData.h">
+      <Filter>MyCode\CommonData\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonData.h">
+      <Filter>MyCode\CommonData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

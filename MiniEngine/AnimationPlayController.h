@@ -135,7 +135,7 @@ private:
 	float					m_interpolateEndTime;				//!<補完終了時間
 	bool					m_isPlaying = false;				//!<再生中？
 	Skeleton*				m_skeleton = nullptr;				//!<スケルトン。
-	Vector3					m_footstepDeltaValue = g_vec3Zero;	//フットステップの移動ベクトル。
-	Vector3					m_footstepPos = g_vec3Zero;			//フットステップボーンの座標。
+	Vector3					m_footstepDeltaValue = g_VEC3_ZERO;	//フットステップの移動ベクトル。
+	Vector3					m_footstepPos = g_VEC3_ZERO;			//フットステップボーンの座標。
 	int						m_footstepBoneNo = -1;				//フットステップのボーンの番号。
 };

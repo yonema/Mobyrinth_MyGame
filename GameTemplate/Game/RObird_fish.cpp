@@ -11,20 +11,20 @@ bool RObird_fish::StartSub()
 		"Assets/modelData/fish.tkm", enFish);
 
 	//表と裏のモデルレンダラーの生成
-	for (int i = 0; i < enFrontAndBackNum; i++)
+	for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
 	{
 		m_otherModelRender[i] = NewGO<CModelRender>(0);
 	}
 
 	//もう一つの表と裏のモデルレンダラーの初期化
-	m_otherModelRender[enFront]->Init("Assets/modelData/grilled_chicken.tkm");
-	m_otherModelRender[enBack]->Init("Assets/modelData/grilled_fish.tkm");
+	m_otherModelRender[EN_FRONT]->Init("Assets/modelData/grilled_chicken.tkm");
+	m_otherModelRender[EN_BACK]->Init("Assets/modelData/grilled_fish.tkm");
 	//もう一つの表と裏のオブジェクトのタイプを設定
-	m_reversibleType[enFront] = enGrilledChicken;
-	m_reversibleType[enBack] = enGrilledFish;
+	m_reversibleType[EN_FRONT] = enGrilledChicken;
+	m_reversibleType[EN_BACK] = enGrilledFish;
 
 	//モデルレンダラーを無効化して非常時にする
-	for (int i = 0; i < enFrontAndBackNum; i++)
+	for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
 	{
 		m_otherModelRender[i]->Deactivate();
 	}
@@ -36,7 +36,7 @@ bool RObird_fish::StartSub()
 RObird_fish::~RObird_fish()
 {
 	//表と裏のモデルレンダラーを破棄
-	for (int i = 0; i < enFrontAndBackNum; i++)
+	for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
 	{
 		DeleteGO(m_otherModelRender[i]);
 	}
@@ -129,7 +129,7 @@ void RObird_fish::QuerySub()
 void RObird_fish::UpdateSub()
 {
 	//もう一つの裏表モデルの更新
-	for (int i = 0; i < enFrontAndBackNum; i++)
+	for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
 	{
 		//もう一つの裏表モデルの場所と回転と拡大を設定
 		m_otherModelRender[i]->SetPosition(m_position);

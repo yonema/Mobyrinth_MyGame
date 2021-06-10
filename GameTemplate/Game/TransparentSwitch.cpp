@@ -552,7 +552,7 @@ void OOTransparentSwitch::SetTimerFRParam
 	//対応する透明オブジェクトの回転を持ってくる
 	Quaternion qRot = levelObject->GetRotation();
 	//アップベクトル
-	Vector3 upVec = g_vec3Up;
+	Vector3 upVec = g_VEC3_UP;
 	//回転で回す
 	qRot.Apply(upVec);
 	//アップベクトルの長さ
@@ -599,11 +599,11 @@ void OOTransparentSwitch::ChangeTransparent()
 
 		//モデルの参照を得てから、SetMulColor()を呼ぶ
 		//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		levelObjects[i]->GetModelRender(CReversibleObject::EN_FRONT)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 		//オブジェクトの輪郭線を書くようにする
-		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetDrawOutLineFlag(true);
-		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetDrawOutLineFlag(true);
+		levelObjects[i]->GetModelRender(CReversibleObject::EN_FRONT)->SetDrawOutLineFlag(true);
+		levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetDrawOutLineFlag(true);
 
 		levelObjects[i]->TransparentSwitchOff();
 
@@ -637,11 +637,11 @@ void OOTransparentSwitch::ChangeEntity()
 
 		//モデルの参照を得てから、SetMulColor()を呼ぶ
 		//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		levelObjects[i]->GetModelRender(CReversibleObject::EN_FRONT)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 		//オブジェクトの輪郭線を書かないようにする
-		levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetDrawOutLineFlag(false);
-		levelObjects[i]->GetModelRender(CReversibleObject::enBack)->SetDrawOutLineFlag(false);
+		levelObjects[i]->GetModelRender(CReversibleObject::EN_FRONT)->SetDrawOutLineFlag(false);
+		levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetDrawOutLineFlag(false);
 
 		levelObjects[i]->TransparentSwitchOn();
 

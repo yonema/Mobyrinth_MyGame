@@ -6,7 +6,7 @@
 class NormalSmoothing {
 private:
 	struct SSmoothVertex {
-		Vector3 newNormal = g_vec3Zero;
+		Vector3 newNormal = g_VEC3_ZERO;
 		TkmFile::SVertex* vertex = nullptr;
 	};
 	struct SFace {
@@ -335,9 +335,9 @@ void TkmFile::Load(const char* filePath)
 			auto& vertex = meshParts.vertexBuffer[vertNo];
 			vertex.pos.Set(vertexTmp.pos[0], vertexTmp.pos[1], vertexTmp.pos[2]);
 		//	vertex.normal.Set(vertexTmp.normal[0], vertexTmp.normal[1], vertexTmp.normal[2]);
-			vertex.normal = g_vec3Zero;
-			vertex.tangent = g_vec3Zero;
-			vertex.binormal = g_vec3Zero;
+			vertex.normal = g_VEC3_ZERO;
+			vertex.tangent = g_VEC3_ZERO;
+			vertex.binormal = g_VEC3_ZERO;
 			vertex.uv.Set(vertexTmp.uv[0], vertexTmp.uv[1]);
 			vertex.skinWeights.Set(vertexTmp.weights[0], vertexTmp.weights[1], vertexTmp.weights[2], vertexTmp.weights[3]);
 			vertex.indices[0] = vertexTmp.indices[0] != -1 ? vertexTmp.indices[0] : 0;

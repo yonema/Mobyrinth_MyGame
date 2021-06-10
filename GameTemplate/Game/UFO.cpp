@@ -32,7 +32,7 @@ bool CUFO::PureVirtualStart()
 	//m_spotLightUp->SetColor({ 300.0f, 300.0f, 0.0f, 0.0f });
 	//m_spotLightUp->SetRange(500.0f);
 	//m_spotLightUp->SetAngle(/*90.0f*/3.14f * 0.5f);
-	//m_spotLightUp->SetDirection(g_vec3Down);
+	//m_spotLightUp->SetDirection(g_VEC3_DOWN);
 
 
 	//下向きのスポットライトの生成と初期化
@@ -44,7 +44,7 @@ bool CUFO::PureVirtualStart()
 	m_spotLightDown->SetPosition(m_position + up);
 	m_spotLightDown->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	m_spotLightDown->SetRange(500.0f);
-	m_spotLightDown->SetDirection(g_vec3Down);
+	m_spotLightDown->SetDirection(g_VEC3_DOWN);
 	m_spotLightDown->SetAngle(3.14f * 0.25f);*/
 
 	//UFOの光線のモデルの生成と初期化
@@ -66,7 +66,7 @@ bool CUFO::PureVirtualStart()
 	m_ufoLandingPoint->SetPosition(m_position);
 
 	//他のレベルオブジェクトと衝突しなくする
-	SetFlagIsHit(false);
+	SetIsHitFlag(false);
 
 	//UFOmoveSEのサウンドキューを生成する
 	m_UFOmoveSE = NewGO<CSoundCue>(0);
@@ -193,7 +193,7 @@ void CUFO::PureVirtualUpdate()
 	//回転を現在の座標に合わせてた回転にする
 	CheckRotation();
 	//アップベクトルを回転に合わせる
-	m_upVec = g_vec3Up;
+	m_upVec = g_VEC3_UP;
 	m_rotation.Apply(m_upVec);
 	m_upVec.Normalize();
 	//ステージの上に乗る
@@ -502,7 +502,7 @@ void CUFO::Capture()
 	//本来の回転に合わせる
 	qRot.Multiply(m_rotation);
 	//プレイヤーの基点は足元だけど、お腹らへんを中心に回すためのオフセット
-	Vector3 offsetVec = g_vec3Up;
+	Vector3 offsetVec = g_VEC3_UP;
 	//回転でベクトルを回す
 	qRot.Apply(offsetVec);
 	//プレイヤーの半分の高さ
@@ -599,7 +599,7 @@ void CUFO::Transport()
 			//自身の左側のウェイポイントと、着地点の左側のウェイポイントが同じなら
 
 			//右の単位方向ベクトル
-			Vector3 rightVec = g_vec3Right;
+			Vector3 rightVec = g_VEC3_RIGHT;
 			//自身の回転を掛ける
 			m_rotation.Apply(rightVec);
 			//自身（UFO）から着地点へのベクトル
@@ -762,7 +762,7 @@ void CUFO::Landing()
 	qRot.Multiply(m_rotation);
 	
 	//プレイヤーの基点は足元だけど、お腹らへんを中心に回すためのオフセット
-	Vector3 offSet = /*g_vec3Left*/g_vec3Right;
+	Vector3 offSet = /*g_VEC3_LEFT*/g_VEC3_RIGHT;
 	//自身の回転で回す
 	m_rotation.Apply(offSet);
 	//プレイヤーの高さの半分
@@ -1013,7 +1013,7 @@ void CUFO::GetOnStage()
 		return;
 	//Upベクトルをイイ感じに伸ばす。
 	//伸ばした先がレイの始点となる
-	Vector3 upVec = g_vec3Up;
+	Vector3 upVec = g_VEC3_UP;
 	m_rotation.Apply(upVec);
 	upVec.Scale(500.0f);
 

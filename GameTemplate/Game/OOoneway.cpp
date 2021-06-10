@@ -72,7 +72,7 @@ bool OOoneway::StartSub()
 	initOBBData.pivot = { 0.5f,0.0f,0.5f };	//基点
 	initOBBData.rotation = m_rotation;		//回転
 	//横へのベクトル
-	Vector3 sideVec = g_vec3Right;
+	Vector3 sideVec = g_VEC3_RIGHT;
 	//自身の回転で回す
 	m_rotation.Apply(sideVec);
 	//横へのベクトルの長さ

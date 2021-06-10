@@ -335,15 +335,15 @@ public:
 protected:
 	float		m_targetToPositionLen = 1.0f;			//注視点と視点まで距離。
 	Vector3		m_position = {0.0f, 0.0f, 1.0f};		//カメラ位置。
-	Vector3		m_up = g_vec3Up;						//カメラの上方向。
+	Vector3		m_up = g_VEC3_UP;						//カメラの上方向。
 	Vector3		m_target;								//カメラの中止点。
 	Matrix		m_viewMatrix;							//ビュー行列。
 	Matrix		m_projectionMatrix;						//プロジェクション行列。
 	Matrix		m_viewProjectionMatrix;					//ビュープロジェクション行列。
 	Matrix		m_viewMatrixInv;						//ビュー行列の逆行列。
 	Matrix		m_cameraRotation;						//カメラの回転行列。
-	Vector3		m_forward = g_vec3Front;				//カメラの前方。
-	Vector3		m_right = g_vec3Right;					//カメラの右。
+	Vector3		m_forward = g_VEC3_FRONT;				//カメラの前方。
+	Vector3		m_right = g_VEC3_RIGHT;					//カメラの右。
 	float		m_near = 1.0f;							//近平面。
 	float		m_far = 5000.0f;						//遠平面。
 	float		m_viewAngle = Math::DegToRad(60.0f);	//画角(ラジアン)。

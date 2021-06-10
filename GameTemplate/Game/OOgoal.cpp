@@ -41,7 +41,7 @@ OOgoal::~OOgoal()
 void OOgoal::UpdateSub()
 {
 	//ヒットフラグが折られているか？
-	if (!GetFlagIsHit())
+	if (!GetIsHitFlag())
 	{
 		//折られている
 		

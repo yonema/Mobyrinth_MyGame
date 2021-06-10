@@ -61,7 +61,7 @@ void ROwire_string::ChangeToKey()
 	//場所を設定
 	RObjrct->SetPosition(m_position);
 	//「表」状態（「鍵」状態）に設定
-	RObjrct->SetFrontOrBack(ROkey_padlock::enFront);
+	RObjrct->SetFrontOrBack(ROkey_padlock::EN_FRONT);
 
 	//自身のオブジェクトを破棄する
 	DeleteGO(this);

@@ -9,7 +9,7 @@ struct CaslData
 	std::unique_ptr<char[]> fileName;	//ファイルパス
 	std::unique_ptr<char[]> ddsFileName;		//ddsファイル
 	std::unique_ptr<char[]> ddsFilePath;	//ddsファイルパス
-	Vector2 position = g_vec2Zero;			//座標
+	Vector2 position = g_VEC2_ZERO;			//座標
 	int width = 0;							//横幅
 	int height = 0;							//縦幅
 	int numberLayer = 0;					//レイヤー優先度

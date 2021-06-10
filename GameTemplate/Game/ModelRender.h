@@ -199,9 +199,9 @@ private://データメンバ
 	std::unique_ptr<Animation> m_animationPtr;	//アニメション再生処理。
 	const char* m_tkmFilePath = nullptr;
 
-	Vector3 m_position = g_vec3Zero;			//位置
-	Quaternion m_rotation = g_quatIdentity;		//回転
-	Vector3 m_scale = g_vec3One;				//拡大
+	Vector3 m_position = g_VEC3_ZERO;			//位置
+	Quaternion m_rotation = g_QUAT_IDENTITY;		//回転
+	Vector3 m_scale = g_VEC3_ONE;				//拡大
 
 	CShadowModel m_shadowModel;					//シャドウを描画する用のモデル
 	Model m_zprepassModel;						// ZPrepassで描画されるモデル

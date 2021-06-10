@@ -85,7 +85,7 @@ void ROnail_bar::QuerySub()
 						m_brokenSE->Play(false);
 
 						//アップベクトル
-						Vector3 upVec = g_vec3Up;
+						Vector3 upVec = g_VEC3_UP;
 						//アップベクトルを自身の回転で回す
 						m_rotation.Apply(upVec);
 						//この値を変更して高さを調節する

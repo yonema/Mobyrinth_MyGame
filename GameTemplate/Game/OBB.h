@@ -4,11 +4,11 @@
 //COBBの初期化用の構造体
 struct SInitOBBData
 {
-	Vector3 position = g_vec3Zero;			//場所
+	Vector3 position = g_VEC3_ZERO;			//場所
 	float width = 1.0f;						//Xの辺の長さ
 	float height = 1.0f;					//Yの辺の長さ
 	float length = 1.0f;					//Zの辺の長さ
-	Quaternion rotation = g_quatIdentity;	//回転
+	Quaternion rotation = g_QUAT_IDENTITY;	//回転
 	Vector3 pivot = OBBConstData::DEFAULT_PIVOT;	//ピボット（基点）
 };
 

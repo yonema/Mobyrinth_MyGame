@@ -38,9 +38,9 @@ private:	//列挙型
 private:	//データメンバ
 
 	int m_updateState = enBeforHitPlayer;			//アップデートステート
-	Vector3 m_playerBeforePosition = g_vec3Zero;	//衝突前のプレイヤーの座標
-	Vector3 m_playerHitPosition = g_vec3Zero;		//衝突時のプレイヤーの座標
-	Vector3 m_playerAfterPosition = g_vec3Zero;		//衝突後のプレイヤーの座標
+	Vector3 m_playerBeforePosition = g_VEC3_ZERO;	//衝突前のプレイヤーの座標
+	Vector3 m_playerHitPosition = g_VEC3_ZERO;		//衝突時のプレイヤーの座標
+	Vector3 m_playerAfterPosition = g_VEC3_ZERO;		//衝突後のプレイヤーの座標
 	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
 	Effect* m_obujectefk = nullptr;  //全反転する場所のエフェクト
 	float i = 0.0f;					 //エフェクトのループ再生ようのタイマー

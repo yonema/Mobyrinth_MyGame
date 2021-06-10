@@ -8,11 +8,11 @@ using namespace OBBConstData;
 COBB::COBB()
 {
 	//各データメンバに初期値を入れる
-	m_position = g_vec3Zero;
-	m_centerPosition = g_vec3Zero;
-	m_normalDirection[enLocalX] = g_vec3Right;
-	m_normalDirection[enLocalY] = g_vec3Up;
-	m_normalDirection[enLocalZ] = g_vec3Front;
+	m_position = g_VEC3_ZERO;
+	m_centerPosition = g_VEC3_ZERO;
+	m_normalDirection[enLocalX] = g_VEC3_RIGHT;
+	m_normalDirection[enLocalY] = g_VEC3_UP;
+	m_normalDirection[enLocalZ] = g_VEC3_FRONT;
 
 	for (int i = 0; i < enLocalAxisNum; i++)
 	{
@@ -169,9 +169,9 @@ void COBB::CalcCenterPosition()
 void COBB::Rotating(const Quaternion& rot)
 {
 	//各軸の単位方向ベクトルを初期化してから
-	m_normalDirection[enLocalX] = g_vec3Right;
-	m_normalDirection[enLocalY] = g_vec3Up;
-	m_normalDirection[enLocalZ] = g_vec3Front;
+	m_normalDirection[enLocalX] = g_VEC3_RIGHT;
+	m_normalDirection[enLocalY] = g_VEC3_UP;
+	m_normalDirection[enLocalZ] = g_VEC3_FRONT;
 	//クォータニオンで回す
 	rot.Apply(m_normalDirection[enLocalX]);
 	rot.Apply(m_normalDirection[enLocalY]);

@@ -76,9 +76,9 @@ private:	//列挙型
 
 private:	//データメンバ
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
-	Vector3 m_onWayPosition = g_vec3Zero;	//ウェイポイント上の座標
+	Vector3 m_onWayPosition = g_VEC3_ZERO;	//ウェイポイント上の座標
 	CMobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
-	Vector3 m_upVec = g_vec3Up;				//アップベクトル
+	Vector3 m_upVec = g_VEC3_UP;				//アップベクトル
 	bool m_leftOrRight = enRight;			//右か左か？
 	float m_defaultSpeed = 1300.0f;			//デフォルトの移動速度
 	float m_moveSpeed = 0.0f;				//移動速度

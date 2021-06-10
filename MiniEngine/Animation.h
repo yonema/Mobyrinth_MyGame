@@ -202,7 +202,7 @@ private:
 	float m_interpolateTimeEnd = 0.0f;
 	bool m_isInterpolate = false;								//!<補間中？
 	std::vector<AnimationEventListener>	m_animationEventListeners;	//!<アニメーションイベントリスナーのリスト。
-	Vector3 m_footstepDeltaValue = g_vec3Zero;					//footstepボーンの移動量。
+	Vector3 m_footstepDeltaValue = g_VEC3_ZERO;					//footstepボーンの移動量。
 	bool m_isInited = false;
 	float m_deltaTimeOnUpdate = 0.0f;							//Update関数を実行したときのデルタタイム。
 };

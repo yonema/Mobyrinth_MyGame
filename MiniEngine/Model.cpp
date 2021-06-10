@@ -51,7 +51,7 @@ void Model::Init(const ModelInitData& initData)
 		initData.m_trans
 	);
 
-	UpdateWorldMatrix(g_vec3Zero, g_quatIdentity, g_vec3One);
+	UpdateWorldMatrix(g_VEC3_ZERO, g_QUAT_IDENTITY, g_VEC3_ONE);
 	
 }
 

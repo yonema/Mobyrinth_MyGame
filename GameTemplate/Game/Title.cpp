@@ -126,7 +126,7 @@ void CTitle::InitTitleSprite()
 				m_title->SetScale(objdata.scale);
 				m_title->SetPosition(objdata.position);
 				//透明にする
-				m_title->SetMulColor(g_vec4Transparent);
+				m_title->SetMulColor(g_VEC4_TRANSPARENT);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -146,7 +146,7 @@ void CTitle::InitTitleSprite()
 				m_pressAButton->SetScale(objdata.scale);
 				m_pressAButton->SetPosition(objdata.position);
 				//透明にする
-				m_pressAButton->SetMulColor(g_vec4Transparent);
+				m_pressAButton->SetMulColor(g_VEC4_TRANSPARENT);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -411,7 +411,7 @@ void CTitle::StartTitle()
 			//ステートをタイトル状態に移行する
 			m_stageState = EN_TITLE_SCREEN;
 			//ここでタイトルアイコンの乗算カラーを不透明で固定する
-			m_title->SetMulColor(g_vec4Opacity);
+			m_title->SetMulColor(g_VEC4_OPACITY);
 			//ボタンを押すことができないようにする（連続入力防止用）
 			m_buttonFlag = false;
 		}
@@ -613,7 +613,7 @@ void CTitle::StageSelect()
 		//点滅のフラグを折る
 		m_blinkingFlag = false;
 		//「Aボタンをおしてね」を透明にする
-		m_pressAButton->SetMulColor(g_vec4Transparent);
+		m_pressAButton->SetMulColor(g_VEC4_TRANSPARENT);
 	}
 	//デバック用
 	//全部のステージが選べるようになる

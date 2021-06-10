@@ -56,7 +56,7 @@ public:		//メンバ関数
 	void SetScale(const float scale)
 	{
 		//拡大率を初期化してから
-		m_scale = g_vec3One;
+		m_scale = g_VEC3_ONE;
 		//拡大
 		m_scale.Scale(scale);
 		//値が変わったから、更新が必要
@@ -77,9 +77,9 @@ public:		//メンバ関数
 private:	//データメンバ
 	Model m_model;							//モデルクラス
 	Texture m_skyCubeTexture;				//スカイキューブテクスチャ
-	Vector3 m_position = g_vec3Zero;		//座標
-	Vector3 m_scale = g_vec3One;			//拡大率
-	Vector4 m_selfLuminous = g_vec4Black;	//自己発光色
+	Vector3 m_position = g_VEC3_ZERO;		//座標
+	Vector3 m_scale = g_VEC3_ONE;			//拡大率
+	Vector4 m_selfLuminous = g_VEC4_BLACK;	//自己発光色
 	bool m_isDirty = false;					//ダーティフラグ
 };
 

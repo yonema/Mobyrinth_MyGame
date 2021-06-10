@@ -219,10 +219,10 @@ void ILevelObjectBase::CheckRotation()
 	m_rotation.Slerp(ComplementRate, (*wayPointRotVec)[m_lpIndex], (*wayPointRotVec)[m_rpIndex]);
 
 	//最初のときだけ、m_startRotationに代入
-	if (m_startRotation.x == g_quatIdentity.x &&
-		m_startRotation.y == g_quatIdentity.y &&
-		m_startRotation.z == g_quatIdentity.z &&
-		m_startRotation.w == g_quatIdentity.w) {
+	if (m_startRotation.x == g_QUAT_IDENTITY.x &&
+		m_startRotation.y == g_QUAT_IDENTITY.y &&
+		m_startRotation.z == g_QUAT_IDENTITY.z &&
+		m_startRotation.w == g_QUAT_IDENTITY.w) {
 		m_startRotation = m_rotation;
 	}
 }
@@ -246,7 +246,7 @@ void ILevelObjectBase::CheckPosition()
 	correctionPos.Scale(projectionLen);
 	correctionPos += (*wayPointPosVec)[m_lpIndex];
 
-	Vector3 zVec = g_vec3Back;
+	Vector3 zVec = g_VEC3_BACK;
 	m_rotation.Apply(zVec);
 	zVec.Scale(m_zPosLen);
 	correctionPos += zVec;
@@ -348,7 +348,7 @@ bool IsHitObject
 (ILevelObjectBase& lhs, ILevelObjectBase& rhs)
 {
 	//オブジェクトの衝突判定を行わない状態の場合
-	if (lhs.GetFlagIsHit() == false || rhs.GetFlagIsHit() == false) {
+	if (lhs.GetIsHitFlag() == false || rhs.GetIsHitFlag() == false) {
 		//衝突していない判定する。
 		return false;
 	}
