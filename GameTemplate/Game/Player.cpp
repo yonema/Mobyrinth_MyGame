@@ -922,7 +922,7 @@ void Player::Rotation()
 void Player::CheckHitOBBTag()
 {
 	//キャラコンから、衝突したOBBのタグを調べる
-	if (m_myCharaCon.GetTag() == COBB::enBigFire)
+	if (m_myCharaCon.GetTag() == COBB::EN_OO_TYPE_FLAME)
 	{
 		//炎衝突していたら
 
@@ -936,7 +936,7 @@ void Player::CheckHitOBBTag()
 		}
 
 	}
-	else if (m_myCharaCon.GetTag() == COBB::enWall)
+	else if (m_myCharaCon.GetTag() == COBB::EN_OO_TYPE_WALL)
 	{
 		//壁と衝突していたら
 
@@ -1052,7 +1052,8 @@ void Player::SetDirectionLight()
 	if (!m_gameDirectionLight)
 	{
 		//探す
-		m_gameDirectionLight = FindGO<CDirectionLight>("GameDirectionLight");
+		m_gameDirectionLight = 
+			FindGO<CDirectionLight>(GetGameObjectName(EN_GO_TYPE_GAME_DIRECTION_LIGHT));
 		//まだ見つからなかったら何もせずにreturn
 		if (!m_gameDirectionLight)
 			return;

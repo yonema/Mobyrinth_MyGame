@@ -2,6 +2,8 @@
 #include "StageBase.h"
 #include "Title.h"
 
+using namespace stageBaseConstData;
+
 //スタート関数
 bool IStageBase::Start()
 {
@@ -115,411 +117,323 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 
 	//レベルをロードする
-	m_level.Init(tklFilePath, [&](LevelObjectData& objData)
-		{//ロードするレベル一つ一つにクエリを行う
+	m_level.Init(tklFilePath, [&](LevelObjectData& objData) {
+		//ロードするレベル一つ一つにクエリを行う
 
-			///
-			///
-			/// 「基本オブジェクト」
-			
-			//オブジェクトネームが"player_kari"と同じだったら
-			if (objData.EqualObjectName(L"player_kari") == true)
-			{
-				//プレイヤーを作成する
-				pPlayer = NewGO<Player>(0, "Player");
-				//プレイヤーのポジションをロードしたオブジェクトと同じポジションにする
-				if (!m_isTitle) {		//ゲーム画面の時
-					pPlayer->SetPosition({ 0.0f,3000.0f,0.0f });	//	画面外に移動
-				}
-				else
-				pPlayer->SetPosition(objData.position);
-				//タイトル画面かどうかの確認
-				pPlayer->SetTitleMove(m_isTitle);
-				//フックしたため、trueを返す。
-				return true;
-			}
-			else if (objData.EqualObjectName(L"Mobius") == true)
-			{
-				mobius = NewGO<CMobius>(0, "Mobius");
-				mobius->SetPosition(objData.position);
-				mobius->SetRotation(objData.rotation);
-				return true;
-			}
-		
+		/*
+		* 「基本オブジェクト」
+		*/
 
-			///
-			///
-			/// 「反転オブジェクト」ReversibleObject
-			 
-			////////////////////////////////////////////////////////////
-			// 反転オブジェクトを作成時、ここに追加
-			////////////////////////////////////////////////////////////
+		//オブジェクトネームがプレイヤーと同じだったら
+		if (objData.EqualObjectName(LEVEL_OBJECT_NAME_PLAYER) == true)
+		{
+			//プレイヤーを作成する
+			pPlayer = NewGO<Player>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_PLAYER));
+			//座標を設定する
+			pPlayer->SetPosition(objData.position);
+			//タイトル画面かどうかの確認
+			//ゲーム画面の場合、座標が変更される
+			pPlayer->SetTitleMove(m_isTitle);
+			//フックしたため、trueを返す。
+			return true;
+		}
+		//メビウスの輪
+		else if (objData.EqualObjectName(LEVEL_OBJECT_NAME_MOBIUS) == true)
+		{
+			mobius = NewGO<CMobius>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_MOBIUS));
+			mobius->SetPosition(objData.position);
+			mobius->SetRotation(objData.rotation);
+			return true;
+		}
 
-			//mizu_kori
-			else if (objData.EqualObjectName(L"mizu") == true)
-			{
-				ROmizu_kori* RObject;
-				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"fire") == true)
-			{
-				ROmizu_kori* RObject;
-				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"koori") == true)
-			{
-				ROmizu_kori* RObject;
-				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-				return true;
-			}
-			//mizu_kori_switch
-			else if (objData.EqualObjectName(L"fire_switch") == true)
-			{
-				ROmizu_kori* RObject;
-				RObject = NewGO<ROmizu_kori>(0, "mizu_kori");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-				RObject->SetTransparentObject();
-				return true;
-			}
-			//bird_fish
-			else if (objData.EqualObjectName(L"bird") == true)
-			{
-				RObird_fish* RObject;
-				RObject = NewGO<RObird_fish>(0, "bird_fish");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"fish") == true)
-			{
-				RObird_fish* RObject;
-				RObject = NewGO<RObird_fish>(0, "bird_fish");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-				return true;
-			}
-			//running_stop
-			else if (objData.EqualObjectName(L"kadou") == true)
-			{
-				ROrunning_stop* RObject;
-				RObject = NewGO<ROrunning_stop>(0, "running_stop");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"teishi") == true)
-			{
-				ROrunning_stop* RObject;
-				RObject = NewGO<ROrunning_stop>(0, "running_stop");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-				return true;
-			}
-			//wire_string
-			else if (objData.EqualObjectName(L"wire") == true)
-			{
-				ROwire_string* RObject;
-				RObject = NewGO<ROwire_string>(0, "wire_string");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"string") == true)
-			{
-				ROwire_string* RObject;
-				RObject = NewGO<ROwire_string>(0, "wire_string");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-				return true;
-			}
-			//nail_bar
-			else if (objData.EqualObjectName(L"nail") == true)
-			{
-				ROnail_bar* RObject;
-				RObject = NewGO<ROnail_bar>(0, "nail_bar");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"bar") == true)
-			{
-				ROnail_bar* RObject;
-				RObject = NewGO<ROnail_bar>(0, "nail_bar");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-				return true;
-			}
-			//nail_bar_switch
-			else if (objData.EqualObjectName(L"nail_switch") == true)
-			{
-			ROnail_bar* RObject;
-			RObject = NewGO<ROnail_bar>(0, "nail_bar");
-			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-			RObject->SetTransparentObject();
-			//スイッチの処理
-			return true;
-			}
-			else if (objData.EqualObjectName(L"bar_switch") == true)
-			{
-			ROnail_bar* RObject;
-			RObject = NewGO<ROnail_bar>(0, "nail_bar");
-			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-			RObject->SetTransparentObject();
-			//スイッチの処理
-			return true;
-			}
-			//axe_pickaxe
-			else if (objData.EqualObjectName(L"axe") == true)
-			{
-				ROaxe_pickaxe* RObject;
-				RObject = NewGO<ROaxe_pickaxe>(0, "axe_pickaxe");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"pickaxe") == true)
-			{
-				ROaxe_pickaxe* RObject;
-				RObject = NewGO<ROaxe_pickaxe>(0, "axe_pickaxe");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-				return true;
-			}
-			//keymold_empty
-			else if (objData.EqualObjectName(L"key mold") == true)
-			{
-				ROkeymold_empty* RObject;
-				RObject = NewGO<ROkeymold_empty>(0, "keymold_empty");
-				RObject->SetPosition(objData.position);
-				RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-				return true;
-			}
-			//key_padlock
-			else if (objData.EqualObjectName(L"key") == true)
-			{
-			ROkey_padlock* RObject;
-			RObject = NewGO<ROkey_padlock>(0, "key");
-			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-			return true;
-			}
-			else if (objData.EqualObjectName(L"padlock") == true)
-			{
-			ROkey_padlock* RObject;
-			RObject = NewGO<ROkey_padlock>(0, "padlock");
-			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-			return true;
-			}
-			//keymold_padlock_switch
-			else if (objData.EqualObjectName(L"key_switch") == true)
-			{
-			ROkey_padlock* RObject;
-			RObject = NewGO<ROkey_padlock>(0, "key");
-			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-			RObject->SetTransparentObject();
-			//スイッチの処理
-			return true;
-			}
-			else if (objData.EqualObjectName(L"padlock_switch") == true)
-			{
-			ROkey_padlock* RObject;
-			RObject = NewGO<ROkey_padlock>(0, "padlock");
-			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-			RObject->SetTransparentObject();
-			//スイッチの処理
-			return true;
-			}
-			//left_right
-			else if (objData.EqualObjectName(L"left") == true)
-			{
-			ROleft_right* RObject;
-			RObject = NewGO<ROleft_right>(0, "left_right");
-			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-			return true;
-			}
-			else if (objData.EqualObjectName(L"right") == true)
-			{
-			ROleft_right* RObject;
-			RObject = NewGO<ROleft_right>(0, "left_right");
-			RObject->SetPosition(objData.position);
-			RObject->SetFrontOrBack(CReversibleObject::EN_BACK);
-			return true;
-			}
 
-			///
-			///
-			/// 「障害オブジェクト」ObstacleObject
-			
-			////////////////////////////////////////////////////////////
-			// 障害オブジェクトを作成時、ここに追加
-			////////////////////////////////////////////////////////////
+		/*
+		* 「反転オブジェクト」ReversibleObject
+		*/
 
-			//goal
-			else if (objData.EqualObjectName(L"goal") == true)
-			{
-				//ゴールはメンバ変数で保持しておく。
-				m_goal = NewGO<OOgoal>(0, "goal");
-				m_goal->SetPosition(objData.position);
-				return true;
-			}
-			//goal_switch
-			else if (objData.EqualObjectName(L"goal_switch") == true)
-			{
+		////////////////////////////////////////////////////////////
+		// 反転オブジェクトを作成時、ここに追加
+		////////////////////////////////////////////////////////////
+
+		//水、火
+		//水
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_WATER)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROmizu_kori>(objData, EN_FRONT);
+			return true;
+		}
+		//火
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_FIRE)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROmizu_kori>(objData, EN_BACK);
+			return true;
+		}
+		//稼働、停止
+		//稼働
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_RUNNING)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROrunning_stop>(objData, EN_FRONT);
+			return true;
+		}
+		//停止
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_STOP)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROrunning_stop>(objData, EN_BACK);
+			return true;
+		}
+		//釘、金槌
+		//釘
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_NAIL)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROnail_bar>(objData, EN_FRONT);
+			return true;
+		}
+		//金槌
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_HAMMER)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROnail_bar>(objData, EN_BACK);
+			return true;
+		}
+		//鍵、南京錠
+		//鍵
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_KEY)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROkey_padlock>(objData, EN_FRONT);
+			return true;
+		}
+		//南京錠
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_PADLOCK)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROkey_padlock>(objData, EN_BACK);
+			return true;
+		}
+		//左、右
+		//左
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_LEFT)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROleft_right>(objData, EN_FRONT);
+			return true;
+		}
+		//右
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_RIGHT)) == true)
+		{
+			//反転オブジェクトの生成
+			NewReversibleObject<ROleft_right>(objData, EN_BACK);
+			return true;
+		}
+
+
+		/*
+		* 「障害オブジェクト」ObstacleObject
+		*/
+
+		////////////////////////////////////////////////////////////
+		// 障害オブジェクトを作成時、ここに追加
+		////////////////////////////////////////////////////////////
+
+		//ゴール
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_OO_TYPE_GOAL)) == true)
+		{
+			//障害オブジェクトの生成
 			//ゴールはメンバ変数で保持しておく。
-			m_goal = NewGO<OOgoal>(0, "goal");
-			m_goal->SetPosition(objData.position);
-			m_goal->SetTransparentObject();
+			m_goal = NewObstacleObject<OOgoal>(objData);
 			return true;
-			}
-			//bigFire
-			else if (objData.EqualObjectName(L"bigFire") == true)
-			{
-				OObigFire* OObject;
-				OObject = NewGO<OObigFire>(0, "bigFire");
-				OObject->SetPosition(objData.position);
-				return true;
-			}
-			//bigFire_switch
-			else if (objData.EqualObjectName(L"bigFire_switch") == true)
-			{
-			OObigFire* OObject;
-			OObject = NewGO<OObigFire>(0, "bigFire");
-			OObject->SetPosition(objData.position);
-			OObject->SetTransparentObject();
+		}
+		//炎
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_OO_TYPE_FLAME)) == true)
+		{
+			//障害オブジェクトの生成
+			NewObstacleObject<OObigFire>(objData);
 			return true;
-			}
-			//wall
-			else if (objData.EqualObjectName(L"wall") == true)
-			{
-				OOwall* OObject;
-				OObject = NewGO<OOwall>(0, "wall");
-				OObject->SetPosition(objData.position);
-				return true;
-			}
-			//notHavePadlock
-			else if (objData.EqualObjectName(L"notHavePadlock") == true)
-			{
-				OOpadlock* OObject;
-				OObject = NewGO<OOpadlock>(0, "notHavePadlock");
-				OObject->SetPosition(objData.position);
-				return true;
-			}
-			//box
-			else if (objData.EqualObjectName(L"box") == true)
-			{
-				OObox* OObject;
-				OObject = NewGO<OObox>(0, "box");
-				OObject->SetPosition(objData.position);
-				return true;
-			}
-			//box_switch
-			else if (objData.EqualObjectName(L"box_switch") == true)
-			{
-			OObox* OObject;
-			OObject = NewGO<OObox>(0, "box");
-			OObject->SetPosition(objData.position);
-			OObject->SetTransparentObject();
-			//スイッチの処理
+		}
+		//壁
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_OO_TYPE_WALL)) == true)
+		{
+			//障害オブジェクトの生成
+			NewObstacleObject<OOwall>(objData);
 			return true;
-			}
-			////////////////////////////////////////////////////////////
-			// 透明オブジェクトを作成時、ここに追加
-			////////////////////////////////////////////////////////////
-
-
-
-
-
-			else if (objData.EqualObjectName(L"switch") == true)
-			{
-				m_switch = NewGO<OOTransparentSwitch>(1, "transparentSwitch");
-				m_switch->SetPosition(objData.position);
-				//スイッチのタイマーを設定する
-				m_switch->SetResetTimerStartValue(m_switchTime);
-				return true;
-			}
-			//oneway
-			else if (objData.EqualObjectName(L"oneway_left") == true)
-			{
-			OOoneway* OObject;
-			OObject = NewGO<OOoneway>(0, "oneway");
-			OObject->SetPosition(objData.position);
+		}
+		//でかい南京錠
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_OO_TYPE_BIG_PADLOCK)) == true)
+		{
+			//障害オブジェクトの生成
+			NewObstacleObject<OOpadlock>(objData);
+			return true;
+		}
+		//箱
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_OO_TYPE_BOX)) == true)
+		{
+			//障害オブジェクトの生成
+			NewObstacleObject<OObox>(objData);
+			return true;
+		}
+		//一方通行
+		//左
+		else if (objData.EqualObjectName(GetLevelObjectName(OO_TYPE_ONEWAY_LEFT)) == true)
+		{
+			//障害オブジェクトの生成
+			OOoneway* OObject = NewObstacleObject<OOoneway>(objData);
+			//左向きに設定
 			OObject->SetLeftOrRight(OOoneway::enLeft);
 			return true;
-			}
-			else if (objData.EqualObjectName(L"oneway_right") == true)
-			{
-			OOoneway* OObject;
-			OObject = NewGO<OOoneway>(0, "oneway");
-			OObject->SetPosition(objData.position);
+		}
+		//右
+		else if (objData.EqualObjectName(GetLevelObjectName(OO_TYPE_ONEWAY_RIGHT)) == true)
+		{
+			//障害オブジェクトの生成
+			OOoneway* OObject = NewObstacleObject<OOoneway>(objData);
+			//左向きに設定
 			OObject->SetLeftOrRight(OOoneway::enRight);
 			return true;
-			}
-			//reverseAll
-			else if (objData.EqualObjectName(L"reverseAll") == true)
-			{
-			OOReverseALL* OObject;
-			OObject = NewGO<OOReverseALL>(0, "oneway");
-			OObject->SetPosition(objData.position);
+		}
+		//全反転
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_OO_TYPE_REVERSE_ALL)) == true)
+		{
+			//障害オブジェクトの生成
+			NewObstacleObject<OOReverseALL>(objData);
 			return true;
-			}
-			////switch
-			//else if (objData.EqualObjectName(L"switch") == true)
-			//{
-			//RObird_fish* RObject;
-			//RObject = NewGO<RObird_fish>(0, "bird_fish");
-			//RObject->SetPosition(objData.position);
-			//RObject->SetFrontOrBack(CReversibleObject::EN_FRONT);
-			//return true;
-			//}
-
-			///
-			///
-			/// 「UFO」
-
-			//UFO
-			else if (objData.EqualObjectName(L"UFO") == true)
-			{
-			m_ufo = NewGO<CUFO>(0, "UFO");
-			m_ufo->SetPosition(objData.position);
+		}
+		//UFO
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_GO_TYPE_UFO)) == true)
+		{
+			//障害オブジェクトの生成
+			//不透明モードで、オブジェクトの名前を付ける
+			m_ufo = NewObstacleObject<CUFO>(
+				objData,
+				MODE_OPACITY,
+				GetGameObjectName(EN_GO_TYPE_UFO)
+				);
 			return true;
-			}
+		}
+		//スイッチ
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_OO_TYPE_TRANSPARENT_SWITCH)) == true)
+		{
+			//障害オブジェクトの生成
+			//不透明モードで、オブジェクトの名前を付けずに、優先度を二番目に設定する
+			m_switch = NewObstacleObject<OOTransparentSwitch>(
+				objData,
+				MODE_OPACITY,
+				NAME_EMPTY,
+				PRIORITY_SECOND
+				);
+			//スイッチのタイマーを設定する
+			m_switch->SetResetTimerStartValue(m_switchTime);
+			return true;
+		}
 
 
-			///
-			///
-			/// 「ウェイポイント」
 
-			//オブジェクトネームに"waypoint"があったら
-			else if (std::wcsstr(objData.name, L"waypoint") != NULL)
-			{
-				//番号（"0"）の文字列があるアドレスを返す
-				std::wstring buff = std::wcsstr(objData.name, L"0");
-				//wstringをintに変換
-				int num = _wtoi(buff.c_str());
-				//マップに入れる
-				posMap.insert(std::make_pair(num, objData.position));
-				rotMap.insert(std::make_pair(num, objData.rotation));
+		////////////////////////////////////////////////////////////
+		// 透明オブジェクトを作成時、ここに追加
+		////////////////////////////////////////////////////////////
 
-				return true;
-			}
-			return false;
-		});
+		/*
+		* 透明反転オブジェクト
+		*/
+
+		//水、火（透明）
+		//火（透明）
+		else if (objData.EqualObjectName(GetLevelObjectName(RO_TYPE_FIRE_TRANSPARENT)) == true)
+		{
+			//反転オブジェクトの生成
+			//透明モード
+			NewReversibleObject<ROmizu_kori>(objData, EN_BACK, MODE_TRANS);
+			return true;
+		}
+		//釘、金槌（透明）
+		//釘（透明）
+		else if (objData.EqualObjectName(GetLevelObjectName(RO_TYPE_NAIL_TRANSPARENT)) == true)
+		{
+			//反転オブジェクトの生成
+			//透明モード
+			NewReversibleObject<ROnail_bar>(objData, EN_FRONT, MODE_TRANS);
+			return true;
+		}
+		//金槌（透明）
+		else if (objData.EqualObjectName(GetLevelObjectName(RO_TYPE_HAMMER_TRANSPARENT)) == true)
+		{
+			//反転オブジェクトの生成
+			//透明モード
+			NewReversibleObject<ROnail_bar>(objData, EN_BACK, MODE_TRANS);
+			return true;
+		}
+		//鍵、南京錠（透明）
+		//鍵（透明）
+		else if (objData.EqualObjectName(GetLevelObjectName(RO_TYPE_KEY_TRANSPARENT)) == true)
+		{
+			//反転オブジェクトの生成
+			//透明モード
+			NewReversibleObject<ROkey_padlock>(objData, EN_FRONT, MODE_TRANS);
+			return true;
+		}
+		//南京錠（透明）
+		else if (objData.EqualObjectName(GetLevelObjectName(RO_TYPE_PADLOCK_TRANSPARENT)) == true)
+		{
+			//反転オブジェクトの生成
+			//透明モード
+			NewReversibleObject<ROkey_padlock>(objData, EN_BACK, MODE_TRANS);
+			return true;
+		}
+
+		/*
+		* 透明障害オブジェクト
+		*/
+
+		//ゴール（透明）
+		else if (objData.EqualObjectName(GetLevelObjectName(OO_TYPE_GOAL_TRANSPARENT)) == true)
+		{
+			//障害オブジェクトの生成
+			//透明モード
+			//ゴールはメンバ変数で保持しておく。
+			m_goal = NewObstacleObject<OOgoal>(objData, MODE_TRANS);
+			return true;
+		}
+		//炎（透明）
+		else if (objData.EqualObjectName(GetLevelObjectName(OO_TYPE_FLAME_TRANSPARENT)) == true)
+		{
+			//障害オブジェクトの生成
+			//透明モード
+			NewObstacleObject<OObigFire>(objData, MODE_TRANS);
+			return true;
+		}
+		//箱（透明）
+		else if (objData.EqualObjectName(GetLevelObjectName(OO_TYPE_BOX_TRANSPARENT)) == true)
+		{
+			//障害オブジェクトの生成
+			//透明モード
+			NewObstacleObject<OObox>(objData, MODE_TRANS);
+			return true;
+		}
+
+
+		/*
+		* 「ウェイポイント」
+		*/
+
+		//オブジェクトネームに"waypoint"があったら
+		else if (std::wcsstr(objData.name, OBJECT_NAME_WAYPOINT) != NULL)
+		{
+			//番号（"0"）の文字列があるアドレスを返す
+			std::wstring buff = std::wcsstr(objData.name, CHAR_GET_WAYPOINT_NUM);
+			//wstringをintに変換
+			int num = _wtoi(buff.c_str());
+			//マップに入れる
+			posMap.insert(std::make_pair(num, objData.position));
+			rotMap.insert(std::make_pair(num, objData.rotation));
+
+			return true;
+		}
+		return false;
+	});
 
 
 	//ステージのメビウスの輪をマネージャーに登録
@@ -543,6 +457,76 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 
 
 	return;
+}
+
+/**
+ * @brief 反転オブジェクトを生成する関数
+ * @note CLevelObjectManager::GetInstance()->AllDeleteLOs()でリソースは一気に開放できる
+ * @tparam C 生成する反転オブジェクトの型
+ * @param [in] objData ロードされたオブジェクトのデータ
+ * @param [in] frontOrBack 表か裏か？
+ * @param [in] Transparen 透明か？デフォルトはfalse
+ * @param [in] objectName オブジェクトの名前。デフォルトはカラの名前
+ * @param [in] priority ゲームオブジェクトの優先度。デフォルトは PRIORITY_FIRST
+ * @return 生成した反転オブジェクトの参照
+*/
+template<class C>
+C* IStageBase::NewReversibleObject(
+	const LevelObjectData& objData,
+	const bool frontOrBack,
+	const bool transparent,
+	const char* const objectName,
+	const int priority
+)
+{
+	//反転オブジェクトを生成
+	C* RObject = NewGO<C>(priority, objectName);
+	//座標を設定
+	RObject->SetPosition(objData.position);
+	//表か裏か？を設定
+	RObject->SetFrontOrBack(frontOrBack);
+	//透明のオブジェクトか？
+	if (transparent == MODE_TRANS)
+	{
+		//透明オブジェクトに設定
+		RObject->SetTransparentObject();
+	}
+
+	//生成した反転オブジェクトの参照を戻す
+	return RObject;
+}
+
+/**
+ * @brief 障害オブジェクトを生成する関数
+ * @note CLevelObjectManager::GetInstance()->AllDeleteLOs()でリソースは一気に開放できる
+ * @tparam C 生成する障害オブジェクトの型
+ * @param [in] objData ロードされたオブジェクトのデータ
+ * @param [in] Transparent 透明か？デフォルトはfalse
+ * @param [in] objectName オブジェクトの名前。デフォルトはカラの名前
+ * @param [in] priority ゲームオブジェクトの優先度。デフォルトは PRIORITY_FIRST
+ * @return 生成した障害オブジェクトの参照
+*/
+template<class C>
+C* IStageBase::NewObstacleObject(
+	const LevelObjectData& objData,
+	const bool transparent,
+	const char* const objectName,
+	const int priority
+)
+{
+	//障害オブジェクトを生成
+	C* OObject = NewGO<C>(priority, objectName);
+	//座標を設定
+	OObject->SetPosition(objData.position);
+	//透明のオブジェクトか？
+	if (transparent == MODE_TRANS)
+	{
+		//透明オブジェクトに設定
+		OObject->SetTransparentObject();
+	}
+
+	//生成した障害オブジェクトの参照を戻す
+	return OObject;
 }
 
 //デストラクタ

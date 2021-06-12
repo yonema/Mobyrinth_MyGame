@@ -178,7 +178,7 @@ void CTitle::InitStageSelectSprite()
 				// "n" の文字列があるアドレスを返す
 				//そして、その次のポインタを指して、数字を得る
 				std::string buff =
-					(std::strstr(objdata.name, STAGE_ICON_GET_NUM_CHAR)) + 1;
+					(std::strstr(objdata.name, CHAR_GET_STAGE_ICON_NUM)) + 1;
 				//stringをintに変換
 				int num = atoi(buff.c_str());
 				//ステージ名は1から始まるけど、配列は0から始まるから

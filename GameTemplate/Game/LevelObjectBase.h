@@ -43,24 +43,6 @@ public:		//CReversibleObjectでオーバーライドしてほしいメンバ関�
 	*/
 	virtual void SwitchReverse(const bool frontOrBack = 0) {};
 
-protected:	//protectedなメンバ関数
-
-	/// <summary>
-	/// 近くのウェイポイントを探して、イイ感じに回転する関数
-	/// </summary>
-	/// <param name="checkRotaton">回転チェックを行うか？</param>
-	/// <param name="checkPosition">座標チェックを行うか？</param>
-	void CheckWayPoint(const bool checkRotaton = true, const bool checkPosition = true);
-
-	/// <summary>
-	/// 現在の座標に合わせた回転にする
-	/// </summary>
-	void CheckRotation();
-
-	/// <summary>
-	/// ウェイポイントにそろえた座標にする
-	/// </summary>
-	void CheckPosition();
 
 public:		//メンバ関数
 
@@ -249,6 +231,26 @@ public:		//メンバ関数
 		m_zPosLen = zPosLen;
 	}
 
+protected:	//protectedなメンバ関数
+
+	/// <summary>
+	/// 近くのウェイポイントを探して、イイ感じに回転する関数
+	/// </summary>
+	/// <param name="checkRotaton">回転チェックを行うか？</param>
+	/// <param name="checkPosition">座標チェックを行うか？</param>
+	void CheckWayPoint(const bool checkRotaton = true, const bool checkPosition = true);
+
+	/// <summary>
+	/// 現在の座標に合わせた回転にする
+	/// </summary>
+	void CheckRotation();
+
+	/// <summary>
+	/// ウェイポイントにそろえた座標にする
+	/// </summary>
+	void CheckPosition();
+
+
 private:	//privateなメンバ関数
 
 	/// <summary>
@@ -263,7 +265,7 @@ protected:	//protectedなデータメンバ	//あんま良くないけど利便�
 	Player* m_pPlayer = nullptr;			//プレイヤーのポインタ
 
 private:	//データメンバ
-	int m_objectType = enEmpty;				//タイプ
+	int m_objectType = EN_OBJECT_TYPE_EMPTY;				//タイプ
 	bool m_isDead = false;					//死んでいるか？
 	COBB m_obb;								//OBBの当たり判定
 	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス

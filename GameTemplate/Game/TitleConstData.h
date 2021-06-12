@@ -125,7 +125,7 @@ namespace titleConstData
 	//レベル2Dのステージアイコンのオブジェクトネーム
 	const char* const LEVEL_2D_OBJECT_NAME_STAGE_ICON = "Stage_icon";
 	//ステージアイコンのナンバーを取得するための文字
-	const char* const STAGE_ICON_GET_NUM_CHAR = "n";
+	const char* const CHAR_GET_STAGE_ICON_NUM = "n";
 	//遊べないステージの乗算カラー
 	const Vector4 SPRITE_MUL_COLOR_STAGE_PLAY_CANNOT = { 0.4f,0.4f,0.4f,1.0f };
 

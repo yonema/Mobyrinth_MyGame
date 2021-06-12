@@ -5,8 +5,8 @@
 bool ROrunning_stop::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/running.tkm", enRunning,
-		"Assets/modelData/stop.tkm", enStop);
+	Init("Assets/modelData/running.tkm", EN_RO_TYPE_RUNNING,
+		"Assets/modelData/stop.tkm", EN_RO_TYPE_STOP);
 
 
 	return true;
@@ -18,10 +18,10 @@ bool ROrunning_stop::StartSub()
 void ROrunning_stop::QuerySub()
 {
 	//自身が「稼働」の時
-	if (GetObjectType() == enRunning)
+	if (GetObjectType() == EN_RO_TYPE_RUNNING)
 	{
 		//障害オブジェクトの「壁」をクエリ
-		QueryLOs<OOwall>(enWall, [&](OOwall* wall) -> bool
+		QueryLOs<OOwall>(EN_OO_TYPE_WALL, [&](OOwall* wall) -> bool
 			{
 				//自身と「壁」が衝突したら
 				if (IsHitObject(*this, *wall))
@@ -56,10 +56,10 @@ void ROrunning_stop::QuerySub()
 		);
 	}
 	//自身が「停止」の時
-	else if (GetObjectType() == enStop)
+	else if (GetObjectType() == EN_RO_TYPE_STOP)
 	{
 		//障害オブジェクトの「壁」をクエリ
-		QueryLOs<OOwall>(enWall, [&](OOwall* wall) -> bool
+		QueryLOs<OOwall>(EN_OO_TYPE_WALL, [&](OOwall* wall) -> bool
 			{
 				//自身と「壁」が衝突したら
 				if (IsHitObject(*this, *wall))

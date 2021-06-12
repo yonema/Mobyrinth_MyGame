@@ -54,7 +54,7 @@ private:	//データメンバ
 	CSpriteRender* m_tipsUISR = nullptr;			//「Tips」のUI
 	CFontRender* m_tipsFR = nullptr;				//「Tips」のフォントレンダラー
 	CFontRender* m_sentenceFR = nullptr;			//Tipsの文章を表示するフォントレンダラー
-	char m_text[enObjectTypeNum][m_maxTextSize];	//ロードしたTipsの文章
+	char m_text[EN_OBJECT_TYPE_NUM][m_maxTextSize];	//ロードしたTipsの文章
 };
 
 //u8len関数（UTF8の文字数をカウントする関数）

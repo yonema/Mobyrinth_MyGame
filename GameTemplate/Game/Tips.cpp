@@ -58,72 +58,72 @@ CTips::~CTips()
 void CTips::InitText()
 {	
 	//オブジェクトタイプの数だけ繰り返す
-	for (int objectType = 0; objectType < enObjectTypeNum; objectType++)
+	for (int objectType = 0; objectType < EN_OBJECT_TYPE_NUM; objectType++)
 	{
 		//オブジェクトタイプによってロードするテキストを振り分ける
 		switch (objectType)
 		{
-		case enEmpty:	//空っぽ
+		case EN_OBJECT_TYPE_EMPTY:	//空っぽ
 			LoadText(objectType, "empty");
 			break;
-		case enWater:	//水
+		case EN_RO_TYPE_WATER:	//水
 			LoadText(objectType, "water");
 			break;
-		case enFire:	//火
+		case EN_RO_TYPE_FIRE:	//火
 			LoadText(objectType, "fire");
 			break;
-		case enRunning:	//稼働
+		case EN_RO_TYPE_RUNNING:	//稼働
 			LoadText(objectType, "running");
 			break;
-		case enStop:	//停止
+		case EN_RO_TYPE_STOP:	//停止
 			LoadText(objectType, "stop");
 			break;
-		case enNail:	//釘
+		case EN_RO_TYPE_NAIL:	//釘
 			LoadText(objectType, "nail");
 			break;
-		case enBar:		//バール
+		case EN_RO_TYPE_BAR:		//バール
 			LoadText(objectType, "bar");
 			break;
-		case enKey:		//鍵
+		case EN_RO_TYPE_KEY:		//鍵
 			LoadText(objectType, "key");
 			break;
-		case enPadlock:	//南京錠
+		case EN_RO_TYPE_PADLOCK:	//南京錠
 			LoadText(objectType, "padlock");
 			break;
-		case enLeftType://左
+		case EN_RO_TYPE_LEFT://左
 			LoadText(objectType, "left");
 			break;
-		case enRightType://右
+		case EN_RO_TYPE_RIGHT://右
 			LoadText(objectType, "right");
 			break;
-		case enBigFire:		//炎
+		case EN_OO_TYPE_FLAME:		//炎
 			LoadText(objectType, "bigFire");
 			break;
-		case enWall:		//壁
+		case EN_OO_TYPE_WALL:		//壁
 			LoadText(objectType, "wall");
 			break;
-		case enGoal:		//ゴール
+		case EN_OO_TYPE_GOAL:		//ゴール
 			LoadText(objectType, "goal");
 			break;
-		case enNotHavePadlock:	//持てない南京錠
+		case EN_OO_TYPE_BIG_PADLOCK:	//持てない南京錠
 			LoadText(objectType, "notHavePadlock");
 			break;
-		case enBox:			//箱
+		case EN_OO_TYPE_BOX:			//箱
 			LoadText(objectType, "box");
 			break;
-		case enOneway:		//一方通行
+		case EN_OO_TYPE_ONEWAY:		//一方通行
 			LoadText(objectType, "oneWay");
 			break;
-		case enTransparentSwitch:	//一方通行
+		case EN_OO_TYPE_TRANSPARENT_SWITCH:	//一方通行
 			LoadText(objectType, "switch");
 			break;
-		case enReverseAll:	//全反転
+		case EN_OO_TYPE_REVERSE_ALL:	//全反転
 			LoadText(objectType, "reverseAll");
 			break;
-		case enUFOCapture:	//UFOに捕まった
+		case EN_OO_TYPE_UFO_CAPTURE:	//UFOに捕まった
 			LoadText(objectType, "UFOCapture");
 			break;
-		case enUFOLandingPoint:	//UFOに捕まった
+		case EN_OO_TYPE_UFO_LANDING_POINT:	//UFOに捕まった
 			LoadText(objectType, "UFOLandingPoint");
 			break;
 		default:		//デフォルト
@@ -279,7 +279,7 @@ void CTips::SetText(const int textType)
 	wchar_t text[m_maxTextSize];
 	//char型のデータメンバをwchar_t型に変換する
 
-	if (textType != enWater)
+	if (textType != EN_RO_TYPE_WATER)
 		int a = 1;
 	
 	std::string str = m_text[textType];
@@ -296,7 +296,7 @@ void CTips::SetText(const int textType)
 void CTips::ClearText()
 {
 	//空っぽのテキストをセット
-	SetText(enEmpty);
+	SetText(EN_OBJECT_TYPE_EMPTY);
 }
 
 void CTips::SetTitleMode()

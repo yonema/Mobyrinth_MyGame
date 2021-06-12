@@ -5,7 +5,7 @@
 bool CUFOLandingPoint::StartSub()
 {
 	//モデルの初期化とタイプの設定
-	Init("Assets/modelData/UFO_Landing.tkm", enUFOLandingPoint);
+	Init("Assets/modelData/UFO_Landing.tkm", EN_OO_TYPE_UFO_LANDING_POINT);
 
 	const float scale = 0.4f;
 	m_scale = { scale ,1.0f ,scale };

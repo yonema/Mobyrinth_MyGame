@@ -267,7 +267,7 @@ private:	//データメンバ
 	//bool m_frontOrBack = EN_FRONT;				//表か裏か？
 	bool m_bothModelactiveFlag = true;			//表裏両方の有効化フラグ
 	CModelRender* m_modelRender[EN_FRONT_AND_BACK_NUM] = { nullptr };	//モデルレンダラー
-	int m_reversibleType[EN_FRONT_AND_BACK_NUM] = { enEmpty };	//表と裏のオブジェクトのタイプ
+	int m_reversibleType[EN_FRONT_AND_BACK_NUM] = { EN_OBJECT_TYPE_EMPTY };	//表と裏のオブジェクトのタイプ
 
 	float m_throwCounter = 0.0f;						//投げている時のカウンター
 	Quaternion m_throwRot = g_QUAT_IDENTITY;		//下に投げるときの回転

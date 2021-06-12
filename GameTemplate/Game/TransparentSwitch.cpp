@@ -28,7 +28,7 @@ OOTransparentSwitch::OOTransparentSwitch()
 //スタート関数
 bool OOTransparentSwitch::StartSub()
 {
-	Init("Assets/modelData/transparentSwitch.tkm", enTransparentSwitch);
+	Init("Assets/modelData/transparentSwitch.tkm", EN_OO_TYPE_TRANSPARENT_SWITCH);
 
 	//OBBWorldに自身のOBBの登録を消去させる
 	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
@@ -599,11 +599,11 @@ void OOTransparentSwitch::ChangeTransparent()
 
 		//モデルの参照を得てから、SetMulColor()を呼ぶ
 		//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-		levelObjects[i]->GetModelRender(CReversibleObject::EN_FRONT)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
-		levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		levelObjects[i]->GetModelRender(EN_FRONT)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		levelObjects[i]->GetModelRender(EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 		//オブジェクトの輪郭線を書くようにする
-		levelObjects[i]->GetModelRender(CReversibleObject::EN_FRONT)->SetDrawOutLineFlag(true);
-		levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetDrawOutLineFlag(true);
+		levelObjects[i]->GetModelRender(EN_FRONT)->SetDrawOutLineFlag(true);
+		levelObjects[i]->GetModelRender(EN_BACK)->SetDrawOutLineFlag(true);
 
 		levelObjects[i]->TransparentSwitchOff();
 
@@ -637,11 +637,11 @@ void OOTransparentSwitch::ChangeEntity()
 
 		//モデルの参照を得てから、SetMulColor()を呼ぶ
 		//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-		levelObjects[i]->GetModelRender(CReversibleObject::EN_FRONT)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-		levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		levelObjects[i]->GetModelRender(EN_FRONT)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		levelObjects[i]->GetModelRender(EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 		//オブジェクトの輪郭線を書かないようにする
-		levelObjects[i]->GetModelRender(CReversibleObject::EN_FRONT)->SetDrawOutLineFlag(false);
-		levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetDrawOutLineFlag(false);
+		levelObjects[i]->GetModelRender(EN_FRONT)->SetDrawOutLineFlag(false);
+		levelObjects[i]->GetModelRender(EN_BACK)->SetDrawOutLineFlag(false);
 
 		levelObjects[i]->TransparentSwitchOn();
 

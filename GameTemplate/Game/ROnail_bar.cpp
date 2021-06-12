@@ -5,8 +5,8 @@
 bool ROnail_bar::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/nail.tkm", enNail,
-		"Assets/modelData/hammer.tkm", enBar);
+	Init("Assets/modelData/nail.tkm", EN_RO_TYPE_NAIL,
+		"Assets/modelData/hammer.tkm", EN_RO_TYPE_BAR);
 
 	//壊れるときのサウンドの生成と初期化
 	m_brokenSE = NewGO<CSoundCue>(0);
@@ -36,17 +36,17 @@ ROnail_bar::~ROnail_bar()
 void ROnail_bar::QuerySub()
 {
 	//自身が「釘」の時
-	if (GetObjectType() == enNail)
+	if (GetObjectType() == EN_RO_TYPE_NAIL)
 	{
 
 	}
 	//自身が「バール」の時
-	else if (GetObjectType() == enBar)
+	else if (GetObjectType() == EN_RO_TYPE_BAR)
 	{
 		////「持てない南京錠」と「箱」だと、「持てない南京錠」の方が優先的に破棄するから
 		////「持てない南京錠」を先にクエリする
 		////障害オブジェクトの「持てない南京錠」をクエリ
-		//QueryLOs<OOpadlock>(enNotHavePadlock, [&](OOpadlock* padlock) -> bool
+		//QueryLOs<OOpadlock>(EN_OO_TYPE_BIG_PADLOCK, [&](OOpadlock* padlock) -> bool
 		//	{
 		//		//自身と「持てない南京錠」が衝突したら
 		//		if (IsHitObject(*this, *padlock))
@@ -66,7 +66,7 @@ void ROnail_bar::QuerySub()
 		//	}
 		//);
 		//障害オブジェクトの「箱」をクエリ
-		QueryLOs<OObox>(enBox, [&](OObox* box) -> bool
+		QueryLOs<OObox>(EN_OO_TYPE_BOX, [&](OObox* box) -> bool
 			{
 				//自身と「箱」が衝突したら
 				if (IsHitObject(*this, *box))

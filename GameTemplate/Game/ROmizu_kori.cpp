@@ -5,8 +5,8 @@
 bool ROmizu_kori::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/water.tkm", enWater,
-		"Assets/modelData/fire.tkm", enFire);
+	Init("Assets/modelData/water.tkm", EN_RO_TYPE_WATER,
+		"Assets/modelData/fire.tkm", EN_RO_TYPE_FIRE);
 
 
 	return true;
@@ -18,10 +18,10 @@ bool ROmizu_kori::StartSub()
 void ROmizu_kori::QuerySub()
 {
 	//自身が「水」の時
-	if (GetObjectType() == enWater)
+	if (GetObjectType() == EN_RO_TYPE_WATER)
 	{
 		//障害オブジェクトの「でかい火」をクエリ
-		QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
+		QueryLOs<OObigFire>(EN_OO_TYPE_FLAME, [&](OObigFire* bigFire) -> bool
 			{
 				if (m_actionFlag)
 				{
@@ -40,7 +40,7 @@ void ROmizu_kori::QuerySub()
 			}
 		);
 		//反転オブジェクトの「火」をクエリ
-		QueryLOs<ROmizu_kori>(enFire, [&](ROmizu_kori* Fire) -> bool
+		QueryLOs<ROmizu_kori>(EN_RO_TYPE_FIRE, [&](ROmizu_kori* Fire) -> bool
 			{
 				//自身と「火」が衝突したら
 				if (IsHitObject(*this, *Fire))
@@ -60,10 +60,10 @@ void ROmizu_kori::QuerySub()
 		);
 	}
 	//自身が「火」の時
-	else if (GetObjectType() == enFire)
+	else if (GetObjectType() == EN_RO_TYPE_FIRE)
 	{
 		//反転オブジェクトの「水」をクエリ
-		QueryLOs<ROmizu_kori>(enWater, [&](ROmizu_kori* Water) -> bool
+		QueryLOs<ROmizu_kori>(EN_RO_TYPE_WATER, [&](ROmizu_kori* Water) -> bool
 			{
 				//自身と「水」が衝突したら
 				if (IsHitObject(*this, *Water))

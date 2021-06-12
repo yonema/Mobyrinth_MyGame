@@ -1,5 +1,7 @@
 #pragma once
 
+//カラの名前
+const char* const NAME_EMPTY = "";
 
 /**
  * @brief 名前が登録されているゲームオブジェクトのタイプ
@@ -12,6 +14,8 @@ enum EN_GAME_OBJECT_TYPE
 	EN_GO_TYPE_TITLE,		//CTitleクラス
 	EN_GO_TYPE_GAME_CAMERA,	//CGameCameraクラス
 	EN_GO_TYPE_MOBIUS,		//CMobiusクラス
+	EN_GO_TYPE_PLAYER,		//CPlayerクラス
+	EN_GO_TYPE_UFO,			//CUFOクラス
 };
 
 
@@ -39,6 +43,12 @@ constexpr const char* const GetGameObjectName(const int gameObjectType)
 		break;
 	case EN_GO_TYPE_MOBIUS:
 		return "Mobius";
+		break;
+	case EN_GO_TYPE_PLAYER:
+		return "Player";
+		break;
+	case EN_GO_TYPE_UFO:
+		return "UFO";
 		break;
 	}
 

@@ -5,8 +5,8 @@
 */
 enum EN_PRIORITY
 {
-	PRIORITY_FIRST,			//優先度0
-	PRIORITY_SECOND = 10,	//優先度10
-	PRIORITY_THIRD = 20,	//優先度20
-	PRIORITY_FOURTH = 30,	//優先度30
+	PRIORITY_FIRST,			//一番目。優先度0
+	PRIORITY_SECOND = 10,	//二番目。優先10
+	PRIORITY_THIRD = 20,	//三番目。優先度20
+	PRIORITY_FOURTH = 30,	//四番目。優先度30
 };
