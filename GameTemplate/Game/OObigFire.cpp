@@ -5,7 +5,7 @@
 bool OObigFire::StartSub()
 {
 	//モデルの初期化とタイプの設定
-	Init("Assets/modelData/flame.tkm", enBigFire);
+	Init("Assets/modelData/flame.tkm", EN_OO_TYPE_FLAME);
 
 	//OBBのサイズを設定
 	Vector3 obbSize;
@@ -27,7 +27,7 @@ bool OObigFire::StartSub()
 	//自己発光色を設定
 	SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
 
-	GetOBB().SetTag(COBB::enBigFire);
+	GetOBB().SetTag(COBB::EN_OO_TYPE_FLAME);
 
 	//flameSEのサウンドキューを生成する
 	m_flameSE = NewGO<CSoundCue>(0);

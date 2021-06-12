@@ -5,8 +5,8 @@
 bool ROkey_padlock::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/key.tkm", enKey,
-		"Assets/modelData/padlock.tkm", enPadlock);
+	Init("Assets/modelData/key.tkm", EN_RO_TYPE_KEY,
+		"Assets/modelData/padlock.tkm", EN_RO_TYPE_PADLOCK);
 
 
 
@@ -26,10 +26,10 @@ bool ROkey_padlock::StartSub()
 void ROkey_padlock::QuerySub()
 {
 	//自身が「鍵の金型」の時
-	if (GetObjectType() == enKey)
+	if (GetObjectType() == EN_RO_TYPE_KEY)
 	{
 		//障害オブジェクトの「持てない南京錠」をクエリ
-		QueryLOs<OOpadlock>(enNotHavePadlock, [&](OOpadlock* padlock) -> bool
+		QueryLOs<OOpadlock>(EN_OO_TYPE_BIG_PADLOCK, [&](OOpadlock* padlock) -> bool
 			{
 				//自身と「持てない南京錠」が衝突したら
 				if (IsHitObject(*this, *padlock))
@@ -49,7 +49,7 @@ void ROkey_padlock::QuerySub()
 	}
 	//else if (GetObjectType() == enROPadlock)
 	//{
-	//	QueryLOs<OObigFire>(enBigFire, [&](OObigFire* bigFire) -> bool
+	//	QueryLOs<OObigFire>(EN_OO_TYPE_FLAME, [&](OObigFire* bigFire) -> bool
 	//		{
 	//			if (IsHitObject(*this, *bigFire, hitDot))
 	//			{

@@ -5,8 +5,8 @@
 bool ROleft_right::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/left.tkm", enLeftType,
-		"Assets/modelData/right.tkm", enRightType);
+	Init("Assets/modelData/left.tkm", EN_RO_TYPE_LEFT,
+		"Assets/modelData/right.tkm", EN_RO_TYPE_RIGHT);
 
 
 	return true;
@@ -18,14 +18,14 @@ bool ROleft_right::StartSub()
 void ROleft_right::QuerySub()
 {
 	//自身が「左」の時
-	if (GetObjectType() == enLeftType)
+	if (GetObjectType() == EN_RO_TYPE_LEFT)
 	{
 
 		//左右反転させるか？
 		bool reverseFlag = true;
 
 		//障害オブジェクトの「一方通行」をクエリ
-		QueryLOs<OOoneway>(enOneway, [&](OOoneway* oneway) -> bool
+		QueryLOs<OOoneway>(EN_OO_TYPE_ONEWAY, [&](OOoneway* oneway) -> bool
 			{
 				//自身と「一方通行」が衝突したら
 				if (IsHitObject(*this, *oneway))
@@ -48,14 +48,14 @@ void ROleft_right::QuerySub()
 			ObjectReverse();
 	}
 	//自身が「右」の時
-	else if (GetObjectType() == enRightType)
+	else if (GetObjectType() == EN_RO_TYPE_RIGHT)
 	{
 
 		//左右反転させるか？
 		bool reverseFlag = true;
 
 		//障害オブジェクトの「一方通行」をクエリ
-		QueryLOs<OOoneway>(enOneway, [&](OOoneway* oneway) -> bool
+		QueryLOs<OOoneway>(EN_OO_TYPE_ONEWAY, [&](OOoneway* oneway) -> bool
 			{
 				//自身と「一方通行」が衝突したら
 				if (IsHitObject(*this, *oneway))
@@ -106,7 +106,7 @@ void ROleft_right::ObjectReverse()
 
 				//左右反転する方向
 				Vector3 scale = lo->GetScale();
-				if (GetObjectType() == enRightType)
+				if (GetObjectType() == EN_RO_TYPE_RIGHT)
 					//右向きなら、左右反転させる
 					scale.x *= -1.0f;
 				//衝突したオブジェクトのスケールを設定する

@@ -200,12 +200,19 @@ public:		//メンバ関数
 	}
 
 	/**
-	 * @brief タイトルか？を設定する
+	 * @brief タイトルか？を設定する。
 	 * @param [in] titleMove 
 	*/
 	void SetTitleMove(const bool titleMove)
 	{
 		m_titleMove = titleMove;
+		//タイトルか？
+		if (!m_titleMove)
+		{
+			//タイトルではない
+			//ゲーム開始時の座標を設定
+			m_position = playerConstData::POSITION_GAME_START;
+		}
 	}
 
 

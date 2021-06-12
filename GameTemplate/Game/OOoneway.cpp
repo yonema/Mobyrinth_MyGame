@@ -5,7 +5,7 @@
 bool OOoneway::StartSub()
 {
 	//モデルの初期化とタイプの設定
-	Init("Assets/modelData/oneway.tkm", enOneway);
+	Init("Assets/modelData/oneway.tkm", EN_OO_TYPE_ONEWAY);
 
 	GetModelRender()->Deactivate();
 

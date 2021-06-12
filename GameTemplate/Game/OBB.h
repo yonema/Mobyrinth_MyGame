@@ -218,10 +218,10 @@ public:		//publicなデータメンバ
 	enum EnTag
 	{
 		enNone,		//なし
-		enBigFire,	//炎
-		enWall,		//壁
-		enPadlock,
-		enBox,
+		EN_OO_TYPE_FLAME,	//炎
+		EN_OO_TYPE_WALL,		//壁
+		EN_RO_TYPE_PADLOCK,
+		EN_OO_TYPE_BOX,
 	};
 private:	//データメンバ
 	Vector3 m_position;							//場所

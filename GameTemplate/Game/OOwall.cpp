@@ -6,7 +6,7 @@
 bool OOwall::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/wall.tkm", enWall);
+	Init("Assets/modelData/wall.tkm", EN_OO_TYPE_WALL);
 
 	//OBBのサイズを設定
 	Vector3 obbSize;
@@ -29,13 +29,13 @@ bool OOwall::StartSub()
 	//移動先の終端位置の設定
 	m_endPosition = m_startPosition + upVec;
 
-	GetOBB().SetTag(COBB::enWall);
+	GetOBB().SetTag(COBB::EN_OO_TYPE_WALL);
 
 	//最初に入れていおく稼働、停止オブジェクトを
 	//停止で生成する
 	m_pRun_stop = NewGO<ROrunning_stop>(0);
 	m_pRun_stop->SetPosition(m_position);
-	m_pRun_stop->SetFrontOrBack(CReversibleObject::EN_BACK);	
+	m_pRun_stop->SetFrontOrBack(EN_BACK);	
 	//全反転しないようにと、Tipsを表示しないようにする
 	m_pRun_stop->SetLock(true);
 

@@ -329,16 +329,7 @@
     <ClCompile Include="ReversibleObject.cpp">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
-    <ClCompile Include="ROaxe_pickaxe.cpp">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClCompile>
-    <ClCompile Include="RObird_fish.cpp">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClCompile>
     <ClCompile Include="ROkey_padlock.cpp">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClCompile>
-    <ClCompile Include="ROkeymold_empty.cpp">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
     <ClCompile Include="ROmizu_kori.cpp">
@@ -348,9 +339,6 @@
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
     <ClCompile Include="ROrunning_stop.cpp">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClCompile>
-    <ClCompile Include="ROwire_string.cpp">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
     <ClCompile Include="DirectionLight.cpp">
@@ -727,16 +715,7 @@
     <ClInclude Include="ReversibleObject.h">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
-    <ClInclude Include="ROaxe_pickaxe.h">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClInclude>
-    <ClInclude Include="RObird_fish.h">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClInclude>
     <ClInclude Include="ROkey_padlock.h">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClInclude>
-    <ClInclude Include="ROkeymold_empty.h">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
     <ClInclude Include="ROmizu_kori.h">
@@ -746,9 +725,6 @@
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
     <ClInclude Include="ROrunning_stop.h">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClInclude>
-    <ClInclude Include="ROwire_string.h">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
     <ClInclude Include="TklFile.h">
@@ -948,6 +924,9 @@
     </ClInclude>
     <ClInclude Include="CommonData.h">
       <Filter>MyCode\CommonData</Filter>
+    </ClInclude>
+    <ClInclude Include="StageBaseConstData.h">
+      <Filter>MyCode\Scene\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

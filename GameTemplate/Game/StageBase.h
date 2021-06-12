@@ -1,6 +1,7 @@
 #pragma once
 
 //基本的に必要
+#include "StageBaseConstData.h"
 #include "GameCamera.h"
 #include "SoundCue.h"
 #include "Sky.h"
@@ -29,13 +30,10 @@
 
 //「反転オブジェクト」ReversibleObject
 #include "ROmizu_kori.h"
-#include "RObird_fish.h"
 #include "ROrunning_stop.h"
-#include "ROwire_string.h"
 #include "ROnail_bar.h"
-#include "ROaxe_pickaxe.h"
-#include "ROkeymold_empty.h"
 #include "ROleft_right.h"
+#include "ROkey_padlock.h"
 
 //「障害オブジェクト」ObstacleObject
 #include "OObigFire.h"
@@ -65,57 +63,21 @@ public:		//自動で呼ばれるメンバ関数
 	void Update()override final;			//アップデート関数
 	void UpdateOnlyPaused()override final;	//ポーズ中のみ呼ばれるアップデート関数
 
-private:	//privateなメンバ関数
+protected:	//オーバーライドしてほしいメンバ関数
 
 	/// <summary>
-	/// クリアした時の処理
+	/// オーバーライドしほしいスタート関数
 	/// </summary>
-	void Clear();
+	/// <returns></returns>
+	virtual bool StartSub() = 0 { return true; };
 
 	/// <summary>
+	/// オーバーライドしてほしい、
 	/// リトライした時の処理
 	/// </summary>
-	void Retry();
+	virtual void RetryStage() = 0 {};
 
-	/// <summary>
-	///	終了した時の処理
-	/// </summary>
-	void Quit();
-
-	/// <summary>
-	/// ゴールした時の処理
-	/// </summary>
-	void Goal();
-
-	/// <summary>
-	/// ゴールしているかどうか調べる
-	/// </summary>
-	void CheckGoal();
-
-	/// <summary>
-	/// タイトルへ遷移する
-	/// </summary>
-	void GoTitle();
-
-	/// <summary>
-	/// ワイプインする
-	/// </summary>
-	void WipeIn();
-
-	/// <summary>
-	/// ワイプアウトする
-	/// </summary>
-	/// <returns>ワイプアウトが終了したか？</returns>
-	bool WipeOut();
-
-	void BGMInteractive();
-
-	/// <summary>
-	/// BGMの初期化
-	/// </summary>
-	void InitBGM();
-
-public: //インライン関数
+public: //メンバ関数
 
 	/**
 	 * @brief タイトルモードにする
@@ -206,20 +168,94 @@ protected:	//protectedなメンバ関数
 	}
 
 
-protected:	//オーバーライドしてほしいメンバ関数
+
+private:	//privateなメンバ関数
+
+	/**
+	 * @brief 反転オブジェクトを生成する関数
+	 * @note CLevelObjectManager::GetInstance()->AllDeleteLOs()でリソースは一気に開放できる
+	 * @tparam C 生成する反転オブジェクトの型
+	 * @param [in] objData ロードされたオブジェクトのデータ
+	 * @param [in] frontOrBack 表か裏か？
+	 * @param [in] Transparen 透明か？デフォルトはfalse
+	 * @param [in] objectName オブジェクトの名前。デフォルトはカラの名前
+	 * @param [in] priority ゲームオブジェクトの優先度。デフォルトは PRIORITY_FIRST
+	 * @return 生成した反転オブジェクトの参照
+	*/
+	template<class C>
+	C* NewReversibleObject(
+		const LevelObjectData& objData,
+		const bool frontOrBack,
+		const bool transparent = false,
+		const char* const objectName = NAME_EMPTY,
+		const int priority = PRIORITY_FIRST
+	);
+
+	/**
+	 * @brief 障害オブジェクトを生成する関数
+	 * @note CLevelObjectManager::GetInstance()->AllDeleteLOs()でリソースは一気に開放できる
+	 * @tparam C 生成する障害オブジェクトの型
+	 * @param [in] objData ロードされたオブジェクトのデータ
+	 * @param [in] Transparent 透明か？デフォルトはfalse
+	 * @param [in] objectName オブジェクトの名前。デフォルトはカラの名前
+	 * @param [in] priority ゲームオブジェクトの優先度。デフォルトは PRIORITY_FIRST
+	 * @return 生成した障害オブジェクトの参照
+	*/
+	template<class C>
+	C* NewObstacleObject(
+		const LevelObjectData& objData,
+		const bool transparent = false,
+		const char* const objectName = NAME_EMPTY,
+		const int priority = PRIORITY_FIRST
+	);
 
 	/// <summary>
-	/// オーバーライドしほしいスタート関数
+	/// クリアした時の処理
 	/// </summary>
-	/// <returns></returns>
-	virtual bool StartSub() = 0 { return true; };
+	void Clear();
 
 	/// <summary>
-	/// オーバーライドしてほしい、
 	/// リトライした時の処理
 	/// </summary>
-	virtual void RetryStage() = 0 {};
+	void Retry();
 
+	/// <summary>
+	///	終了した時の処理
+	/// </summary>
+	void Quit();
+
+	/// <summary>
+	/// ゴールした時の処理
+	/// </summary>
+	void Goal();
+
+	/// <summary>
+	/// ゴールしているかどうか調べる
+	/// </summary>
+	void CheckGoal();
+
+	/// <summary>
+	/// タイトルへ遷移する
+	/// </summary>
+	void GoTitle();
+
+	/// <summary>
+	/// ワイプインする
+	/// </summary>
+	void WipeIn();
+
+	/// <summary>
+	/// ワイプアウトする
+	/// </summary>
+	/// <returns>ワイプアウトが終了したか？</returns>
+	bool WipeOut();
+
+	void BGMInteractive();
+
+	/// <summary>
+	/// BGMの初期化
+	/// </summary>
+	void InitBGM();
 
 private:	//データメンバ
 	CLevel m_level;									//レベルロード用クラス

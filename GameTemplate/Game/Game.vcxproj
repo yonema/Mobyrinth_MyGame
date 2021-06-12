@@ -338,9 +338,6 @@
     <ClCompile Include="LevelObjectManager.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="ObstacleObject.cpp" />
-    <ClCompile Include="ROaxe_pickaxe.cpp" />
-    <ClCompile Include="RObird_fish.cpp" />
-    <ClCompile Include="ROkeymold_empty.cpp" />
     <ClCompile Include="ROkey_padlock.cpp" />
     <ClCompile Include="ROmizu_kori.cpp" />
     <ClCompile Include="main.cpp" />
@@ -350,7 +347,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ROnail_bar.cpp" />
     <ClCompile Include="ROrunning_stop.cpp" />
-    <ClCompile Include="ROwire_string.cpp" />
     <ClCompile Include="StageBase.cpp" />
     <ClCompile Include="stage_title.cpp" />
     <ClCompile Include="StartDirecting.cpp" />
@@ -448,6 +444,7 @@
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="OOoneway.h" />
     <ClInclude Include="ROleft_right.h" />
+    <ClInclude Include="StageBaseConstData.h" />
     <ClInclude Include="Tips.h" />
     <ClInclude Include="OOReverseALL.h" />
     <ClInclude Include="TipsController.h" />
@@ -491,9 +488,6 @@
     <ClInclude Include="LightData.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="ObstacleObject.h" />
-    <ClInclude Include="ROaxe_pickaxe.h" />
-    <ClInclude Include="RObird_fish.h" />
-    <ClInclude Include="ROkeymold_empty.h" />
     <ClInclude Include="ROkey_padlock.h" />
     <ClInclude Include="ROmizu_kori.h" />
     <ClInclude Include="MapChip.h" />
@@ -502,7 +496,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="ROnail_bar.h" />
     <ClInclude Include="ROrunning_stop.h" />
-    <ClInclude Include="ROwire_string.h" />
     <ClInclude Include="StageBase.h" />
     <ClInclude Include="stage_title.h" />
     <ClInclude Include="StartDirecting.h" />

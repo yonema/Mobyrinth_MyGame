@@ -203,7 +203,7 @@ const int CLevelObjectManager::GetNearestObjectType(const float nearDist)
 		//捕まっていたら
 
 		//UFOに捕まっている状態を戻す
-		return enUFOCapture;
+		return EN_OO_TYPE_UFO_CAPTURE;
 	}
 
 
@@ -233,7 +233,7 @@ const int CLevelObjectManager::GetNearestObjectType(const float nearDist)
 
 	//戻すオブジェクトタイプ
 	//近くにオブジェクトがなかったらenEmptyを戻す
-	int objectType = enEmpty;
+	int objectType = EN_OBJECT_TYPE_EMPTY;
 
 	//レベルオブジェクトを全部調べる
 	for (int i = 0; i < m_levelObjects.size(); i++)

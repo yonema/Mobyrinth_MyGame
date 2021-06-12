@@ -248,6 +248,12 @@ namespace playerConstData
 	//スタン中の点滅のカラー
 	const Vector4 BLINK_COLOR_STUN = { 1.5f,0.2f,0.2f,1.0f };
 
+	/*
+	* 開始演出関連の定数
+	*/
+
+	//ゲームの開始時の座標
+	const Vector3 POSITION_GAME_START = { 0.0f, 3000.0f, 0.0f };
 
 	/*
 	* ゴール関連の定数

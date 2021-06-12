@@ -5,7 +5,7 @@
 bool OOgoal::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/goal.tkm", enGoal);
+	Init("Assets/modelData/goal.tkm", EN_OO_TYPE_GOAL);
 
 	//フォントレンダラーの生成
 	//m_spriteRender = NewGO<CSpriteRender>(2);
