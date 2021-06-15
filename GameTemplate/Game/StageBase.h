@@ -258,42 +258,57 @@ private:	//privateなメンバ関数
 	void InitBGM();
 
 private:	//データメンバ
+
+	/*
+	* レベルロード関連
+	*/
+
 	CLevel m_level;									//レベルロード用クラス
+	CSky* m_sky = nullptr;							//空クラスのポインタ
+	CGameCamera* m_gameCamea = nullptr;				//ゲームカメラ
+	CStartDirecting* m_startDirecting = nullptr;	//開始演出クラス
 	Player* m_player = nullptr;						//プレイヤークラスのポインタ
 	CPause* m_pause = nullptr;						//ポーズクラスのポインタ
 	OOgoal* m_goal = nullptr;						//ゴールクラスのポインタ
-	CSky* m_sky = nullptr;							//空クラスのポインタ
+	OOTransparentSwitch* m_switch = nullptr;		//スイッチのポインタ
+	CUFO* m_ufo = nullptr;							//UFOのポインタ
+
+
+
 	float m_goalTimer = 0;							//ゴールした後の待ち時間をはかる
 
-	CUFO* m_ufo = nullptr;							//UFOのポインタ
-	OOTransparentSwitch* m_switch = nullptr;		//スイッチのポインタ
-
-	CGameCamera* m_gameCamea = nullptr;				//ゲームカメラ
-
-	CStartDirecting* m_startDirecting = nullptr;	//開始演出クラス
 	bool m_isTitle = false;							//タイトル画面か？
 
+	bool m_wipeInFlag = false;						//ワイプインする？
 
+	CSpriteRender* m_goalSR = nullptr;				//ゴールのスプライト
+	float m_switchTime = stageBaseConstData::SWITCH_TIME_DEFAULT;	//スイッチのタイム
+
+	/*
+	* キャパシティ関連
+	*/
+	CTipsController* m_tipsController = nullptr;	//Tipsのコントロ―ルクラス
+	CCapacityUI* m_capacityUI = nullptr;			//キャパシティのUIクラス
+
+
+	/*
+	* セーブ関連
+	*/
+	CSave m_save;									//セーブデータクラス
+	int m_highestClearStageNum = -1;				//一番高いクリアステージ
+	int m_stageNum = -1;							//ステージの番号
+
+
+	/*
+	* サウンド関連
+	*/
 	CSoundCue* m_bgmStage1 = nullptr;				//BGMのサウンドキュー
 	CSoundCue* m_bgmStage2 = nullptr;				//BGMのサウンドキュー
 	CSoundCue* m_loop_bgmStage1 = nullptr;			//BGMのサウンドキュー
 	CSoundCue* m_loop_bgmStage2 = nullptr;			//BGMのサウンドキュー
+	CSoundCue* m_goalSE = nullptr;					//m_goalSEのサウンドキュー
 	bool m_check_loop1 = false;						//ループ確認
 	bool m_check_loop2 = false;						//ループ確認
 	bool m_initedBGM = false;						//BGMが初期化済みか？
-	bool m_wipeInFlag = false;						//ワイプインする？
-
-	CTipsController* m_tipsController = nullptr;	//Tipsのコントロ―ルクラス
-	CCapacityUI* m_capacityUI = nullptr;			//キャパシティのUIクラス
-	CSoundCue* m_goalSE = nullptr;					//m_goalSEのサウンドキュー
-	int m_goalSEcount = 0;							//m_goalSEのサポート
-
-	CSave m_save;									//セーブデータクラス
-	int m_highestClearStageNum = -1;				//一番高いクリアステージ
-	int m_stageNum = -1;							//ステージの番号
-	
-	CSpriteRender* m_goalSR = nullptr;				//ゴールのスプライト
-	float m_switchTime = 10.0f;						//スイッチのタイム
-
 };
 

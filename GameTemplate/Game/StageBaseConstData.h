@@ -3,6 +3,10 @@
 
 namespace stageBaseConstData
 {
+	/*
+	* レベルロード関連の定数
+	*/
+
 	//プレイヤーのオブジェクトネーム
 	const wchar_t* const LEVEL_OBJECT_NAME_PLAYER = L"player_kari";
 	//メビウスの輪のオブジェクトネーム
@@ -106,7 +110,7 @@ namespace stageBaseConstData
 		case EN_OO_TYPE_REVERSE_ALL:
 			return L"reverseAll";
 			break;
-		case EN_GO_TYPE_UFO:
+		case EN_OO_TYPE_UFO_CAPTURE:
 			return L"UFO";
 			break;
 		case EN_OO_TYPE_TRANSPARENT_SWITCH:
@@ -117,7 +121,7 @@ namespace stageBaseConstData
 			/*
 			* 透明反転オブジェクト
 			*/
-			
+
 		case RO_TYPE_FIRE_TRANSPARENT:
 			return L"fire_switch";
 			break;
@@ -163,6 +167,60 @@ namespace stageBaseConstData
 	const wchar_t* const CHAR_GET_WAYPOINT_NUM = L"0";
 
 
+	/*
+	* 透明アイテムか普通のアイテムか関連
+	*/
 	const bool MODE_TRANS = true;		//透明モード
 	const bool MODE_OPACITY = false;	//不透明モード
+
+
+	//空の拡大率
+	const float MODEL_SCALE_SKY = 1000.0f;
+
+	//デフォルトのスイッチのタイム
+	const float SWITCH_TIME_DEFAULT = 10.0f;
+	//ステージ4のスイッチのタイム
+	const float SWITCH_TIME_STAGE_4 = 12.0f;
+
+
+	/*
+	* ゴールのスプライト関連の定数
+	*/
+
+	//ゴールのスプライトのファイルパス
+	const char* const SPRITE_FILEPATH_GOAL = "Assets/Image/Clear.DDS";
+	//ゴールのスプライトの幅
+	const float SPRITE_WIDHT_GOAL = 1024.0f;
+	//ゴールのスプライトの高さ
+	const float SPRITE_HEIGHT_GOAL = 512.0f;
+	//ゴールのスプライトの座標
+	const Vector3 SPRITE_POSITION_GOAL = { 0.0f,250.0f,0.0f };
+	//ゴールした時の待ち時間
+	const float TIME_WAIT_GOAL = 4.0f;
+
+	
+
+
+	/*
+	* サウンド関連の定数
+	*/
+
+	//ゴールのSEのファイルパス
+	const wchar_t* const SOUND_FILEPATH_SE_GOAL = L"Assets/sound/goal.wav";
+	//ゴールのSEの音量
+	const float SOUND_VOLUME_SE_GOAL = 0.5f;
+
+	//ステージのBGM1のファイルパス
+	const wchar_t* const SOUND_FILEPATH_BGM_STAGE_1 = L"Assets/sound/Stage1.wav";
+	//ステージのBGM2のファイルパス
+	const wchar_t* const SOUND_FILEPATH_BGM_STAGE_2 = L"Assets/sound/Stage2.wav";
+	//ステージのループ用BGM1のファイルパス
+	const wchar_t* const SOUND_FILEPATH_BGM_STAGE_1_LOOP = L"Assets/sound/Stage1.wav";
+	//ステージのループ用BGM2のファイルパス
+	const wchar_t* const SOUND_FILEPATH_BGM_STAGE_2_LOOP = L"Assets/sound/Stage2.wav";
+
+	//BGMインタラクティブで音量を増減させる値
+	const float SOUND_VOLUME_INC_OR_DEC_BGM_INTERACTIVE = 0.01f;
+
+
 }

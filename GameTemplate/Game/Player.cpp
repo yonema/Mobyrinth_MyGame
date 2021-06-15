@@ -244,7 +244,7 @@ void Player::InitModel()
 		MODEL_FILEPATH_PLAYER,			//ファイルパス
 		D3D12_CULL_MODE_BACK,			//カリング設定
 		m_animationClips,				//アニメーションクリップ
-		EN_ANIM_CLIP_NUM,					//アニメーションクリップの数
+		EN_ANIM_CLIP_NUM,				//アニメーションクリップの数
 		enModelUpAxisZ					//アップ軸
 	);
 	//シャドウキャスター有効
@@ -266,7 +266,7 @@ void Player::InitModel()
 		MODEL_FILEPATH_PLAYER_GOAL,		//ファイルパス
 		D3D12_CULL_MODE_BACK,			//カリング設定
 		m_goalAnimationClips,			//アニメーションクリップ
-		EN_GOAL_ANIM_CLIP_NUM,				//アニメーションクリップの数
+		EN_GOAL_ANIM_CLIP_NUM,			//アニメーションクリップの数
 		enModelUpAxisZ					//アップ軸
 	);
 	//ゴール用のモデルを非表示にする
