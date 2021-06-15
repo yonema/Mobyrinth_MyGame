@@ -41,6 +41,9 @@ void CLevelObjectManager::InitWayPointPos(std::map<int, Vector3>& posMap)
 	{
 		m_wayPointPos[index] = it->second;
 	}
+
+	//表側と裏側のしきい値の初期化
+	InitFrontOrBackSideThreshold();
 }
 
 
@@ -61,6 +64,25 @@ void CLevelObjectManager::InitWayPointRot(std::map<int, Quaternion>& rotMap)
 	{
 		m_wayPointRot[index] = it->second;
 	}
+}
+
+
+/**
+ * @brief 表側と裏側のしきい値の初期化
+*/
+void CLevelObjectManager::InitFrontOrBackSideThreshold()
+{
+	/*
+	* ウェイポイントの番号の最初4分の1と最後4分の1が表側、
+	* 4分の2～4分の3は裏側になる。
+	* 
+	* ウェイポイントの番号は左周りで増えていき、表側か裏側かは
+	* 自身の左側のウェイポイントを使って計算するから、小さいほうの
+	* しきい値が1加算する。
+	*/
+
+	m_frontOrBackSideThresholdSmall = m_vecSize / 4 + 1;
+	m_frontOrBackSideThresholdBig = (m_vecSize / 4) * 3;
 }
 
 
@@ -274,5 +296,33 @@ const int CLevelObjectManager::GetNearestObjectType(const float nearDist)
 	
 	//オブジェクトタイプを戻す
 	return objectType;
+
+}
+
+
+/**
+ * @brief 表側にいるのか裏側にいるのかを調べる
+ * @param [in] lpIndex 自身の左側のウェイポイントの番号
+ * @return 表側か裏側か
+*/
+const int CLevelObjectManager::CheckFrontOrBackSide(const int lpIndex)
+{
+	//表側か裏側か
+	int frontOrBackSide = enNone;
+
+	//左側のウェイポイントをしきい値と比べて、表側か裏側か調べる
+	if (m_frontOrBackSideThresholdSmall <= lpIndex && lpIndex <= m_frontOrBackSideThresholdBig)
+	{
+		//裏側
+		frontOrBackSide = enBackSide;
+	}
+	else
+	{
+		//表側
+		frontOrBackSide = enFrontSide;
+	}
+
+	//結果を戻す
+	return frontOrBackSide;
 
 }

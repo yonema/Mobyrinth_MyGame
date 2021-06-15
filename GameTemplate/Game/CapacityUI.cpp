@@ -620,21 +620,18 @@ void CCapacityUI::CheckActiveFontColor()
 	//プレイヤーのウェイポイント
 	const int lpIndex = m_player->GetLeftPointIndex();
 
-
+	m_playerFrontOrBackSide = CLevelObjectManager::GetInstance()->CheckFrontOrBackSide(lpIndex);
 	//左側のウェイポイントを調べて表側か裏側か調べる
-	if ((25 <= lpIndex && lpIndex <= 31) ||
-		(0 <= lpIndex && lpIndex <= 8))
+	if (m_playerFrontOrBackSide == CLevelObjectManager::enFrontSide )
 	{
 		//表側
-		m_playerFrontOrBackSide = CLevelObjectManager::enFrontSide;
 		m_defaultFontColor[enFrontSide] = m_activeFontColor;
 		m_defaultFontColor[enBackSide] = m_inactiveFontColor;
 
 	}
-	else if (9 <= lpIndex <= 24)
+	else
 	{
 		//裏側
-		m_playerFrontOrBackSide = CLevelObjectManager::enBackSide;
 		m_defaultFontColor[enFrontSide] = m_inactiveFontColor;
 		m_defaultFontColor[enBackSide] = m_activeFontColor;
 	}

@@ -628,13 +628,13 @@ void CTitle::StageSelect()
 		{
 			//ステージのアイコンを有効化する
 			m_stageIcon[i]->Activate();
-			m_stageIcon[i]->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+			m_stageIcon[i]->SetMulColor(g_VEC4_OPACITY);
 			//一番高いクリアしたステージの番号より大きいか？
 			if (i > m_stageTitle->GetHighestClearStageNum() + 1)
 			{
 				//大きいとき
 				//カラーを薄暗くする
-				m_stageIcon[i]->SetMulColor({ 0.4f,0.4f,0.4f,1.0f });
+				m_stageIcon[i]->SetMulColor(SPRITE_MUL_COLOR_STAGE_PLAY_CANNOT);
 			}
 		}
 
@@ -731,7 +731,7 @@ void CTitle::StageDecision()
 		if (m_stageSelectState == EN_STAGE_4)
 		{
 			//スイッチのタイムをデフォルトから変更する	
-			stage->SetSwitchTime(SWITCH_TIME_STAGE_4);
+			stage->SetSwitchTime(stageBaseConstData::SWITCH_TIME_STAGE_4);
 		}
 	}
 

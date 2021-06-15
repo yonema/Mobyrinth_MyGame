@@ -12,6 +12,8 @@ enum EN_GAME_OBJECT_TYPE
 	//ゲーム全体を通して使われるCDirectionLightクラス
 	EN_GO_TYPE_GAME_DIRECTION_LIGHT,
 	EN_GO_TYPE_TITLE,		//CTitleクラス
+	EN_GO_TYPE_START_DIRECTING,	//CStartDirectingクラス
+	EN_GO_TYPE_PAUSE,		//CPauseクラス
 	EN_GO_TYPE_GAME_CAMERA,	//CGameCameraクラス
 	EN_GO_TYPE_MOBIUS,		//CMobiusクラス
 	EN_GO_TYPE_PLAYER,		//CPlayerクラス
@@ -37,6 +39,12 @@ constexpr const char* const GetGameObjectName(const int gameObjectType)
 		break;
 	case EN_GO_TYPE_TITLE:
 		return "Title";
+		break;
+	case EN_GO_TYPE_START_DIRECTING:
+		return "StartDirecting";
+		break;
+	case EN_GO_TYPE_PAUSE:
+		return "Pause";
 		break;
 	case EN_GO_TYPE_GAME_CAMERA:
 		return "GameCamera";

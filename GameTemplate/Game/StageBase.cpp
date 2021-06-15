@@ -9,50 +9,33 @@ bool IStageBase::Start()
 {
 
 	//ステージ開始時の演出の作成
-	m_startDirecting = NewGO<CStartDirecting>(0, "StartDirecting");
-	//タイトル画面か？
-	if (m_isTitle) 
-	{
-		//タイトル画面
-		//開始時の演出を行わない
-		m_startDirecting->SetCheckStartDirecting(false);
-	}
-	else
-	{
-		//ゲーム画面
-		//ゲーム画面では絶対ワイプインがある
-		m_wipeInFlag = true;
-	}
+	m_startDirecting = 
+		NewGO<CStartDirecting>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_START_DIRECTING));
 
-	//ワイプインフラグが立っていたら、ワイプインさせる
-	//ワイプインフラグは外からtrueにされることもある。
-	if (m_wipeInFlag)
-		WipeIn();
 
 	//ゲームカメラの作成
-	m_gameCamea = NewGO<CGameCamera>(0, "GameCamera");
-	//タイトル画面か？
-	if (m_isTitle)
-	{
-		//タイトル画面なら
-		//タイトルモードにする
-		m_gameCamea->TitleMode();
-	}
+	m_gameCamea = NewGO<CGameCamera>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_GAME_CAMERA));
+
 
 	//ポーズ画面用クラスの作成
-	m_pause = NewGO<CPause>(0, "Pause");
+	m_pause = NewGO<CPause>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_PAUSE));
 
 	//空を作る
-	m_sky = NewGO<CSky>(0);
-	m_sky->SetScale(1000.0f);
+	m_sky = NewGO<CSky>(PRIORITY_FIRST);
+	m_sky->SetScale(MODEL_SCALE_SKY);
 
 
-	//フォントレンダラーの生成
-	m_goalSR = NewGO<CSpriteRender>(10);
+	//ゴールのスプライトの生成
+	m_goalSR = NewGO<CSpriteRender>(PRIORITY_SECOND);
 	//初期化
-	m_goalSR->Init
-	("Assets/Image/Clear.DDS", 1024.0f, 512.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
-	m_goalSR->SetPosition({ 0.0f,250.0f,0.0f });
+	m_goalSR->Init(
+		SPRITE_FILEPATH_GOAL,
+		SPRITE_WIDHT_GOAL,
+		SPRITE_HEIGHT_GOAL,
+		spriteRenderConstData::DEFAULT_PIVOT,
+		AlphaBlendMode_Trans
+	);
+	m_goalSR->SetPosition(SPRITE_POSITION_GOAL);
 	m_goalSR->SetPostRenderFlag(true);
 
 	//無効化する
@@ -60,38 +43,49 @@ bool IStageBase::Start()
 
 
 	//キャパシティを表示するスプライトの生成と初期化
-	m_capacityUI = NewGO<CCapacityUI>(0);
-
-	//タイトル画面か？
-	if (m_isTitle)
-	{
-		//タイトル画面なら
-
-		//キャパシティのタイトルフラグを立てる
-		m_capacityUI->SetTitleFlag(true);
-	}
+	m_capacityUI = NewGO<CCapacityUI>(PRIORITY_FIRST);
 
 
 	//Tipsコントローラーの生成
-	m_tipsController = NewGO<CTipsController>(0);
+	m_tipsController = NewGO<CTipsController>(PRIORITY_FIRST);
+
+
+	//m_goalSEのサウンドキューを生成する
+	m_goalSE = NewGO<CSoundCue>(PRIORITY_FIRST);
+	//m_goalSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_goalSE->Init(SOUND_FILEPATH_SE_GOAL);
+	//音量調節
+	m_goalSE->SetVolume(SOUND_VOLUME_SE_GOAL);
+
+	//セーブデータをデータメンバに保持させる
+	m_highestClearStageNum = m_save.GetSaveData().highestClearStageNum;
+
+
 	//タイトル画面か？
 	if (m_isTitle)
 	{
 		//タイトル画面なら
 
+		//開始時の演出を行わない
+		m_startDirecting->SetCheckStartDirecting(false);
+		//タイトルモードにする
+		m_gameCamea->TitleMode();
+		//キャパシティのタイトルフラグを立てる
+		m_capacityUI->SetTitleFlag(true);
 		//Tipsをタイトルモードにする
 		m_tipsController->SetTitleMode();
 	}
-
-	//m_goalSEのサウンドキューを生成する
-	m_goalSE = NewGO<CSoundCue>(0);
-	//m_goalSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_goalSE->Init(L"Assets/sound/goal.wav");
-	//音量調節
-	m_goalSE->SetVolume(0.5f);
-
-	//セーブデータをデータメンバに代入
-	m_highestClearStageNum = m_save.GetSaveData().highestClearStageNum;
+	else
+	{
+		//ゲーム画面
+		//ゲーム画面では絶対ワイプインがある
+		m_wipeInFlag = true;
+	}
+	
+	//ワイプインフラグが立っていたら、ワイプインさせる
+	//ワイプインフラグは外からtrueにされることもある。
+	if (m_wipeInFlag)
+		WipeIn();
 
 	return StartSub();
 }
@@ -303,7 +297,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			return true;
 		}
 		//UFO
-		else if (objData.EqualObjectName(GetLevelObjectName(EN_GO_TYPE_UFO)) == true)
+		else if (objData.EqualObjectName(GetLevelObjectName(EN_OO_TYPE_UFO_CAPTURE)) == true)
 		{
 			//障害オブジェクトの生成
 			//不透明モードで、オブジェクトの名前を付ける
@@ -532,22 +526,25 @@ C* IStageBase::NewObstacleObject(
 //デストラクタ
 IStageBase::~IStageBase()
 {
-	//単体のオブジェクトを消去
+	//単体のオブジェクトを破棄
 	DeleteGO(m_gameCamea);
 	DeleteGO(m_pause);
 	DeleteGO(m_sky);
 	DeleteGO(m_startDirecting);
+	DeleteGO(m_tipsController);
+	DeleteGO(m_capacityUI);
+
+	//スプライトの破棄
 	DeleteGO(m_goalSR);
 
+	//サウンドの破棄
 	DeleteGO(m_bgmStage1);
 	DeleteGO(m_bgmStage2);
 	DeleteGO(m_loop_bgmStage1);
 	DeleteGO(m_loop_bgmStage2);
 
-	DeleteGO(m_capacityUI);
 
 
-	DeleteGO(m_tipsController);
 
 	//レベルでロードしたオブジェクトを消去
 
@@ -556,13 +553,13 @@ IStageBase::~IStageBase()
 	////////////////////////////////////////////////////////////
 
 	//「基本オブジェクト」
-	QueryGOs<Player>("Player", [&](Player* player)->bool
+	QueryGOs<Player>(GetGameObjectName(EN_GO_TYPE_PLAYER), [&](Player* player)->bool
 		{
 			DeleteGO(player);
 			return true;
 		}
 	);
-	QueryGOs<CMobius>("Mobius", [&](CMobius* mobius)->bool
+	QueryGOs<CMobius>(GetGameObjectName(EN_GO_TYPE_MOBIUS), [&](CMobius* mobius)->bool
 		{
 			DeleteGO(mobius);
 			return true;
@@ -575,22 +572,13 @@ IStageBase::~IStageBase()
 	//を全部消去
 	CLevelObjectManager::GetInstance()->AllDeleteLOs();
 
-
-	//デバック用
-	//後で消す
-	//QueryGOs<CModelRender>("waypoint", [&](CModelRender* waypoint)->bool
-	//	{
-	//		DeleteGO(waypoint);
-	//		return true;
-	//	}
-	//);
-	//デバック用ここまで
 }
 
 
 //アップデート関数
 void IStageBase::Update()
 {
+	//ゴールしているかどうかを調べる
 	CheckGoal();
 
 	//Start関数ではなくUpdate関数でBGMを初期化しているのは
@@ -603,7 +591,11 @@ void IStageBase::Update()
 		InitBGM();
 	}
 
-	if (!m_isTitle) {
+	//タイトル画面か？
+	if (!m_isTitle)
+	{
+		//ゲーム画面
+		//BGMインタラクティブを実行する
 		BGMInteractive();
 	}
 
@@ -628,11 +620,13 @@ void IStageBase::UpdateOnlyPaused()
 {
 	//ポーズの状態を調べる
 
+	//リトライが選択されたか？
 	if (m_pause->GetRetryFlag())
 	{
 		//リトライ
 		Retry();
 	}
+	//終了が選択されたか？
 	else if (m_pause->GetQuitFlag())
 	{
 		//終了
@@ -645,8 +639,14 @@ void IStageBase::UpdateOnlyPaused()
 /// </summary>
 void IStageBase::Clear()
 {
+	//ワイプが終わっていか？
 	if (!WipeOut())
+	{
+		//終わっていない
+		//ここでreturn
 		return;
+	}
+
 
 	//セーブデータの構造体
 	SSaveData saveData;
@@ -674,8 +674,14 @@ void IStageBase::Clear()
 /// </summary>
 void IStageBase::Retry()
 {
+	//ワイプが終わっていか？
 	if (!WipeOut())
+	{
+		//終わっていない
+		//ここでreturn
 		return;
+	}
+
 	//オーバーライドされているはずの処理を行う
 	RetryStage();
 	Release();	//リリース
@@ -686,8 +692,14 @@ void IStageBase::Retry()
 /// </summary>
 void IStageBase::Quit()
 {
+	//ワイプが終わっていか？
 	if (!WipeOut())
+	{
+		//終わっていない
+		//ここでreturn
 		return;
+	}
+
 	//タイトルの戻る
 	GoTitle();
 	Release();	//リリース
@@ -698,19 +710,21 @@ void IStageBase::Quit()
 /// </summary>
 void IStageBase::Goal()
 {
-	if (m_goalSEcount < 1) {				//一度だけ呼ぶ
-		m_goalSE->Play(false);			//m_goalSEをループ再生をオフで再生する。
-		m_goalSEcount++;
+	//ゴールのスプライトが非有効か？
+	//一度だけ呼ぶ
+	if (!m_goalSR->IsActive()) 
+	{
+		//ゴールのSEをワンショット再生で再生する。
+		m_goalSE->Play(false);
+		//ゴールのスプライトを有効化する
 		m_goalSR->Activate();
-
 	}
 	
-	m_player->GetPosition();
 	//ゴールした後の時間を計測する	//デルタタイムを掛ける
 	m_goalTimer += GameTime().GetFrameDeltaTime();
 
 	//一定時間たったら
-	if (m_goalTimer >= 4.0f)
+	if (m_goalTimer >= TIME_WAIT_GOAL)
 	{
 		//クリアする
 		Clear();
@@ -719,15 +733,6 @@ void IStageBase::Goal()
 
 void IStageBase::CheckGoal()
 {
-
-	//アニメーションの初期化でエラーが出るのを調べる用のコード
-	//デバック用
-	//後で消す
-	//ゴールしていたら、ゴールの処理をする
-	//Goal();
-	//return;
-	//デバック用ここまで
-
 	//ゴールがアクティブなら
 	if (m_goal)
 	{
@@ -751,7 +756,6 @@ void IStageBase::CheckGoal()
 		}
 	}
 
-	//Quit();
 }
 
 /// <summary>
@@ -785,7 +789,7 @@ bool IStageBase::WipeOut()
 void IStageBase::GoTitle()
 {
 	//タイトルを生成
-	CTitle* title = NewGO<CTitle>(0);
+	CTitle* title = NewGO<CTitle>(PRIORITY_FIRST);
 	//ワイプインするように設定する
 	title->SetWipeInFlag(true);
 }
@@ -800,9 +804,9 @@ void IStageBase::InitBGM()
 	//////////
 
 	//BGMのサウンドキューを生成する
-	m_bgmStage1 = NewGO<CSoundCue>(0);
+	m_bgmStage1 = NewGO<CSoundCue>(PRIORITY_FIRST);
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_bgmStage1->Init(L"Assets/sound/Stage1.wav");
+	m_bgmStage1->Init(SOUND_FILEPATH_BGM_STAGE_1);
 	m_bgmStage1->SetSoundType(CSoundCue::enBGM);
 	//BGMをループ再生をオンで再生する。
 	m_bgmStage1->Play(true);
@@ -812,9 +816,9 @@ void IStageBase::InitBGM()
 	}
 
 	//BGMのサウンドキューを生成する
-	m_bgmStage2 = NewGO<CSoundCue>(0);
+	m_bgmStage2 = NewGO<CSoundCue>(PRIORITY_FIRST);
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_bgmStage2->Init(L"Assets/sound/Stage2.wav");
+	m_bgmStage2->Init(SOUND_FILEPATH_BGM_STAGE_2);
 	m_bgmStage2->SetSoundType(CSoundCue::enBGM);
 	//BGMをループ再生をオンで再生する。
 	m_bgmStage2->Play(true);
@@ -823,17 +827,17 @@ void IStageBase::InitBGM()
 
 
 	//BGMのサウンドキューを生成する
-	m_loop_bgmStage1 = NewGO<CSoundCue>(0);
+	m_loop_bgmStage1 = NewGO<CSoundCue>(PRIORITY_FIRST);
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_loop_bgmStage1->Init(L"Assets/sound/Stage1_Loop.wav");
+	m_loop_bgmStage1->Init(SOUND_FILEPATH_BGM_STAGE_1_LOOP);
 	m_loop_bgmStage1->SetSoundType(CSoundCue::enBGM);
 	//BGM音量を０にする。
 	m_loop_bgmStage1->SetVolume(0.0f);
 
 	//BGMのサウンドキューを生成する
-	m_loop_bgmStage2 = NewGO<CSoundCue>(0);
+	m_loop_bgmStage2 = NewGO<CSoundCue>(PRIORITY_FIRST);
 	//BGMのサウンドキューを、waveファイルを指定して初期化する。
-	m_loop_bgmStage2->Init(L"Assets/sound/Stage2_Loop.wav");
+	m_loop_bgmStage2->Init(SOUND_FILEPATH_BGM_STAGE_2_LOOP);
 	m_loop_bgmStage2->SetSoundType(CSoundCue::enBGM);
 	//BGM音量を０にする。
 	m_loop_bgmStage2->SetVolume(0.0f);
@@ -843,27 +847,41 @@ void IStageBase::InitBGM()
 
 void IStageBase::BGMInteractive()
 {
+	//プレイヤーが見つかっていないか？
 	if (!m_player)
 	{
-		m_player = FindGO<Player>("Player");
+		//見つかっていない
+		//プレイヤーを探す
+		m_player = FindGO<Player>(GetGameObjectName(EN_GO_TYPE_PLAYER));
+		//まだ見つかっていなかったら
 		if (!m_player)
+			//下の処理を実行しない
 			return;
 	}
 
-	//ウェイポイントが24～7の場合
-	if (24 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 31 ||
-		0 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 7) {
+	//プレイヤーのウェイポイント
+	const int lpIndex = m_player->GetLeftPointIndex();
+
+	//プレイヤーが表側にいるか裏側にいるかを調べる
+	int playerFrontOrBackSide = CLevelObjectManager::GetInstance()->CheckFrontOrBackSide(lpIndex);
+
+	//プレイヤーが表側にいるとき
+	if (playerFrontOrBackSide == CLevelObjectManager::enFrontSide) {
 		if (m_bgmStage1->GetVolume() < 1.0f) {
-			m_bgmStage1->SetVolume(m_bgmStage1->GetVolume() + 0.01f);
-			m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() - 0.01f);
+			m_bgmStage1->
+				SetVolume(m_bgmStage1->GetVolume() + SOUND_VOLUME_INC_OR_DEC_BGM_INTERACTIVE);
+			m_bgmStage2->
+				SetVolume(m_bgmStage2->GetVolume() - SOUND_VOLUME_INC_OR_DEC_BGM_INTERACTIVE);
 		}
 	}
 
-	//ウェイポイントが8～23の場合
-	if (8 <= m_player->GetWayPointState() && m_player->GetWayPointState() <= 23) {
+	//プレイヤーが裏側にいるとき
+	if (playerFrontOrBackSide == CLevelObjectManager::enBackSide) {
 		if (m_bgmStage2->GetVolume() < 1.0f) {
-			m_bgmStage2->SetVolume(m_bgmStage2->GetVolume() + 0.01f);
-			m_bgmStage1->SetVolume(m_bgmStage1->GetVolume() - 0.01f);
+			m_bgmStage2->
+				SetVolume(m_bgmStage2->GetVolume() + SOUND_VOLUME_INC_OR_DEC_BGM_INTERACTIVE);
+			m_bgmStage1->
+				SetVolume(m_bgmStage1->GetVolume() - SOUND_VOLUME_INC_OR_DEC_BGM_INTERACTIVE);
 		}
 	}
 

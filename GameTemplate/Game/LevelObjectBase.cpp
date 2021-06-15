@@ -262,20 +262,8 @@ void ILevelObjectBase::CheckPosition()
 void ILevelObjectBase::CheckFrontOrBackSide(const bool reversibleObject)
 {
 	//表側か裏側か
-	int nextFrontOrBackSide = 0;
+	int nextFrontOrBackSide = CLevelObjectManager::GetInstance()->CheckFrontOrBackSide(m_lpIndex);
 
-	//左側のウェイポイントを調べて表側か裏側か調べる
-	if ((25 <= m_lpIndex && m_lpIndex <= 31) ||
-		(0 <= m_lpIndex && m_lpIndex <= 8))
-	{
-		//表側
-		nextFrontOrBackSide = CLevelObjectManager::enFrontSide;
-	}
-	else if (9 <= m_lpIndex <= 24)
-	{
-		//裏側
-		nextFrontOrBackSide = CLevelObjectManager::enBackSide;
-	}
 
 	if (reversibleObject)
 	{

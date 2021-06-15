@@ -54,7 +54,7 @@ public:		//staticなメンバ関数
 		return m_instance;
 	}
 
-public:		//ここのメンバ関数を主に使う
+public:		//メンバ関数
 
 	/// <summary>
 	/// プレイヤーの参照を得る
@@ -264,6 +264,20 @@ public:		//ここのメンバ関数を主に使う
 		m_mobius = mobius;
 	}
 
+	/**
+	 * @brief 表側にいるのか裏側にいるのかを調べる
+	 * @param [in] lpIndex 自身の左側のウェイポイントの番号
+	 * @return 表側か裏側か
+	*/
+	const int CheckFrontOrBackSide(const int lpIndex);
+
+private:	//privateなメンバ関数
+
+	/**
+	 * @brief 表側と裏側のしきい値の初期化
+	*/
+	void InitFrontOrBackSideThreshold();
+
 public:	//列挙体
 	/// <summary>
 	/// 表側か裏側か
@@ -280,6 +294,8 @@ private:	//データメンバ
 	std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
 	std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
 	int m_vecSize = 0;						//ウェイポイントステートの最大の値
+	int m_frontOrBackSideThresholdSmall = 0;	//表側と裏側のしきい値の小さい方
+	int m_frontOrBackSideThresholdBig = 0;		//表側と裏側のしきい値の大きい方
 
 	std::vector<ILevelObjectBase*> m_levelObjects;	//インスタンスしたレベルオブジェクトの配列
 	//反転オブジェクトの、表側と裏側のそれぞれの数

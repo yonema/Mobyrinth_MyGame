@@ -81,8 +81,6 @@ namespace titleConstData
 		return nullptr;
 	}
 
-	//ステージ4のスイッチのタイム
-	const float SWITCH_TIME_STAGE_4 = 12.0f;
 
 	//一番最初のステージ番号
 	const int STAGE_NUM_FIRST = EN_STAGE_1;
