@@ -123,7 +123,7 @@ void OObigFire::Damage()
 //プレイヤーが炎に近づくと燃えてる音を出す
 void OObigFire::Burn()
 {
-	Vector3 distance = m_position - m_pPlayer->GetPosition();
+	Vector3 distance = m_position - m_player->GetPosition();
 	const float MaxDist = 700;
 	const float DistLen = distance.Length();
 

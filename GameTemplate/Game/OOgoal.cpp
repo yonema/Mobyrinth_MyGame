@@ -66,7 +66,7 @@ void OOgoal::UpdateSub()
 	}
 
 	//落下中か？
-	if (m_pPlayer->GetFallFalg())
+	if (m_player->GetFallFalg())
 		//落下中はゴール判定を取らない
 		return;
 
@@ -78,7 +78,7 @@ void OOgoal::UpdateSub()
 		//フォントレンダラーを有効化する
 		//m_spriteRender->Activate();
 		//プレイヤーをゴール状態にする
-		m_pPlayer->SetGoal(true);
+		m_player->SetGoal(true);
 		////モデルを見えなくする
 		//GetModelRender()->Deactivate();
 		DeleteGO(this);

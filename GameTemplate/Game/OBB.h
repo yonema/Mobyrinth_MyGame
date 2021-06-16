@@ -217,7 +217,7 @@ public:		//publicなデータメンバ
 	//OBBのタグ
 	enum EnTag
 	{
-		enNone,		//なし
+		EB_NONE_SIDE,		//なし
 		EN_OO_TYPE_FLAME,	//炎
 		EN_OO_TYPE_WALL,		//壁
 		EN_RO_TYPE_PADLOCK,
@@ -230,7 +230,7 @@ private:	//データメンバ
 	
 	Vector3 m_normalDirection[enLocalAxisNum];	//各軸の単位方向ベクトル
 	float m_directionLength[enLocalAxisNum];	//各軸の方向ベクトルの長さ
-	int m_tag = enNone;							//OBBのタグ
+	int m_tag = EB_NONE_SIDE;							//OBBのタグ
 	bool m_exceptionFlag = false;				//例外フラグ
 
 private:	//staticなデータメンバ

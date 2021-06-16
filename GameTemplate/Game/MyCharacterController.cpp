@@ -22,7 +22,7 @@ void CMyCharacterController::Init(const SInitOBBData& initOBBData)
 /// <returns>ˆÚ“®Œã‚ÌÀ•W</returns>
 const Vector3& CMyCharacterController::Execute(const Vector3& moveSpeed, const float deltaTime)
 {
-	m_tag = COBB::enNone;
+	m_tag = COBB::EB_NONE_SIDE;
 
 	//ˆÚ“®‘O‚ÌÀ•W
 	Vector3 oldPosition = m_obb.GetPosition();

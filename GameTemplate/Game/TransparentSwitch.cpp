@@ -233,7 +233,7 @@ void OOTransparentSwitch::UpdateSub()
 
 
 				//プレイヤーを操作不能にする
-				m_pPlayer->SetOperationFlag(false);
+				m_player->SetOperationFlag(false);
 
 				//UFOがあるか？
 				if (m_ufo)
@@ -451,7 +451,7 @@ void OOTransparentSwitch::Switching()
 		m_flagSwitchOn = true;
 
 		//プレイヤーを操作可能にする
-		m_pPlayer->SetOperationFlag(true);
+		m_player->SetOperationFlag(true);
 
 		//UFOがあるか？
 		if (m_ufo)

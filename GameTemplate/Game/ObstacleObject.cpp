@@ -62,13 +62,13 @@ bool CObstacleObject::Init(const char* filePath, int objectType)
 void CObstacleObject::PureVirtualUpdate()
 {
 	//プレイヤーが見つかっていなかったら
-	if (!m_pPlayer)
+	if (!m_player)
 	{
 		//プレイヤーを探す
-		m_pPlayer = CLevelObjectManager::GetInstance()->GetPlayer();
+		m_player = CLevelObjectManager::GetInstance()->GetPlayer();
 
 		//それでも見つからなかったら何もずにreturn
-		if (!m_pPlayer)
+		if (!m_player)
 			return;
 	}
 

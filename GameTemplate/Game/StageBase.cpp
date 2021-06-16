@@ -866,7 +866,7 @@ void IStageBase::BGMInteractive()
 	int playerFrontOrBackSide = CLevelObjectManager::GetInstance()->CheckFrontOrBackSide(lpIndex);
 
 	//プレイヤーが表側にいるとき
-	if (playerFrontOrBackSide == CLevelObjectManager::enFrontSide) {
+	if (playerFrontOrBackSide == EN_FRONT_SIDE) {
 		if (m_bgmStage1->GetVolume() < 1.0f) {
 			m_bgmStage1->
 				SetVolume(m_bgmStage1->GetVolume() + SOUND_VOLUME_INC_OR_DEC_BGM_INTERACTIVE);
@@ -876,7 +876,7 @@ void IStageBase::BGMInteractive()
 	}
 
 	//プレイヤーが裏側にいるとき
-	if (playerFrontOrBackSide == CLevelObjectManager::enBackSide) {
+	if (playerFrontOrBackSide == EN_BACK_SIDE) {
 		if (m_bgmStage2->GetVolume() < 1.0f) {
 			m_bgmStage2->
 				SetVolume(m_bgmStage2->GetVolume() + SOUND_VOLUME_INC_OR_DEC_BGM_INTERACTIVE);

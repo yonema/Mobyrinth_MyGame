@@ -86,22 +86,22 @@ void CCapacityUI::InitFont()
 	//明るすぎるため正規化
 	fontColor.Normalize();
 	fontColor = { 1.0f,1.0f,1.0f };
-	m_defaultFontColor[enFrontSide] = fontColor;
+	m_defaultFontColor[EN_FRONT_SIDE] = fontColor;
 	m_activeFontColor = fontColor;
 	//フォントのX座標
 	const float capacityNumX = -615.0f;
 	//フォントのY座標
 	const float capacityNumY = 332.5f;
-	m_capacityPos[enFrontSide] = { capacityNumX ,capacityNumY };
+	m_capacityPos[EN_FRONT_SIDE] = { capacityNumX ,capacityNumY };
 	//テキストをセット
-	swprintf(text, L"表:  /%d", maxNum[enFrontSide]);
+	swprintf(text, L"表:  /%d", maxNum[EN_FRONT_SIDE]);
 	//表側の数のキャパシティのフォントの初期化
-	m_capacityFR[enFrontSide]->Init(text,
-		m_capacityPos[enFrontSide],
+	m_capacityFR[EN_FRONT_SIDE]->Init(text,
+		m_capacityPos[EN_FRONT_SIDE],
 		{ fontColor.x,fontColor.y,fontColor.z,1.0f },
 		0.0f, scale, { 0.5f,0.5f });
 	//表側の数フォントの初期化
-	m_RONumFR[enFrontSide]->Init(L"",
+	m_RONumFR[EN_FRONT_SIDE]->Init(L"",
 		{ capacityNumX + m_diffCapacityToNum,capacityNumY }, { fontColor.x,fontColor.y,fontColor.z,1.0f },
 		0.0f, scale, { 0.5f,0.5f });
 
@@ -115,20 +115,20 @@ void CCapacityUI::InitFont()
 	//色が一緒過ぎて見えにくかったから、暗くする
 	fontColor = { 1.0f,1.0f,1.0f };
 	fontColor.Scale(0.0);
-	m_defaultFontColor[enBackSide] = fontColor;
+	m_defaultFontColor[EN_BACK_SIDE] = fontColor;
 	m_inactiveFontColor = fontColor;
 	//表側のフォントとのY座標の差
 	const float diffFrontToBackY = 70.0f;
-	m_capacityPos[enBackSide] = { capacityNumX ,capacityNumY - diffFrontToBackY };
+	m_capacityPos[EN_BACK_SIDE] = { capacityNumX ,capacityNumY - diffFrontToBackY };
 	//テキストをセット
-	swprintf(text, L"裏:  /%d", maxNum[enBackSide]);
+	swprintf(text, L"裏:  /%d", maxNum[EN_BACK_SIDE]);
 	//裏側のキャパシティのフォントの初期化
-	m_capacityFR[enBackSide]->Init(text,
-		m_capacityPos[enBackSide],
+	m_capacityFR[EN_BACK_SIDE]->Init(text,
+		m_capacityPos[EN_BACK_SIDE],
 		{ fontColor.x,fontColor.y,fontColor.z,1.0f },
 		0.0f, scale, { 0.5f,0.5f });
 	//裏側の数のフォントの初期化
-	m_RONumFR[enBackSide]->Init(L"",
+	m_RONumFR[EN_BACK_SIDE]->Init(L"",
 		{ capacityNumX + m_diffCapacityToNum,capacityNumY - diffFrontToBackY },
 		{ fontColor.x,fontColor.y,fontColor.z,1.0f },
 		0.0f, scale, { 0.5f,0.5f });
@@ -139,10 +139,10 @@ void CCapacityUI::InitFont()
 		//タイトル画面なら
 
 		//非表示にする
-		m_capacityFR[enFrontSide]->Deactivate();
-		m_capacityFR[enBackSide]->Deactivate();
-		m_RONumFR[enFrontSide]->Deactivate();
-		m_RONumFR[enBackSide]->Deactivate();
+		m_capacityFR[EN_FRONT_SIDE]->Deactivate();
+		m_capacityFR[EN_BACK_SIDE]->Deactivate();
+		m_RONumFR[EN_FRONT_SIDE]->Deactivate();
+		m_RONumFR[EN_BACK_SIDE]->Deactivate();
 	}
 }
 
@@ -171,10 +171,10 @@ void CCapacityUI::Update()
 	//現在の表側と裏側の反転オブジェクトの数を取得
 	const int* num = CLevelObjectManager::GetInstance()->GetReversibleObjectNum();
 	//テキストをセット
-	swprintf(text, L"%d", num[enFrontSide]);
-	m_RONumFR[enFrontSide]->SetText(text);
-	swprintf(text, L"%d", num[enBackSide]);
-	m_RONumFR[enBackSide]->SetText(text);
+	swprintf(text, L"%d", num[EN_FRONT_SIDE]);
+	m_RONumFR[EN_FRONT_SIDE]->SetText(text);
+	swprintf(text, L"%d", num[EN_BACK_SIDE]);
+	m_RONumFR[EN_BACK_SIDE]->SetText(text);
 
 	//最初のフレームか？
 	if (m_firstFrame)
@@ -211,8 +211,8 @@ void CCapacityUI::Update()
 void CCapacityUI::CheckDirecting(const int* num)
 {
 	//どれかがオーバー中か？
-	if (m_directingState[enFrontSide] == enOver ||
-		m_directingState[enBackSide] == enOver)
+	if (m_directingState[EN_FRONT_SIDE] == enOver ||
+		m_directingState[EN_BACK_SIDE] == enOver)
 		//オーバー中なら
 		//ほかの演出はしない
 		return;
@@ -246,10 +246,10 @@ void CCapacityUI::CheckDirecting(const int* num)
 	}
 
 	//どれかがオーバーの演出になったら、他の演出はキャンセルする
-	if (m_directingState[enFrontSide] == enOver)
-		m_directingState[enBackSide] = enNormal;
-	else if (m_directingState[enBackSide] == enOver)
-		m_directingState[enFrontSide] = enNormal;
+	if (m_directingState[EN_FRONT_SIDE] == enOver)
+		m_directingState[EN_BACK_SIDE] = enNormal;
+	else if (m_directingState[EN_BACK_SIDE] == enOver)
+		m_directingState[EN_FRONT_SIDE] = enNormal;
 }
 
 
@@ -622,18 +622,18 @@ void CCapacityUI::CheckActiveFontColor()
 
 	m_playerFrontOrBackSide = CLevelObjectManager::GetInstance()->CheckFrontOrBackSide(lpIndex);
 	//左側のウェイポイントを調べて表側か裏側か調べる
-	if (m_playerFrontOrBackSide == CLevelObjectManager::enFrontSide )
+	if (m_playerFrontOrBackSide == EN_FRONT_SIDE )
 	{
 		//表側
-		m_defaultFontColor[enFrontSide] = m_activeFontColor;
-		m_defaultFontColor[enBackSide] = m_inactiveFontColor;
+		m_defaultFontColor[EN_FRONT_SIDE] = m_activeFontColor;
+		m_defaultFontColor[EN_BACK_SIDE] = m_inactiveFontColor;
 
 	}
 	else
 	{
 		//裏側
-		m_defaultFontColor[enFrontSide] = m_inactiveFontColor;
-		m_defaultFontColor[enBackSide] = m_activeFontColor;
+		m_defaultFontColor[EN_FRONT_SIDE] = m_inactiveFontColor;
+		m_defaultFontColor[EN_BACK_SIDE] = m_activeFontColor;
 	}
 	
 	for (int frontOrBack = 0; frontOrBack < enFrontAndBackSideNum; frontOrBack++)

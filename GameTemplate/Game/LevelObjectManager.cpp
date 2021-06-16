@@ -308,18 +308,18 @@ const int CLevelObjectManager::GetNearestObjectType(const float nearDist)
 const int CLevelObjectManager::CheckFrontOrBackSide(const int lpIndex)
 {
 	//表側か裏側か
-	int frontOrBackSide = enNone;
+	int frontOrBackSide = EB_NONE_SIDE;
 
 	//左側のウェイポイントをしきい値と比べて、表側か裏側か調べる
 	if (m_frontOrBackSideThresholdSmall <= lpIndex && lpIndex <= m_frontOrBackSideThresholdBig)
 	{
 		//裏側
-		frontOrBackSide = enBackSide;
+		frontOrBackSide = EN_BACK_SIDE;
 	}
 	else
 	{
 		//表側
-		frontOrBackSide = enFrontSide;
+		frontOrBackSide = EN_FRONT_SIDE;
 	}
 
 	//結果を戻す

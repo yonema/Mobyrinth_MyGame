@@ -41,7 +41,9 @@ public:		//CReversibleObjectでオーバーライドしてほしいメンバ関�
 	 * @param [in] frontOrBack 表か裏か？
 	 * @retval 
 	*/
-	virtual void SwitchReverse(const bool frontOrBack = 0) {};
+	virtual void ReversibleSwitchOff() {};
+
+	virtual void ReversibleSwitchOn() {};
 
 
 public:		//メンバ関数
@@ -231,6 +233,54 @@ public:		//メンバ関数
 		m_zPosLen = zPosLen;
 	}
 
+	/// <summary>
+	/// 重なっているかの判定の処理を行うか確認するフラグの値を変更する。
+	/// </summary>
+	/// <param name="b">フラグの値</param>
+	void SetIsHitFlag(const bool b)
+	{
+		m_isHitFlag = b;
+	}
+
+	/// <summary>
+	/// 重なっているかの判定の処理を行うか確認するフラグの値を取得
+	/// </summary>
+	/// <returns>m_flagIsHitの値</returns>
+	const bool GetIsHitFlag()const
+	{
+		return m_isHitFlag;
+	}
+
+	/// <summary>
+/// 透明オブジェクトに使用するデータを初期化する。
+/// </summary>
+	void SetTransparentObject();
+
+	/// <summary>
+/// 透明スイッチが押されたときに使用される関数
+/// </summary>
+	void TransparentSwitchOn();
+
+	/// <summary>
+	/// 透明スイッチの効果が消えたときに使用される関数
+	/// </summary>
+	void TransparentSwitchOff();
+
+
+	bool GetFlagTransparentObject()
+	{
+		return m_transparentObjectFlag;
+	}
+
+	/// <summary>
+	/// タイマーのフォントレンダラーの参照を戻す
+	/// </summary>
+	/// <returns>タイマーのフォントレンダラーの参照</returns>
+	CFontRender* GetTimerFR()
+	{
+		return m_timerFR;
+	}
+
 protected:	//protectedなメンバ関数
 
 	/// <summary>
@@ -251,6 +301,9 @@ protected:	//protectedなメンバ関数
 	void CheckPosition();
 
 
+
+
+
 private:	//privateなメンバ関数
 
 	/// <summary>
@@ -258,213 +311,56 @@ private:	//privateなメンバ関数
 	/// </summary>
 	void InitOBB();
 
+
+
+
 protected:	//protectedなデータメンバ	//あんま良くないけど利便性のために
-	Vector3 m_position = g_VEC3_ZERO;		//場所
+	Vector3 m_position = g_VEC3_ZERO;			//場所
 	Quaternion m_rotation = g_QUAT_IDENTITY;	//回転
-	Vector3 m_scale = g_VEC3_ONE;			//拡大
-	Player* m_pPlayer = nullptr;			//プレイヤーのポインタ
+	Vector3 m_scale = g_VEC3_ONE;				//拡大
+	Player* m_player = nullptr;					//プレイヤーのポインタ
 
 private:	//データメンバ
-	int m_objectType = EN_OBJECT_TYPE_EMPTY;				//タイプ
+
+	/*
+	* フラグ関連
+	*/
 	bool m_isDead = false;					//死んでいるか？
-	COBB m_obb;								//OBBの当たり判定
-	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス
-	int m_rpIndex = 0;
-	int m_frontOrBackSide = CLevelObjectManager::enNone;	//自身が表側にあるか裏側にあるか
 	bool m_lock = false;					//ロック中か？、Tips表示や全反転をロックする
+	bool m_transparentObjectFlag = false;	//透明オブジェクトどうかのフラグ
+	bool m_isHitFlag = true;				//重なっているかの判定の処理を行うか確認するフラグ
+	bool m_switchValid = false;				//スイッチが有効か？
+
+	/*
+	* ウェイポイント関連
+	*/
+	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス
+	int m_rpIndex = 0;						//自身の右側のウェイポイントのインデックス
 	float m_zPosLen = 0.0f;					//ウェイポイントからの奥行の距離
-	////////////////////////////////////////////////////////////
-	// 透明オブジェクト用の変数と関数
-	////////////////////////////////////////////////////////////
-public: //Set関数
-	/// <summary>
-	/// 重なっているかの判定の処理を行うか確認するフラグの値を変更する。
-	/// </summary>
-	/// <param name="b">フラグの値</param>
-	void SetIsHitFlag(const bool b)
-	{
-		m_isHitFlag = b;
-	}
+	int m_frontOrBackSide = EB_NONE_SIDE;	//自身が表側にあるか裏側にあるか
 
-	/// <summary>
-	/// 重なっているかの判定の処理を行うか確認するフラグの値を取得
-	/// </summary>
-	/// <returns>m_flagIsHitの値</returns>
-	const bool GetIsHitFlag()const
-	{
-		return m_isHitFlag;
-	}
+	/*
+	* オブジェクトタイプ関連
+	*/
+	int m_objectType = EN_OBJECT_TYPE_EMPTY;//タイプ
 
-	/// <summary>
-	/// 透明オブジェクトに使用するデータを初期化する。
-	/// </summary>
-	void SetTransparentObject()
-	{
-		//透明オブジェクト判定に使用するフラグをtrueにする。
-		m_transparentObjectFlag = true;
-		//オブジェクトの重なっている判定を行わないようにする。
-		m_isHitFlag = false;
-		//リセット時に使用する位置、回転情報を初期化
-		//m_startRotation = m_rotation;
-		m_startPosition = m_position;
-
-		//リセット時に使用する表裏情報を初期化
-		m_startfrontOrBack = m_frontOrBack;
-		
-
-		//タイマーのフォントレンダラーの生成と初期化
-		m_timerFR = NewGO<CFontRender>(0);
-		m_timerFR->Init(L"10", { 0.0f,0.0f });
-		m_timerFR->SetPostRenderFlag(true);
-		//非表示にする
-		m_timerFR->Deactivate();
-
-		m_swichon = NewGO<Effect>(0);
-		m_swichon->Init(u"Assets/effect2/activation.efk");
-		float scale = 70.0f;								//小さいので大きくしておく
-		m_swichon->SetScale({ scale ,scale ,scale });
+	/*
+	* OBB関連
+	*/
+	COBB m_obb;								//OBBの当たり判定
 
 
-		m_swichoff = NewGO<Effect>(0);
-		m_swichoff->Init(u"Assets/effect2/activation.efk");
-		float scale2 = 70.0f;								//小さいので大きくしておく
-		m_swichoff->SetScale({ scale2 ,scale2 ,scale2 });
+	/*
+	* エフェクト関連
+	*/
+	Effect* m_swichonEffect = nullptr;				//スイッチを押したときに出るエフェクト
+	Effect* m_swichoffEffect = nullptr;				//スイッチが戻るときのエフェクト
 
 
-		//オブジェクトを半透明にする。
-		//GetModelRender(CReversibleObject::EN_FRONT)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-		//GetModelRender(CReversibleObject::EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-		//上記の半透明にする処理がうまく動かなかった場合、
-		//ChangeTransparent()関数を使ってください。
-	}
-
-
-public: //透明スイッチに使用する関数
-	/// <summary>
-	/// 透明スイッチが押されたときに使用される関数
-	/// </summary>
-	void TransparentSwitchOn()
-	{
-		m_swichon->SetPosition(m_position);
-		m_swichon->SetRotation(m_rotation);
-		m_swichon->Play();
-
-		//オブジェクトを持ち上げられるようにする。
-		m_heldFlag = true;
-		//オブジェクトの衝突判定を行うようにする。
-		m_isHitFlag = true;
-
-		//オブジェクトの当たり判定を有効にする。
-		m_obb.SetExceptionFlag(false);
-
-
-		//タイマーのフォントを表示する
-		m_timerFR->Activate();
-
-		m_swichon->SetPosition(m_position);
-		m_swichon->SetRotation(m_rotation);
-		m_swichon->Play();
-
-		
-	}
-
-	/// <summary>
-	/// 透明スイッチの効果が消えたときに使用される関数
-	/// </summary>
-	void TransparentSwitchOff()
-	{
-		//スイッチが有効か？
-		if (m_switchValid)
-		{
-			//有効
-
-			//エフェクトを再生する
-			m_swichoff->SetPosition(m_position);
-			m_swichoff->SetRotation(m_rotation);
-			m_swichoff->Play();
-		}
-		else
-		{
-			//有効じゃない
-
-			//有効にする
-			m_switchValid = true;
-		}
-
-		//オブジェクトを持ち上げられないようにする。
-		m_heldFlag = false;
-		//オブジェクトの衝突判定を行わないようにする。
-		m_isHitFlag = false;
-		//位置、回転情報を初期状態に戻す。
-		m_rotation = m_startRotation;
-		m_position = m_startPosition;
-		//表裏情報を初期状態に戻す。
-		m_frontOrBack = m_startfrontOrBack;
-		CheckWayPoint();
-		CheckFrontOrBackSide();
-		SwitchReverse(m_frontOrBack);
-		//オブジェクトの当たり判定を無効にする。
-		m_obb.SetExceptionFlag(true);
-
-		//タイマーのフォントを非表示にする
-		m_timerFR->Deactivate();
-
-
-	}
-
-	/// <summary>
-	/// オブジェクトが現在持ち上げられるかのフラグの値を代入する。
-	/// </summary>
-	/// <param name="b">オブジェクトが現在持てるか</param>
-	void SetFlagHeld(bool b)
-	{
-		m_heldFlag = b;
-	}
-
-	bool GetFlagHeld()
-	{
-		return m_heldFlag;
-	}
-
-
-	bool GetFlagTransparentObject()
-	{
-		return m_transparentObjectFlag;
-	}
-
-	/// <summary>
-	/// タイマーのフォントレンダラーの参照を戻す
-	/// </summary>
-	/// <returns>タイマーのフォントレンダラーの参照</returns>
-	CFontRender* GetTimerFR()
-	{
-		return m_timerFR;
-	}
-
-private: //メンバ変数
-	bool m_transparentObjectFlag = false; //透明オブジェクトどうかのフラグ
-	bool m_isHitFlag = true; //重なっているかの判定の処理を行うか確認するフラグ
-	bool m_heldFlag = true; //オブジェクトが現在持ち上げられるかのフラグ
-	
-
-	Vector3 m_startPosition = g_VEC3_ZERO; //オブジェクトの初期位置を保存する位置情報変数
-	Quaternion m_startRotation = g_QUAT_IDENTITY; //オブジェクトの初期回転を保存する回転情報変数
-
+	/*
+	* フォント関連
+	*/
 	CFontRender* m_timerFR = nullptr;			//タイマーのフォントレンダラー
-
-	Effect* m_swichon = nullptr;					 //スイッチを押したときに出るエフェクト
-	Effect* m_swichoff = nullptr;					 //スイッチが戻るときのエフェクト
-	bool m_switchValid = false;						//スイッチが有効か？
-
-
-	////////////////////////////////////////////////////////////
-	// 反転オブジェクト用の変数と関数（透明オブジェクトのために移動）
-	////////////////////////////////////////////////////////////
-
-protected:
-	bool m_frontOrBack = EN_FRONT;				//表か裏か？
-	bool m_startfrontOrBack = EN_FRONT;
-
 
 
 	//デバック用

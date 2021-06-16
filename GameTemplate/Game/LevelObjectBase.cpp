@@ -13,7 +13,7 @@ bool ILevelObjectBase::Start()
 	//近くのウェイポイントを探して、イイ感じに回転する
 	CheckWayPoint();
 	//プレイヤーの参照を保持する
-	m_pPlayer = CLevelObjectManager::GetInstance()->GetPlayer();
+	m_player = CLevelObjectManager::GetInstance()->GetPlayer();
 
 	//LevelObjectManagerにオブジェクトが追加されたことを報告
 	CLevelObjectManager::GetInstance()->AddObject(this);
@@ -46,7 +46,7 @@ bool ILevelObjectBase::Start()
 ILevelObjectBase::~ILevelObjectBase()
 {
 	//m_swichon削除
-	DeleteGO(m_swichon);
+	DeleteGO(m_swichonEffect);
 
 	//フォントのタイマーの破棄
 	if (m_timerFR)
@@ -66,6 +66,31 @@ ILevelObjectBase::~ILevelObjectBase()
 	CLevelObjectManager::GetInstance()->RemoveObject(this);
 }
 
+
+//アップデート関数
+void ILevelObjectBase::Update()
+{
+	//オーバーライドされる関数
+	//派生クラスのアップデート関数から先に呼ばれる
+	PureVirtualUpdate();
+
+	//OBBの場所と回転を設定する
+	m_obb.SetPosition(m_position);
+	m_obb.SetRotation(m_rotation);
+#ifdef MY_DEBUG
+	//デバック用
+	//後で消す
+	Vector3* vertPos = m_obb.GetBoxVertex();
+	for (int i = 0; i < m_dbgOBBNum; i++)
+	{
+		m_dbgOBBVert[i]->SetPosition(vertPos[i]);
+		m_dbgOBBVert[i]->SetRotation(m_rotation);
+	}
+	//デバック用ここまで
+#endif
+}
+
+
 /// <summary>
 /// OBBの初期化関数
 /// </summary>
@@ -83,6 +108,7 @@ void ILevelObjectBase::InitOBB()
 	//OBBの初期化
 	m_obb.Init(initData);
 }
+
 
 /// <summary>
 /// 近くのウェイポイントを探して、イイ感じに回転する関数
@@ -218,13 +244,6 @@ void ILevelObjectBase::CheckRotation()
 	//を使って回転させる
 	m_rotation.Slerp(ComplementRate, (*wayPointRotVec)[m_lpIndex], (*wayPointRotVec)[m_rpIndex]);
 
-	//最初のときだけ、m_startRotationに代入
-	if (m_startRotation.x == g_QUAT_IDENTITY.x &&
-		m_startRotation.y == g_QUAT_IDENTITY.y &&
-		m_startRotation.z == g_QUAT_IDENTITY.z &&
-		m_startRotation.w == g_QUAT_IDENTITY.w) {
-		m_startRotation = m_rotation;
-	}
 }
 
 void ILevelObjectBase::CheckPosition()
@@ -268,7 +287,7 @@ void ILevelObjectBase::CheckFrontOrBackSide(const bool reversibleObject)
 	if (reversibleObject)
 	{
 		//初期値ではなかったら
-		if (m_frontOrBackSide != CLevelObjectManager::enNone)
+		if (m_frontOrBackSide != EB_NONE_SIDE)
 		{
 			//前の場所の反転オブジェクトの数を減算する
 			CLevelObjectManager::GetInstance()->RemoveReversibleObjectNum(m_frontOrBackSide);
@@ -281,32 +300,6 @@ void ILevelObjectBase::CheckFrontOrBackSide(const bool reversibleObject)
 	m_frontOrBackSide = nextFrontOrBackSide;
 }
 
-
-
-//アップデート関数
-void ILevelObjectBase::Update()
-{
-	//オーバーライドされる関数
-	//派生クラスのアップデート関数から先に呼ばれる
-	PureVirtualUpdate();
-
-	//OBBの場所と回転を設定する
-	m_obb.SetPosition(m_position);
-	m_obb.SetRotation(m_rotation);
-#ifdef MY_DEBUG
-	//デバック用
-	//後で消す
-	Vector3* vertPos = m_obb.GetBoxVertex();
-	for (int i = 0; i < m_dbgOBBNum; i++)
-	{
-		m_dbgOBBVert[i]->SetPosition(vertPos[i]);
-		m_dbgOBBVert[i]->SetRotation(m_rotation);
-	}
-	//デバック用ここまで
-#endif
-}
-
-
 /// <summary>
 /// 自身とプレイヤーの当たり判定
 /// </summary>
@@ -314,16 +307,111 @@ void ILevelObjectBase::Update()
 bool ILevelObjectBase::IsHitPlayer()
 {
 	//プレイヤーが見つかっていなかったら何もせずにreturn
-	if (!m_pPlayer)
+	if (!m_player)
 		return false;
 
 	//OBB同士の当たり判定をして、
 	//その結果を戻す
-	return CollisionOBBs(m_pPlayer->GetOBB(), m_obb);
-
-
+	return CollisionOBBs(m_player->GetOBB(), m_obb);
 }
 
+
+/// <summary>
+/// 透明オブジェクトに使用するデータを初期化する。
+/// </summary>
+void ILevelObjectBase::SetTransparentObject()
+{
+	//透明オブジェクト判定に使用するフラグをtrueにする。
+	m_transparentObjectFlag = true;
+	//オブジェクトの重なっている判定を行わないようにする。
+	m_isHitFlag = false;
+
+
+
+	//タイマーのフォントレンダラーの生成と初期化
+	m_timerFR = NewGO<CFontRender>(0);
+	m_timerFR->Init(L"10", { 0.0f,0.0f });
+	m_timerFR->SetPostRenderFlag(true);
+	//非表示にする
+	m_timerFR->Deactivate();
+
+	m_swichonEffect = NewGO<Effect>(0);
+	m_swichonEffect->Init(u"Assets/effect2/activation.efk");
+	float scale = 70.0f;								//小さいので大きくしておく
+	m_swichonEffect->SetScale({ scale ,scale ,scale });
+
+
+	m_swichoffEffect = NewGO<Effect>(0);
+	m_swichoffEffect->Init(u"Assets/effect2/activation.efk");
+	float scale2 = 70.0f;								//小さいので大きくしておく
+	m_swichoffEffect->SetScale({ scale2 ,scale2 ,scale2 });
+}
+
+
+/// <summary>
+/// 透明スイッチが押されたときに使用される関数
+/// </summary>
+void ILevelObjectBase::TransparentSwitchOn()
+{
+	m_swichonEffect->SetPosition(m_position);
+	m_swichonEffect->SetRotation(m_rotation);
+	m_swichonEffect->Play();
+
+	//オブジェクトの衝突判定を行うようにする。
+	m_isHitFlag = true;
+
+	//オブジェクトの当たり判定を有効にする。
+	m_obb.SetExceptionFlag(false);
+
+
+	//タイマーのフォントを表示する
+	m_timerFR->Activate();
+
+	m_swichonEffect->SetPosition(m_position);
+	m_swichonEffect->SetRotation(m_rotation);
+	m_swichonEffect->Play();
+
+	ReversibleSwitchOn();
+}
+
+
+/// <summary>
+/// 透明スイッチの効果が消えたときに使用される関数
+/// </summary>
+void ILevelObjectBase::TransparentSwitchOff()
+{
+	//スイッチが有効か？
+	if (m_switchValid)
+	{
+		//有効
+
+		//エフェクトを再生する
+		m_swichoffEffect->SetPosition(m_position);
+		m_swichoffEffect->SetRotation(m_rotation);
+		m_swichoffEffect->Play();
+	}
+	else
+	{
+		//有効じゃない
+
+		//有効にする
+		m_switchValid = true;
+	}
+
+	//オブジェクトの衝突判定を行わないようにする。
+	m_isHitFlag = false;
+
+	CheckWayPoint();
+	CheckFrontOrBackSide();
+	//オブジェクトの当たり判定を無効にする。
+	m_obb.SetExceptionFlag(true);
+
+	//タイマーのフォントを非表示にする
+	m_timerFR->Deactivate();
+
+
+	ReversibleSwitchOff();
+}
 
 
 /// <summary>

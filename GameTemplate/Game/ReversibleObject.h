@@ -15,21 +15,6 @@ public:		//自動で呼ばれるメンバ関数
 	virtual ~CReversibleObject();			//デストラクタ
 	void PureVirtualUpdate()override final;	//アップデート関数
 
-public:
-	/// <summary>
-	/// 表か裏かのモデルの参照を得る
-	/// </summary>
-	/// <param name="frontOrBack">表か裏か？</param>
-	/// <returns>モデルの参照</returns>
-	CModelRender* GetModelRender(const int frontOrBack = 0) override final
-	{
-		return m_modelRender[frontOrBack];
-	}
-
-	void SwitchReverse(const bool frontOrBack)override final
-	{
-		SetFrontOrBack(frontOrBack);
-	}
 
 public:		//publicなオーバーライドしてほしいメンバ関数
 	virtual bool StartSub() { return true; };	//スタート関数
@@ -57,38 +42,27 @@ private:	//privateなオーバーライドしてほしいメンバ関数
 		}
 	};
 
-
-protected:	//ここのメンバ関数を主に使う
+public:		//オーバーライドしたメンバ関数
 	/// <summary>
-	/// 初期化関数
-	/// 最初に読んでね。trueを戻してね。
-	/// 表のモデルとそのタイプ、裏のモデルとそのタイプ
-	/// を設定する。
-	/// タイプ一覧はObjectType.hを参照
+	/// 表か裏かのモデルの参照を得る
 	/// </summary>
-	/// <param name="filePath_front">表のモデルのtkmファイルパス</param>
-	/// <param name="type_front">表のタイプ</param>
-	/// <param name="filePath_back">裏のモデルのtkmファイルパス</param>
-	/// <param name="type_back">裏のタイプ</param>
-	/// <returns>true戻してね</returns>
-	bool Init
-	(const char* filePath_front, const int type_front,
-		const char* filePath_back, const int type_back);
-
-	/// <summary>
-	/// 自己発光色を設定する
-	/// </summary>
-	/// <param name="color">自己発光色</param>
-	void SetEmissionColor(const Vector4& color)
+	/// <param name="frontOrBack">表か裏か？</param>
+	/// <returns>モデルの参照</returns>
+	CModelRender* GetModelRender(const int frontOrBack = 0) override final
 	{
-		m_modelRender[EN_FRONT]->SetEmissionColor(color);
-		m_modelRender[EN_BACK]->SetEmissionColor(color);
+		return m_modelRender[frontOrBack];
 	}
 
-public:
-	//void Update()override final;
+	void ReversibleSwitchOn() override final
+	{
+		//オブジェクトを持ち上げられるようにする。
+		m_heldFlag = true;
+	}
 
-public:		//ここのメンバ関数を主に使う	
+	void ReversibleSwitchOff()override final;
+
+
+public:		//メンバ関数	
 	/// <summary>
 	/// 反転させる
 	/// </summary>
@@ -167,6 +141,33 @@ public:		//ここのメンバ関数を主に使う
 		return enCheckPlayer;
 	};
 
+protected:	//protectedなメンバ関数
+
+	/// <summary>
+	/// 初期化関数
+	/// 最初に読んでね。trueを戻してね。
+	/// 表のモデルとそのタイプ、裏のモデルとそのタイプ
+	/// を設定する。
+	/// タイプ一覧はObjectType.hを参照
+	/// </summary>
+	/// <param name="filePath_front">表のモデルのtkmファイルパス</param>
+	/// <param name="type_front">表のタイプ</param>
+	/// <param name="filePath_back">裏のモデルのtkmファイルパス</param>
+	/// <param name="type_back">裏のタイプ</param>
+	/// <returns>true戻してね</returns>
+	bool Init
+	(const char* filePath_front, const int type_front,
+		const char* filePath_back, const int type_back);
+
+	/// <summary>
+	/// 自己発光色を設定する
+	/// </summary>
+	/// <param name="color">自己発光色</param>
+	void SetEmissionColor(const Vector4& color)
+	{
+		m_modelRender[EN_FRONT]->SetEmissionColor(color);
+		m_modelRender[EN_BACK]->SetEmissionColor(color);
+	}
 
 private:	//privateなメンバ関数
 
@@ -251,17 +252,6 @@ private:	//privateなメンバ関数
 	/// <returns>オーバーしているか？</returns>
 	const bool IsCapacityOver(const int frontOrBackSide, const int adjust = 0);
 
-//public:		//publicなデータメンバ
-//
-//	/// <summary>
-//	/// 表か裏かを表す列挙体
-//	/// </summary>
-//	enum EnFrontAndBack
-//	{
-//		EN_FRONT,			//表状態
-//		EN_BACK,				//裏状態
-//		EN_FRONT_AND_BACK_NUM,	//表裏の数
-//	};
 
 private:	//データメンバ
 	//bool m_frontOrBack = EN_FRONT;				//表か裏か？
@@ -307,7 +297,6 @@ private:	//データメンバ
 		enLeft,		//左
 		enRight,	//右
 	};
-	//int m_playerLeftOrRight = enRight;	//キャラクターの左右の向き
 	int m_leftOrRight = enLeft;
 	bool m_checkOverlap = false; //このオブジェクトを戻らせるかのフラグ
 
@@ -318,8 +307,13 @@ private:	//データメンバ
 
 	bool m_changeObject = true;
 
-protected:
 	bool m_flagOverlap = true; //このオブジェクトが重なっているかを判定する処理を動かすかどうか
+
+	bool m_frontOrBack = EN_FRONT;				//表か裏か？
+	bool m_startfrontOrBack = EN_FRONT;
+	Vector3 m_startPosition = g_VEC3_ZERO; //オブジェクトの初期位置を保存する位置情報変数
+	Quaternion m_startRotation = g_QUAT_IDENTITY; //オブジェクトの初期回転を保存する回転情報変数
+	bool m_heldFlag = true; //オブジェクトが現在持ち上げられるかのフラグ
 
 };
 

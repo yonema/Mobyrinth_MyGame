@@ -105,7 +105,7 @@ void OOwall::UpdateSub()
 //ƒvƒŒƒCƒ„[‚ªUFO‚É‹ß‚Ã‚­‚Æ‰¹‚ð–Â‚ç‚·
 void OOwall::MoveSE()
 {
-	Vector3 distance = m_position - m_pPlayer->GetPosition();
+	Vector3 distance = m_position - m_player->GetPosition();
 	const float MaxDist = 1500;
 	const float DistLen = distance.Length();
 

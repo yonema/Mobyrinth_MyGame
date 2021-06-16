@@ -136,7 +136,7 @@ OOoneway::~OOoneway()
 void OOoneway::UpdateSub()
 {
 	//プレイヤーが自身と同じ向きを向いているか
-	if (m_pPlayer->GetEnLeftOrRight() == m_leftOrRight)
+	if (m_player->GetEnLeftOrRight() == m_leftOrRight)
 	{
 		//向いている時は
 		//通れる

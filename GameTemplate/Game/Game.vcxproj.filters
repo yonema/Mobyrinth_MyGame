@@ -913,9 +913,6 @@
     <ClInclude Include="LeftOrRightData.h">
       <Filter>MyCode\CommonData</Filter>
     </ClInclude>
-    <ClInclude Include="FrontOrBack.h">
-      <Filter>MyCode\CommonData</Filter>
-    </ClInclude>
     <ClInclude Include="PriorityData.h">
       <Filter>MyCode\CommonData\GameObject</Filter>
     </ClInclude>
@@ -927,6 +924,12 @@
     </ClInclude>
     <ClInclude Include="StageBaseConstData.h">
       <Filter>MyCode\Scene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="FrontSideOrBackSideData.h">
+      <Filter>MyCode\CommonData</Filter>
+    </ClInclude>
+    <ClInclude Include="FrontOrBackData.h">
+      <Filter>MyCode\CommonData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
