@@ -48,8 +48,7 @@ void ROrunning_stop::QuerySub()
 						wall->SetRun_stop(this);
 					}
 					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
-					m_flagOverlap = false;
-					//SetFlagOverlap(false);
+					SetFlagOverlap(false);
 				}
 				return true;
 			}
@@ -86,8 +85,7 @@ void ROrunning_stop::QuerySub()
 						wall->SetRun_stop(this);
 					}
 					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
-					m_flagOverlap = false;
-					//SetFlagOverlap(false);
+					SetFlagOverlap(false);
 				}
 				return true;
 			}

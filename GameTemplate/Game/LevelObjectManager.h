@@ -278,17 +278,6 @@ private:	//privateなメンバ関数
 	*/
 	void InitFrontOrBackSideThreshold();
 
-public:	//列挙体
-	/// <summary>
-	/// 表側か裏側か
-	/// </summary>
-	enum EnFrontOrBackSide
-	{
-		enFrontSide,			//表側
-		enBackSide,				//裏側
-		enFrontOrBackSideNum,	//表と裏の数
-		enNone = -1,			//無し
-	};
 private:	//データメンバ
 	Player* m_player = nullptr;				//プレイヤーのポインタ
 	std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
@@ -299,9 +288,9 @@ private:	//データメンバ
 
 	std::vector<ILevelObjectBase*> m_levelObjects;	//インスタンスしたレベルオブジェクトの配列
 	//反転オブジェクトの、表側と裏側のそれぞれの数
-	int m_reversibleObjectNum[enFrontOrBackSideNum] = { 0,0 };
+	int m_reversibleObjectNum[EN_FRONT_SIDE_AND_BACK_SIDE_NUM] = { 0,0 };
 	//反転オブジェクトの、表側と裏側のそれぞれの最大数
-	int m_reversibleObjectMaxNum[enFrontOrBackSideNum] = { 0,0 };
+	int m_reversibleObjectMaxNum[EN_FRONT_SIDE_AND_BACK_SIDE_NUM] = { 0,0 };
 	CMobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
 };
 

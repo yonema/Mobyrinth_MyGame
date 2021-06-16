@@ -5,7 +5,7 @@ class Player;
 bool CGameCamera::Start()
 {
 	//プレイヤーを探す
-	m_pPlayer = FindGO<Player>("Player");
+	m_player = FindGO<Player>("Player");
 	//注視点から視点へのベクトルを設定する
 	m_toCameraPos = { 0.0f,0.0f,1000.0f };
 
@@ -15,12 +15,12 @@ bool CGameCamera::Start()
 	//ばねカメラの初期化
 	m_springCamera.Init(*g_camera3D, 5000.0f, false, 0.0f);
 
-	if (m_pPlayer)
+	if (m_player)
 	{
 		//プレイヤーが見つかったら
 		//プレイヤーの位置をもとにカメラの場所を決める
-		m_springCamera.SetPosition(m_pPlayer->GetPosition() + m_toCameraPos);
-		m_springCamera.SetTarget(m_pPlayer->GetPosition());
+		m_springCamera.SetPosition(m_player->GetPosition() + m_toCameraPos);
+		m_springCamera.SetTarget(m_player->GetPosition());
 	}
 	else
 	{
@@ -39,7 +39,7 @@ bool CGameCamera::Start()
 	m_startDirecting = FindGO<CStartDirecting>("StartDirecting");
 
 	//カメラの上方向の修正
-	//const Quaternion qRot = (m_pPlayer->GetFinalWPRot());
+	//const Quaternion qRot = (m_player->GetFinalWPRot());
 	//qRot.Apply(m_toCameraPos);
 	Vector3 vecUp = g_VEC3_AXIS_Y;
 	//qRot.Apply(vecUp);
@@ -219,7 +219,7 @@ void CGameCamera::InGameCamera()
 {
 	if (m_lookPlayerFlag)
 	{
-		if (m_pPlayer)
+		if (m_player)
 		{
 			//プレイヤーが見つかっていたら
 
@@ -233,7 +233,7 @@ void CGameCamera::InGameCamera()
 
 
 			//プレイヤーの回転を得る
-			const Quaternion qRot = (m_pPlayer->GetFinalWPRot());
+			const Quaternion qRot = (m_player->GetFinalWPRot());
 			//カメラへのベクトルを回す
 			qRot.Apply(m_toCameraPos);
 			//アップベクトル
@@ -247,9 +247,9 @@ void CGameCamera::InGameCamera()
 				upVec = g_VEC3_ZERO;
 
 			//注視点を設定する
-			m_springCamera.SetTarget(m_pPlayer->GetPosition() + upVec);
+			m_springCamera.SetTarget(m_player->GetPosition() + upVec);
 			//視点を設定する
-			m_springCamera.SetPosition(m_pPlayer->GetPosition() + m_toCameraPos + upVec);
+			m_springCamera.SetPosition(m_player->GetPosition() + m_toCameraPos + upVec);
 			//アップ軸を設定する
 			m_springCamera.SetUp(vecUp);
 		}
@@ -257,7 +257,7 @@ void CGameCamera::InGameCamera()
 		{
 			//プレイヤーが見つかっていなかったら
 			//プレイヤーを探す
-			m_pPlayer = FindGO<Player>("Player");
+			m_player = FindGO<Player>("Player");
 		}
 	}
 

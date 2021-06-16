@@ -97,7 +97,7 @@ public:	//インライン関数
 	}
 
 private:	//データメンバ
-	Player* m_pPlayer = nullptr;				//プレイヤーのポインタ
+	Player* m_player = nullptr;				//プレイヤーのポインタ
 	Vector3 m_toCameraPos;						//注視点から視点へのベクトル
 	bool m_lookPlayerFlag = true;				//プレイヤーを見るか？
 	CStartDirecting* m_startDirecting = nullptr;

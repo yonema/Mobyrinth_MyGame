@@ -157,7 +157,7 @@ void OOReverseALL::BeforeHitPlayer()
 		//衝突している
 
 		//衝突時のプレイヤーの座標を保治
-		m_playerHitPosition = m_pPlayer->GetPosition();
+		m_playerHitPosition = m_player->GetPosition();
 		//アップデートステートをプレイヤーと衝突時の状態へ
 		m_updateState = enHitPlayer;
 
@@ -168,7 +168,7 @@ void OOReverseALL::BeforeHitPlayer()
 		//衝突していない
 
 		//衝突前のプレイヤーの座標を保持
-		m_playerBeforePosition = m_pPlayer->GetPosition();
+		m_playerBeforePosition = m_player->GetPosition();
 	}
 }
 
@@ -181,14 +181,14 @@ void OOReverseALL::HitPlayer()
 		//衝突している
 
 		//衝突時のプレイヤーの座標を保治
-		m_playerHitPosition = m_pPlayer->GetPosition();
+		m_playerHitPosition = m_player->GetPosition();
 	}
 	else
 	{
 		//衝突していない
 
 		//衝突後のプレイヤーの座標の確保
-		m_playerAfterPosition = m_pPlayer->GetPosition();
+		m_playerAfterPosition = m_player->GetPosition();
 		//アップデートステートをプレイヤーと衝突後の状態へ
 		m_updateState = enAfterHitPlayer;
 	}
@@ -198,7 +198,7 @@ void OOReverseALL::HitPlayer()
 void OOReverseALL::AfterHitPlayer()
 {
 	//衝突後のプレイヤーの座標の確保
-	m_playerAfterPosition = m_pPlayer->GetPosition();
+	m_playerAfterPosition = m_player->GetPosition();
 
 	//衝突前から衝突時の座標へのベクトル
 	Vector3 beforeToHit = m_playerHitPosition - m_playerBeforePosition;
@@ -250,7 +250,7 @@ void OOReverseALL::AfterHitPlayer()
 
 
 	//衝突前のプレイヤーの座標を保持
-	m_playerBeforePosition = m_pPlayer->GetPosition();
+	m_playerBeforePosition = m_player->GetPosition();
 
 	//アップデートステートをプレイヤーと衝突前の状態へ
 	m_updateState = enBeforHitPlayer;

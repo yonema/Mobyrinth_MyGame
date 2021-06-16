@@ -54,7 +54,15 @@ bool CReversibleObject::PureVirtualStart()
 	m_reverseall2->SetRotation(m_rotation);
 
 
+	if (GetFlagTransparentObject())
+	{
+		//リセット時に使用する位置、回転情報を初期化
+		m_startRotation = m_rotation;
+		m_startPosition = m_position;
 
+		//リセット時に使用する表裏情報を初期化
+		m_startfrontOrBack = m_frontOrBack;
+	}
 
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
@@ -83,6 +91,19 @@ CReversibleObject::~CReversibleObject()
 
 	//m_capacity_over
 
+}
+
+void CReversibleObject::ReversibleSwitchOff()
+{
+
+	//オブジェクトを持ち上げられないようにする。
+	m_heldFlag = false;
+	//位置、回転情報を初期状態に戻す。
+	m_rotation = m_startRotation;
+	m_position = m_startPosition;
+	//表裏情報を初期状態に戻す。
+	m_frontOrBack = m_startfrontOrBack;
+	SetFrontOrBack(m_frontOrBack);
 }
 
 
@@ -224,26 +245,26 @@ void CReversibleObject::SetBothModelActiveFlag(const bool activeFlag)
 void CReversibleObject::PureVirtualUpdate()
 {
 	//プレイヤーが見つかっていなかったら
-	if (!m_pPlayer)
+	if (!m_player)
 	{
 		//プレイヤーを探す
-		m_pPlayer = CLevelObjectManager::GetInstance()->GetPlayer();
+		m_player = CLevelObjectManager::GetInstance()->GetPlayer();
 
 		//それでも見つからなかったら何もずにreturn
-		if (!m_pPlayer)
+		if (!m_player)
 			return;
 	}
 
 	//オブジェクトが持てない状態のとき、m_objectStateの値をenCheckPlayerに変更
-	if (GetFlagHeld() == false) {
+	if (m_heldFlag == false) {
 		m_objectState = enCheckPlayer;
 		//プレイヤーがオブジェクトを持っていないようにする
-		m_pPlayer->SetHoldObject(false);
+		m_player->SetHoldObject(false);
 	}
 
 
 	//オブジェクトが持てない状態なら、この関switch文の処理を行わない。
-	if (GetFlagHeld() == true) {
+	if (m_heldFlag == true) {
 		/// <summary>
 		/// ステート（状態）アップデートを割り振る
 		/// </summary>
@@ -322,13 +343,13 @@ void CReversibleObject::CheckPlayer()
 			//プレイヤーが別のオブジェクトを持っていなかったら
 			//かつ、UFOに捕まっていなかったら
 			//かつ、スタン中ではなかったら
-			if (!m_pPlayer->GetHoldObject() && !m_pPlayer->GetCapturedUFOFlag() && 
-				!m_pPlayer->GetStunFlag())
+			if (!m_player->GetHoldObject() && !m_player->GetCapturedUFOFlag() && 
+				!m_player->GetStunFlag())
 			{
 				//ステートをプレイヤーに持ち上げられている状態へ
 				m_objectState = enLiftedPlayer;
 				//プレイヤーをオブジェクトを持ってる状態にする
-				m_pPlayer->SetHoldObject(true, this);
+				m_player->SetHoldObject(true, this);
 				//オブジェクトが重なっているかを判定する処理を動かすフラグをtrueにする
 				m_flagOverlap = true;
 				m_timer = 0.0f;
@@ -348,7 +369,7 @@ void CReversibleObject::LiftedPlayer()
 	const float switchingTime = 0.45f;
 	
 	//次の座標
-	Vector3 nextPos = m_pPlayer->GetPosition();
+	Vector3 nextPos = m_player->GetPosition();
 	//y座標の調整値。開始位置を少し低くする
 	const float yPosAdjustment = 50.0f;
 	nextPos.y -= yPosAdjustment;
@@ -356,7 +377,7 @@ void CReversibleObject::LiftedPlayer()
 	//X軸に加えるベクトル
 	Vector3 addVecX = g_VEC3_RIGHT;
 	//プレイヤーの向きが右向きなら
-	if (m_pPlayer->GetEnLeftOrRight() == enRight)
+	if (m_player->GetEnLeftOrRight() == enRight)
 		//逆向きのベクトルにする
 		addVecX = g_VEC3_LEFT;
 
@@ -364,7 +385,7 @@ void CReversibleObject::LiftedPlayer()
 	Vector3 addVecY = g_VEC3_UP;
 
 	//プレイヤーの回転
-	Quaternion playerQRot = m_pPlayer->GetFinalWPRot();
+	Quaternion playerQRot = m_player->GetFinalWPRot();
 	//モデルの回転をプレイヤーの回転にする
 	m_rotation = playerQRot;
 	//加えるベクトルをプレイヤーの回転で回転させる
@@ -462,7 +483,7 @@ void CReversibleObject::LiftedPlayer()
 void CReversibleObject::HeldPlayer()
 {
 	//プレイヤーの左側のウェイポイントのインデックスを取得
-	int lpIndex = m_pPlayer->GetLeftPointIndex();
+	int lpIndex = m_player->GetLeftPointIndex();
 
 	//自身の左側のウェイポイントのインデックスを設定する
 	SetLeftWayPointIndex(lpIndex);
@@ -493,7 +514,7 @@ void CReversibleObject::HeldPlayer()
 
 
 	//プレイヤーの回転を保持
-	Quaternion qRot = m_pPlayer->GetFinalWPRot();
+	Quaternion qRot = m_player->GetFinalWPRot();
 	//上方向ベクトルを保持
 	Vector3 up = g_VEC3_UP;
 	//上方向のベクトルをプレイヤーの回転で回す
@@ -502,7 +523,7 @@ void CReversibleObject::HeldPlayer()
 	up.Scale(m_heldUpLen);
 
 	//モデルの場所をプレイヤーの上にする
-	m_position = m_pPlayer->GetPosition() + up;
+	m_position = m_player->GetPosition() + up;
 	//モデルの回転をプレイヤーと同じにする
 	m_rotation = qRot;
 
@@ -531,7 +552,7 @@ void CReversibleObject::HeldPlayer()
 			//左に移動しているから、右に弾く
 			m_leftOrRight = enRight;
 	}
-	else if (!m_pPlayer->GetStunFlag())
+	else if (!m_player->GetStunFlag())
 	{
 		//弾かれる状態ではない
 		//かつ、プレイヤーがスタン中ではない
@@ -540,9 +561,9 @@ void CReversibleObject::HeldPlayer()
 		if (g_pad[0]->IsTrigger(enButtonA))
 		{
 			//プレイヤーの回転を保持する
-			m_throwRot = m_pPlayer->GetFinalWPRot();
+			m_throwRot = m_player->GetFinalWPRot();
 			//プレイヤーを投げている状態にする
-			m_pPlayer->SetThrowing(true);
+			m_player->SetThrowing(true);
 
 			//ステートを下に投げる状態へ
 			m_objectState = enThrownDown;
@@ -556,8 +577,8 @@ void CReversibleObject::HeldPlayer()
 			m_objectAction = enCancel;
 
 			//ウェイポイント
-			if (m_pPlayer->GetLeftPointIndex() == 8 ||
-				m_pPlayer->GetLeftPointIndex() == 24)
+			if (m_player->GetLeftPointIndex() == 8 ||
+				m_player->GetLeftPointIndex() == 24)
 				m_leftOrRight = enRight;
 			else
 				m_leftOrRight = enLeft;
@@ -570,14 +591,14 @@ void CReversibleObject::HeldPlayer()
 	//	if (m_objectState != enThrownSide)
 	//	{
 	//		//CalcTargetPos();
-	//		m_throwRot = m_pPlayer->GetFinalWPRot();
+	//		m_throwRot = m_player->GetFinalWPRot();
 	//		//投げる位置をプレイヤーの少し上に設定
 	//		Vector3 dir = { 0.0f,10.0f,0.0f };
 	//		m_throwRot.Apply(dir);
 	//		dir.Scale(7.0f);
 	//		m_position += dir;
 	//		//プレイヤーの左右の向きを調べる
-	//		m_playerLeftOrRight = m_pPlayer->GetEnLeftOrRight();
+	//		m_playerLeftOrRight = m_player->GetEnLeftOrRight();
 	//	}
 	//	//ステートを横に投げる状態へ
 	//	m_objectState = enThrownSide;
@@ -687,7 +708,7 @@ void CReversibleObject::ThrownDown()
 			test.Scale(-1.0f);
 
 		//プレイヤーがオブジェクトを持っていない状態にする
-		m_pPlayer->SetHoldObject(false);
+		m_player->SetHoldObject(false);
 
 		//投げている時のカウンターを0に戻す
 		m_throwCounter = 0.0f;
@@ -704,10 +725,10 @@ void CReversibleObject::ThrownDown()
 	else if (m_throwCounter >= maxThrowCounter / 2.0f && m_changeObject == true)
 	{
 		//表側か裏側か？
-		int frontOrBackSide = CLevelObjectManager::enFrontSide;
+		int frontOrBackSide = EN_FRONT_SIDE;
 		//自分がいる側の反対側にする
-		if (GetFrontOrBackSide() == CLevelObjectManager::enFrontSide)
-			frontOrBackSide = CLevelObjectManager::enBackSide;
+		if (GetFrontOrBackSide() == EN_FRONT_SIDE)
+			frontOrBackSide = EN_BACK_SIDE;
 
 		//キャパシティオーバーか？
 		//自分がいない側のキャパシティを調べる
@@ -732,7 +753,7 @@ void CReversibleObject::ThrownDown()
 void CReversibleObject::Cancel()
 {
 	//プレイヤーの現在の回転を持ってくる
-	Quaternion qRot = m_pPlayer->GetFinalWPRot();
+	Quaternion qRot = m_player->GetFinalWPRot();
 	//UpベクトルにYUpベクトルを入れる
 	Vector3 up = g_VEC3_UP;
 	//Upベクトルを回す
@@ -741,9 +762,9 @@ void CReversibleObject::Cancel()
 	up.Scale(20.0f);
 
 	//プレイヤーの場所のちょっと上に場所を設定する
-	m_position = m_pPlayer->GetPosition() + up;
+	m_position = m_player->GetPosition() + up;
 	//プレイヤーがオブジェクトを持っていないようにする
-	m_pPlayer->SetHoldObject(false);
+	m_player->SetHoldObject(false);
 
 	//キャンセルの時、重なったら弾かれる処理
 	//ステートをクエリへ移行する
@@ -791,7 +812,7 @@ void CReversibleObject::Cancel()
 //		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
 //		m_rotation.Multiply(m_throwRot);
 //		m_throwCounter += GameTime().GetFrameDeltaTime();
-//		m_pPlayer->SetHoldObject(false);
+//		m_player->SetHoldObject(false);
 //
 //		if (m_throwCounter >= maxThrowCounter)
 //		{
@@ -819,7 +840,7 @@ void CReversibleObject::Cancel()
 //		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
 //		m_rotation.Multiply(m_throwRot);
 //		m_throwCounter += GameTime().GetFrameDeltaTime();
-//		m_pPlayer->SetHoldObject(false);
+//		m_player->SetHoldObject(false);
 //
 //		if (m_throwCounter >= maxThrowCounter)
 //		{
@@ -837,7 +858,7 @@ void CReversibleObject::Cancel()
 /// </summary>
 //void CReversibleObject::CalcTargetPos()
 //{
-//	m_pPlayer->GetLeftPointIndex();
+//	m_player->GetLeftPointIndex();
 //}
 
 /// <summary>
@@ -864,7 +885,7 @@ void CReversibleObject::Repelled()
 		m_addPosition /= switchingTimer;
 
 		//プレイヤーがオブジェクトを持っていない状態にする
-		m_pPlayer->SetHoldObject(false);
+		m_player->SetHoldObject(false);
 	}
 
 	//ウェイポイントと回転の更新
@@ -1097,7 +1118,7 @@ void CReversibleObject::OverlapThrownDown()
 		}
 
 		//プレイヤーがオブジェクトを持っていない状態にする
-		//m_pPlayer->SetHoldObject(false);
+		//m_player->SetHoldObject(false);
 
 		//投げている時のカウンターを0に戻す
 		m_throwCounter = 0.0f;
@@ -1114,10 +1135,10 @@ void CReversibleObject::OverlapThrownDown()
 	else if (m_throwCounter >= maxThrowCounter / 2.0f && m_changeObject == true)
 	{
 		//表側か裏側か？
-		int frontOrBackSide = CLevelObjectManager::enFrontSide;
+		int frontOrBackSide = EN_FRONT_SIDE;
 		//自分がいる側の反対側にする
-		if (GetFrontOrBackSide() == CLevelObjectManager::enFrontSide)
-			frontOrBackSide = CLevelObjectManager::enBackSide;
+		if (GetFrontOrBackSide() == EN_FRONT_SIDE)
+			frontOrBackSide = EN_BACK_SIDE;
 
 		//キャパシティオーバーか？
 		//自分がいない側のキャパシティを調べる
@@ -1182,7 +1203,7 @@ const bool CReversibleObject::IsCapacityOver(const int frontOrBackSide, const in
 //		m_rotation.SetRotationDegZ(-360.0f * m_throwCounter / maxThrowCounter);
 //		m_rotation.Multiply(m_throwRot);
 //		m_throwCounter += GameTime().GetFrameDeltaTime();
-//		m_pPlayer->SetHoldObject(false);
+//		m_player->SetHoldObject(false);
 //
 //		if (m_throwCounter >= maxThrowCounter)
 //		{
@@ -1210,7 +1231,7 @@ const bool CReversibleObject::IsCapacityOver(const int frontOrBackSide, const in
 //		m_rotation.SetRotationDegZ(360.0f * m_throwCounter / maxThrowCounter);
 //		m_rotation.Multiply(m_throwRot);
 //		m_throwCounter += GameTime().GetFrameDeltaTime();
-//		m_pPlayer->SetHoldObject(false);
+//		m_player->SetHoldObject(false);
 //
 //		if (m_throwCounter >= maxThrowCounter)
 //		{

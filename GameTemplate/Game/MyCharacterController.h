@@ -75,7 +75,7 @@ public:		//ここのメンバ関数を主に使う
 
 private:	//データメンバ
 	COBB m_obb;					//OBB
-	int m_tag = COBB::enNone;	//タグ
+	int m_tag = COBB::EB_NONE_SIDE;	//タグ
 	COBB* m_hitOBB = nullptr;
 	std::list<COBB*> m_exceptionalOBB;
 };

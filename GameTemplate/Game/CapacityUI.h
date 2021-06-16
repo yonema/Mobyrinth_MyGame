@@ -85,8 +85,8 @@ private:	//列挙型
 	//表側と裏側の列挙型
 	enum EnFrontOrBackSide
 	{
-		enFrontSide,			//表側
-		enBackSide,				//裏側
+		EN_FRONT_SIDE,			//表側
+		EN_BACK_SIDE,				//裏側
 		enFrontAndBackSideNum,	//表側と裏側の数
 	};
 
@@ -110,6 +110,6 @@ private:	//データメンバ
 	CSoundCue* m_capacity_over = nullptr;			//キャパオーバーの音
 	Player* m_player = nullptr;						//プレイヤーのポインタ
 	//プレイヤーが表側にいるか裏側にいるか？
-	int m_playerFrontOrBackSide = CLevelObjectManager::enFrontSide;
+	int m_playerFrontOrBackSide = EN_FRONT_SIDE;
 };
 

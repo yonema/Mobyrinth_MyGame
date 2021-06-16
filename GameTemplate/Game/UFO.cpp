@@ -250,7 +250,7 @@ void CUFO::PureVirtualUpdate()
 //プレイヤーがUFOに近づくと音を鳴らす
 void CUFO::UFOmove()
 {
-	Vector3 distance = m_position - m_pPlayer->GetPosition();
+	Vector3 distance = m_position - m_player->GetPosition();
 	const float MaxDist = 1500;
 	const float DistLen = distance.Length();
 
@@ -276,7 +276,7 @@ void CUFO::UFOmove()
 //プレイヤーがUFOyellowlightに近づくと音を鳴らす
 void CUFO::UFOyellowlight()
 {
-	Vector3 distance = m_position - m_pPlayer->GetPosition();
+	Vector3 distance = m_position - m_player->GetPosition();
 	const float MaxDist = 1500;
 	const float DistLen = distance.Length();
 
@@ -374,12 +374,12 @@ void CUFO::Search()
 			m_ufoLight->SetDrawOutLineFlag(true);
 			
 			//プレイヤーをUFOに捕まった状態にする
-			m_pPlayer->SetCapturedUFOFlag(true);
-			m_pPlayer->SetRotation(m_rotation);
-			m_pPlayer->SetCapturedRotation(m_rotation);
+			m_player->SetCapturedUFOFlag(true);
+			m_player->SetRotation(m_rotation);
+			m_player->SetCapturedRotation(m_rotation);
 			//プレイヤーが何か持っていたら、離させる
-			if (m_pPlayer->GetHoldObject())
-				m_pPlayer->GetReversibleObject()->StateToCancel();
+			if (m_player->GetHoldObject())
+				m_player->GetReversibleObject()->StateToCancel();
 			//スピードを0にする
 			m_moveSpeed = 0.0f;
 			//タイマーを初期化する
@@ -433,8 +433,8 @@ void CUFO::Capture()
 		//小さいとき
 
 		//プレイヤーはその場にとどまらせる
-		m_pPlayer->SetCapturedPosition(m_pPlayer->GetPosition());
-		m_pPlayer->SetCapturedRotation(m_pPlayer->GetRotation());
+		m_player->SetCapturedPosition(m_player->GetPosition());
+		m_player->SetCapturedRotation(m_player->GetRotation());
 		//タイマーを進める
 		m_timer += GameTime().GetFrameDeltaTime();
 
@@ -452,12 +452,12 @@ void CUFO::Capture()
 	Vector3 capturePos = m_position + upVec;
 
 	//プレイヤーに加えるベクトル
-	Vector3 addVec = capturePos - m_pPlayer->GetPosition();
+	Vector3 addVec = capturePos - m_player->GetPosition();
 	//デルタタイムを掛けておく
 	addVec.Scale(GameTime().GetFrameDeltaTime());
 	//プレイヤーの座標を設定
-	Vector3 pos = m_pPlayer->GetPosition() + addVec;
-	m_pPlayer->SetPosition(pos);
+	Vector3 pos = m_player->GetPosition() + addVec;
+	m_player->SetPosition(pos);
 
 	//プレイヤーに渡す回転
 	Quaternion qRot;
@@ -478,9 +478,9 @@ void CUFO::Capture()
 	//本来の回転に合わせる
 	qRot.Multiply(m_rotation);
 	//プレイヤーに本来の回転を渡す
-	m_pPlayer->SetRotation(m_rotation);
+	m_player->SetRotation(m_rotation);
 	//プレイヤーにUFOに捕まったとき限定の見た目だけの回転を渡す
-	m_pPlayer->SetCapturedRotation(qRot);
+	m_player->SetCapturedRotation(qRot);
 
 	//タイマーの一定のところで終わる
 	float endTimeScale = 0.95f;
@@ -495,7 +495,7 @@ void CUFO::Capture()
 		scale = 0.0f;
 
 	//プレイヤーの拡大を設定する
-	m_pPlayer->SetScale({ scale ,scale ,scale });
+	m_player->SetScale({ scale ,scale ,scale });
 
 	//くるくる回す回転を入れる
 	qRot = spiralRot;
@@ -510,7 +510,7 @@ void CUFO::Capture()
 	//プレイヤーの拡大に合わせてオフセットも拡大する
 	offsetVec.Scale(-playerHalfHeight * scale);
 	//プレイヤーにUFOに捕まったとき限定の見た目だけの座標を渡す
-	m_pPlayer->SetCapturedPosition(m_pPlayer->GetPosition() + offsetVec);
+	m_player->SetCapturedPosition(m_player->GetPosition() + offsetVec);
 
 	//タイマーが一定のところまでは
 	if (m_timer - surprisedTimer < ((switchingTimer - surprisedTimer) * endTimeScale))
@@ -708,12 +708,12 @@ void CUFO::Transport()
 		m_timer += GameTime().GetFrameDeltaTime();
 
 	//プレイヤーの情報を更新する
-	m_pPlayer->SetPosition(capturePos);
-	m_pPlayer->SetCapturedPosition(capturePos);
-	m_pPlayer->SetRotation(m_rotation);
-	m_pPlayer->SetCapturedRotation(m_rotation);
-	m_pPlayer->SetLeftPointIndex(GetLeftWayPointIndex());
-	m_pPlayer->SetRightPointIndex(GetRightWayPointIndex());
+	m_player->SetPosition(capturePos);
+	m_player->SetCapturedPosition(capturePos);
+	m_player->SetRotation(m_rotation);
+	m_player->SetCapturedRotation(m_rotation);
+	m_player->SetLeftPointIndex(GetLeftWayPointIndex());
+	m_player->SetRightPointIndex(GetRightWayPointIndex());
 
 	//UFOcarrymoveSEをループ再生オンで再生する
 	m_UFOcarrymoveSE->Play(true);
@@ -862,7 +862,7 @@ void CUFO::Landing()
 			capturePos += downVec;
 
 			//プレイヤーの拡大をタイマーに応じて元の大きさに向かって大きくする
-			m_pPlayer->SetScale({ timeScale ,timeScale ,timeScale });
+			m_player->SetScale({ timeScale ,timeScale ,timeScale });
 
 			//オフセットもタイマーに応じて大きくする
 			offSet.Scale(timeScale);
@@ -889,13 +889,13 @@ void CUFO::Landing()
 		//吐き出す時間以下の時
 
 		//プレイヤーのパラメーターを更新する
-		m_pPlayer->SetPosition(capturePos);
-		m_pPlayer->SetCapturedPosition(capturePos + offSet);
-		m_pPlayer->SetRotation(m_rotation);
-		m_pPlayer->SetCapturedRotation(qRot);
-		m_pPlayer->SetWayPointState(GetLeftWayPointIndex());
-		m_pPlayer->SetLeftPointIndex(GetLeftWayPointIndex());
-		m_pPlayer->SetRightPointIndex(GetRightWayPointIndex());
+		m_player->SetPosition(capturePos);
+		m_player->SetCapturedPosition(capturePos + offSet);
+		m_player->SetRotation(m_rotation);
+		m_player->SetCapturedRotation(qRot);
+		m_player->SetWayPointState(GetLeftWayPointIndex());
+		m_player->SetLeftPointIndex(GetLeftWayPointIndex());
+		m_player->SetRightPointIndex(GetRightWayPointIndex());
 	}
 	else if (m_updateState == enLeave)
 	{
@@ -961,7 +961,7 @@ void CUFO::Leave()
 		//タイマーを初期化する
 		m_timer = 0.0f;
 		//プレイヤーをUFOに捕まっていない状態にする
-		m_pPlayer->SetCapturedUFOFlag(false);
+		m_player->SetCapturedUFOFlag(false);
 
 		if (m_UFOcarrymoveSE->IsPlaying()) {
 			m_UFOcarrymoveSE->Stop();
