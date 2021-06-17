@@ -291,7 +291,7 @@ void Player::InitMyCharacterController()
 	initData.position = m_position;
 	initData.rotation = m_rotation;
 	//ピボットをデフォルトのピボットにする
-	initData.pivot = OBBConstData::DEFAULT_PIVOT;
+	initData.pivot = OBBConstData::OBB_PIVOT_DEFAULT;
 	//キャラクターコントローラーを初期化する
 	m_myCharaCon.Init(initData);
 
@@ -810,18 +810,10 @@ void Player::GetOnStage()
 
 		//メビウスの輪が見つかっていたら
 		//メビウスの輪のモデルのポリゴンと、レイの当たり判定を取る
-		if (m_mobius->GetModel()->InIntersectLine(
-			m_onWayPosition + intersectLine, m_onWayPosition - intersectLine
-		))
-		{
-			//ポリゴンとレイの交差点をを取ってきてモデルの座標に入れる
-			m_position = m_mobius->GetModel()->GetIntersectPos();
-		}
-		else
-		{
-			//交差しなかったらウェイポイント上の座標をそのまま入れる
-			m_position = m_onWayPosition;
-		}
+		m_mobius->GetIntersectPosWithMobius(
+			m_onWayPosition + intersectLine, m_onWayPosition - intersectLine, &m_position
+		);
+
 	}
 	else
 	{
@@ -844,12 +836,13 @@ void Player::StunGetOnStage()
 	//レイの長さ分大きくする
 	upVec.Scale(INTERSECT_LINE_FOR_MOBIUS_LEN);
 
+	//ポリゴンとレイの交差点
+	Vector3 intersectPos = g_VEC3_ZERO;
 	//メビウスの輪のモデルのポリゴンと、レイの当たり判定を取る
-	if (m_mobius->GetModel()
-		->InIntersectLine(m_onWayPosition + upVec, m_onWayPosition - upVec))
+	if (m_mobius->
+		GetIntersectPosWithMobius(m_onWayPosition + upVec, m_onWayPosition - upVec, &intersectPos))
 	{
-		//ポリゴンとレイの交差点
-		Vector3 intersectPos = m_mobius->GetModel()->GetIntersectPos();
+
 		//交差点からプレイヤーの道上の座標のベクトル
 		Vector3 intersectToOnWay = m_onWayPosition - intersectPos;
 		//正規化する

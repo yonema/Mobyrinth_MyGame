@@ -61,13 +61,27 @@ public:		//ƒƒ“ƒoŠÖ”
 	{
 		return m_rotation;
 	}
-	/*!
-		*@brief	Šg‘å—¦‚ğİ’èB
-		*/
+
+	/**
+	 * @brief Šg‘å—¦‚ğİ’èB(Vector3)
+	 * @param [in] scale Šg‘å—¦
+	*/
 	void SetScale(const Vector3& scale)
 	{
 		m_scale = scale;
 	}
+
+	/**
+	 * @brief Šg‘å—¦‚ğİ’èB(float)
+	 * @param [in] scale Šg‘å—¦
+	*/
+	void SetScale(const float scale)
+	{
+		m_scale.x = scale;
+		m_scale.y = scale;
+		m_scale.z = scale;
+	}
+
 	/// <summary>
 	/// Šg‘å—¦‚ğæ“¾B
 	/// </summary>
