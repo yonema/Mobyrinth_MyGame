@@ -76,3 +76,17 @@ CMobius::~CMobius()
 	CLevelObjectManager::GetInstance()->SetMobius(nullptr);
 }
 
+
+const bool CMobius::GetIntersectPosWithMobius(
+	const Vector3& startPos, const Vector3& endPos, Vector3* const IntersectPos
+)
+{
+	if (m_modelRender->GetModel().InIntersectLine(startPos, endPos))
+	{
+		if (IntersectPos)
+			*IntersectPos = m_modelRender->GetModel().GetIntersectPos();
+		return true;
+	}
+
+	return false;
+}

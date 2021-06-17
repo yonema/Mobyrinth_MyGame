@@ -128,8 +128,8 @@ private:	//データメンバ
 	Quaternion m_rotation = g_QUAT_IDENTITY;		//回転
 	//座標系の関係で左右反転するから
 	//xの拡大を反転させる
-	Vector3 m_scale = spriteRenderConstData::DEFAULT_SCALE;	//拡大
-	Vector2 m_pivot = spriteRenderConstData::DEFAULT_PIVOT;	//ピボット（基点）
+	Vector3 m_scale = spriteRenderConstData::SPRITE_SCALE_DEFAULT;	//拡大
+	Vector2 m_pivot = spriteRenderConstData::SPRITE_PIVOT_DEFALUT;	//ピボット（基点）
 	
 	bool m_postRenderFlag = false;				//PostRenderで描画するかどうか？
 };

@@ -6,12 +6,32 @@
 int ILevelObjectBase::objectNumber = 0;
 #endif
 
+namespace
+{
+	//OBBのデフォルトの大きさ
+	const Vector3 OBB_SIZE_DEFAULT = { 100.0f,100.0f,100.0f };
+
+	//タイマーのフォントのデフォルトのテキスト
+	const wchar_t* const FONT_TEXT_TIMER_DEFAULT = L"10";
+
+	//スイッチONの時のエフェクトのファイルパス
+	const char16_t* const EFFECT_FILEPATH_SWITCH_ON = u"Assets/effect2/activation.efk";
+	//スイッチONの時のエフェクトの拡大率
+	const float EFFECT_SCALE_SWITCH_ON = 70.0f;
+
+	//スイッチOFFの時のエフェクトのファイルパス
+	const char16_t* const EFFECT_FILEPATH_SWITCH_OFF = u"Assets/effect2/activation.efk";
+	//スイッチOFFの時のエフェクトの拡大率
+	const float EFFECT_SCALE_SWITCH_OFF = 70.0f;
+}
+
 
 //スタート関数
 bool ILevelObjectBase::Start()
 {
 	//近くのウェイポイントを探して、イイ感じに回転する
 	CheckWayPoint();
+
 	//プレイヤーの参照を保持する
 	m_player = CLevelObjectManager::GetInstance()->GetPlayer();
 
@@ -37,6 +57,7 @@ bool ILevelObjectBase::Start()
 
 	//デバック用ここまで
 #endif
+
 	//オーバーライドしてほしい関数PureVirtualStart()
 	return PureVirtualStart();
 
@@ -45,8 +66,13 @@ bool ILevelObjectBase::Start()
 //デストラクタ
 ILevelObjectBase::~ILevelObjectBase()
 {
-	//m_swichon削除
-	DeleteGO(m_swichonEffect);
+	//スイッチをオンにしたときのエフェクトの破棄
+	if (m_swichonEffect)
+		DeleteGO(m_swichonEffect);
+
+	//スイッチをオフにしたときのエフェクトの破棄
+	if (m_swichoffEffect)
+		DeleteGO(m_swichoffEffect);
 
 	//フォントのタイマーの破棄
 	if (m_timerFR)
@@ -64,6 +90,8 @@ ILevelObjectBase::~ILevelObjectBase()
 
 	//LevelObjectManagerにオブジェクトが破棄されたことを伝える
 	CLevelObjectManager::GetInstance()->RemoveObject(this);
+
+	return;
 }
 
 
@@ -77,6 +105,7 @@ void ILevelObjectBase::Update()
 	//OBBの場所と回転を設定する
 	m_obb.SetPosition(m_position);
 	m_obb.SetRotation(m_rotation);
+
 #ifdef MY_DEBUG
 	//デバック用
 	//後で消す
@@ -88,6 +117,8 @@ void ILevelObjectBase::Update()
 	}
 	//デバック用ここまで
 #endif
+
+	return;
 }
 
 
@@ -99,20 +130,24 @@ void ILevelObjectBase::InitOBB()
 	//OBBの初期化データ
 	SInitOBBData initData;
 	initData.position = m_position;
-	initData.width = 100.0f;
-	initData.height = 100.0f;
-	initData.length = 100.0f;
-	initData.pivot = { 0.5f,0.0f,0.5f };
+	initData.width = OBB_SIZE_DEFAULT.x;
+	initData.height = OBB_SIZE_DEFAULT.y;
+	initData.length = OBB_SIZE_DEFAULT.z;
+	initData.pivot = OBBConstData::OBB_PIVOT_DEFAULT;
 	initData.rotation = m_rotation;
 
 	//OBBの初期化
 	m_obb.Init(initData);
+
+	return;
 }
 
 
-/// <summary>
-/// 近くのウェイポイントを探して、イイ感じに回転する関数
-/// </summary>
+/**
+ * @brief 自身の現在の座標から、ウェイポイントの番号を決定し、回転と座標をイイ感じに合わせる
+ * @param [in] checkRotaton 回転チェックを行うか？
+ * @param [in] checkPosition 座標チェックを行うか？
+*/
 void ILevelObjectBase::CheckWayPoint(const bool checkRotaton, const bool checkPosition)
 {
 	//LevelObjectManagerからウェイポイントの情報を持ってくる
@@ -210,16 +245,35 @@ void ILevelObjectBase::CheckWayPoint(const bool checkRotaton, const bool checkPo
 		}
 	}
 
-
+	//左右のウェイポイントの番号を確定する
 	m_lpIndex = lpIndex;
 	m_rpIndex = rpIndex;
-	
-	if (checkRotaton)
-		CheckRotation();
-	if (checkPosition)
-		CheckPosition();
+
+	//ロックされているか？
+	if (!m_isLock)
+	{
+		//ロックされていない
+
+		//回転チェックをするか？
+		if (checkRotaton)
+		{
+			//現在の座標に合わせた回転にする
+			CheckRotation();
+		}
+		//座標チェックをするか？
+		if (checkPosition)
+		{
+			//ウェイポイントにそろえた座標にする
+			CheckPosition();
+		}
+	}
+
+	return;
 }
 
+/**
+ * @brief 現在の座標に合わせた回転にする
+*/
 void ILevelObjectBase::CheckRotation()
 {
 	//LevelObjectManagerからウェイポイントの情報を持ってくる
@@ -228,50 +282,80 @@ void ILevelObjectBase::CheckRotation()
 		= CLevelObjectManager::GetInstance()->GetWayPointPos();
 	//ウェイポイントの「回転」を持ってくる
 	std::vector<Quaternion>* wayPointRotVec
-
 		= CLevelObjectManager::GetInstance()->GetWayPointRot();
+
 	//左のウェイポイントから右のウェイポイントへのベクトル
-	Vector3 lpToRpLen = (*wayPointPosVec)[m_rpIndex] - (*wayPointPosVec)[m_lpIndex];
+	Vector3 lpToRpVec = (*wayPointPosVec)[m_rpIndex] - (*wayPointPosVec)[m_lpIndex];
 
 	//左のウェイポイントから自身へのベクトル
-	Vector3 lpToPosLen = m_position - (*wayPointPosVec)[m_lpIndex];
+	Vector3 lpToPosVec = m_position - (*wayPointPosVec)[m_lpIndex];
+
+	//正規化した、左のウェイポイントから右のウェイポイントへのベクトル
+	Vector3 normalLpToRpVec = lpToRpVec;
+	normalLpToRpVec.Normalize();
+
+	//左のウェイポイントから自身へのベクトルを、ウェイポイント上に射影した距離
+	float projLpToPosLen = Dot(normalLpToRpVec, lpToPosVec);
 
 	//自身が左右のウェイポイントの間のどれくらいの位置にいるかで
 	//補完率を計算する
-	float ComplementRate = lpToPosLen.Length() / lpToRpLen.Length();
+	float ComplementRate = projLpToPosLen / lpToRpVec.Length();
 
 	//球面線形補完
 	//を使って回転させる
 	m_rotation.Slerp(ComplementRate, (*wayPointRotVec)[m_lpIndex], (*wayPointRotVec)[m_rpIndex]);
 
+	return;
 }
 
+
+/**
+ * @brief 座標をきれいにメビウスの輪の上に配置する
+*/
 void ILevelObjectBase::CheckPosition()
 {
-	Vector3 onWayPosition;
 	//LevelObjectManagerからウェイポイントの情報を持ってくる
 	//ウェイポイントの「場所」を持ってくる
 	const std::vector<Vector3>* wayPointPosVec
 		= CLevelObjectManager::GetInstance()->GetWayPointPos();
+
 	//左のウェイポイントから右のウェイポイントへのベクトル
-	Vector3 lpToRpVec = (*wayPointPosVec)[m_rpIndex] - (*wayPointPosVec)[m_lpIndex];
-	lpToRpVec.Normalize();
+	Vector3 normalLpToRpVec = (*wayPointPosVec)[m_rpIndex] - (*wayPointPosVec)[m_lpIndex];
+	normalLpToRpVec.Normalize();
+
 	//左のウェイポイントから自身へのベクトル
 	const Vector3 lpToPosVec = m_position - (*wayPointPosVec)[m_lpIndex];
 
-	const float projectionLen = Dot(lpToRpVec, lpToPosVec);
+	//左のウェイポイントから自身へのベクトルを、ウェイポイント上に射影した距離
+	const float projLpToPosLen = Dot(normalLpToRpVec, lpToPosVec);
 
-	Vector3 correctionPos = lpToRpVec;
-	correctionPos.Scale(projectionLen);
-	correctionPos += (*wayPointPosVec)[m_lpIndex];
+	//ウェイポイント上の座標を出す
+	Vector3 nextPos = normalLpToRpVec;	//次の座標
+	nextPos.Scale(projLpToPosLen);
+	nextPos += (*wayPointPosVec)[m_lpIndex];
 
+	//メビウスの輪にピッタリ合わせる
+	Vector3 yVec = g_VEC3_UP;
+	m_rotation.Apply(yVec);
+	Vector3 IntersectLineVec = yVec;
+	IntersectLineVec.Scale(300.0f);
+	CLevelObjectManager::GetInstance()->GetMobius()->GetIntersectPosWithMobius(
+		nextPos + IntersectLineVec, nextPos - IntersectLineVec, &nextPos
+	);
+	//メビウスの輪から上にあげる
+	yVec.Scale(m_yPosLen);
+	nextPos += yVec;
+
+	//ウェイポイントから奥によらせる
 	Vector3 zVec = g_VEC3_BACK;
 	m_rotation.Apply(zVec);
 	zVec.Scale(m_zPosLen);
-	correctionPos += zVec;
+	nextPos += zVec;
 
-	m_position = correctionPos;
+	//座標を確定する
+	m_position = nextPos;
 
+	return;
 }
 
 /// <summary>
@@ -283,9 +367,12 @@ void ILevelObjectBase::CheckFrontOrBackSide(const bool reversibleObject)
 	//表側か裏側か
 	int nextFrontOrBackSide = CLevelObjectManager::GetInstance()->CheckFrontOrBackSide(m_lpIndex);
 
-
+	//反転オブジェクトか？
 	if (reversibleObject)
 	{
+		//反転オブジェクト
+		//ステージ上の表裏のアイテム数を変更させる
+
 		//初期値ではなかったら
 		if (m_frontOrBackSide != EB_NONE_SIDE)
 		{
@@ -296,7 +383,8 @@ void ILevelObjectBase::CheckFrontOrBackSide(const bool reversibleObject)
 		//次の場所の反転オブジェクトの数を加算する
 		CLevelObjectManager::GetInstance()->AddReversibleObjectNum(nextFrontOrBackSide);
 	}
-		//現在の表側か裏側かを更新する
+
+	//現在の表側か裏側かを確定する
 	m_frontOrBackSide = nextFrontOrBackSide;
 }
 
@@ -323,28 +411,33 @@ void ILevelObjectBase::SetTransparentObject()
 {
 	//透明オブジェクト判定に使用するフラグをtrueにする。
 	m_transparentObjectFlag = true;
+
 	//オブジェクトの重なっている判定を行わないようにする。
 	m_isHitFlag = false;
 
-
-
 	//タイマーのフォントレンダラーの生成と初期化
-	m_timerFR = NewGO<CFontRender>(0);
-	m_timerFR->Init(L"10", { 0.0f,0.0f });
+	m_timerFR = NewGO<CFontRender>(PRIORITY_FIRST);
+	m_timerFR->Init(FONT_TEXT_TIMER_DEFAULT, g_VEC2_ZERO);
 	m_timerFR->SetPostRenderFlag(true);
 	//非表示にする
 	m_timerFR->Deactivate();
 
-	m_swichonEffect = NewGO<Effect>(0);
-	m_swichonEffect->Init(u"Assets/effect2/activation.efk");
-	float scale = 70.0f;								//小さいので大きくしておく
-	m_swichonEffect->SetScale({ scale ,scale ,scale });
+	//スイッチONの時のエフェクトの生成と初期化
+	m_swichonEffect = NewGO<Effect>(PRIORITY_FIRST);
+	m_swichonEffect->Init(EFFECT_FILEPATH_SWITCH_ON);
+	//小さいので大きくしておく
+	m_swichonEffect->SetScale(EFFECT_SCALE_SWITCH_ON);
 
+	//スイッチOFFの時のエフェクトの生成と初期化
+	m_swichoffEffect = NewGO<Effect>(PRIORITY_FIRST);
+	m_swichoffEffect->Init(EFFECT_FILEPATH_SWITCH_OFF);
+	//小さいので大きくしておく
+	m_swichoffEffect->SetScale(EFFECT_SCALE_SWITCH_OFF);
 
-	m_swichoffEffect = NewGO<Effect>(0);
-	m_swichoffEffect->Init(u"Assets/effect2/activation.efk");
-	float scale2 = 70.0f;								//小さいので大きくしておく
-	m_swichoffEffect->SetScale({ scale2 ,scale2 ,scale2 });
+	//開始時に透明にするときにエフェクトを呼ばないようにするために、無効化する
+	m_swichoffEffect->Deactivate();
+
+	return;
 }
 
 
@@ -353,8 +446,10 @@ void ILevelObjectBase::SetTransparentObject()
 /// </summary>
 void ILevelObjectBase::TransparentSwitchOn()
 {
+	//スイッチONの時のエフェクトの座標と回転を設定
 	m_swichonEffect->SetPosition(m_position);
 	m_swichonEffect->SetRotation(m_rotation);
+	//エフェクトを再生
 	m_swichonEffect->Play();
 
 	//オブジェクトの衝突判定を行うようにする。
@@ -367,10 +462,8 @@ void ILevelObjectBase::TransparentSwitchOn()
 	//タイマーのフォントを表示する
 	m_timerFR->Activate();
 
-	m_swichonEffect->SetPosition(m_position);
-	m_swichonEffect->SetRotation(m_rotation);
-	m_swichonEffect->Play();
 
+	//反転オブジェクト用のスイッチONの時の処理
 	ReversibleSwitchOn();
 }
 
@@ -380,29 +473,33 @@ void ILevelObjectBase::TransparentSwitchOn()
 /// </summary>
 void ILevelObjectBase::TransparentSwitchOff()
 {
-	//スイッチが有効か？
-	if (m_switchValid)
+	//開始時にオブジェクトを透明にするときに、
+	//エフェクトが再生されないようにする
+
+	//スイッチOFFのエフェクトが有効か？
+	if (m_swichoffEffect->IsActive())
 	{
 		//有効
+		//開始時以外で呼ばれる
 
-		//エフェクトを再生する
+		//エフェクトの座標と回転を設定する
 		m_swichoffEffect->SetPosition(m_position);
 		m_swichoffEffect->SetRotation(m_rotation);
+		//エフェクトを再生する
 		m_swichoffEffect->Play();
 	}
 	else
 	{
 		//有効じゃない
+		//開始時に呼ばれる
 
 		//有効にする
-		m_switchValid = true;
+		m_swichoffEffect->Activate();
 	}
 
 	//オブジェクトの衝突判定を行わないようにする。
 	m_isHitFlag = false;
 
-	CheckWayPoint();
-	CheckFrontOrBackSide();
 	//オブジェクトの当たり判定を無効にする。
 	m_obb.SetExceptionFlag(true);
 
@@ -410,7 +507,10 @@ void ILevelObjectBase::TransparentSwitchOff()
 	m_timerFR->Deactivate();
 
 
+	//反転オブジェクト用のスイッチをOFFにする処理
 	ReversibleSwitchOff();
+
+	return;
 }
 
 

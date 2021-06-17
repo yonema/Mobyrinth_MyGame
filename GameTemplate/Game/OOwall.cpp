@@ -2,6 +2,16 @@
 #include "OOwall.h"
 #include "ROrunning_stop.h"
 
+//コンストラクタ
+OOwall::OOwall()
+{
+	//スタート関数では間に合わない。
+	//オブジェクトが生成された瞬間に呼ばれてほしい処理
+
+	//ウェイポイントからの上の距離を設定
+	SetYPosLen(50.0f);
+}
+
 //スタート関数
 bool OOwall::StartSub()
 {
@@ -45,6 +55,8 @@ bool OOwall::StartSub()
 	m_wallmoveSE->Init(L"Assets/sound/wallmove.wav");
 	//音量調節
 	m_wallmoveSE->SetVolume(0.1f);
+
+	SetYPosLen(100.0f);
 
 	return true;
 }

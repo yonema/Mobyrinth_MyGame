@@ -1028,17 +1028,9 @@ void CUFO::GetOnStage()
 	{
 		//メビウスの輪が見つかっていたら
 		//メビウスの輪のモデルのポリゴンと、レイの当たり判定を取る
-		if (m_mobius->GetModel()
-			->InIntersectLine(m_onWayPosition + upVec, m_onWayPosition - upVec))
-		{
-			//ポリゴンとレイの交差点をを取ってきてモデルの座標に入れる
-			m_position = m_mobius->GetModel()->GetIntersectPos();
-
-		}
-		else
-		{
-			m_position = m_onWayPosition;
-		}
+		if (m_mobius->GetIntersectPosWithMobius(
+			m_onWayPosition + upVec, m_onWayPosition - upVec, &m_position
+		));
 	}
 	else
 	{

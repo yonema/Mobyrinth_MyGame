@@ -30,14 +30,9 @@ public:		//ここのメンバ関数を主に使う。
 		m_rotation = rot;
 	}
 
-	/// <summary>
-	/// モデルの参照を取得する
-	/// </summary>
-	/// <returns>モデルの参照</returns>
-	Model* GetModel()
-	{
-		return &m_modelRender->GetModel();
-	}
+	const bool GetIntersectPosWithMobius(
+		const Vector3& startPos, const Vector3& endPos, Vector3* const IntersectPos = nullptr
+	);
 
 private:	//データメンバ
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー

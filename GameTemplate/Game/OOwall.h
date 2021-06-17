@@ -10,6 +10,7 @@ class ROrunning_stop;
 class OOwall :public CObstacleObject
 {
 public:		//自動で呼ばれるメンバ関数
+	OOwall();						//コンストラクタ
 	bool StartSub() override final;	//スタート関数
 	~OOwall();						//デストラクタ
 	void UpdateSub()override final;	//アップデート関数

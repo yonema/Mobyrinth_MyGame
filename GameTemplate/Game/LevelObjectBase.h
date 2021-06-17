@@ -36,15 +36,16 @@ public:		//オーバーライドしてほしいメンバ関数
 
 
 public:		//CReversibleObjectでオーバーライドしてほしいメンバ関数
-	/**
-	 * @brief スイッチの効果が切れた時、表と裏をもとに戻すために使う関数
-	 * @param [in] frontOrBack 表か裏か？
-	 * @retval 
-	*/
-	virtual void ReversibleSwitchOff() {};
 
+	/**
+	 * @brief 反転オブジェクト用のスイッチをオンにするときの処理
+	*/
 	virtual void ReversibleSwitchOn() {};
 
+	/**
+	 * @brief 反転オブジェクト用のスイッチをオフにするときの処理
+	*/
+	virtual void ReversibleSwitchOff() {};
 
 public:		//メンバ関数
 
@@ -130,7 +131,7 @@ public:		//メンバ関数
 	/// <param name="lock">ロックするか？</param>
 	void SetLock(const bool lock)
 	{
-		m_lock = lock;
+		m_isLock = lock;
 	}
 
 	/// <summary>
@@ -140,7 +141,7 @@ public:		//メンバ関数
 	/// <returns>ロック中か？</returns>
 	const bool GetLock() const
 	{
-		return m_lock;
+		return m_isLock;
 	}
 
 	/// <summary>
@@ -233,6 +234,15 @@ public:		//メンバ関数
 		m_zPosLen = zPosLen;
 	}
 
+	/**
+	 * @brief ウェイポイントからの上への距離を設定
+	 * @param [in] yPosLen 上への距離
+	*/
+	void SetYPosLen(const float yPosLen)
+	{
+		m_yPosLen = yPosLen;
+	}
+
 	/// <summary>
 	/// 重なっているかの判定の処理を行うか確認するフラグの値を変更する。
 	/// </summary>
@@ -252,13 +262,13 @@ public:		//メンバ関数
 	}
 
 	/// <summary>
-/// 透明オブジェクトに使用するデータを初期化する。
-/// </summary>
+	/// 透明オブジェクトに使用するデータを初期化する。
+	/// </summary>
 	void SetTransparentObject();
 
 	/// <summary>
-/// 透明スイッチが押されたときに使用される関数
-/// </summary>
+	/// 透明スイッチが押されたときに使用される関数
+	/// </summary>
 	void TransparentSwitchOn();
 
 	/// <summary>
@@ -267,7 +277,11 @@ public:		//メンバ関数
 	void TransparentSwitchOff();
 
 
-	bool GetFlagTransparentObject()
+	/**
+	 * @brief 透明オブジェクトかどうか？を得る
+	 * @return 透明オブジェクトかどうか？
+	*/
+	const bool GetFlagTransparentObject() const
 	{
 		return m_transparentObjectFlag;
 	}
@@ -283,21 +297,21 @@ public:		//メンバ関数
 
 protected:	//protectedなメンバ関数
 
-	/// <summary>
-	/// 近くのウェイポイントを探して、イイ感じに回転する関数
-	/// </summary>
-	/// <param name="checkRotaton">回転チェックを行うか？</param>
-	/// <param name="checkPosition">座標チェックを行うか？</param>
+	/**
+	 * @brief 自身の現在の座標から、ウェイポイントの番号を決定し、回転と座標をイイ感じに合わせる
+	 * @param [in] checkRotaton 回転チェックを行うか？
+	 * @param [in] checkPosition 座標チェックを行うか？
+	*/
 	void CheckWayPoint(const bool checkRotaton = true, const bool checkPosition = true);
 
-	/// <summary>
-	/// 現在の座標に合わせた回転にする
-	/// </summary>
+	/**
+	 * @brief 現在の座標に合わせた回転にする
+	*/
 	void CheckRotation();
 
-	/// <summary>
-	/// ウェイポイントにそろえた座標にする
-	/// </summary>
+	/**
+	 * @brief 座標をきれいにメビウスの輪の上に配置する
+	*/
 	void CheckPosition();
 
 
@@ -326,16 +340,16 @@ private:	//データメンバ
 	* フラグ関連
 	*/
 	bool m_isDead = false;					//死んでいるか？
-	bool m_lock = false;					//ロック中か？、Tips表示や全反転をロックする
+	bool m_isLock = false;					//ロック中か？、Tips表示や全反転をロックする
 	bool m_transparentObjectFlag = false;	//透明オブジェクトどうかのフラグ
 	bool m_isHitFlag = true;				//重なっているかの判定の処理を行うか確認するフラグ
-	bool m_switchValid = false;				//スイッチが有効か？
 
 	/*
 	* ウェイポイント関連
 	*/
 	int m_lpIndex = 0;						//自身の左側のウェイポイントのインデックス
 	int m_rpIndex = 0;						//自身の右側のウェイポイントのインデックス
+	float m_yPosLen = 0.0f;					//ウェイポイントからの上への距離
 	float m_zPosLen = 0.0f;					//ウェイポイントからの奥行の距離
 	int m_frontOrBackSide = EB_NONE_SIDE;	//自身が表側にあるか裏側にあるか
 

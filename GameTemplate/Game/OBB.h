@@ -9,7 +9,7 @@ struct SInitOBBData
 	float height = 1.0f;					//Yの辺の長さ
 	float length = 1.0f;					//Zの辺の長さ
 	Quaternion rotation = g_QUAT_IDENTITY;	//回転
-	Vector3 pivot = OBBConstData::DEFAULT_PIVOT;	//ピボット（基点）
+	Vector3 pivot = OBBConstData::OBB_PIVOT_DEFAULT;	//ピボット（基点）
 };
 
 //int型が三つ入る構造体

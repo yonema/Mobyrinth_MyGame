@@ -119,7 +119,7 @@ void CTitle::InitTitleSprite()
 					objdata.ddsFilePath,	//ファイルパス
 					objdata.width,			//横幅
 					objdata.height,			//縦幅
-					DEFAULT_PIVOT,			//ピボット
+					SPRITE_PIVOT_DEFALUT,			//ピボット
 					AlphaBlendMode_Trans	//透過合成モード
 				);
 				//座標と拡大を設定
@@ -139,7 +139,7 @@ void CTitle::InitTitleSprite()
 					objdata.ddsFilePath,
 					objdata.width,
 					objdata.height,
-					DEFAULT_PIVOT,
+					SPRITE_PIVOT_DEFALUT,
 					AlphaBlendMode_Trans
 				);
 				//座標と拡大を設定
@@ -196,7 +196,7 @@ void CTitle::InitStageSelectSprite()
 						objdata.ddsFilePath,	//ファイルパス
 						objdata.width,			//横幅
 						objdata.height,			//縦幅
-						DEFAULT_PIVOT,			//ピボット
+						SPRITE_PIVOT_DEFALUT,			//ピボット
 						AlphaBlendMode_Trans	//透過合成モード
 					);
 					//座標と拡大を設定する
@@ -238,7 +238,7 @@ void CTitle::InitStageSelectSprite()
 						objdata.ddsFilePath,
 						objdata.width,
 						objdata.height,
-						DEFAULT_PIVOT,
+						SPRITE_PIVOT_DEFALUT,
 						AlphaBlendMode_Trans);
 					//座標と拡大を設定
 					m_stageClear[num]->SetScale(objdata.scale);
@@ -263,7 +263,7 @@ void CTitle::InitStageSelectSprite()
 					objdata.ddsFilePath,
 					objdata.width,
 					objdata.height,
-					DEFAULT_PIVOT,
+					SPRITE_PIVOT_DEFALUT,
 					AlphaBlendMode_Trans);
 				//座標と拡大を設定
 				m_cursor->SetScale(objdata.scale);
@@ -280,7 +280,7 @@ void CTitle::InitStageSelectSprite()
 					objdata.ddsFilePath,
 					objdata.width,
 					objdata.height,
-					DEFAULT_PIVOT,
+					SPRITE_PIVOT_DEFALUT,
 					AlphaBlendMode_Trans);
 				//座標と拡大を設定する
 				m_stageSelection->SetScale(objdata.scale);
@@ -297,7 +297,7 @@ void CTitle::InitStageSelectSprite()
 					objdata.ddsFilePath,
 					objdata.width,
 					objdata.height,
-					DEFAULT_PIVOT,
+					SPRITE_PIVOT_DEFALUT,
 					AlphaBlendMode_Trans);
 				//座標と拡大を設定する
 				m_stageSelectionBase->SetScale(objdata.scale);

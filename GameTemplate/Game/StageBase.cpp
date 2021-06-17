@@ -32,7 +32,7 @@ bool IStageBase::Start()
 		SPRITE_FILEPATH_GOAL,
 		SPRITE_WIDHT_GOAL,
 		SPRITE_HEIGHT_GOAL,
-		spriteRenderConstData::DEFAULT_PIVOT,
+		spriteRenderConstData::SPRITE_PIVOT_DEFALUT,
 		AlphaBlendMode_Trans
 	);
 	m_goalSR->SetPosition(SPRITE_POSITION_GOAL);

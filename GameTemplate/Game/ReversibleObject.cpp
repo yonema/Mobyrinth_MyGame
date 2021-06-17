@@ -13,8 +13,7 @@ CReversibleObject::CReversibleObject()
 //スタート関数
 bool CReversibleObject::PureVirtualStart()
 {
-	//モデルの回転を、現在の場所とイイ感じに合わせる
-	//CheckWayPoint();
+
 	//自身が表側にあるか裏側にあるかを調べる
 	CheckFrontOrBackSide();
 
