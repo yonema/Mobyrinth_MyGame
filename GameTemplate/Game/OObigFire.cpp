@@ -25,7 +25,7 @@ bool OObigFire::StartSub()
 	m_pointLight->SetRange(500.0f);
 
 	//©ŒÈ”­ŒõF‚ğİ’è
-	SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
+	SetModelEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
 
 	SetOBBTag(COBB::EN_OO_TYPE_FLAME);
 

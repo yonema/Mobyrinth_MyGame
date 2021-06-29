@@ -339,12 +339,12 @@ void CUFO::Search()
 		//捜索中なら
 
 		//黄色に光る
-		//m_modelRender->SetEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
+		//m_modelRender->SetModelEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
 		//上下のスポットライトを光らせる
 		//m_spotLightUp->SetColor({ 450.0f,450.0f,0.0f,1.0f });
 		//m_spotLightDown->SetColor({ 450.0f,450.0f,0.0f,1.0f });
 		//UFOの光線を光らせる
-		m_ufoLight->SetEmissionColor({ 1.5f,1.5f,0.0f,1.0f });
+		m_ufoLight->SetModelEmissionColor({ 1.5f,1.5f,0.0f,1.0f });
 		//UFOの光線を半透明にする
 		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 		//UFOyellowlightSE
@@ -362,12 +362,12 @@ void CUFO::Search()
 			m_updateState = enCapture;
 
 			//赤色に光る
-			//m_modelRender->SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
+			//m_modelRender->SetModelEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
 			//上下のスポットライトを光らせる
 			//m_spotLightUp->SetColor({ 900.0f,0.0f,0.0f,1.0f });
 			//m_spotLightDown->SetColor({ 900.0f,0.0f,0.0f,1.0f });
 			//UFOの光線を光らせる
-			m_ufoLight->SetEmissionColor({ 3.0f,0.0f,0.0f,1.0f });
+			m_ufoLight->SetModelEmissionColor({ 3.0f,0.0f,0.0f,1.0f });
 			//UFOの光線を半透明にする
 			m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
 			//輪郭線を書くようにする
@@ -401,12 +401,12 @@ void CUFO::Search()
 		//捜索中ではない
 
 		//光らない
-		//m_modelRender->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
+		//m_modelRender->SetModelEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//上下のスポットライトの光を消す
 		//m_spotLightUp->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 		//m_spotLightDown->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の光を消す
-		m_ufoLight->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
+		m_ufoLight->SetModelEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の透明にする
 		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 		//輪郭線を書かないようにする
@@ -579,7 +579,7 @@ void CUFO::Transport()
 		//m_spotLightUp->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 		//m_spotLightDown->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の光を消す
-		m_ufoLight->SetEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
+		m_ufoLight->SetModelEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線を透明にする
 		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 		//輪郭線を書かないようにする

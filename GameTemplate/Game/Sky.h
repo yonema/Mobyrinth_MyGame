@@ -67,9 +67,9 @@ public:		//メンバ関数
 	 * @brief 自己発光カラーを設定
 	 * @param [in] color 自己発光から―
 	*/
-	void SetEmissionColor(const Vector4 color)
+	void SetModelEmissionColor(const Vector4 color)
 	{
-		m_model.SetEmissionColor(color);
+		m_model.SetModelEmissionColor(color);
 		//値が変わったから、更新が
 		m_isDirty = true;
 	}

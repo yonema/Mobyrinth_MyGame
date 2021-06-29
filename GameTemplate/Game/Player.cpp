@@ -739,13 +739,13 @@ void Player::StunMove()
 	if (m_blinkTimer < blinkInterval)
 	{
 		//点滅のカラーに光らせる
-		m_modelRender->SetEmissionColor(BLINK_COLOR_STUN);
+		m_modelRender->SetModelEmissionColor(BLINK_COLOR_STUN);
 	}
 	//点滅タイマーが、点滅の間隔の2倍より小さかったら
 	else if (m_blinkTimer < blinkInterval * 2)
 	{
 		//元の明るさに戻す
-		m_modelRender->SetEmissionColor(g_VEC4_BLACK);
+		m_modelRender->SetModelEmissionColor(g_VEC4_BLACK);
 	}
 	//点滅タイマーが、点滅の間隔の2倍を過ぎたら
 	else
@@ -773,7 +773,7 @@ void Player::StunMove()
 		//点滅タイマーをゼロにする
 		m_blinkTimer = 0.0f;
 		//明るさを元に戻す
-		m_modelRender->SetEmissionColor(g_VEC4_BLACK);
+		m_modelRender->SetModelEmissionColor(g_VEC4_BLACK);
 
 	}
 

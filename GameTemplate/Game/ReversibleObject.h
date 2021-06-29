@@ -151,10 +151,10 @@ protected:	//protectedなメンバ関数
 	/// 自己発光色を設定する
 	/// </summary>
 	/// <param name="color">自己発光色</param>
-	void SetEmissionColor(const Vector4& color)
+	void SetModelEmissionColor(const Vector4& color)
 	{
-		m_modelRender[EN_FRONT]->SetEmissionColor(color);
-		m_modelRender[EN_BACK]->SetEmissionColor(color);
+		m_modelRender[EN_FRONT]->SetModelEmissionColor(color);
+		m_modelRender[EN_BACK]->SetModelEmissionColor(color);
 	}
 
 private:	//privateなメンバ関数

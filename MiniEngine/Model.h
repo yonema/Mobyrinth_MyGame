@@ -132,9 +132,9 @@ public:
 	/// ©ŒÈ”­ŒõF‚ğİ’è‚·‚é
 	/// </summary>
 	/// <param name="color">©ŒÈ”­ŒõF</param>
-	void SetEmissionColor(const Vector4& color)
+	void SetModelEmissionColor(const Vector4& color)
 	{
-		m_meshParts.SetEmissionColor(color);
+		m_meshParts.SetModelEmissionColor(color);
 	}
 
 	/// <summary>

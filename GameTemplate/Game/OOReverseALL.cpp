@@ -13,7 +13,7 @@ bool OOReverseALL::StartSub()
 	COBBWorld::GetInstance()->RemoveOBB(GetOBB());
 
 	//自己発光色を設定
-	SetEmissionColor({ 0.5f,0.0f,0.5f,1.0f });
+	SetModelEmissionColor({ 0.5f,0.0f,0.5f,1.0f });
 
 	//OBBのパラメーターを設定する
 	SetOBBDirectionLength({ 10.0f,400.0f,400.0f });

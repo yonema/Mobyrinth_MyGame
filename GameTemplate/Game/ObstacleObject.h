@@ -15,7 +15,8 @@ public:		//自動で呼ばれるメンバ関数
 	virtual ~CObstacleObject();					//デストラクタ
 	void PureVirtualUpdate()override final;		//アップデート関数
 
-public:
+public:		//オーバーライドしたメンバ関数
+
 	/// <summary>
 	/// モデルの参照を得る
 	/// </summary>
@@ -31,7 +32,7 @@ public:		//オーバーライドしてほしいメンバ関数
 	virtual bool StartSub() { return true; };	//スタート関数
 	virtual void UpdateSub() {};				//アップデート関数
 
-protected:	//ここのメンバ関数を主に使う
+protected:	//protectedなメンバ関数
 
 	/// <summary>
 	/// 初期化関数
@@ -49,26 +50,11 @@ protected:	//ここのメンバ関数を主に使う
 	/// 自己発光色を設定する
 	/// </summary>
 	/// <param name="color">自己発光色</param>
-	void SetEmissionColor(const Vector4& color)
+	void SetModelEmissionColor(const Vector4& color)
 	{
-		m_modelRender->SetEmissionColor(color);
+		m_modelRender->SetModelEmissionColor(color);
 	}
 
-	/// <summary>
-	/// ゲームオブジェクトをアクティブにする
-	/// </summary>
-	void Activate()
-	{
-		m_modelRender->Activate();
-	}
-
-	/// <summary>
-	/// ゲームオブジェクトを非アクティブにする
-	/// </summary>
-	void Deactivate()
-	{
-		m_modelRender->Deactivate();
-	}
 
 private:	//データメンバ
 	CModelRender* m_modelRender = nullptr;	//モデルレンダラー
