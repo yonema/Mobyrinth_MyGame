@@ -107,9 +107,9 @@ public:		//ここのメンバ関数を主に使う。
 	/// 自己発光色を設定する
 	/// </summary>
 	/// <param name="color">自己発光色</param>
-	void SetEmissionColor(const Vector4& color)
+	void SetModelEmissionColor(const Vector4& color)
 	{
-		m_model.SetEmissionColor(color);
+		m_model.SetModelEmissionColor(color);
 	}
 
 	/// <summary>

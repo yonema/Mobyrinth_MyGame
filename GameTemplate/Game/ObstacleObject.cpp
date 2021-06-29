@@ -8,11 +8,9 @@ bool CObstacleObject::PureVirtualStart()
 	//これによってPlayerが通れなくなる
 	COBBWorld::GetInstance()->AddOBB(GetOBB());
 
-	//モデルの回転を、現在の場所とイイ感じに合わせる
-	//CheckWayPoint();
-
+	//表側にいるか裏側にいるか調べる
+	//反転オブジェクトではないからfalseを渡す
 	CheckFrontOrBackSide(false);
-
 
 	//オーバーライドしてほしい関数StartSub()はここで呼ばれる。
 	return StartSub();
@@ -30,6 +28,8 @@ CObstacleObject::~CObstacleObject()
 
 	//モデルの消去
 	DeleteGO(m_modelRender);
+
+	return;
 }
 
 
@@ -47,7 +47,7 @@ CObstacleObject::~CObstacleObject()
 bool CObstacleObject::Init(const char* filePath, int objectType)
 {
 	//モデルレンダラーを生成
-	m_modelRender = NewGO<CModelRender>(0);
+	m_modelRender = NewGO<CModelRender>(PRIORITY_FIRST);
 	//モデルレンダラーを初期化
 	m_modelRender->Init(filePath, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetShadowReceiverFlag(false);

@@ -107,23 +107,15 @@ public:		//メンバ関数
 		return &m_wayPointRot;
 	}
 
-	/// <summary>
-	/// ウェイポイントのベクターのサイズを得る
-	/// </summary>
-	/// <returns>ウェイポイントのベクターのサイズ</returns>
-	int GetVecSize()const
-	{
-		return m_vecSize;
-	}
-
-	/// <summary>
-	/// ウェイポイント上での移動先を計算する関数
-	/// </summary>
-	/// <param name="rpIndex">現在の右側のウェイポイントのインデックス</param>
-	/// <param name="pos">現在の座標</param>
-	/// <param name="dist">移動する距離</param>
-	/// <param name="leftOrRight">右側に移動するか左側い移動するか。0:左,1:右</param>
-	/// <returns>移動先の座標</returns>
+	/**
+	 * @brief ウェイポイント上での移動先を計算する関数
+	 * @param [in] rpIndex 現在の右側のウェイポイントのインデックス
+	 * @param [in] pos 現在の座標
+	 * @param [in] dist 移動する距離
+	 * @param [in] leftOrRight 右側に移動するか左側い移動するか。0:左,1:右
+	 * @param [out] pNextIndex 移動先のウェイポイントのインデックス
+	 * @return 移動先の座標
+	*/
 	const Vector3 CalcWayPointNextPos
 	(const int rpIndex, const Vector3& pos, const float dist, const bool leftOrRight, int* pNextIndex = nullptr);
 
@@ -295,19 +287,26 @@ private:	//privateなメンバ関数
 	void InitFrontOrBackSideThreshold();
 
 private:	//データメンバ
-	Player* m_player = nullptr;				//プレイヤーのポインタ
+	Player* m_player = nullptr;						//プレイヤーのポインタ
+	CMobius* m_mobius = nullptr;					//ステージのメビウスの輪のポインタ
+	std::vector<ILevelObjectBase*> m_levelObjects;	//インスタンスしたレベルオブジェクトの配列
+
+	/*
+	* ウェイポイント関連
+	*/
 	std::vector<Vector3> m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
 	std::vector<Quaternion> m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
-	int m_vecSize = 0;						//ウェイポイントステートの最大の値
+
+	/*
+	* 表側裏側関連
+	*/
 	int m_frontOrBackSideThresholdSmall = 0;	//表側と裏側のしきい値の小さい方
 	int m_frontOrBackSideThresholdBig = 0;		//表側と裏側のしきい値の大きい方
-
-	std::vector<ILevelObjectBase*> m_levelObjects;	//インスタンスしたレベルオブジェクトの配列
 	//反転オブジェクトの、表側と裏側のそれぞれの数
 	int m_reversibleObjectNum[EN_FRONT_SIDE_AND_BACK_SIDE_NUM] = { 0,0 };
 	//反転オブジェクトの、表側と裏側のそれぞれの最大数
 	int m_reversibleObjectMaxNum[EN_FRONT_SIDE_AND_BACK_SIDE_NUM] = { 0,0 };
-	CMobius* m_mobius = nullptr;				//ステージのメビウスの輪のポインタ
+
 };
 
 

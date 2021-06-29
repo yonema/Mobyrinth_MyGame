@@ -15,6 +15,7 @@ CLevelObjectManager::CLevelObjectManager()
 		//インスタンスがすでに作られている。
 		std::abort();
 	}
+	return;
 }
 
 //デストラクタ
@@ -22,6 +23,8 @@ CLevelObjectManager::~CLevelObjectManager()
 {
 	//nullptrを入れておく
 	m_instance = nullptr;
+
+	return;
 }
 
 /// <summary>
@@ -31,10 +34,8 @@ CLevelObjectManager::~CLevelObjectManager()
 /// <param name="posMap">場所のマップ</param>
 void CLevelObjectManager::InitWayPointPos(std::map<int, Vector3>& posMap)
 {
-	//ウェイポイントステートの最大の値を設定
-	m_vecSize = posMap.size();
 	//vectorのサイズの確保
-	m_wayPointPos.resize(m_vecSize);
+	m_wayPointPos.resize(posMap.size());
 	//m_wayPointPosにウェイポイントの「場所」を格納する
 	std::map<int, Vector3>::iterator it = posMap.begin();
 	for (int index = 0; it != posMap.end(); index++, it++)
@@ -44,6 +45,8 @@ void CLevelObjectManager::InitWayPointPos(std::map<int, Vector3>& posMap)
 
 	//表側と裏側のしきい値の初期化
 	InitFrontOrBackSideThreshold();
+
+	return;
 }
 
 
@@ -54,16 +57,16 @@ void CLevelObjectManager::InitWayPointPos(std::map<int, Vector3>& posMap)
 /// <param name="rotMap">回転のマップ</param>
 void CLevelObjectManager::InitWayPointRot(std::map<int, Quaternion>& rotMap)
 {
-	//ウェイポイントステートの最大の値を設定
-	m_vecSize = rotMap.size();
 	//vectorのサイズの確保
-	m_wayPointRot.resize(m_vecSize);
+	m_wayPointRot.resize(rotMap.size());
 	//m_wayPointRotにウェイポイントの「回転」を格納する
 	std::map<int, Quaternion>::iterator it = rotMap.begin();
 	for (int index = 0; it != rotMap.end(); index++, it++)
 	{
 		m_wayPointRot[index] = it->second;
 	}
+
+	return;
 }
 
 
@@ -81,32 +84,42 @@ void CLevelObjectManager::InitFrontOrBackSideThreshold()
 	* しきい値が1加算する。
 	*/
 
-	m_frontOrBackSideThresholdSmall = m_vecSize / 4 + 1;
-	m_frontOrBackSideThresholdBig = (m_vecSize / 4) * 3;
+	m_frontOrBackSideThresholdSmall = m_wayPointPos.size() / 4 + 1;
+	m_frontOrBackSideThresholdBig = (m_wayPointPos.size() / 4) * 3;
+
+	return;
 }
 
 
-/// <summary>
-/// ウェイポイント上での移動先を計算する関数
-/// </summary>
-/// <param name="rpIndex">現在の右側のウェイポイントのインデックス</param>
-/// <param name="pos">現在の座標</param>
-/// <param name="dist">移動する距離</param>
-/// <param name="leftOrRight">右側に移動するか左側い移動するか。0:左,1:右</param>
-/// <returns>移動先の座標</returns>
+/**
+ * @brief ウェイポイント上での移動先を計算する関数
+ * @param [in] rpIndex 現在の右側のウェイポイントのインデックス
+ * @param [in] pos 現在の座標
+ * @param [in] dist 移動する距離
+ * @param [in] leftOrRight 右側に移動するか左側い移動するか。0:左,1:右
+ * @param [out] pNextIndex 移動先のウェイポイントのインデックス
+ * @return 移動先の座標
+*/
 const Vector3 CLevelObjectManager::CalcWayPointNextPos
 (const int rpIndex, const Vector3& pos, const float dist, const bool leftOrRight, int* pNextIndex)
 {
+	//左側のウェイポイントは右側のウェイポイントの1上
 	int lpIndex = rpIndex + 1;
-	const int maxWayPointIndex = m_vecSize - 1;
+	//ウェイポイントの最大数はサイズの1下
+	const int maxWayPointIndex = m_wayPointPos.size() - 1;
+	//左側のウェイポイントが最大値より大きかったら
 	if (lpIndex > maxWayPointIndex)
 	{
+		//一周して0になる
 		lpIndex = 0;
 	}
 
+	//移動するために加えるベクトル
 	Vector3 addVec = g_VEC3_ZERO;
+	//移動する先にあるウェイポイントのインデックス
 	int nextIndex = 0;
-	if (leftOrRight)
+	//左右どちらに飛ばすか？
+	if (leftOrRight == EN_RIGHT)
 	{
 		//右に飛ばす
 		nextIndex = rpIndex;
@@ -116,38 +129,51 @@ const Vector3 CLevelObjectManager::CalcWayPointNextPos
 		//左に飛ばす
 		nextIndex = lpIndex;
 	}
+	//移動前の座標
 	Vector3 originPos = pos;
+	//元の場所から移動先の方向のウェイポイントへのベクトル
 	addVec = m_wayPointPos[nextIndex] - originPos;
-
-
+	//移動先への長さ
 	float addLen = addVec.Length();
+	//指定された移動する距離
 	float rDist = dist;
+	//指定された移動距離が、計算した移動距離より大きかったら
 	if (addLen <= rDist)
 	{
+		//指定された移動距離を計算した移動距離分減算する
 		rDist -= addLen;
+		//変更前の移動先のウェイポイントのインデックを変更する
 		int otherIndex = nextIndex;
-		if (leftOrRight)
+		if (leftOrRight == EN_RIGHT)
 		{
-			//左に飛ばす
+			//右に飛ばす
 			nextIndex--;
 			if (nextIndex < 0)
 				nextIndex = maxWayPointIndex;
 		}
 		else
 		{
-			//右に飛ばす
+			//左に飛ばす
 			nextIndex++;
 			if (nextIndex > maxWayPointIndex)
 				nextIndex = 0;
 		}
+		//移動前の座標
 		originPos = m_wayPointPos[otherIndex];
+		//移動前から移動後へのベクトル
 		addVec = m_wayPointPos[nextIndex] - originPos;
-		addLen = addVec.Length();
+		//addLen = addVec.Length();
 	}
+	//移動する方向を正規化する
 	addVec.Normalize();
+	//指定された移動量だけ方向を伸ばす
 	addVec.Scale(rDist);
+	//次のウェイポイントが引数で渡されていたら
 	if (pNextIndex)
+		//次のウェイポイントに値を変更する
 		*pNextIndex = nextIndex;
+
+	//移動前の座標に移動するベクトルを加えて戻す
 	return originPos + addVec;
 }
 
@@ -234,7 +260,7 @@ const int CLevelObjectManager::GetNearestObjectType(const float nearDist)
 
 
 	//ウェイポイントの最大値
-	const int maxWayPoint = m_vecSize - 1;
+	const int maxWayPoint = m_wayPointPos.size() - 1;
 	//プレイヤーのいるウェイポイント
 	int wayPoint = m_player->GetLeftPointIndex();
 	//ウェイポイント左のウェイポイント

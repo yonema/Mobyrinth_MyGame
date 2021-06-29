@@ -98,7 +98,7 @@ public:
 	/// ©ŒÈ”­ŒõF‚ğİ’è‚·‚é
 	/// </summary>
 	/// <param name="color">©ŒÈ”­ŒõF</param>
-	void SetEmissionColor(const Vector4& color)
+	void SetModelEmissionColor(const Vector4& color)
 	{
 		m_emissionColor = color;
 	}
