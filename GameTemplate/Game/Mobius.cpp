@@ -76,17 +76,32 @@ CMobius::~CMobius()
 	CLevelObjectManager::GetInstance()->SetMobius(nullptr);
 }
 
-
+/**
+ * @brief メビウスの輪とレイの交差点を求める
+ * @param [in] startPos レイの始点
+ * @param [in] endPos レイの終点
+ * @param [out] IntersectPos 交差点
+ * @return 交差しているか？
+*/
 const bool CMobius::GetIntersectPosWithMobius(
 	const Vector3& startPos, const Vector3& endPos, Vector3* const IntersectPos
 )
 {
+	//メビウスの輪のモデルとレイが交差しているか？
 	if (m_modelRender->GetModel().InIntersectLine(startPos, endPos))
 	{
+		//交差した
+
+		//交差点の座標が引数で渡されているか？
 		if (IntersectPos)
+			//渡されている
+			//交差点を入れる
 			*IntersectPos = m_modelRender->GetModel().GetIntersectPos();
+
+		//交差した、と戻す
 		return true;
 	}
 
+	//交差してない
 	return false;
 }

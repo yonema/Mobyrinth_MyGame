@@ -68,7 +68,7 @@ public:		//ここのメンバ関数を主に使う
 		return m_tag;
 	}
 
-	COBB* GetHitOBB() const
+	const COBB* GetHitOBB() const
 	{
 		return m_hitOBB;
 	}
@@ -76,7 +76,7 @@ public:		//ここのメンバ関数を主に使う
 private:	//データメンバ
 	COBB m_obb;					//OBB
 	int m_tag = COBB::EB_NONE_SIDE;	//タグ
-	COBB* m_hitOBB = nullptr;
+	const COBB* m_hitOBB = nullptr;
 	std::list<COBB*> m_exceptionalOBB;
 };
 

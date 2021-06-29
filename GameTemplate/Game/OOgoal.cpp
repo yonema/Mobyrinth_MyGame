@@ -26,7 +26,7 @@ bool OOgoal::StartSub()
 
 
 	//OBBWorldに自身のOBBの登録を消去させる
-	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
+	COBBWorld::GetInstance()->RemoveOBB(GetOBB());
 
 	return true;
 }
@@ -79,9 +79,16 @@ void OOgoal::UpdateSub()
 		//m_spriteRender->Activate();
 		//プレイヤーをゴール状態にする
 		m_player->SetGoal(true);
-		////モデルを見えなくする
-		//GetModelRender()->Deactivate();
-		DeleteGO(this);
+		//モデルを見えなくする
+		GetModelRender()->Deactivate();
+		//透明オブジェクトか？
+		if (GetFlagTransparentObject())
+		{
+			//タイマーのフォントを見えなくする
+			SetTimerFontAitiveFlag(false);
+		}
+
+		//DeleteGO(this);
 	}
 
 }

@@ -24,7 +24,7 @@ void ROrunning_stop::QuerySub()
 		QueryLOs<OOwall>(EN_OO_TYPE_WALL, [&](OOwall* wall) -> bool
 			{
 				//自身と「壁」が衝突したら
-				if (IsHitObject(*this, *wall))
+				if (IsHitLevelObject(*this, *wall))
 				{
 					//壁を稼働モードにする
 					wall->Running();
@@ -48,7 +48,7 @@ void ROrunning_stop::QuerySub()
 						wall->SetRun_stop(this);
 					}
 					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
-					SetFlagOverlap(false);
+					SetOverlapFlag(false);
 				}
 				return true;
 			}
@@ -61,7 +61,7 @@ void ROrunning_stop::QuerySub()
 		QueryLOs<OOwall>(EN_OO_TYPE_WALL, [&](OOwall* wall) -> bool
 			{
 				//自身と「壁」が衝突したら
-				if (IsHitObject(*this, *wall))
+				if (IsHitLevelObject(*this, *wall))
 				{
 					//壁を停止モードにする
 					wall->Stop();
@@ -85,7 +85,7 @@ void ROrunning_stop::QuerySub()
 						wall->SetRun_stop(this);
 					}
 					//オブジェクトが重なっているかを判定する処理を動かさないようにする。
-					SetFlagOverlap(false);
+					SetOverlapFlag(false);
 				}
 				return true;
 			}

@@ -931,6 +931,9 @@
     <ClInclude Include="FrontOrBackData.h">
       <Filter>MyCode\CommonData</Filter>
     </ClInclude>
+    <ClInclude Include="ReversibleObjectConstData.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">

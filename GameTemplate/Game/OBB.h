@@ -185,7 +185,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 例外フラグを取得する
 	/// </summary>
 	/// <returns></returns>
-	const bool GetExceptionFlag()
+	const bool GetExceptionFlag() const
 	{
 		return m_exceptionFlag;
 	}

@@ -28,7 +28,7 @@ void ROleft_right::QuerySub()
 		QueryLOs<OOoneway>(EN_OO_TYPE_ONEWAY, [&](OOoneway* oneway) -> bool
 			{
 				//自身と「一方通行」が衝突したら
-				if (IsHitObject(*this, *oneway))
+				if (IsHitLevelObject(*this, *oneway))
 				{
 					//「一方通行」の向きを左向きにする
 					oneway->SetLeftOrRight(OOoneway::enLeft);
@@ -58,7 +58,7 @@ void ROleft_right::QuerySub()
 		QueryLOs<OOoneway>(EN_OO_TYPE_ONEWAY, [&](OOoneway* oneway) -> bool
 			{
 				//自身と「一方通行」が衝突したら
-				if (IsHitObject(*this, *oneway))
+				if (IsHitLevelObject(*this, *oneway))
 				{
 					//「一方通行」の向きを右向きにする
 					oneway->SetLeftOrRight(OOoneway::enRight);
@@ -95,7 +95,7 @@ void ROleft_right::ObjectReverse()
 			continue;
 
 		//自身とオブジェクトが衝突しているか？
-		if (IsHitObject(*this, *lo))
+		if (IsHitLevelObject(*this, *lo))
 		{
 			//衝突していたら
 

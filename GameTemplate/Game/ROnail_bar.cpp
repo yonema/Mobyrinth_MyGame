@@ -49,7 +49,7 @@ void ROnail_bar::QuerySub()
 		//QueryLOs<OOpadlock>(EN_OO_TYPE_BIG_PADLOCK, [&](OOpadlock* padlock) -> bool
 		//	{
 		//		//自身と「持てない南京錠」が衝突したら
-		//		if (IsHitObject(*this, *padlock))
+		//		if (IsHitLevelObject(*this, *padlock))
 		//		{
 		//			//行動できたら
 		//			if (m_actionFlag)
@@ -69,7 +69,7 @@ void ROnail_bar::QuerySub()
 		QueryLOs<OObox>(EN_OO_TYPE_BOX, [&](OObox* box) -> bool
 			{
 				//自身と「箱」が衝突したら
-				if (IsHitObject(*this, *box))
+				if (IsHitLevelObject(*this, *box))
 				{
 					//行動できたら
 					if (m_actionFlag)

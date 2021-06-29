@@ -148,9 +148,36 @@ public:		//メンバ関数
 	/// OBBの参照を戻す
 	/// </summary>
 	/// <returns>OBBの参照</returns>
-	COBB& GetOBB()
+	const COBB& GetOBB() const
 	{
 		return m_obb;
+	}
+
+	/**
+	 * @brief OBBの方向ベクトルの長さを設定する
+	 * @param [in] directionLenght 方向ベクトルの長さ
+	*/
+	void SetOBBDirectionLength(const Vector3& directionLenght)
+	{
+		m_obb.SetDirectionLength(directionLenght);
+	}
+
+	/**
+	 * @brief OBBのピボットを設定する
+	 * @param [in] pivot ピボット
+	*/
+	void SetOBBPivot(const Vector3& pivot)
+	{
+		m_obb.SetPivot(pivot);
+	}
+
+	/**
+	 * @brief OBBのタグを設定する
+	 * @param [in] tag タグを設定する
+	*/
+	void SetOBBTag(const int tag)
+	{
+		m_obb.SetTag(tag);
 	}
 
 	/// <summary>
@@ -286,13 +313,45 @@ public:		//メンバ関数
 		return m_transparentObjectFlag;
 	}
 
-	/// <summary>
-	/// タイマーのフォントレンダラーの参照を戻す
-	/// </summary>
-	/// <returns>タイマーのフォントレンダラーの参照</returns>
-	CFontRender* GetTimerFR()
+
+	/**
+	 * @brief タイマーのフォントの座標を設定する
+	 * @param [in] position 座標
+	*/
+	void SetTimerFontPosition(const Vector2& position)
 	{
-		return m_timerFR;
+		m_timerFR->SetPosition(position);
+	}
+
+	/**
+	 * @brief タイマーのフォントのカラーを設定する
+	 * @param  [in] color カラー
+	*/
+	void SetTimerFontColor(const Vector4& color)
+	{
+		m_timerFR->SetColor(color);
+	}
+
+	/**
+	 * @brief タイマーのフォントのテキストを設定
+	 * @param [in] text テキスト
+	*/
+	void SetTimerFontText(const wchar_t* const text)
+	{
+		m_timerFR->SetText(text);
+	}
+
+
+	/**
+	 * @brief タイマーのフォントのアクティブフラグを設定する
+	 * @param [in] activeFlag アクティブフラグ
+	*/
+	void SetTimerFontAitiveFlag(const bool activeFlag)
+	{
+		if (activeFlag)
+			m_timerFR->Activate();
+		else
+			m_timerFR->Deactivate();
 	}
 
 protected:	//protectedなメンバ関数
@@ -401,5 +460,5 @@ private:
 /// <param name="lhs">レベルオブジェクト1</param>
 /// <param name="rhs">レベルオブジェクト2</param>
 /// <returns>trueが戻ってきたら当たっている</returns>
-bool IsHitObject
-(ILevelObjectBase& lhs, ILevelObjectBase& rhs);
+bool IsHitLevelObject
+(const ILevelObjectBase& lhs, const ILevelObjectBase& rhs);

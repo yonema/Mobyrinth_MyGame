@@ -1,4 +1,5 @@
 #pragma once
+#include "ReversibleObjectConstData.h"
 #include "LevelObjectBase.h"
 #include "SoundCue.h"
 #include "effect/Effect.h"
@@ -23,7 +24,6 @@ public:		//publicなオーバーライドしてほしいメンバ関数
 	/// 表と裏をセットするサブ関数
 	/// これを呼ぶときは、CReversibleObjectの継承したクラスが
 	/// 新たな表裏をセットする必要があるときに使う。
-	/// 例はRObird_fishを参照
 	/// </summary>
 	virtual void SetFrontOrBackSub() {};
 
@@ -53,12 +53,18 @@ public:		//オーバーライドしたメンバ関数
 		return m_modelRender[frontOrBack];
 	}
 
+	/**
+	 * @brief 反転オブジェクトのスイッチをONにするときの処理
+	*/
 	void ReversibleSwitchOn() override final
 	{
 		//オブジェクトを持ち上げられるようにする。
 		m_heldFlag = true;
 	}
 
+	/**
+	 * @brief 反転オブジェクトのスイッチをOFFにするときの処理
+	*/
 	void ReversibleSwitchOff()override final;
 
 
@@ -83,9 +89,9 @@ public:		//メンバ関数
 	/// オブジェクトが重なっているかを確認する処理を動かすか確認するフラグの値を変更
 	/// </summary>
 	/// <param name="b">trueかfalseを入れる</param>
-	void SetFlagOverlap(const bool b)
+	void SetOverlapFlag(const bool b)
 	{
-		m_flagOverlap = b;
+		m_OverlapFlag = b;
 	}
 
 
@@ -111,16 +117,7 @@ public:		//メンバ関数
 	/// </summary>
 	void StateToCancel()
 	{
-		m_objectState = enCancel;
-	}
-
-	/// <summary>
-	/// 持ち上げた時の、上に持ち上げるベクトルの長さを設定
-	/// </summary>
-	/// <param name="heldUpLen"></param>
-	static void SetHeldUpLen(const float heldUpLen)
-	{
-		m_heldUpLen = heldUpLen;
+		m_objectState = reversibleObjectConstData::EN_CANCEL;
 	}
 
 	/// <summary>
@@ -128,18 +125,9 @@ public:		//メンバ関数
 	/// </summary>
 	void SetObjectStateEnCheckPlayer()
 	{
-		m_objectState = enCheckPlayer;
+		m_objectState = reversibleObjectConstData::EN_CHECK_HELD_PLAYER;
 	}
 
-	int GetObjectState()
-	{
-		return m_objectState;
-	}
-
-	int GetEnCheckPlayer()
-	{
-		return enCheckPlayer;
-	};
 
 protected:	//protectedなメンバ関数
 
@@ -170,6 +158,26 @@ protected:	//protectedなメンバ関数
 	}
 
 private:	//privateなメンバ関数
+
+	/**
+	 * @brief サウンドの初期化
+	*/
+	void InitSound();
+
+	/**
+	 * @brief エフェクトの初期化
+	*/
+	void InitEffect();
+
+	/**
+	 * @brief OBBの初期化
+	*/
+	void InitOBB();
+
+	/**
+	 * @brief 透明オブジェクト用のパラメーターの初期化
+	*/
+	void InitTransparentObjectParam();
 
 	/// <summary>
 	/// プレイヤーに持たれるかどうか調べる関数
@@ -204,12 +212,6 @@ private:	//privateなメンバ関数
 	void Cancel();
 
 	/// <summary>
-	/// 持っているオブジェクトを横に投げる関数
-	/// enQueryへステート（状態）を移行
-	/// </summary>
-	//void ThrownSide();
-
-	/// <summary>
 	/// 横に弾かれる
 	/// </summary>
 	void Repelled();
@@ -222,24 +224,10 @@ private:	//privateなメンバ関数
 	void Query();
 
 	/// <summary>
-	/// オブジェクトを横に投げる際の、投げる先を計算する関数
-	/// </summary>
-	//void CalcTargetPos();
-
-	/// <summary>
 	/// 反転オブジェクトが障害オブジェクトの中に埋まっているかの確認
 	/// </summary>
 	void CheckObjectsOverlap();
 
-	/// <summary>
-	/// オブジェクトが戻ってくる処理（縦）
-	/// </summary>
-	void OverlapThrownDown();
-
-	/// <summary>
-	/// オブジェクトが戻ってくる処理（横）
-	/// </summary>
-	//void OverlapThrownSide();
 
 	/// <summary>
 	/// 表側か裏側のキャパシティがオーバーしているか？
@@ -248,72 +236,76 @@ private:	//privateなメンバ関数
 	/// キャパシティはオーバーするのか？を調べるときに、1を入れる。
 	/// </summary>
 	/// <param name="frontOrBackSide">表側か裏側か？</param>
-	/// <param name="adjust">調整値</param>
 	/// <returns>オーバーしているか？</returns>
-	const bool IsCapacityOver(const int frontOrBackSide, const int adjust = 0);
+	const bool IsCapacityOver(const int frontOrBackSide);
 
 
 private:	//データメンバ
-	//bool m_frontOrBack = EN_FRONT;				//表か裏か？
-	bool m_bothModelactiveFlag = true;			//表裏両方の有効化フラグ
-	CModelRender* m_modelRender[EN_FRONT_AND_BACK_NUM] = { nullptr };	//モデルレンダラー
-	int m_reversibleType[EN_FRONT_AND_BACK_NUM] = { EN_OBJECT_TYPE_EMPTY };	//表と裏のオブジェクトのタイプ
 
-	float m_throwCounter = 0.0f;						//投げている時のカウンター
+	/*
+	* モデル関連
+	*/
+	CModelRender* m_modelRender[EN_FRONT_AND_BACK_NUM] = { nullptr };	//表と裏のモデルレンダラー
+
+	/*
+	* フラグ関連
+	*/
+	bool m_bothModelActiveFlag = true;		//表裏両方が有効か？
+	bool m_changeObject = true;				//反転するか？（二重反転防止）
+	bool m_OverlapFlag = true;				//オブジェクトが重なっている時の処理を行うか？
+	bool m_frontOrBack = EN_FRONT;			//表か裏か？
+	bool m_heldFlag = true;					//オブジェクトが現在持ち上げられるか？
+
+	/*
+	* オブジェクトタイプ関連
+	*/
+	//表と裏のオブジェクトのタイプ
+	int m_reversibleType[EN_FRONT_AND_BACK_NUM] = { EN_OBJECT_TYPE_EMPTY, EN_OBJECT_TYPE_EMPTY };
+
+	/*
+	* 状態関連
+	*/
+	//現在のオブジェクトのステート（状態）
+	int m_objectState = reversibleObjectConstData::EN_CHECK_HELD_PLAYER;
+	//投げた後の行動
+	int m_overlapAction = reversibleObjectConstData::EN_CHECK_HELD_PLAYER;
+
+	/*
+	* 投げられている時関連
+	*/
+	float m_thrownDownTimer = 0.0f;					//投げている時のタイマー
 	Quaternion m_throwRot = g_QUAT_IDENTITY;		//下に投げるときの回転
+	int m_trownDownOrUp = reversibleObjectConstData::EN_START_THROWN;	//下に投げられるか上に投げられるか？
 
-	static float m_heldUpLen;					//持ち上げた時の、上に持ち上げるベクトルの長さ
-	float m_timer = 0.0f;						//タイマー
-	Vector3 m_addPosition = g_VEC3_ZERO;			//ポジションに加えるベクトル
-	bool m_virticalRepelledFlag = false;		//盾に弾かれるか？
-	Effect* m_reverseall2 = nullptr;			//全反転
-	CSoundCue* m_capacity_overSE = nullptr;		//capacity_overのSE
-	/// <summary>
-	/// オブジェクトの現在のステート（状態）
-	/// これでアップデート中の処理を割り振る
-	/// </summary>
-	enum EnObjectState
-	{
-		enCheckPlayer,	//プレイヤーに持たれるかどうか調べる
-		enLiftedPlayer,	//プレイヤーに持ち上げられ中の状態
-		enHeldPlayer,	//プレイヤーに持たれている状態
-		enThrownDown,	//持っているオブジェクトを下に投げる関数
-		enCancel,		//持っているオブジェクトをその場に置く
-		//enThrownSide,	//持っているオブジェクトを横に投げる関数
-		enRepelled,		//横に弾かれる
-		enQuery,		//クエリしてほしいタイミング
+	/*
+	* 弾かれている時関連
+	*/
+	Vector3 m_addPosition = g_VEC3_ZERO;	//ポジションに加えるベクトル
+	int m_leftOrRight = EN_LEFT;			//右に弾かれるか、左に弾かれるか
 
-		enOverlap,		//障害オブジェクトに重ねっているかの確認
-		enOverlapThrownDown, //オブジェクトが戻ってくる処理（縦）
-		//enOverlapThrownSide //オブジェクトが戻ってくる処理（横）
-	};
-	int m_objectState = enCheckPlayer;			//現在のオブジェクトのステート（状態）
-	int m_objectAction = enCheckPlayer;			//オブジェクトに行ったアクションを保存（戻ってくる処理に使用）
+	/*
+	* 全体で使うタイマー
+	*/
+	float m_timer = 0.0f;	//タイマー
 
-	
-	//キャラクターの左右の向きを調べるのに使用
-	enum EnPlayerLeftOrRight
-	{
-		enLeft,		//左
-		enRight,	//右
-	};
-	int m_leftOrRight = enLeft;
-	bool m_checkOverlap = false; //このオブジェクトを戻らせるかのフラグ
 
-	Vector3 test = { 0.0f,0.0f,0.0f };
+	/*
+	* スイッチ関連
+	*/
+	bool m_startFrontOrBack = EN_FRONT;				//表か裏かの初期値
+	Vector3 m_startPosition = g_VEC3_ZERO;			//座標の初期値
+	Quaternion m_startRotation = g_QUAT_IDENTITY;	//回転の初期値
 
-	CSoundCue* m_changeSE = nullptr; //m_changeSEのサウンドキュー
-	CSoundCue* m_throwSE = nullptr;  //m_throwSEのサウンドキュー
+	/*
+	* エフェクト関連
+	*/
+	Effect* m_reverseAllEffect = nullptr;	//全反転のエフェクト
 
-	bool m_changeObject = true;
-
-	bool m_flagOverlap = true; //このオブジェクトが重なっているかを判定する処理を動かすかどうか
-
-	bool m_frontOrBack = EN_FRONT;				//表か裏か？
-	bool m_startfrontOrBack = EN_FRONT;
-	Vector3 m_startPosition = g_VEC3_ZERO; //オブジェクトの初期位置を保存する位置情報変数
-	Quaternion m_startRotation = g_QUAT_IDENTITY; //オブジェクトの初期回転を保存する回転情報変数
-	bool m_heldFlag = true; //オブジェクトが現在持ち上げられるかのフラグ
-
+	/*
+	* サウンド関連
+	*/
+	CSoundCue* m_changeSE = nullptr;		//性質反転するときのSE
+	CSoundCue* m_throwSE = nullptr;			//投げるときのSE
+	CSoundCue* m_capacityOverSE = nullptr;	//キャパシティがオーバーした時のSE
 };
 

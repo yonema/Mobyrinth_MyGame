@@ -59,10 +59,10 @@ bool OOoneway::StartSub()
 	Vector3 obbSize;
 	obbSize = { 300.0f,300.0f,400.0f };
 	//OBBの方向ベクトルの長さを設定
-	GetOBB().SetDirectionLength(obbSize);
+	SetOBBDirectionLength(obbSize);
 
 	//OBBWorldに自身のOBBの登録を消去させる
-	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
+	COBBWorld::GetInstance()->RemoveOBB(GetOBB());
 
 	//OBBの初期化データ
 	SInitOBBData initOBBData;
@@ -93,7 +93,7 @@ bool OOoneway::StartSub()
 	//両サイドのOBBをOBBワールドに登録する
 	for (int i = 0; i < enLeftAndRightNum; i++)
 	{
-		COBBWorld::GetInstance()->AddOBB(&m_sideOBB[i]);
+		COBBWorld::GetInstance()->AddOBB(m_sideOBB[i]);
 	}
 
 #ifdef MY_DEBUG
@@ -122,7 +122,7 @@ OOoneway::~OOoneway()
 	//両サイドのOBBをOBBワールドから解除する
 	for (int i = 0; i < enLeftAndRightNum; i++)
 	{
-		COBBWorld::GetInstance()->RemoveOBB(&m_sideOBB[i]);
+		COBBWorld::GetInstance()->RemoveOBB(m_sideOBB[i]);
 #ifdef MY_DEBUG
 		for (int j = 0; j < m_vertNum; j++)
 		{

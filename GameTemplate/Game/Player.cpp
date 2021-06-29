@@ -765,7 +765,7 @@ void Player::StunMove()
 		//スタン中ではなくする
 		m_stunFlag = false;
 		//解除していたOBBを登録しなおす
-		COBBWorld::GetInstance()->AddOBB(m_hitOBB);
+		COBBWorld::GetInstance()->AddOBB(*m_hitOBB);
 		//衝突したOBBをnullptrにする
 		m_hitOBB = nullptr;
 		//スタン中タイマーをゼロにする
@@ -954,13 +954,13 @@ void Player::HitFlame()
 	if (m_hitOBB)
 	{
 		//OBBをOBBワールドに登録しなおす
-		COBBWorld::GetInstance()->AddOBB(m_hitOBB);
+		COBBWorld::GetInstance()->AddOBB(*m_hitOBB);
 	}
 
 	//衝突したOBBを入れる
 	m_hitOBB = m_myCharaCon.GetHitOBB();
 	//衝突したOBBをOBBワールドから解除する
-	COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
+	COBBWorld::GetInstance()->RemoveOBB(*m_hitOBB);
 
 	//炎と衝突したSEをワンショット再生で再生する
 	m_flameHitSE->Play(false);
@@ -994,12 +994,12 @@ void Player::HitWall()
 		if (m_hitOBB)
 		{
 			//OBBをOBBワールドに登録しなおす
-			COBBWorld::GetInstance()->AddOBB(m_hitOBB);
+			COBBWorld::GetInstance()->AddOBB(*m_hitOBB);
 		}
 		//衝突したOBBを入れる
 		m_hitOBB = m_myCharaCon.GetHitOBB();
 		//衝突したOBBをOBBワールドから解除する
-		COBBWorld::GetInstance()->RemoveOBB(m_hitOBB);
+		COBBWorld::GetInstance()->RemoveOBB(*m_hitOBB);
 	}
 
 	return;

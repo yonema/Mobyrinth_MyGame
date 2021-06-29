@@ -10,14 +10,14 @@ bool OOReverseALL::StartSub()
 	m_scale = { 0.0f,0.0f,0.0f };
 
 	//OBBWorldに自身のOBBの登録を消去させる
-	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
+	COBBWorld::GetInstance()->RemoveOBB(GetOBB());
 
 	//自己発光色を設定
 	SetEmissionColor({ 0.5f,0.0f,0.5f,1.0f });
 
 	//OBBのパラメーターを設定する
-	GetOBB().SetDirectionLength({ 10.0f,400.0f,400.0f });
-	GetOBB().SetPivot({ 0.5f,0.0f,0.5f });
+	SetOBBDirectionLength({ 10.0f,400.0f,400.0f });
+	SetOBBPivot({ 0.5f,0.0f,0.5f });
 
 	//オブジェクトと当たらないようにする
 	SetIsHitFlag(false);

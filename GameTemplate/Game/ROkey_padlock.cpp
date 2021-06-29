@@ -32,7 +32,7 @@ void ROkey_padlock::QuerySub()
 		QueryLOs<OOpadlock>(EN_OO_TYPE_BIG_PADLOCK, [&](OOpadlock* padlock) -> bool
 			{
 				//自身と「持てない南京錠」が衝突したら
-				if (IsHitObject(*this, *padlock))
+				if (IsHitLevelObject(*this, *padlock))
 				{
 					//「持てない南京錠」を破棄
 					DeleteGO(padlock);
@@ -51,7 +51,7 @@ void ROkey_padlock::QuerySub()
 	//{
 	//	QueryLOs<OObigFire>(EN_OO_TYPE_FLAME, [&](OObigFire* bigFire) -> bool
 	//		{
-	//			if (IsHitObject(*this, *bigFire, hitDot))
+	//			if (IsHitLevelObject(*this, *bigFire, hitDot))
 	//			{
 	//				bigFire->Damage();
 	//				DeleteGO(this);
