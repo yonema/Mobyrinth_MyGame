@@ -191,14 +191,18 @@ void CLevelObjectManager::AllDeleteLOs()
 	}
 }
 
-
-bool CLevelObjectManager::QueryLevelAllObjects(ILevelObjectBase& thisObject, const int objectType)
+/**
+ * @brief 全てのレベルオブジェクトを調べて、衝突していないか調べる
+ * @param [in] thisObject 自身のインスタンス
+ * @return 衝突しているか？
+*/
+bool CLevelObjectManager::IsHitAllLevelObjects(const ILevelObjectBase& thisObject)
 {
 	for (auto lo : m_levelObjects) {
 		//自分自身じゃないとき
 		if (lo != &thisObject) {
 			//重なっているオブジェクトがある。
-			if (IsHitObject(thisObject, *lo)) {
+			if (IsHitLevelObject(thisObject, *lo)) {
 				return true;
 			}
 		}

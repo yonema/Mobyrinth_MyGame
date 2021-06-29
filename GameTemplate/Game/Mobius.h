@@ -30,6 +30,13 @@ public:		//ここのメンバ関数を主に使う。
 		m_rotation = rot;
 	}
 
+	/**
+	 * @brief メビウスの輪とレイの交差点を求める
+	 * @param [in] startPos レイの始点
+	 * @param [in] endPos レイの終点
+	 * @param [out] IntersectPos 交差点
+	 * @return 交差しているか？
+	*/
 	const bool GetIntersectPosWithMobius(
 		const Vector3& startPos, const Vector3& endPos, Vector3* const IntersectPos = nullptr
 	);

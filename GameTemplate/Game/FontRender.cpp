@@ -44,7 +44,7 @@ void CFontRender::Init
 /// 表示するテキストを設定する
 /// </summary>
 /// <param name="text">テキスト</param>
-void CFontRender::SetText(const wchar_t* text)
+void CFontRender::SetText(const wchar_t* const text)
 {
 	swprintf_s(m_text, text);
 }

@@ -171,6 +171,15 @@ public:		//メンバ関数
 	}
 
 	/**
+	 * @brief 持っている反転オブジェクトのポインタを戻す
+	 * @return 持っている反転オブジェクトポインタ
+	*/
+	const CReversibleObject* GetReversibleObject() const
+	{
+		return m_reversibleObject;
+	}
+
+	/**
 	 * @brief 持っている反転オブジェクトの参照を得る
 	 * @return 持っている反転オブジェクトの参照
 	*/
@@ -407,7 +416,7 @@ private://privateなメンバ関数
 	void InitEffect();
 
 	/**
-	 * @brief サウンドを初期化
+	 * @brief サウンドの初期化
 	*/
 	void InitSound();
 
@@ -584,7 +593,7 @@ private:	//データメンバ
 	Vector3 m_stunMoveSpeedVertical = g_VEC3_ZERO;	//スタン中の縦方向の移動速度
 	bool m_stunMoveFlag = true;						//スタン中に吹っ飛び中か？
 	float m_blinkTimer = 0.0f;						//スタン状態にモデルを点滅させるタイマー
-	COBB* m_hitOBB = nullptr;						//衝突したOBBのポインタ
+	const COBB* m_hitOBB = nullptr;					//衝突したOBBのポインタ
 
 	/*
 	* キャプチャ関連

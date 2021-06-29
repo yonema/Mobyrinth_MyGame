@@ -52,24 +52,15 @@ public:		//ここのメンバ関数を主に使う
 	/// OBBをOBBWorldに登録する関数
 	/// </summary>
 	/// <param name="obb">登録するOBB</param>
-	void AddOBB(COBB* obb);
+	void AddOBB(const COBB& obb);
 
 	/// <summary>
 	/// OBBWorldに登録してあるOBBを解除する関数
 	/// </summary>
 	/// <param name="obb">登録するOBB</param>
-	void RemoveOBB(COBB* obb);
+	void RemoveOBB(const COBB& obb);
 
-	/// <summary>
-	/// とりあえず作ったけど、使わない予定。
-	/// テストもしてない
-	/// 一応、OBBとレイの交差点を求める関数
-	/// </summary>
-	/// <param name="start">レイの始点</param>
-	/// <param name="end">レイの終点</param>
-	/// <param name="pos">交差した際の交差点の座標</param>
-	/// <returns>交差したか？</returns>
-	bool InIntersectLine(const Vector3& start, const Vector3& end, Vector3* pos = nullptr);
+
 	
 	/// <summary>
 	/// OBBWorldに登録してあるすべてのOBBを調べて、
@@ -80,10 +71,10 @@ public:		//ここのメンバ関数を主に使う
 	/// </summary>
 	/// <param name="myOBB">自身のOBB</param>
 	/// <returns>衝突しているOBBか、nullptr</returns>
-	COBB* HitAllOBB(const COBB& myOBB);
+	const COBB* HitAllOBB(const COBB& myOBB);
 
 private:	//データメンバ
-	std::vector<COBB*> m_worldOBBs;		//OBBWorldに登録されているOBB達
+	std::vector<const COBB*> m_worldOBBs;		//OBBWorldに登録されているOBB達
 
 };
 

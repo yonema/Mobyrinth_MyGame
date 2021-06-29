@@ -11,14 +11,14 @@ bool CUFOLandingPoint::StartSub()
 	m_scale = { scale ,1.0f ,scale };
 
 	//OBBWorldに自身のOBBの登録を消去させる
-	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
+	COBBWorld::GetInstance()->RemoveOBB(GetOBB());
 
 	//自己発光色を設定
 	//SetEmissionColor({ 0.5f,0.5f,0.0f,1.0f });
 
 	//OBBのパラメーターを設定する
-	GetOBB().SetDirectionLength({ 2000.0f,750.0f,500.0f });
-	GetOBB().SetPivot({ 0.5f,0.0f,0.5f });
+	SetOBBDirectionLength({ 2000.0f,750.0f,500.0f });
+	SetOBBPivot({ 0.5f,0.0f,0.5f });
 
 	//端のOBBのパラメーターの設定をする
 	for (int i = 0; i < enLeftAndRightNum; i++)

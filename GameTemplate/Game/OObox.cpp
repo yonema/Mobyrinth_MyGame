@@ -10,9 +10,9 @@ bool OObox::StartSub()
 	//OBBÇÃÉTÉCÉYÇê›íË
 	Vector3 obbSize;
 	obbSize = { 250.0f,250.0f,250.0f };
-	GetOBB().SetDirectionLength(obbSize);
+	SetOBBDirectionLength(obbSize);
 
-	GetOBB().SetTag(COBB::EN_OO_TYPE_BOX);
+	SetOBBTag(COBB::EN_OO_TYPE_BOX);
 
 
 	return true;

@@ -520,8 +520,8 @@ void ILevelObjectBase::TransparentSwitchOff()
 /// <param name="lhs">レベルオブジェクト1</param>
 /// <param name="rhs">レベルオブジェクト2</param>
 /// <returns>trueが戻ってきたら当たっている</returns>
-bool IsHitObject
-(ILevelObjectBase& lhs, ILevelObjectBase& rhs)
+bool IsHitLevelObject
+(const ILevelObjectBase& lhs, const ILevelObjectBase& rhs)
 {
 	//オブジェクトの衝突判定を行わない状態の場合
 	if (lhs.GetIsHitFlag() == false || rhs.GetIsHitFlag() == false) {

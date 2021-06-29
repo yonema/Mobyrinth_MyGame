@@ -18,8 +18,8 @@ bool CUFO::PureVirtualStart()
 	m_onWayPosition = m_position;
 
 	//OBBを調節する
-	GetOBB().SetPivot({ 0.5f,0.0f,0.5f });
-	GetOBB().SetDirectionLength({ 10.0f,200.0f,400.0f });
+	SetOBBPivot({ 0.5f,0.0f,0.5f });
+	SetOBBDirectionLength({ 10.0f,200.0f,400.0f });
 
 	//上向きのスポットライトの生成と初期化
 	//m_spotLightUp = NewGO<CSpotLight>(0);

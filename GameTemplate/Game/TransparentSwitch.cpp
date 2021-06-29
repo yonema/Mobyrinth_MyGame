@@ -31,7 +31,7 @@ bool OOTransparentSwitch::StartSub()
 	Init("Assets/modelData/transparentSwitch.tkm", EN_OO_TYPE_TRANSPARENT_SWITCH);
 
 	//OBBWorldに自身のOBBの登録を消去させる
-	COBBWorld::GetInstance()->RemoveOBB(&GetOBB());
+	COBBWorld::GetInstance()->RemoveOBB(GetOBB());
 
 	//透明オブジェクトを半透明にする。
 	ChangeTransparent();
@@ -65,7 +65,7 @@ bool OOTransparentSwitch::StartSub()
 	Vector3 obbSize;
 	obbSize = { 100.0f,200.0f,600.0f };
 	//OBBの方向ベクトルの長さを設定
-	GetOBB().SetDirectionLength(obbSize);
+	SetOBBDirectionLength(obbSize);
 
 	
 	//m_buttonpushSEのサウンドキューを生成する
@@ -568,7 +568,7 @@ void OOTransparentSwitch::SetTimerFRParam
 	timerPos.x += offset.x;
 	timerPos.y += offset.y;
 	//タイマーのフォントの座標を設定する
-	levelObject->GetTimerFR()->SetPosition(timerPos);
+	levelObject->SetTimerFontPosition(timerPos);
 
 	//タイマーのフォントに設定するテキスト
 	wchar_t text[32];
@@ -576,9 +576,9 @@ void OOTransparentSwitch::SetTimerFRParam
 	//1.0f加算して、0もちょっとは表示したいから0.1f減算する
 	swprintf_s(text, L"%d", static_cast<int>(m_resetTimer + 0.9f));
 	//タイマーのフォントにテキストを設定する
-	levelObject->GetTimerFR()->SetText(text);
+	levelObject->SetTimerFontText(text);
 	//タイマーのフォントのカラーを設定する
-	levelObject->GetTimerFR()->SetColor(m_fontColor);
+	levelObject->SetTimerFontColor(m_fontColor);
 }
 
 /// <summary>
@@ -609,7 +609,7 @@ void OOTransparentSwitch::ChangeTransparent()
 
 		//フォントのカラーを通常のカラーに設定する
 		m_fontColor = m_normalColor;
-		levelObjects[i]->GetTimerFR()->SetColor(m_fontColor);
+		levelObjects[i]->SetTimerFontColor(m_fontColor);
 	}
 
 	//タイマーのフォントを無効化した

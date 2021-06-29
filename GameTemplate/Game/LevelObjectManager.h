@@ -166,14 +166,12 @@ public:		//メンバ関数
 		}
 	}
 
-	/// <summary>
-	/// オブジェクトをすべて検索して
-	/// 自分自身以外で重なっているものを探す。
-	/// </summary>
-	/// <param name="thisObject">自分自身の情報</param>
-	/// <param name="objectType">自分自身の名前</param>
-	/// <returns></returns>
-	bool QueryLevelAllObjects(ILevelObjectBase& thisObject, const int objectType);
+	/**
+	 * @brief 全てのレベルオブジェクトを調べて、衝突していないか調べる
+	 * @param [in] thisObject 自身のインスタンス
+	 * @return 衝突しているか？
+	*/
+	bool IsHitAllLevelObjects(const ILevelObjectBase& thisObject);
 
 
 	/// <summary>
@@ -271,6 +269,24 @@ public:		//メンバ関数
 	*/
 	const int CheckFrontOrBackSide(const int lpIndex);
 
+	/**
+	 * @brief 表側と裏側のしきい値の小さい方の取得
+	 * @return 表側と裏側のしきい値の小さい方
+	*/
+	const int GetFrontOrBackSideThresholdSmall() const
+	{
+		return m_frontOrBackSideThresholdSmall;
+	}
+
+	/**
+	 * @brief 表側と裏側のしきい値の大きい方の取得
+	 * @return 表側と裏側のしきい値の大きい方
+	*/
+	const int GetFrontOrBackSideThresholdBig() const
+	{
+		return m_frontOrBackSideThresholdBig;
+	}
+
 private:	//privateなメンバ関数
 
 	/**
@@ -311,7 +327,12 @@ static inline void QueryLOs(const int objectType, std::function<bool(T* lo)> fun
 	return CLevelObjectManager::GetInstance()->QueryLevelObjects(objectType, func);
 }
 
-static inline bool QueryAllLOs(ILevelObjectBase& thisObject, const int objectType)
+/**
+ * @brief 全てのレベルオブジェクトを調べて、衝突しているか調べる
+ * @param [in] thisObject 自身のインスタンス
+ * @return 衝突しているか？
+*/
+static inline bool IsHitAllLOs(const ILevelObjectBase& thisObject)
 {
-	return CLevelObjectManager::GetInstance()->QueryLevelAllObjects(thisObject, objectType);
+	return CLevelObjectManager::GetInstance()->IsHitAllLevelObjects(thisObject);
 }

@@ -11,7 +11,7 @@ bool OObigFire::StartSub()
 	Vector3 obbSize;
 	obbSize = { 300.0f,300.0f,400.0f };
 	//OBBの方向ベクトルの長さを設定
-	GetOBB().SetDirectionLength(obbSize);
+	SetOBBDirectionLength(obbSize);
 
 	//ポイントライトを生成
 	m_pointLight = NewGO<CPointLight>(0);
@@ -27,7 +27,7 @@ bool OObigFire::StartSub()
 	//自己発光色を設定
 	SetEmissionColor({ 1.0f,0.0f,0.0f,1.0f });
 
-	GetOBB().SetTag(COBB::EN_OO_TYPE_FLAME);
+	SetOBBTag(COBB::EN_OO_TYPE_FLAME);
 
 	//flameSEのサウンドキューを生成する
 	m_flameSE = NewGO<CSoundCue>(0);
@@ -104,7 +104,7 @@ void OObigFire::Damage()
 		//評価した値が0になってしまう。
 		//だから、m_hpをfloatにキャストする
 		obbSize.Scale(static_cast<float>(m_hp + sizeComplement) / (m_maxHp + sizeComplement));
-		GetOBB().SetDirectionLength(obbSize);
+		SetOBBDirectionLength(obbSize);
 
 
 		//モデルのサイズをHPに応じて小さくする

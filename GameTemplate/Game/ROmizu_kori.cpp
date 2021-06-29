@@ -26,7 +26,7 @@ void ROmizu_kori::QuerySub()
 				if (m_actionFlag)
 				{
 					//自身と「でかい火」が衝突したら
-					if (IsHitObject(*this, *bigFire))
+					if (IsHitLevelObject(*this, *bigFire))
 					{
 						//「でかい火」にダメージを与える
 						bigFire->Damage();
@@ -43,7 +43,7 @@ void ROmizu_kori::QuerySub()
 		QueryLOs<ROmizu_kori>(EN_RO_TYPE_FIRE, [&](ROmizu_kori* Fire) -> bool
 			{
 				//自身と「火」が衝突したら
-				if (IsHitObject(*this, *Fire))
+				if (IsHitLevelObject(*this, *Fire))
 				{
 					if (m_actionFlag) {
 						//相手を破棄する。
@@ -66,7 +66,7 @@ void ROmizu_kori::QuerySub()
 		QueryLOs<ROmizu_kori>(EN_RO_TYPE_WATER, [&](ROmizu_kori* Water) -> bool
 			{
 				//自身と「水」が衝突したら
-				if (IsHitObject(*this, *Water))
+				if (IsHitLevelObject(*this, *Water))
 				{
 					if (m_actionFlag) {
 						//相手を破棄する。

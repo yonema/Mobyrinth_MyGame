@@ -10,9 +10,9 @@ bool OOpadlock::StartSub()
 	//OBBÇÃÉTÉCÉYÇê›íË
 	Vector3 obbSize;
 	obbSize = { 300.0f,300.0f,300.0f };
-	GetOBB().SetDirectionLength(obbSize);
+	SetOBBDirectionLength(obbSize);
 
-	GetOBB().SetTag(COBB::EN_RO_TYPE_PADLOCK);
+	SetOBBTag(COBB::EN_RO_TYPE_PADLOCK);
 
 	return true;
 }
