@@ -1,358 +1,209 @@
 #include "stdafx.h"
 #include "StartDirecting.h"
-
 #include "GameCamera.h"
-#include "Player.h"
-#include "Pause.h"
 
-//担当外
+//開始演出の定数データを使えるようにする
+using namespace startDirectingConstData;
 
-bool CStartDirecting::Start()
+/**
+ * @brief 開始演出の更新。使うときにアップデート関数で呼ぶ。
+*/
+void CStartDirecting::StartDirectingUpdate()
 {
-	m_position = { 0.0f,1740.0f,0.0f };
-	m_onWayPosition = m_position;
-	m_mobius = FindGO<CMobius>("Mobius");
+	//ステージの周りをぐるぐる回るか？
+	if (m_goAroundStageFlag)
+	{
+		GoAroundStage();
+	}
 
-	m_startPosition = m_position;
+	//フェードを行うか？
+	if (m_fadeFlag)
+	{
+		FadeDirectingCamera();
+	}
 
-	m_player = FindGO<Player>("Player");
-	m_gameCamera = FindGO<CGameCamera>("GameCamera");
-
-
-	return true;
-}
-
-CStartDirecting::~CStartDirecting()
-{
-
-}
-
-void CStartDirecting::Update()
-{
-	//カメラのターゲットを見えない形で動かして
-	//カメラを動かす。
-	
-	//wayポイント[16]まで動かす。
-
-	//演出をしない状態、またはワイプが終了していなかったら
-	//何もせずにreturn
-	//if (m_checkStartDirecting == false || !m_wipeEndFlag) {
-	//	return;
-	//}
-
-	////ちょっと待ってから演出を開始する
-	//if (m_startTimer < /*0.5f*/0.5f)
-	//{
-	//	m_startTimer += GameTime().GetFrameDeltaTime();
-	//	return;
-	//}
-
-	//////////
-	// ここから下が、ステージ開始時の演出の処理
-	//////////
-
-	if (CheckAButton == true && m_checkStartDirecting == true) {
+	//プレイヤーが落ちてくる演出を行うか？
+	if (m_fallPlayerFlag)
+	{
 		FallPlayer();
 	}
 
-
-	//if (g_pad[0]->IsTrigger(enButtonA) == true) {
-		//CheckAButton = true;
-		//checkZoomIn = true;
-		//countZoomIn = startDirectingTime;
-
-		//m_gameCamera->FinishZoom();
-		//カメラの寄る処理のフラグをtrueにする。
-		//m_gameCamera->SetStartDirectingZoomInCamera(true);
-		//FallPlayer();
-		//m_checkStartDirecting = false;
-		////プレイヤーの操作フラグをtrueにする。
-		//Player* player = FindGO<Player>("Player");
-		//player->SetOperationFlag(true);
-		////ポーズの操作フラグをtrueにする。
-		//CPause* pause = FindGO<CPause>("Pause");
-		//pause->SetCanPause(true);
-		////UFOがあったら動かす
-		//CUFO* ufo = FindGO<CUFO>("UFO");
-		//if (ufo)
-		//	ufo->SetMoveSpeed();
-	//}
-
-	//if (checkZoomIn == false) {
-		//ここで大体のスタート演出をしている。
-	
-
-
-		//ここから下は使わない。
-
-		//カメラの移動力
-		//m_padLStickXF = 1.0f;
-		//m_padLStickXF = 1.3f /** GameTime().GetFrameDeltaTime()*/;
-		//if (m_padLStickXF > 1.5f)
-		//	m_padLStickXF = 1.5f;
-
-		////ウェイポイントの更新処理
-		//CheckWayPoint();
-		////移動処理
-		//Move();
-		////モデルの回転処理
-		//Rotation();
-
-		////デルタタイムを掛ける
-		//m_onWayPosition += m_moveSpeed * GameTime().GetFrameDeltaTime();
-		//GetOnStage();
-	//}
-	//else {
-	//	if (countZoomIn < startDirectingTime) {
-	//		++countZoomIn;
-	//	}
-	//	else {
-	//		m_gameCamera->FinishZoom();
-	//		//FallPlayer();
-	//		//m_checkStartDirecting = false;
-	//		////プレイヤーの操作フラグをtrueにする。
-	//		//m_player = FindGO<Player>("Player");
-	//		//player->SetOperationFlag(true);
-	//		////ポーズの操作フラグをtrueにする。
-	//		//CPause* pause = FindGO<CPause>("Pause");
-	//		//pause->SetCanPause(true);
-	//		////UFOがあったら動かす
-	//		//CUFO* ufo = FindGO<CUFO>("UFO");
-	//		//if (ufo)
-	//		//	ufo->SetMoveSpeed();
-	//	}
-	//}
+	return;
 }
 
 
-//void StartDirecting::CheckWayPoint()
-//{
-//	///
-//	///
-//	/// m_wayPointStateは左周りで0から増えていく。
-//	/// m_wayPointStateが0の時、m_lpIndexは0,m_rpIndexは1になる。
-//	/// つまり、m_lpIndexは常にm_wayPointStateと同じ値になり、
-//	/// m_rpIndexはm_wayPointStateに1加算した値になる。
-//	/// そしてm_maxWayPointStateはm_wayPointStateの最大数を表す。
-//	/// m_maxWayPointStateが31だったらm_wayPointStateは31まで存在する。
-//
-//
-//	//1.プレイヤー自身の左右のウェイポイントを設定する
-//	//m_wayPointStateをもとにウェイポイントを設定する。
-//	m_rpIndex = m_wayPointState;	//右のウェイポイントはとm_wayPointStateは同じ値
-//	m_lpIndex = m_rpIndex + 1;		//左のウェイポイントは右のウェイポイントの1つ上の値
-//
-//	if (m_lpIndex > m_maxWayPointState)
-//	{
-//		//左のウェイポイントがMAXより大きかったら
-//		//一周したということだから、スタートの0にする
-//		m_lpIndex = 0;
-//	}
-//
-//
-//	//2.m_wayPointStateの更新。
-//
-//	Vector3 LpToRpVec = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
-//	LpToRpVec.Normalize();
-//	Vector3 LpToPlayerVec = m_position - (*m_wayPointPos)[m_lpIndex];
-//	LpToPlayerVec.Normalize();
-//	Vector3 RpToPlayerVec = m_position - (*m_wayPointPos)[m_rpIndex];
-//	RpToPlayerVec.Normalize();
-//
-//	float LpDotPlayer = Dot(LpToRpVec, LpToPlayerVec);
-//	float RpDotPlayer = Dot(LpToRpVec, RpToPlayerVec);
-//
-//
-//	//左右のウェイポイントとの距離を調べる
-//	float f = 0.35f;
-//	if (LpDotPlayer > f && RpDotPlayer < -f)
-//	{
-//		//今のウェイポイントの間にいる
-//	}
-//	else if (LpDotPlayer <= f && m_padLStickXF < 0.0f)
-//	{
-//		//今のウェイポイントの間から、左側に出ていった
-//		m_wayPointState += 1;
-//		if (m_wayPointState > m_maxWayPointState)
-//		{
-//			//m_wayPointStateがMAXより大きかったら
-//			//一周したということだから、スタートの0にする
-//			m_wayPointState = 0;
-//		}
-//	}
-//	else if (RpDotPlayer >= -f && m_padLStickXF > 0.0f)
-//	{
-//		//今のウェイポイントの間から、右側から出ていった
-//		//m_wayPointStateを減算して右に進める。
-//		m_wayPointState -= 1;
-//		if (m_wayPointState < 0)
-//		{
-//			//m_wayPointStateが0より小さかったら
-//			//一周したということだから、MAXの値にする
-//			m_wayPointState = m_maxWayPointState;
-//		}
-//
-//		//カメラの移動を止める位置に来たかの確認
-//		if (m_wayPointState == 15) {
-//			checkZoomIn = true;
-//			//カメラの寄る処理のフラグをtrueにする。
-//			m_gameCamera->SetStartDirectingZoomInCamera(true);
-//		}
-//	}
-//
-//
-//
-//	return;
-//
-//}
-//
-//void StartDirecting::Move()
-//{
-//	//移動する向きは毎フレーム計算した方がいいのかな？
-//	//それとも、m_wayPointStateの切り替の時にした方がいいのかな？
-//	//いや、今のやり方だと毎フレームやらなくてはいけない気がする
-//
-//	//1.左右への移動する方向を計算する。
-//
-//	//左へ移動する方向
-//	Vector3 moveToLeft = (*m_wayPointPos)[m_lpIndex] - m_onWayPosition;
-//	moveToLeft.Normalize();
-//	//右へ移動する方向
-//	Vector3 moveToRight = (*m_wayPointPos)[m_rpIndex] - m_onWayPosition;
-//	moveToRight.Normalize();
-//
-//
-//	//2.移動処理
-//
-//	//とりあえずの処理
-//	//重力や、加速度、抵抗を実装するときは別のやり方で
-//	m_moveSpeed = g_VEC3_ZERO;
-//
-//	//カメラの移動スピード
-//	float moveLen = 1000.0f;
-//
-//
-//	if (m_padLStickXF < 0.0f)
-//	{
-//		//左への移動の入力があったら
-//		//左への移動の計算する
-//		m_moveSpeed += moveToLeft * m_padLStickXF * -moveLen;
-//	}
-//	else if (m_padLStickXF > 0.0f)
-//	{
-//		//右への移動の入力があったら
-//		//右への移動の計算をする
-//		m_moveSpeed += moveToRight * m_padLStickXF * moveLen;
-//	}
-//
-//
-//	return;
-//}
-//
-//void StartDirecting::GetOnStage()
-//{
-//	m_upVec = g_VEC3_AXIS_Y;
-//	m_finalWPRot.Apply(m_upVec);
-//	m_upVec.Scale(150.0f);
-//	if (m_mobius)
-//	{
-//		if (m_mobius->GetModel()->InIntersectLine(m_onWayPosition + m_upVec, m_onWayPosition - m_upVec))
-//		{
-//			m_position = m_mobius->GetModel()->GetIntersectPos();
-//		}
-//	}
-//	else
-//	{
-//		m_mobius = FindGO<CMobius>("Mobius");
-//	}
-//	auto hitPos = m_mobius->GetModel()->GetIntersectPos();
-//
-//	//m_modelRender->SetPosition(hitPos);
-//	return;
-//
-//}
-//
-//void StartDirecting::Rotation()
-//{
-//	//左のウェイポイントから右のウェイポイントへのベクトル
-//	Vector3 lpToRpLen = (*m_wayPointPos)[m_rpIndex] - (*m_wayPointPos)[m_lpIndex];
-//
-//	//左のウェイポイントからプレイヤーへのベクトル
-//	Vector3 lpToPlayerLen = m_onWayPosition - (*m_wayPointPos)[m_lpIndex];
-//
-//	//補完率
-//	float ComplementRate = lpToPlayerLen.Length() / lpToRpLen.Length();
-//
-//	//球面線形補完
-//	m_finalWPRot.Slerp(ComplementRate, (*m_wayPointRot)[m_lpIndex], (*m_wayPointRot)[m_rpIndex]);
-//
-//	return;
-//}
+/**
+ * @brief ステージ開始時のカメラ
+*/
+void CStartDirecting::GoAroundStage()
+{
+	//ワイプが終わっていないか？
+	if (!m_wipeEndFlag)
+	{
+		//終わっていない
+		//何もせずreturn
+		return;
+	}
 
+	//ちょっと待ってから演出を開始する
+	if (m_firstWaitTimer < TIME_FIRST_WAIT_START_DIRECTING)
+	{
+		//タイマーを進める
+		m_firstWaitTimer += GameTime().GetFrameDeltaTime();
+		return;
+	}
+
+	//ステージの周りを回るクォータニオン
+	Quaternion goAroundStageQRot;
+	//ステージの周りを回る角度を増やす	//デルタタイムを掛ける
+	m_goAroundStageAngle += ANGLE_MAX_GO_AROUND_STAGE / TIME_GO_AROUND_STAGE * 
+		CGameTime::GetInstance().GetFrameDeltaTime();
+	//クォータニオンに角度をセットする
+	goAroundStageQRot.SetRotationDegY(m_goAroundStageAngle);
+	//カメラの視点への座標
+	Vector3 toCameraPos = POSITION_TO_CAMERA;
+	//カメラの視点への座標を回す
+	goAroundStageQRot.Apply(toCameraPos);
+	//ステージ全体が見渡せるように視点と注視点を設定
+	m_gameCamera->SetPosition(POSITION_TARGET_CAMERA + toCameraPos);
+	m_gameCamera->SetTarget(POSITION_TARGET_CAMERA);
+
+	//ステージの周りを回る角度が一定の角度に達する、または
+	//Aボタンを押す
+	if (m_goAroundStageAngle >= ANGLE_MAX_GO_AROUND_STAGE * SCALE_ANGLE_FINISH_GO_AROUND_STAGE ||
+		g_pad[0]->IsTrigger(enButtonA) == true)
+	{
+		//フェードのフラグを立てる
+		m_fadeFlag = true;
+	}
+
+	return;
+}
+
+/**
+ * @brief フェードの処理
+*/
+void CStartDirecting::FadeDirectingCamera()
+{
+	//フェードアウトの時間か？
+	if (m_fadeTimer < TIME_FADE_OUT)
+	{
+		//アルファ値
+		float alphaValue = 1.0f;
+		//タイマーに経過具合によってアルファ値を補完
+		float timeScale = (m_fadeTimer) / (TIME_FADE_OUT);
+		alphaValue *= timeScale;
+		//フェードを徐々に暗くしていく
+		g_graphicsEngine->GetSceneChange().SetFadeSpriteAlphaValue(alphaValue);
+	}
+	//フェードアウトとフェードインの中間の時間か？
+	else if (m_fadeTimer < TIME_FADE_WAIT)
+	{
+		//カメラがステージの周りを回転しないようにする。
+		m_goAroundStageFlag = false;
+
+		//フェードは真っ暗
+		g_graphicsEngine->GetSceneChange().
+			SetFadeSpriteAlphaValue(spriteRenderConstData::ALPHA_VALUE_OPACITY);
+	}
+	//フェードインの時間か？
+	else if (m_fadeTimer < TIME_FADE_IN)
+	{
+		//プレイヤーが落ちてくる演出を始める
+		m_fallPlayerFlag = true;
+
+		//アルファ値
+		float alphaValue = 1.0f;
+		//タイマーに経過具合によって補完
+		float timeScale = (m_fadeTimer - TIME_FADE_WAIT) / (TIME_FADE_IN - TIME_FADE_WAIT);
+		alphaValue -= 1.0f * timeScale;
+		//フェードを徐々に明るくしていく
+		g_graphicsEngine->GetSceneChange().SetFadeSpriteAlphaValue(alphaValue);
+	}
+	else
+	{
+		//全ての工程が終わったら
+		//フェードを完全に透明にして
+		g_graphicsEngine->GetSceneChange().
+			SetFadeSpriteAlphaValue(spriteRenderConstData::ALPHA_VALUE_TRANSPARENT);
+		//フェードを行わないようにする
+		m_fadeFlag = false;
+	}
+
+	//フェードのタイマーを進める
+	m_fadeTimer += GameTime().GetFrameDeltaTime();
+
+	return;
+}
+
+/**
+ * @brief プレイヤーの演出時の落下処理
+*/
 void CStartDirecting::FallPlayer()
 {
-	m_player->SetFallFlag(true);
-	Vector3 fallpos = m_player->GetPosition();
-	fallpos.y -= 1200.0f * GameTime().GetFrameDeltaTime();
-	if (fallpos.y <= 1630.0f) {
-		fallpos.y = 1630.0f;
+	//プレイヤーがみつかっていないか？
+	if (m_player == nullptr)
+	{
+		//見つかっていない
+		//プレイヤーを探す
+		m_player = FindGO<Player>(GetGameObjectName(EN_GO_TYPE_PLAYER));
+		//まだ見つかっていなかったら
+		if (m_player == nullptr)
+		{
+			//何もせずにreturn
+			return;
+		}
+	}
 
-		if (m_fallTimer > 1.0f) {
+	//プレイヤーを落ちている状態にする
+	m_player->SetFallFlag(true);
+
+	//落下中のプレイヤーの座標
+	Vector3 fallpos = m_player->GetPosition();
+	//落下させる	//デルタタイムを掛ける
+	fallpos.y -= SPEED_FALL_PLAYER * GameTime().GetFrameDeltaTime();
+	//高さが地面より低いか？
+	if (fallpos.y < HEIGHT_GROUND) 
+	{
+		//高さを地面に合わせる
+		fallpos.y = HEIGHT_GROUND;
+
+		//落下後に待つ時間か？
+		if (m_waitTimerAfterFell < TIME_WAIT_AFTER_FELL) 
+		{
+			//落下後に少し待機する
+			m_waitTimerAfterFell += GameTime().GetFrameDeltaTime();
+		}
+		//少し待った後
+		else 
+		{
+			//開始演出を終える
+			m_startDirectingFlag = false;
+
+			//プレイヤーを落ちている状態ではなくする
 			m_player->SetFallFlag(false);
-			m_checkStartDirecting = false;
 			//プレイヤーの操作フラグをtrueにする。
 			m_player->SetOperationFlag(true);
+
 			//ポーズの操作フラグをtrueにする。
-			CPause* pause = FindGO<CPause>("Pause");
+			CPause* pause = FindGO<CPause>(GetGameObjectName(EN_GO_TYPE_PAUSE));
 			pause->SetCanPause(true);
 			//UFOがあったら動かす
-			CUFO* ufo = FindGO<CUFO>("UFO");
+			CUFO* ufo = FindGO<CUFO>(GetGameObjectName(EN_GO_TYPE_UFO));
 			if (ufo)
 				ufo->SetMoveSpeed();
 		}
-		else {
-			m_fallTimer += GameTime().GetFrameDeltaTime();
-		}
 	}
+
+	//プレイヤーに落下中の座標を設定する
+	m_player->SetPosition(fallpos);
 	//カメラをリフレッシュして、一時的にばねカメラを無効にし、
 	//一気にカメラを移動できるようにする
 	m_gameCamera->Refresh();
-	m_player->SetPosition(fallpos);
+	//カメラの視点を設定する
+	m_gameCamera->SetPosition(m_player->GetPosition() + gameCameraConstData::POSITION_TO_CAMERA);
+	//カメラの注視点を設定する
 	m_gameCamera->SetTarget(m_player->GetPosition());
-	m_gameCamera->SetPosition({ m_player->GetPosition().x,
-								m_player->GetPosition().y,
-								m_player->GetPosition().z + 1200.0f });
+
+	return;
 }
-
-
-//void StartDirecting::SetWayPointPos
-//(const std::size_t vecSize, std::vector<Vector3>* const posMap)
-//{
-//	//vectorのサイズの確保
-//	//m_wayPointPos->resize(vecSize);
-//	//ウェイポイントステートの最大の値を設定
-//	m_maxWayPointState = vecSize - 1;
-//	//m_wayPointPosにウェイポイントの「場所」を格納する
-//	m_wayPointPos = posMap;
-//	//std::vector<Vector3>::iterator it = posMap->begin();
-//	//for (int index = 0; it != posMap->end(); index++, it++)
-//	//{
-//	//	m_wayPointPos[index] = &it;
-//	//}
-//}
-//
-//void StartDirecting::SetWayPointRot
-//(const std::size_t vecSize, std::vector<Quaternion>* rotMap)
-//{
-//	//vectorのサイズの確保
-//	//m_wayPointRot->resize(vecSize);
-//	//ウェイポイントステートの最大の値を設定
-//	m_maxWayPointState = vecSize - 1;
-//	//m_wayPointRotにウェイポイントの「回転」を格納する
-//	m_wayPointRot = rotMap;
-//	//std::map<int, Quaternion>::iterator it = rotMap->begin();
-//	//for (int index = 0; it != rotMap->end(); index++, it++)
-//	//{
-//	//	m_wayPointRot[index] = &it->second;
-//	//}
-//}

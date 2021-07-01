@@ -91,6 +91,15 @@ public:		//ここのメンバ関数を主に使う
 		m_sprite.SetMulColor(mulColor);
 	}
 
+	/**
+	 * @brief スプライトのアルファ値を設定する
+	 * @param [in] alphaValue アルファ値
+	*/
+	void SetAlphaValue(const float alphaValue)
+	{
+		m_sprite.SetAlphaValue(alphaValue);
+	}
+
 	/// <summary>
 	/// PostRenderで描画するかどうか設定する関数
 	/// 引数にtrueを入れるとPostRenderで描画されるようになり、

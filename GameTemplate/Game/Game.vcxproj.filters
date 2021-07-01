@@ -488,9 +488,6 @@
     <ClCompile Include="main.cpp">
       <Filter>MyCode\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="StartDirecting.cpp">
-      <Filter>MyCode\Scene\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Title.cpp">
       <Filter>MyCode\Scene\Title</Filter>
     </ClCompile>
@@ -499,6 +496,9 @@
     </ClCompile>
     <ClCompile Include="Mobius.cpp">
       <Filter>MyCode\LevelObject\Mobius</Filter>
+    </ClCompile>
+    <ClCompile Include="StartDirecting.cpp">
+      <Filter>MyCode\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -892,9 +892,6 @@
     <ClInclude Include="FontRender.h">
       <Filter>MyCode\Graphic\Font</Filter>
     </ClInclude>
-    <ClInclude Include="StartDirecting.h">
-      <Filter>MyCode\Scene\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Title.h">
       <Filter>MyCode\Scene\Title</Filter>
     </ClInclude>
@@ -933,6 +930,18 @@
     </ClInclude>
     <ClInclude Include="ReversibleObjectConstData.h">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCameraConstData.h">
+      <Filter>MyCode\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="StartDirecting.h">
+      <Filter>MyCode\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="StartDirectingConstData.h">
+      <Filter>MyCode\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelRenderConstData.h">
+      <Filter>MyCode\Graphic\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

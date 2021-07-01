@@ -7,12 +7,6 @@ using namespace stageBaseConstData;
 //スタート関数
 bool IStageBase::Start()
 {
-
-	//ステージ開始時の演出の作成
-	m_startDirecting = 
-		NewGO<CStartDirecting>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_START_DIRECTING));
-
-
 	//ゲームカメラの作成
 	m_gameCamea = NewGO<CGameCamera>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_GAME_CAMERA));
 
@@ -66,9 +60,7 @@ bool IStageBase::Start()
 	{
 		//タイトル画面なら
 
-		//開始時の演出を行わない
-		m_startDirecting->SetCheckStartDirecting(false);
-		//タイトルモードにする
+		//ゲームカメラをタイトルモードにする
 		m_gameCamea->TitleMode();
 		//キャパシティのタイトルフラグを立てる
 		m_capacityUI->SetTitleFlag(true);
@@ -444,12 +436,6 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	pPlayer->SetWayPointRot
 	(CLevelObjectManager::GetInstance()->GetWayPointRot());
 
-	//ステージ開始時の演出時のカメラの注視点の座標を設定する
-	m_startDirecting->SetPosition(pPlayer->GetPosition());
-
-
-
-
 	return;
 }
 
@@ -530,7 +516,6 @@ IStageBase::~IStageBase()
 	DeleteGO(m_gameCamea);
 	DeleteGO(m_pause);
 	DeleteGO(m_sky);
-	DeleteGO(m_startDirecting);
 	DeleteGO(m_tipsController);
 	DeleteGO(m_capacityUI);
 

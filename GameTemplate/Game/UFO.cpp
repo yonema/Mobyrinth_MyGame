@@ -59,7 +59,7 @@ bool CUFO::PureVirtualStart()
 	m_ufoLight->SetRotation(m_rotation);
 	m_ufoLight->SetDrawOutLineFlag(false);
 	//Å‰‚ÍŒ©‚¦‚È‚¢‚æ‚¤‚É“§–¾‚É‚·‚é
-	m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+	m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
 
 	//UFO‚Ì’…’n“_‚Ì¶¬‚Æ‰Šú‰»
 	m_ufoLandingPoint = NewGO<CUFOLandingPoint>(0);
@@ -346,7 +346,7 @@ void CUFO::Search()
 		//UFO‚ÌŒõü‚ğŒõ‚ç‚¹‚é
 		m_ufoLight->SetModelEmissionColor({ 1.5f,1.5f,0.0f,1.0f });
 		//UFO‚ÌŒõü‚ğ”¼“§–¾‚É‚·‚é
-		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+		m_ufoLight->SetAlphaValue(0.5f);
 		//UFOyellowlightSE
 		UFOyellowlight();
 		//—ÖŠsü‚ğ‘‚­‚æ‚¤‚É‚·‚é
@@ -369,7 +369,7 @@ void CUFO::Search()
 			//UFO‚ÌŒõü‚ğŒõ‚ç‚¹‚é
 			m_ufoLight->SetModelEmissionColor({ 3.0f,0.0f,0.0f,1.0f });
 			//UFO‚ÌŒõü‚ğ”¼“§–¾‚É‚·‚é
-			m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
+			m_ufoLight->SetAlphaValue(0.5f);
 			//—ÖŠsü‚ğ‘‚­‚æ‚¤‚É‚·‚é
 			m_ufoLight->SetDrawOutLineFlag(true);
 			
@@ -408,7 +408,7 @@ void CUFO::Search()
 		//UFO‚ÌŒõü‚ÌŒõ‚ğÁ‚·
 		m_ufoLight->SetModelEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFO‚ÌŒõü‚Ì“§–¾‚É‚·‚é
-		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_OPACITY);
 		//—ÖŠsü‚ğ‘‚©‚È‚¢‚æ‚¤‚É‚·‚é
 		m_ufoLight->SetDrawOutLineFlag(false);
 		//UFOyellowSE‚ª–Â‚Á‚Ä‚¢‚½‚ç~‚ß‚é
@@ -581,7 +581,7 @@ void CUFO::Transport()
 		//UFO‚ÌŒõü‚ÌŒõ‚ğÁ‚·
 		m_ufoLight->SetModelEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFO‚ÌŒõü‚ğ“§–¾‚É‚·‚é
-		m_ufoLight->SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+		m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_OPACITY);
 		//—ÖŠsü‚ğ‘‚©‚È‚¢‚æ‚¤‚É‚·‚é
 		m_ufoLight->SetDrawOutLineFlag(false);
 

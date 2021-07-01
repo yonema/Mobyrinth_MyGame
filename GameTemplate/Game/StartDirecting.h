@@ -1,147 +1,101 @@
 #pragma once
-#include "Mobius.h"
-#include "GameTime.h"
+#include "StartDirectingConstData.h"
+#include "Player.h"
+#include "Pause.h"
 #include "UFO.h"
-class ILevelObjectBase;
-class Player;
 class CGameCamera;
 
-//担当外
-
-class CStartDirecting : public IGameObject
+/**
+ * @brief 開始演出クラス
+*/
+class CStartDirecting
 {
-public:
-	bool Start() override final;
-	~CStartDirecting();
-	void Update() override final;
+public:		//自動で呼ばれるメンバ関数
+	CStartDirecting() {};				//コンストラクタ
+	~CStartDirecting() {};				//デストラクタ
 
-	//void SetWayPointPos(const std::size_t vecSize, std::vector<Vector3>* const posMap);
-	//void SetWayPointRot(const std::size_t vecSize, std::vector<Quaternion>* rotMap);
+private:	//privateなメンバ関数
 
-private:
-	///// <summary>
-	///// ウェイポイントの更新処理
-	///// </summary>
-	//void CheckWayPoint();
-	///// <summary>
-	///// 移動処理
-	///// </summary>
-	//void Move();
-	///// <summary>
-	///// ステージに乗る
-	///// </summary>
-	//void GetOnStage();
-	///// <summary>
-	///// モデルの回転処理
-	///// </summary>
-	//void Rotation();
-	/// <summary>
-	/// プレイヤーの演出時の落下処理
-	/// </summary>
+	/**
+	 * @brief ステージの周りをくるくる回る処理
+	*/
+	void GoAroundStage();
+
+	/**
+	 * @brief フェードの処理
+	*/
+	void FadeDirectingCamera();
+
+	/**
+	 * @brief プレイヤーの演出時の落下処理
+	*/
 	void FallPlayer();
 
-public:	//Get、Set関数
-	const bool GetStartDirecting()const
+public:		//メンバ関数
+
+	/**
+	 * @brief 開始演出の更新。使うときにアップデート関数で呼ぶ。
+	*/
+	void StartDirectingUpdate();
+
+	/**
+	 * @brief ステージの開始演出を行っているか？を得る
+	 * @return 開始演出を行っているか？
+	*/
+	const bool GetStartDirectingFlag()const
 	{
-		return m_checkStartDirecting;
+		return m_startDirectingFlag;
 	}
 
-	const Vector3 GetPosition()const
+	/**
+	 * @brief ステージの開始演出を行っているか？を設定する
+	 * @param [in] startDirecting ステージの開始演出を行っているか？
+	*/
+	void SetStartDirectingFlag(const bool startDirecting)
 	{
-		return m_position;
-	}
-	/// <summary>
-	/// 補完済みの最終的なウェイポイントの回転を取得
-	/// </summary>
-	/// <returns>補完済みの最終的なウェイポイントの回転</returns>
-	const Quaternion GetFinalWPRot()const
-	{
-		return m_finalWPRot;
-	}
-	const int GetStartDirectingTime()const
-	{
-		return startDirectingTime;
-	}
-	/// <summary>
-	/// 演出時のカメラの注視点の開始地点の座標を設定
-	/// </summary>
-	/// <param name="pos">場所</param>
-	void SetPosition(const Vector3& pos)
-	{
-		m_position = pos;
-	}
-	void SetCheckStartDirecting(bool b)
-	{
-		m_checkStartDirecting = b;
+		m_startDirectingFlag = startDirecting;
 	}
 
-	/// <summary>
-	/// ワイプが終わったかを設定
-	/// </summary>
-	/// <param name="wipeEndFlag">ワイプが終わった？</param>
+	/**
+	 * @brief ワイプが終わったか？を設定
+	 * @param [in] wipeEndFlag ワイプが終わったか？
+	*/
 	void SetWipeEndFlag(const bool wipeEndFlag)
 	{
 		m_wipeEndFlag = wipeEndFlag;
 	}
 
-
-private:
-	Vector3 m_position = g_VEC3_ZERO; //演出に使用する注視点座標
-	Vector3 m_moveSpeed = g_VEC3_ZERO;
-	Vector3 m_onWayPosition = g_VEC3_ZERO;		//道の上の座標
-	Quaternion m_rotation = g_QUAT_IDENTITY;
-	Vector3 m_upVec = g_VEC3_UP;
-
-	float m_padLStickXF = 0.0f;		//パッドの左スティックのX軸の入力情報
-
-	std::vector<Vector3>* m_wayPointPos;		//ウェイポイントの「場所」のコンテナ
-	std::vector<Quaternion>* m_wayPointRot;	//ウェイポイントの「回転」のコンテナ
-	int m_rpIndex = 0;				//右のウェイポイントのインデックス
-	int m_lpIndex = m_rpIndex + 1;	//左のウェイポイントのインデックス
-	int m_wayPointState = 0;		//自身がどのウェイポイントにいるか表すステート
-	int m_maxWayPointState = 0;		//ウェイポイントステートの最大の値
-	Quaternion m_finalWPRot = g_QUAT_IDENTITY;	//補完済みの最終的なウェイポイントの回転
-
-	CMobius* m_mobius = nullptr;		//ステージのメビウスの輪のポインタ
-
-	Player* m_player = nullptr;		//プレイヤーの初期化
-
-	CGameCamera* m_gameCamera = nullptr;		//ゲームカメラの初期化
-
-	enum EnLeftOrRight
+	/**
+	 * @brief ゲームカメラのアクセスをセット
+	 * @param [in] gameCamera ゲームカメラのアドレス
+	*/
+	void SetGameCamera(CGameCamera* gameCamera)
 	{
-		enLeft,		//左
-		enRight,	//右
-	};
-	int m_leftOrRight = enRight;	//キャラクターの左右の向き
+		m_gameCamera = gameCamera;
+	}
 
-private:
-	bool m_checkStartDirecting = true; //ステージ開始時の演出をしているかどうか。（GameCameraクラスで使用）
-	bool checkZoomIn = false; //カメラのズーム処理のフラグ
-	int countZoomIn = 0; //カメラのズーム中のカウント
-	Vector3 m_startPosition = g_VEC3_ZERO; //演出に使用する注視点座標の開始位置
+private:	//データメンバ
 
-	const int startDirectingTime = 120; //カメラが寄る演出の時間
-
+	/*
+	* フラグ関連
+	*/
+	bool m_startDirectingFlag = true;	//開始演出中か？（GameCameraクラスで使用）
 	bool m_wipeEndFlag = false;			//ワイプが終わった？
-	float m_startTimer = 0;				//演出開始までのタイマー
+	bool m_goAroundStageFlag = true;	//ステージの周りを回るか？
+	bool m_fadeFlag = false;			//フェードするか？
+	bool m_fallPlayerFlag = false;		//プレイヤーが落ちてくる演出を行うか？
 
-	float m_fallTimer = 0.0f;			//落下後から開始までの時間
-	
-	bool CheckAButton = false; //Aボタンを押したかの確認
-
-
-public:
-	bool GetCheckAButton()
-	{
-		return CheckAButton;
-	}
-
-	void SetCheckAButton(bool b)
-	{
-		CheckAButton = b;
-	}
+	/*
+	* タイマー関連
+	*/
+	float m_firstWaitTimer = 0;			//演出開始までのタイマー
+	float m_fadeTimer = 0.0f;			//フェード中のタイマー
+	float m_waitTimerAfterFell = 0.0f;	//落下後から開始までの時間
 
 
+	float m_goAroundStageAngle = 0.0f;	//開始演出中にステージの周りを回っている角度
+
+	Player* m_player = nullptr;			//プレイヤー
+	CGameCamera* m_gameCamera = nullptr;//ゲームカメラ
 };
 

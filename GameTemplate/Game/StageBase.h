@@ -266,7 +266,6 @@ private:	//データメンバ
 	CLevel m_level;									//レベルロード用クラス
 	CSky* m_sky = nullptr;							//空クラスのポインタ
 	CGameCamera* m_gameCamea = nullptr;				//ゲームカメラ
-	CStartDirecting* m_startDirecting = nullptr;	//開始演出クラス
 	Player* m_player = nullptr;						//プレイヤークラスのポインタ
 	CPause* m_pause = nullptr;						//ポーズクラスのポインタ
 	OOgoal* m_goal = nullptr;						//ゴールクラスのポインタ

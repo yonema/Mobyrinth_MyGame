@@ -152,5 +152,14 @@ public:		//メンバ関数
 		return m_constantBufferCPU.mulColor;
 	}
 
+	/**
+	 * @brief スプライトのアルファ値を設定する
+	 * @param [in] alphaValue アルファ値
+	*/
+	void SetAlphaValue(const float alphaValue)
+	{
+		m_constantBufferCPU.mulColor.w = alphaValue;
+	}
+
 
 };

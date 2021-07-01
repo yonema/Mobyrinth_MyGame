@@ -1,45 +1,28 @@
 #pragma once
+#include "GameCameraConstData.h"
 #include "SpriteRender.h"
 #include "Player.h"
 #include "StartDirecting.h"
 #include "SpringCamera.h"
 
-/// <summary>
-/// ゲーム内カメラクラス
-/// </summary>
+/**
+ * @brief ゲーム内カメラクラス
+*/
 class CGameCamera : public IGameObject
 {
 public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;		//スタート関数
 	void Update()override final;	//アップデート関数
 
-private:	//メンバ関数
-	/// <summary>
-	/// ステージ開始時のカメラ
-	/// </summary>
-	void StartDirectingCamera();
-	/// <summary>
-	/// ステージ開始時のカメラのフェード
-	/// </summary>
-	void FadeDirectingCamera();
-	/// <summary>
-	/// ゲーム中のカメラ
-	/// </summary>
+private:	//privateメンバ関数
+
+	/**
+	 * @brief ゲーム中のカメラ
+	*/
 	void InGameCamera();
 
-public:	//インライン関数
-	void SetStartDirectingZoomInCamera(const bool b)
-	{
-		m_startDirectingZoomInCamera = b;
-	}
 
-	/// <summary>
-	/// ズームが終了した
-	/// </summary>
-	void FinishZoom()
-	{
-		m_zoomFinished = true;
-	}
+public:		//メンバ関数
 
 	/// <summary>
 	/// カメラの注視点を設定する
@@ -63,7 +46,7 @@ public:	//インライン関数
 	/// カメラの視点を取得する
 	/// </summary>
 	/// <returns>カメラの視点</returns>
-	const Vector3 GetPosition() const
+	const Vector3& GetPosition() const
 	{
 		return m_springCamera.GetPosition();
 	}
@@ -96,36 +79,24 @@ public:	//インライン関数
 		m_springCamera.Refresh();
 	}
 
-private:	//データメンバ
-	Player* m_player = nullptr;				//プレイヤーのポインタ
-	Vector3 m_toCameraPos;						//注視点から視点へのベクトル
-	bool m_lookPlayerFlag = true;				//プレイヤーを見るか？
-	CStartDirecting* m_startDirecting = nullptr;
-	bool m_startDirectingZoomInCamera = false;	//カメラを寄せる処理のフラグ
-
-	bool m_zoomFinished = false;				//Zoomが終わったか
-
-	bool m_titleMode = false;					//タイトル画面か？
-
-
-
-	float m_switchingTimer = 0.0f;				//スイッチの切り替え中のタイマー
-	//CSpriteRender* m_fadeSR = nullptr;			//フェードイン、アウトで使うスプライトレンダラー
-	float m_test = 0.0f;
-	bool m_flagRotationCamera = true;			//カメラがステージの周りを回転しているかのフラグ
-	bool m_wipeEndFlag = false;					//ワイプが終わった？
-	float m_startTimer = 0;						//演出開始までのタイマー
-	CSpringCamera m_springCamera;				//ばねカメラ
-
-
-public:
 	/// <summary>
 	/// ワイプが終わったかを設定
 	/// </summary>
 	/// <param name="wipeEndFlag">ワイプが終わった？</param>
 	void SetWipeEndFlag(const bool wipeEndFlag)
 	{
-		m_wipeEndFlag = wipeEndFlag;
+		m_startDirecting.SetWipeEndFlag(wipeEndFlag);
 	}
+
+
+private:	//データメンバ
+
+	bool m_lookPlayerFlag = true;				//プレイヤーを見るか？
+	bool m_titleMode = false;					//タイトル画面か？
+
+	CSpringCamera m_springCamera;				//ばねカメラ
+	CStartDirecting m_startDirecting;			//開始演出クラス
+	Player* m_player = nullptr;					//プレイヤーのポインタ
+
 };
 

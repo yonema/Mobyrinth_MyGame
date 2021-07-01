@@ -159,11 +159,15 @@ public:		//メンバ関数
 	/// <returns>最後までワイプしたか？</returns>
 	const bool IsWipeFinished() const;
 
-
-	Sprite* GetFadeSprite()
+	/**
+	 * @brief フェードのスプライトのアルファ値を設定する
+	 * @param [in] alphaValue アルファ値
+	*/
+	void SetFadeSpriteAlphaValue(const float alphaValue)
 	{
-		return &m_fadeSprite;
+		m_fadeSprite.SetAlphaValue(alphaValue);
 	}
+
 
 private:	//privateなメンバ関数
 
