@@ -1,4 +1,5 @@
 #pragma once
+#include "ModelRenderConstData.h"
 #include "LightManager.h"
 #include "ShadowModel.h"
 #include "GameTime.h"
@@ -119,6 +120,15 @@ public:		//ここのメンバ関数を主に使う。
 	void SetMulColor(const Vector4& color)
 	{
 		m_model.SetMulColor(color);
+	}
+
+	/**
+	 * @brief アルファ値を設定する
+	 * @param [in] alphaValue アルファ値
+	*/
+	void SetAlphaValue(const float alphaValue)
+	{
+		m_model.SetAlphaValue(alphaValue);
 	}
 
 	/// <summary>

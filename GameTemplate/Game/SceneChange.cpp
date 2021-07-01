@@ -112,7 +112,8 @@ void CSceneChange::InitFade()
 	fadeSpriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
 
 	m_fadeSprite.Init(fadeSpriteInitData);
-	m_fadeSprite.SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
+	//透明にしておく
+	m_fadeSprite.SetAlphaValue(0.0f);
 }
 
 //パラメータのアップデート関数

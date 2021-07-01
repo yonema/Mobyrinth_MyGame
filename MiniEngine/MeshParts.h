@@ -112,6 +112,15 @@ public:
 		m_mulColor = color;
 	}
 
+	/**
+	 * @brief アルファ値を設定する
+	 * @param [in] alphaValue アルファ値
+	*/
+	void SetAlphaValue(const float alphaValue)
+	{
+		m_mulColor.w = alphaValue;
+	}
+
 	/// <summary>
 	/// 輪郭線を描画するか？を設定
 	/// </summary>

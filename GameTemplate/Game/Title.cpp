@@ -126,7 +126,7 @@ void CTitle::InitTitleSprite()
 				m_title->SetScale(objdata.scale);
 				m_title->SetPosition(objdata.position);
 				//透明にする
-				m_title->SetMulColor(g_VEC4_TRANSPARENT);
+				m_title->SetAlphaValue(spriteRenderConstData::ALPHA_VALUE_TRANSPARENT);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -146,7 +146,7 @@ void CTitle::InitTitleSprite()
 				m_pressAButton->SetScale(objdata.scale);
 				m_pressAButton->SetPosition(objdata.position);
 				//透明にする
-				m_pressAButton->SetMulColor(g_VEC4_TRANSPARENT);
+				m_pressAButton->SetAlphaValue(spriteRenderConstData::ALPHA_VALUE_TRANSPARENT);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -196,7 +196,7 @@ void CTitle::InitStageSelectSprite()
 						objdata.ddsFilePath,	//ファイルパス
 						objdata.width,			//横幅
 						objdata.height,			//縦幅
-						SPRITE_PIVOT_DEFALUT,			//ピボット
+						SPRITE_PIVOT_DEFALUT,	//ピボット
 						AlphaBlendMode_Trans	//透過合成モード
 					);
 					//座標と拡大を設定する
@@ -304,7 +304,7 @@ void CTitle::InitStageSelectSprite()
 				m_stageSelectionBase->SetPosition(objdata.position);
 				//スプライトに色を乗算する。
 				//少し透明にする
-				m_stageSelectionBase->SetMulColor(SPRITE_MUL_COLOR_STAGE_SELECTION_BASE);
+				m_stageSelectionBase->SetAlphaValue(SPRITE_ALPHA_VALUE_STAGE_SELECTION_BASE);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -397,7 +397,7 @@ void CTitle::StartTitle()
 
 	//タイトルのスプライトの乗算カラーの設定する
 	//だんだん透明から不透明にしていく
-	m_title->SetMulColor({ 1.0f,1.0f,1.0f,transparentRate });
+	m_title->SetAlphaValue(transparentRate);
 
 	//ワイプが終了したか？
 	if (g_graphicsEngine->GetSceneChange().IsWipeFinished())
@@ -411,7 +411,7 @@ void CTitle::StartTitle()
 			//ステートをタイトル状態に移行する
 			m_stageState = EN_TITLE_SCREEN;
 			//ここでタイトルアイコンの乗算カラーを不透明で固定する
-			m_title->SetMulColor(g_VEC4_OPACITY);
+			m_title->SetAlphaValue(spriteRenderConstData::ALPHA_VALUE_OPACITY);
 			//ボタンを押すことができないようにする（連続入力防止用）
 			m_buttonFlag = false;
 		}
@@ -489,8 +489,8 @@ void CTitle::TitleScreen()
 	{
 		//立っている
 		//だんだんと透明にする
-		m_pressAButton->SetMulColor(
-			{ 1.0f,1.0f,1.0f,m_pressAButton->GetMulColor().w - SPEED_CHANGE_ALPHA_PRESS_A_BUTTON }
+		m_pressAButton->SetAlphaValue(
+			m_pressAButton->GetMulColor().w - SPEED_CHANGE_ALPHA_PRESS_A_BUTTON 
 		);
 
 		//完全に透明になったら
@@ -504,8 +504,8 @@ void CTitle::TitleScreen()
 	{
 		//折れている
 		//だんだんと不透明にする
-		m_pressAButton->SetMulColor(
-			{ 1.0f,1.0f,1.0f,m_pressAButton->GetMulColor().w + SPEED_CHANGE_ALPHA_PRESS_A_BUTTON }
+		m_pressAButton->SetAlphaValue(
+			m_pressAButton->GetMulColor().w + SPEED_CHANGE_ALPHA_PRESS_A_BUTTON
 		);
 
 		//不透明になったら
@@ -613,7 +613,7 @@ void CTitle::StageSelect()
 		//点滅のフラグを折る
 		m_blinkingFlag = false;
 		//「Aボタンをおしてね」を透明にする
-		m_pressAButton->SetMulColor(g_VEC4_TRANSPARENT);
+		m_pressAButton->SetAlphaValue(spriteRenderConstData::ALPHA_VALUE_TRANSPARENT);
 	}
 	//デバック用
 	//全部のステージが選べるようになる

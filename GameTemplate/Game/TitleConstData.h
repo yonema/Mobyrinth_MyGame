@@ -141,8 +141,8 @@ namespace titleConstData
 	//レベル2Dのステージ選択背景のオブジェクトネーム
 	const char* const LEVEL_2D_OBJECT_NAME_STAGE_SELECTION_BASE =
 		"Stage_selection_base";
-	//ステージ選択背景のスプライトの乗算カラー
-	const Vector4 SPRITE_MUL_COLOR_STAGE_SELECTION_BASE = { 1.0f,1.0f,1.0f,0.8f };
+	//ステージ選択背景のスプライトのアルファ値
+	const float SPRITE_ALPHA_VALUE_STAGE_SELECTION_BASE = 0.8f;
 
 
 	/*

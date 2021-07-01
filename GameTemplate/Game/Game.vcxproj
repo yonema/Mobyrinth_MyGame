@@ -432,8 +432,10 @@
     <ClInclude Include="CommonData.h" />
     <ClInclude Include="FrontOrBackData.h" />
     <ClInclude Include="FrontSideOrBackSideData.h" />
+    <ClInclude Include="GameCameraConstData.h" />
     <ClInclude Include="GameObjectNameData.h" />
     <ClInclude Include="LeftOrRightData.h" />
+    <ClInclude Include="ModelRenderConstData.h" />
     <ClInclude Include="OBBConstData.h" />
     <ClInclude Include="PlayerConstData.h" />
     <ClInclude Include="PriorityData.h" />
@@ -447,6 +449,7 @@
     <ClInclude Include="OOoneway.h" />
     <ClInclude Include="ROleft_right.h" />
     <ClInclude Include="StageBaseConstData.h" />
+    <ClInclude Include="StartDirectingConstData.h" />
     <ClInclude Include="Tips.h" />
     <ClInclude Include="OOReverseALL.h" />
     <ClInclude Include="TipsController.h" />
