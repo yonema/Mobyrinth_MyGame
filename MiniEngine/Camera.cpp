@@ -2,6 +2,7 @@
 * @brief	ƒJƒƒ‰
 */
 #include "stdafx.h"
+#include "../GameTemplate/Game/stdafx.h"
 #include "Camera.h"
 
 

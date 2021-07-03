@@ -153,6 +153,7 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -210,6 +211,7 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -231,6 +233,7 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -294,6 +297,7 @@
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CaslFile.cpp" />
     <ClCompile Include="CapacityUI.cpp" />
+    <ClCompile Include="MiniEngine.cpp" />
     <ClCompile Include="Save.cpp" />
     <ClCompile Include="SpringCamera.cpp" />
     <ClCompile Include="Stage.cpp" />
@@ -306,7 +310,7 @@
     <ClCompile Include="UFOLandingPoint.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="SceneChange.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="ShadowModel.cpp" />
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
@@ -434,6 +438,8 @@
     <ClInclude Include="FrontSideOrBackSideData.h" />
     <ClInclude Include="GameCameraConstData.h" />
     <ClInclude Include="GameObjectNameData.h" />
+    <ClInclude Include="HUDConstData.h" />
+    <ClInclude Include="InOrOutConstData.h" />
     <ClInclude Include="LeftOrRightData.h" />
     <ClInclude Include="ModelRenderConstData.h" />
     <ClInclude Include="OBBConstData.h" />
@@ -455,11 +461,12 @@
     <ClInclude Include="TipsController.h" />
     <ClInclude Include="TitleConstData.h" />
     <ClInclude Include="TitleNameData.h" />
+    <ClInclude Include="TopOrDownData.h" />
     <ClInclude Include="UFO.h" />
     <ClInclude Include="UFOLandingPoint.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="PointLight.h" />
-    <ClInclude Include="SceneChange.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="ShadowModel.h" />
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="GaussianBlur.h" />
@@ -540,7 +547,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\shader\SceneChange.fx">
+    <FxCompile Include="Assets\shader\Wipe.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>

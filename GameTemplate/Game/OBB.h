@@ -12,26 +12,7 @@ struct SInitOBBData
 	Vector3 pivot = OBBConstData::OBB_PIVOT_DEFAULT;	//ピボット（基点）
 };
 
-//int型が三つ入る構造体
-struct int3
-{
-	int x = 0;
-	int y = 0;
-	int z = 0;
-};
 
-//OBBのインデックスバッファの構造体
-struct SOBBIndexBuffer
-{
-	//OBBのインデックスバッファのベクター
-	std::vector<int3> m_indexBuffer;
-	
-	/// <summary>
-	/// コンストラクタ
-	/// ここでベクターを初期化する
-	/// </summary>
-	SOBBIndexBuffer();
-};
 
 
 /// <summary>

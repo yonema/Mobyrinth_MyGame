@@ -67,7 +67,13 @@ bool CPause::Start()
 			else if (objdata.EqualObjectName("Pause_background"))
 			{
 				m_background = NewGO<CSpriteRender>(2);
-				m_background->Init(objdata.ddsFilePath, 1280.0f, 780.0f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
+				m_background->Init(
+					objdata.ddsFilePath,
+					static_cast<float>(g_FRAME_BUFFER_W),
+					static_cast<float>(g_FRAME_BUFFER_H),
+					{ 0.5f,0.5f },
+					AlphaBlendMode_Trans
+				);
 				m_background->SetScale(objdata.scale);
 				m_background->SetPosition(objdata.position);
 				m_background->SetPostRenderFlag(true);

@@ -11,4 +11,11 @@ namespace spriteRenderConstData
 
 	const float ALPHA_VALUE_TRANSPARENT = 0.0f;					//透明のアルファ値
 	const float ALPHA_VALUE_OPACITY = 1.0f;						//不透明のアルファ値
+
+	//シェーダーのデフォルトのファイルパス
+	const char* const SHADER_FILEPATH_DEFAULT = "Assets/shader/sprite.fx";
+	//ピクセルシェーダ―のデフォルトのエントリーポイント
+	const char* const ENTRY_POINT_FUNC_PS_DEFAULT = "PSMain";
+	//頂点シェーダーのデフォルトのエントリーポイント
+	const char* const ENTRY_POINT_FUNC_VS_DEFAULT = "VSMain";
 }

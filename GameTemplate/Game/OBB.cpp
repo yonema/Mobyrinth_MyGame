@@ -21,31 +21,6 @@ COBB::COBB()
 
 }
 
-/// <summary>
-/// OBBのインデックスバッファの
-/// 構造体のコンストラクタ
-/// ここでベクターを初期化する
-/// </summary>
-SOBBIndexBuffer::SOBBIndexBuffer()
-{
-	//インデックスバッファのサイズ
-	const int indexSize = 12;
-	//インデックスバッファの初期化
-	m_indexBuffer.resize(indexSize);
-	m_indexBuffer[0] = { 0, 1, 2 };
-	m_indexBuffer[1] = { 3, 2, 1 };
-	m_indexBuffer[2] = { 0, 4, 1 };
-	m_indexBuffer[3] = { 5, 1, 4 };
-	m_indexBuffer[4] = { 5, 4, 7 };
-	m_indexBuffer[5] = { 6, 7, 4 };
-	m_indexBuffer[6] = { 6, 7, 2 };
-	m_indexBuffer[7] = { 3, 2, 7 };
-	m_indexBuffer[8] = { 1, 5, 3 };
-	m_indexBuffer[9] = { 7, 3, 5 };
-	m_indexBuffer[10] = { 4, 0, 6 };
-	m_indexBuffer[11] = { 2, 6, 0 };
-}
-
 
 /// <summary>
 /// 初期化関数。

@@ -15,11 +15,9 @@
 #include "font/FontEngine.h"
 #include "RenderTarget.h"
 #include "Sprite.h"
-#include "PostEffect.h"
-#include "ShadowMap.h"
-#include "SceneChange.h"
-
-
+#include "../GameTemplate/Game/PostEffect.h"
+#include "../GameTemplate/Game/ShadowMap.h"
+#include "../GameTemplate/Game/HUD.h"
 
 
 /// <summary>
@@ -337,7 +335,7 @@ private:	//データメンバ
 	Texture m_skyCubeTexture;					//スカイキューブのテクスチャ
 	CPostEffect m_postEffect;					//ポストエフェクト
 	CShadowMap m_shadowMap;						//シャドウマップ
-	CSceneChange m_sceneChange;					//場面転換
+	CHUD m_sceneChange;					//場面転換
 
 public:		//メンバ関数
 
@@ -453,10 +451,10 @@ public:		//メンバ関数
 	 * @brief 場面転換の参照を得る
 	 * @return 場面転換の参照
 	*/
-	CSceneChange& GetSceneChange()
+	CHUD& GetSceneChange()
 	{
 		return m_sceneChange;
-	}
+	};
 
 private:	//privateなメンバ関数
 

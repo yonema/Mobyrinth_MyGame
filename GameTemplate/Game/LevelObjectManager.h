@@ -1,5 +1,5 @@
 #pragma once
-#include "CommonData.h"
+//#include "CommonData.h"
 
 //レベルオブジェクトの抽象クラス
 class ILevelObjectBase;

@@ -36,8 +36,8 @@ void CBloom::InitluminanceRenderTarget()
     //輝度抽出用のレンダリングターゲットを作成
     //解像度、ミップマップレベル
     m_luminanceRenderTarget.Create(
-        1280,       // 解像度はメインレンダリングターゲットと同じ
-        720,        // 解像度はメインレンダリングターゲットと同じ
+        g_FRAME_BUFFER_W,       // 解像度はメインレンダリングターゲットと同じ
+        g_FRAME_BUFFER_H,        // 解像度はメインレンダリングターゲットと同じ
         1,
         1,
         // 【注目】カラーバッファーのフォーマットを32bit浮動小数点にしている
@@ -59,14 +59,14 @@ void CBloom::InitluminanceSprite()
     luminanceSpriteInitData.m_fxFilePath = "Assets/shader/PostEffect.fx";
 
     // 頂点シェーダーのエントリーポイントを指定する
-    luminanceSpriteInitData.m_vsEntryPointFunc = "VSMain";
+    luminanceSpriteInitData.m_vsEntryPointFunc = spriteRenderConstData::ENTRY_POINT_FUNC_VS_DEFAULT;
 
     // ピクセルシェーダーのエントリーポイントを指定する
     luminanceSpriteInitData.m_psEntryPoinFunc = "PSSamplingLuminance";
 
     // スプライトの幅と高さはluminnceRenderTargetと同じ
-    luminanceSpriteInitData.m_width = 1280;
-    luminanceSpriteInitData.m_height = 720;
+    luminanceSpriteInitData.m_width = g_FRAME_BUFFER_W;
+    luminanceSpriteInitData.m_height = g_FRAME_BUFFER_H;
 
     // テクスチャはメインレンダリングターゲットのカラーバッファー
     luminanceSpriteInitData.m_textures[0] = 
@@ -101,8 +101,8 @@ void CBloom::InitGaussianBlur()
     finalSpriteInitData.m_textures[3] = &m_gaussianBlur[3].GetBokeTexture();
 
 
-    finalSpriteInitData.m_width = 1280;
-    finalSpriteInitData.m_height = 720;
+    finalSpriteInitData.m_width = g_FRAME_BUFFER_W;
+    finalSpriteInitData.m_height = g_FRAME_BUFFER_H;
 
     finalSpriteInitData.m_fxFilePath = "Assets/shader/PostEffect.fx";
     finalSpriteInitData.m_psEntryPoinFunc = "PSBloomFinal"; //ブルーム用シェーダー

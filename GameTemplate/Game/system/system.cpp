@@ -62,8 +62,8 @@ void InitWindow(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, 
 		WS_OVERLAPPEDWINDOW,	//ウィンドウスタイル。ゲームでは基本的にWS_OVERLAPPEDWINDOWでいい、
 		0,						//ウィンドウの初期X座標。
 		0,						//ウィンドウの初期Y座標。
-		FRAME_BUFFER_W,			//ウィンドウの幅。
-		FRAME_BUFFER_H,			//ウィンドウの高さ。
+		g_FRAME_BUFFER_W,			//ウィンドウの幅。
+		g_FRAME_BUFFER_H,			//ウィンドウの高さ。
 		NULL,					//親ウィンドウ。ゲームでは基本的にNULLでいい。
 		NULL,					//メニュー。今はNULLでいい。
 		hInstance,				//アプリケーションのインスタンス。
@@ -82,7 +82,7 @@ void InitGame(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, in
 	InitWindow(hInstance, hPrevInstance, lpCmdLine, nCmdShow, appName);
 	//TKエンジンの初期化。
 	g_engine = new TkEngine;
-	g_engine->Init(g_hWnd, FRAME_BUFFER_W, FRAME_BUFFER_H);
+	g_engine->Init(g_hWnd, g_FRAME_BUFFER_W, g_FRAME_BUFFER_H);
 }
 //ウィンドウメッセージをディスパッチ。falseが返ってきたら、ゲーム終了。
 bool DispatchWindowMessage()

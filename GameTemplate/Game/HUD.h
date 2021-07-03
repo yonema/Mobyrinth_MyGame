@@ -1,14 +1,16 @@
 #pragma once
 #include <time.h>
-//#include "GameTime.h"
+#include "HUDConstData.h"
+#include "SpriteRenderConstData.h"
 
 /// <summary>
 /// 場面転換クラス
 /// </summary>
-class CSceneChange
+class CHUD
 {
-public:
-	~CSceneChange();				//デストラクタ
+public:		//自動で呼ばれるメンバ関数
+	CHUD();			//コンストラクタ
+	~CHUD() {};		//デストラクタ
 
 public:		//グラフィックエンジンで呼ばれるメンバ関数
 	void Init();					//初期化関数
@@ -23,7 +25,7 @@ public:		//メンバ関数
 	void WipeIn()
 	{
 		//ワイプインに設定して
-		SetInOrOut(enIn);
+		SetInOrOut(EN_IN);
 		//ワイプ開始
 		WipeStart();
 	}
@@ -34,7 +36,7 @@ public:		//メンバ関数
 	void WipeOut()
 	{
 		//ワイプアウトに設定して
-		SetInOrOut(enOut);
+		SetInOrOut(EN_OUT);
 		//ワイプ開始
 		WipeStart();
 	}
@@ -44,16 +46,6 @@ public:		//メンバ関数
 	/// </summary>
 	void RandomWipeOut();
 
-	/// <summary>
-	/// ワイプ開始
-	/// </summary>
-	void WipeStart()
-	{
-		//ワイプを開始位置にする
-		m_wipeParam.wipeSize = 0.0f;
-		//ワイプフラグを立てる
-		m_wipeFlag = true;
-	};
 
 	/// <summary>
 	/// ワイプ終了
@@ -64,7 +56,7 @@ public:		//メンバ関数
 		m_wipeParam.wipeSize = 0.0f;
 		//ワイプをワイプアウトにしておく
 		//こうしないでワイプを開始位置に戻すと、たぶん真っ暗になる
-		SetInOrOut(enOut);
+		SetInOrOut(EN_OUT);
 		//ワイプフラグを折る
 		m_wipeFlag = false;
 	}
@@ -79,7 +71,6 @@ public:		//メンバ関数
 	/// <summary>
 	/// 左側からワイプするか、右側からワイプするか設定する
 	/// WipeDirectionと矛盾するように設定しないでね。
-	/// CSceneChange::enLeftかCSceneChange::enRightを引数にする
 	/// </summary>
 	/// <param name="leftOrLight">右側か左側</param>
 	void SetWipeLeftOrLight(const bool leftOrLight)
@@ -89,7 +80,6 @@ public:		//メンバ関数
 
 	/// <summary>
 	/// 上側からワイプするか、下側からワイプするか設定する
-	/// CSceneChange::enTopかCSceneChange::enDownを引数にする
 	/// </summary>
 	/// <param name="topOrDown">上側か下側</param>
 	void SetWipeTopOrDown(const bool topOrDown)
@@ -99,7 +89,6 @@ public:		//メンバ関数
 
 	/// <summary>
 	/// ワイプの種類を設定する
-	/// ワイプの種類はSceneChange.hを参照
 	/// </summary>
 	/// <param name="wipeType"></param>
 	void SetWipeType(const int wipeType)
@@ -107,15 +96,6 @@ public:		//メンバ関数
 		m_wipeParam.wipeType = wipeType;
 	}
 
-	/// <summary>
-	/// ワイプインかワイプアウトを設定
-	/// CSceneChange::enInかCSceneChange::enOutを引数にする
-	/// </summary>
-	/// <param name="inOrOut"></param>
-	void SetInOrOut(const bool inOrOut)
-	{
-		m_wipeParam.inOrOut = inOrOut;
-	}
 
 	/// <summary>
 	/// ワイプする速度を設定する
@@ -137,7 +117,6 @@ public:		//メンバ関数
 
 	/// <summary>
 	/// 各種類のワイプの最大サイズを得る
-	/// ワイプの種類はSceneChange.hを参照
 	/// </summary>
 	/// <param name="wipeType">ワイプの種類</param>
 	/// <returns>各種類のワイプの最大サイズ</returns>
@@ -145,7 +124,6 @@ public:		//メンバ関数
 
 	/// <summary>
 	/// 現在のワイプの種類を得る
-	/// ワイプの種類はSceneChange.hを参照
 	/// </summary>
 	/// <returns>現在のワイプの種類</returns>
 	const int GetWipeType() const
@@ -186,84 +164,50 @@ private:	//privateなメンバ関数
 	/// </summary>
 	void InitFade();
 
-public:		//列挙型
-
 	/// <summary>
-	/// 左か右か
+	/// ワイプ開始
 	/// </summary>
-	enum EnLeftOrLight
+	void WipeStart()
 	{
-		enLeft,		//左
-		enRight,	//右
+		//ワイプを開始位置にする
+		m_wipeParam.wipeSize = 0.0f;
+		//ワイプフラグを立てる
+		m_wipeFlag = true;
 	};
 
 	/// <summary>
-	/// 上か下か
+	/// ワイプインかワイプアウトを設定
 	/// </summary>
-	enum EnTopOrDown
+	/// <param name="inOrOut"></param>
+	void SetInOrOut(const bool inOrOut)
 	{
-		enTop,		//上
-		enDown,		//下
-	};
-
-	/// <summary>
-	/// ワイプインかワイプアウトか
-	/// </summary>
-	enum EnInOrOut
-	{
-		enIn,		//ワイプイン
-		enOut,		//ワイプアウト
-	};
-
-	/// <summary>
-	/// ワイプの種類
-	/// </summary>
-	enum EnWipeType
-	{
-		enWipe,					//普通のワイプ
-		enCircleWipe,			//円形ワイプ
-		enVerticalStripeWipe,	//縦縞ワイプ
-		enHorizontalStripeWipe,	//横縞ワイプ
-		enCheckerboardWipe,		//チェッカーボードワイプ	//ここまでしか実装していない
-		enMonochrome,			//モノクロ加工
-		enSepia,				//セピア調加工
-		enNega,					//ネガポジ反転
-		enNois,					//ノイズ加工
+		m_wipeParam.inOrOut = inOrOut;
 	};
 
 private:	//構造体
 
 	/// <summary>
 	/// ワイプのパラメータ構造体
-	/// ここを変更したら、SceneChange.fxの定数バッファも変更すること
 	/// </summary>
-	struct WipeParam
+	struct SWipeParam
 	{
-		Vector2 wipeDir = { -1.0f,1.0f };
-		float wipeSize = 0.0f;
-		int leftOtLight = enLeft;
-		int topOrDown = enTop;
-		int wipeType = enWipe;
-		int inOrOut = enOut;
+		Vector2 wipeDir = HUDConstData::DIR_WIPE_DEFAULT;	//ワイプの方向
+		float wipeSize = 0.0f;								//ワイプした量
+		int leftOtLight = EN_LEFT;							//右と左どちらからワイプするか？
+		int topOrDown = EN_TOP;								//上と下どちらからワイプするか？
+		int wipeType = HUDConstData::EN_WIPE;				//ワイプの種類
+		int inOrOut = EN_OUT;								//インとアウトどちらにワイプするか？
 	};
-private:	//定数
-	//各ワイプの最大ワイプサイズ
-	//ここを変更したら、SceneChange.fxの定数も変更すること
-	const float m_wipeMaxX = 1280.0f;				//普通のワイプのX軸の最大サイズ
-	const float m_wipeMaxY = 720.f;					//普通のワイプのY軸の最大サイズ
-	const float m_circleWipeMax = 1280.0f / 1.5;	//円形ワイプの最大サイズ
-	const float m_verticalStripeWipeMax = 64.0f;	//縦縞ワイプの最大サイズ
-	const float m_horizontalStripeWipeMax = 64.0f;	//横縞ワイプの最大サイズ
-	const float m_checkerboardWipeMax = 128.0f;		//チェッカーボードワイプの最大サイズ
 
 private:	//データメンバ
-	RenderTarget m_renderTarget;	//レンダリングターゲット
-	Sprite m_sprite;				//スプライト
-	Sprite m_finalSprite;			//最終的なスプライト
-	Sprite m_backSprite;			//後ろに映すスプライト
-	WipeParam m_wipeParam;			//ワイプのパラメータ
-	bool m_wipeFlag = false;		//ワイプするか？
-	float m_wipeSpeed = 120.0f;		//ワイプのスピード
-	float m_deltaTime = 0.0f;		//デルタタイム
+	RenderTarget m_beforeWipingRenderTarget;	//ワイプ前のレンダリングターゲット
+	Sprite m_mainRenderTargetSprite;			//メインレンダリングターゲットのスプライト
+	Sprite m_afterWipingSprite;					//ワイプした後のスプライト
+	Sprite m_backSprite;						//ワイプの後ろに映すスプライト
+	SWipeParam m_wipeParam;						//ワイプのパラメータ
+	bool m_wipeFlag = false;					//ワイプするか？
+	float m_wipeSpeed = 0.0f;					//ワイプのスピード
+	float m_deltaTime = 0.0f;					//デルタタイム
+
 	Sprite m_fadeSprite;			//フェードイン、アウトで使うスプライトレンダラー
 };
