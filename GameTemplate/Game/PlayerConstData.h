@@ -137,10 +137,10 @@ namespace playerConstData
 	*/
 
 	//プレイヤーの通常のモデルのファイルパス
-	const char* const MODEL_FILEPATH_PLAYER = "Assets/modelData/player.tkm";
+	constexpr const char* const MODEL_FILEPATH_PLAYER = "Assets/modelData/player.tkm";
 
 	//プレイヤーのゴール時のモデルのファイルパス
-	const char* const MODEL_FILEPATH_PLAYER_GOAL = "Assets/modelData/player2.tkm";
+	constexpr const char* const MODEL_FILEPATH_PLAYER_GOAL = "Assets/modelData/player2.tkm";
 
 
 
@@ -149,10 +149,10 @@ namespace playerConstData
 	*/
 
 	//歩くときの移動速度
-	const float MOVE_SPEED_WALK = 1000.0f;
+	constexpr float MOVE_SPEED_WALK = 1000.0f;
 
 	//走るときの移動速度
-	const float MOVE_SPEED_RUN = 3000.0f;
+	constexpr float MOVE_SPEED_RUN = 3000.0f;
 
 
 
@@ -161,7 +161,7 @@ namespace playerConstData
 	*/
 
 	//ゴール時のエフェクトのファイルパス
-	const char16_t* const EFFECT_FILEPATH_GOAL = u"Assets/effect2/goal.efk";
+	constexpr const char16_t* const EFFECT_FILEPATH_GOAL = u"Assets/effect2/goal.efk";
 	//ゴール時のエフェクトの拡大率
 	const Vector3 EFFECT_SCALE_GOAL = { 150.0f,150.0f,150.0f };
 
@@ -172,24 +172,24 @@ namespace playerConstData
 	*/
 
 	//落ちるときのSEのファイルパス
-	const wchar_t* const SE_FILEPATH_FALL_START = L"Assets/sound/fallstart.wav";
+	constexpr const wchar_t* const SE_FILEPATH_FALL_START = L"Assets/sound/fallstart.wav";
 	//落ちるときのSEのボリューム
-	const float SE_VOLUME_FALL_START = 0.5f;
+	constexpr const float SE_VOLUME_FALL_START = 0.5f;
 
 	//歩くときのSEのファイルパス
-	const wchar_t* const SE_FILEPATH_WALK = L"Assets/sound/walk2.wav";
+	constexpr const wchar_t* const SE_FILEPATH_WALK = L"Assets/sound/walk2.wav";
 	//歩くときのSEのボリューム
-	const float SE_VOLUME_WALK = 1.0f;
+	constexpr float SE_VOLUME_WALK = 1.0f;
 
 	//走るときのSEのファイルパス
-	const wchar_t* const SE_FILEPATH_RUN = L"Assets/sound/run2.wav";
+	constexpr const wchar_t* const SE_FILEPATH_RUN = L"Assets/sound/run2.wav";
 	//走るときのSEのボリューム
-	const float SE_VOLUME_RUN = 1.0f;
+	constexpr float SE_VOLUME_RUN = 1.0f;
 
 	//炎に当たったときのSEのファイルパス
-	const wchar_t* const SE_FILEPATH_FLAME_HIT = L"Assets/sound/flameHit.wav";
+	constexpr const wchar_t* const SE_FILEPATH_FLAME_HIT = L"Assets/sound/flameHit.wav";
 	//炎に当たったときのSEのボリューム
-	const float SE_VOLUME_FLAME_HIT = 1.0f;
+	constexpr float SE_VOLUME_FLAME_HIT = 1.0f;
 
 
 	/*
@@ -205,7 +205,7 @@ namespace playerConstData
 	*/
 
 	//メビウスの輪の交差戦の長さ
-	const float INTERSECT_LINE_FOR_MOBIUS_LEN = 300.0f;
+	constexpr float INTERSECT_LINE_FOR_MOBIUS_LEN = 300.0f;
 
 
 
@@ -222,7 +222,7 @@ namespace playerConstData
 	*/
 
 	//壁の下のしきい値
-	const float THRESHOLD_UNDER_WALL = 0.8F;
+	constexpr float THRESHOLD_UNDER_WALL = 0.8F;
 
 
 
@@ -231,19 +231,19 @@ namespace playerConstData
 	*/
 
 	//スタン中の横方向の移動速度
-	const float MOVE_SPEED_STUN_HORIZONTAL = 675.0f;
+	constexpr float MOVE_SPEED_STUN_HORIZONTAL = 675.0f;
 
 	//スタン中の上方向の移動速度
-	const float MOVE_SPEED_STUN_UP = 1000.0f;
+	constexpr float MOVE_SPEED_STUN_UP = 1000.0f;
 
 	//スタン中の下方向の加速度
-	const float MOVE_ACCELERATION_STUN_DOWN = -1800.0f;
+	constexpr float MOVE_ACCELERATION_STUN_DOWN = -1800.0f;
 	
 	//スタン中の時間
-	const float TIME_STUN = 3.0f;
+	constexpr float TIME_STUN = 3.0f;
 
 	//スタン中の点滅回数
-	const int NUMBER_OF_BLINKS_STUN = 24;
+	constexpr int NUMBER_OF_BLINKS_STUN = 24;
 
 	//スタン中の点滅のカラー
 	const Vector4 BLINK_COLOR_STUN = { 1.5f,0.2f,0.2f,1.0f };
@@ -260,13 +260,13 @@ namespace playerConstData
 	*/
 
 	//ゴール時にカメラが移動する時間
-	const float TIME_GOAL_CAMERA_MOVE = 0.5f;
+	constexpr float TIME_GOAL_CAMERA_MOVE = 0.5f;
 
 	//ゴール時のカメラの注視点に使う上向きのベクトルの長さ
-	const float CAMERA_TRGET_UPVEC_LEN_GOAL = 200.0f;
+	constexpr float CAMERA_TRGET_UPVEC_LEN_GOAL = 200.0f;
 
 	//ゴール時のカメラからプレイヤーへのベクトルの長さ
-	const float CAMERA_TO_PLAYER_VEC_LEN_GOAL = 100.0f;
+	constexpr float CAMERA_TO_PLAYER_VEC_LEN_GOAL = 100.0f;
 
 
 
@@ -275,7 +275,7 @@ namespace playerConstData
 	*/
 
 	//タイトル時のパッドの左スティックの入力値
-	const float TITLE_PAD_STICK_VALUE = 0.5f;
+	constexpr float TITLE_PAD_STICK_VALUE = 0.5f;
 
 
 
@@ -284,6 +284,6 @@ namespace playerConstData
 	*/
 
 	//落下時の高さの最小値
-	const float MIN_HEIGHT_FALL = 1800.0f;
+	constexpr float MIN_HEIGHT_FALL = 1800.0f;
 
 }

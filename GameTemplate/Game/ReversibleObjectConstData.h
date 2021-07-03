@@ -6,10 +6,10 @@
 namespace reversibleObjectConstData
 {
 	//ウェイポイントからのZ方向への奥行
-	const float LENGHT_Z_FROMT_WEYPOINT = 100.0f;
+	constexpr float LENGHT_Z_FROMT_WEYPOINT = 100.0f;
 
 	//オブジェクトが持ち上げられた時の高さ
-	const float HEIGHT_HELD_UP = 330.0f;
+	constexpr float HEIGHT_HELD_UP = 330.0f;
 
 	/**
 	 * @brief オブジェクトの現在のステート（状態）
@@ -34,19 +34,20 @@ namespace reversibleObjectConstData
 	*/
 
 	//性質反転する時のSEのファイルパス
-	const wchar_t* const SOUND_FILEPATH_SE_CHANGE = L"Assets/sound/change.wav";
+	constexpr const wchar_t* const SOUND_FILEPATH_SE_CHANGE = L"Assets/sound/change.wav";
 	//性質反転するときのSEの音量
-	const float SOUND_VOLUME_SE_CHANGE = 0.5f;
+	constexpr float SOUND_VOLUME_SE_CHANGE = 0.5f;
 
 	//性質反転する時のSEのファイルパス
-	const wchar_t* const SOUND_FILEPATH_SE_THROW = L"Assets/sound/throw.wav";
+	constexpr const wchar_t* const SOUND_FILEPATH_SE_THROW = L"Assets/sound/throw.wav";
 	//性質反転するときのSEの音量
-	const float SOUND_VOLUME_SE_THROW = 0.5f;
+	constexpr float SOUND_VOLUME_SE_THROW = 0.5f;
 
 	//キャパシティオーバー時のSEのファイルパス
-	const wchar_t* const SOUND_FILEPATH_SE_CAPACITY_OVER = L"Assets/sound/capacity_over.wav";
+	constexpr const wchar_t* const SOUND_FILEPATH_SE_CAPACITY_OVER = 
+		L"Assets/sound/capacity_over.wav";
 	//キャパシティオーバー時のSEの音量
-	const float SOUND_VOLUME_SE_CAPACITY_OVER = 0.5f;
+	constexpr float SOUND_VOLUME_SE_CAPACITY_OVER = 0.5f;
 
 
 	/*
@@ -54,11 +55,11 @@ namespace reversibleObjectConstData
 	*/
 	
 	//全反転のエフェクトのファイルパス
-	const char16_t* const EFFECT_FILEPATH_REVERSE_ALL = u"Assets/effect/reverseall2.efk";
+	constexpr const char16_t* const EFFECT_FILEPATH_REVERSE_ALL = u"Assets/effect/reverseall2.efk";
 	//全反転のエフェクトの拡大率
-	const float EFFECT_SCALE_REVERSE_ALL = 50.0f;
+	constexpr float EFFECT_SCALE_REVERSE_ALL = 50.0f;
 	//全反転のエフェクトの座標の高さ
-	const float EFFECT_POSITION_HEIGHT_REVERSE_ALL = 100.0f;
+	constexpr float EFFECT_POSITION_HEIGHT_REVERSE_ALL = 100.0f;
 
 
 	//反転オブジェクトのOBBの初期サイズ
@@ -69,11 +70,11 @@ namespace reversibleObjectConstData
 	* プレイヤーに持ち上がられ中関連の定数
 	*/
 	//プレイヤーに持ち上げられ中のタイム
-	const float TIME_LIFTED_PLAYER = 0.45f;
+	constexpr float TIME_LIFTED_PLAYER = 0.45f;
 	//プレイヤーに持ち上げられ中の水平方向に加える座標
-	const float ADD_VECTOR_SCALE_HORIZONTAL_LIFTED_PLAYER = 150.0f;
+	constexpr float ADD_VECTOR_SCALE_HORIZONTAL_LIFTED_PLAYER = 150.0f;
 	//プレイヤーに持ち上げられ中の、動く前に待つタイム
-	const float TIME_LIFTED_PLAYER_WAIT_BEFORE_MOVING = 0.1f;
+	constexpr float TIME_LIFTED_PLAYER_WAIT_BEFORE_MOVING = 0.1f;
 
 
 	/*
@@ -90,31 +91,31 @@ namespace reversibleObjectConstData
 		EN_UP_THROWN,		//上に投げられる
 	};
 	//下に投げられ中のタイム
-	const float TIME_THROWN_DOWN = 0.5f;
+	constexpr float TIME_THROWN_DOWN = 0.5f;
 	//下に投げるベクトルの大きさ
-	const float ADD_VECTOR_SCALE_HORIZONTAL_THORWN_DOWN = HEIGHT_HELD_UP * 2.0f * 1.2f;
+	constexpr float ADD_VECTOR_SCALE_HORIZONTAL_THORWN_DOWN = HEIGHT_HELD_UP * 2.0f * 1.2f;
 	//弾かれて帰ってくるときのベクトルの大きさ
-	const float ADD_VECTOR_SCALE_HORIZONTAL_THORWN_DOWN_OVERLAP = HEIGHT_HELD_UP * 1.0f * 1.4f;
+	constexpr float ADD_VECTOR_SCALE_HORIZONTAL_THORWN_DOWN_OVERLAP = HEIGHT_HELD_UP * 1.0f * 1.4f;
 	//下に投げるときの奥行のベクトルの大きさ
-	const float ADD_VECTOR_SCALE_DEPTH_THROWN_DOWN = 60000.0f;
+	constexpr float ADD_VECTOR_SCALE_DEPTH_THROWN_DOWN = 60000.0f;
 	//下に投げるときの奥行のベクトルの大きさに累乗する数
-	const float POW_NUM_DEPTH_SCALE_THROWN_DOWN = 2.0f;
+	constexpr float POW_NUM_DEPTH_SCALE_THROWN_DOWN = 2.0f;
 
 	/*
 	* キャンセル時関連の定数
 	*/
 
 	//キャンセル時の座標の高さ
-	const float POSITION_HEIGHT_CANCEL = 20.0f;
+	constexpr float POSITION_HEIGHT_CANCEL = 20.0f;
 
 	/*
 	* 弾かれるとき関連の定数
 	*/
 
 	//弾かれるときの時間
-	const float TIME_REPELLED = 1.0f;
+	constexpr float TIME_REPELLED = 1.0f;
 	//弾かれるときの水平方向に加えるベクトルの大きさ
-	const float ADD_VECTOR_SCALE_HORIZONTAL_REPELLED = 500.0f;
+	constexpr float ADD_VECTOR_SCALE_HORIZONTAL_REPELLED = 500.0f;
 	//弾かれるときの垂直方向に加えるベクトルの大きさ
-	const float ADD_VECTOR_SCALE_VERTICAL_REPELLED = 2000.0f;
+	constexpr float ADD_VECTOR_SCALE_VERTICAL_REPELLED = 2000.0f;
 }

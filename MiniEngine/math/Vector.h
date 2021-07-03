@@ -695,6 +695,7 @@ const Vector3 g_VEC3_AXIS_Z = { 0.0f,  0.0f,  1.0f };
 const Vector3 g_VEC3_ONE = { 1.0f, 1.0f, 1.0f };
 
 //í«â¡
+const Vector4 g_VEC4_WHITE = { 1.0f,1.0f,1.0f,1.0f };		//îíêF
 const Vector4 g_VEC4_BLACK = { 0.0f,0.0f,0.0f,1.0f };		//çïêF
 const Vector4 g_VEC4_TRANSPARENT = { 1.0f,1.0f,1.0f,0.0f };	//ìßñæ
 const Vector4 g_VEC4_OPACITY = { 1.0f,1.0f,1.0f,1.0f };		//ïsìßñæ
