@@ -20,7 +20,7 @@ void CMyCharacterController::Init(const SInitOBBData& initOBBData)
 /// <param name="moveSpeed">動くスピード</param>
 /// <param name="deltaTime">デルタタイム</param>
 /// <returns>移動後の座標</returns>
-const Vector3& CMyCharacterController::Execute(const Vector3& moveSpeed, const float deltaTime)
+const Vector3 CMyCharacterController::Execute(const Vector3& moveSpeed, const float deltaTime)
 {
 	m_tag = COBB::EB_NONE_SIDE;
 

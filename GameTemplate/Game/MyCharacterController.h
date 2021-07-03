@@ -25,7 +25,7 @@ public:		//ここのメンバ関数を主に使う
 	/// <param name="moveSpeed">動くスピード</param>
 	/// <param name="deltaTime">デルタタイム</param>
 	/// <returns>移動後の座標</returns>
-	const Vector3& Execute(const Vector3& moveSpeed, const float deltaTime);
+	const Vector3 Execute(const Vector3& moveSpeed, const float deltaTime);
 
 	/// <summary>
 	/// 衝突解決を気にしないで、場所を移動させる関数

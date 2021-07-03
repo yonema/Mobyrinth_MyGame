@@ -52,7 +52,7 @@ private:	//privateなメンバ関数
 	/// 回転処理
 	/// </summary>
 	/// <returns>計算された回転</returns>
-	const Quaternion& Rotating();
+	const Quaternion Rotating();
 	void UpdateLight();	//ライトの更新
 
 private:	//列挙型

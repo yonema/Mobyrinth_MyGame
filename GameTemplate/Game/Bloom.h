@@ -1,5 +1,6 @@
 #pragma once
 #include "GaussianBlur.h"
+#include "SpriteRenderConstData.h"
 
 class CBloom
 {

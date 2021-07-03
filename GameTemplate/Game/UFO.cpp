@@ -1045,7 +1045,7 @@ void CUFO::GetOnStage()
 /// 回転処理
 /// </summary>
 /// <returns>計算された回転</returns>
-const Quaternion& CUFO::Rotating()
+const Quaternion CUFO::Rotating()
 {
 	//UFOの回転の角度を増やす	//デルタタイムを掛けておく
 	m_ufoAngle += m_ufoAngleSpeed * GameTime().GetFrameDeltaTime();

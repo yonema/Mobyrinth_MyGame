@@ -32,9 +32,9 @@ void CSpriteRender::Init(const char* texFilePath, float w, float h, const Vector
 	initData.m_ddsFilePath[0] = texFilePath;
 	initData.m_width = w;
 	initData.m_height = h;
-	initData.m_fxFilePath = "Assets/shader/sprite.fx";
-	initData.m_psEntryPoinFunc = "PSMain";
-	initData.m_vsEntryPointFunc = "VSMain";
+	initData.m_fxFilePath = SHADER_FILEPATH_DEFAULT;
+	initData.m_psEntryPoinFunc = ENTRY_POINT_FUNC_PS_DEFAULT;
+	initData.m_vsEntryPointFunc = ENTRY_POINT_FUNC_VS_DEFAULT;
 	initData.m_alphaBlendMode = alphaBlendMode;
 
 	m_pivot = pivot;

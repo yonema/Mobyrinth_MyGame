@@ -29,7 +29,7 @@ public:		//メンバ関数
 	/// </summary>
 	/// <param name="renderContext">レンダーコンテキスト</param>
 	void Draw(RenderContext& renderContext);
-
+	
 	/// <summary>
 	/// 影を生成するライトを生成する
 	/// </summary>

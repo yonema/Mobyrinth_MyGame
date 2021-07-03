@@ -71,13 +71,12 @@
 
 
 
-
 //追加ここまで
 
 
 
 
 
-const UINT FRAME_BUFFER_W = 1280;				//フレームバッファの幅。
-const UINT FRAME_BUFFER_H = 720;				//フレームバッファの高さ。
-static const int MAX_BONE = 512;	//!<ボーンの最大数。
+extern const UINT g_FRAME_BUFFER_W;	//フレームバッファの幅。
+extern const UINT g_FRAME_BUFFER_H;	//フレームバッファの高さ。
+static const int g_MAX_BONE = 512;	//!<ボーンの最大数。

@@ -407,9 +407,6 @@
     <ClCompile Include="ShadowMap.cpp">
       <Filter>MyCode\Graphic\2D</Filter>
     </ClCompile>
-    <ClCompile Include="SceneChange.cpp">
-      <Filter>MyCode\Graphic\2D</Filter>
-    </ClCompile>
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
     </ClCompile>
@@ -499,6 +496,12 @@
     </ClCompile>
     <ClCompile Include="StartDirecting.cpp">
       <Filter>MyCode\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>MyCode\Graphic\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniEngine.cpp">
+      <Filter>MiniEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -790,9 +793,6 @@
     <ClInclude Include="ShadowMap.h">
       <Filter>MyCode\Graphic\2D</Filter>
     </ClInclude>
-    <ClInclude Include="SceneChange.h">
-      <Filter>MyCode\Graphic\2D</Filter>
-    </ClInclude>
     <ClInclude Include="GameTime.h">
       <Filter>MyCode\Timer</Filter>
     </ClInclude>
@@ -943,6 +943,18 @@
     <ClInclude Include="ModelRenderConstData.h">
       <Filter>MyCode\Graphic\Model</Filter>
     </ClInclude>
+    <ClInclude Include="HUDConstData.h">
+      <Filter>MyCode\Graphic\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="TopOrDownData.h">
+      <Filter>MyCode\CommonData</Filter>
+    </ClInclude>
+    <ClInclude Include="InOrOutConstData.h">
+      <Filter>MyCode\CommonData</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>MyCode\Graphic\2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">
@@ -963,9 +975,6 @@
     <FxCompile Include="Assets\shader\SkyCubeMap.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\shader\SceneChange.fx">
-      <Filter>Assets\shader</Filter>
-    </FxCompile>
     <FxCompile Include="Assets\shader\ufoLight.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
@@ -976,6 +985,9 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\model2.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\Wipe.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

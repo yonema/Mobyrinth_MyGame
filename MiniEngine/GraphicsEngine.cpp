@@ -1,5 +1,7 @@
 #include "stdafx.h"
+#include "../GameTemplate/Game/stdafx.h"
 #include "GraphicsEngine.h"
+#include "../GameTemplate/Game/SpriteRenderConstData.h"
 
 GraphicsEngine* g_graphicsEngine = nullptr;	//グラフィックスエンジン
 Camera* g_camera2D = nullptr;				//2Dカメラ。
@@ -100,7 +102,7 @@ void GraphicsEngine::InitCopyToFrameBufferSprite()
 	spriteInitData.m_height = 720;
 
 	// モノクロ用のシェーダーを指定する
-	spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+	spriteInitData.m_fxFilePath = spriteRenderConstData::SHADER_FILEPATH_DEFAULT;
 
 	// 初期化オブジェクトを使って、スプライトを初期化する
 	m_copyToFrameBufferSprite.Init(spriteInitData);
