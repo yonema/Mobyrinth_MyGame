@@ -3,6 +3,7 @@
 #include "tkFile/TkmFile.h"
 #include "MeshParts.h"
 #include "Skeleton.h"
+#include "../GameTemplate/Game/ModelRenderConstData.h"
 
 class IShaderResource;
 
@@ -16,9 +17,12 @@ enum EnModelUpAxis {
 /// </summary>
 struct ModelInitData {
 	const char* m_tkmFilePath = nullptr;							//tkmファイルパス。
-	const char* m_vsEntryPointFunc = "VSMain";						//頂点シェーダーのエントリーポイント。
-	const char* m_vsSkinEntryPointFunc = "VSSkinMain";				//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
-	const char* m_psEntryPointFunc = "PSMain";						//ピクセルシェーダーのエントリーポイント。
+	//頂点シェーダーのエントリーポイント。
+	const char* m_vsEntryPointFunc = modelRenderConstData::ENTRY_POINT_FUNC_VS_DEFAULT;
+	//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
+	const char* m_vsSkinEntryPointFunc = modelRenderConstData::ENTRY_POINT_FUNC_VS_SKIN_DEFAULT;
+	//ピクセルシェーダーのエントリーポイント。
+	const char* m_psEntryPointFunc = modelRenderConstData::ENTRY_POINT_FUNC_PS_DEFAULT;
 	const char* m_fxFilePath = nullptr;								//.fxファイルのファイルパス。
 	void* m_expandConstantBuffer[MeshParts::m_maxExCBNum] = { nullptr };	//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize[MeshParts::m_maxExCBNum] = { 0 };	//ユーザー拡張の定数バッファのサイズ。
@@ -27,7 +31,7 @@ struct ModelInitData {
 	Skeleton* m_skeleton = nullptr;									//スケルトン。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					//モデルの上方向。
 
-	D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK;
+	D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK;			//カリングモード
 	bool m_trans = true;
 
 };

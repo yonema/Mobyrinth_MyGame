@@ -12,9 +12,9 @@ class CModelRender : public IGameObject
 public:		//自動で呼ばれるメンバ関数
 	void Update() override final;					//アップデート関数
 	void Render(RenderContext& rc) override final;	//描画用関数
-	void UpdateWhenPaused() override final;
+	void AlwaysUpdate() override final;				//常に呼ばれるアップデート関数
 
-public:		//ここのメンバ関数を主に使う。
+public:		//メンバ関数
 	/// <summary>
 	/// デフォルトの初期化処理関数
 	/// 最初に呼んで！
@@ -50,6 +50,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
+		return;
 	}
 
 	/// <summary>
@@ -59,6 +60,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetRotation(const Quaternion& rot)
 	{
 		m_rotation = rot;
+		return;
 	}
 
 	/// <summary>
@@ -68,6 +70,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetScale(const Vector3& scale)
 	{
 		m_scale = scale;
+		return;
 	}
 
 	/// <summary>
@@ -75,9 +78,13 @@ public:		//ここのメンバ関数を主に使う。
 	/// </summary>
 	/// <param name="animNo">登録してあるアニメーションクリップの番号</param>
 	/// <param name="interpolateTime">補完時間（単位：秒）</param>
-	void PlayAnimation(int animNo, float interpolateTime = 0.2f)
+	void PlayAnimation(
+		int animNo,
+		float interpolateTime = modelRenderConstData::INTERPOLATE_TIME_DEFAULT
+	)
 	{
 		m_animationPtr->Play(animNo, interpolateTime);
+		return;
 	}
 
 	/// <summary>
@@ -87,6 +94,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetShadowReceiverFlag(const bool shadowReceiverFlag)
 	{
 		m_model.SetShadowReceiverFlag(shadowReceiverFlag);
+		return;
 	}
 
 	/// <summary>
@@ -98,10 +106,19 @@ public:		//ここのメンバ関数を主に使う。
 		//シャドウキャスターがtrueで、かつ
 		//まだシャドウ用モデルが初期化されていなかったら
 		if (shadowCasterFlag && !m_shadowModel.IsValid())
+		{
 			//シャドウ用モデルを初期化
 			InitShadowModel();
+		}
+		//シャドウキャスターがfalseで、かつ
+		//作動モデルが初期化済みだったら
 		else if (!shadowCasterFlag && m_shadowModel.IsValid())
+		{
+			//シャドウモデルの登録を消す
 			m_shadowModel.RemoveShadowModel();
+		}
+
+		return;
 	}
 
 	/// <summary>
@@ -111,6 +128,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetModelEmissionColor(const Vector4& color)
 	{
 		m_model.SetModelEmissionColor(color);
+		return;
 	}
 
 	/// <summary>
@@ -120,6 +138,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetMulColor(const Vector4& color)
 	{
 		m_model.SetMulColor(color);
+		return;
 	}
 
 	/**
@@ -129,6 +148,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetAlphaValue(const float alphaValue)
 	{
 		m_model.SetAlphaValue(alphaValue);
+		return;
 	}
 
 	/// <summary>
@@ -139,6 +159,7 @@ public:		//ここのメンバ関数を主に使う。
 	{
 		m_drawOutLineFlag = drawOutLineFlag;
 		m_model.SetOutLineFlag(drawOutLineFlag);
+		return;
 	}
 
 
@@ -150,6 +171,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetStealthFlag(const bool stealthFlag)
 	{
 		m_model.SetStealthFlag(stealthFlag);
+		return;
 	}
 
 	//モデルの参照を返す
@@ -207,7 +229,7 @@ private://データメンバ
 	Model m_model;								//モデル表示処理
 	std::unique_ptr<Skeleton> m_skeletonPtr;	//スケルトン。
 	std::unique_ptr<Animation> m_animationPtr;	//アニメション再生処理。
-	const char* m_tkmFilePath = nullptr;
+	const char* m_tkmFilePath = nullptr;		//tkmファイルパス
 
 	Vector3 m_position = g_VEC3_ZERO;			//位置
 	Quaternion m_rotation = g_QUAT_IDENTITY;		//回転

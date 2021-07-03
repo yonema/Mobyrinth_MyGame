@@ -17,7 +17,7 @@ public:		//自動で呼ばれるメンバ関数
 	/// ポーズ中でも呼ばれるアップデート関数
 	/// ポーズ中でなくても常に呼ばれる
 	/// </summary>
-	void UpdateWhenPaused()override final;
+	void AlwaysUpdate()override final;
 
 	/// <summary>
 	/// ポーズ中にだけ呼ばれるアップデート関数

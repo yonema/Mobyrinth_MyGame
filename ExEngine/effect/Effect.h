@@ -12,7 +12,7 @@ public:		//自動で呼ばれるメンバ関数
 	Effect();						//コンストラクタ
 	~Effect();						//デストラクタ
 	bool Start() override final;	//スタート関数
-	void UpdateWhenPaused() override final;	//アップデート関数
+	void AlwaysUpdate() override final;	//アップデート関数
 
 public:		//メンバ関数
 	

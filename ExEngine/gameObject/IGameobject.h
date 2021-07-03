@@ -157,18 +157,18 @@ public:
 		return m_gamePaused;
 	}
 	/// <summary>
-	/// ポーズ中でも呼ばれるUpdate（更新）
+	/// 常に呼ばれるUpdate（更新）
 	/// </summary>
-	virtual void UpdateWhenPaused() {};
+	virtual void AlwaysUpdate() {};
 	/// <summary>
 	/// ポーズ中にだけ呼ばれるUpdate（更新）
 	/// </summary>
 	virtual void UpdateOnlyPaused() {};
 	
-	void UpdateWhenPausedWrapper()
+	void AlwaysUpdateWrapper()
 	{
 		if (m_isActive && m_isStart && !m_isDead) {
-			UpdateWhenPaused();
+			AlwaysUpdate();
 		}
 	}
 	void UpdateOnlyPausedWrapper()

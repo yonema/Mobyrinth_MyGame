@@ -93,7 +93,7 @@ OOReverseALL::~OOReverseALL()
 }
 
 //ポーズ中でもいつでもアップデートする関数
-void OOReverseALL::UpdateWhenPaused()
+void OOReverseALL::AlwaysUpdate()
 {
 		//エフェクト再生までのタイマー
 	i += GameTime().GetFrameDeltaTime();

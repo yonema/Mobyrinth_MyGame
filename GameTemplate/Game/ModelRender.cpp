@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "ModelRender.h"
 
+//モデルレンダラーの定数データを使えるようにする
+using namespace modelRenderConstData;
 
 /// <summary>
 /// デフォルトの初期化処理関数
@@ -31,6 +33,8 @@ void CModelRender::Init(
 	InitZPrepassModel();
 	//初期化完了
 	m_isInited = true;
+
+	return;
 }
 
 
@@ -61,6 +65,8 @@ void CModelRender::Init(
 
 	//初期化完了
 	m_isInited = true;
+
+	return;
 }
 
 
@@ -74,8 +80,10 @@ bool CModelRender::InitSkeleton(const char* filePath)
 {
 	//tkmファイルをtksファイルに変換する
 	std::string skeletonFilePath = filePath;
-	int pos = (int)skeletonFilePath.find(".tkm");
-	skeletonFilePath.replace(pos, 4, ".tks");
+	//ファイルパスの文字列から、拡張子の場所を探す
+	int pos = (int)skeletonFilePath.find(FILE_EXTENSION_TKM);
+	//tkmのファイルパスからtksのファイルパスに入れ替える
+	skeletonFilePath.replace(pos, FILE_EXTENSION_LENGHT, FILE_EXTENSION_TKS);
 
 	//スケルトンのリソースの確保
 	m_skeletonPtr.reset(new Skeleton);
@@ -107,7 +115,7 @@ void CModelRender::InitModel(const char* filePath, D3D12_CULL_MODE cullMode, EnM
 	//tkmファイルのファイルパスを指定する。
 	initData.m_tkmFilePath = filePath;
 	//シェーダーファイルのファイルパスを指定する。
-	initData.m_fxFilePath = "Assets/shader/model2.fx";
+	initData.m_fxFilePath = SHADER_FILEPATH_DEFAULT;
 	//スケルトンを指定する。
 	if (m_skeletonPtr)	//スケルトンが初期化されていたら
 		initData.m_skeleton = m_skeletonPtr.get();
@@ -148,18 +156,23 @@ void CModelRender::InitModel(const char* filePath, D3D12_CULL_MODE cullMode, EnM
 		g_graphicsEngine->GetShadowMap().GetShadowParam();
 	initData.m_expandConstantBufferSize[4] =
 		sizeof(*g_graphicsEngine->GetShadowMap().GetShadowParam()) * g_MAX_SHADOW_NUM;
-	initData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetShadowMap().GetShadowBlur();
 
+	//シェーダーリソースビューの設定
+
+	//シャドウマップの登録
+	initData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetShadowMap().GetShadowBlur();
 	//ZPrepassで作成された深度テクスチャの登録
 	initData.m_expandShaderResoruceView[1] = &g_graphicsEngine->GetZPrepassDepthTexture();
-
-
+	//スカイキューブの登録
 	initData.m_expandShaderResoruceView[2] = &g_graphicsEngine->GetSkyCubeTexture();
 
+	//カリングモードを設定する
 	initData.m_cullMode = cullMode;
 
 	//作成した初期化データをもとにモデルを初期化する、
 	m_model.Init(initData);
+
+	return;
 }
 
 
@@ -182,6 +195,8 @@ void CModelRender::InitAnimation(AnimationClip* animationClips, int numAnimation
 		animationClips,		//アニメーションクリップ。
 		numAnimationClips	//アニメーションの数。
 	);
+
+	return;
 }
 
 /// <summary>
@@ -194,11 +209,12 @@ void CModelRender::InitShadowModel()
 
 	//シャドウ用のモデルの初期化データ
 	ModelInitData initShadowModelData;
-	initShadowModelData.m_fxFilePath =
-		"Assets/shader/DrawShadowMap.fx";
+	initShadowModelData.m_fxFilePath = SHADER_FILTPATH_SHADOW_MAP;
 	//シャドウのパラーメータを定数バッファに渡す
-	initShadowModelData.m_expandConstantBuffer[0] = (void*)g_graphicsEngine->GetShadowMap().GetShadowParam();
-	initShadowModelData.m_expandConstantBufferSize[0] = sizeof(*g_graphicsEngine->GetShadowMap().GetShadowParam());
+	initShadowModelData.m_expandConstantBuffer[0] = 
+		(void*)g_graphicsEngine->GetShadowMap().GetShadowParam();
+	initShadowModelData.m_expandConstantBufferSize[0] = 
+		sizeof(*g_graphicsEngine->GetShadowMap().GetShadowParam());
 
 	initShadowModelData.m_colorBufferFormat = DXGI_FORMAT_R32G32_FLOAT;
 
@@ -213,6 +229,7 @@ void CModelRender::InitShadowModel()
 		m_scale
 	);
 
+	return;
 }
 
 /// <summary>
@@ -220,13 +237,18 @@ void CModelRender::InitShadowModel()
 /// </summary>
 void CModelRender::InitZPrepassModel()
 {
+	//Zプリパス用モデルの初期化データ
 	ModelInitData modelInitData;
 	modelInitData.m_tkmFilePath = m_tkmFilePath;
-	modelInitData.m_fxFilePath = "Assets/shader/ZPrepass.fx";
+	modelInitData.m_fxFilePath = SHADER_GILEPATH_Z_PREPASS;
 	modelInitData.m_colorBufferFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	modelInitData.m_trans = false;
 	modelInitData.m_cullMode = D3D12_CULL_MODE_NONE;
+
+	//Zプリパス用のモデルの初期化
 	m_zprepassModel.Init(modelInitData);
+
+	return;
 }
 
 
@@ -244,6 +266,7 @@ void CModelRender::Update()
 	//アニメーションを進める。
 	if (m_animationPtr)	//アニメーションが初期化されていたら
 		m_animationPtr->Progress(GameTime().GetFrameDeltaTime());
+
 	//モデルの座標更新
 	m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
@@ -254,15 +277,21 @@ void CModelRender::Update()
 
 	//ZPrepass用モデルの更新
 	m_zprepassModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+
+	return;
 }
 
-void CModelRender::UpdateWhenPaused()
+//常に呼ばれるアップデート関数
+void CModelRender::AlwaysUpdate()
 {
+	//輪郭線を描画するか？
 	if (m_drawOutLineFlag)
 	{
 		// ZPrepassの描画パスにモデルを追加
 		g_graphicsEngine->Add3DModelToZPrepass(m_zprepassModel);
 	}
+
+	return;
 }
 
 
@@ -277,4 +306,6 @@ void CModelRender::Render(RenderContext& rc)
 
 	//モデルを描画
 	m_model.Draw(rc);
+
+	return;
 }

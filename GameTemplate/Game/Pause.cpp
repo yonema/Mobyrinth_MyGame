@@ -148,7 +148,7 @@ CPause::~CPause()
 /// ポーズ中でも呼ばれるアップデート関数
 /// ポーズ中でなくても常に呼ばれる
 /// </summary>
-void CPause::UpdateWhenPaused()
+void CPause::AlwaysUpdate()
 {
 	//ポーズ画面の操作ができない場合、この関数の処理を行わない。
 	if (m_flagOperation == false) {
