@@ -83,10 +83,10 @@ namespace titleConstData
 
 
 	//一番最初のステージ番号
-	const int STAGE_NUM_FIRST = EN_STAGE_1;
+	constexpr int STAGE_NUM_FIRST = EN_STAGE_1;
 
 	//一番最大のステージ番号
-	const int STAGE_NUM_LAST = EN_STAGE_NUM - 1;
+	constexpr int STAGE_NUM_LAST = EN_STAGE_NUM - 1;
 
 
 	/*
@@ -94,22 +94,22 @@ namespace titleConstData
 	*/
 
 	//タイトル画面のレベル2Dのファイルパス
-	const char* const LEVEL_2D_FILEPATH_TITLE = "Assets/level2D/Title.casl";
+	constexpr const char* const LEVEL_2D_FILEPATH_TITLE = "Assets/level2D/Title.casl";
 
 	//レベル2Dのタイトルのオブジェクトネーム
-	const char* const LEVEL_2D_OBJECT_NAME_TITLE = "Title";
+	constexpr const char* const LEVEL_2D_OBJECT_NAME_TITLE = "Title";
 
 	//レベル2Dの「Aボタンを押してね」のオブジェクトネーム
-	const char* const LEVEL_2D_OBJECT_NAME_PRESS_A_BUTTON = "Press_A_Button";
+	constexpr const char* const LEVEL_2D_OBJECT_NAME_PRESS_A_BUTTON = "Press_A_Button";
 
 	//開始の演出の最大カウント
-	const int MAX_COUNT_START_TITLE = 120;
+	constexpr int MAX_COUNT_START_TITLE = 120;
 
 	//「Aボタンを押してね」のアルファ値の変化スピード
-	const float SPEED_CHANGE_ALPHA_PRESS_A_BUTTON = 0.02f;
+	constexpr float SPEED_CHANGE_ALPHA_PRESS_A_BUTTON = 0.02f;
 
 	//「Aボタンを押してね」の不透明と判断するしきい値
-	const float THRESHOLD_OPACITY_PRESS_A_BUTTON = 0.8f;
+	constexpr float THRESHOLD_OPACITY_PRESS_A_BUTTON = 0.8f;
 
 
 	/*
@@ -117,32 +117,32 @@ namespace titleConstData
 	*/
 	
 	//ステージセレクト画面のレベル2Dのファイルパス
-	const char* const LEVEL_2D_FILEPATH_STAGE_SELECTION = 
+	constexpr const char* const LEVEL_2D_FILEPATH_STAGE_SELECTION =
 		"Assets/level2D/Stage_selection3.casl";
 
 	//レベル2Dのステージアイコンのオブジェクトネーム
-	const char* const LEVEL_2D_OBJECT_NAME_STAGE_ICON = "Stage_icon";
+	constexpr const char* const LEVEL_2D_OBJECT_NAME_STAGE_ICON = "Stage_icon";
 	//ステージアイコンのナンバーを取得するための文字
-	const char* const CHAR_GET_STAGE_ICON_NUM = "n";
+	constexpr const char* const CHAR_GET_STAGE_ICON_NUM = "n";
 	//遊べないステージの乗算カラー
 	const Vector4 SPRITE_MUL_COLOR_STAGE_PLAY_CANNOT = { 0.4f,0.4f,0.4f,1.0f };
 
 	//レベル2Dのステージクリアのアイコンのオブジェクトネーム
-	const char* const LEVEL_2D_OBJECT_NAME_STAGE_CLEAR = "Stage_clear";
+	constexpr const char* const LEVEL_2D_OBJECT_NAME_STAGE_CLEAR = "Stage_clear";
 	//ステージクリアのナンバーを取得するための文字
-	const char* const STAGE_CLEAR_GET_NUM_CHAR = "r";
+	constexpr const char* const STAGE_CLEAR_GET_NUM_CHAR = "r";
 
 	//レベル2Dのカーソルのオブジェクトネーム
-	const char* const LEVEL_2D_OBJECT_NAME_CURSOR = "cursor";
+	constexpr const char* const LEVEL_2D_OBJECT_NAME_CURSOR = "cursor";
 
 	//レベル2Dのステージセレクトのオブジェクトネーム
-	const char* const LEVEL_2D_OBJECT_NAME_STAGE_SELECTION = "Stage_selection";
+	constexpr const char* const LEVEL_2D_OBJECT_NAME_STAGE_SELECTION = "Stage_selection";
 
 	//レベル2Dのステージ選択背景のオブジェクトネーム
-	const char* const LEVEL_2D_OBJECT_NAME_STAGE_SELECTION_BASE =
+	constexpr const char* const LEVEL_2D_OBJECT_NAME_STAGE_SELECTION_BASE =
 		"Stage_selection_base";
 	//ステージ選択背景のスプライトのアルファ値
-	const float SPRITE_ALPHA_VALUE_STAGE_SELECTION_BASE = 0.8f;
+	constexpr float SPRITE_ALPHA_VALUE_STAGE_SELECTION_BASE = 0.8f;
 
 
 	/*
@@ -150,28 +150,28 @@ namespace titleConstData
 	*/
 
 	//タイトルのBGMのサウンドのファイルパス
-	const wchar_t* const SOUND_FILEPATH_BGM_TITLE = L"Assets/sound/Title.wav";
+	constexpr const wchar_t* const SOUND_FILEPATH_BGM_TITLE = L"Assets/sound/Title.wav";
 	//タイトルのBGMのサウンドの音量
-	const float SOUND_VOLUME_BGM_TITLE = 0.5f;
+	constexpr float SOUND_VOLUME_BGM_TITLE = 0.5f;
 
 	//AボタンのSEのサウンドのファイルパス
-	const wchar_t* const SOUND_FILEPATH_SE_BUTTON_A = L"Assets/sound/buttonA.wav";
+	constexpr const wchar_t* const SOUND_FILEPATH_SE_BUTTON_A = L"Assets/sound/buttonA.wav";
 	//AボタンのSEのサウンドの音量
-	const float SOUND_VOLUME_SE_BUTTON_A = 0.5f;
+	constexpr float SOUND_VOLUME_SE_BUTTON_A = 0.5f;
 
 	//BボタンのSEのサウンドのファイルパス
-	const wchar_t* const SOUND_FILEPATH_SE_BUTTON_B = L"Assets/sound/buttonB.wav";
+	constexpr const wchar_t* const SOUND_FILEPATH_SE_BUTTON_B = L"Assets/sound/buttonB.wav";
 	//BボタンのSEのサウンドの音量
-	const float SOUND_VOLUME_SE_BUTTON_B = 0.5f;
+	constexpr float SOUND_VOLUME_SE_BUTTON_B = 0.5f;
 
 	//カーソル移動のSEのサウンドのファイルパス
-	const wchar_t* const SOUND_FILEPATH_SE_SELECT = L"Assets/sound/select.wav";
+	constexpr const wchar_t* const SOUND_FILEPATH_SE_SELECT = L"Assets/sound/select.wav";
 	//カーソル移動のSEのサウンドの音量
-	const float SOUND_VOLUME_SE_SELECT = 0.5f;
+	constexpr float SOUND_VOLUME_SE_SELECT = 0.5f;
 
 
 
 	//左スティックの入力があると判断するしきい値
-	const float THRESHOLD_STICK_L_VALUE = 0.5f;
+	constexpr float THRESHOLD_STICK_L_VALUE = 0.5f;
 
 }

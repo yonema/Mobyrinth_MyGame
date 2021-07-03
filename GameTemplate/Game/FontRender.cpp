@@ -10,7 +10,7 @@ bool CFontRender::Start()
 //デストラクタ
 CFontRender::~CFontRender()
 {
-
+	return;
 }
 
 
@@ -38,6 +38,8 @@ void CFontRender::Init
 	m_rotation = rotation;
 	m_scale = scale;
 	m_pivot = pivot;
+
+	return;
 }
 
 /// <summary>
@@ -47,6 +49,8 @@ void CFontRender::Init
 void CFontRender::SetText(const wchar_t* const text)
 {
 	swprintf_s(m_text, text);
+
+	return;
 }
 
 
@@ -73,6 +77,8 @@ void CFontRender::Render(RenderContext& rc)
 
 	//描画終了
 	m_font.End(rc);
+
+	return;
 }
 
 /// <summary>
@@ -100,4 +106,5 @@ void CFontRender::PostRender(RenderContext& rc)
 	//描画終了
 	m_font.End(rc);
 
+	return;
 }

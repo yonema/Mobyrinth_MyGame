@@ -9,17 +9,17 @@ namespace shadowConstData
 	//影を作るライトの方向の初期値
 	const Vector3 SHADOW_INIT_DIRECTION = { 1.0f,-1.0f,-1.0f };
 	//影を作るライトの距離の初期値
-	const float SHADOW_INIT_LENGTH = 1000.0f;
+	constexpr float SHADOW_INIT_LENGTH = 1000.0f;
 	//デフォルトの影の長さ
-	const float LENGHT_SHADOW_DEFAULT = 500.0f;
+	constexpr float LENGHT_SHADOW_DEFAULT = 500.0f;
 	//シャドウマップのクリアカラー
-	const float COLOR_CLEAR_SHADOWMAP = 1.0f;
+	constexpr float COLOR_CLEAR_SHADOWMAP = 1.0f;
 	//シャドウマップのレンダリングターゲットの幅
-	const float WIDTH_RENDERTARGET_SHADOWMAP = 2048.0f;
+	constexpr float WIDTH_RENDERTARGET_SHADOWMAP = 2048.0f;
 	//シャドウマップのレンダリングターゲットの高さ
-	const float HEIGHT_RENDERTARGET_SHADOWMAP = 2048.0f;
+	constexpr float HEIGHT_RENDERTARGET_SHADOWMAP = 2048.0f;
 	//デフォルトのブラーの強さ
-	const float POWER_BLUR_DEFAULT = 5.0f;
+	constexpr float POWER_BLUR_DEFAULT = 5.0f;
 }
 
 /// <summary>

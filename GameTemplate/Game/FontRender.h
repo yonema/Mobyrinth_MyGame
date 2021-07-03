@@ -1,5 +1,18 @@
 #pragma once
 
+//フォントレンダラーの定数データ
+namespace fontRendetConstData
+{
+	//デフォルトの座標
+	const Vector2 POSITION_DEFAULT = { 0.0f,0.0f };
+	//デフォルトのカラー
+	const Vector4 COLOR_DEFAULT = g_VEC4_WHITE;
+	//デフォルトのピボット
+	const Vector2 PIVOT_DEFAULT = { 0.0f,0.0f };
+	//テキストの最大のサイズ
+	constexpr UINT SIZE_MAX_TEXT = 256;
+}
+
 /// <summary>
 /// フォント描画クラス
 /// </summary>
@@ -24,11 +37,11 @@ public:		//ここのメンバ関数を主に使う。
 	/// <param name="pivot">ピボット（基点）</param>
 	void Init
 	(const wchar_t* text,
-		Vector2 position = { 0.0f,0.0f },
-		Vector4 color = { 1.0f,1.0f,1.0f,1.0f },
+		Vector2 position = fontRendetConstData::POSITION_DEFAULT,
+		Vector4 color = fontRendetConstData::COLOR_DEFAULT,
 		float rotation = 0.0f,
 		float scale = 1.0f,
-		Vector2 pivot = { 0.0f,0.0f }
+		Vector2 pivot = fontRendetConstData::PIVOT_DEFAULT
 	);
 
 	/// <summary>
@@ -50,6 +63,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetText(const wchar_t* text, const T var)
 	{
 		swprintf_s(m_text, text, var);
+		return;
 	}
 
 	/// <summary>
@@ -59,6 +73,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetPosition(const Vector2& pos)
 	{
 		m_position = pos;
+		return;
 	}
 
 	/// <summary>
@@ -77,6 +92,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetColor(const Vector4& color)
 	{
 		m_color = color;
+		return;
 	}
 
 	/// <summary>
@@ -86,6 +102,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetRotation(const float rotation)
 	{
 		m_rotation = rotation;
+		return;
 	}
 
 	/// <summary>
@@ -95,6 +112,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetScale(const float scale)
 	{
 		m_scale = scale;
+		return;
 	}
 
 	/// <summary>
@@ -104,6 +122,7 @@ public:		//ここのメンバ関数を主に使う。
 	void SetPivot(const Vector2& pivot)
 	{
 		m_pivot = pivot;
+		return;
 	}
 
 	/// <summary>
@@ -115,26 +134,26 @@ public:		//ここのメンバ関数を主に使う。
 	void SetPostRenderFlag(const bool flag)
 	{
 		m_postRenderFlag = flag;
+		return;
 	}
 
 
 	void SetShadowParam(const bool isDrawShadow, const float shadowOffset, const Vector4& shadowColor)
 	{
 		m_font.SetShadowParam(isDrawShadow, shadowOffset, shadowColor);
+		return;
 	}
 
-
-private:
-	static const int m_maxTextSize = 256;
 private:	//データメンバ
 	Font m_font;								//フォントクラス
-	wchar_t m_text[m_maxTextSize];				//表示するテキスト
-	Vector2 m_position = { 0.0f,0.0f };			//表示する場所。{0.0f,0.0f}が中央
-	Vector4 m_color = { 1.0f,1.0f,1.0f,1.0f };	//カラー{1.0f,1.0f,1.0f,1.0f}が白色
-	float m_rotation = 0.0f;					//回転
-	float m_scale = 1.0f;						//拡大
-	Vector2 m_pivot = { 0.0f,0.0f };			//ピボット（基点）
 
-	bool m_postRenderFlag = false;				//PostRenderで描画するかどうか？
+	wchar_t m_text[fontRendetConstData::SIZE_MAX_TEXT];			//表示するテキスト
+	Vector2 m_position = fontRendetConstData::POSITION_DEFAULT;	//表示する場所。{0.0f,0.0f}が中央
+	Vector4 m_color = fontRendetConstData::COLOR_DEFAULT;		//カラー{1.0f,1.0f,1.0f,1.0f}が白色
+	float m_rotation = 0.0f;									//回転
+	float m_scale = 1.0f;										//拡大
+	Vector2 m_pivot = fontRendetConstData::PIVOT_DEFAULT;		//ピボット（基点）
+
+	bool m_postRenderFlag = false;								//PostRenderで描画するかどうか？
 };
 
