@@ -10,6 +10,16 @@ namespace shadowConstData
 	const Vector3 SHADOW_INIT_DIRECTION = { 1.0f,-1.0f,-1.0f };
 	//影を作るライトの距離の初期値
 	const float SHADOW_INIT_LENGTH = 1000.0f;
+	//デフォルトの影の長さ
+	const float LENGHT_SHADOW_DEFAULT = 500.0f;
+	//シャドウマップのクリアカラー
+	const float COLOR_CLEAR_SHADOWMAP = 1.0f;
+	//シャドウマップのレンダリングターゲットの幅
+	const float WIDTH_RENDERTARGET_SHADOWMAP = 2048.0f;
+	//シャドウマップのレンダリングターゲットの高さ
+	const float HEIGHT_RENDERTARGET_SHADOWMAP = 2048.0f;
+	//デフォルトのブラーの強さ
+	const float POWER_BLUR_DEFAULT = 5.0f;
 }
 
 /// <summary>
@@ -36,8 +46,11 @@ public:		//メンバ関数
 	/// <param name="direction">影を作るライトの方向</param>
 	/// <param name="length">ライトがどれくらい離れているか</param>
 	/// <param name="target">ライトが照らす目標</param>
-	void CreateShadowMap
-	(const Vector3& direction, const float length = 500.0f, const Vector3& target = g_VEC3_ZERO);
+	void CreateShadowMap(
+		const Vector3& direction,
+		const float length = shadowConstData::LENGHT_SHADOW_DEFAULT,
+		const Vector3& target = g_VEC3_ZERO
+	);
 
 	/// <summary>
 	/// 影を生成するライトのパラメーター設定する
@@ -92,11 +105,13 @@ private:	//privateなメンバ関数
 
 private:	//データメンバ
 
-	ShadowParam m_shadowParam[g_max_shadowMap];	//シャドウのパラメータ
-	RenderTarget m_shadowMapRenderTarget;		//シャドウマップのレンダーターゲット
-	CGaussianBlur m_gaussianBlur;				//ガウシアンブラー
-	std::list<Model*> m_shadowModels;			//シャドウマップに描画するシャドウ用モデルのリスト
-	Vector3 m_targetPos = g_VEC3_ZERO;			//シャドウライトの注視点
+	//シャドウマップに描画するシャドウ用モデルのコンテナ
+	std::vector<Model*> m_shadowModels;
+
+	ShadowParam m_shadowParam[g_MAX_SHADOW_NUM];	//シャドウのパラメータ
+	RenderTarget m_shadowMapRenderTarget;			//シャドウマップのレンダーターゲット
+	CGaussianBlur m_gaussianBlur;					//ガウシアンブラー
+	Vector3 m_targetPos = g_VEC3_ZERO;				//シャドウライトの注視点
 };
 
 

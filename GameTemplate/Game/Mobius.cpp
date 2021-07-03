@@ -49,7 +49,7 @@ bool CMobius::Start()
 	initData.m_expandConstantBuffer[4] =
 		g_graphicsEngine->GetShadowMap().GetShadowParam();
 	initData.m_expandConstantBufferSize[4] =
-		sizeof(*g_graphicsEngine->GetShadowMap().GetShadowParam()) * g_max_shadowMap;
+		sizeof(*g_graphicsEngine->GetShadowMap().GetShadowParam()) * g_MAX_SHADOW_NUM;
 	initData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetShadowMap().GetShadowBlur();
 
 	//ZPrepassで作成された深度テクスチャの登録

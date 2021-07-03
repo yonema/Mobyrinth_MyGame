@@ -39,7 +39,7 @@ struct SSpotLight
 };
 
 //シャドウの最大数
-const int g_max_shadowMap = 5;
+const int g_MAX_SHADOW_NUM = 5;
 
 //シャドウマップ用のパラメータ構造体
 struct ShadowParam
