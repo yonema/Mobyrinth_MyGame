@@ -64,7 +64,7 @@ void GameObjectManager::ExecuteUpdate()
 	//UpdateWhenPaused‚ðŒÄ‚Ô
 	for (auto& goList : m_gameObjectListArray) {
 		for (auto& go : goList) {
-			go->UpdateWhenPausedWrapper();
+			go->AlwaysUpdateWrapper();
 		}
 	}
 
