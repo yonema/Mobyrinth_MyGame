@@ -71,6 +71,7 @@ void Player::Update()
 		//タイトル
 		//タイトル中の動きをする
 		TitleMove();
+		Player* player = FindGO<Player>("");
 	}
 	else {
 		//ゲーム中

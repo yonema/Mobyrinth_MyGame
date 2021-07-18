@@ -56,7 +56,7 @@ void COBB::Init(const SInitOBBData& initData)
 /// 頂点数持ってきてね。
 /// </summary>
 /// <returns>頂点の配列の先頭アドレス</returns>
-Vector3* COBB::GetBoxVertex()
+Vector3* COBB::GetBoxVertex() const
 {
 
 	//ボックスの頂点の場所
@@ -499,7 +499,7 @@ const bool CollisionOBBs(const COBB& obb1, const COBB& obb2)
 
 
 
-	//分離平面が存在しないので
+	//分離超平面が存在しないので
 	
 	return true;		//衝突している
 

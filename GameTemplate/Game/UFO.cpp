@@ -408,7 +408,7 @@ void CUFO::Search()
 		//UFOの光線の光を消す
 		m_ufoLight->SetModelEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の透明にする
-		m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_OPACITY);
+		m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
 		//輪郭線を書かないようにする
 		m_ufoLight->SetDrawOutLineFlag(false);
 		//UFOyellowSEが鳴っていたら止める
@@ -581,7 +581,7 @@ void CUFO::Transport()
 		//UFOの光線の光を消す
 		m_ufoLight->SetModelEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線を透明にする
-		m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_OPACITY);
+		m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
 		//輪郭線を書かないようにする
 		m_ufoLight->SetDrawOutLineFlag(false);
 
@@ -1028,9 +1028,9 @@ void CUFO::GetOnStage()
 	{
 		//メビウスの輪が見つかっていたら
 		//メビウスの輪のモデルのポリゴンと、レイの当たり判定を取る
-		if (m_mobius->GetIntersectPosWithMobius(
+		m_mobius->GetIntersectPosWithMobius(
 			m_onWayPosition + upVec, m_onWayPosition - upVec, &m_position
-		));
+		);
 	}
 	else
 	{

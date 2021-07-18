@@ -748,6 +748,7 @@ void CReversibleObject::ThrownDown()
 	{
 		//モデルの回転を完全に逆さ向きに回す。
 		m_rotation.SetRotationDegX(180.0f);
+		m_rotation.Multiply(m_throwRot);
 
 
 		//プレイヤーがオブジェクトを持っていない状態にする

@@ -100,6 +100,8 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 	//ステージのメビウスの輪のポインタ
 	CMobius* mobius = nullptr;
 
+	//ウェイポイントを見るためのコード
+	//static bool InitedWayPoint = false;
 
 
 	//レベルをロードする
@@ -416,10 +418,21 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			posMap.insert(std::make_pair(num, objData.position));
 			rotMap.insert(std::make_pair(num, objData.rotation));
 
+			//ウェイポイントを見るためのコード
+			//if (InitedWayPoint == false)
+			//{
+			//	CModelRender* wayPointModel = NewGO<CModelRender>(0);
+			//	wayPointModel->Init("Assets/modelData/yuka.tkm");
+			//	wayPointModel->SetPosition(objData.position);
+			//	wayPointModel->SetRotation(objData.rotation);
+			//}
 			return true;
 		}
 		return false;
 	});
+
+	//ウェイポイントを見るためのコード
+	//InitedWayPoint = true;
 
 
 	//ステージのメビウスの輪をマネージャーに登録
