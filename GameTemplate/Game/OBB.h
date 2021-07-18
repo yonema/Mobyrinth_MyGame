@@ -105,7 +105,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 頂点数持ってきてね。
 	/// </summary>
 	/// <returns>頂点の配列の先頭アドレス</returns>
-	Vector3* GetBoxVertex();
+	Vector3* GetBoxVertex() const;
 
 	/// <summary>
 	/// ボックスの頂点の数を得る
@@ -211,7 +211,7 @@ private:	//データメンバ
 	
 	Vector3 m_normalDirection[enLocalAxisNum];	//各軸の単位方向ベクトル
 	float m_directionLength[enLocalAxisNum];	//各軸の方向ベクトルの長さ
-	int m_tag = EB_NONE_SIDE;							//OBBのタグ
+	int m_tag = EB_NONE_SIDE;					//OBBのタグ
 	bool m_exceptionFlag = false;				//例外フラグ
 
 private:	//staticなデータメンバ
