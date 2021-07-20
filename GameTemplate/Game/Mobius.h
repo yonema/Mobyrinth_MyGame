@@ -1,6 +1,15 @@
 #pragma once
 #include "ModelRender.h"
 
+namespace mobiusConstData
+{
+	//メビウスの輪のモデルのファイルパス
+	constexpr const char* const MODEL_FILEPATH_MOBIUS = "Assets/modelData/Mobius.tkm";
+
+	//メビウスの輪のシェーダーのファイルパス
+	constexpr const char* const SHADER_FILEPATH_MOBIUS = "Assets/shader/PBR.fx";
+}
+
 /// <summary>
 /// メビウスの輪クラス
 /// </summary>
@@ -10,7 +19,7 @@ public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;		//スタート関数
 	~CMobius();						//デストラクタ
 
-public:		//ここのメンバ関数を主に使う。
+public:		//メンバ関数
 
 	/// <summary>
 	/// 場所の設定

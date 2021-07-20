@@ -2,19 +2,21 @@
 #include "Mobius.h"
 #include "LevelObjectManager.h"
 
+using namespace mobiusConstData;
+
 
 //スタート関数
 bool CMobius::Start()
 {
 	//モデルレンダラーの生成
-	m_modelRender = NewGO<CModelRender>(0);
+	m_modelRender = NewGO<CModelRender>(PRIORITY_FIRST);
 
 	//初期化データを作成する
 	ModelInitData initData;
 	//tkmファイルのファイルパスを指定する。
-	initData.m_tkmFilePath = "Assets/modelData/Mobius.tkm";
+	initData.m_tkmFilePath = MODEL_FILEPATH_MOBIUS;
 	//シェーダーファイルのファイルパスを指定する。
-	initData.m_fxFilePath = "Assets/shader/PBR.fx";
+	initData.m_fxFilePath = SHADER_FILEPATH_MOBIUS;
 
 	//シェーダに渡すコンスタントバッファの設定
 
@@ -64,6 +66,7 @@ bool CMobius::Start()
 	m_modelRender->SetRotation(m_rotation);
 	//m_modelRender->SetShadowCasterFlag(true);
 	m_modelRender->SetShadowReceiverFlag(true);
+
 	return true;
 }
 
@@ -74,6 +77,8 @@ CMobius::~CMobius()
 	DeleteGO(m_modelRender);
 	//マネージャーにメビウスの輪が消去されたと伝える
 	CLevelObjectManager::GetInstance()->SetMobius(nullptr);
+
+	return;
 }
 
 /**
