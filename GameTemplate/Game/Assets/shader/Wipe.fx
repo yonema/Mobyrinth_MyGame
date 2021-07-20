@@ -20,6 +20,7 @@ static const int g_top = 0;         //上側から
 static const int g_down = 1;        //下側から
 
 //どの種類のワイプを行うか
+//ここを変更したらHUDConstData.hも変更すること。
 static const int g_wipe = 0;                    //普通のワイプ
 static const int g_circleWipe = 1;              //円形ワイプ
 static const int g_verticalStripeWipe = 2;      //縦縞ワイプ
@@ -31,7 +32,7 @@ static const int g_nega = 7;                    //ネガポジ反転
 static const int g_noise = 8;                   //ノイズ加工
 
 //各ワイプの最大ワイプサイズ
-//ここを変更したら、SceneChange.hの定数も変更すること
+//ここを変更したらHUDConstData.hも変更すること。
 static const float g_wipeMax = g_width;                 //普通のワイプのX軸の最大サイズ
 static const float g_circleWipeMax = g_width / 1.5;     //普通のワイプのY軸の最大サイズ
 static const float g_verticalStripeWipeMax = 64.0f;     //円形ワイプの最大サイズ
@@ -72,7 +73,7 @@ cbuffer cb : register(b0)
 
 
 // ワイプパラメータにアクセスするための定数バッファ
-//ここを変更したら、SceneChange.hの構造体も変更すること
+//ここを変更したらHUDConstData.hも変更すること。
 cbuffer WipeCB : register (b1)
 {
     float2 wipeDirection;   //ワイプする方向

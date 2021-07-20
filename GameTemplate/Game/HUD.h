@@ -184,30 +184,16 @@ private:	//privateなメンバ関数
 		m_wipeParam.inOrOut = inOrOut;
 	};
 
-private:	//構造体
-
-	/// <summary>
-	/// ワイプのパラメータ構造体
-	/// </summary>
-	struct SWipeParam
-	{
-		Vector2 wipeDir = HUDConstData::DIR_WIPE_DEFAULT;	//ワイプの方向
-		float wipeSize = 0.0f;								//ワイプした量
-		int leftOtLight = EN_LEFT;							//右と左どちらからワイプするか？
-		int topOrDown = EN_TOP;								//上と下どちらからワイプするか？
-		int wipeType = HUDConstData::EN_WIPE;				//ワイプの種類
-		int inOrOut = EN_OUT;								//インとアウトどちらにワイプするか？
-	};
 
 private:	//データメンバ
 	RenderTarget m_beforeWipingRenderTarget;	//ワイプ前のレンダリングターゲット
 	Sprite m_mainRenderTargetSprite;			//メインレンダリングターゲットのスプライト
 	Sprite m_afterWipingSprite;					//ワイプした後のスプライト
 	Sprite m_backSprite;						//ワイプの後ろに映すスプライト
-	SWipeParam m_wipeParam;						//ワイプのパラメータ
+	Sprite m_fadeSprite;						//フェードイン、アウトで使うスプライトレンダラー
+	HUDConstData::SWipeParam m_wipeParam;		//ワイプのパラメータ
 	bool m_wipeFlag = false;					//ワイプするか？
 	float m_wipeSpeed = 0.0f;					//ワイプのスピード
 	float m_deltaTime = 0.0f;					//デルタタイム
 
-	Sprite m_fadeSprite;			//フェードイン、アウトで使うスプライトレンダラー
 };

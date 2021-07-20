@@ -226,8 +226,7 @@ void CHUD::SetWipeDirection(const Vector2& dir)
 void CHUD::RandomWipeOut()
 {
 	//0`4‚Ì5‚Â‚Ì—”‚ğ“¾‚é
-	int randNum = rand() % 5;
-	randNum = 0;
+	int randNum = rand() % EN_WIPE_NUM;
 	//ƒƒCƒv‚Ìí—Ş‚ğİ’è‚·‚é
 	SetWipeType(randNum);
 
