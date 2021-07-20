@@ -18,6 +18,8 @@ void CPostEffect::Init()
 {
 	//ブルームを初期化する
 	m_bloom.Init();
+
+	return;
 }
 
 //描画する関数
@@ -64,4 +66,5 @@ void CPostEffect::Draw(RenderContext& renderContext)
 	//メインレンダリングターゲットへの書き込み終了待ち
 	renderContext.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
 
+	return;
 }
