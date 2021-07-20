@@ -17,7 +17,7 @@ public:		//ここのメンバ関数を主に使う
 	/// 初期化。
 	/// </summary>
 	/// <param name="caslData">Caslデータ。</param>
-	void Init(CaslData* caslData);
+	void Init(SCaslData* caslData);
 
 
 

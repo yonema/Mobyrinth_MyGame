@@ -5,7 +5,7 @@
 /// 初期化。
 /// </summary>
 /// <param name="caslData">Caslデータ。</param>
-void MapChip2D::Init(CaslData* caslData)
+void MapChip2D::Init(SCaslData* caslData)
 {
 	//スプライトレンダラーの生成
 	m_spriteRender = NewGO<CSpriteRender>(1);
@@ -24,6 +24,7 @@ void MapChip2D::Init(CaslData* caslData)
 	scale.y = caslData->scale.y;
 	m_spriteRender->SetScale(scale);
 
+	return;
 }
 
 
@@ -31,4 +32,6 @@ MapChip2D::~MapChip2D()
 {
 	if (m_spriteRender)
 		DeleteGO(m_spriteRender);
+
+	return;
 }

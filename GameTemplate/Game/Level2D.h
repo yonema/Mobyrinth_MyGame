@@ -53,7 +53,7 @@ private:
 	//マップチップのユニークポインタ
 	using MapChip2DPtr = std::unique_ptr<MapChip2D>;
 
-public:		//ここのメンバ関数を主に使う
+public:		//メンバ関数
 
 	/// <summary>
 	/// レベルを初期化。
@@ -70,9 +70,9 @@ private:	//privateなメンバ関数
 	/// マップチップ2Dを追加する。
 	/// </summary>
 	/// <param name="caslData">Caslデータ</param>
-	void AddMapChip2D(CaslData* caslData);
+	void AddMapChip2D(SCaslData* caslData);
 
-private:
+private:	//データメンバ
 	std::vector<MapChip2DPtr> m_mapChip2DPtrList;		//マップチップ2D。
 };
 

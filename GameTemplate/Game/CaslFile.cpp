@@ -32,7 +32,7 @@ void CaslFile::Load(const char* filePath)
 	for (int i = 0; i < numLevel; i++)
 	{
 
-		auto caslData = std::make_unique<CaslData>();
+		auto caslData = std::make_unique<SCaslData>();
 		//std::unique_ptr<Level2DObject> levelObject;
 		//レベルファイルに保存してあるのは。
 		//以下全てchar型で保存してある、一つ一つに(,)で区切りがしてある。

@@ -681,7 +681,11 @@ public:
 	}
 };
 
+//í«â¡
 const Vector2 g_VEC2_ZERO = { 0.0f, 0.0f };
+const Vector2 g_VEC2_ONE = { 1.0f,1.0f };
+//í«â¡Ç±Ç±Ç‹Ç≈
+
 const Vector3 g_VEC3_ZERO = { 0.0f,  0.0f,  0.0f };
 const Vector3 g_VEC3_RIGHT = { 1.0f,  0.0f,  0.0f };
 const Vector3 g_VEC3_LEFT = { -1.0f,  0.0f,  0.0f };
@@ -699,6 +703,7 @@ const Vector4 g_VEC4_WHITE = { 1.0f,1.0f,1.0f,1.0f };		//îíêF
 const Vector4 g_VEC4_BLACK = { 0.0f,0.0f,0.0f,1.0f };		//çïêF
 const Vector4 g_VEC4_TRANSPARENT = { 1.0f,1.0f,1.0f,0.0f };	//ìßñæ
 const Vector4 g_VEC4_OPACITY = { 1.0f,1.0f,1.0f,1.0f };		//ïsìßñæ
+//í«â¡Ç±Ç±Ç‹Ç≈
 
 
 /// <summary>
