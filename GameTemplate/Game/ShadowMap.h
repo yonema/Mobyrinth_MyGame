@@ -62,7 +62,7 @@ public:		//メンバ関数
 	(const Vector3& direction, const float length, const Vector3& target);
 
 	/// <summary>
-	/// シャドウのパラメータのポインタの初期化
+	/// シャドウのパラメータのポインタを得る
 	/// </summary>
 	/// <returns>シャドウのパラメータのポインタ</returns>
 	ShadowParam* GetShadowParam()
