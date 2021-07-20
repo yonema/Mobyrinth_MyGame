@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Bloom.h"
 
+//ブルームの定数データを使用可能にする
+using namespace BloomConstData;
+
 //コンストラクタ
 CBloom::CBloom()
 {
@@ -26,6 +29,8 @@ void CBloom::Init()
 
     //ガウシアンブラーの初期化
     InitGaussianBlur();
+
+    return;
 }
 
 /// <summary>
@@ -44,6 +49,8 @@ void CBloom::InitluminanceRenderTarget()
         DXGI_FORMAT_R32G32B32A32_FLOAT,
         DXGI_FORMAT_D32_FLOAT
     );
+
+    return;
 }
 
 /// <summary>
@@ -56,13 +63,13 @@ void CBloom::InitluminanceSprite()
     SpriteInitData luminanceSpriteInitData;
 
     // 輝度抽出用のシェーダーのファイルパスを指定する
-    luminanceSpriteInitData.m_fxFilePath = "Assets/shader/PostEffect.fx";
+    luminanceSpriteInitData.m_fxFilePath = SHADER_FILEPATH_POST_EFFECT;
 
     // 頂点シェーダーのエントリーポイントを指定する
     luminanceSpriteInitData.m_vsEntryPointFunc = spriteRenderConstData::ENTRY_POINT_FUNC_VS_DEFAULT;
 
     // ピクセルシェーダーのエントリーポイントを指定する
-    luminanceSpriteInitData.m_psEntryPoinFunc = "PSSamplingLuminance";
+    luminanceSpriteInitData.m_psEntryPoinFunc = ENTRY_POINT_FUNC_PS_LUMINANCE_SPRITE;
 
     // スプライトの幅と高さはluminnceRenderTargetと同じ
     luminanceSpriteInitData.m_width = g_FRAME_BUFFER_W;
@@ -78,6 +85,8 @@ void CBloom::InitluminanceSprite()
 
     // 作成した初期化情報をもとにスプライトを初期化する
     m_luminanceSprite.Init(luminanceSpriteInitData);
+
+    return;
 }
 
 /// <summary>
@@ -104,14 +113,16 @@ void CBloom::InitGaussianBlur()
     finalSpriteInitData.m_width = g_FRAME_BUFFER_W;
     finalSpriteInitData.m_height = g_FRAME_BUFFER_H;
 
-    finalSpriteInitData.m_fxFilePath = "Assets/shader/PostEffect.fx";
-    finalSpriteInitData.m_psEntryPoinFunc = "PSBloomFinal"; //ブルーム用シェーダー
+    finalSpriteInitData.m_fxFilePath = SHADER_FILEPATH_POST_EFFECT;
+    finalSpriteInitData.m_psEntryPoinFunc = ENTRY_POINT_FUNC_PS_BLOOM; //ブルーム用シェーダー
 
     finalSpriteInitData.m_alphaBlendMode = AlphaBlendMode_Add;  //加算合成
     finalSpriteInitData.m_colorBufferFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 
     //最終的なスプライトの初期化
     m_finalSprite.Init(finalSpriteInitData);
+
+    return;
 }
 
 /// <summary>
@@ -138,11 +149,12 @@ void CBloom::Draw(RenderContext& renderContext)
     renderContext.WaitUntilFinishDrawingToRenderTarget(m_luminanceRenderTarget);
 
     //ガウシアンブラーを4回実行する
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < GAUSSIAN_BLUR_NUM; i++)
     {
-        m_gaussianBlur[i].ExecuteOnGPU(renderContext, 10);
+        m_gaussianBlur[i].ExecuteOnGPU(renderContext, POWER_GAUSSIAN_BLUR);
     }
 
+    return;
 }
 
 /// <summary>
@@ -153,4 +165,6 @@ void CBloom::DrawToMainRenderTarget(RenderContext& renderContext)
 {
     //最終的なスプライトを描画する
     m_finalSprite.Draw(renderContext);
+
+    return;
 }
