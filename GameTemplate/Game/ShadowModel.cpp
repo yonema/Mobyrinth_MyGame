@@ -46,6 +46,7 @@ void CShadowModel::UpdateModel(const Vector3& pos, const Quaternion& rot, const 
 /// </summary>
 void CShadowModel::RemoveShadowModel()
 {
+	//—LŒø‚©H
 	if (m_isValid)
 	{
 		g_graphicsEngine->GetShadowMap().RemoveShadowModel(*m_model);
