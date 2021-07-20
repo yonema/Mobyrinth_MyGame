@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "GaussianBlur.h"
 
+//ガウシアンブラーの定数データを使用可能にする
+using namespace gaussianBlurConstData;
+
 /// <summary>
 /// 初期化。
 /// </summary>
@@ -13,6 +16,8 @@ void CGaussianBlur::Init(Texture* originalTexture)
 	InitRenderTargets();
 	//スプライトを初期化。
 	InitSprites();
+
+	return;
 }
 
 /// <summary>
@@ -53,6 +58,8 @@ void CGaussianBlur::ExecuteOnGPU(RenderContext& rc, float blurPower)
 	m_yBlurSprite.Draw(rc);
 	//レンダリングターゲットへの書き込み終了待ち。
 	rc.WaitUntilFinishDrawingToRenderTarget(m_yBlurRenderTarget);
+
+	return;
 }
 
 /// <summary>
@@ -62,7 +69,7 @@ void CGaussianBlur::InitRenderTargets()
 {
 	//Xブラー用のレンダリングターゲットを作成する。
 	m_xBlurRenderTarget.Create(
-		m_originalTexture->GetWidth() / 2,
+		m_originalTexture->GetWidth() / 2,	//X方向の解像度を半分にする
 		m_originalTexture->GetHeight(),
 		1,
 		1,
@@ -72,13 +79,15 @@ void CGaussianBlur::InitRenderTargets()
 
 	//Yブラー用のレンダリングターゲットを作成する。
 	m_yBlurRenderTarget.Create(
-		m_originalTexture->GetWidth() / 2,
-		m_originalTexture->GetHeight() / 2,
+		m_originalTexture->GetWidth() / 2,	//X方向と
+		m_originalTexture->GetHeight() / 2,	//Y方向の解像度を半分にする
 		1,
 		1,
 		m_originalTexture->GetFormat(),
 		DXGI_FORMAT_D32_FLOAT
 	);
+
+	return;
 }
 
 /// <summary>
@@ -89,9 +98,9 @@ void CGaussianBlur::InitSprites()
 	//横ブラー用のスプライトを初期化する。
 	{
 		SpriteInitData xBlurSpriteInitData;
-		xBlurSpriteInitData.m_fxFilePath = "Assets/shader/gaussianBlur.fx";
-		xBlurSpriteInitData.m_vsEntryPointFunc = "VSXBlur";
-		xBlurSpriteInitData.m_psEntryPoinFunc = "PSBlur";
+		xBlurSpriteInitData.m_fxFilePath = SHADER_FILEPATH_GAUSSIAN_BLUR;
+		xBlurSpriteInitData.m_vsEntryPointFunc = ENTRY_POINT_FUNC_VS_X_BLUR;
+		xBlurSpriteInitData.m_psEntryPoinFunc = ENTRY_POINT_FUNC_PS_BLUR;
 		//スプライトの解像度はm_xBlurRenderTargetと同じ。
 		xBlurSpriteInitData.m_width = m_xBlurRenderTarget.GetWidth();
 		xBlurSpriteInitData.m_height = m_xBlurRenderTarget.GetHeight();
@@ -109,9 +118,9 @@ void CGaussianBlur::InitSprites()
 	//縦ブラー用のスプライトを初期化する。
 	{
 		SpriteInitData yBlurSpriteInitData;
-		yBlurSpriteInitData.m_fxFilePath = "Assets/shader/gaussianBlur.fx";
-		yBlurSpriteInitData.m_vsEntryPointFunc = "VSYBlur";
-		yBlurSpriteInitData.m_psEntryPoinFunc = "PSBlur";
+		yBlurSpriteInitData.m_fxFilePath = SHADER_FILEPATH_GAUSSIAN_BLUR;
+		yBlurSpriteInitData.m_vsEntryPointFunc = ENTRY_POINT_FUNC_VS_Y_BLUR;
+		yBlurSpriteInitData.m_psEntryPoinFunc = ENTRY_POINT_FUNC_PS_BLUR;
 		//スプライトの解像度はm_yBlurRenderTargetと同じ。
 		yBlurSpriteInitData.m_width = m_yBlurRenderTarget.GetWidth();
 		yBlurSpriteInitData.m_height = m_yBlurRenderTarget.GetHeight();
@@ -126,6 +135,8 @@ void CGaussianBlur::InitSprites()
 		//初期化情報をもとに縦ブラー用のスプライトを初期化する。
 		m_yBlurSprite.Init(yBlurSpriteInitData);
 	}
+
+	return;
 }
 
 /// <summary>
@@ -143,4 +154,6 @@ void CGaussianBlur::UpdateWeightsTable(float blurPower)
 	for (int i = 0; i < NUM_WEIGHTS; i++) {
 		m_weights[i] /= total;
 	}
+
+	return;
 }

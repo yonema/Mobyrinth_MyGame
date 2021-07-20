@@ -5,7 +5,7 @@
 /**
  * @brief ブルームの定数データ
 */
-namespace BloomConstData
+namespace bloomConstData
 {
 	//ガウシアンブラーの数
 	constexpr int GAUSSIAN_BLUR_NUM = 4;
@@ -68,7 +68,7 @@ private:	//privateなメンバ関数
 private:	//データメンバ
 	RenderTarget m_luminanceRenderTarget;	//輝度抽出用のレンダリングターゲット
 	Sprite m_luminanceSprite;				//輝度抽出用のスプライト
-	CGaussianBlur m_gaussianBlur[BloomConstData::GAUSSIAN_BLUR_NUM];	//ガウシアンブラー４枚
+	CGaussianBlur m_gaussianBlur[bloomConstData::GAUSSIAN_BLUR_NUM];	//ガウシアンブラー４枚
 	Sprite m_finalSprite;					//最終的なスプライト
 
 };

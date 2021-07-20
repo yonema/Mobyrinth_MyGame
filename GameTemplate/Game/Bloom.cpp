@@ -2,7 +2,7 @@
 #include "Bloom.h"
 
 //ブルームの定数データを使用可能にする
-using namespace BloomConstData;
+using namespace bloomConstData;
 
 //コンストラクタ
 CBloom::CBloom()
