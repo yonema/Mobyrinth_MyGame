@@ -35,7 +35,11 @@ public:		//ここのメンバ関数を主に使う
 	/// <param name="h">スプライトの縦幅</param>
 	/// <param name="pivot">ピボット（基点）</param>
 	/// <param name="alphaBlendMode">アルファブレンディングモード</param>
-	void Init(const char* texFilePath, float w, float h, const Vector2& pivot = { 0.5f,0.5f },
+	void Init(
+		const char* texFilePath,
+		const float w,
+		const float h,
+		const Vector2& pivot = spriteRenderConstData::SPRITE_PIVOT_DEFALUT,
 		AlphaBlendMode alphaBlendMode = AlphaBlendMode_None);
 
 	/// <summary>
@@ -115,7 +119,7 @@ public:		//ここのメンバ関数を主に使う
 	/// m_positionの値を返す。
 	/// </summary>
 	/// <returns>m_position</returns>
-	const Vector3& GetPosition()
+	const Vector3& GetPosition() const
 	{
 		return m_position;
 	}
@@ -124,7 +128,7 @@ public:		//ここのメンバ関数を主に使う
 	 * @brief 乗算カラーを得る
 	 * @return 乗算カラー
 	*/
-	const Vector4& GetMulColor()
+	const Vector4& GetMulColor() const
 	{
 		return m_sprite.GetMulColor();
 	}
@@ -133,7 +137,7 @@ private:	//データメンバ
 	Sprite m_sprite;							//スプライトクラス
 	SpriteInitData m_initData;					//スプライトの初期化データ。構造体。
 	
-	Vector3 m_position = { 100.0f,0.0f,0.0f };	//場所
+	Vector3 m_position = g_VEC3_ZERO;	//場所
 	Quaternion m_rotation = g_QUAT_IDENTITY;		//回転
 	//座標系の関係で左右反転するから
 	//xの拡大を反転させる
