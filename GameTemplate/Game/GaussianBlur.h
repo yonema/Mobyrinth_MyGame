@@ -1,6 +1,25 @@
 #pragma once
 
+/**
+ * @brief ガウシアンブラーの定数データ
+*/
+namespace gaussianBlurConstData
+{
+	//重みの数
+	constexpr int NUM_WEIGHTS = 8;
 
+	//ガウシアンブラーのシェーダーファイルパス
+	constexpr const char* const SHADER_FILEPATH_GAUSSIAN_BLUR = "Assets/shader/gaussianBlur.fx";
+
+	//Xブラー用の頂点シェーダーのエントリーポイント
+	constexpr const char* const ENTRY_POINT_FUNC_VS_X_BLUR = "VSXBlur";
+
+	//Yブラー用の頂点シェーダーのエントリーポイント
+	constexpr const char* const ENTRY_POINT_FUNC_VS_Y_BLUR = "VSYBlur";
+
+	//ブラー用のピクセルシェーダーのエントリーポイント
+	constexpr const char* const ENTRY_POINT_FUNC_PS_BLUR = "PSBlur";
+}
 
 /// <summary>
 /// ガウシアンブラークラス。
@@ -49,8 +68,7 @@ private:	//privateなメンバ関数
 	void UpdateWeightsTable(float blurPower);
 
 private:	//データメンバ
-	enum { NUM_WEIGHTS = 8 };				//重みの数。
-	float m_weights[NUM_WEIGHTS];			//重みテーブル。
+	float m_weights[gaussianBlurConstData::NUM_WEIGHTS];			//重みテーブル。
 	Texture* m_originalTexture = nullptr;	//オリジナルテクスチャ。
 	RenderTarget m_xBlurRenderTarget;		//横ボケ画像を描画するレンダリングターゲット。
 	RenderTarget m_yBlurRenderTarget;		//縦ボケ画像を描画するレンダリングターゲット。
