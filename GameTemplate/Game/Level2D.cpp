@@ -44,6 +44,7 @@ void CLevel2D::Init(
 		}
 	}
 
+	return;
 }
 
 
@@ -51,12 +52,14 @@ void CLevel2D::Init(
 /// マップチップ2Dを追加する。
 /// </summary>
 /// <param name="caslData">Caslデータ</param>
-void CLevel2D::AddMapChip2D(CaslData* caslData)
+void CLevel2D::AddMapChip2D(SCaslData* caslData)
 {
 	auto mapChip2DPtr = std::make_unique<MapChip2D>();
 	mapChip2DPtr.get()->Init(caslData);
 	//std::unique_ptrを移動させる時はstd::move()を使う。
 	m_mapChip2DPtrList.push_back(std::move(mapChip2DPtr));
+
+	return;
 }
 
 
