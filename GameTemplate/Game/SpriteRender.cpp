@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SpriteRender.h"
 
-
+//スプライトレンダラーの定数データを使用可能にする
 using namespace spriteRenderConstData;
 
 //スタート関数
@@ -24,7 +24,7 @@ CSpriteRender::~CSpriteRender()
 /// <param name="w">スプライトの横幅</param>
 /// <param name="h">スプライトの縦幅</param>
 /// <param name="pivot">ピボット（基点）</param>
-void CSpriteRender::Init(const char* texFilePath, float w, float h, const Vector2& pivot,
+void CSpriteRender::Init(const char* texFilePath, const float w, const float h, const Vector2& pivot,
 	AlphaBlendMode alphaBlendMode)
 {
 	//スプライトの初期化用データ
@@ -63,6 +63,8 @@ void CSpriteRender::Render(RenderContext& rc)
 
 	//スプライトの描画用関数
 	m_sprite.Draw(rc);
+
+	return;
 }
 
 //一番上に描画する関数
@@ -74,4 +76,6 @@ void CSpriteRender::PostRender(RenderContext& rc)
 
 	//スプライトの描画用関数
 	m_sprite.Draw(rc);
+
+	return;
 }

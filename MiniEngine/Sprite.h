@@ -150,7 +150,7 @@ public:		//メンバ関数
 	 * @brief 乗算カラーを得る
 	 * @return 乗算カラー
 	*/
-	const Vector4& GetMulColor()
+	const Vector4& GetMulColor() const
 	{
 		return m_constantBufferCPU.mulColor;
 	}
