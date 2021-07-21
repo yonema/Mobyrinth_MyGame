@@ -280,7 +280,6 @@ private:	//データメンバ
 
 	bool m_wipeInFlag = false;						//ワイプインする？
 
-	CSpriteRender* m_goalSR = nullptr;				//ゴールのスプライト
 	float m_switchTime = stageBaseConstData::SWITCH_TIME_DEFAULT;	//スイッチのタイム
 
 	/*
@@ -305,7 +304,6 @@ private:	//データメンバ
 	CSoundCue* m_bgmStage2 = nullptr;				//BGMのサウンドキュー
 	CSoundCue* m_loop_bgmStage1 = nullptr;			//BGMのサウンドキュー
 	CSoundCue* m_loop_bgmStage2 = nullptr;			//BGMのサウンドキュー
-	CSoundCue* m_goalSE = nullptr;					//m_goalSEのサウンドキュー
 	bool m_check_loop1 = false;						//ループ確認
 	bool m_check_loop2 = false;						//ループ確認
 	bool m_initedBGM = false;						//BGMが初期化済みか？

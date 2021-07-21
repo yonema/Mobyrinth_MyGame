@@ -19,9 +19,6 @@ bool Player::Start()
 
 	//キャラクターコントローラーの初期化
 	InitMyCharacterController();
-	
-	//エフェクトの初期化
-	InitEffect();
 
 	//サウンドを初期化
 	InitSound();
@@ -48,8 +45,6 @@ Player::~Player()
 	//ゴール時のプレイヤーのモデルレンダラーを破棄
 	DeleteGO(m_goalPlayerMR);
 	
-	//ゴール時のエフェクトを破棄
-	DeleteGO(m_goalEffect);
 
 	//落ちてくるときのSEを破棄
 	DeleteGO(m_fallstartSE);
@@ -299,18 +294,6 @@ void Player::InitMyCharacterController()
 	return;
 }
 
-/**
- * @brief エフェクトの初期化
-*/
-void Player::InitEffect()
-{
-	//ゴール時のエフェクトの生成
-	m_goalEffect = NewGO<Effect>(PRIORITY_FIRST);
-	//初期化
-	m_goalEffect->Init(EFFECT_FILEPATH_GOAL);
-
-	return;
-}
 
 /**
  * @brief サウンドを初期化
@@ -1180,15 +1163,6 @@ void Player::Goal()
 		m_goalPlayerMR->SetPosition(m_position);
 		//ゴール用のモデルの回転を更新する
 		m_goalPlayerMR->SetRotation(m_finalWPRot);
-
-		//ゴール時のエフェクトの座標を更新する
-		m_goalEffect->SetPosition(m_position);
-		//ゴール時のエフェクトの回転を更新する
-		m_goalEffect->SetRotation(m_finalWPRot);
-		//ゴール時のエフェクトの拡大を更新する
-		m_goalEffect->SetScale(EFFECT_SCALE_GOAL);
-		//ゴール時のエフェクトを再生する
-		m_goalEffect->Play();
 
 		//ゴール時のタイマーを初期化する
 		m_goalTimer = 0.0f;
