@@ -240,7 +240,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		else if (objData.EqualObjectName(GetLevelObjectName(EN_OO_TYPE_FLAME)) == true)
 		{
 			//障害オブジェクトの生成
-			NewObstacleObject<OObigFire>(objData);
+			NewObstacleObject<OOflame>(objData);
 			return true;
 		}
 		//壁
@@ -390,7 +390,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		{
 			//障害オブジェクトの生成
 			//透明モード
-			NewObstacleObject<OObigFire>(objData, MODE_TRANS);
+			NewObstacleObject<OOflame>(objData, MODE_TRANS);
 			return true;
 		}
 		//箱（透明）

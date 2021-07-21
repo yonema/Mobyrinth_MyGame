@@ -36,7 +36,7 @@
 #include "ROkey_padlock.h"
 
 //「障害オブジェクト」ObstacleObject
-#include "OObigFire.h"
+#include "OOflame.h"
 #include "OOwall.h"
 #include "OOgoal.h"
 #include "OOpadlock.h"

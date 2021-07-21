@@ -25,7 +25,7 @@ namespace shadowConstData
 /// <summary>
 /// シャドウマップクラス
 /// </summary>
-class CShadowMap
+class CShadowMap : private Noncopyable
 {
 public:		//メンバ関数
 

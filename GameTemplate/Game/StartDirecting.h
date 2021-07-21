@@ -8,7 +8,7 @@ class CGameCamera;
 /**
  * @brief 開始演出クラス
 */
-class CStartDirecting
+class CStartDirecting : private Noncopyable
 {
 public:		//自動で呼ばれるメンバ関数
 	CStartDirecting() {};				//コンストラクタ

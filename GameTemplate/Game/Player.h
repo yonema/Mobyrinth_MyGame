@@ -139,7 +139,7 @@ public:		//メンバ関数
 	 * @brief スタン中か？を得る
 	 * @return スタン中か？
 	*/
-	const bool GetStunFlag()const
+	bool GetStunFlag()const
 	{
 		return m_stunFlag;
 	}
@@ -165,7 +165,7 @@ public:		//メンバ関数
 	 * @retval true 持っている
 	 * @retval false 持っていない
 	*/
-	const bool GetHoldObject()const
+	bool GetHoldObject()const
 	{
 		return m_holdObject;
 	}
@@ -238,7 +238,7 @@ public:		//メンバ関数
 	 * @brief 現在のプレイヤーの左側のウェイポイントの番号を得る
 	 * @return 左側のウェイポイントの番号
 	*/
-	const int GetLeftPointIndex()const
+	int GetLeftPointIndex()const
 	{
 		return m_lpIndex;
 	}
@@ -256,7 +256,7 @@ public:		//メンバ関数
 	 * @brief 現在のプレイヤーの右側のウェイポイントの番号を得る
 	 * @return 右側のウェイポイント
 	*/
-	const int GetRightPointIndex()const
+	int GetRightPointIndex()const
 	{
 		return m_rpIndex;
 	}
@@ -286,7 +286,7 @@ public:		//メンバ関数
 	 * @retval 0 enLeft
 	 * @retval 1 enRight
 	*/
-	const int GetEnLeftOrRight()const
+	int GetEnLeftOrRight()const
 	{
 		return m_leftOrRight;
 	}
@@ -295,7 +295,7 @@ public:		//メンバ関数
 	 * @brief 自身がどのウェイポイントにいるか表すステートを戻す関数
 	 * @return ウェイポイントの番号
 	*/
-	const int GetWayPointState()const
+	int GetWayPointState()const
 	{
 		return m_wayPointState;
 	}
@@ -322,7 +322,7 @@ public:		//メンバ関数
 	 * @brief UFOに捕まっているか？を取得
 	 * @return UFOに捕まっているか？
 	*/
-	const bool GetCapturedUFOFlag()const
+	bool GetCapturedUFOFlag()const
 	{
 		return m_capturedUFOFlag;
 	}
@@ -340,7 +340,7 @@ public:		//メンバ関数
 	 * @brief 落ちているか？を取得
 	 * @return 落ちているか？
 	*/
-	const bool GetFallFalg() const
+	bool GetFallFalg() const
 	{
 		return m_fallFlag;
 	}
@@ -565,8 +565,9 @@ private:	//データメンバ
 	/*
 	* 状態
 	*/
-	int m_animState;									//アニメーションの状態
-	int m_leftOrRight = EN_LEFT;						//キャラクターの左右の向き
+	//アニメーションの状態
+	playerConstData::EN_ANIMATION_CLIP m_animState = playerConstData::EN_ANIM_CLIP_IDLE;
+	EN_LEFT_OR_RIGHT m_leftOrRight = EN_LEFT;			//キャラクターの左右の向き
 	CReversibleObject* m_reversibleObject = nullptr;	//持っている反転オブジェクトのポインタ
 
 	/*
@@ -598,8 +599,8 @@ private:	//データメンバ
 	/*
 	* キャプチャ関連
 	*/
-	Quaternion m_capturedRotation = m_rotation;		//キャプチャ中にカメラに渡す回転
-	Vector3 m_capturedPosition = m_position;		//キャプチャ中にカメラに渡す座標
+	Quaternion m_capturedRotation = g_QUAT_IDENTITY;	//キャプチャ中にカメラに渡す回転
+	Vector3 m_capturedPosition = g_VEC3_ZERO;		//キャプチャ中にカメラに渡す座標
 
 	/*
 	* ゴール関連

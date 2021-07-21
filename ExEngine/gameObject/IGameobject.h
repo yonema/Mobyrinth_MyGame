@@ -5,13 +5,15 @@
 #pragma once
 
 #include <list>
+#include "../../GameTemplate/Game/Noncopyable.h"
 
 class RenderContext;
 
 /*!
 	*@brief	ゲームオブジェクト。
 	*/
-class IGameObject {
+class IGameObject : private Noncopyable
+{
 public:
 	/*!
 		*@brief	デストラクタ

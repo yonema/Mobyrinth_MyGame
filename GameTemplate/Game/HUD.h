@@ -6,7 +6,7 @@
 /// <summary>
 /// 場面転換クラス
 /// </summary>
-class CHUD
+class CHUD : private Noncopyable
 {
 public:		//自動で呼ばれるメンバ関数
 	CHUD();			//コンストラクタ

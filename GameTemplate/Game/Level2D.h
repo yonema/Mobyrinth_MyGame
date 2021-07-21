@@ -48,7 +48,8 @@ struct Level2DObjectData {
 /// <summary>
 /// レベル2D
 /// </summary>
-class CLevel2D {
+class CLevel2D : private Noncopyable
+{
 private:
 	//マップチップのユニークポインタ
 	using MapChip2DPtr = std::unique_ptr<MapChip2D>;

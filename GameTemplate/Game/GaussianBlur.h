@@ -24,7 +24,8 @@ namespace gaussianBlurConstData
 /// <summary>
 /// ガウシアンブラークラス。
 /// </summary>
-class CGaussianBlur {
+class CGaussianBlur : private Noncopyable
+{
 public:		//メンバ関数
 	/// <summary>
 	/// 初期化。

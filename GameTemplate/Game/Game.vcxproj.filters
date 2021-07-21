@@ -311,9 +311,6 @@
     <ClCompile Include="ObstacleObject.cpp">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
-    <ClCompile Include="OObigFire.cpp">
-      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
-    </ClCompile>
     <ClCompile Include="OObox.cpp">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
@@ -502,6 +499,9 @@
     </ClCompile>
     <ClCompile Include="MiniEngine.cpp">
       <Filter>MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="OOflame.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -698,9 +698,6 @@
       <Filter>MyCode\Light</Filter>
     </ClInclude>
     <ClInclude Include="ObstacleObject.h">
-      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
-    </ClInclude>
-    <ClInclude Include="OObigFire.h">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
     <ClInclude Include="OObox.h">
@@ -954,6 +951,9 @@
     </ClInclude>
     <ClInclude Include="HUD.h">
       <Filter>MyCode\Graphic\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="OOflame.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
