@@ -1,6 +1,6 @@
 #pragma once
 #include "ReversibleObject.h"
-#include "OObigFire.h"
+#include "OOflame.h"
 
 /// <summary>
 /// 反転オブジェクト。

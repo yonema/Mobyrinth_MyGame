@@ -6,7 +6,7 @@
 /// OBBWorld
 /// 衝突解決させるOBBを登録する場所
 /// </summary>
-class COBBWorld
+class COBBWorld : private Noncopyable
 {
 private:	//自動で呼ばれるメンバ関数
 	COBBWorld() {};			//コンストラクタををprivateに隠す

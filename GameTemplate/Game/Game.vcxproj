@@ -329,7 +329,7 @@
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="OObigFire.cpp" />
+    <ClCompile Include="OOflame.cpp" />
     <ClCompile Include="OObox.cpp" />
     <ClCompile Include="OOgoal.cpp" />
     <ClCompile Include="OOpadlock.cpp" />
@@ -486,7 +486,7 @@
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="OObigFire.h" />
+    <ClInclude Include="OOflame.h" />
     <ClInclude Include="OObox.h" />
     <ClInclude Include="OOgoal.h" />
     <ClInclude Include="OOpadlock.h" />

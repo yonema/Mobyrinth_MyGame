@@ -23,7 +23,7 @@ namespace bloomConstData
 	constexpr const char* const ENTRY_POINT_FUNC_PS_BLOOM = "PSBloomFinal";
 }
 
-class CBloom
+class CBloom : private Noncopyable
 {
 public:		//自動で呼ばれるメンバ関数
 	CBloom();		//コンストラクタ

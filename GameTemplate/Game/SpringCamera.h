@@ -4,7 +4,7 @@
 /// <summary>
 /// ばねカメラ
 /// </summary>
-class CSpringCamera
+class CSpringCamera : private Noncopyable
 {
 public:		//自動で呼ばれるメンバ関数
 	CSpringCamera();		//コンストラクタ

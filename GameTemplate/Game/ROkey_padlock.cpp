@@ -49,7 +49,7 @@ void ROkey_padlock::QuerySub()
 	}
 	//else if (GetObjectType() == enROPadlock)
 	//{
-	//	QueryLOs<OObigFire>(EN_OO_TYPE_FLAME, [&](OObigFire* bigFire) -> bool
+	//	QueryLOs<OOflame>(EN_OO_TYPE_FLAME, [&](OOflame* bigFire) -> bool
 	//		{
 	//			if (IsHitLevelObject(*this, *bigFire, hitDot))
 	//			{

@@ -21,7 +21,7 @@ void ROmizu_kori::QuerySub()
 	if (GetObjectType() == EN_RO_TYPE_WATER)
 	{
 		//障害オブジェクトの「でかい火」をクエリ
-		QueryLOs<OObigFire>(EN_OO_TYPE_FLAME, [&](OObigFire* bigFire) -> bool
+		QueryLOs<OOflame>(EN_OO_TYPE_FLAME, [&](OOflame* bigFire) -> bool
 			{
 				if (m_actionFlag)
 				{

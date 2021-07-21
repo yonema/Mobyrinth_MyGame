@@ -3,7 +3,7 @@
 /// <summary>
 /// シャドウ用モデルクラス
 /// </summary>
-class CShadowModel
+class CShadowModel : private Noncopyable
 {
 public:		//自動で呼ばれるメンバ関数
 	CShadowModel();		//コンストラクタ

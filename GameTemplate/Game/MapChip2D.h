@@ -6,7 +6,7 @@
 /// <summary>
 /// マップチップ2D。
 /// </summary>
-class MapChip2D
+class MapChip2D : private Noncopyable
 {
 public:		//自動で呼ばれるメンバ関数
 	~MapChip2D();

@@ -22,7 +22,7 @@ struct SCaslData
 /// <summary>
 /// caslファイルを扱うクラス
 /// </summary>
-class CaslFile
+class CaslFile : private Noncopyable
 {
 private:
 	//CaslDataのユニークポインタ

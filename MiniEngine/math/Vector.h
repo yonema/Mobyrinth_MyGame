@@ -701,6 +701,7 @@ const Vector3 g_VEC3_ONE = { 1.0f, 1.0f, 1.0f };
 //追加
 const Vector4 g_VEC4_WHITE = { 1.0f,1.0f,1.0f,1.0f };		//白色
 const Vector4 g_VEC4_BLACK = { 0.0f,0.0f,0.0f,1.0f };		//黒色
+const Vector4 g_VEC4_RED = { 1.0f,0.0f,0.0f,1.0f };			//赤色
 const Vector4 g_VEC4_TRANSPARENT = { 1.0f,1.0f,1.0f,0.0f };	//透明
 const Vector4 g_VEC4_OPACITY = { 1.0f,1.0f,1.0f,1.0f };		//不透明
 //追加ここまで

@@ -4,7 +4,7 @@
 /// <summary>
 /// ポストエフェクトクラス
 /// </summary>
-class CPostEffect
+class CPostEffect : private Noncopyable
 {
 public:		//自動で呼ばれるメンバ関数
 	CPostEffect();		//コンストラクタ
