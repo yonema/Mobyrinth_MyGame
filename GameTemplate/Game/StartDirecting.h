@@ -42,7 +42,7 @@ public:		//メンバ関数
 	 * @brief ステージの開始演出を行っているか？を得る
 	 * @return 開始演出を行っているか？
 	*/
-	const bool GetStartDirectingFlag()const
+	bool GetStartDirectingFlag()const
 	{
 		return m_startDirectingFlag;
 	}

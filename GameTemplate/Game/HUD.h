@@ -110,7 +110,7 @@ public:		//メンバ関数
 	/// どれくらいワイプしているかを得る
 	/// </summary>
 	/// <returns>どれくらいワイプしているか</returns>
-	const float GetWipeSize() const
+	float GetWipeSize() const
 	{
 		return m_wipeParam.wipeSize;
 	}
@@ -120,13 +120,13 @@ public:		//メンバ関数
 	/// </summary>
 	/// <param name="wipeType">ワイプの種類</param>
 	/// <returns>各種類のワイプの最大サイズ</returns>
-	const float GetWipeSizeMax(const int wipeType) const;
+	float GetWipeSizeMax(const int wipeType) const;
 
 	/// <summary>
 	/// 現在のワイプの種類を得る
 	/// </summary>
 	/// <returns>現在のワイプの種類</returns>
-	const int GetWipeType() const
+	int GetWipeType() const
 	{
 		return m_wipeParam.wipeType;
 	}
@@ -135,7 +135,7 @@ public:		//メンバ関数
 	/// ワイプが最後までワイプしたかを得る
 	/// </summary>
 	/// <returns>最後までワイプしたか？</returns>
-	const bool IsWipeFinished() const;
+	bool IsWipeFinished() const;
 
 	/**
 	 * @brief フェードのスプライトのアルファ値を設定する

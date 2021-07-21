@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "OOflame.h"
 
+//ObstacleObjectのモデルのファイルパスとOBBのサイズの定数データを使用可能にする
+using namespace OOsFilepathAndObbSizeConstData;
 //炎の定数データを使用可能にする
 using namespace flameConstData;
 

@@ -8,10 +8,6 @@ namespace flameConstData
 {
 	//最大HP
 	constexpr int HP_MAX = 3;
-	//炎のモデルのファイルパス
-	constexpr const char* const MODEL_FILEPATH_FLAME = "Assets/modelData/flame.tkm";
-	//炎のOBBのサイズ
-	const Vector3 SIZE_OBB_FLAME = { 300.0f,300.0f,400.0f };
 
 	/*
 	* ポイントライト関連の定数

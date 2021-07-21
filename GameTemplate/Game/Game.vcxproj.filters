@@ -955,6 +955,9 @@
     <ClInclude Include="OOflame.h">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
+    <ClInclude Include="OOsFilepathAndObbSizeConstData.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">

@@ -2,6 +2,7 @@
 #include "LevelObjectBase.h"
 #include "ModelRender.h"
 #include "OBBWorld.h"
+#include "OOsFilepathAndObbSizeConstData.h"
 
 
 /// <summary>

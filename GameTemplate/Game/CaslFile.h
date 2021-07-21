@@ -40,7 +40,7 @@ public:		//メンバ関数
 	/// Caslデータの数を取得
 	/// </summary>
 	/// <returns></returns>
-	const int GetNumCaslData() const
+	int GetNumCaslData() const
 	{
 		return m_caslDataList.size();
 	}

@@ -39,7 +39,7 @@ public:		//メンバ関数
 	/// 有効かどうか？
 	/// </summary>
 	/// <returns>有効か？</returns>
-	const bool IsValid() const
+	bool IsValid() const
 	{
 		return m_isValid;
 	}

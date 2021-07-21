@@ -1,6 +1,8 @@
 #pragma once
 #include "ObstacleObject.h"
 
+
+
 /// <summary>
 /// 障害オブジェクト
 /// 箱オブジェクト
