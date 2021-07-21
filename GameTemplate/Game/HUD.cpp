@@ -255,7 +255,7 @@ void CHUD::RandomWipeOut()
 /// </summary>
 /// <param name="wipeType">ワイプの種類</param>
 /// <returns>各種類のワイプの最大サイズ</returns>
-const float CHUD::GetWipeSizeMax(const int wipeType) const
+float CHUD::GetWipeSizeMax(const int wipeType) const
 {
 	//ワイプの最大のサイズ
 	float sizeMax = SIZE_MAX_X_WIPE;
@@ -298,7 +298,7 @@ const float CHUD::GetWipeSizeMax(const int wipeType) const
 /// ワイプが最後までワイプしたかを得る
 /// </summary>
 /// <returns>最後までワイプしたか？</returns>
-const bool CHUD::IsWipeFinished() const
+bool CHUD::IsWipeFinished() const
 {
 	//最後までワイプしたか？
 	bool isFinished = !m_wipeFlag;

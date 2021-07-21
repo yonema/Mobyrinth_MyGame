@@ -46,7 +46,7 @@ public:		//ƒƒ“ƒoŠÖ”
 	 * @param [out] IntersectPos Œğ·“_
 	 * @return Œğ·‚µ‚Ä‚¢‚é‚©H
 	*/
-	const bool GetIntersectPosWithMobius(
+	bool GetIntersectPosWithMobius(
 		const Vector3& startPos, const Vector3& endPos, Vector3* const IntersectPos = nullptr
 	);
 

@@ -88,7 +88,7 @@ CMobius::~CMobius()
  * @param [out] IntersectPos Œğ·“_
  * @return Œğ·‚µ‚Ä‚¢‚é‚©H
 */
-const bool CMobius::GetIntersectPosWithMobius(
+bool CMobius::GetIntersectPosWithMobius(
 	const Vector3& startPos, const Vector3& endPos, Vector3* const IntersectPos
 )
 {

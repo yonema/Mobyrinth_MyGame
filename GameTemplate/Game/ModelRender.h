@@ -184,7 +184,7 @@ public:		//メンバ関数
 	/// アニメーションの再生中？
 	/// </summary>
 	/// <returns></returns>
-	const bool IsPlayingAnimation() const
+	bool IsPlayingAnimation() const
 	{
 		return m_animationPtr->IsPlaying();
 	}

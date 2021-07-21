@@ -443,6 +443,7 @@
     <ClInclude Include="LeftOrRightData.h" />
     <ClInclude Include="ModelRenderConstData.h" />
     <ClInclude Include="OBBConstData.h" />
+    <ClInclude Include="OOsFilepathAndObbSizeConstData.h" />
     <ClInclude Include="PlayerConstData.h" />
     <ClInclude Include="PriorityData.h" />
     <ClInclude Include="resource.h" />
