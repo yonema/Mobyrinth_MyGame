@@ -19,23 +19,6 @@ bool IStageBase::Start()
 	m_sky->SetScale(MODEL_SCALE_SKY);
 
 
-	//ゴールのスプライトの生成
-	m_goalSR = NewGO<CSpriteRender>(PRIORITY_SECOND);
-	//初期化
-	m_goalSR->Init(
-		SPRITE_FILEPATH_GOAL,
-		SPRITE_WIDHT_GOAL,
-		SPRITE_HEIGHT_GOAL,
-		spriteRenderConstData::SPRITE_PIVOT_DEFALUT,
-		AlphaBlendMode_Trans
-	);
-	m_goalSR->SetPosition(SPRITE_POSITION_GOAL);
-	m_goalSR->SetPostRenderFlag(true);
-
-	//無効化する
-	m_goalSR->Deactivate();
-
-
 	//キャパシティを表示するスプライトの生成と初期化
 	m_capacityUI = NewGO<CCapacityUI>(PRIORITY_FIRST);
 
@@ -43,13 +26,6 @@ bool IStageBase::Start()
 	//Tipsコントローラーの生成
 	m_tipsController = NewGO<CTipsController>(PRIORITY_FIRST);
 
-
-	//m_goalSEのサウンドキューを生成する
-	m_goalSE = NewGO<CSoundCue>(PRIORITY_FIRST);
-	//m_goalSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_goalSE->Init(SOUND_FILEPATH_SE_GOAL);
-	//音量調節
-	m_goalSE->SetVolume(SOUND_VOLUME_SE_GOAL);
 
 	//セーブデータをデータメンバに保持させる
 	m_highestClearStageNum = m_save.GetSaveData().highestClearStageNum;
@@ -532,8 +508,6 @@ IStageBase::~IStageBase()
 	DeleteGO(m_tipsController);
 	DeleteGO(m_capacityUI);
 
-	//スプライトの破棄
-	DeleteGO(m_goalSR);
 
 	//サウンドの破棄
 	DeleteGO(m_bgmStage1);
@@ -708,16 +682,6 @@ void IStageBase::Quit()
 /// </summary>
 void IStageBase::Goal()
 {
-	//ゴールのスプライトが非有効か？
-	//一度だけ呼ぶ
-	if (!m_goalSR->IsActive()) 
-	{
-		//ゴールのSEをワンショット再生で再生する。
-		m_goalSE->Play(false);
-		//ゴールのスプライトを有効化する
-		m_goalSR->Activate();
-	}
-	
 	//ゴールした後の時間を計測する	//デルタタイムを掛ける
 	m_goalTimer += GameTime().GetFrameDeltaTime();
 

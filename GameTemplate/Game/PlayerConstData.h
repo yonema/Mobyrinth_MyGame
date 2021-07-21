@@ -157,17 +157,6 @@ namespace playerConstData
 
 
 	/*
-	* エフェクト関連の定数
-	*/
-
-	//ゴール時のエフェクトのファイルパス
-	constexpr const char16_t* const EFFECT_FILEPATH_GOAL = u"Assets/effect2/goal.efk";
-	//ゴール時のエフェクトの拡大率
-	const Vector3 EFFECT_SCALE_GOAL = { 150.0f,150.0f,150.0f };
-
-
-
-	/*
 	* サウンド関連の定数
 	*/
 

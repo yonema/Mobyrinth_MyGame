@@ -409,12 +409,6 @@ private://privateなメンバ関数
 	*/
 	void InitMyCharacterController();
 
-
-	/**
-	 * @brief エフェクトの初期化
-	*/
-	void InitEffect();
-
 	/**
 	 * @brief サウンドの初期化
 	*/
@@ -606,7 +600,6 @@ private:	//データメンバ
 	* ゴール関連
 	*/
 	float m_goalTimer = 0.0f;						//ゴールの時のタイマー
-	Effect* m_goalEffect = nullptr;					//ゴール時のエフェクト
 
 	/*
 	* SE関連
