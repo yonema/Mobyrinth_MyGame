@@ -89,16 +89,11 @@ void Player::TitleMove()
 	//タイトルでの向きは右向き
 	m_leftOrRight = EN_RIGHT;
 
-	//走り状態か？
-	if (m_isDush)
-		//走り状態
-		//走りのアニメーションを再生
-		m_modelRender->PlayAnimation(EN_ANIM_CLIP_RUN);
-	else
-		//走り状態ではない。
-		//歩きのアニメーションを再生
-		m_modelRender->PlayAnimation(EN_ANIM_CLIP_WALK);
+	//タイトル画面では、歩きのアニメーションを再生
+	m_modelRender->PlayAnimation(EN_ANIM_CLIP_WALK);
 
+	//タイトル画面では走らない。
+	m_isDush = false;
 
 	//ウェイポイントの更新処理
 	CheckWayPoint();
@@ -399,16 +394,17 @@ void Player::CheckInput()
 	if (m_throwing || m_lifting)
 		m_padLStickXF = 0.0f;
 
-	//ゲームパッドのR1ボタンが押されているか？
-	if (g_pad[0]->IsPress(enButtonRB1))
+	//ゲームパッドのR1ボタンが押されているか？かつ
+	//ゲームパッドの左スティックのX軸の入力は0ではないか？
+	if (g_pad[0]->IsPress(enButtonRB1) && m_padLStickXF != 0.0f)
 	{
-		//押されている
+		//押されている、かつ、入力が0ではない。
 		//ダッシュ状態
 		m_isDush = true;
 	}
 	else
 	{
-		//押されていない
+		//押されていない、もしくは、入力が0
 		//ダッシュ状態ではない
 		m_isDush = false;
 	}
