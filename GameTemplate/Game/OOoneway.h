@@ -1,6 +1,15 @@
 #pragma once
 #include "ObstacleObject.h"
 
+/**
+ * @brief 「一方通行」の定数データ
+*/
+namespace onewayConstData
+{
+	//サイドのOBBへの長さ
+	constexpr float LENGHT_TO_SIDE_OBB = 300.0f;
+}
+
 /// <summary>
 /// 障害オブジェクト
 /// 一方通行オブジェクト
@@ -24,12 +33,12 @@ public:		//メンバ関数
 		m_leftOrRight = leftOrRight;
 
 		//両端のOBBを一度例外にしておく。
-		for (int i = 0; i < enLeftAndRightNum; i++)
+		for (int i = 0; i < EN_LEFT_AND_RIGHT_NUM; i++)
 		{
 			m_sideOBB[i].SetExceptionFlag(true);
 		}
 
-		if (m_leftOrRight == enLeft)
+		if (m_leftOrRight == EN_LEFT)
 		{
 			if (m_rightCanPassMR)
 				m_rightCanPassMR->Deactivate();
@@ -45,25 +54,45 @@ public:		//メンバ関数
 		}
 	}
 
-public:		//publicな列挙型
+private:	//privateなメンバ関数
 
-	/// <summary>
-	/// 左か右か？
-	/// </summary>
-	enum EnLeftOrRight
-	{
-		enLeft,				//左
-		enRight,			//右
-		enLeftAndRightNum,	//左と右の数
-	};
+	/**
+	 * @brief モデルの初期化処理
+	*/
+	void InitModel();
+
+	/**
+	 * @brief 右向きか左向きかに合わせて初期化処理
+	*/
+	void InitLeftOrRight();
+
+	/**
+	 * @brief OBBの初期化処理
+	*/
+	void InitOBB();
+
+	/**
+	 * @brief 通れるモデルの有効化する
+	*/
+	void CanPassModelActivate();
+
+	/**
+	 * @brief 通れないモデルを有効化する
+	*/
+	void CannotPassModelActivate();
+
+	/**
+	 * @brief モデルのトランスフォームの更新
+	*/
+	void ModelTransformUpdate();
 
 private:	//データメンバ
 
-	COBB m_sideOBB[enLeftAndRightNum];	//両サイドのOBB
-	int m_leftOrRight = enLeft;			//左か右か？
-	CModelRender* m_canPassMR = nullptr;	//通れる時のモデル
-	CModelRender* m_rightCanPassMR = nullptr;		//右側時のモデル
-	CModelRender* m_rightMR = nullptr;		//通れない右側時のモデル
+	COBB m_sideOBB[EN_LEFT_AND_RIGHT_NUM];		//両サイドのOBB
+	int m_leftOrRight = EN_LEFT;				//左か右か？
+	CModelRender* m_canPassMR = nullptr;		//左向きの通れる時のモデル
+	CModelRender* m_rightMR = nullptr;			//右向きのモデル
+	CModelRender* m_rightCanPassMR = nullptr;	//右向きの通れる時のモデル
 
 
 

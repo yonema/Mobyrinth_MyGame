@@ -247,7 +247,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			//障害オブジェクトの生成
 			OOoneway* OObject = NewObstacleObject<OOoneway>(objData);
 			//左向きに設定
-			OObject->SetLeftOrRight(OOoneway::enLeft);
+			OObject->SetLeftOrRight(EN_LEFT);
 			return true;
 		}
 		//右
@@ -256,7 +256,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 			//障害オブジェクトの生成
 			OOoneway* OObject = NewObstacleObject<OOoneway>(objData);
 			//左向きに設定
-			OObject->SetLeftOrRight(OOoneway::enRight);
+			OObject->SetLeftOrRight(EN_RIGHT);
 			return true;
 		}
 		//全反転

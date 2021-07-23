@@ -31,7 +31,7 @@ void ROleft_right::QuerySub()
 				if (IsHitLevelObject(*this, *oneway))
 				{
 					//「一方通行」の向きを左向きにする
-					oneway->SetLeftOrRight(OOoneway::enLeft);
+					oneway->SetLeftOrRight(EN_LEFT);
 					reverseFlag = false;
 					//自身は破棄する
 					DeleteGO(this);
@@ -61,7 +61,7 @@ void ROleft_right::QuerySub()
 				if (IsHitLevelObject(*this, *oneway))
 				{
 					//「一方通行」の向きを右向きにする
-					oneway->SetLeftOrRight(OOoneway::enRight);
+					oneway->SetLeftOrRight(EN_RIGHT);
 					reverseFlag = false;
 					//自身は破棄する
 					DeleteGO(this);
