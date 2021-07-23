@@ -153,10 +153,10 @@ public:		//ここのメンバ関数を主に使う
 		return m_tag;
 	}
 
-	/// <summary>
-	/// 例外フラグを設定する
-	/// </summary>
-	/// <param name="exceptionFlag"></param>
+	/**
+	 * @brief 例外フラグを設定する。例外だとOBBWorldでの衝突計算から除外される。
+	 * @param exceptionFlag 例外フラグ。trueで例外。
+	*/
 	void SetExceptionFlag(const bool exceptionFlag)
 	{
 		m_exceptionFlag = exceptionFlag;
