@@ -37,4 +37,9 @@ namespace OOsFilepathAndObbSizeConstData
 	constexpr const char* const MODEL_FILEPATH_PADLOCK = "Assets/modelData/padlock1.tkm";
 	//「南京錠」のOBBのサイズ
 	const Vector3 SIZE_OBB_PADLOCK = { 300.0f,300.0f,300.0f };
+
+	//「全反転」のモデルのファイルパス
+	constexpr const char* const MODEL_FILEPATH_REVERSE_ALL = "Assets/modelData/box.tkm";
+	//「全反転」のOBBのサイズ
+	const Vector3 SIZE_OBB_REVERSE_ALL = { 10.0f,400.0f,400.0f };
 }

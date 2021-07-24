@@ -47,6 +47,11 @@ public:		//CReversibleObjectでオーバーライドしてほしいメンバ関�
 	*/
 	virtual void ReversibleSwitchOff() {};
 
+	/**
+	 * @brief 反転オブジェクト用の全反転するときの処理
+	*/
+	virtual void AllReverse() {};
+
 public:		//メンバ関数
 
 	/// <summary>
