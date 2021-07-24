@@ -67,17 +67,17 @@ public:		//オーバーライドしたメンバ関数
 	*/
 	void ReversibleSwitchOff()override final;
 
+	/**
+	 * @brief 特定の場所を通過した際にすべてのオブジェクトを反転させる処理に使用する関数
+	*/
+	void AllReverse()override final;
+
 
 public:		//メンバ関数	
 	/// <summary>
 	/// 反転させる
 	/// </summary>
 	void Reverse();
-
-	/// <summary>
-	/// 特定の場所を通過した際にすべてのオブジェクトを反転させる処理に使用する関数
-	/// </summary>
-	void AllReverse();
 
 	/// <summary>
 	/// 表か裏かを設定するする

@@ -1,50 +1,38 @@
 #include "stdafx.h"
 #include "OOReverseALL.h"
 
+//ObstacleObjectのモデルのファイルパスとOBBのサイズの定数データを使用可能にする
+using namespace OOsFilepathAndObbSizeConstData;
+//「全反転」の定数データを使用可能にする
+using namespace reverseAllConstData;
+
 //スタート関数
 bool OOReverseALL::StartSub()
 {
 	//モデルの初期化とタイプの設定
-	Init("Assets/modelData/grilled fish.tkm", EN_OO_TYPE_REVERSE_ALL);
-
-	m_scale = { 0.0f,0.0f,0.0f };
-
-	//OBBWorldに自身のOBBの登録を消去させる
-	COBBWorld::GetInstance()->RemoveOBB(GetOBB());
-
-	//自己発光色を設定
-	SetModelEmissionColor({ 0.5f,0.0f,0.5f,1.0f });
+	Init(MODEL_FILEPATH_REVERSE_ALL, EN_OO_TYPE_REVERSE_ALL);
 
 	//OBBのパラメーターを設定する
-	SetOBBDirectionLength({ 10.0f,400.0f,400.0f });
-	SetOBBPivot({ 0.5f,0.0f,0.5f });
+	SetOBBDirectionLength(SIZE_OBB_REVERSE_ALL);
+
+	//モデルを非表示にする
+	GetModelRender()->Deactivate();
+
+	//OBBWorldに自身のOBBの登録を消去さて、プレイヤーと衝突しないようにする
+	COBBWorld::GetInstance()->RemoveOBB(GetOBB());
 
 	//オブジェクトと当たらないようにする
 	SetIsHitFlag(false);
 
-	//changeSEのサウンドキューを生成する
-	m_changeSE = NewGO<CSoundCue>(0);
-	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_changeSE->Init(L"Assets/sound/allchange.wav");
-	//音量調節
-	m_changeSE->SetVolume(1.0f);
+	//自己発光色を設定
+	SetModelEmissionColor(MODEL_COLOR_EMISSION);
 
-	//m_obujectefkエフェクトの作成
-	m_obujectefk = NewGO<Effect>(0);
-	m_obujectefk->Init(u"Assets/effect/reverseall.efk");
-	float scale = 200.0f;								//小さいので大きくしておく
-	m_obujectefk->SetScale({ scale ,scale ,scale });
-	m_obujectefk->SetPosition(m_position);				//座標を渡す
-	m_obujectefk->SetRotation(m_rotation);
-	m_obujectefk->Play();								//再生
+	//サウンドの初期化処理
+	InitSound();
 
-	//m_reverseall2エフェクトの作成
-	m_reverseall2 = NewGO<Effect>(0);
-	m_reverseall2->Init(u"Assets/effect/reverseall2.efk");
-	float scale2 = 50.0f;								//小さいので大きくしておく
-	m_reverseall2->SetScale({ scale2 ,scale2 ,scale2 });
-	m_reverseall2->SetPosition(m_position);				//座標を渡す
-	m_reverseall2->SetRotation(m_rotation);
+	//エフェクトの初期化処理
+	InitEffect();
+
 
 	//デバック用
 #ifdef MY_DEBUG
@@ -63,22 +51,63 @@ bool OOReverseALL::StartSub()
 	return true;
 }
 
+/**
+ * @brief サウンドの初期化処理
+*/
+void OOReverseALL::InitSound()
+{
+	//changeSEのサウンドキューを生成する
+	m_changeAllSC = NewGO<CSoundCue>(PRIORITY_FIRST);
+	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
+	m_changeAllSC->Init(SOUND_FILEPATH_CHANGE_ALL);
+	//音量調節
+	m_changeAllSC->SetVolume(SOUND_VALUME_CHANGE_ALL);
+
+	return;
+}
+
+/**
+ * @brief エフェクトの初期化処理
+*/
+void OOReverseALL::InitEffect()
+{
+	//全反転自身を表すエフェクトの生成と初期化
+	m_reverslAllEF = NewGO<Effect>(PRIORITY_FIRST);
+	m_reverslAllEF->Init(EFFECT_FILEPATH_REVERSE_ALL);
+	//座標と回転と拡大率を設定す
+	m_reverslAllEF->SetPosition(m_position);
+	m_reverslAllEF->SetRotation(m_rotation);
+	m_reverslAllEF->SetScale(EFFECT_SCALE_REVERSE_ALL);
+	//再生する
+	m_reverslAllEF->Play();
+
+	//全反転する時のエフェクトの生成と初期化
+	m_changeAllEF = NewGO<Effect>(PRIORITY_FIRST);
+	m_changeAllEF->Init(EFFECT_FILEPATH_CHANGE_ALL);
+	//座標と回転と拡大率を設定す
+	m_changeAllEF->SetPosition(m_position);
+	m_changeAllEF->SetRotation(m_rotation);
+	m_changeAllEF->SetScale(EFFECT_SCALE_CHANGE_ALL);
+
+	return;
+}
+
 //デストラクタ
 OOReverseALL::~OOReverseALL()
 {
 	//エフェクトが再生中なら
-	if (m_obujectefk->IsPlay())
+	if (m_reverslAllEF->IsPlay())
 		//停止する
-		m_obujectefk->Stop();
+		m_reverslAllEF->Stop();
 
-	//m_objectefkの削除
-	DeleteGO(m_obujectefk);
+	//全反転自身を表すエフェクトを破棄
+	DeleteGO(m_reverslAllEF);
 
-	//m_reverseall2を削除
-	DeleteGO(m_reverseall2);
+	//全反転する時のエフェクトを破棄
+	DeleteGO(m_changeAllEF);
 
-	//m_changeSEを削除
-	DeleteGO(m_changeSE);
+	//サウンドの破棄
+	DeleteGO(m_changeAllSC);
 
 #ifdef MY_DEBUG
 	//デバック用
@@ -90,18 +119,23 @@ OOReverseALL::~OOReverseALL()
 	}
 	//デバック用ここまで
 #endif
+
+	return;
 }
 
 //ポーズ中でもいつでもアップデートする関数
 void OOReverseALL::AlwaysUpdate()
 {
-		//エフェクト再生までのタイマー
-	i += GameTime().GetFrameDeltaTime();
+	//エフェクト再生までのタイマー
+	m_effectLoopTimer += GameTime().GetFrameDeltaTime();
 
-	if (i >= 2.0f) {				//120フレームでエフェクトが終わるのでから始める
-		m_obujectefk->Play();
-		i = 0;
+	//ループ再生にする
+	if (m_effectLoopTimer >= EFFECT_TIME_LOOP) {
+		m_reverslAllEF->Play();
+		m_effectLoopTimer = 0;
 	}
+
+	return;
 }
 
 
@@ -134,18 +168,19 @@ void OOReverseALL::UpdateSub()
 	/// 全部ifで振り分けた。
 
 	//アップデートステートで処理を振り分ける
-	if (m_updateState == enBeforHitPlayer)
+	if (m_updateState == EN_BEFOR_HIT_PLAYER)
 		//プレイヤーと衝突前の処理
 		BeforeHitPlayer();
 
-	if (m_updateState == enHitPlayer)
+	if (m_updateState == EN_HIT_PLAYER)
 		//プレイヤーと衝突時の処理
 		HitPlayer();
 
-	if (m_updateState == enAfterHitPlayer)
+	if (m_updateState == EN_AFTER_HIT_PLAYER)
 		//プレイヤーと衝突後の処理
 		AfterHitPlayer();
 
+	return;
 }
 
 //プレイヤーと衝突前の処理
@@ -159,9 +194,8 @@ void OOReverseALL::BeforeHitPlayer()
 		//衝突時のプレイヤーの座標を保治
 		m_playerHitPosition = m_player->GetPosition();
 		//アップデートステートをプレイヤーと衝突時の状態へ
-		m_updateState = enHitPlayer;
+		m_updateState = EN_HIT_PLAYER;
 
-		
 	}
 	else
 	{
@@ -170,6 +204,8 @@ void OOReverseALL::BeforeHitPlayer()
 		//衝突前のプレイヤーの座標を保持
 		m_playerBeforePosition = m_player->GetPosition();
 	}
+
+	return;
 }
 
 //プレイヤーと衝突時の処理
@@ -190,8 +226,10 @@ void OOReverseALL::HitPlayer()
 		//衝突後のプレイヤーの座標の確保
 		m_playerAfterPosition = m_player->GetPosition();
 		//アップデートステートをプレイヤーと衝突後の状態へ
-		m_updateState = enAfterHitPlayer;
+		m_updateState = EN_AFTER_HIT_PLAYER;
 	}
+
+	return;
 }
 
 //プレイヤーと衝突後の処理
@@ -219,33 +257,25 @@ void OOReverseALL::AfterHitPlayer()
 		std::vector<ILevelObjectBase*> levelObjects
 			= CLevelObjectManager::GetInstance()->GetLevelObjects();
 		//全てのレベルオブジェクトに検索
-		for (int i = 0; i < levelObjects.size(); i++)
+		for (ILevelObjectBase* levelObject : CLevelObjectManager::GetInstance()->GetLevelObjects())
 		{
-			//モデルの参照を得てから、SetMulColor()を呼ぶ
-			//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-			/*levelObjects[i]->GetModelRender(CReversibleObject::enFront)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });
-			levelObjects[i]->GetModelRender(CReversibleObject::EN_BACK)->SetMulColor({ 1.0f,1.0f,1.0f,0.5f });*/
-			//CReversibleObjectなら反転させる
-			CReversibleObject* revers = dynamic_cast<CReversibleObject*>(levelObjects[i]);
-			if (revers)
+			//透明オブジェクトでは無かったら
+			if (levelObject->GetIsHitFlag())
 			{
-				//透明オブジェクトでは無かったら
-				if (revers->GetIsHitFlag())
-					//反転させる
-					revers->AllReverse();
+				//反転させる
+				levelObject->AllReverse();
 			}
 		}
 		//changeSEをループ再生をオフで再生する。
-		m_changeSE->Play(false);
+		m_changeAllSC->Play(false);
 
+		//上にあげるベクトル
 		Vector3 upVec = g_VEC3_UP;
 		m_rotation.Apply(upVec);
-		//この値を変更して高さを調節する
-		const float upVecLne = 100.0f;
-		upVec.Scale(upVecLne);
-		m_reverseall2->SetPosition(m_position + upVec);		//座標を渡す
-		m_reverseall2->SetRotation(m_rotation);
-		m_reverseall2->Play();								//再生
+		upVec.Scale(EFFECT_LENGHT_POSITION_CHANGE_ALL);
+		m_changeAllEF->SetPosition(m_position + upVec);		//座標を渡す
+		m_changeAllEF->SetRotation(m_rotation);
+		m_changeAllEF->Play();								//再生
 	}
 
 
@@ -253,5 +283,7 @@ void OOReverseALL::AfterHitPlayer()
 	m_playerBeforePosition = m_player->GetPosition();
 
 	//アップデートステートをプレイヤーと衝突前の状態へ
-	m_updateState = enBeforHitPlayer;
+	m_updateState = EN_BEFOR_HIT_PLAYER;
+
+	return;
 }
