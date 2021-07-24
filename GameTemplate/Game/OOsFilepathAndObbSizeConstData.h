@@ -32,4 +32,9 @@ namespace OOsFilepathAndObbSizeConstData
 	const Vector3 SIZE_OBB_ONEWAY = { 300.0f,300.0f,400.0f };
 	//「一方通行」のサイドのOBBのサイズ
 	const Vector3 SIZE_OBB_ONEWAY_SIDE = { 10.0f,400.0f,600.0f };
+
+	//「南京錠」のモデルのファイルパス
+	constexpr const char* const MODEL_FILEPATH_PADLOCK = "Assets/modelData/padlock1.tkm";
+	//「南京錠」のOBBのサイズ
+	const Vector3 SIZE_OBB_PADLOCK = { 300.0f,300.0f,300.0f };
 }
