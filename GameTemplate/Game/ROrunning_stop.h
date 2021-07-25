@@ -24,12 +24,19 @@ public:
 	/// 壁のポインタを設定する
 	/// </summary>
 	/// <param name="wall">壁のポインタ</param>
-	void SetWall(OOwall* wall)
+	void SetWall(const OOwall* wall)
 	{
 		m_pWall = wall;
 	}
 
+	/**
+	 * @brief 「壁」と衝突した時の処理
+	 * @param wall 「壁」のポインタ
+	*/
+	void HitWall(OOwall* wall);
+
 private:	//データメンバ
-	OOwall* m_pWall = nullptr;		//壁のポインタ
+	const OOwall* m_pWall = nullptr;		//壁のポインタ
+	bool m_actionFlag = true;				//行動できるか？
 };
 
