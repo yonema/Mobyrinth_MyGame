@@ -71,6 +71,8 @@ namespace reversibleObjectConstData
 	*/
 	//プレイヤーに持ち上げられ中のタイム
 	constexpr float TIME_LIFTED_PLAYER = 0.45f;
+	//プレイヤーに持ち上げられ中の半分のタイム
+	constexpr float TIME_LIFTED_PLAYER_HALF = TIME_LIFTED_PLAYER / 2.0f;
 	//プレイヤーに持ち上げられ中の水平方向に加える座標
 	constexpr float ADD_VECTOR_SCALE_HORIZONTAL_LIFTED_PLAYER = 150.0f;
 	//プレイヤーに持ち上げられ中の、動く前に待つタイム
@@ -92,6 +94,8 @@ namespace reversibleObjectConstData
 	};
 	//下に投げられ中のタイム
 	constexpr float TIME_THROWN_DOWN = 0.5f;
+	//下に投げられ中の半分のタイム
+	constexpr float TIME_THROWN_DOWN_HALF = TIME_THROWN_DOWN / 2.0f;
 	//下に投げるベクトルの大きさ
 	constexpr float ADD_VECTOR_SCALE_HORIZONTAL_THORWN_DOWN = HEIGHT_HELD_UP * 2.0f * 1.2f;
 	//弾かれて帰ってくるときのベクトルの大きさ

@@ -4,10 +4,10 @@
 #include "SoundCue.h"
 #include "effect/Effect.h"
 
-/// <summary>
-///	リバーシブルオブジェクト（反転オブジェクト）
-/// 反転オブジェクトを作るときはこのクラスを継承してね！
-/// </summary>
+/**
+ * @brief リバーシブルオブジェクト（反転オブジェクト）
+ * @note 反転オブジェクトを作るときはこのクラスを継承してね！
+*/
 class CReversibleObject : public ILevelObjectBase
 {
 public:		//自動で呼ばれるメンバ関数
@@ -20,6 +20,7 @@ public:		//自動で呼ばれるメンバ関数
 public:		//publicなオーバーライドしてほしいメンバ関数
 	virtual bool StartSub() { return true; };	//スタート関数
 	virtual void UpdateSub() {};				//アップデート関数
+
 	/// <summary>
 	/// 表と裏をセットするサブ関数
 	/// これを呼ぶときは、CReversibleObjectの継承したクラスが
