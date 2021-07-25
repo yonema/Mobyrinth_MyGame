@@ -154,14 +154,14 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_NAIL)) == true)
 		{
 			//反転オブジェクトの生成
-			NewReversibleObject<ROnail_bar>(objData, EN_FRONT);
+			NewReversibleObject<ROnail_hammer>(objData, EN_FRONT);
 			return true;
 		}
 		//金槌
 		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_HAMMER)) == true)
 		{
 			//反転オブジェクトの生成
-			NewReversibleObject<ROnail_bar>(objData, EN_BACK);
+			NewReversibleObject<ROnail_hammer>(objData, EN_BACK);
 			return true;
 		}
 		//鍵、南京錠
@@ -319,7 +319,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		{
 			//反転オブジェクトの生成
 			//透明モード
-			NewReversibleObject<ROnail_bar>(objData, EN_FRONT, MODE_TRANS);
+			NewReversibleObject<ROnail_hammer>(objData, EN_FRONT, MODE_TRANS);
 			return true;
 		}
 		//金槌（透明）
@@ -327,7 +327,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		{
 			//反転オブジェクトの生成
 			//透明モード
-			NewReversibleObject<ROnail_bar>(objData, EN_BACK, MODE_TRANS);
+			NewReversibleObject<ROnail_hammer>(objData, EN_BACK, MODE_TRANS);
 			return true;
 		}
 		//鍵、南京錠（透明）

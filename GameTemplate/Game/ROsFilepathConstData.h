@@ -23,4 +23,10 @@ namespace ROsFilepathConstdata
 	//「火」
 	constexpr const char* const MODEL_FILEPATH_FIRE = "Assets/modelData/fire.tkm";
 
+	//「釘」「金槌」オブジェクトのモデルのファイルパス
+	//「釘」
+	constexpr const char* const MODEL_FILEPATH_NAIL = "Assets/modelData/nail.tkm";
+	//「金槌」
+	constexpr const char* const MODEL_FILEPATH_HAMMER = "Assets/modelData/hammer.tkm";
+
 }

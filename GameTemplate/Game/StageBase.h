@@ -31,7 +31,7 @@
 //「反転オブジェクト」ReversibleObject
 #include "ROwater_fire.h"
 #include "ROrunning_stop.h"
-#include "ROnail_bar.h"
+#include "ROnail_hammer.h"
 #include "ROleft_right.h"
 #include "ROkey_padlock.h"
 
