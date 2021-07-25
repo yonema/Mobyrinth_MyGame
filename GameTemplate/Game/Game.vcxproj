@@ -343,7 +343,7 @@
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="ObstacleObject.cpp" />
     <ClCompile Include="ROkey_padlock.cpp" />
-    <ClCompile Include="ROmizu_kori.cpp" />
+    <ClCompile Include="ROwater_fire.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="Mobius.cpp" />
@@ -503,7 +503,7 @@
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="ObstacleObject.h" />
     <ClInclude Include="ROkey_padlock.h" />
-    <ClInclude Include="ROmizu_kori.h" />
+    <ClInclude Include="ROwater_fire.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="Mobius.h" />
     <ClInclude Include="ModelRender.h" />

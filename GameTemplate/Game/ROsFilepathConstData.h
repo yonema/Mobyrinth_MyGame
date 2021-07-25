@@ -17,4 +17,10 @@ namespace ROsFilepathConstdata
 	//「右」
 	constexpr const char* const MODEL_FILEPATH_RIGHT = "Assets/modelData/right.tkm";
 
+	//「水」「火」オブジェクトのモデルのファイルパス
+	//「水」
+	constexpr const char* const MODEL_FILEPATH_WATER = "Assets/modelData/water.tkm";
+	//「火」
+	constexpr const char* const MODEL_FILEPATH_FIRE = "Assets/modelData/fire.tkm";
+
 }
