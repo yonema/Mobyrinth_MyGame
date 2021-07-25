@@ -448,6 +448,7 @@
     <ClInclude Include="PriorityData.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ReversibleObjectConstData.h" />
+    <ClInclude Include="ROsFilepathConstData.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="SpringCamera.h" />
     <ClInclude Include="SpriteRenderConstData.h" />
