@@ -105,7 +105,7 @@ void CReversibleObject::InitEffect()
 {
 	//m_reverseall2エフェクトの作成
 	m_reverseAllEffect = NewGO<Effect>(PRIORITY_FIRST);
-	m_reverseAllEffect->Init(u"Assets/effect/reverseall2.efk");
+	m_reverseAllEffect->Init(EFFECT_FILEPATH_REVERSE_ALL);
 	//小さいので大きくしておく
 	m_reverseAllEffect->SetScale(EFFECT_SCALE_REVERSE_ALL);
 	m_reverseAllEffect->SetPosition(m_position);				//座標を渡す
@@ -480,21 +480,15 @@ void CReversibleObject::LiftedPlayer()
 	{
 		//小さい時
 
-		//持ち上げられ中のタイムの半分のタイム
-		const float halfLiftedTime = TIME_LIFTED_PLAYER / 2.0f;
-
-		//動く前に少しモデルの移動を待つ時間
-		const float waitTimeBeforeMoving = TIME_LIFTED_PLAYER_WAIT_BEFORE_MOVING;
-
 		//タイマーによる拡大
 		float timeScale = 0.0f;
 
 		//タイマーが待つ時間より大きかったら
-		if (m_timer > waitTimeBeforeMoving)
+		if (m_timer > TIME_LIFTED_PLAYER_WAIT_BEFORE_MOVING)
 		{
 			//タイマーに応じて徐々に大きくする
-			timeScale = (m_timer - waitTimeBeforeMoving) /
-				(TIME_LIFTED_PLAYER - waitTimeBeforeMoving);
+			timeScale = (m_timer - TIME_LIFTED_PLAYER_WAIT_BEFORE_MOVING) /
+				(TIME_LIFTED_PLAYER - TIME_LIFTED_PLAYER_WAIT_BEFORE_MOVING);
 			//縦方向に移動するベクトルを大きくする
 			addVecVerticalScale *= timeScale;
 			addVecVertical.Scale(addVecVerticalScale);
@@ -508,12 +502,13 @@ void CReversibleObject::LiftedPlayer()
 		}
 
 		//タイマーが半分の時間より大きいか？
-		if (m_timer >= halfLiftedTime)
+		if (m_timer >= TIME_LIFTED_PLAYER_HALF)
 		{
 			//大きいとき
 
 			//タイマーに応じて拡大する、徐々に小さくする
-			timeScale = 1.0f - (m_timer - halfLiftedTime) / (TIME_LIFTED_PLAYER - halfLiftedTime);
+			timeScale = 1.0f - (m_timer - TIME_LIFTED_PLAYER_HALF) /
+				(TIME_LIFTED_PLAYER - TIME_LIFTED_PLAYER_HALF);
 			//横方向に移動するベクトルを徐々に小さくする
 			addVecHorizontalScale *= timeScale;
 			addVecHorizontal.Scale(addVecHorizontalScale);
@@ -718,12 +713,9 @@ void CReversibleObject::ThrownDown()
 	//自身の回転で回す
 	m_throwRot.Apply(backwardVec);
 
-	//下に投げるタイムの半分の時間
-	const double halfThrownDownTime = TIME_THROWN_DOWN / 2.0;
-
 
 	//二次関数的な動きにする
-	backwardVec *= pow(m_thrownDownTimer - halfThrownDownTime,
+	backwardVec *= powf(m_thrownDownTimer - TIME_THROWN_DOWN_HALF,
 			POW_NUM_DEPTH_SCALE_THROWN_DOWN);
 
 	//モデルの回転を、逆さ向きに向かってちょっとずつ回す
@@ -733,7 +725,7 @@ void CReversibleObject::ThrownDown()
 
 
 	//半分の時間が過ぎたら下に下げる
-	if (m_thrownDownTimer >= halfThrownDownTime)
+	if (m_thrownDownTimer >= TIME_THROWN_DOWN_HALF)
 		backwardVec *= -1.0f;
 
 	//モデルの場所を下に下げる
@@ -769,7 +761,7 @@ void CReversibleObject::ThrownDown()
 
 	}
 	//投げている時のカウンターが最大値の半分まで来たら
-	else if (m_thrownDownTimer >= halfThrownDownTime && m_changeObject == true)
+	else if (m_thrownDownTimer >= TIME_THROWN_DOWN_HALF && m_changeObject == true)
 	{
 		//表側か裏側か？
 		int frontOrBackSide = EN_FRONT_SIDE;
@@ -856,7 +848,7 @@ void CReversibleObject::Repelled()
 		//自身の回転で回す
 		m_rotation.Apply(verticalPower);
 		//二次関数的な動きにする
-		verticalPower *= pow(static_cast<double>(m_timer - TIME_REPELLED / 2.0), 2.0);
+		verticalPower *= powf(m_timer - TIME_REPELLED / 2.0f, 2.0f);
 		//半分の時間が過ぎたら下に下げる
 		if (m_timer >= TIME_REPELLED / 2.0f)
 			verticalPower *= -1.0f;
