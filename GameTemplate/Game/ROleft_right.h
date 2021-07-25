@@ -20,6 +20,7 @@ private:	//privateなメンバ関数
 	
 	/**
 	 * @brief 「一方通行」と衝突した時の処理
+	 * @param oneway 「一方通行」のポインタ
 	*/
 	void HitOneway(OOoneway* oneway);
 

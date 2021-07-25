@@ -124,14 +124,14 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_WATER)) == true)
 		{
 			//反転オブジェクトの生成
-			NewReversibleObject<ROmizu_kori>(objData, EN_FRONT);
+			NewReversibleObject<ROwater_fire>(objData, EN_FRONT);
 			return true;
 		}
 		//火
 		else if (objData.EqualObjectName(GetLevelObjectName(EN_RO_TYPE_FIRE)) == true)
 		{
 			//反転オブジェクトの生成
-			NewReversibleObject<ROmizu_kori>(objData, EN_BACK);
+			NewReversibleObject<ROwater_fire>(objData, EN_BACK);
 			return true;
 		}
 		//稼働、停止
@@ -310,7 +310,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 		{
 			//反転オブジェクトの生成
 			//透明モード
-			NewReversibleObject<ROmizu_kori>(objData, EN_BACK, MODE_TRANS);
+			NewReversibleObject<ROwater_fire>(objData, EN_BACK, MODE_TRANS);
 			return true;
 		}
 		//釘、金槌（透明）

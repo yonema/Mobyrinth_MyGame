@@ -329,9 +329,6 @@
     <ClCompile Include="ROkey_padlock.cpp">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
-    <ClCompile Include="ROmizu_kori.cpp">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClCompile>
     <ClCompile Include="ROnail_bar.cpp">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
@@ -502,6 +499,9 @@
     </ClCompile>
     <ClCompile Include="OOflame.cpp">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ROwater_fire.cpp">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -716,9 +716,6 @@
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
     <ClInclude Include="ROkey_padlock.h">
-      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
-    </ClInclude>
-    <ClInclude Include="ROmizu_kori.h">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
     <ClInclude Include="ROnail_bar.h">
@@ -959,6 +956,9 @@
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
     <ClInclude Include="ROsFilepathConstData.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ROwater_fire.h">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
     </ClInclude>
   </ItemGroup>

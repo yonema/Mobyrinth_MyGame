@@ -29,7 +29,7 @@
 #include "Mobius.h"
 
 //「反転オブジェクト」ReversibleObject
-#include "ROmizu_kori.h"
+#include "ROwater_fire.h"
 #include "ROrunning_stop.h"
 #include "ROnail_bar.h"
 #include "ROleft_right.h"

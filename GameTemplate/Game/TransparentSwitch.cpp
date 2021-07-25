@@ -1,7 +1,5 @@
 #include "stdafx.h"
 
-#include "ROmizu_kori.h"
-
 #include "TransparentSwitch.h"
 
 //コンストラクタ
