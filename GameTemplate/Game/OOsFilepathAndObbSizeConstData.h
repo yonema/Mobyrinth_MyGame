@@ -42,4 +42,9 @@ namespace OOsFilepathAndObbSizeConstData
 	constexpr const char* const MODEL_FILEPATH_REVERSE_ALL = "Assets/modelData/box.tkm";
 	//「全反転」のOBBのサイズ
 	const Vector3 SIZE_OBB_REVERSE_ALL = { 10.0f,400.0f,400.0f };
+
+	//「壁」のモデルのファイルパス
+	constexpr const char* const MODEL_FILEPATH_WALL = "Assets/modelData/wall.tkm";
+	//「壁」のモデルの拡大率
+	const Vector3 MODEL_SCALE_WALL = { 400.0f,1000.0f,400.0f };
 }

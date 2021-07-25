@@ -180,17 +180,17 @@ void OOflame::Damage()
 //プレイヤーが炎に近づくと燃えてる音を出す
 void OOflame::Burn()
 {
-	//自身からプレイヤーへのベクトル
-	Vector3 toPlayerVec = m_position - m_player->GetPosition();
-	//プレイヤーへの距離
-	const float distToPlayer = toPlayerVec.Length();
+	//プレイヤーから自身へのベクトル
+	Vector3 fromPlayerVec = m_position - m_player->GetPosition();
+	//プレイヤーからの距離
+	const float distFromPlayer = fromPlayerVec.Length();
 
 	//距離が最大距離より小さいか？
-	if (distToPlayer < DISTANCE_MAX_FLAME_SOUND) 
+	if (distFromPlayer < DISTANCE_MAX_FLAME_SOUND)
 	{
 		//音量の倍率
-		//distToPlayerが小さくなるほど、倍率が～1.0fに近づく
-		const float volumeRate = DISTANCE_MAX_FLAME_SOUND - distToPlayer / DISTANCE_MAX_FLAME_SOUND;
+		//distFromPlayerが小さくなるほど、倍率が～1.0fに近づく
+		const float volumeRate = (DISTANCE_MAX_FLAME_SOUND - distFromPlayer) / DISTANCE_MAX_FLAME_SOUND;
 		//音量計算
 		const float volume = SOUND_VOLUME_FLAME * volumeRate;
 		
