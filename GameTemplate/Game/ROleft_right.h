@@ -18,6 +18,11 @@ public:		//自動で呼ばれるメンバ関数
 
 private:	//privateなメンバ関数
 	
+	/**
+	 * @brief 「一方通行」と衝突した時の処理
+	*/
+	void HitOneway(OOoneway* oneway);
+
 	/// <summary>
 	/// 当たったオブジェクトを左右反転させる
 	/// </summary>

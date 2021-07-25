@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "ROleft_right.h"
 
+//ReversibleObjectのモデルのファイルパスの定数データを使用可能にする
+using namespace ROsFilepathConstdata;
+
 //スタート関数
 bool ROleft_right::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/left.tkm", EN_RO_TYPE_LEFT,
-		"Assets/modelData/right.tkm", EN_RO_TYPE_RIGHT);
+	Init(MODEL_FILEPATH_LEFT, EN_RO_TYPE_LEFT,
+		MODEL_FILEPATH_RIGHT, EN_RO_TYPE_RIGHT);
 
 
 	return true;
@@ -17,65 +20,56 @@ bool ROleft_right::StartSub()
 /// </summary>
 void ROleft_right::QuerySub()
 {
-	//自身が「左」の時
-	if (GetObjectType() == EN_RO_TYPE_LEFT)
+
+	//障害オブジェクトの「一方通行」をクエリ
+	QueryLOs<OOoneway>(EN_OO_TYPE_ONEWAY, [&](OOoneway* oneway) -> bool
+		{
+			//「一方通行」と衝突した時の処理
+			HitOneway(oneway);
+
+			//trueを戻す
+			return true;
+		}
+	);
+
+	//行動できるか？
+	if (m_actionFlag)
+		//当たったときオブジェクトを左右反転させる
+		ObjectReverse();
+
+	return;
+}
+
+/**
+ * @brief 「一方通行」と衝突した時の処理
+*/
+void ROleft_right::HitOneway(OOoneway* oneway)
+{
+	//行動できるか？
+	if (m_actionFlag)
 	{
+		//自身と「一方通行」が衝突したら
+		if (IsHitLevelObject(*this, *oneway))
+		{
+			//右か左か？
+			//デフォは左
+			EN_LEFT_OR_RIGHT leftOrRight = EN_LEFT;
 
-		//左右反転させるか？
-		bool reverseFlag = true;
+			//自身が「右」の時
+			if (GetObjectType() == EN_RO_TYPE_RIGHT)
+				//右にする
+				leftOrRight = EN_RIGHT;
 
-		//障害オブジェクトの「一方通行」をクエリ
-		QueryLOs<OOoneway>(EN_OO_TYPE_ONEWAY, [&](OOoneway* oneway) -> bool
-			{
-				//自身と「一方通行」が衝突したら
-				if (IsHitLevelObject(*this, *oneway))
-				{
-					//「一方通行」の向きを左向きにする
-					oneway->SetLeftOrRight(EN_LEFT);
-					reverseFlag = false;
-					//自身は破棄する
-					DeleteGO(this);
-					//行動できなくする
-					m_actionFlag = false;
-				}
-
-				//trueを戻す
-				return true;
-			}
-		);
-
-		if (reverseFlag)
-			ObjectReverse();
+			//「一方通行」の向きを左向きにする
+			oneway->SetLeftOrRight(leftOrRight);
+			//行動できなくする
+			m_actionFlag = false;
+			//自身は破棄する
+			DeleteGO(this);
+		}
 	}
-	//自身が「右」の時
-	else if (GetObjectType() == EN_RO_TYPE_RIGHT)
-	{
 
-		//左右反転させるか？
-		bool reverseFlag = true;
-
-		//障害オブジェクトの「一方通行」をクエリ
-		QueryLOs<OOoneway>(EN_OO_TYPE_ONEWAY, [&](OOoneway* oneway) -> bool
-			{
-				//自身と「一方通行」が衝突したら
-				if (IsHitLevelObject(*this, *oneway))
-				{
-					//「一方通行」の向きを右向きにする
-					oneway->SetLeftOrRight(EN_RIGHT);
-					reverseFlag = false;
-					//自身は破棄する
-					DeleteGO(this);
-					//行動できなくする
-					m_actionFlag = false;
-				}
-				//trueを戻す
-				return true;
-			}
-		);
-
-		if (reverseFlag)
-			ObjectReverse();
-	}
+	return;
 }
 
 /// <summary>
@@ -90,6 +84,7 @@ void ROleft_right::ObjectReverse()
 	//レベルオブジェクトたちを一つずつ取り出す
 	for (auto lo : levelObjects)
 	{
+
 		//自分自身の時はスキップ
 		if (lo == this)
 			continue;
@@ -99,23 +94,25 @@ void ROleft_right::ObjectReverse()
 		{
 			//衝突していたら
 
-			//行動可能か？
-			if (m_actionFlag)
-			{
-				//可能
+
 
 				//左右反転する方向
-				Vector3 scale = lo->GetScale();
-				if (GetObjectType() == EN_RO_TYPE_RIGHT)
-					//右向きなら、左右反転させる
-					scale.x *= -1.0f;
-				//衝突したオブジェクトのスケールを設定する
-				lo->SetScale(scale);
-				//自身は破棄する
-				DeleteGO(this);
-				//行動できなくする
-				m_actionFlag = false;
-			}
+			Vector3 scale = lo->GetScale();
+			if (GetObjectType() == EN_RO_TYPE_RIGHT)
+				//右向きなら、左右反転させる
+				scale.x *= -1.0f;
+			//衝突したオブジェクトのスケールを設定する
+			lo->SetScale(scale);
+			//自身は破棄する
+			DeleteGO(this);
+			//行動できなくする
+			m_actionFlag = false;
+
+			//これ以上行動しなくて良いので、returnする
+			return;
+
 		}
 	}
+
+	return;
 }
