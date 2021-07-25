@@ -958,6 +958,9 @@
     <ClInclude Include="OOsFilepathAndObbSizeConstData.h">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
+    <ClInclude Include="ROsFilepathConstData.h">
+      <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">

@@ -1,23 +1,37 @@
 #include "stdafx.h"
 #include "ROkey_padlock.h"
 
+//ReversibleObjectのモデルのファイルパスの定数データを使用可能にする
+using namespace ROsFilepathConstdata;
+//「鍵」「南京錠」の定数データを使用可能にする
+using namespace key_padlockConstData;
+
 //スタート関数
 bool ROkey_padlock::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/key.tkm", EN_RO_TYPE_KEY,
-		"Assets/modelData/padlock.tkm", EN_RO_TYPE_PADLOCK);
+	Init(MODEL_FILEPATH_KEY, EN_RO_TYPE_KEY,
+		MODEL_FILEPATH_PADLOCK, EN_RO_TYPE_PADLOCK);
 
-
-
-	//padlockbreakSEのサウンドキューを生成する
-	m_padlockbreakSE = NewGO<CSoundCue>(0);
-	//padlockbreakSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_padlockbreakSE->Init(L"Assets/sound/padlockbreak.wav");
-	//音量調節
-	m_padlockbreakSE->SetVolume(1.0f);
+	//サウンドの初期化処理
+	InitSound();
 
 	return true;
+}
+
+/**
+ * @brief サウンドの初期化処理
+*/
+void ROkey_padlock::InitSound()
+{
+	//南京錠が開くときのサウンドを生成する
+	m_padlockbreakSE = NewGO<CSoundCue>(PRIORITY_FIRST);
+	//南京錠が開くときのサウンドを、waveファイルを指定して初期化する。
+	m_padlockbreakSE->Init(SOUND_FILEPATH_BREAK_PADLOCK);
+	//音量調節
+	m_padlockbreakSE->SetVolume(SOUND_VOLUME_BREAK_PADLOCK);
+
+	return;
 }
 
 /// <summary>
@@ -28,16 +42,16 @@ void ROkey_padlock::QuerySub()
 	//自身が「鍵の金型」の時
 	if (GetObjectType() == EN_RO_TYPE_KEY)
 	{
-		//障害オブジェクトの「持てない南京錠」をクエリ
+		//障害オブジェクトの「大きな南京錠」をクエリ
 		QueryLOs<OOpadlock>(EN_OO_TYPE_BIG_PADLOCK, [&](OOpadlock* padlock) -> bool
 			{
-				//自身と「持てない南京錠」が衝突したら
+				//自身と「大きな南京錠」が衝突したら
 				if (IsHitLevelObject(*this, *padlock))
 				{
-					//「持てない南京錠」を破棄
+					//「大きな南京錠」を破棄
 					DeleteGO(padlock);
 
-					//padlockbreakSEをループ再生をオフで再生する。
+					//南京錠が開くときのサウンドをワンショット再生で再生する
 					m_padlockbreakSE->Play(false);
 
 					//自身のオブジェクトを破棄
@@ -47,17 +61,7 @@ void ROkey_padlock::QuerySub()
 			}
 		);
 	}
-	//else if (GetObjectType() == enROPadlock)
-	//{
-	//	QueryLOs<OOflame>(EN_OO_TYPE_FLAME, [&](OOflame* bigFire) -> bool
-	//		{
-	//			if (IsHitLevelObject(*this, *bigFire, hitDot))
-	//			{
-	//				bigFire->Damage();
-	//				DeleteGO(this);
-	//			}
-	//			return true;
-	//		}
-	//	);
-	//}
+
+	return;
+
 }

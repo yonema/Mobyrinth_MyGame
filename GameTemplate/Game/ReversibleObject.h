@@ -1,5 +1,6 @@
 #pragma once
 #include "ReversibleObjectConstData.h"
+#include "ROsFilepathConstData.h"
 #include "LevelObjectBase.h"
 #include "SoundCue.h"
 #include "effect/Effect.h"
