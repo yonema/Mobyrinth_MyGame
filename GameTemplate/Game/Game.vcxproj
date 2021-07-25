@@ -349,7 +349,7 @@
     <ClCompile Include="Mobius.cpp" />
     <ClCompile Include="ModelRender.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ROnail_bar.cpp" />
+    <ClCompile Include="ROnail_hammer.cpp" />
     <ClCompile Include="ROrunning_stop.cpp" />
     <ClCompile Include="StageBase.cpp" />
     <ClCompile Include="stage_title.cpp" />
@@ -508,7 +508,7 @@
     <ClInclude Include="Mobius.h" />
     <ClInclude Include="ModelRender.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="ROnail_bar.h" />
+    <ClInclude Include="ROnail_hammer.h" />
     <ClInclude Include="ROrunning_stop.h" />
     <ClInclude Include="StageBase.h" />
     <ClInclude Include="stage_title.h" />
