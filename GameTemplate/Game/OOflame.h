@@ -54,7 +54,7 @@ namespace flameConstData
 	constexpr int SIZE_COMPLEMENT_FLAME = 3;
 
 	//‰Š‚Ìí–Â‚Á‚Ä‚¢‚éƒTƒEƒ“ƒh‚ª•·‚±‚¦‚éÅ‘å‹——£
-	constexpr float DISTANCE_MAX_FLAME_SOUND = 700.0f;
+	constexpr float DISTANCE_MAX_FLAME_SOUND = 1500.0f;
 }
 
 

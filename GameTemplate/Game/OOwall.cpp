@@ -2,6 +2,11 @@
 #include "OOwall.h"
 #include "ROrunning_stop.h"
 
+//ObstacleObjectのモデルのファイルパスとOBBのサイズの定数データを使用可能にする
+using namespace OOsFilepathAndObbSizeConstData;
+//「壁」の定数データを使用可能にする
+using namespace wallConstData;
+
 //コンストラクタ
 OOwall::OOwall()
 {
@@ -9,135 +14,206 @@ OOwall::OOwall()
 	//オブジェクトが生成された瞬間に呼ばれてほしい処理
 
 	//ウェイポイントからの上の距離を設定
-	SetYPosLen(50.0f);
+	SetYPosLen(LENGHT_POSITION_FROM_STAGE);
+
+	return;
 }
 
 //スタート関数
 bool OOwall::StartSub()
 {
 	//初期化用関数
-	Init("Assets/modelData/wall.tkm", EN_OO_TYPE_WALL);
+	Init(MODEL_FILEPATH_WALL, EN_OO_TYPE_WALL);
 
 	//OBBのサイズを設定
-	Vector3 obbSize;
-	obbSize = { 400.0f,1000.0f,400.0f };
-	SetOBBDirectionLength(obbSize);
+	SetOBBDirectionLength(MODEL_SCALE_WALL);
 
+	//OBBのタグを設定する
+	SetOBBTag(COBB::EN_OO_TYPE_WALL);
+
+
+	//移動前の初期位置と移動先の終端位置の初期化処理
+	InitStartAndEndPos();
+
+	//稼働、停止オブジェクトの初期化処理
+	InitRun_stopObject();
+
+	//サウンドの初期化処理
+	InitSound();
+
+	return true;
+}
+
+/**
+ * @brief 移動前の初期位置と移動先の終端位置の初期化処理
+*/
+void OOwall::InitStartAndEndPos()
+{
 	//移動前の初期位置の設定
 	m_startPosition = m_position;
 
-	//稼働する片道分の時間
-	const int moveTime = 3.0f;
-	//移動する距離の補正
-	const float moveLen = 200.0f;
 	//アップベクトル
 	Vector3 upVec = g_VEC3_UP;
 	//現在の自身の回転で、アップベクトルを回す
 	m_rotation.Apply(upVec);
 	//アップベクトル
-	upVec.Scale(moveLen * moveTime);
+	upVec.Scale(LENGTH_MOVE * TIME_MOVE);
 	//移動先の終端位置の設定
 	m_endPosition = m_startPosition + upVec;
 
-	SetOBBTag(COBB::EN_OO_TYPE_WALL);
+	return;
+}
 
+/**
+ * @brief 稼働、停止オブジェクトの初期化処理
+*/
+void OOwall::InitRun_stopObject()
+{
 	//最初に入れていおく稼働、停止オブジェクトを
 	//停止で生成する
-	m_pRun_stop = NewGO<ROrunning_stop>(0);
+	m_pRun_stop = NewGO<ROrunning_stop>(PRIORITY_FIRST);
 	m_pRun_stop->SetPosition(m_position);
-	m_pRun_stop->SetFrontOrBack(EN_BACK);	
+	m_pRun_stop->SetFrontOrBack(EN_BACK);
 	//全反転しないようにと、Tipsを表示しないようにする
 	m_pRun_stop->SetLock(true);
 
-	//m_wallmoveSEのサウンドキューを生成する
-	m_wallmoveSE = NewGO<CSoundCue>(0);
-	//m_wallmoveSEのサウンドキューを、waveファイルを指定して初期化する。
-	m_wallmoveSE->Init(L"Assets/sound/wallmove.wav");
-	//音量調節
-	m_wallmoveSE->SetVolume(0.1f);
-
-	SetYPosLen(100.0f);
-
-	return true;
+	return;
 }
 
+/**
+ * @brief サウンドの初期化処理
+*/
+void OOwall::InitSound()
+{
+	//壁が動くときのサウンドを生成する
+	m_wallmoveSE = NewGO<CSoundCue>(PRIORITY_FIRST);
+	//壁が動くときのサウンドを、waveファイルを指定して初期化する。
+	m_wallmoveSE->Init(SOUND_FILEPATH_WALL_MOVE);
+	//音量調節
+	m_wallmoveSE->SetVolume(SOUND_VALUME_WALL_MOVE);
+
+	return;
+}
+
+//デストラクト
 OOwall::~OOwall()
 {
 	DeleteGO(m_wallmoveSE);
+
+	//稼働、停止オブジェクトはILevelObjectBaseを継承しているから、ここで消す必要はない
+
+	return;
 }
 
 //アップデート関数
 void OOwall::UpdateSub()
 {
+	//最初のアップデートか？
 	if (m_firstUpdateFlag)
 		FirstUpdate();
 
 	//稼働中か？
 	if (m_moveFlag)
 	{
-		//稼働する片道分の時間
-		const float moveTime = 3.0f;
+		//座標の更新処理
+		PositionUpdate();
 
-		//初期位置から終端位値へのベクトル
-		Vector3 movePos = m_endPosition - m_startPosition;	//終端位置へのベクトル
-		
-		//現在の時間 / 片道分の時間 で倍率を出す
-		float moveScale = static_cast<float>(m_moveTimer) / moveTime;	//移動速度の倍率
-
-		//カウンターが片道分の時間を越していたら
-		if (m_moveTimer >= moveTime)
-		{
-			//終端位置への残りのカウンターを出して、倍率を出す
-			moveScale = static_cast<float>(moveTime * 2 - m_moveTimer) / moveTime;
-
-			//カウンターが往復分の時間を越していたら
-			if (m_moveTimer >= moveTime * 2)
-			{
-				//カウンターを0にする
-				m_moveTimer = 0;
-			}
-		}
-
-		//移動先へのベクトルに、倍率を掛ける
-		movePos.Scale(moveScale);
-
-		//現在の場所を、初期位置から移動先へのベクトルを加算した場所にする
-		m_position = m_startPosition + movePos;
-
-		//カウンターを進める
-		m_moveTimer += GameTime().GetFrameDeltaTime();
-
-
-		MoveSE();
+		//サウンドの更新処理
+		SEUpdate();
 	}
 
 	return;
 }
 
-//プレイヤーがUFOに近づくと音を鳴らす
-void OOwall::MoveSE()
+/**
+ * @brief 座標の更新処理
+*/
+void OOwall::PositionUpdate()
 {
-	Vector3 distance = m_position - m_player->GetPosition();
-	const float MaxDist = 1500;
-	const float DistLen = distance.Length();
+	//初期位置から終端位値へのベクトル
+	Vector3 movePos = m_endPosition - m_startPosition;	//終端位置へのベクトル
 
-	if (DistLen < MaxDist) {
-		float Le = MaxDist - DistLen;
-		float SubLe = Le / MaxDist;
-		float Vo = 2.0f * SubLe;
+	//移動速度の倍率
+	float moveScale = 0.0f;
+
+	//タイマーが片道分の時間より小さいか？
+	if (m_moveTimer < TIME_MOVE)
+	{
+		//タイマーが片道分の時間より小さいとき
+
+		//現在の時間 / 片道分の時間 で倍率を出す
+		moveScale = m_moveTimer / TIME_MOVE;
+	}
+	//タイマーが往復分の時間より小さいか？
+	else if (m_moveTimer < TIME_MOVE * 2)
+	{
+		//タイマーが片道分の時間より大きい、かつ、
+		//往復分の時間より小さいとき
+
+		//終端位置への残りのタイマーを出して、倍率を出す
+		moveScale = (TIME_MOVE * 2.0f - m_moveTimer) / TIME_MOVE;
+	}
+	else
+	{
+		//タイマーが往復分の時間より大きい時
+
+		//タイマーを初期化する
+		m_moveTimer = 0.0f;
+	}
+
+	//移動先へのベクトルに、倍率を掛ける
+	movePos.Scale(moveScale);
+
+	//現在の場所を、初期位置から移動先へのベクトルを加算した場所にする
+	m_position = m_startPosition + movePos;
+
+	//カウンターを進める
+	m_moveTimer += GameTime().GetFrameDeltaTime();
+
+	return;
+}
+
+/**
+ * @brief サウンドの更新処理
+*/
+void OOwall::SEUpdate()
+{
+	//プレイヤーから自身へのベクトル
+	Vector3 fromPlayerVec = m_position - m_player->GetPosition();
+	//プレイヤーからの距離
+	const float distFromPlayer = fromPlayerVec.Length();
+
+	//距離が最大距離より小さいか？
+	if (distFromPlayer < DISTANCE_MAX_WALL_MOVE_SOUND)
+	{
+		//音量の倍率
+		//distFromPlayerが小さくなるほど、倍率が～1.0fに近づく
+		const float volumeRate =
+			(DISTANCE_MAX_WALL_MOVE_SOUND - distFromPlayer) / DISTANCE_MAX_WALL_MOVE_SOUND;
+		//音量計算
+		const float volume = SOUND_VALUME_WALL_MOVE * volumeRate;
+
 
 		//UFOmoveSEをループ再生をオンで再生する。
 		m_wallmoveSE->Play(true);
 
 		//音量調節
-		m_wallmoveSE->SetVolume(Vo);
+		m_wallmoveSE->SetVolume(volume);
 
 	}
-	else {
-		if (m_wallmoveSE->IsPlaying()) {
+	else 
+	{
+		//距離が最大距離より大きい
+
+		//再生中か？
+		if (m_wallmoveSE->IsPlaying()) 
+		{
+			//再生中なら停止する
 			m_wallmoveSE->Stop();
 		}
 	}
+
+	return;
 }
 
 /// <summary>
@@ -156,4 +232,6 @@ void OOwall::FirstUpdate()
 
 	//一回目のアップデートの終了
 	m_firstUpdateFlag = false;
+
+	return;
 }
