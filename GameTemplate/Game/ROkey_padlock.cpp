@@ -43,20 +43,11 @@ void ROkey_padlock::QuerySub()
 	if (GetObjectType() == EN_RO_TYPE_KEY)
 	{
 		//障害オブジェクトの「大きな南京錠」をクエリ
-		QueryLOs<OOpadlock>(EN_OO_TYPE_BIG_PADLOCK, [&](OOpadlock* padlock) -> bool
+		QueryLOs<OOpadlock>(EN_OO_TYPE_BIG_PADLOCK, [&](OOpadlock* bigPadlock) -> bool
 			{
-				//自身と「大きな南京錠」が衝突したら
-				if (IsHitLevelObject(*this, *padlock))
-				{
-					//「大きな南京錠」を破棄
-					DeleteGO(padlock);
+				//自身が「鍵」で、「大きな南京錠」と衝突した時の処理
+				KeyHitBigPadlock(bigPadlock);
 
-					//南京錠が開くときのサウンドをワンショット再生で再生する
-					m_padlockbreakSE->Play(false);
-
-					//自身のオブジェクトを破棄
-					DeleteGO(this);
-				}
 				return true;
 			}
 		);
@@ -64,4 +55,30 @@ void ROkey_padlock::QuerySub()
 
 	return;
 
+}
+
+
+/**
+ * @brief 自身が「鍵」で、「大きな南京錠」と衝突した時の処理
+*/
+void ROkey_padlock::KeyHitBigPadlock(OOpadlock* bigPadlock)
+{
+	//行動できるか？
+	if (m_actionFlag)
+	{
+		//自身と「大きな南京錠」が衝突したら
+		if (IsHitLevelObject(*this, *bigPadlock))
+		{
+			//「大きな南京錠」を破棄
+			DeleteGO(bigPadlock);
+			//南京錠が開くときのサウンドをワンショット再生で再生する
+			m_padlockbreakSE->Play(false);
+			//行動できなくする
+			m_actionFlag = false;
+			//自身のオブジェクトを破棄
+			DeleteGO(this);
+		}
+	}
+
+	return;
 }

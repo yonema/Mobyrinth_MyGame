@@ -34,7 +34,13 @@ private:	//privateなメンバ関数
 	*/
 	void InitSound();
 
+	/**
+	 * @brief 自身が「鍵」で、「大きな南京錠」と衝突した時の処理
+	*/
+	void KeyHitBigPadlock(OOpadlock* bigPadlock);
+
 private:	//データメンバ
-	CSoundCue* m_padlockbreakSE = nullptr; //南京錠が開くときのサウンド
+	CSoundCue* m_padlockbreakSE = nullptr;	//南京錠が開くときのサウンド
+	bool m_actionFlag = true;				//行動できるか？
 };
 
