@@ -29,4 +29,10 @@ namespace ROsFilepathConstdata
 	//「金槌」
 	constexpr const char* const MODEL_FILEPATH_HAMMER = "Assets/modelData/hammer.tkm";
 
+	//「稼働」「停止」オブジェクトのモデルのファイルパス
+	//「稼働」
+	constexpr const char* const MODEL_FILEPATH_RUNNING = "Assets/modelData/running.tkm";
+	//「停止」
+	constexpr const char* const MODEL_FILEPATH_STOP = "Assets/modelData/stop.tkm";
+
 }
