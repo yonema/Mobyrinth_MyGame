@@ -31,7 +31,7 @@ public:
 
 	/**
 	 * @brief 「壁」と衝突した時の処理
-	 * @param wall 「壁」のポインタ
+	 * @param [in] wall 「壁」のポインタ
 	*/
 	void HitWall(OOwall* wall);
 

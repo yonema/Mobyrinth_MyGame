@@ -16,16 +16,67 @@ CSpriteRender::~CSpriteRender()
 
 }
 
-/// <summary>
-/// 初期化用関数
-/// 最初に呼んでね。
-/// </summary>
-/// <param name="texFilePath">ddsファイルパス</param>
-/// <param name="w">スプライトの横幅</param>
-/// <param name="h">スプライトの縦幅</param>
-/// <param name="pivot">ピボット（基点）</param>
-void CSpriteRender::Init(const char* texFilePath, const float w, const float h, const Vector2& pivot,
-	AlphaBlendMode alphaBlendMode)
+/**
+ * @brief 初期化用関数。幅の引数が<float>バージョン。最初に呼んでね。
+ * @attention 幅はUINTにキャストされるので、小数点以下のデータは失われる。
+ * @param [in] texFilePath ddsファイルパス
+ * @param [in] w スプライトの横幅
+ * @param [in] h スプライトの縦幅
+ * @param [in] pivot ピボット（基点）
+ * @param [in] alphaBlendMode アルファブレンディングモード
+*/
+void CSpriteRender::Init(
+	const char* texFilePath,
+	const float w,
+	const float h,
+	const Vector2& pivot,
+	AlphaBlendMode alphaBlendMode
+)
+{
+	//初期化用関数のメインコア
+	InitMainCore(texFilePath, static_cast<UINT>(w), static_cast<UINT>(h), pivot, alphaBlendMode);
+
+	return;
+}
+
+/**
+ * @brief 初期化用関数。幅の引数が<int>バージョン。最初に呼んでね。
+ * @param [in] texFilePath ddsファイルパス
+ * @param [in] w スプライトの横幅
+ * @param [in] h スプライトの縦幅
+ * @param [in] pivot ピボット（基点）
+ * @param [in] alphaBlendMode アルファブレンディングモード
+*/
+void CSpriteRender::Init(
+	const char* texFilePath,
+	const int w,
+	const int h,
+	const Vector2& pivot,
+	AlphaBlendMode alphaBlendMode
+)
+{
+	//初期化用関数のメインコア
+	//intをfloatにキャストしてから渡す
+	InitMainCore(texFilePath, static_cast<UINT>(w), static_cast<UINT>(h), pivot, alphaBlendMode);
+
+	return;
+}
+
+/**
+ * @brief 初期化用関数のメインコア。Init関数の中で呼ばれる。
+ * @param [in] texFilePath ddsファイルパス
+ * @param [in] w スプライトの横幅
+ * @param [in] h スプライトの縦幅
+ * @param [in] pivot ピボット（基点）
+ * @param [in] alphaBlendMode アルファブレンディングモード
+*/
+void CSpriteRender::InitMainCore(
+	const char* texFilePath,
+	const UINT w,
+	const UINT h,
+	const Vector2& pivot,
+	AlphaBlendMode alphaBlendMode
+)
 {
 	//スプライトの初期化用データ
 	SpriteInitData initData;

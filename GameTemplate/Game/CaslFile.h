@@ -42,7 +42,7 @@ public:		//ƒƒ“ƒoŠÖ”
 	/// <returns></returns>
 	int GetNumCaslData() const
 	{
-		return m_caslDataList.size();
+		return static_cast<int>(m_caslDataList.size());
 	}
 
 	/// <summary>

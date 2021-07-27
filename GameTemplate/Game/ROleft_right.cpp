@@ -42,7 +42,7 @@ void ROleft_right::QuerySub()
 
 /**
  * @brief 「一方通行」と衝突した時の処理
- * @param oneway 「一方通行」のポインタ
+ * @param [in] oneway 「一方通行」のポインタ
 */
 void ROleft_right::HitOneway(OOoneway* oneway)
 {

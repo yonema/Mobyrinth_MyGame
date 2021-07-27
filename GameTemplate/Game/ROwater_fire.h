@@ -20,19 +20,19 @@ private:	//privateなメンバ関数
 
 	/**
 	 * @brief 自身が「水」で、「炎」と衝突した時の処理
-	 * @param flame 「炎」のポインタ
+	 * @param [in] flame 「炎」のポインタ
 	*/
 	void WaterHitFlame(OOflame* flame);
 
 	/**
 	 * @brief 自身が「水」で、「火」と衝突した時の処理
-	 * @param fire 「火」のポインタ
+	 * @param [in] fire 「火」のポインタ
 	*/
 	void WaterHitFire(ROwater_fire* fire);
 
 	/**
 	 * @brief 自身が「火」で、「水」と衝突した時の処理
-	 * @param water 「水」のポインタ
+	 * @param [in] water 「水」のポインタ
 	*/
 	void FireHitWater(ROwater_fire* water);
 

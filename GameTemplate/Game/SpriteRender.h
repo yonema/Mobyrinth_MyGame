@@ -26,21 +26,39 @@ public:		//ここのメンバ関数を主に使う
 		m_sprite.Update(m_position, m_rotation, m_scale, m_pivot);
 	}
 
-	/// <summary>
-	/// 初期化用関数
-	/// 最初に呼んでね。
-	/// </summary>
-	/// <param name="texFilePath">ddsファイルパス</param>
-	/// <param name="w">スプライトの横幅</param>
-	/// <param name="h">スプライトの縦幅</param>
-	/// <param name="pivot">ピボット（基点）</param>
-	/// <param name="alphaBlendMode">アルファブレンディングモード</param>
+	/**
+	 * @brief 初期化用関数。幅の引数が<float>バージョン。最初に呼んでね。
+	 * @attention 幅はUINTにキャストされるので、小数点以下のデータは失われる。
+	 * @param [in] texFilePath ddsファイルパス
+	 * @param [in] w スプライトの横幅
+	 * @param [in] h スプライトの縦幅
+	 * @param [in] pivot ピボット（基点）
+	 * @param [in] alphaBlendMode アルファブレンディングモード
+	*/
 	void Init(
 		const char* texFilePath,
 		const float w,
 		const float h,
 		const Vector2& pivot = spriteRenderConstData::SPRITE_PIVOT_DEFALUT,
-		AlphaBlendMode alphaBlendMode = AlphaBlendMode_None);
+		AlphaBlendMode alphaBlendMode = AlphaBlendMode_None
+	);
+
+	/**
+	 * @brief 初期化用関数。幅の引数が<int>バージョン。最初に呼んでね。
+	 * @param [in] texFilePath ddsファイルパス
+	 * @param [in] w スプライトの横幅
+	 * @param [in] h スプライトの縦幅
+	 * @param [in] pivot ピボット（基点）
+	 * @param [in] alphaBlendMode アルファブレンディングモード
+	*/
+	void Init(
+		const char* texFilePath,
+		const int w,
+		const int h,
+		const Vector2& pivot = spriteRenderConstData::SPRITE_PIVOT_DEFALUT,
+		AlphaBlendMode alphaBlendMode = AlphaBlendMode_None
+	);
+
 
 	/// <summary>
 	/// 場所を設定する。{0.0f,0.0f}が中央
@@ -132,6 +150,24 @@ public:		//ここのメンバ関数を主に使う
 	{
 		return m_sprite.GetMulColor();
 	}
+
+private:	//privateなメンバ関数
+
+	/**
+	 * @brief 初期化用関数のメインコア。Init関数の中で呼ばれる。
+	 * @param [in] texFilePath ddsファイルパス
+	 * @param [in] w スプライトの横幅
+	 * @param [in] h スプライトの縦幅
+	 * @param [in] pivot ピボット（基点）
+	 * @param [in] alphaBlendMode アルファブレンディングモード
+	*/
+	void InitMainCore(
+		const char* texFilePath,
+		const UINT w,
+		const UINT h,
+		const Vector2& pivot,
+		AlphaBlendMode alphaBlendMode
+	);
 
 private:	//データメンバ
 	Sprite m_sprite;							//スプライトクラス

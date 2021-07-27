@@ -290,7 +290,7 @@ void IStageBase::LoadLevel(const char* tklFilePath)
 				PRIORITY_SECOND
 				);
 			//スイッチのタイマーを設定する
-			m_switch->SetResetTimerStartValue(m_switchTime);
+			m_switch->SetEntityMaxTime(m_switchTime);
 			return true;
 		}
 

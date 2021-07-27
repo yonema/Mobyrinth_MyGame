@@ -51,7 +51,7 @@ private:	//privateなメンバ関数
 
 	/**
 	 * @brief 自身が「金槌」で、「箱」と衝突した時の処理
-	 * @param box 
+	 * @param [in] box 「箱」のポインタ
 	*/
 	void HammerHitBox(OObox* box);
 

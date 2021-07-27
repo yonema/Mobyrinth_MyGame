@@ -1415,7 +1415,9 @@ void Player::SetWayPointPos
 	m_wayPointPos = posVec;
 	//ウェイポイントステートの最大の値を設定
 	//ステートは0から始まるから、サイズより1小さくする
-	m_maxWayPointState = m_wayPointPos->size() - 1;
+	m_maxWayPointState = static_cast<int>(m_wayPointPos->size()) - 1;
+
+	return;
 	
 }
 
@@ -1430,7 +1432,9 @@ void Player::SetWayPointRot
 	m_wayPointRot = rotVec;
 	//ウェイポイントステートの最大の値を設定
 	//ステートは0から始まるから、サイズより1小さくする
-	m_maxWayPointState = m_wayPointRot->size() - 1;
+	m_maxWayPointState = static_cast<int>(m_wayPointRot->size()) - 1;
+
+	return;
 }
 
 
