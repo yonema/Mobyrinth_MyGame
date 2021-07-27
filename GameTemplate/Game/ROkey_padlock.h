@@ -36,7 +36,7 @@ private:	//privateなメンバ関数
 
 	/**
 	 * @brief 自身が「鍵」で、「大きな南京錠」と衝突した時の処理
-	 * @param bigPadlock 「大きな南京錠」のポインタ
+	 * @param [in] bigPadlock 「大きな南京錠」のポインタ
 	*/
 	void KeyHitBigPadlock(OOpadlock* bigPadlock);
 

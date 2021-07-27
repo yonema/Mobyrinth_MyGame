@@ -64,7 +64,7 @@ void ROwater_fire::QuerySub()
 
 /**
  * @brief 自身が「水」で、「炎」と衝突した時の処理
- * @param flame 「炎」のポインタ
+ * @param flame [in] 「炎」のポインタ
 */
 void ROwater_fire::WaterHitFlame(OOflame* flame)
 {
@@ -88,7 +88,7 @@ void ROwater_fire::WaterHitFlame(OOflame* flame)
 
 /**
  * @brief 自身が「水」で、「火」と衝突した時の処理
- * @param fire 「火」のポインタ
+ * @param fire [in] 「火」のポインタ
 */
 void ROwater_fire::WaterHitFire(ROwater_fire* fire)
 {
@@ -112,7 +112,7 @@ void ROwater_fire::WaterHitFire(ROwater_fire* fire)
 
 /**
  * @brief 自身が「火」で、「水」と衝突した時の処理
- * @param water 「水」のポインタ
+ * @param water [in] 「水」のポインタ
 */
 void ROwater_fire::FireHitWater(ROwater_fire* water)
 {

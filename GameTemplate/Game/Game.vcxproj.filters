@@ -78,9 +78,6 @@
     <Filter Include="MyCode\Timer">
       <UniqueIdentifier>{70b6ee87-5725-4869-ab1d-15b0b3a1cae8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\LevelObject\TransparentObject">
-      <UniqueIdentifier>{29081464-a22e-4612-9396-393e3742a98e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ExEngine\effect">
       <UniqueIdentifier>{c549521a-8801-4d62-819d-a3eefeb37cef}</UniqueIdentifier>
     </Filter>
@@ -401,9 +398,6 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="TransparentSwitch.cpp">
-      <Filter>MyCode\LevelObject\TransparentObject</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
       <Filter>ExEngine\effect</Filter>
     </ClCompile>
@@ -502,6 +496,9 @@
     </ClCompile>
     <ClCompile Include="ROnail_hammer.cpp">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="OOTransparentSwitch.cpp">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -790,9 +787,6 @@
     <ClInclude Include="StopWatch.h">
       <Filter>MyCode\Timer</Filter>
     </ClInclude>
-    <ClInclude Include="TransparentSwitch.h">
-      <Filter>MyCode\LevelObject\TransparentObject</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
       <Filter>ExEngine\effect</Filter>
     </ClInclude>
@@ -960,6 +954,9 @@
     </ClInclude>
     <ClInclude Include="ROnail_hammer.h">
       <Filter>MyCode\LevelObject\ReversibleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="OOTransparentSwitch.h">
+      <Filter>MyCode\LevelObject\ObstacleObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

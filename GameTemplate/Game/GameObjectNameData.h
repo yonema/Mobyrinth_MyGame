@@ -8,16 +8,16 @@ const char* const NAME_EMPTY = "";
 */
 enum EN_GAME_OBJECT_TYPE
 {
-	EN_GO_TYPE_GAME,		//CGameクラス
+	EN_GO_TYPE_GAME,			//CGameクラス
 	//ゲーム全体を通して使われるCDirectionLightクラス
 	EN_GO_TYPE_GAME_DIRECTION_LIGHT,
-	EN_GO_TYPE_TITLE,		//CTitleクラス
+	EN_GO_TYPE_TITLE,			//CTitleクラス
 	EN_GO_TYPE_START_DIRECTING,	//CStartDirectingクラス
-	EN_GO_TYPE_PAUSE,		//CPauseクラス
-	EN_GO_TYPE_GAME_CAMERA,	//CGameCameraクラス
-	EN_GO_TYPE_MOBIUS,		//CMobiusクラス
-	EN_GO_TYPE_PLAYER,		//CPlayerクラス
-	EN_GO_TYPE_UFO,			//CUFOクラス
+	EN_GO_TYPE_PAUSE,			//CPauseクラス
+	EN_GO_TYPE_GAME_CAMERA,		//CGameCameraクラス
+	EN_GO_TYPE_MOBIUS,			//CMobiusクラス
+	EN_GO_TYPE_PLAYER,			//CPlayerクラス
+	EN_GO_TYPE_UFO,				//CUFOクラス
 };
 
 

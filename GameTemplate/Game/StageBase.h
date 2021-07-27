@@ -41,7 +41,7 @@
 #include "OOgoal.h"
 #include "OOpadlock.h"
 #include "OObox.h"
-#include "TransparentSwitch.h"
+#include "OOTransparentSwitch.h"
 #include "OOoneway.h"
 #include "OOReverseALL.h"
 

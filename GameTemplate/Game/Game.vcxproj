@@ -365,7 +365,7 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TklFile.cpp" />
-    <ClCompile Include="TransparentSwitch.cpp" />
+    <ClCompile Include="OOTransparentSwitch.cpp" />
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="WaveFileBank.cpp" />
   </ItemGroup>
@@ -518,7 +518,7 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TklFile.h" />
-    <ClInclude Include="TransparentSwitch.h" />
+    <ClInclude Include="OOTransparentSwitch.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />

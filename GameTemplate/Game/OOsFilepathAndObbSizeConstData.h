@@ -47,4 +47,12 @@ namespace OOsFilepathAndObbSizeConstData
 	constexpr const char* const MODEL_FILEPATH_WALL = "Assets/modelData/wall.tkm";
 	//「壁」のモデルの拡大率
 	const Vector3 MODEL_SCALE_WALL = { 400.0f,1000.0f,400.0f };
+
+	//「スイッチ」のモデルのファイルパス
+	constexpr const char* const MODEL_FILEPATH_SWITCH = "Assets/modelData/transparentSwitch.tkm";
+	//押された「スイッチ」のモデルのファイルパス
+	constexpr const char* const MODEL_FILEPATH_SWITCH_PRESSED = "Assets/modelData/transparentSwitch2.tkm";
+	//「スイッチ」のモデルの拡大率
+	const Vector3 MODEL_SCALE_SWITCH = { 100.0f,200.0f,600.0f };
+
 }

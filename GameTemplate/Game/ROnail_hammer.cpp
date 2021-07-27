@@ -84,7 +84,7 @@ void ROnail_hammer::QuerySub()
 
 /**
  * @brief 自身が「金槌」で、「箱」と衝突した時の処理
- * @param box
+ * @param [in] box 箱のポインタ
 */
 void ROnail_hammer::HammerHitBox(OObox* box)
 {
