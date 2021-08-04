@@ -52,6 +52,12 @@ bool Skeleton::Init(const char* tksFilePath)
 	BuildBoneMatrices();
 	return loaded;
 }
+
+/// <summary>
+/// レベル用の初期化。
+/// </summary>
+/// <param name="tklFilePath">tksファイルのファイルパス</param>
+/// <returns>trueが返ってきたらロード成功。</returns>
 bool Skeleton::InitLevel(const char* tklFilePath)
 {
 	//tklファイルをロードする
@@ -128,6 +134,11 @@ void Skeleton::BuildBoneMatrices()
 	m_isInited = true;
 
 }
+
+/// <summary>
+/// レベル用のボーン行列の構築。
+/// 読み込みが完了した後で呼び出してください。
+/// </summary>
 void Skeleton::BuildBoneMatricesLevel()
 {
 	m_tklFile.QueryBone([&](TklFile::SBone& tklBone) {

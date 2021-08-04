@@ -317,7 +317,7 @@ void OOTransparentSwitch::SwitchingProduction()
 		//フェードアウトとフェードインの間
 
 		//フェードは真っ暗
-		g_graphicsEngine->GetSceneChange().
+		g_graphicsEngine->GetHUD().
 			SetFadeSpriteAlphaValue(spriteRenderConstData::ALPHA_VALUE_OPACITY);
 		//カメラをステージ全体を見渡す位置に移動させる処理
 		CameraSetStageView();
@@ -365,7 +365,7 @@ void OOTransparentSwitch::SwitchingProduction()
 		//フェードアウトとフェードインの間
 
 		//フェードは真っ暗
-		g_graphicsEngine->GetSceneChange().
+		g_graphicsEngine->GetHUD().
 			SetFadeSpriteAlphaValue(spriteRenderConstData::ALPHA_VALUE_OPACITY);
 		//カメラがプレイヤーを見るようにする
 		CameraSetLookPlayer();
@@ -408,7 +408,7 @@ void OOTransparentSwitch::FadeOut(const float fadeRate)
 	//アルファ値
 	const float alphaValue = Math::Lerp<float>(fadeRate, 0.0f, 1.0f);
 	//フェードを徐々に暗くしていく
-	g_graphicsEngine->GetSceneChange().SetFadeSpriteAlphaValue(alphaValue);
+	g_graphicsEngine->GetHUD().SetFadeSpriteAlphaValue(alphaValue);
 
 	return;
 }
@@ -422,7 +422,7 @@ void OOTransparentSwitch::FadeIn(const float fadeRate)
 	//アルファ値
 	const float alphaValue = Math::Lerp(fadeRate, 1.0f, 0.0f);
 	//フェードを徐々に明るくしていく
-	g_graphicsEngine->GetSceneChange().SetFadeSpriteAlphaValue(alphaValue);
+	g_graphicsEngine->GetHUD().SetFadeSpriteAlphaValue(alphaValue);
 
 	return;
 }
@@ -437,7 +437,7 @@ void OOTransparentSwitch::Switching()
 	{
 		//小さいとき
 		//フェードを透明にする
-		g_graphicsEngine->GetSceneChange().
+		g_graphicsEngine->GetHUD().
 			SetFadeSpriteAlphaValue(spriteRenderConstData::ALPHA_VALUE_TRANSPARENT);
 
 		//早期リターン
@@ -475,7 +475,7 @@ void OOTransparentSwitch::SwitchingEnd()
 	m_switchingTimer = 0.0f;
 
 	//フェードを透明にする
-	g_graphicsEngine->GetSceneChange().
+	g_graphicsEngine->GetHUD().
 		SetFadeSpriteAlphaValue(spriteRenderConstData::ALPHA_VALUE_TRANSPARENT);
 
 	//プレイヤーを操作可能にする

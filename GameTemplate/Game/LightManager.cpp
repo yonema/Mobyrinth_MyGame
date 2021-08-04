@@ -39,7 +39,7 @@ void CLightManager::Init()
 
 
 //アップデート
-void CLightManager::ExecuteUpdate()
+void CLightManager::Update()
 {
 	//視点をカメラの位置にする
 	m_lightParam.eyePos = g_camera3D->GetPosition();

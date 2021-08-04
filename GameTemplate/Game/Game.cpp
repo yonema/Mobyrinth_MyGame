@@ -31,6 +31,8 @@ CGame::~CGame()
 			DeleteGO(title);
 			return true;
 		});
+
+	return;
 }
 
 //デバック用
