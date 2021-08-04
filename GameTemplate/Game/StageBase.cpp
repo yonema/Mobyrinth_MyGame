@@ -575,11 +575,11 @@ void IStageBase::Update()
 	if (m_wipeInFlag)
 	{
 		//ワイプが終了位置にいないか調べて、
-		m_wipeInFlag = !g_graphicsEngine->GetSceneChange().IsWipeFinished();
+		m_wipeInFlag = !g_graphicsEngine->GetHUD().IsWipeFinished();
 		//終了位置まで来ていたら、ワイプの終了させる
 		if (!m_wipeInFlag)
 		{
-			g_graphicsEngine->GetSceneChange().WipeEnd();
+			g_graphicsEngine->GetHUD().WipeEnd();
 			m_gameCamea->SetWipeEndFlag(true);
 		}
 	}
@@ -726,7 +726,7 @@ void IStageBase::CheckGoal()
 void IStageBase::WipeIn()
 {
 	//ワイプインする
-	g_graphicsEngine->GetSceneChange().WipeIn();
+	g_graphicsEngine->GetHUD().WipeIn();
 }
 
 /// <summary>
@@ -736,12 +736,12 @@ void IStageBase::WipeIn()
 bool IStageBase::WipeOut()
 {
 	//ワイプの状態が、開始位置なら
-	if (g_graphicsEngine->GetSceneChange().GetWipeSize() == 0.0f)
+	if (g_graphicsEngine->GetHUD().GetWipeSize() == 0.0f)
 		//ワイプアウトする
-		g_graphicsEngine->GetSceneChange().RandomWipeOut();
+		g_graphicsEngine->GetHUD().RandomWipeOut();
 
 	//ワイプが終わったかどうか？
-	return g_graphicsEngine->GetSceneChange().IsWipeFinished();
+	return g_graphicsEngine->GetHUD().IsWipeFinished();
 
 }
 

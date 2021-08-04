@@ -400,7 +400,7 @@ void CTitle::StartTitle()
 	m_title->SetAlphaValue(transparentRate);
 
 	//ワイプが終了したか？
-	if (g_graphicsEngine->GetSceneChange().IsWipeFinished())
+	if (g_graphicsEngine->GetHUD().IsWipeFinished())
 	{
 		//ワイプが終了している状態で
 
@@ -567,7 +567,7 @@ void CTitle::StageSelect()
 		m_buttonFlag = false;
 
 		//ランダムワイプアウトをする
-		g_graphicsEngine->GetSceneChange().RandomWipeOut();
+		g_graphicsEngine->GetHUD().RandomWipeOut();
 
 		//ステージのステートをステージを決定した状態にする
 		m_stageState = EN_STAGE_DESICION;
@@ -709,7 +709,7 @@ void CTitle::SelectPrevStage()
 void CTitle::StageDecision()
 {
 	//ワイプが終わるまで処理しない
-	if (!g_graphicsEngine->GetSceneChange().IsWipeFinished())
+	if (!g_graphicsEngine->GetHUD().IsWipeFinished())
 		return;
 
 	////////////////////////////////////////////////////////////

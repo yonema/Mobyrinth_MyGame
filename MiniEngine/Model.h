@@ -63,6 +63,12 @@ public:
 	/// <param name="renderContext">レンダリングコンテキスト</param>
 	void Draw(RenderContext& renderContext);
 
+	/**
+	 * @brief ビュー行列とプロジェクション行列を指定して描画
+	 * @param [in] renderContext レンダリングコンテキスト
+	 * @param [in] viewMatrix ビュー行列
+	 * @param [in] projectionMatrix プロジェクション行列
+	*/
 	void Draw(RenderContext& renderContext, const Matrix& viewMatrix, const Matrix& projectionMatrix);
 
 	/// <summary>
@@ -104,10 +110,21 @@ public:
 		return *m_tkmFile;
 	}
 
+
+private:
+
+	Matrix m_world;										//ワールド行列。
+	TkmFile* m_tkmFile = nullptr;						//tkmファイル。
+	Skeleton m_skeleton;								//スケルトン。
+	MeshParts m_meshParts;								//メッシュパーツ。
+	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
+
+	//追加
+public:
 	/// <summary>
-	/// シャドウレシーバーフラグを設定する
-	/// </summary>
-	/// <param name="shadowReceiverFlag">シャドウレシーバー？</param>
+/// シャドウレシーバーフラグを設定する
+/// </summary>
+/// <param name="shadowReceiverFlag">シャドウレシーバー？</param>
 	void SetShadowReceiverFlag(const bool shadowReceiverFlag)
 	{
 		m_shadowReceiverFlag = shadowReceiverFlag;
@@ -115,14 +132,14 @@ public:
 
 
 
-	/// <summary>
-	/// メッシュとレイの交差判定
-	/// </summary>
-	/// <param name="start">レイの始点</param>
-	/// <param name="end">レイの終点</param>
-	/// <returns>交差したか？</returns>
+	/**
+	 * @brief メッシュとレイの交差判定
+	 * @param [in] start レイの始点
+	 * @param [in] end レイの終点
+	 * @return 交差したか？
+	*/
 	bool InIntersectLine(const Vector3& start, const Vector3& end);
-	
+
 	/// <summary>
 	/// InIntersectLineで交差した交差点を取得
 	/// </summary>
@@ -175,15 +192,7 @@ public:
 	{
 		m_meshParts.SetStealthFlag(stealthFlag);
 	}
-
 private:
-
-	Matrix m_world;										//ワールド行列。
-	TkmFile* m_tkmFile = nullptr;						//tkmファイル。
-	Skeleton m_skeleton;								//スケルトン。
-	MeshParts m_meshParts;								//メッシュパーツ。
-	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
-
 	bool m_shadowReceiverFlag = false;		//シャドウレシーバー？
 
 	Vector3 m_intersectPos = g_VEC3_ZERO;	//交差点

@@ -704,6 +704,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 				float2 shadowValue = g_shadowMap.Sample(g_sampler, shadowMapUV).rg;
 				if (zInLVP > shadowValue.r + 0.0001)
 				{
+					//depth_sq：平均の二乗、shadowValue.y：二乗の平均
 					float depth_sq = shadowValue.x * shadowValue.x;
 					float variance = min(max(shadowValue.y - depth_sq, 0.0001f), 1.0f);
 					float md = zInLVP - shadowValue.x;
@@ -731,11 +732,12 @@ float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal)
 	//lig += albedoColor * emissionColor;
 	lig.xyz += emissionColor.xyz;
 	lig *= mulColor;
-
+	
 	float4 color = g_skyCubeMap.Sample(g_sampler, normal * -1.0f);
 
 	//リム
 	//輪郭を光らせる
+	//法線のZ成分が多いほどリムが弱くなる
 	float limPower = pow( 1.0f - abs(viewNormal.z), 5.0f );
 	lig.xyz += color * limPower * 0.8f;
 	

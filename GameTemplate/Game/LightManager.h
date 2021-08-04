@@ -86,7 +86,7 @@ public://publidなメンバ関数
 	/// ゲームループで読んでほしい
 	/// アップデート関数関数
 	/// </summary>
-	void ExecuteUpdate();
+	void Update();
 
 	/// <summary>
 	/// ライトを追加する関数（ディレクションライト）

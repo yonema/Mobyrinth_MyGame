@@ -92,6 +92,13 @@ void Model::Draw(RenderContext& rc)
 		m_shadowReceiverFlag
 	);
 }
+
+/**
+ * @brief ビュー行列とプロジェクション行列を指定して描画
+ * @param [in] renderContext レンダリングコンテキスト
+ * @param [in] viewMatrix ビュー行列
+ * @param [in] projectionMatrix プロジェクション行列
+*/
 void Model::Draw(RenderContext& rc, const Matrix& viewMatrix,const Matrix& projectionMatrix)
 {
 	m_meshParts.Draw(
@@ -103,7 +110,12 @@ void Model::Draw(RenderContext& rc, const Matrix& viewMatrix,const Matrix& proje
 	);
 }
 
-
+/**
+ * @brief メッシュとレイの交差判定
+ * @param [in] start レイの始点
+ * @param [in] end レイの終点
+ * @return 交差したか？
+*/
 bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 {
 	const auto& meshParts = m_tkmFile->GetMeshParts();

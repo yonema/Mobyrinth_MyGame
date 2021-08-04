@@ -71,7 +71,7 @@ void GraphicsEngine::WaitDraw()
  * @brief メインレンダーターゲットの初期化
  * @return 初期化できたか？
 */
-const bool GraphicsEngine::InitMainRenderTarget()
+bool GraphicsEngine::InitMainRenderTarget()
 {
 	bool ret =
 		m_mainRenderTarget.Create(
@@ -261,7 +261,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	//ポストエフェクトの初期化
 	m_postEffect.Init();
 	//
-	m_sceneChange.Init();
+	m_hud.Init();
 
 	m_skyCubeTexture.InitFromDDSFile(L"Assets/modelData/preset/sky.dds" );
 
@@ -542,13 +542,15 @@ void GraphicsEngine::BeginRender()
 
 	//UseMainRenderTarget();
 
-
+	return;
 }
 
 
 void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 {
 	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
+
+	return;
 }
 
 ///// <summary>
@@ -571,6 +573,8 @@ void GraphicsEngine::UseMainRenderTarget()
 	m_renderContext.SetRenderTargetAndViewport(m_mainRenderTarget);
 	// レンダリングターゲットをクリア
 	m_renderContext.ClearRenderTargetView(m_mainRenderTarget);
+
+	return;
 }
 
 /// <summary>
@@ -579,17 +583,21 @@ void GraphicsEngine::UseMainRenderTarget()
 void GraphicsEngine::WaitDrawingMainRenderTarget()
 {
 	m_renderContext.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+
+	return;
 }
 
 /**
- * @brief 場面転換の描画
+ * @brief HUDの描画
 */
-void GraphicsEngine::SceneChangeRender()
+void GraphicsEngine::HUDRender()
 {
 	//パラメータのアップデート
-	m_sceneChange.UpdateParam();
+	m_hud.UpdateParam();
 	//描画
-	m_sceneChange.Draw(m_renderContext);
+	m_hud.Draw(m_renderContext);
+
+	return;
 }
 
 /**
@@ -603,6 +611,8 @@ void GraphicsEngine::CopyToFrameBuffer()
 		m_currentFrameBufferDSVHandle
 	);
 	m_copyToFrameBufferSprite.Draw(m_renderContext);
+
+	return;
 }
 
 /**
@@ -627,6 +637,8 @@ void GraphicsEngine::ZPrepass(RenderContext& rc)
 	}
 
 	rc.WaitUntilFinishDrawingToRenderTarget(m_zprepassRenderTarget);
+
+	return;
 }
 
 /**
@@ -635,6 +647,8 @@ void GraphicsEngine::ZPrepass(RenderContext& rc)
 void GraphicsEngine::ClearZPrepassModels()
 {
 	m_zprepassModels.clear();
+
+	return;
 }
 
 void GraphicsEngine::EndRender()
@@ -663,4 +677,6 @@ void GraphicsEngine::EndRender()
 	m_directXTKGfxMemroy->GarbageCollect();
 	//描画完了待ち。
 	WaitDraw();
+
+	return;
 }

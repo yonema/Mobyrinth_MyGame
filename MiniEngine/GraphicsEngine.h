@@ -335,7 +335,7 @@ private:	//データメンバ
 	Texture m_skyCubeTexture;					//スカイキューブのテクスチャ
 	CPostEffect m_postEffect;					//ポストエフェクト
 	CShadowMap m_shadowMap;						//シャドウマップ
-	CHUD m_sceneChange;					//場面転換
+	CHUD m_hud;					//場面転換
 
 public:		//メンバ関数
 
@@ -368,9 +368,9 @@ public:		//メンバ関数
 	void WaitDrawingMainRenderTarget();
 
 	/**
-	 * @brief 場面転換の描画
+	 * @brief HUDの描画
 	*/
-	void SceneChangeRender();
+	void HUDRender();
 
 
 	/**
@@ -451,9 +451,9 @@ public:		//メンバ関数
 	 * @brief 場面転換の参照を得る
 	 * @return 場面転換の参照
 	*/
-	CHUD& GetSceneChange()
+	CHUD& GetHUD()
 	{
-		return m_sceneChange;
+		return m_hud;
 	};
 
 private:	//privateなメンバ関数
@@ -462,7 +462,7 @@ private:	//privateなメンバ関数
 	 * @brief メインレンダーターゲットの初期化
 	 * @return 初期化できたか？
 	*/
-	const bool InitMainRenderTarget();
+	bool InitMainRenderTarget();
 
 	/**
 	 * @brief フレームバッファにコピーするスプライトの初期化

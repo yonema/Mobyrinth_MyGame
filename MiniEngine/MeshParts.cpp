@@ -212,7 +212,7 @@ void MeshParts::Draw(
 	//プリミティブのトポロジーはトライアングルリストのみ。
 	rc.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	//定数バッファを更新する。
+	//共通定数バッファを更新する。
 	SConstantBuffer cb;
 	cb.mWorld = mWorld;
 	cb.mView = mView;

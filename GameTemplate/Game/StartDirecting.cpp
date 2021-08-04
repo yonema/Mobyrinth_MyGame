@@ -94,7 +94,7 @@ void CStartDirecting::FadeDirectingCamera()
 		float timeScale = (m_fadeTimer) / (TIME_FADE_OUT);
 		alphaValue *= timeScale;
 		//フェードを徐々に暗くしていく
-		g_graphicsEngine->GetSceneChange().SetFadeSpriteAlphaValue(alphaValue);
+		g_graphicsEngine->GetHUD().SetFadeSpriteAlphaValue(alphaValue);
 	}
 	//フェードアウトとフェードインの中間の時間か？
 	else if (m_fadeTimer < TIME_FADE_WAIT)
@@ -103,7 +103,7 @@ void CStartDirecting::FadeDirectingCamera()
 		m_goAroundStageFlag = false;
 
 		//フェードは真っ暗
-		g_graphicsEngine->GetSceneChange().
+		g_graphicsEngine->GetHUD().
 			SetFadeSpriteAlphaValue(spriteRenderConstData::ALPHA_VALUE_OPACITY);
 	}
 	//フェードインの時間か？
@@ -118,13 +118,13 @@ void CStartDirecting::FadeDirectingCamera()
 		float timeScale = (m_fadeTimer - TIME_FADE_WAIT) / (TIME_FADE_IN - TIME_FADE_WAIT);
 		alphaValue -= 1.0f * timeScale;
 		//フェードを徐々に明るくしていく
-		g_graphicsEngine->GetSceneChange().SetFadeSpriteAlphaValue(alphaValue);
+		g_graphicsEngine->GetHUD().SetFadeSpriteAlphaValue(alphaValue);
 	}
 	else
 	{
 		//全ての工程が終わったら
 		//フェードを完全に透明にして
-		g_graphicsEngine->GetSceneChange().
+		g_graphicsEngine->GetHUD().
 			SetFadeSpriteAlphaValue(spriteRenderConstData::ALPHA_VALUE_TRANSPARENT);
 		//フェードを行わないようにする
 		m_fadeFlag = false;
