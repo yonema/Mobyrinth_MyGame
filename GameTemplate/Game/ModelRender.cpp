@@ -27,8 +27,8 @@ void CModelRender::Init(
 	InitModel(filePath, cullMode, modelUpAxis);
 	//アニメーションを初期化
 	InitAnimation(animationClips, numAnimationClips);
-	SetShadowCasterFlag(true);
-	SetShadowReceiverFlag(true);
+	//SetShadowCasterFlag(true);
+	//SetShadowReceiverFlag(true);
 
 	InitZPrepassModel();
 	//初期化完了
@@ -204,8 +204,7 @@ void CModelRender::InitAnimation(AnimationClip* animationClips, int numAnimation
 /// </summary>
 void CModelRender::InitShadowModel()
 {
-	//シャドウ用のモデルクラスの初期化
-	m_shadowModel.Init();
+
 
 	//シャドウ用のモデルの初期化データ
 	ModelInitData initShadowModelData;
@@ -220,14 +219,43 @@ void CModelRender::InitShadowModel()
 
 	initShadowModelData.m_tkmFilePath = m_tkmFilePath;
 
-	//シャドウ用のモデルの初期化
-	m_shadowModel.InitModel(initShadowModelData);
+	if (m_skeletonPtr)
+		initShadowModelData.m_skeleton = m_skeletonPtr.get();
+
+
+	//シャドウ用のモデルクラスの初期化
+	m_shadowModel.Init(initShadowModelData);
+	//m_shadowModel.InitModel(initShadowModelData);
 	//パラメータを更新する
 	m_shadowModel.UpdateModel(
 		m_position,
 		m_rotation,
 		m_scale
 	);
+
+	return;
+}
+
+/// <summary>
+/// シャドウキャスターフラグを設定
+/// </summary>
+/// <param name="shadowCasterFlag">シャドウキャスター？</param>
+void CModelRender::SetShadowCasterFlag(const bool shadowCasterFlag)
+{
+	//シャドウキャスターがtrueで、かつ
+	//まだシャドウ用モデルが初期化されていなかったら
+	if (shadowCasterFlag && !m_shadowModel.IsValid())
+	{
+		//シャドウ用モデルを初期化
+		InitShadowModel();
+	}
+	//シャドウキャスターがfalseで、かつ
+	//作動モデルが初期化済みだったら
+	else if (!shadowCasterFlag && m_shadowModel.IsValid())
+	{
+		//シャドウモデルの登録を消す
+		m_shadowModel.RemoveShadowModel();
+	}
 
 	return;
 }

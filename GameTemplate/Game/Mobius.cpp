@@ -64,7 +64,8 @@ bool CMobius::Start()
 	m_modelRender->Init(initData);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
-	//m_modelRender->SetShadowCasterFlag(true);
+
+	//シャドウレシーバーフラグを立てる
 	m_modelRender->SetShadowReceiverFlag(true);
 
 	return true;

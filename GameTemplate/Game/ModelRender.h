@@ -101,25 +101,7 @@ public:		//メンバ関数
 	/// シャドウキャスターフラグを設定
 	/// </summary>
 	/// <param name="shadowCasterFlag">シャドウキャスター？</param>
-	void SetShadowCasterFlag(const bool shadowCasterFlag)
-	{
-		//シャドウキャスターがtrueで、かつ
-		//まだシャドウ用モデルが初期化されていなかったら
-		if (shadowCasterFlag && !m_shadowModel.IsValid())
-		{
-			//シャドウ用モデルを初期化
-			InitShadowModel();
-		}
-		//シャドウキャスターがfalseで、かつ
-		//作動モデルが初期化済みだったら
-		else if (!shadowCasterFlag && m_shadowModel.IsValid())
-		{
-			//シャドウモデルの登録を消す
-			m_shadowModel.RemoveShadowModel();
-		}
-
-		return;
-	}
+	void SetShadowCasterFlag(const bool shadowCasterFlag);
 
 	/// <summary>
 	/// 自己発光色を設定する

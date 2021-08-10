@@ -4,6 +4,7 @@
 //スタート関数
 bool CUFO::PureVirtualStart()
 {
+	
 	//モデルレンダラーの生成と初期化
 	m_modelRender = NewGO<CModelRender>(0);
 	m_modelRender->Init("Assets/modelData/UFO2.tkm");
@@ -11,6 +12,8 @@ bool CUFO::PureVirtualStart()
 	m_modelRender->SetRotation(m_rotation);
 
 	m_modelRender->SetDrawOutLineFlag(true);
+
+	m_modelRender->SetShadowCasterFlag(true);
 
 	//アップベクトルを現在の回転に合わせる
 	m_rotation.Apply(m_upVec);
