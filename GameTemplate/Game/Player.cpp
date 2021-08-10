@@ -1125,6 +1125,8 @@ void Player::Fall()
 	//補完済みの回転を初期化する
 	m_finalWPRot = g_QUAT_IDENTITY;
 
+	//ライトのデータを更新する
+	UpdateLightData();
 
 	return;
 }

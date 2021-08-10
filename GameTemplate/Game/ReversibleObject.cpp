@@ -198,6 +198,8 @@ bool CReversibleObject::Init
 	//シャドウレシーバーをOFFにする
 	m_modelRender[EN_FRONT]->SetShadowReceiverFlag(false);
 	m_modelRender[EN_BACK]->SetShadowReceiverFlag(false);
+	m_modelRender[EN_FRONT]->SetShadowCasterFlag(true);
+	m_modelRender[EN_BACK]->SetShadowCasterFlag(true);
 
 	//タイプを設定
 	m_reversibleType[EN_FRONT] = type_front;

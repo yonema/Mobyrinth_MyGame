@@ -14,13 +14,13 @@ public:		//メンバ関数
 	/// <summary>
 	/// 初期化関数
 	/// </summary>
-	void Init();
+	void Init(const ModelInitData& initData);
 
 	/// <summary>
 	/// モデルの初期化関数
 	/// </summary>
 	/// <param name="initData">モデルの初期化データ</param>
-	void InitModel(ModelInitData& initData);
+	//void InitModel(ModelInitData& initData);
 
 	/// <summary>
 	/// モデルのパラメータ更新

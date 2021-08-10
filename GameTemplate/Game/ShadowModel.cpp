@@ -4,31 +4,37 @@
 //コンストラクタ
 CShadowModel::CShadowModel()
 {
+	return;
 }
 //デストラクタ
 CShadowModel::~CShadowModel()
 {
 	RemoveShadowModel();
+
+	return;
 }
 
 /// <summary>
 /// 初期化関数
 /// </summary>
-void CShadowModel::Init()
+void CShadowModel::Init(const ModelInitData& initData)
 {
 	m_model.reset(new Model);
+	m_model->Init(initData);
 	g_graphicsEngine->GetShadowMap().AddShadowModel(*m_model);
 	m_isValid = true;
+
+	return;
 }
 
 /// <summary>
 /// モデルの初期化関数
 /// </summary>
 /// <param name="initData">モデルの初期化データ</param>
-void CShadowModel::InitModel(ModelInitData& initData)
-{
-	m_model->Init(initData);
-}
+//void CShadowModel::InitModel(ModelInitData& initData)
+//{
+//	m_model->Init(initData);
+//}
 
 /// <summary>
 /// モデルのパラメータ更新
@@ -39,6 +45,8 @@ void CShadowModel::InitModel(ModelInitData& initData)
 void CShadowModel::UpdateModel(const Vector3& pos, const Quaternion& rot, const Vector3& scale)
 {
 	m_model->UpdateWorldMatrix(pos, rot, scale);
+
+	return;
 }
 
 /// <summary>
@@ -50,6 +58,9 @@ void CShadowModel::RemoveShadowModel()
 	if (m_isValid)
 	{
 		g_graphicsEngine->GetShadowMap().RemoveShadowModel(*m_model);
+		m_model.reset();
 		m_isValid = false;
 	}
+
+	return;
 }
