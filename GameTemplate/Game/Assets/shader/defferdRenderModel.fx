@@ -79,6 +79,15 @@ struct SPSIn {
 	float4 posInLVP[Max_ShadowMap]: TEXCOORD3;
 };
 
+struct SPSOut {
+	float4 albedo		: SV_Target0;	//アルベド
+	float4 normal		: SV_Target1;	//法線
+	float4 viewNormal	: SV_Target2;	//ビュー座標系の法線
+	float4 posInLVP		: SV_Target3;	//ライトビュープロジェクション座標系の座標
+	float4 posInProj	: SV_Target4;	//プロジェクション座標系の座標
+	float4 emissionColor : SV_Target5;	//自己発光色
+};
+
 ////////////////////////////////////////////////
 // 定数バッファ。
 ////////////////////////////////////////////////
@@ -138,9 +147,6 @@ Texture2D<float4> g_specularMap : register(t2);			//スペキュラマップ。
 														//rgbにスペキュラカラー、aに金属度。
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 
-Texture2D<float4> g_shadowMap : register(t10);		//シャドウマップ
-Texture2D<float4> g_depthTexture : register(t11);	//深度テクスチャ
-TextureCube<float4> g_skyCubeMap : register(t12);	//スカイキューブ
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ///////////////////////////////////////////
@@ -148,8 +154,6 @@ sampler g_sampler : register(s0);	//サンプラステート。
 ///////////////////////////////////////////
 float3 GetNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin);
-float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal);
-bool IsOnOutLine(float4 posInProj,float thickness);
 ////////////////////////////////////////////////
 // 関数定義。
 ////////////////////////////////////////////////
@@ -185,86 +189,6 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
     return skinning;
 }
 
-/// <summary>
-//	輪郭線を描画する
-/// </summary>
-bool IsOnOutLine(float4 posInProj, float thickness)
-{
-	//輪郭線を引くか？
-	if (!outLineFlag)
-		//引かないなら、falseを戻す
-		return false;
-
-
-	// 近傍8テクセルの深度値を計算して、エッジを抽出する
-	float2 uv = posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
-
-	//float thickness = 2.0f;
-	float2 uvOffset[8] =
-	{
-		float2(	0.0f				,  thickness / 720.0f),
-		float2(	0.0f				, -thickness / 720.0f),
-		float2(	thickness / 1280.0f	,				 0.0f),
-		float2(-thickness / 1280.0f	,				 0.0f),
-		float2(	thickness / 1280.0f	,  thickness / 720.0f),
-		float2(-thickness / 1280.0f	,  thickness / 720.0f),
-		float2(	thickness / 1280.0f	, -thickness / 720.0f),
-		float2(-thickness / 1280.0f	, -thickness / 720.0f),
-	};
-	//深度テクスチャ
-	Texture2D<float4> depthTex = g_depthTexture;
-	//現在のピクセルの深度を出す
-	float depth = depthTex.Sample(g_sampler, uv).x;
-
-	float depth2 = 0.0f;
-	for (int i = 0; i < 8; i++)
-	{
-		// 近傍8テクセルの深度値を加算して
-		depth2 += depthTex.Sample(g_sampler, uv + uvOffset[i]).x;
-	}
-	//平均を取る
-	depth2 /= 8.0f;
-
-	//周りの深度値と現在のピクセルの深度値が一定より大きかったら
-	if (abs(depth - depth2) > 0.00005f)
-	{
-		//輪郭線を引く
-		return true;
-	}
-
-
-	//あった方とない方どっちがいいかな？
-	//法線の内積から輪郭線を引くか決める
-
-	//現在のピクセルの、頂点の法線を出す
-	float3 normal = g_depthTexture.Sample(g_sampler, uv).yzw;
-	float3 normal2 = normal;
-
-	for (int i = 0; i < 8; i++)
-	{
-		// 近傍8テクセルの頂点の法線をだして
-		normal2 = g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).yzw;
-		//どれか一つでも頂点の内積が一定より小さかったら
-		float inner = dot(normal, normal2);
-		if (inner < 0.5f)
-			//輪郭線を引く
-			return true;
-	}
-
-
-
-	//輪郭線を引かない
-	return false;
-}
-
-
-static const int pattern[4][4] =
-{
-	{0,32,8,40},
-	{48,16,56,24},
-	{12,44,4,36},
-	{60,28,52,20},
-};
 
 
 /// <summary>
@@ -347,107 +271,124 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 /// <summary>
 /// ピクセルシェーダーのエントリー関数。
 /// </summary>
-float4 PSMain(SPSIn psIn) : SV_Target0
+SPSOut PSMain(SPSIn psIn) : SV_Target0
 {
-	//ビュー空間での法線を計算
-	float3 viewNormal = normalize(mul(mView, psIn.normal));
-	//頂点の正規化スクリーン座標系の座標を計算する	
-	psIn.posInProj.xy /= psIn.posInProj.w;
-
+	SPSOut psOut;
+	
+	//アルベドカラーをサンプリング
+	float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
+	//乗算カラーを計算
+	albedo *= mulColor;
+	//アルベドカラーを出力
+	psOut.albedo = albedo;
+	
 	//法線を計算。
 	float3 normal = GetNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
-	//アルベドカラーをサンプリングする
-	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
 
-	//アウトラインにディザリングを行うか？
-	bool ditherFlag = false;
-	//モデルが半透明か透明だったら、ディザリングを行う。
-	if (mulColor.w < 1.0f)
-		ditherFlag = true;
+	// 法線を出力
+	// 出力は0～1に丸められてしまうのでマイナスの値が失われてしまう
+	// なので-1～1を0～1に変換する
+	// (-1 ～ 1) ÷ 2.0       = (-0.5 ～ 0.5)
+	// (-0.5 ～ 0.5) + 0.5  = ( 0.0 ～ 1.0)
+	psOut.normal.xyz = (normal / 2.0f) + 0.5f;
+	//wはアウトラインフラグ
+	psOut.normal.w = outLineFlag;
 
-	//アウトラインの太さ
-	float thickness =2.0f;
-	//ディザリグを行う場合は太くする
-	if (ditherFlag)
-		thickness = 4.0f;
-	
-	//輪郭を描画するか？
-	if (IsOnOutLine(psIn.posInProj, thickness))
-	{
-		//アウトラインを描画する
+	//ビュー座標系の法線を計算して出力
+	psOut.viewNormal.xyz = normalize(mul(mView, normal));
+	//psOut.viewNormal.xyz = (normal / 2.0f) + 0.5f;
+	//wはシャドウレシーバーフラグ
+	psOut.viewNormal.w = shadowReceiverFlag;
 
-		//ディザリングを行うか？
-		if (ditherFlag)
-		{
-			//ディザリングを行う
-			int x = (int)fmod(abs(psIn.pos.x), 4.0f);
-			int y = (int)fmod(abs(psIn.pos.y), 4.0f);
+	//ライトビュープロジェクション座標系の座標を出力
+	psOut.posInLVP = psIn.posInLVP[0];
 
-			int dither = pattern[x][y];
+	//プロジェクション座標系の座標を出力
+	psOut.posInProj = psIn.posInProj;
 
-			if (dither >= 30)
-				return float4(0.0f, 0.0f, 0.0f, 1.0f);
-		}
-		else
-			//ディザリングを行わない
-			//アウトラインを黒色で出す
-			return float4(0.0f, 0.0f, 0.0f, 1.0f);
-	}
+	//自己発光色を出力
+	psOut.emissionColor = emissionColor;
 
-	float4 finalColor = SpecialColor(albedoColor, viewNormal, normal);
+	return psOut;
 
-	if (shadowReceiverFlag >= 1)
-	{
-		for (int shadowNo = 0; shadowNo < numShadow; shadowNo++)
-		{
-			//ライトビュースクリーン空間からUV空間に座標変換。
-			float2 shadowMapUV = psIn.posInLVP[shadowNo].xy / psIn.posInLVP[shadowNo].w;
-			shadowMapUV *= float2(0.5f, -0.5f);
-			shadowMapUV += 0.5f;
+	////ビュー空間での法線を計算
+	//float3 viewNormal = normalize(mul(mView, psIn.normal));
+	////頂点の正規化スクリーン座標系の座標を計算する	
+	//psIn.posInProj.xy /= psIn.posInProj.w;
 
-			//ライトビュースクリーン空間でのZ値を計算する。
-			float zInLVP = psIn.posInLVP[shadowNo].z;
+	////法線を計算。
+	//float3 normal = GetNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
+	////アルベドカラーをサンプリングする
+	//float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
 
-			if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
-				&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
-				) {
-				//step-13 シャドウレシーバーに影を落とす。
-				float2 shadowValue = g_shadowMap.Sample(g_sampler, shadowMapUV).rg;
-				if (zInLVP > shadowValue.r + 0.0001)
-				{
-					float depth_sq = shadowValue.x * shadowValue.x;
-					float variance = min(max(shadowValue.y - depth_sq, 0.0001f), 1.0f);
-					float md = zInLVP - shadowValue.x;
-					float lit_factor = variance / (variance + md * md);
-					float3 shadowColor = finalColor.xyz * 0.5f;
-					finalColor.xyz = lerp(shadowColor, finalColor.xyz, lit_factor);
-				}
+	////アウトラインにディザリングを行うか？
+	//bool ditherFlag = false;
+	////モデルが半透明か透明だったら、ディザリングを行う。
+	//if (mulColor.w < 1.0f)
+	//	ditherFlag = true;
 
-			}
-		}
-	}
+	////アウトラインの太さ
+	//float thickness =2.0f;
+	////ディザリグを行う場合は太くする
+	//if (ditherFlag)
+	//	thickness = 4.0f;
+	//
+	////輪郭を描画するか？
+	//if (IsOnOutLine(psIn.posInProj, thickness))
+	//{
+	//	//アウトラインを描画する
 
-	return finalColor;
+	//	//ディザリングを行うか？
+	//	if (ditherFlag)
+	//	{
+	//		//ディザリングを行う
+	//		int x = (int)fmod(abs(psIn.pos.x), 4.0f);
+	//		int y = (int)fmod(abs(psIn.pos.y), 4.0f);
 
-}
+	//		int dither = pattern[x][y];
 
-float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal)
-{
-	float4 lig = albedoColor;
+	//		if (dither >= 30)
+	//			return float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//	}
+	//	else
+	//		//ディザリングを行わない
+	//		//アウトラインを黒色で出す
+	//		return float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//}
 
-	//自己発光色
-	lig.xyz += emissionColor.xyz;
-	lig *= mulColor;
-	
-	float4 color = g_skyCubeMap.Sample(g_sampler, normal * -1.0f);
+	//float4 finalColor = SpecialColor(albedoColor, viewNormal, normal);
 
-	//リム
-	//輪郭を光らせる
-	//法線のZ成分が多いほどリムが弱くなる
-	float limPower = pow( 1.0f - abs(viewNormal.z), 5.0f );
-	lig.xyz += color * limPower * 0.8f;
-	
+	//if (shadowReceiverFlag >= 1)
+	//{
+	//	for (int shadowNo = 0; shadowNo < numShadow; shadowNo++)
+	//	{
+	//		//ライトビュースクリーン空間からUV空間に座標変換。
+	//		float2 shadowMapUV = psIn.posInLVP[shadowNo].xy / psIn.posInLVP[shadowNo].w;
+	//		shadowMapUV *= float2(0.5f, -0.5f);
+	//		shadowMapUV += 0.5f;
 
-	return lig;
+	//		//ライトビュースクリーン空間でのZ値を計算する。
+	//		float zInLVP = psIn.posInLVP[shadowNo].z;
+
+	//		if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+	//			&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
+	//			) {
+	//			//step-13 シャドウレシーバーに影を落とす。
+	//			float2 shadowValue = g_shadowMap.Sample(g_sampler, shadowMapUV).rg;
+	//			if (zInLVP > shadowValue.r + 0.0001)
+	//			{
+	//				float depth_sq = shadowValue.x * shadowValue.x;
+	//				float variance = min(max(shadowValue.y - depth_sq, 0.0001f), 1.0f);
+	//				float md = zInLVP - shadowValue.x;
+	//				float lit_factor = variance / (variance + md * md);
+	//				float3 shadowColor = finalColor.xyz * 0.5f;
+	//				finalColor.xyz = lerp(shadowColor, finalColor.xyz, lit_factor);
+	//			}
+
+	//		}
+	//	}
+	//}
+
+	//return finalColor;
 
 }

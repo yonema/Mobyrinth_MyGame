@@ -78,9 +78,19 @@ void GameObjectManager::ExecuteRender(RenderContext& rc)
 		}
 	}
 
+}
+
+/**
+ * @brief フォワードレンダリングを実行
+ * @param rc レンダーコンテキスト
+*/
+void GameObjectManager::ExecuteForwardRender(RenderContext& rc)
+{
+	//レンダラーを変更するならここを改造していくと良い。
 	for (auto& goList : m_gameObjectListArray) {
 		for (auto& go : goList) {
-			go->PostRenderWrapper(rc);
+			go->ForwardRenderWrapper(rc);
 		}
 	}
+
 }

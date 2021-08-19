@@ -63,6 +63,12 @@ public:
 	/// </summary>
 	/// <param name="rc"></param>
 	void ExecuteRender(RenderContext& rc);
+
+	/**
+	 * @brief フォワードレンダリングを実行
+	 * @param rc レンダーコンテキスト
+	*/
+	void ExecuteForwardRender(RenderContext& rc);
 	
 	
 	/*!

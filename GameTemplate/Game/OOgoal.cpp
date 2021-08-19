@@ -65,7 +65,6 @@ void OOgoal::InitSprite()
 	);
 	//À•WÝ’è
 	m_goalSR->SetPosition(SPRITE_POSITION_GOAL);
-	m_goalSR->SetPostRenderFlag(true);
 
 	//–³Œø‰»‚·‚é
 	m_goalSR->Deactivate();

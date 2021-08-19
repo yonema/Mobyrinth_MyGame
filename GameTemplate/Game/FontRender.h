@@ -22,7 +22,6 @@ public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;							//スタート関数
 	~CFontRender();										//デストラクタ
 	void Render(RenderContext& rc)override final;		//描画用関数
-	void PostRender(RenderContext& rc)override final;	//一番上に描画する関数
 
 public:		//ここのメンバ関数を主に使う。
 
@@ -125,18 +124,6 @@ public:		//ここのメンバ関数を主に使う。
 		return;
 	}
 
-	/// <summary>
-	/// PostRenderで描画するかどうか設定する関数
-	/// 引数にtrueを入れるとPostRenderで描画されるようになり、
-	/// 一番上に描画されるようになる。
-	/// </summary>
-	/// <param name="flag">PostRenderで描画するか？</param>
-	void SetPostRenderFlag(const bool flag)
-	{
-		m_postRenderFlag = flag;
-		return;
-	}
-
 
 	void SetShadowParam(const bool isDrawShadow, const float shadowOffset, const Vector4& shadowColor)
 	{
@@ -154,6 +141,5 @@ private:	//データメンバ
 	float m_scale = 1.0f;										//拡大
 	Vector2 m_pivot = fontRendetConstData::PIVOT_DEFAULT;		//ピボット（基点）
 
-	bool m_postRenderFlag = false;								//PostRenderで描画するかどうか？
 };
 

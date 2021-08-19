@@ -11,7 +11,6 @@ CTips::CTips()
 	m_tipsUISR->Init("Assets/image/Tips_UI.DDS",
 		512.0f * 1.5f, 256.0f * 0.8f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 	m_tipsUISR->SetPosition({ tipsUIX, tipsUIY, 0.0f});
-	m_tipsUISR->SetPostRenderFlag(true);
 
 	//「Tips」のフォントレンダーの生成と初期化
 	m_tipsFR = NewGO<CFontRender>(1);
@@ -24,8 +23,6 @@ CTips::CTips()
 		0.0f,						//回転
 		0.8f						//拡大
 	);
-	//ポストレンダラーで描画する
-	m_tipsFR->SetPostRenderFlag(true);
 	m_tipsFR->SetShadowParam(true, 0.4f, { 0.0f,0.0f,0.0f,1.0f });
 
 	//Tipsの文章を表示するフォントレンダラーの生成と初期化
@@ -33,8 +30,6 @@ CTips::CTips()
 	const float sentenceDistX = 20.0f;
 	const float sentenceDistY = -50.0f;
 	m_sentenceFR->Init(L"", { tipsX + sentenceDistX,tipsY + sentenceDistY });
-	//ポストレンダラーで描画する
-	m_sentenceFR->SetPostRenderFlag(true);
 	m_sentenceFR->SetScale(0.7f);
 	m_sentenceFR->SetShadowParam(true, 0.4f, { 0.0f,0.0f,0.0f,1.0f });
 

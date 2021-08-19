@@ -34,6 +34,8 @@ bool CSky::Start()
 	//モデルを更新する
 	m_model.UpdateWorldMatrix(m_position, g_QUAT_IDENTITY, m_scale);
 
+	SetIsDefferdRender(false);
+
 	return true;
 }
 
@@ -54,7 +56,7 @@ void CSky::Update()
 }
 
 //描画関数
-void CSky::Render(RenderContext& rc)
+void CSky::ForwardRender(RenderContext& rc)
 {
 	//モデルを描画する
 	m_model.Draw(rc);

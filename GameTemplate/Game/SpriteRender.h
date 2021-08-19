@@ -11,8 +11,7 @@ public:		//自動でよばれるメンバ関数
 	bool Start()override final;								//スタート関数
 	~CSpriteRender();										//デストラクタ
 	void Update()override final;							//アップデート関数
-	void Render(RenderContext& rc)override final;			//描画用関数
-	void PostRender(RenderContext& rc)override final;		//一番上に描画する関数
+	void ForwardRender(RenderContext& rc)override final;			//描画用関数
 
 public:		//ここのメンバ関数を主に使う
 
@@ -123,17 +122,6 @@ public:		//ここのメンバ関数を主に使う
 	}
 
 	/// <summary>
-	/// PostRenderで描画するかどうか設定する関数
-	/// 引数にtrueを入れるとPostRenderで描画されるようになり、
-	/// 一番上に描画されるようになる。
-	/// </summary>
-	/// <param name="flag">PostRenderで描画するか？</param>
-	void SetPostRenderFlag(const bool flag)
-	{
-		m_postRenderFlag = flag;
-	}
-
-	/// <summary>
 	/// m_positionの値を返す。
 	/// </summary>
 	/// <returns>m_position</returns>
@@ -180,6 +168,5 @@ private:	//データメンバ
 	Vector3 m_scale = spriteRenderConstData::SPRITE_SCALE_DEFAULT;	//拡大
 	Vector2 m_pivot = spriteRenderConstData::SPRITE_PIVOT_DEFALUT;	//ピボット（基点）
 	
-	bool m_postRenderFlag = false;				//PostRenderで描画するかどうか？
 };
 

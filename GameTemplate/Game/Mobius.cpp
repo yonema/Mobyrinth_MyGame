@@ -10,7 +10,7 @@ bool CMobius::Start()
 {
 	//モデルレンダラーの生成
 	m_modelRender = NewGO<CModelRender>(PRIORITY_FIRST);
-
+	m_modelRender->SetIsDefferdRender(false);
 	//初期化データを作成する
 	ModelInitData initData;
 	//tkmファイルのファイルパスを指定する。

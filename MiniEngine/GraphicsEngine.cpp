@@ -49,6 +49,10 @@ GraphicsEngine::~GraphicsEngine()
 		m_d3dDevice->Release();
 	}
 
+	//追加
+	//G_BUFFER用のレンダリングターゲットの破棄処理
+	ReleaseGBufferRenderTarget();
+
 	CloseHandle(m_fenceEvent);
 }
 void GraphicsEngine::WaitDraw()
@@ -124,7 +128,129 @@ void GraphicsEngine::InitZPrepassRenderTarget()
 		DXGI_FORMAT_D32_FLOAT
 	);
 
+	return;
 }
+
+/**
+ * @brief G_BUFFER用のレンダリングターゲットの初期化処理
+*/
+void GraphicsEngine::InitGBufferRenderTarget()
+{
+	//G_BUFFER用のレンダリングターゲットを動的に生成
+	for (int i = 0; i < EN_G_BUFFER_NUM; i++)
+	{
+		m_gBufferRenderTargets[i] = new RenderTarget;
+	}
+
+	//アルベドカラー描き込み用レンダリングターゲット
+	m_gBufferRenderTargets[EN_ALBED]->Create(
+		g_graphicsEngine->GetFrameBufferWidth(),
+		g_graphicsEngine->GetFrameBufferHeight(),
+		1,
+		1,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_D32_FLOAT
+	);
+
+	//法線書き込み用のレンダリングターゲット
+	m_gBufferRenderTargets[EN_NORMAL]->Create(
+		g_graphicsEngine->GetFrameBufferWidth(),
+		g_graphicsEngine->GetFrameBufferHeight(),
+		1,
+		1,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_UNKNOWN
+	);
+
+	//ビュー座標系の法線描き込み用のレンダリングターゲット
+	m_gBufferRenderTargets[EN_VIEW_NORMAL]->Create(
+		g_graphicsEngine->GetFrameBufferWidth(),
+		g_graphicsEngine->GetFrameBufferHeight(),
+		1,
+		1,
+		DXGI_FORMAT_R8G8B8A8_SNORM,
+		DXGI_FORMAT_UNKNOWN
+	);
+
+	//ライトビュープロジェクション座標系の座標描き込み用のレンダリングターゲット
+	m_gBufferRenderTargets[EN_POS_IN_LVP]->Create(
+		g_graphicsEngine->GetFrameBufferWidth(),
+		g_graphicsEngine->GetFrameBufferHeight(),
+		1,
+		1,
+		DXGI_FORMAT_R32G32B32A32_FLOAT,
+		DXGI_FORMAT_UNKNOWN
+	);
+
+	//プロジェクション座標系の座標の描き込みようのレンダリングターゲット
+	m_gBufferRenderTargets[EN_POS_IN_PROJ]->Create(
+		g_graphicsEngine->GetFrameBufferWidth(),
+		g_graphicsEngine->GetFrameBufferHeight(),
+		1,
+		1,
+		DXGI_FORMAT_R32G32B32A32_FLOAT,
+		DXGI_FORMAT_UNKNOWN
+	);
+
+	//自己発光色の描き込みようのレンダリングターゲット
+	m_gBufferRenderTargets[EN_EMISSION_COLOR]->Create(
+		g_graphicsEngine->GetFrameBufferWidth(),
+		g_graphicsEngine->GetFrameBufferHeight(),
+		1,
+		1,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_UNKNOWN
+	);
+
+
+	return;
+}
+
+/**
+ * @brief G_BUFFER用のレンダリングターゲットの破棄処理
+*/
+void GraphicsEngine::ReleaseGBufferRenderTarget()
+{
+	//G_BUFFER用のレンダリングターゲットを動的に開放
+	for (int i = 0; i < EN_G_BUFFER_NUM; i++)
+	{
+		delete m_gBufferRenderTargets[i];
+	}
+	return;
+}
+
+/**
+ * @brief ディファ―ドレンダリング用のスプライトの初期化
+*/
+void GraphicsEngine::InitDefferdRenderSprite()
+{
+	SpriteInitData defferdSpriteInitData;
+
+	defferdSpriteInitData.m_width = g_graphicsEngine->GetFrameBufferWidth();
+	defferdSpriteInitData.m_height = g_graphicsEngine->GetFrameBufferHeight();
+
+	//ディファ―ドレンダリングで使用するG_BUFFERの設定
+	for (int i = 0; i < EN_G_BUFFER_NUM; i++)
+	{
+		defferdSpriteInitData.m_textures[i] = &m_gBufferRenderTargets[i]->GetRenderTargetTexture();
+	}
+
+	defferdSpriteInitData.m_textures[EN_G_BUFFER_NUM + 0] = &m_shadowMap.GetShadowBlur();
+	defferdSpriteInitData.m_textures[EN_G_BUFFER_NUM + 1] = 
+		&m_zprepassRenderTarget.GetRenderTargetTexture();
+	defferdSpriteInitData.m_textures[EN_G_BUFFER_NUM + 2] = &m_skyCubeTexture;
+
+
+	defferdSpriteInitData.m_fxFilePath = "Assets/shader/defferdLightingSprite.fx";
+
+	defferdSpriteInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
+
+	m_defferdRenderSprite.Init(defferdSpriteInitData);
+	m_defferdRenderSprite.Update(g_VEC3_ZERO, g_QUAT_IDENTITY, spriteRenderConstData::SPRITE_SCALE_DEFAULT);
+
+	return;
+}
+
 
 bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 {
@@ -265,7 +391,11 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 
 	m_skyCubeTexture.InitFromDDSFile(L"Assets/modelData/preset/sky.dds" );
 
+	//G_BUFFER用のレンダリングターゲットの初期化処理
+	InitGBufferRenderTarget();
 
+	//ディファ―ドレンダリング用のスプライトの初期化
+	InitDefferdRenderSprite();
 
 	return true;
 }
@@ -572,7 +702,8 @@ void GraphicsEngine::UseMainRenderTarget()
 	// レンダリングターゲットを設定
 	m_renderContext.SetRenderTargetAndViewport(m_mainRenderTarget);
 	// レンダリングターゲットをクリア
-	m_renderContext.ClearRenderTargetView(m_mainRenderTarget);
+	//m_renderContext.ClearRenderTargetView(m_mainRenderTarget);
+	//m_renderContext.ClearRenderTargetView(m_mainRenderTarget.GetRTVCpuDescriptorHandle(), m_mainRenderTarget.GetRTVClearColor());
 
 	return;
 }
@@ -647,6 +778,43 @@ void GraphicsEngine::ZPrepass(RenderContext& rc)
 void GraphicsEngine::ClearZPrepassModels()
 {
 	m_zprepassModels.clear();
+
+	return;
+}
+
+/**
+ * @brief ディファ―ドレンダリングを使用可能にする
+*/
+void GraphicsEngine::UseDefferdRendering()
+{
+	// まず、レンダリングターゲットとして設定できるようになるまで待つ
+	m_renderContext.WaitUntilToPossibleSetRenderTargets(ARRAYSIZE(m_gBufferRenderTargets), m_gBufferRenderTargets);
+
+	// レンダリングターゲットを設定
+	m_renderContext.SetRenderTargets(ARRAYSIZE(m_gBufferRenderTargets), m_gBufferRenderTargets);
+
+	// レンダリングターゲットをクリア
+	m_renderContext.ClearRenderTargetViews(ARRAYSIZE(m_gBufferRenderTargets), m_gBufferRenderTargets);
+
+	return;
+}
+
+/**
+ * @brief ディファ―ドレンダリングの書き込み終了待ち
+*/
+void GraphicsEngine::WaitDefferdRenderring()
+{
+	m_renderContext.WaitUntilFinishDrawingToRenderTargets(ARRAYSIZE(m_gBufferRenderTargets), m_gBufferRenderTargets);
+
+	return;
+}
+
+/**
+ * @brief ディファ―ドレンダリング用のスプライトの描画処理
+*/
+void GraphicsEngine::DrawDefferdRenderSprite()
+{
+	m_defferdRenderSprite.Draw(m_renderContext);
 
 	return;
 }

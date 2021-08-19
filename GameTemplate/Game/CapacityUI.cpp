@@ -37,7 +37,6 @@ void CCapacityUI::InitSprite()
 	m_capacityDisplaySR->Init
 	("Assets/image/Capacity_display.DDS", 512.0f * 1.1f, 256.0f * 1.1f, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 	m_capacityDisplaySR->SetPosition({ capacityX, capacityY,0.0f });
-	m_capacityDisplaySR->SetPostRenderFlag(true);
 	//タイトル画面か？
 	if (m_titleFlag)
 	{
@@ -57,11 +56,9 @@ void CCapacityUI::InitFont()
 	{
 		//表側と裏側にあるアイテムの数のフォント
 		m_RONumFR[i] = NewGO<CFontRender>(1);
-		m_RONumFR[i]->SetPostRenderFlag(true);
 		m_RONumFR[i]->SetShadowParam(true, 0.4f, { 0.0f,0.0f,0.0f,1.0f });
 		//キャパシティのフォント
 		m_capacityFR[i] = NewGO<CFontRender>(1);
-		m_capacityFR[i]->SetPostRenderFlag(true);
 		m_capacityFR[i]->SetShadowParam(true, 0.4f, { 0.0f,0.0f,0.0f,1.0f });
 		//最大数を設定
 		CLevelObjectManager::GetInstance()->SetReversibleObjectMaxNum(i, m_maxCapacityNum[i]);
