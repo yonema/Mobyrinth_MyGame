@@ -23,7 +23,7 @@ public:		//自動で呼ばれるメンバ関数
 	~CSky();	//デストラクタ
 	bool Start()override final;		//スタート関数
 	void Update()override final;	//アップデート関数
-	void Render(RenderContext& rc)override final;	//描画関数
+	void ForwardRender(RenderContext& rc)override final;	//描画関数
 
 public:		//メンバ関数
 

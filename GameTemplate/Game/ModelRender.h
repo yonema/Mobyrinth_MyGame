@@ -12,6 +12,7 @@ class CModelRender : public IGameObject
 public:		//自動で呼ばれるメンバ関数
 	void Update() override final;					//アップデート関数
 	void Render(RenderContext& rc) override final;	//描画用関数
+	void ForwardRender(RenderContext& rc) override final;
 	void AlwaysUpdate() override final;				//常に呼ばれるアップデート関数
 
 public:		//メンバ関数

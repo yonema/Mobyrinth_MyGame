@@ -416,9 +416,8 @@ void ILevelObjectBase::SetTransparentObject()
 	m_isHitFlag = false;
 
 	//タイマーのフォントレンダラーの生成と初期化
-	m_timerFR = NewGO<CFontRender>(PRIORITY_FIRST);
+	m_timerFR = NewGO<CFontRender>(PRIORITY_SECOND);
 	m_timerFR->Init(FONT_TEXT_TIMER_DEFAULT, g_VEC2_ZERO);
-	m_timerFR->SetPostRenderFlag(true);
 	//非表示にする
 	m_timerFR->Deactivate();
 

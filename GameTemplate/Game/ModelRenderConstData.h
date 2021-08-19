@@ -26,7 +26,7 @@ namespace modelRenderConstData
 	//スキンありの頂点シェーダーのデフォルトのエントリーポイント
 	constexpr const char* const ENTRY_POINT_FUNC_VS_SKIN_DEFAULT = "VSSkinMain";
 	//シェーダーのデフォルトのファイルパス
-	constexpr const char* const SHADER_FILEPATH_DEFAULT = "Assets/shader/model2.fx";
+	constexpr const char* const SHADER_FILEPATH_DEFAULT = "Assets/shader/defferdRenderModel.fx";
 
 	//シェーダーのシャドウマップのファイルパス
 	constexpr const char* const SHADER_FILTPATH_SHADOW_MAP = "Assets/shader/DrawShadowMap.fx";

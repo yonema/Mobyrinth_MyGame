@@ -93,6 +93,8 @@ void CSpriteRender::InitMainCore(
 	//スプライトの初期化
 	m_sprite.Init(initData);
 
+	SetIsDefferdRender(false);
+
 	return;
 }
 
@@ -106,25 +108,8 @@ void CSpriteRender::Update()
 }
 
 //描画用関数
-void CSpriteRender::Render(RenderContext& rc)
+void CSpriteRender::ForwardRender(RenderContext& rc)
 {
-	//PostRenderFlagがtrueなら何もせずにreturn
-	if (m_postRenderFlag)
-		return;
-
-	//スプライトの描画用関数
-	m_sprite.Draw(rc);
-
-	return;
-}
-
-//一番上に描画する関数
-void CSpriteRender::PostRender(RenderContext& rc)
-{
-	//PostRenderFlagがfalseなら何もせずにreturn
-	if (!m_postRenderFlag)
-		return;
-
 	//スプライトの描画用関数
 	m_sprite.Draw(rc);
 

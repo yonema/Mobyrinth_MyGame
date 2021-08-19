@@ -15,7 +15,6 @@ bool CPause::Start()
 				m_pause->Init("Assets/level2D/Pause.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_pause->SetScale(objdata.scale);
 				m_pause->SetPosition(objdata.position);
-				m_pause->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -26,7 +25,6 @@ bool CPause::Start()
 				m_choices[enContinue]->Init("Assets/level2D/Continue.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_choices[enContinue]->SetScale(objdata.scale);
 				m_choices[enContinue]->SetPosition(objdata.position);
-				m_choices[enContinue]->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -37,7 +35,6 @@ bool CPause::Start()
 				m_choices[enRetry]->Init("Assets/level2D/Retry.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_choices[enRetry]->SetScale(objdata.scale);
 				m_choices[enRetry]->SetPosition(objdata.position);
-				m_choices[enRetry]->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -48,7 +45,6 @@ bool CPause::Start()
 				m_choices[enQuit]->Init("Assets/level2D/Quit.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_choices[enQuit]->SetScale(objdata.scale);
 				m_choices[enQuit]->SetPosition(objdata.position);
-				m_choices[enQuit]->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -59,7 +55,6 @@ bool CPause::Start()
 				m_cursor->Init("Assets/level2D/cursor.dds", objdata.width, objdata.height, { 0.5f,0.5f }, AlphaBlendMode_Trans);
 				m_cursor->SetScale(objdata.scale);
 				m_cursor->SetPosition(objdata.position);
-				m_cursor->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}
@@ -76,7 +71,6 @@ bool CPause::Start()
 				);
 				m_background->SetScale(objdata.scale);
 				m_background->SetPosition(objdata.position);
-				m_background->SetPostRenderFlag(true);
 				//フックしたらtrueを戻す
 				return true;
 			}

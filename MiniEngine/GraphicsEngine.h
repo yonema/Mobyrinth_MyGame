@@ -325,8 +325,24 @@ private:
 
 
 	//追加
+
+private:
+
+	//G_BUFFERの種類
+	enum EN_G_BUFFER
+	{
+		EN_ALBED,			//アルベド
+		EN_NORMAL,			//法線
+		EN_VIEW_NORMAL,		//ビュー座標系の法線
+		EN_POS_IN_LVP,		//ライトビュープロジェクション座標系の座標
+		EN_POS_IN_PROJ,		//プロジェクション座標系の座標
+		EN_EMISSION_COLOR,	//自己発光色
+		EN_G_BUFFER_NUM		//G_BUFFERの数
+	};
 private:	//データメンバ
-	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット	
+	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット
+	RenderTarget* m_gBufferRenderTargets[EN_G_BUFFER_NUM];	//G_BUFFER用のレンダリングターゲット
+	Sprite m_defferdRenderSprite;				//ディファ―ドレンダリング用のスプライト
 	//メインレンダリングターゲットの絵をフレームバッファにコピーするためのスプライト
 	Sprite m_copyToFrameBufferSprite;
 	int m_refreshRate = 59;						//垂直同期に使うリフレッシュレート
@@ -456,6 +472,27 @@ public:		//メンバ関数
 		return m_hud;
 	};
 
+	/**
+	 * @brief ディファ―ドレンダリングを使用可能にする
+	*/
+	void UseDefferdRendering();
+
+	/**
+	 * @brief ディファ―ドレンダリングの書き込み終了待ち
+	*/
+	void WaitDefferdRenderring();
+
+
+	/**
+	 * @brief ディファ―ドレンダリング用のスプライトの描画処理
+	*/
+	void DrawDefferdRenderSprite();
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GetGBufferDSVCpuDescriptorHandle()
+	{
+		return m_gBufferRenderTargets[0]->GetDSVCpuDescriptorHandle();
+	}
+
 private:	//privateなメンバ関数
 
 	/**
@@ -473,6 +510,21 @@ private:	//privateなメンバ関数
 	 * @brief ZPrepass用のレンダリングターゲットを初期化
 	*/
 	void InitZPrepassRenderTarget();
+
+	/**
+	 * @brief G_BUFFER用のレンダリングターゲットの初期化処理
+	*/
+	void InitGBufferRenderTarget();
+
+	/**
+	 * @brief G_BUFFER用のレンダリングターゲットの破棄処理
+	*/
+	void ReleaseGBufferRenderTarget();
+
+	/**
+	 * @brief ディファ―ドレンダリング用のスプライトの初期化
+	*/
+	void InitDefferdRenderSprite();
 
 };
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン

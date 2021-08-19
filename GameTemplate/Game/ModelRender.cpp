@@ -330,7 +330,19 @@ void CModelRender::Render(RenderContext& rc)
 	if (!m_isInited)
 		return;	//‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Í‰½‚à‚µ‚È‚¢
 
+	if (!IsDefferdRender())
+		return;
 
+	//ƒ‚ƒfƒ‹‚ğ•`‰æ
+	m_model.Draw(rc);
+
+	return;
+}
+
+void CModelRender::ForwardRender(RenderContext& rc)
+{
+	if (IsDefferdRender())
+		return;
 
 	//ƒ‚ƒfƒ‹‚ğ•`‰æ
 	m_model.Draw(rc);

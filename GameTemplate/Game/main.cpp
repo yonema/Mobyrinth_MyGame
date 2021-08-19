@@ -234,11 +234,28 @@ void Rendering(RenderContext& renderContext)
 	// ZPrepass
 	g_graphicsEngine->ZPrepass(renderContext);
 
+	//ディファ―ドレンダリングを使用可能にする
+	g_graphicsEngine->UseDefferdRendering();
+
+	//G-Bufferの作成を実行
+	GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+
+	//G-Bufferの作成待ち
+	g_graphicsEngine->WaitDefferdRenderring();
+
 	//メインレンダリングターゲットをセットする
 	g_graphicsEngine->UseMainRenderTarget();
 
+	//G-Bufferを使用してディファ―ドライティング用のスプライトの描画処理
+	g_graphicsEngine->DrawDefferdRenderSprite();
+
+	renderContext.SetRenderTarget(
+		g_graphicsEngine->GetMainRenderTarget().GetRTVCpuDescriptorHandle(),
+		g_graphicsEngine->GetGBufferDSVCpuDescriptorHandle()
+	);
+
 	//メインのレンダリングを実行
-	GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+	GameObjectManager::GetInstance()->ExecuteForwardRender(renderContext);
 
 	//エフェクトのドロー。
 	EffectEngine::GetInstance()->Draw();

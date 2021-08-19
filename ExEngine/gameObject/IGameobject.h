@@ -46,10 +46,15 @@ public:
 		(void)renderContext;
 	}
 
-	virtual void PostRender(RenderContext& renderContext)
+	/**
+	 * @brief フォワードレンダリング
+	 * @param renderContext レンダーコンテキスト
+	*/
+	virtual void ForwardRender(RenderContext& renderContext)
 	{
 		(void)renderContext;
 	}
+
 	
 public:
 	/*!
@@ -80,6 +85,24 @@ public:
 	{
 		m_isActive = false;
 	}
+
+	/**
+	 * @brief ディファ―ドレンダリングで描画するか？を設定。
+	 * @param [in] isDefferdRender ディファ―ドレンダリングで描画するか？
+	*/
+	void SetIsDefferdRender(const bool isDefferdRender)
+	{
+		m_isDefferdRender = isDefferdRender;
+	}
+
+	/**
+	 * @brief ディファ―ドレンダリングで描画するか？を取得
+	 * @return ディファ―ドレンダリングで描画するか？
+	*/
+	bool IsDefferdRender()const
+	{
+		return m_isDefferdRender;
+	}
 	
 	/// <summary>
 	/// 死亡させる。
@@ -104,14 +127,15 @@ public:
 
 	void RenderWrapper(RenderContext& renderContext)
 	{
-		if (m_isActive && m_isStart && !m_isDead ) {
+		if (m_isActive && m_isStart && m_isDefferdRender && !m_isDead ) {
 			Render(renderContext);
 		}
 	}
-	void PostRenderWrapper(RenderContext& renderContext)
+
+	void ForwardRenderWrapper(RenderContext& renderContext)
 	{
-		if (m_isActive && m_isStart && !m_isDead) {
-			PostRender(renderContext);
+		if (m_isActive && m_isStart && !m_isDefferdRender && !m_isDead) {
+			ForwardRender(renderContext);
 		}
 	}
 	
@@ -145,6 +169,7 @@ protected:
 	bool m_isNewFromGameObjectManager;	//GameObjectManagerでnewされた。
 	bool m_isRegist = false;							//GameObjectManagerに登録されている？
 	bool m_isActive = true;							//Activeフラグ。
+	bool m_isDefferdRender = true;					//ディファ―ドレンダリングで描画するか？
 
 	//追加
 private:

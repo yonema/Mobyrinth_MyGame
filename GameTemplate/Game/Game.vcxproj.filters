@@ -993,6 +993,12 @@
     <FxCompile Include="Assets\shader\Wipe.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\defferdLightingSprite.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\defferdRenderModel.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc">
