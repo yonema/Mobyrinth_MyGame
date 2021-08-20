@@ -63,6 +63,7 @@ bool CUFO::PureVirtualStart()
 	m_ufoLight->SetDrawOutLineFlag(false);
 	//Å‰‚ÍŒ©‚¦‚È‚¢‚æ‚¤‚É“§–¾‚É‚·‚é
 	m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
+	m_ufoLight->SetIsDefferdRender(false);
 
 	//UFO‚Ì’…’n“_‚Ì¶¬‚Æ‰Šú‰»
 	m_ufoLandingPoint = NewGO<CUFOLandingPoint>(0);

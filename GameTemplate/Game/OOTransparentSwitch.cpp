@@ -650,11 +650,15 @@ void OOTransparentSwitch::ChangeTransparent()
 
 		//モデルの参照を得てから、SetMulColor()を呼ぶ
 		//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-		levelObject->GetModelRender(EN_FRONT)->SetMulColor(g_VEC4_TRANSPARENT);
-		levelObject->GetModelRender(EN_BACK)->SetMulColor(g_VEC4_TRANSPARENT);
-		//オブジェクトの輪郭線を書くようにする
-		levelObject->GetModelRender(EN_FRONT)->SetDrawOutLineFlag(true);
-		levelObject->GetModelRender(EN_BACK)->SetDrawOutLineFlag(true);
+		for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
+		{
+			//乗算カラーを透明にする
+			levelObject->GetModelRender(i)->SetMulColor(g_VEC4_TRANSPARENT);
+			//オブジェクトの輪郭線を書くようにする
+			levelObject->GetModelRender(i)->SetDrawOutLineFlag(true);
+			//ディファ―ドレンダリングではなくする
+			//levelObject->GetModelRender(i)->SetIsDefferdRender(false);
+		}
 
 		levelObject->TransparentSwitchOff();
 
@@ -684,11 +688,15 @@ void OOTransparentSwitch::ChangeEntity()
 
 		//モデルの参照を得てから、SetMulColor()を呼ぶ
 		//Obstacleの場合は無駄に二回呼ばれるけど、我慢しよう。
-		levelObject->GetModelRender(EN_FRONT)->SetMulColor(g_VEC4_OPACITY);
-		levelObject->GetModelRender(EN_BACK)->SetMulColor(g_VEC4_OPACITY);
-		//オブジェクトの輪郭線を書かないようにする
-		levelObject->GetModelRender(EN_FRONT)->SetDrawOutLineFlag(false);
-		levelObject->GetModelRender(EN_BACK)->SetDrawOutLineFlag(false);
+		for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
+		{
+			//モデルの乗算カラーを不透明にする
+			levelObject->GetModelRender(i)->SetMulColor(g_VEC4_OPACITY);
+			//オブジェクトの輪郭線を書かないようにする
+			levelObject->GetModelRender(i)->SetDrawOutLineFlag(false);
+			//ディファ―ドレンダリングを行うようにする
+			//levelObject->GetModelRender(i)->SetIsDefferdRender(true);
+		}
 
 		levelObject->TransparentSwitchOn();
 

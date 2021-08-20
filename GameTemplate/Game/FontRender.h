@@ -21,7 +21,7 @@ class CFontRender : public IGameObject
 public:		//自動で呼ばれるメンバ関数
 	bool Start()override final;							//スタート関数
 	~CFontRender();										//デストラクタ
-	void Render(RenderContext& rc)override final;		//描画用関数
+	void ForwardRender(RenderContext& rc)override final;		//描画用関数
 
 public:		//ここのメンバ関数を主に使う。
 
