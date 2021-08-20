@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 
-//#define SOUND_OFF	//定義されていたらサウンドをオフにする。
+#define SOUND_OFF	//定義されていたらサウンドをオフにする。
 
 //スタート関数
 bool CGame::Start()

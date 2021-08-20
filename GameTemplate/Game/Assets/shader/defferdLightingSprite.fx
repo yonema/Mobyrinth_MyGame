@@ -49,17 +49,13 @@ PSInput VSMain(VSInput In)
 }
 float4 PSMain(PSInput In) : SV_Target0
 {
-	//アウトラインにディザリングを行うか？
-	bool ditherFlag = false;
-	//モデルが半透明か透明だったら、ディザリングを行う。
+	//アルベドをアルベドテクスチャからサンプリング
 	float4 albedo = albedTexture.Sample(Sampler, In.uv);
 
-	/*if (albedo.x <= 0.0f && albedo.y <= 0.0f && albedo.z <= 0.0f)
-		return float4(0.0f, 0.0f, 0.0f, 0.0f);*/
-
-	//albedo.w = 1.0f;
-
-	if (albedo.w < 1.0f)
+	//アウトラインにディザリングを行うか？
+	bool ditherFlag = false;
+	//完全に透明だったらアウトラインにディザリングをかける
+	if (albedo.w <= 0.0f)
 		ditherFlag = true;
 
 	//アウトラインの太さ
@@ -67,10 +63,13 @@ float4 PSMain(PSInput In) : SV_Target0
 	//ディザリグを行う場合は太くする
 	if (ditherFlag)
 		thickness = 4.0f;
-	//頂点の正規化スクリーン座標系の座標を計算する
+
+	//プロジェクション座標系の座標をテクスチャからサンプリング
 	float4 posInProj = posInProjTexture.Sample(Sampler, In.uv);
+	//頂点の正規化スクリーン座標系の座標を計算する
 	posInProj.xy /= posInProj.w;
 
+	//法線を法線マップからサンプリング
 	float4 normal = normalTexture.Sample(Sampler, In.uv);
 
 	//輪郭を描画するか？
@@ -82,8 +81,8 @@ float4 PSMain(PSInput In) : SV_Target0
 		if (ditherFlag)
 		{
 			//ディザリングを行う
-			int x = (int)fmod(abs(posInProj.x), 4.0f);
-			int y = (int)fmod(abs(posInProj.y), 4.0f);
+			int x = (int)fmod(abs(posInProj.x * 100.0f), 4.0f);
+			int y = (int)fmod(abs(posInProj.y * 100.0f), 4.0f);
 
 			int dither = pattern[x][y];
 
@@ -96,10 +95,30 @@ float4 PSMain(PSInput In) : SV_Target0
 			return float4(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
-
+	//ビュー座標系の法線をテクスチャからサンプリング
 	float4 viewNormal = viewNormalTexture.Sample(Sampler, In.uv);
 
-	float4 finalColor = SpecialColor(albedo, viewNormal.xyz, normal.xyz);
+	//最終カラー
+	float4 finalColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+
+	//ディザリングフラグがたっていないか？
+	//つまり透明ではないか？
+	if (!ditherFlag)
+	{
+		//透明ではない
+
+		//ライティング処理を行う
+		finalColor = SpecialColor(albedo, viewNormal.xyz, normal.xyz);
+		//自己発光カラーをテクスチャからサンプリング
+		float4 emissionColor = emissionColorTexture.Sample(Sampler, In.uv);
+		//自己発光色を加える
+		finalColor.xyz += emissionColor.xyz;
+	}
+	else
+	{
+		return float4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
 
 	//if (shadowReceiverFlag >= 1)
 	//{
@@ -221,7 +240,6 @@ float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal)
 	//法線のZ成分が多いほどリムが弱くなる
 	float limPower = pow(1.0f - abs(viewNormal.z), 5.0f);
 	lig.xyz += color * limPower * 0.8f;
-
 
 	return lig;
 

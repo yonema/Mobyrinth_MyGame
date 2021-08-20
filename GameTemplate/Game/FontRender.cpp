@@ -39,6 +39,9 @@ void CFontRender::Init
 	m_scale = scale;
 	m_pivot = pivot;
 
+	//ディファ―ドレンダリングではなくする
+	SetIsDefferdRender(false);
+
 	return;
 }
 
@@ -58,7 +61,7 @@ void CFontRender::SetText(const wchar_t* const text)
 /// 描画用関数
 /// </summary>
 /// <param name="rc"></param>
-void CFontRender::Render(RenderContext& rc)
+void CFontRender::ForwardRender(RenderContext& rc)
 {
 	//描画開始
 	m_font.Begin(rc);

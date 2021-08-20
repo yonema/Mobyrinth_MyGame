@@ -305,6 +305,7 @@ SPSOut PSMain(SPSIn psIn) : SV_Target0
 
 	//プロジェクション座標系の座標を出力
 	psOut.posInProj = psIn.posInProj;
+	//psOut.posInProj.xy = psIn.posInProj.xy / psIn.posInProj.w;
 
 	//自己発光色を出力
 	psOut.emissionColor = emissionColor;
