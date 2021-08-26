@@ -72,3 +72,7 @@ https://effekseer.github.io/jp/
 
 ・project弾幕GIrls エフェクト
 投稿者：project弾幕GIrls
+
+●フォント
+・チェックポイント★リベンジ
+http://marusexijaxs.web.fc2.com/quizfont.html#quizfont5

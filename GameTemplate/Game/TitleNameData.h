@@ -1,10 +1,16 @@
 #pragma once
-
 /**
- * @brief タイトルネームの定数
+ * @brief メビリンス
 */
-namespace titleNameData
+namespace nsMobyrinth
 {
-	//タイトルの名前
-	const TCHAR* TITLE_NAME = TEXT("メビリンス");
+
+	/**
+	 * @brief タイトルネームの定数
+	*/
+	namespace titleNameData
+	{
+		//タイトルの名前
+		const TCHAR* TITLE_NAME = TEXT("メビリンス");
+	}
 }

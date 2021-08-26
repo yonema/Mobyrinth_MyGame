@@ -1,10 +1,23 @@
 #pragma once
 
 /**
- * @brief インかアウトかの定数値
+ * @brief メビリンス
 */
-enum EN_IN_OR_OUT
+namespace nsMobyrinth
 {
-	EN_IN,		//イン状態
-	EN_OUT,		//アウト状態
-};
+	/**
+	 * @brief 共通データ
+	*/
+	namespace nsCommonData
+	{
+
+		/**
+		 * @brief インかアウトかの定数値
+		*/
+		enum EN_IN_OR_OUT
+		{
+			EN_IN,		//イン状態
+			EN_OUT,		//アウト状態
+		};
+	}
+}

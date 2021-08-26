@@ -67,7 +67,7 @@ float4 PSMain(PSInput In) : SV_Target0
 	//プロジェクション座標系の座標をテクスチャからサンプリング
 	float4 posInProj = posInProjTexture.Sample(Sampler, In.uv);
 	//頂点の正規化スクリーン座標系の座標を計算する
-	posInProj.xy /= posInProj.w;
+	//posInProj.xy /= posInProj.w;
 
 	//法線を法線マップからサンプリング
 	float4 normal = normalTexture.Sample(Sampler, In.uv);
@@ -81,8 +81,8 @@ float4 PSMain(PSInput In) : SV_Target0
 		if (ditherFlag)
 		{
 			//ディザリングを行う
-			int x = (int)fmod(abs(posInProj.x * 100.0f), 4.0f);
-			int y = (int)fmod(abs(posInProj.y * 100.0f), 4.0f);
+			int x = (int)fmod(abs(posInProj.x), 4.0f);
+			int y = (int)fmod(abs(posInProj.y), 4.0f);
 
 			int dither = pattern[x][y];
 
@@ -116,7 +116,7 @@ float4 PSMain(PSInput In) : SV_Target0
 	}
 	else
 	{
-		return float4(1.0f, 1.0f, 1.0f, 1.0f);
+		//return float4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 
@@ -165,7 +165,7 @@ bool IsOnOutLine(float4 posInProj, float thickness, float outlineFlag)
 		//引かないなら、falseを戻す
 		return false;
 
-
+	posInProj.xy /= posInProj.w;
 	// 近傍8テクセルの深度値を計算して、エッジを抽出する
 	float2 uv = posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
 
@@ -233,8 +233,9 @@ float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal)
 	//lig.xyz += emissionColor.xyz;
 	//lig *= mulColor;
 
-	float4 color = g_skyCubeMap.Sample(Sampler, normal * -1.0f);
-
+	float4 color = g_skyCubeMap.SampleLevel(Sampler, normal * -1.0f, 12) * 1.4f;
+	lig.xyz *= color;
+	return lig;
 	//リム
 	//輪郭を光らせる
 	//法線のZ成分が多いほどリムが弱くなる

@@ -1,14 +1,24 @@
 #include "stdafx.h"
 #include "SpringCamera.h"
 
+/**
+ * @brief メビリンス
+*/
+namespace nsMobyrinth
+{
+	/**
+	 * @brief カメラ
+	*/
+	namespace nsCamera
+	{
 
-float dampingK = 70.0f;
+		float dampingK = 70.0f;
 		float CalcSpringScalar(
 			float positionNow,
 			float positionTarget,
 			float& moveSpeed)
 		{
-			float deltaTime = GameTime().GetFrameDeltaTime();
+			float deltaTime = nsTimer::GameTime().GetFrameDeltaTime();
 
 			float dampingRate = 0.2f;
 			float distance;
@@ -63,7 +73,7 @@ float dampingK = 70.0f;
 			float dampingRate
 		)
 		{
-			float deltaTime = min(1.0f / 30.0f, GameTime().GetFrameDeltaTime());
+			float deltaTime = min(1.0f / 30.0f, nsTimer::GameTime().GetFrameDeltaTime());
 			//現在の位置と目標の位置との差分を求める。
 			Vector3 distance;
 			distance.Subtract(positionTarget, positionNow);
@@ -82,7 +92,7 @@ float dampingK = 70.0f;
 
 			springAccel.Scale(deltaTime);
 			moveSpeed.Add(springAccel);
-			if (moveSpeed.LengthSq() > maxMoveSpeed*maxMoveSpeed) {
+			if (moveSpeed.LengthSq() > maxMoveSpeed * maxMoveSpeed) {
 				//最高速度より速くなってしまった。
 				moveSpeed.Normalize();
 				moveSpeed.Scale(maxMoveSpeed);
@@ -106,67 +116,69 @@ float dampingK = 70.0f;
 			}
 			return newPos;
 		}
-	
-	CSpringCamera::CSpringCamera()
-	{
-	}
-	CSpringCamera::~CSpringCamera()
-	{
-	}
-	/*!
-	* @brief	初期化。
-	*/
-	void CSpringCamera::Init(
-		Camera& camera,
-		float maxMoveSpeed,
-		bool isEnableCollisionSolver,
-		float sphereCollisionRadius
-	)
-	{
-		m_camera = &camera;
-		SetTarget(m_camera->GetTarget());
-		SetPosition(m_camera->GetPosition());
-		m_isEnableCollisionSolver = isEnableCollisionSolver;
-		//m_cameraCollisionSolver.Init(sphereCollisionRadius);
-		m_targetMoveSpeed = Vector3::Zero;
-		m_positionMoveSpeed = Vector3::Zero;
-		m_maxMoveSpeed = maxMoveSpeed;
-		m_isRefresh = true;
-	}
-	void CSpringCamera::UpdateSpringCamera()
-	{
-		if (m_camera == nullptr) {
-			return;
+
+		CSpringCamera::CSpringCamera()
+		{
 		}
-		if (m_isRefresh) {
-			//リフレッシュが必要なら、カメラの座標を一気に目標座標にする。
-			//シーンの切り替わり時など、一気にカメラを変更する必要があるときに使用してください。
-			m_camera->SetTarget(m_target);
-			m_camera->SetPosition(m_position);
-			m_isRefresh = false;
+		CSpringCamera::~CSpringCamera()
+		{
 		}
-		else {
-			m_dampingRate = CalcSpringScalar(m_dampingRate, m_targetDampingRate, m_dampingRateVel);
-			Vector3 target = CalcSpringVector(m_camera->GetTarget(), m_target, m_targetMoveSpeed, m_maxMoveSpeed, m_dampingRate);
-			Vector3 position = CalcSpringVector(m_camera->GetPosition(), m_position, m_positionMoveSpeed, m_maxMoveSpeed, m_dampingRate);
-			m_camera->SetTarget(target);
-			m_camera->SetPosition(position);
+		/*!
+		* @brief	初期化。
+		*/
+		void CSpringCamera::Init(
+			Camera& camera,
+			float maxMoveSpeed,
+			bool isEnableCollisionSolver,
+			float sphereCollisionRadius
+		)
+		{
+			m_camera = &camera;
+			SetTarget(m_camera->GetTarget());
+			SetPosition(m_camera->GetPosition());
+			m_isEnableCollisionSolver = isEnableCollisionSolver;
+			//m_cameraCollisionSolver.Init(sphereCollisionRadius);
+			m_targetMoveSpeed = Vector3::Zero;
+			m_positionMoveSpeed = Vector3::Zero;
+			m_maxMoveSpeed = maxMoveSpeed;
+			m_isRefresh = true;
+		}
+		void CSpringCamera::UpdateSpringCamera()
+		{
+			if (m_camera == nullptr) {
+				return;
+			}
+			if (m_isRefresh) {
+				//リフレッシュが必要なら、カメラの座標を一気に目標座標にする。
+				//シーンの切り替わり時など、一気にカメラを変更する必要があるときに使用してください。
+				m_camera->SetTarget(m_target);
+				m_camera->SetPosition(m_position);
+				m_isRefresh = false;
+			}
+			else {
+				m_dampingRate = CalcSpringScalar(m_dampingRate, m_targetDampingRate, m_dampingRateVel);
+				Vector3 target = CalcSpringVector(m_camera->GetTarget(), m_target, m_targetMoveSpeed, m_maxMoveSpeed, m_dampingRate);
+				Vector3 position = CalcSpringVector(m_camera->GetPosition(), m_position, m_positionMoveSpeed, m_maxMoveSpeed, m_dampingRate);
+				m_camera->SetTarget(target);
+				m_camera->SetPosition(position);
+			}
+		}
+		/*!
+		* @brief	更新。
+		*/
+		void CSpringCamera::Update()
+		{
+			UpdateSpringCamera();
+			if (m_isEnableCollisionSolver) {
+				//Vector3 result;
+				//m_cameraCollisionSolver.Execute(
+				//	result,
+				//	m_camera->GetPosition(),
+				//	m_camera->GetTarget()
+				//);
+				//m_camera->SetPosition(result);
+			}
+			UpdateCamera();
 		}
 	}
-	/*!
-	* @brief	更新。
-	*/
-	void CSpringCamera::Update()
-	{
-		UpdateSpringCamera();
-		if (m_isEnableCollisionSolver) {
-			//Vector3 result;
-			//m_cameraCollisionSolver.Execute(
-			//	result,
-			//	m_camera->GetPosition(),
-			//	m_camera->GetTarget()
-			//);
-			//m_camera->SetPosition(result);
-		}
-		UpdateCamera();
-	}
+}

@@ -1,13 +1,26 @@
 #pragma once
 
 /**
- * @brief 表側か裏側か
+ * @brief メビリンス
 */
-enum EN_FRONT_SIDE_OR_BACK_SIDE
+namespace nsMobyrinth
 {
-	EN_FRONT_SIDE,						//表側
-	EN_BACK_SIDE,						//裏側
-	EN_FRONT_SIDE_AND_BACK_SIDE_NUM,	//表と裏の数
+	/**
+	 * @brief 共通データ
+	*/
+	namespace nsCommonData
+	{
 
-	EB_NONE_SIDE = -1,					//無し
-};
+		/**
+		 * @brief 表側か裏側か
+		*/
+		enum EN_FRONT_SIDE_OR_BACK_SIDE
+		{
+			EN_FRONT_SIDE,						//表側
+			EN_BACK_SIDE,						//裏側
+			EN_FRONT_SIDE_AND_BACK_SIDE_NUM,	//表と裏の数
+
+			EB_NONE_SIDE = -1,					//無し
+		};
+	}
+}

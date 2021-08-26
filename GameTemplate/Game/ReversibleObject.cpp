@@ -1,8 +1,26 @@
 #include "stdafx.h"
 #include "ReversibleObject.h"
 
+/**
+ * @brief メビリンス
+*/
+namespace nsMobyrinth
+{
+	/**
+	 * @brief レベルオブジェクト
+	*/
+	namespace nsLevelObject
+	{
+		/**
+		 * @brief 反転オブジェクト
+		*/
+		namespace nsReversibleObject
+		{
+
 //反転オブジェクトの定数を使えるようにする
 using namespace reversibleObjectConstData;
+//共通定数データを使用可能にする
+using namespace nsCommonData;
 
 
 //コンストラクタ
@@ -73,6 +91,10 @@ CReversibleObject::~CReversibleObject()
 */
 void CReversibleObject::InitSound()
 {
+	//この関数限定で
+	//サウンドを使用可能にする
+	using namespace nsSound;
+
 	//changeSEのサウンドキューを生成する
 	m_changeSE = NewGO<CSoundCue>(PRIORITY_FIRST);
 	//changeSEのサウンドキューを、waveファイルを指定して初期化する。
@@ -190,16 +212,59 @@ bool CReversibleObject::Init
 	//表と裏の分、モデルレンダラーを生成
 	for (int i = 0; i < EN_FRONT_AND_BACK_NUM; i++)
 	{
-		m_modelRender[i] = NewGO<CModelRender>(PRIORITY_FIRST);
+		m_modelRender[i] = NewGO<nsGraphic::nsModel::CModelRender>(PRIORITY_FIRST);
 	}
-	//モデルレンダラーを初期化
-	m_modelRender[EN_FRONT]->Init(filePath_front, D3D12_CULL_MODE_NONE);
-	m_modelRender[EN_BACK]->Init(filePath_back, D3D12_CULL_MODE_NONE);
+
+	//透明オブジェクトか？
+	if (GetFlagTransparentObject())
+	{
+		//透明オブジェクトの場合
+
+		//モデルの初期化データ
+		ModelInitData modelInitData;
+		//シェーダーを設定
+		//透明オブジェクトが描画できるシェーダーを設定
+		modelInitData.m_fxFilePath = "Assets/shader/model2.fx";
+
+		//シャドウマップの登録
+		modelInitData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetShadowMap().GetShadowBlur();
+		//ZPrepassで作成された深度テクスチャの登録
+		modelInitData.m_expandShaderResoruceView[1] = &g_graphicsEngine->GetZPrepassDepthTexture();
+		//スカイキューブの登録
+		modelInitData.m_expandShaderResoruceView[2] = &g_graphicsEngine->GetSkyCubeTexture();
+
+		//カリングモードを設定
+		modelInitData.m_cullMode = D3D12_CULL_MODE_NONE;
+
+		//モデルレンダラーを初期化
+		//モデルのファイルパスの設定
+		modelInitData.m_tkmFilePath = filePath_front;
+		//モデルの初期化
+		m_modelRender[EN_FRONT]->Init(modelInitData);
+		//モデルのファイルパスの設定
+		modelInitData.m_tkmFilePath = filePath_back;
+		//モデルの初期化
+		m_modelRender[EN_BACK]->Init(modelInitData);
+
+		//ディファ―ドレンダリングを行わないようにする
+		m_modelRender[EN_FRONT]->SetIsDefferdRender(false);
+		m_modelRender[EN_BACK]->SetIsDefferdRender(false);
+
+	}
+	else
+	{
+		//透明アイテムではない時
+
+		//普通に初期化
+
+		//モデルレンダラーを初期化
+		m_modelRender[EN_FRONT]->Init(filePath_front, D3D12_CULL_MODE_NONE);
+		m_modelRender[EN_BACK]->Init(filePath_back, D3D12_CULL_MODE_NONE);
+	}
+
 	//シャドウレシーバーをOFFにする
 	m_modelRender[EN_FRONT]->SetShadowReceiverFlag(false);
 	m_modelRender[EN_BACK]->SetShadowReceiverFlag(false);
-	m_modelRender[EN_FRONT]->SetShadowCasterFlag(true);
-	m_modelRender[EN_BACK]->SetShadowCasterFlag(true);
 
 	//タイプを設定
 	m_reversibleType[EN_FRONT] = type_front;
@@ -528,7 +593,7 @@ void CReversibleObject::LiftedPlayer()
 		nextPos += addVecVertical;
 
 		//タイマーを進める
-		m_timer += GameTime().GetFrameDeltaTime();
+		m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 	}
 	else
 	{
@@ -731,11 +796,11 @@ void CReversibleObject::ThrownDown()
 		backwardVec *= -1.0f;
 
 	//モデルの場所を下に下げる
-	m_position += (thorwnDownHorizontalVec + backwardVec) * GameTime().GetFrameDeltaTime();
+	m_position += (thorwnDownHorizontalVec + backwardVec) * nsTimer::GameTime().GetFrameDeltaTime();
 
 
 	//投げている時のカウンターを進める
-	m_thrownDownTimer += GameTime().GetFrameDeltaTime();
+	m_thrownDownTimer += nsTimer::GameTime().GetFrameDeltaTime();
 
 	//投げている時のカウンターが最大値まで来たら
 	if (m_thrownDownTimer >= TIME_THROWN_DOWN)
@@ -861,9 +926,9 @@ void CReversibleObject::Repelled()
 		m_rotation.Multiply(qRot);
 
 		//座標に次へのベクトルを加算する	//デルタタイムを掛けておく
-		m_position += (m_addPosition + verticalPower) * GameTime().GetFrameDeltaTime();
+		m_position += (m_addPosition + verticalPower) * nsTimer::GameTime().GetFrameDeltaTime();
 		//タイマーを進める
-		m_timer += GameTime().GetFrameDeltaTime();
+		m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 	}
 	else
 	{
@@ -1007,3 +1072,6 @@ const bool CReversibleObject::IsCapacityOver(const int frontOrBackSide)
 	return nextSideNum > nextSideMaxNum;
 }
 
+}
+}
+}

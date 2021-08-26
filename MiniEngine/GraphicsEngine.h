@@ -349,9 +349,9 @@ private:	//データメンバ
 	std::vector< Model* > m_zprepassModels;		// ZPrepassの描画パスで描画されるモデルのリスト
 	RenderTarget m_zprepassRenderTarget;		// ZPrepass描画用のレンダリングターゲット
 	Texture m_skyCubeTexture;					//スカイキューブのテクスチャ
-	CPostEffect m_postEffect;					//ポストエフェクト
-	CShadowMap m_shadowMap;						//シャドウマップ
-	CHUD m_hud;					//場面転換
+	nsMobyrinth::nsGraphic::nsPostEffect::CPostEffect m_postEffect;					//ポストエフェクト
+	nsMobyrinth::nsGraphic::nsShadow::CShadowMap m_shadowMap;						//シャドウマップ
+	nsMobyrinth::nsGraphic::nsHUD::CHUD m_hud;					//場面転換
 
 public:		//メンバ関数
 
@@ -457,7 +457,7 @@ public:		//メンバ関数
 	 * @brief シャドウマップの参照を得る
 	 * @return シャドウマップの参照
 	*/
-	CShadowMap& GetShadowMap()
+	nsMobyrinth::nsGraphic::nsShadow::CShadowMap& GetShadowMap()
 	{
 		return m_shadowMap;
 	}
@@ -467,7 +467,7 @@ public:		//メンバ関数
 	 * @brief 場面転換の参照を得る
 	 * @return 場面転換の参照
 	*/
-	CHUD& GetHUD()
+	nsMobyrinth::nsGraphic::nsHUD::CHUD& GetHUD()
 	{
 		return m_hud;
 	};

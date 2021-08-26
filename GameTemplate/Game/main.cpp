@@ -10,6 +10,9 @@
 #include "effect/effect.h"
 #include "TitleNameData.h"
 
+//メビリンスを使用可能にする
+using namespace nsMobyrinth;
+
 /**
  * @brief 必要なインスタンス達を生成する
 */
@@ -24,7 +27,7 @@ void DeleteInstances();
  * @brief ゲーム全体を通して使うディレクションライトを生成する
  * @param [out] directionLight ディレクションライトのポインタ
 */
-void CreateGameDirectionLigth(CDirectionLight* directionLight);
+void CreateGameDirectionLigth(nsLight::CDirectionLight* directionLight);
 
 /**
  * @brief アップデート処理
@@ -53,13 +56,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CreateInstances();
 
 	//ストップウォッチを生成する
-	CStopWatch stopWatch;
+	nsTimer::CStopWatch stopWatch;
 
 	//ゲームのインスタンスを生成する
-	CGame* game = NewGO<CGame>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_GAME));
+	CGame* game = NewGO<CGame>(nsCommonData::PRIORITY_FIRST,
+		nsCommonData::GetGameObjectName(nsCommonData::EN_GO_TYPE_GAME));
 
 	//ゲーム全体を通して使うディレクションライト
-	CDirectionLight* gameDirectionLight = nullptr;
+	nsLight::CDirectionLight* gameDirectionLight = nullptr;
 	//ゲーム全体を通して使うディレクションライトを生成する
 	CreateGameDirectionLigth(gameDirectionLight);
 
@@ -115,7 +119,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		int restTime = 0;
 		do {
 			stopWatch.Stop();
-			restTime = STOP_WATCH_CONST_DATA::MILLISECOND_FOR_LOCK_60FPS - 
+			restTime = nsTimer::STOP_WATCH_CONST_DATA::MILLISECOND_FOR_LOCK_60FPS -
 				static_cast<int>(stopWatch.GetElapsedMillisecond());
 		} while (restTime > 0);
 
@@ -123,7 +127,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		stopWatch.Stop();
 
 		//デルタタイムをストップウォッチの計測時間から、計算する
-		GameTime().PushFrameDeltaTime((float)stopWatch.GetElapsed());
+		nsTimer::GameTime().PushFrameDeltaTime((float)stopWatch.GetElapsed());
 	}
 
 	//ディレクションライトを破棄
@@ -149,10 +153,10 @@ void CreateInstances()
 	PhysicsWorld::CreateInstance();
 
 	//各管理クラスのインスタンスを生成する。
-	CLightManager::CreateInstance();		//ライトマネージャー
-	CLevelObjectManager::CreateInstance();	//レベルオブジェクトマネージャー
-	CSoundEngine::CreateInstance();			//サウンドエンジン
-	COBBWorld::CreateInstance();			//OBBワールド
+	nsLight::CLightManager::CreateInstance();		//ライトマネージャー
+	nsLevelObject::CLevelObjectManager::CreateInstance();	//レベルオブジェクトマネージャー
+	nsSound::CSoundEngine::CreateInstance();			//サウンドエンジン
+	nsOBB::COBBWorld::CreateInstance();			//OBBワールド
 
 	//エフェクトエンジンのインスタンスを作成する。
 	EffectEngine::CreateInstance();
@@ -160,8 +164,8 @@ void CreateInstances()
 
 	//シャドウの生成と初期化
 	g_graphicsEngine->GetShadowMap().CreateShadowMap(
-		shadowConstData::SHADOW_INIT_DIRECTION,
-		shadowConstData::SHADOW_INIT_LENGTH
+		nsGraphic::nsShadow::shadowConstData::SHADOW_INIT_DIRECTION,
+		nsGraphic::nsShadow::shadowConstData::SHADOW_INIT_LENGTH
 	);
 
 	return;
@@ -176,10 +180,10 @@ void DeleteInstances()
 	EffectEngine::DeleteInstance();
 
 	//各管理クラスのインスタンスを破棄する。
-	COBBWorld::DeleteInstance();			//OBBワールド
-	CSoundEngine::DeleteInstance();			//サウンドエンジン
-	CLevelObjectManager::DeleteInstance();	//レベルオブジェクトマネージャー
-	CLightManager::DeleteInstance();		//ライトマネージャー
+	nsOBB::COBBWorld::DeleteInstance();			//OBBワールド
+	nsSound::CSoundEngine::DeleteInstance();			//サウンドエンジン
+	nsLevelObject::CLevelObjectManager::DeleteInstance();	//レベルオブジェクトマネージャー
+	nsLight::CLightManager::DeleteInstance();		//ライトマネージャー
 
 	//ゲームオブジェクトマネージャーを削除。
 	PhysicsWorld::DeleteInstance();
@@ -193,15 +197,16 @@ void DeleteInstances()
  * @brief ゲーム全体を通して使うディレクションライトを生成する
  * @param [out] directionLight ディレクションライトのポインタ
 */
-void CreateGameDirectionLigth(CDirectionLight* directionLight)
+void CreateGameDirectionLigth(nsLight::CDirectionLight* directionLight)
 {
-	directionLight = NewGO<CDirectionLight>(
-		PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_GAME_DIRECTION_LIGHT)
+	directionLight = NewGO<nsLight::CDirectionLight>(
+		nsCommonData::PRIORITY_FIRST,
+		nsCommonData::GetGameObjectName(nsCommonData::EN_GO_TYPE_GAME_DIRECTION_LIGHT)
 		);
 	directionLight->SetDirection(
-		directionLightConstData::DIRECTIONLIG_INIT_DIRECTION
+		nsLight::directionLightConstData::DIRECTIONLIG_INIT_DIRECTION
 	);
-	directionLight->SetColor(directionLightConstData::DIRECTIONLIG_INIT_COLOR);
+	directionLight->SetColor(nsLight::directionLightConstData::DIRECTIONLIG_INIT_COLOR);
 
 	return;
 }
@@ -214,11 +219,11 @@ void Updating()
 	//ゲームオブジェクトのアップデート
 	GameObjectManager::GetInstance()->ExecuteUpdate();
 	//エフェクトエンジンのアップデート。
-	EffectEngine::GetInstance()->Update(GameTime().GetFrameDeltaTime());
+	EffectEngine::GetInstance()->Update(nsTimer::GameTime().GetFrameDeltaTime());
 	//ライトのアップデート
-	CLightManager::GetInstance()->Update();
+	nsLight::CLightManager::GetInstance()->Update();
 	//サウンドエンジンのアップデート
-	CSoundEngine::GetInstance()->Update();
+	nsSound::CSoundEngine::GetInstance()->Update();
 
 	return;
 }
@@ -270,6 +275,8 @@ void Rendering(RenderContext& renderContext)
 
 	//ポストエフェクト
 	g_graphicsEngine->DrawPostEffect(renderContext);
+
+	GameObjectManager::GetInstance()->ExecuteFontRender(renderContext);
 
 	//HUD
 	g_graphicsEngine->HUDRender();

@@ -4,8 +4,22 @@
 #include "ReversibleObject.h"
 #include "GameCamera.h"
 
+/**
+ * @brief メビリンス
+*/
+namespace nsMobyrinth
+{
+	/**
+	 * @brief プレイヤー
+	*/
+	namespace nsPlayer
+	{
+
 //プレイヤーの定数データを使えるようにする
 using namespace playerConstData;
+using namespace nsCommonData;
+//OBBを使用可能にする
+using namespace nsOBB;
 
 
 //スタート関数
@@ -25,13 +39,13 @@ bool Player::Start()
 
 
 	//カメラを探す
-	m_gameCamera = FindGO<CGameCamera>(GetGameObjectName(EN_GO_TYPE_GAME_CAMERA));
+	m_gameCamera = FindGO<nsCamera::CGameCamera>(GetGameObjectName(EN_GO_TYPE_GAME_CAMERA));
 
 	//ウェイポイント上の座標にキャラの座標を入れておく
 	m_onWayPosition = m_position;
 
 	//ステージのメビウスの輪の参照を得る
-	m_mobius = CLevelObjectManager::GetInstance()->GetMobius();
+	m_mobius = nsLevelObject::CLevelObjectManager::GetInstance()->GetMobius();
 
 
 	return true;
@@ -106,7 +120,7 @@ void Player::TitleMove()
 	//デルタタイムを掛ける
 	//キャラコンを使ってウェイポイント上の座標を進める
 	m_onWayPosition = 
-		m_myCharaCon.Execute(m_moveSpeed, GameTime().GetFrameDeltaTime());
+		m_myCharaCon.Execute(m_moveSpeed, nsTimer::GameTime().GetFrameDeltaTime());
 
 	//メビウスの輪の上に乗る処理
 	GetOnStage();
@@ -150,7 +164,7 @@ void Player::GameMove()
 
 	//キャラコンを使ってウェイポイント上の座標を移動させる	//デルタタイムを掛ける
 	m_onWayPosition = 
-		m_myCharaCon.Execute(m_moveSpeed, GameTime().GetFrameDeltaTime());
+		m_myCharaCon.Execute(m_moveSpeed, nsTimer::GameTime().GetFrameDeltaTime());
 
 	//衝突したOBBのタグを調べる
 	CheckHitOBBTag();
@@ -228,7 +242,7 @@ void Player::InitAnimation()
 void Player::InitModel()
 {
 	//通常のモデルレンダラーを生成する
-	m_modelRender = NewGO<CModelRender>(PRIORITY_FIRST);
+	m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(PRIORITY_FIRST);
 	//通常のモデルレンダラーの初期化をする
 	//この時にアニメーションクリップを一緒に引数に渡しておく
 	m_modelRender->Init(
@@ -250,7 +264,7 @@ void Player::InitModel()
 
 
 	//ゴール用のモデルの生成
-	m_goalPlayerMR = NewGO<CModelRender>(PRIORITY_FIRST);
+	m_goalPlayerMR = NewGO<nsGraphic::nsModel::CModelRender>(PRIORITY_FIRST);
 	//ゴール用のモデルの初期化
 	m_goalPlayerMR->Init
 	(
@@ -295,6 +309,10 @@ void Player::InitMyCharacterController()
 */
 void Player::InitSound()
 {
+	//この関数限定で
+	//サウンドを使用可能にする
+	using namespace nsSound;
+
 	//m_fallstartSEのサウンドキューを生成する
 	m_fallstartSE = NewGO<CSoundCue>(PRIORITY_FIRST);
 	//m_fallstartSEのサウンドキューを、waveファイルを指定して初期化する。
@@ -673,7 +691,7 @@ void Player::StunMove()
 			m_stunLeftOrRight = EN_RIGHT;
 		}
 		//最終的に吹っ飛ばされる先の座標を取ってくる
-		m_stunMoveSpeedHorizontal = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
+		m_stunMoveSpeedHorizontal = nsLevelObject::CLevelObjectManager::GetInstance()->CalcWayPointNextPos
 		(m_rpIndex, m_onWayPosition, MOVE_SPEED_STUN_HORIZONTAL, m_stunLeftOrRight);
 		//現在の座標から移動先のベクトルを出す
 		m_stunMoveSpeedHorizontal -= m_onWayPosition;
@@ -697,7 +715,7 @@ void Player::StunMove()
 		//Upベクトルを下向き大きくする
 		down.Scale(MOVE_ACCELERATION_STUN_DOWN);
 		//デルタタイムを掛ける
-		down.Scale(GameTime().GetFrameDeltaTime());
+		down.Scale(nsTimer::GameTime().GetFrameDeltaTime());
 		//吹っ飛び中の上下に動くベクトルに下向きのベクトルを加える
 		m_stunMoveSpeedVertical += down;
 	}
@@ -735,9 +753,9 @@ void Player::StunMove()
 	}
 
 	//点滅タイマーを進める
-	m_blinkTimer += GameTime().GetFrameDeltaTime();
+	m_blinkTimer += nsTimer::GameTime().GetFrameDeltaTime();
 	//スタン中のタイマーを進める
-	m_stunTimer += GameTime().GetFrameDeltaTime();
+	m_stunTimer += nsTimer::GameTime().GetFrameDeltaTime();
 
 	//スタン中のタイマーが、スタン中の最大時間を過ぎたら
 	if (m_stunTimer >= TIME_STUN)
@@ -800,7 +818,7 @@ void Player::GetOnStage()
 		//無効
 
 		//メビウスの輪（ステージ）が見つかっていなかったら探す
-		m_mobius = FindGO<CMobius>(GetGameObjectName(EN_GO_TYPE_MOBIUS));
+		m_mobius = FindGO<nsLevelObject::nsMobius::CMobius>(GetGameObjectName(EN_GO_TYPE_MOBIUS));
 	}
 
 	return;
@@ -1010,7 +1028,7 @@ void Player::SetShadowParam()
 	m_finalWPRot.Apply(dir);
 	//シャドウのつくるライトのパラメータを設定
 	g_graphicsEngine->GetShadowMap().SetShadowParam(
-		dir, shadowConstData::SHADOW_INIT_LENGTH, m_position
+		dir, nsGraphic::nsShadow::shadowConstData::SHADOW_INIT_LENGTH, m_position
 	);
 
 	return;
@@ -1026,7 +1044,7 @@ void Player::SetDirectionLight()
 	{
 		//探す
 		m_gameDirectionLight = 
-			FindGO<CDirectionLight>(GetGameObjectName(EN_GO_TYPE_GAME_DIRECTION_LIGHT));
+			FindGO<nsLight::CDirectionLight>(GetGameObjectName(EN_GO_TYPE_GAME_DIRECTION_LIGHT));
 		//まだ見つからなかったら何もせずにreturn
 		if (!m_gameDirectionLight)
 			return;
@@ -1125,8 +1143,6 @@ void Player::Fall()
 	//補完済みの回転を初期化する
 	m_finalWPRot = g_QUAT_IDENTITY;
 
-	//ライトのデータを更新する
-	UpdateLightData();
 
 	return;
 }
@@ -1188,7 +1204,7 @@ void Player::Goal()
 		//カメラからプレイヤーへのベクトルを拡大する
 		cameraToPlayerVec.Scale(CAMERA_TO_PLAYER_VEC_LEN_GOAL);
 		//デルタタイムを掛けておく
-		cameraToPlayerVec.Scale(GameTime().GetFrameDeltaTime());
+		cameraToPlayerVec.Scale(nsTimer::GameTime().GetFrameDeltaTime());
 		
 		//カメラの注視点を更新
 		m_gameCamera->SetTarget(m_position + targetUp);
@@ -1196,7 +1212,7 @@ void Player::Goal()
 		m_gameCamera->SetPosition(m_gameCamera->GetPosition() + cameraToPlayerVec);
 
 		//ゴール時のタイマーを進める
-		m_goalTimer += GameTime().GetFrameDeltaTime();
+		m_goalTimer += nsTimer::GameTime().GetFrameDeltaTime();
 	}
 	else
 	{
@@ -1441,3 +1457,5 @@ void Player::SetWayPointRot
 
 
 
+}
+}

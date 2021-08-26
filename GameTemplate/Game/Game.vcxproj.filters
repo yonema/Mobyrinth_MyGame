@@ -105,9 +105,6 @@
     <Filter Include="MyCode\Graphic\PostEffect">
       <UniqueIdentifier>{56d31043-f300-4720-914e-a65248a4ad80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\Graphic\2D">
-      <UniqueIdentifier>{19573a5f-530e-43a4-a106-fbfa3f10b045}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyCode\Save">
       <UniqueIdentifier>{3a362aab-e44b-4264-81c7-edfcbf8666de}</UniqueIdentifier>
     </Filter>
@@ -146,6 +143,12 @@
     </Filter>
     <Filter Include="MyCode\CommonData\GameObject">
       <UniqueIdentifier>{34db99e8-ddd2-4cf0-bece-34f414af101b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Graphic\HUD">
+      <UniqueIdentifier>{4c742bf1-7c7b-4d9b-a6df-36d98aac83f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Graphic\Shadow">
+      <UniqueIdentifier>{ae49cb4d-a81a-487c-9df6-31a774a47332}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -392,9 +395,6 @@
     <ClCompile Include="PointLight.cpp">
       <Filter>MyCode\Light</Filter>
     </ClCompile>
-    <ClCompile Include="ShadowMap.cpp">
-      <Filter>MyCode\Graphic\2D</Filter>
-    </ClCompile>
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
     </ClCompile>
@@ -482,9 +482,6 @@
     <ClCompile Include="StartDirecting.cpp">
       <Filter>MyCode\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="HUD.cpp">
-      <Filter>MyCode\Graphic\2D</Filter>
-    </ClCompile>
     <ClCompile Include="MiniEngine.cpp">
       <Filter>MiniEngine</Filter>
     </ClCompile>
@@ -499,6 +496,12 @@
     </ClCompile>
     <ClCompile Include="OOTransparentSwitch.cpp">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>MyCode\Graphic\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>MyCode\Graphic\Shadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -778,9 +781,6 @@
     <ClInclude Include="..\..\MiniEngine\TResourceBank.h">
       <Filter>MiniEngine</Filter>
     </ClInclude>
-    <ClInclude Include="ShadowMap.h">
-      <Filter>MyCode\Graphic\2D</Filter>
-    </ClInclude>
     <ClInclude Include="GameTime.h">
       <Filter>MyCode\Timer</Filter>
     </ClInclude>
@@ -928,17 +928,11 @@
     <ClInclude Include="ModelRenderConstData.h">
       <Filter>MyCode\Graphic\Model</Filter>
     </ClInclude>
-    <ClInclude Include="HUDConstData.h">
-      <Filter>MyCode\Graphic\2D</Filter>
-    </ClInclude>
     <ClInclude Include="TopOrDownData.h">
       <Filter>MyCode\CommonData</Filter>
     </ClInclude>
     <ClInclude Include="InOrOutConstData.h">
       <Filter>MyCode\CommonData</Filter>
-    </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>MyCode\Graphic\2D</Filter>
     </ClInclude>
     <ClInclude Include="OOflame.h">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
@@ -957,6 +951,15 @@
     </ClInclude>
     <ClInclude Include="OOTransparentSwitch.h">
       <Filter>MyCode\LevelObject\ObstacleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="HUDConstData.h">
+      <Filter>MyCode\Graphic\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>MyCode\Graphic\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>MyCode\Graphic\Shadow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

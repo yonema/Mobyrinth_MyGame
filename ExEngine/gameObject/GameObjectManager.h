@@ -69,6 +69,8 @@ public:
 	 * @param rc レンダーコンテキスト
 	*/
 	void ExecuteForwardRender(RenderContext& rc);
+
+	void ExecuteFontRender(RenderContext& rc);
 	
 	
 	/*!
