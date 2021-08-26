@@ -38,26 +38,48 @@ namespace nsMobyrinth
 			m_pause = NewGO<nsUI::CPause>(PRIORITY_FIRST, GetGameObjectName(EN_GO_TYPE_PAUSE));
 
 			//空を作る
+			//モデルに空のテクスチャを渡すため、モデルより先に生成する必要あり
 			m_sky = NewGO<nsSky::CSky>(PRIORITY_FIRST);
 			m_sky->SetScale(MODEL_SCALE_SKY);
+
+			//空のタイプ
+			nsSky::skyConstData::EN_SKY_TYPE skyType = nsSky::skyConstData::EN_SKY_DEFAULT;
+			//skyType = nsSky::skyConstData::EN_SKY_DAY_1;		//×	//青空と雲、下がほぼ単色
+			//skyType = nsSky::skyConstData::EN_SKY_DAY_2;		//×	//雲と隙間の光、下がほぼ単色
+			//skyType = nsSky::skyConstData::EN_SKY_DAY_3;		//○	//青空と雲、紫っぽい雲もある
+			//skyType = nsSky::skyConstData::EN_SKY_DAY_4;		//△	//曇天
+			//skyType = nsSky::skyConstData::EN_SKY_NIGHT_1;	//×	//全面星空
+			//skyType = nsSky::skyConstData::EN_SKY_NIGHT_2;	//△	//夜空と雲、下がほぼ単色
+			//skyType = nsSky::skyConstData::EN_SKY_NIGHT_3;	//○	//夜と赤い月
+			//skyType = nsSky::skyConstData::EN_SKY_SPACE_1;	//○	//宇宙
+			//skyType = nsSky::skyConstData::EN_SKY_SPACE_2;	//△	//夕焼け宇宙
+			//skyType = nsSky::skyConstData::EN_SKY_SUNRISE_1;	//×	//日の出、下がほぼ単色
 			switch (m_stageNum)
 			{
+			default:	//タイトル時
+				skyType = nsSky::skyConstData::EN_SKY_DAY_3;		//○	//青空と雲、紫っぽい雲もある
+				break;
 			case titleConstData::EN_STAGE_1:
 			case titleConstData::EN_STAGE_2:
-			case titleConstData::EN_STAGE_3:
-				m_sky->SetSkyCubeTextureFilepath(nsSky::skyConstData::TEXTURE_FILEPATH_SKY_DEFAULT);
+				skyType = nsSky::skyConstData::EN_SKY_DAY_3;		//○	//青空と雲、紫っぽい雲もある
 				break;
+			case titleConstData::EN_STAGE_3:
 			case titleConstData::EN_STAGE_4:
+				skyType = nsSky::skyConstData::EN_SKY_DAY_4;		//△	//曇天
+				break;
 			case titleConstData::EN_STAGE_5:
 			case titleConstData::EN_STAGE_6:
-				m_sky->SetSkyCubeTextureFilepath(nsSky::skyConstData::TEXTURE_FILEPATH_SKY_EVENING);
+				skyType = nsSky::skyConstData::EN_SKY_NIGHT_2;	//△	//夜空と雲、下がほぼ単色
 				break;
 			case titleConstData::EN_STAGE_7:
 			case titleConstData::EN_STAGE_8:
+				skyType = nsSky::skyConstData::EN_SKY_NIGHT_3;	//○	//夜と赤い月
+				break;
 			case titleConstData::EN_STAGE_9:
-				m_sky->SetSkyCubeTextureFilepath(nsSky::skyConstData::TEXTURE_FILEPATH_SKY_NIGHT);
+				skyType = nsSky::skyConstData::EN_SKY_SPACE_1;	//○	//宇宙
 				break;
 			}
+			m_sky->SetSkyType(skyType);
 
 
 			//キャパシティを表示するスプライトの生成と初期化

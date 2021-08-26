@@ -1,4 +1,5 @@
 #pragma once
+#include "SkyConstData.h"
 
 /**
  * @brief メビリンス
@@ -10,23 +11,6 @@ namespace nsMobyrinth
 	*/
 	namespace nsSky
 	{
-		/**
-		 * @brief 空クラスの定数データ
-		*/
-		namespace skyConstData
-		{
-			//空のモデルのファイルパス
-			const char* const MODEL_FILEPATH_SKY = "Assets/modelData/preset/sky.tkm";
-			//空のシェーダーファイルパス
-			const char* const FX_FILEPATH_SKY = "Assets/shader/SkyCubeMap.fx";
-			//空のテクスチャのデフォルトファイルパス
-			const wchar_t* const TEXTURE_FILEPATH_SKY_DEFAULT = L"Assets/modelData/preset/sky.dds";
-			//夕方の空のテクスチャのファイルパス
-			const wchar_t* const TEXTURE_FILEPATH_SKY_EVENING = L"Assets/modelData/preset/sky.dds";
-			//夜の空のテクスチャのファイルパス
-			const wchar_t* const TEXTURE_FILEPATH_SKY_NIGHT = L"Assets/modelData/preset/sky.dds";
-		}
-
 		/**
 		 * @brief 空クラス
 		*/
@@ -93,9 +77,15 @@ namespace nsMobyrinth
 			 * @attention Start関数より早く呼ばないと効果がない
 			 * @param filepath スカイキューブテクスチャのファイルパス
 			*/
-			void SetSkyCubeTextureFilepath(const wchar_t* filepath)
+
+			/**
+			 * @brief 空の種類を設定
+			 * @attention Start関数より早く呼ばないと効果がない
+			 * @param skyType 空の種類
+			*/
+			void SetSkyType(const skyConstData::EN_SKY_TYPE skyType)
 			{
-				m_skyCubeTextureFiltpath = m_skyCubeTextureFiltpath;
+				m_skyType = skyType;
 			}
 
 		private:	//データメンバ
@@ -105,7 +95,7 @@ namespace nsMobyrinth
 			Vector3 m_scale = g_VEC3_ONE;			//拡大率
 			Vector4 m_selfLuminous = g_VEC4_BLACK;	//自己発光色
 			bool m_isDirty = false;					//ダーティフラグ
-			const wchar_t* m_skyCubeTextureFiltpath = nullptr;	//スカイキューブテクスチャのファイルパス
+			skyConstData::EN_SKY_TYPE m_skyType = skyConstData::EN_SKY_DEFAULT;	//空の種類
 		};
 
 	}

@@ -169,7 +169,17 @@ void GraphicsEngine::InitGBufferRenderTarget()
 		g_graphicsEngine->GetFrameBufferHeight(),
 		1,
 		1,
-		DXGI_FORMAT_R8G8B8A8_SNORM,
+		DXGI_FORMAT_R8G8B8A8_SNORM,	//負の数情報あり
+		DXGI_FORMAT_UNKNOWN
+	);
+
+	//ワールド座標系の座標描き込み用のレンダリングターゲット
+	m_gBufferRenderTargets[EN_POS_IN_WRD]->Create(
+		g_graphicsEngine->GetFrameBufferWidth(),
+		g_graphicsEngine->GetFrameBufferHeight(),
+		1,
+		1,
+		DXGI_FORMAT_R32G32B32A32_FLOAT,
 		DXGI_FORMAT_UNKNOWN
 	);
 
@@ -241,13 +251,16 @@ void GraphicsEngine::InitDefferdRenderSprite()
 		&m_zprepassRenderTarget.GetRenderTargetTexture();
 	defferdSpriteInitData.m_textures[EN_G_BUFFER_NUM + 2] = &m_skyCubeTexture;
 
+	defferdSpriteInitData.m_expandConstantBuffer = &m_skyIBLcb;
+	defferdSpriteInitData.m_expandConstantBufferSize = sizeof(m_skyIBLcb);
+
 
 	defferdSpriteInitData.m_fxFilePath = "Assets/shader/defferdLightingSprite.fx";
 
 	defferdSpriteInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
 
-	m_defferdRenderSprite.Init(defferdSpriteInitData);
-	m_defferdRenderSprite.Update(
+	m_defferdLightingSprite.Init(defferdSpriteInitData);
+	m_defferdLightingSprite.Update(
 		g_VEC3_ZERO, g_QUAT_IDENTITY,
 		nsMobyrinth::nsGraphic::nsSprite::spriteRenderConstData::SPRITE_SCALE_DEFAULT
 	);
@@ -393,7 +406,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	//
 	m_hud.Init();
 
-	m_skyCubeTexture.InitFromDDSFile(L"Assets/modelData/preset/sky.dds" );
+	//m_skyCubeTexture.InitFromDDSFile(L"Assets/modelData/preset/sky.dds" );
 
 	//G_BUFFER用のレンダリングターゲットの初期化処理
 	InitGBufferRenderTarget();
@@ -402,6 +415,20 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	InitDefferdRenderSprite();
 
 	return true;
+}
+
+/**
+ * @brief スカイキューブ用のテクスチャを初期化しなおす
+ * @param skyIBLData IBL用の空のデータ
+*/
+void GraphicsEngine::ReInitSkyCubeTexture(const nsMobyrinth::nsSky::SSkyIBLData& skyIBLData)
+{
+	m_skyCubeTexture.InitFromDDSFile(skyIBLData.m_skyTextureFilepath);
+	m_skyIBLcb.m_luminance = skyIBLData.m_luminance;
+
+	InitDefferdRenderSprite();
+
+	return;
 }
 
 IDXGIFactory4* GraphicsEngine::CreateDXGIFactory()
@@ -818,7 +845,7 @@ void GraphicsEngine::WaitDefferdRenderring()
 */
 void GraphicsEngine::DrawDefferdRenderSprite()
 {
-	m_defferdRenderSprite.Draw(m_renderContext);
+	m_defferdLightingSprite.Draw(m_renderContext);
 
 	return;
 }
