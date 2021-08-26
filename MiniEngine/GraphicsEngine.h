@@ -18,6 +18,7 @@
 #include "../GameTemplate/Game/PostEffect.h"
 #include "../GameTemplate/Game/ShadowMap.h"
 #include "../GameTemplate/Game/HUD.h"
+#include "../GameTemplate/Game/SkyIBLData.h"
 
 
 /// <summary>
@@ -334,6 +335,7 @@ private:
 		EN_ALBED,			//アルベド
 		EN_NORMAL,			//法線
 		EN_VIEW_NORMAL,		//ビュー座標系の法線
+		EN_POS_IN_WRD,		//ワールド座標系の座標
 		EN_POS_IN_LVP,		//ライトビュープロジェクション座標系の座標
 		EN_POS_IN_PROJ,		//プロジェクション座標系の座標
 		EN_EMISSION_COLOR,	//自己発光色
@@ -342,7 +344,8 @@ private:
 private:	//データメンバ
 	RenderTarget m_mainRenderTarget;	//メインレンダリングターゲット
 	RenderTarget* m_gBufferRenderTargets[EN_G_BUFFER_NUM];	//G_BUFFER用のレンダリングターゲット
-	Sprite m_defferdRenderSprite;				//ディファ―ドレンダリング用のスプライト
+	Sprite m_defferdLightingSprite;				//ディファ―ドレンダリング用のスプライト
+	nsMobyrinth::nsSky::SSkyIBLConstantBuffer m_skyIBLcb;
 	//メインレンダリングターゲットの絵をフレームバッファにコピーするためのスプライト
 	Sprite m_copyToFrameBufferSprite;
 	int m_refreshRate = 59;						//垂直同期に使うリフレッシュレート
@@ -445,6 +448,13 @@ public:		//メンバ関数
 	}
 
 	/**
+	 * @brief スカイキューブ用のテクスチャを初期化しなおす
+	 * @param  
+	 * @param textureFilepath 
+	*/
+	void ReInitSkyCubeTexture(const nsMobyrinth::nsSky::SSkyIBLData& skyIBLData);
+
+	/**
 	 * @brief ポストエフェクトを描画する
 	 * @param [in,out] rc レンダリングコンテキスト
 	*/
@@ -491,6 +501,14 @@ public:		//メンバ関数
 	D3D12_CPU_DESCRIPTOR_HANDLE GetGBufferDSVCpuDescriptorHandle()
 	{
 		return m_gBufferRenderTargets[0]->GetDSVCpuDescriptorHandle();
+	}
+
+	/**
+	 * @brief 視線の座標のアップデート
+	*/
+	void UpdateEyePos()
+	{
+		m_skyIBLcb.m_eyePos = m_camera3D.GetPosition();
 	}
 
 private:	//privateなメンバ関数

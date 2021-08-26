@@ -83,9 +83,10 @@ struct SPSOut {
 	float4 albedo		: SV_Target0;	//アルベド
 	float4 normal		: SV_Target1;	//法線
 	float4 viewNormal	: SV_Target2;	//ビュー座標系の法線
-	float4 posInLVP		: SV_Target3;	//ライトビュープロジェクション座標系の座標
-	float4 posInProj	: SV_Target4;	//プロジェクション座標系の座標
-	float4 emissionColor : SV_Target5;	//自己発光色
+	float4 posInRRD		: SV_Target3;
+	float4 posInLVP		: SV_Target4;	//ライトビュープロジェクション座標系の座標
+	float4 posInProj	: SV_Target5;	//プロジェクション座標系の座標
+	float4 emissionColor : SV_Target6;	//自己発光色
 };
 
 ////////////////////////////////////////////////
@@ -300,12 +301,16 @@ SPSOut PSMain(SPSIn psIn) : SV_Target0
 	//wはシャドウレシーバーフラグ
 	psOut.viewNormal.w = shadowReceiverFlag;
 
+	//ワールド座標系の座標を出力
+	psOut.posInRRD.xyz = psIn.worldPos;
+	//wは未使用
+	psOut.posInRRD.w = 0.0f;
+
 	//ライトビュープロジェクション座標系の座標を出力
 	psOut.posInLVP = psIn.posInLVP[0];
 
 	//プロジェクション座標系の座標を出力
 	psOut.posInProj = psIn.posInProj;
-	//psOut.posInProj.xy = psIn.posInProj.xy / psIn.posInProj.w;
 
 	//自己発光色を出力
 	psOut.emissionColor = emissionColor;

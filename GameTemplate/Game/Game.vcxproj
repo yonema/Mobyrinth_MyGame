@@ -450,6 +450,8 @@
     <ClInclude Include="ReversibleObjectConstData.h" />
     <ClInclude Include="ROsFilepathConstData.h" />
     <ClInclude Include="Save.h" />
+    <ClInclude Include="SkyConstData.h" />
+    <ClInclude Include="SkyIBLData.h" />
     <ClInclude Include="SpringCamera.h" />
     <ClInclude Include="SpriteRenderConstData.h" />
     <ClInclude Include="Stage.h" />

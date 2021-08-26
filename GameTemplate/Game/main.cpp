@@ -218,6 +218,8 @@ void Updating()
 {
 	//ゲームオブジェクトのアップデート
 	GameObjectManager::GetInstance()->ExecuteUpdate();
+	//視線の座標の更新
+	g_graphicsEngine->UpdateEyePos();
 	//エフェクトエンジンのアップデート。
 	EffectEngine::GetInstance()->Update(nsTimer::GameTime().GetFrameDeltaTime());
 	//ライトのアップデート

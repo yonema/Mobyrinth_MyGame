@@ -37,14 +37,10 @@ namespace nsMobyrinth
 			//シェーダーファイルのファイルパスを指定する。
 			initData.m_fxFilePath = FX_FILEPATH_SKY;
 
-			//スカイキューブテクスチャのファイルパスが指定されていなかったら、デフォルトのファイルパス
-			if (m_skyCubeTextureFiltpath == nullptr)
-			{
-				m_skyCubeTextureFiltpath = TEXTURE_FILEPATH_SKY_DEFAULT;
-			}
+			SSkyIBLData skyIBLData = GetIBLLuminanceForSky(m_skyType);
 
 			//スカイキューブテクスチャを初期化
-			m_skyCubeTexture.InitFromDDSFile(m_skyCubeTextureFiltpath);
+			m_skyCubeTexture.InitFromDDSFile(skyIBLData.m_skyTextureFilepath);
 
 			//スカイキューブテクスチャをSRVに登録
 			initData.m_expandShaderResoruceView[0] = &m_skyCubeTexture;
@@ -55,6 +51,8 @@ namespace nsMobyrinth
 			m_model.UpdateWorldMatrix(m_position, g_QUAT_IDENTITY, m_scale);
 
 			SetIsDefferdRender(false);
+
+			g_graphicsEngine->ReInitSkyCubeTexture(skyIBLData);
 
 			return true;
 		}

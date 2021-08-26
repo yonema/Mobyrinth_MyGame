@@ -4,6 +4,13 @@ cbuffer cb : register(b0) {
 	float4x4 mvp;		
 	float4 mulColor;	
 };
+
+cbuffer IBLCb : register(b1)
+{
+	float3 eyePos;
+	float IBLluminance;
+}
+
 struct VSInput {
 	float4 pos : POSITION;
 	float2 uv  : TEXCOORD0;
@@ -17,19 +24,20 @@ struct PSInput {
 Texture2D<float4> albedTexture		: register(t0);		//アルベド
 Texture2D<float4> normalTexture		: register(t1);		//法線
 Texture2D<float4> viewNormalTexture	: register(t2);		//ビュー座標系の法線
-Texture2D<float4> posInLVPTexture	: register(t3);		//ライトビュープロジェクション座標系の座標
-Texture2D<float4> posInProjTexture	: register(t4);		//プロジェクション座標系の座標
-Texture2D<float4> emissionColorTexture	: register(t5);	//自己発光色
+Texture2D<float4> posInWRDTexture	: register(t3);		//ビュー座標系の法線
+Texture2D<float4> posInLVPTexture	: register(t4);		//ライトビュープロジェクション座標系の座標
+Texture2D<float4> posInProjTexture	: register(t5);		//プロジェクション座標系の座標
+Texture2D<float4> emissionColorTexture	: register(t6);	//自己発光色
 
-Texture2D<float4> g_shadowMap		: register(t6);		//シャドウマップ
-Texture2D<float4> g_depthTexture	: register(t7);		//深度テクスチャ
-TextureCube<float4> g_skyCubeMap	: register(t8);		//スカイキューブ
+Texture2D<float4> g_shadowMap		: register(t7);		//シャドウマップ
+Texture2D<float4> g_depthTexture	: register(t8);		//深度テクスチャ
+TextureCube<float4> g_skyCubeMap	: register(t9);		//スカイキューブ
 
 sampler Sampler : register(s0);
 
 //関数宣言
 bool IsOnOutLine(float4 posInProj, float thickness, float outlineFlag);
-float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal);
+float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal, float3 toEye);
 
 
 static const int pattern[4][4] =
@@ -47,6 +55,7 @@ PSInput VSMain(VSInput In)
 	psIn.uv = In.uv;
 	return psIn;
 }
+
 float4 PSMain(PSInput In) : SV_Target0
 {
 	//アルベドをアルベドテクスチャからサンプリング
@@ -107,8 +116,11 @@ float4 PSMain(PSInput In) : SV_Target0
 	{
 		//透明ではない
 
+		float3 toEye = eyePos - posInWRDTexture.Sample(Sampler, In.uv).xyz;
+		toEye = normalize(toEye);
+
 		//ライティング処理を行う
-		finalColor = SpecialColor(albedo, viewNormal.xyz, normal.xyz);
+		finalColor = SpecialColor(albedo, viewNormal.xyz, normal.xyz, toEye);
 		//自己発光カラーをテクスチャからサンプリング
 		float4 emissionColor = emissionColorTexture.Sample(Sampler, In.uv);
 		//自己発光色を加える
@@ -225,17 +237,19 @@ bool IsOnOutLine(float4 posInProj, float thickness, float outlineFlag)
 	return false;
 }
 
-float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal)
+float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal, float3 toEye)
 {
 	float4 lig = albedoColor;
 
-	//自己発光色
-	//lig.xyz += emissionColor.xyz;
-	//lig *= mulColor;
+	normal = normal * 2.0f - 1.0f;
 
-	float4 color = g_skyCubeMap.SampleLevel(Sampler, normal * -1.0f, 12) * 1.4f;
+	float3 refV = reflect(toEye * -1.0f, normal);
+
+	float4 color = g_skyCubeMap.SampleLevel(Sampler, refV, 12) * IBLluminance;
 	lig.xyz *= color;
 	return lig;
+
+
 	//リム
 	//輪郭を光らせる
 	//法線のZ成分が多いほどリムが弱くなる

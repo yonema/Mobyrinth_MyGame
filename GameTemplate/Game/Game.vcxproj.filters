@@ -961,6 +961,12 @@
     <ClInclude Include="ShadowMap.h">
       <Filter>MyCode\Graphic\Shadow</Filter>
     </ClInclude>
+    <ClInclude Include="SkyConstData.h">
+      <Filter>MyCode\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyIBLData.h">
+      <Filter>MyCode\Sky</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">
