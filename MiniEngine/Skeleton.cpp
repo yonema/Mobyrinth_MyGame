@@ -141,7 +141,7 @@ void Skeleton::BuildBoneMatrices()
 /// </summary>
 void Skeleton::BuildBoneMatricesLevel()
 {
-	m_tklFile.QueryBone([&](TklFile::SBone& tklBone) {
+	m_tklFile.QueryBone([&](nsMobyrinth::nsTkLevel::TklFile::SBone& tklBone) {
 		//バインドポーズ。
 		Matrix bindPoseMatrix;
 		memcpy(bindPoseMatrix.m[0], &tklBone.bindPose[0], sizeof(tklBone.bindPose[0]));

@@ -265,7 +265,7 @@ public:
 
 private:
 	TksFile m_tksFile;										//TKSファイル。
-	TklFile m_tklFile;								//TKLファイル
+	nsMobyrinth::nsTkLevel::TklFile m_tklFile;								//TKLファイル
 	static const int BONE_MAX = 512;				//ボーンの最大数。
 	using BonePtr = std::unique_ptr<Bone>;
 	std::vector<BonePtr>	m_bones;				//ボーンの配列。

@@ -6,6 +6,11 @@
 #ifndef _TKNONCOPYABLE_H_
 #define _TKNONCOPYABLE_H_
 
+ /**
+  * @brief メビリンス
+ */
+namespace nsMobyrinth
+{
 	/// <summary>
 	/// コピー禁止
 	/// </summary>
@@ -14,6 +19,6 @@
 		Noncopyable(const Noncopyable&) = delete;
 		Noncopyable& operator=(const Noncopyable&) = delete;
 	};
-
+}
 
 #endif // _TKNONCOPYABLE_H_

@@ -2,28 +2,38 @@
 #include "CaslFile.h"
 #include "SpriteRender.h"
 
-
-/// <summary>
-/// マップチップ2D。
-/// </summary>
-class MapChip2D : private Noncopyable
+/**
+ * @brief メビリンス
+*/
+namespace nsMobyrinth
 {
-public:		//自動で呼ばれるメンバ関数
-	~MapChip2D();
+	/**
+	 * @brief レベル2D
+	*/
+	namespace nsLevel2D
+	{
 
-public:		//ここのメンバ関数を主に使う
+		/// <summary>
+		/// マップチップ2D。
+		/// </summary>
+		class MapChip2D : private Noncopyable
+		{
+		public:		//自動で呼ばれるメンバ関数
+			~MapChip2D();
 
-	/// <summary>
-	/// 初期化。
-	/// </summary>
-	/// <param name="caslData">Caslデータ。</param>
-	void Init(SCaslData* caslData);
+		public:		//ここのメンバ関数を主に使う
+
+			/// <summary>
+			/// 初期化。
+			/// </summary>
+			/// <param name="caslData">Caslデータ。</param>
+			void Init(SCaslData* caslData);
 
 
 
-private:	//データメンバ
-	CSpriteRender* m_spriteRender = nullptr;	//スプライト。
-};
+		private:	//データメンバ
+			nsGraphic::nsSprite::CSpriteRender* m_spriteRender = nullptr;	//スプライト。
+		};
 
-
-
+	}
+}

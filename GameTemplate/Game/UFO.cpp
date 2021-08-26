@@ -1,19 +1,32 @@
 #include "stdafx.h"
 #include "UFO.h"
 
+/**
+ * @brief メビリンス
+*/
+namespace nsMobyrinth
+{
+	/**
+	 * @brief レベルオブジェクト
+	*/
+	namespace nsLevelObject
+	{
+		/**
+		 * @brief 障害オブジェクト
+		*/
+		namespace nsObstacleObject
+		{
+
 //スタート関数
 bool CUFO::PureVirtualStart()
 {
-	
 	//モデルレンダラーの生成と初期化
-	m_modelRender = NewGO<CModelRender>(0);
+	m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::PRIORITY_FIRST);
 	m_modelRender->Init("Assets/modelData/UFO2.tkm");
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 
 	m_modelRender->SetDrawOutLineFlag(true);
-
-	m_modelRender->SetShadowCasterFlag(true);
 
 	//アップベクトルを現在の回転に合わせる
 	m_rotation.Apply(m_upVec);
@@ -51,7 +64,7 @@ bool CUFO::PureVirtualStart()
 	m_spotLightDown->SetAngle(3.14f * 0.25f);*/
 
 	//UFOの光線のモデルの生成と初期化
-	m_ufoLight = NewGO<CModelRender>(1);
+	m_ufoLight = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::PRIORITY_SECOND);
 	ModelInitData ufoLigInitData;
 	ufoLigInitData.m_tkmFilePath = "Assets/modelData/ufoLight.tkm";
 	ufoLigInitData.m_fxFilePath = "Assets/shader/ufoLight.fx";
@@ -62,46 +75,50 @@ bool CUFO::PureVirtualStart()
 	m_ufoLight->SetRotation(m_rotation);
 	m_ufoLight->SetDrawOutLineFlag(false);
 	//最初は見えないように透明にする
-	m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
+	m_ufoLight->SetAlphaValue(nsGraphic::nsModel::modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
 	m_ufoLight->SetIsDefferdRender(false);
 
 	//UFOの着地点の生成と初期化
-	m_ufoLandingPoint = NewGO<CUFOLandingPoint>(0);
+	m_ufoLandingPoint = NewGO<CUFOLandingPoint>(nsCommonData::PRIORITY_FIRST);
 	m_ufoLandingPoint->SetPosition(m_position);
 
 	//他のレベルオブジェクトと衝突しなくする
 	SetIsHitFlag(false);
 
+	//ここ関数限定で
+	//サウンドを使用可能にする
+	using namespace nsSound;
+
 	//UFOmoveSEのサウンドキューを生成する
-	m_UFOmoveSE = NewGO<CSoundCue>(0);
+	m_UFOmoveSE = NewGO<nsSound::CSoundCue>(nsCommonData::PRIORITY_FIRST);
 	//UFOmoveSEのサウンドキューを、waveファイルを指定して初期化する。
 	m_UFOmoveSE->Init(L"Assets/sound/UFOmove.wav");
 	//音量調節
 	m_UFOmoveSE->SetVolume(0.5f);
 
 	//UFOcarrymoveSEのサウンドキューを生成する
-	m_UFOcarrymoveSE = NewGO<CSoundCue>(0);
+	m_UFOcarrymoveSE = NewGO<CSoundCue>(nsCommonData::PRIORITY_FIRST);
 	//UFOcarrymoveSEのサウンドキューを、waveファイルを指定して初期化する。
 	m_UFOcarrymoveSE->Init(L"Assets/sound/UFOcarrymove.wav");
 	//音量調節
 	m_UFOcarrymoveSE->SetVolume(0.5f);
 
 	//UFOyellowlightのサウンドキューを生成する
-	m_UFOyellowlightSE = NewGO<CSoundCue>(0);
+	m_UFOyellowlightSE = NewGO<CSoundCue>(nsCommonData::PRIORITY_FIRST);
 	//UFOyellowlightのサウンドキューを、waveファイルを指定して初期化する。
 	m_UFOyellowlightSE->Init(L"Assets/sound/UFOyellowlight.wav");
 	//音量調節
 	m_UFOyellowlightSE->SetVolume(0.5f);
 
 	//UFOdiscoverySEのサウンドキューを生成する
-	m_UFOdiscoverySE = NewGO<CSoundCue>(0);
+	m_UFOdiscoverySE = NewGO<CSoundCue>(nsCommonData::PRIORITY_FIRST);
 	//UFOdiscoverySEのサウンドキューを、waveファイルを指定して初期化する。
 	m_UFOdiscoverySE->Init(L"Assets/sound/UFOdiscovery.wav");
 	//音量調節
 	m_UFOdiscoverySE->SetVolume(0.5f);
 
 	//UFOdiscoverySEのサウンドキューを生成する
-	m_UFOredlightSE = NewGO<CSoundCue>(0);
+	m_UFOredlightSE = NewGO<CSoundCue>(nsCommonData::PRIORITY_FIRST);
 	//UFOredlightのサウンドキューを、waveファイルを指定して初期化する。
 	m_UFOredlightSE->Init(L"Assets/sound/UFOredlight.wav");
 	//音量調節
@@ -323,7 +340,7 @@ void CUFO::Search()
 
 
 	//タイマーにデルタタイムを加算
-	m_timer += GameTime().GetFrameDeltaTime();
+	m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 
 	//捜索フラグの切り替えと時間
 	const float switchingTime = 1.5f;
@@ -412,7 +429,7 @@ void CUFO::Search()
 		//UFOの光線の光を消す
 		m_ufoLight->SetModelEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線の透明にする
-		m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
+		m_ufoLight->SetAlphaValue(nsGraphic::nsModel::modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
 		//輪郭線を書かないようにする
 		m_ufoLight->SetDrawOutLineFlag(false);
 		//UFOyellowSEが鳴っていたら止める
@@ -440,7 +457,7 @@ void CUFO::Capture()
 		m_player->SetCapturedPosition(m_player->GetPosition());
 		m_player->SetCapturedRotation(m_player->GetRotation());
 		//タイマーを進める
-		m_timer += GameTime().GetFrameDeltaTime();
+		m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 
 		//そのまま戻す
 		return;
@@ -458,7 +475,7 @@ void CUFO::Capture()
 	//プレイヤーに加えるベクトル
 	Vector3 addVec = capturePos - m_player->GetPosition();
 	//デルタタイムを掛けておく
-	addVec.Scale(GameTime().GetFrameDeltaTime());
+	addVec.Scale(nsTimer::GameTime().GetFrameDeltaTime());
 	//プレイヤーの座標を設定
 	Vector3 pos = m_player->GetPosition() + addVec;
 	m_player->SetPosition(pos);
@@ -566,7 +583,7 @@ void CUFO::Capture()
 	}
 	else
 		//まだならタイマーを進める
-		m_timer += GameTime().GetFrameDeltaTime();
+		m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 
 }
 
@@ -585,7 +602,7 @@ void CUFO::Transport()
 		//UFOの光線の光を消す
 		m_ufoLight->SetModelEmissionColor({ 0.0f,0.0f,0.0f,1.0f });
 		//UFOの光線を透明にする
-		m_ufoLight->SetAlphaValue(modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
+		m_ufoLight->SetAlphaValue(nsGraphic::nsModel::modelRenderConstData::ALPHA_VALUE_TRANSPARENT);
 		//輪郭線を書かないようにする
 		m_ufoLight->SetDrawOutLineFlag(false);
 
@@ -671,7 +688,7 @@ void CUFO::Transport()
 		//停止時間より小さい
 
 		//タイマーを進める
-		m_timer += GameTime().GetFrameDeltaTime();
+		m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 		//何もせずに戻す
 		return;
 	}
@@ -709,7 +726,7 @@ void CUFO::Transport()
 	else
 		//衝突していなかったら
 		//タイマーを進める
-		m_timer += GameTime().GetFrameDeltaTime();
+		m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 
 	//プレイヤーの情報を更新する
 	m_player->SetPosition(capturePos);
@@ -800,7 +817,7 @@ void CUFO::Landing()
 		//衝突している時
 
 		//タイマーを進める
-		m_timer += GameTime().GetFrameDeltaTime();
+		m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 
 		//タイマーの進具合を調べる
 		if (m_timer <= inflateTimer)
@@ -974,7 +991,7 @@ void CUFO::Leave()
 	else
 		//切り替え時間より小さかったら
 		//タイマーを進める
-		m_timer += GameTime().GetFrameDeltaTime();
+		m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 }
 
 //移動処理
@@ -983,7 +1000,7 @@ void CUFO::Move()
 	//次のウェイポイント
 	int nextIndex = GetRightWayPointIndex();
 	//最終的な移動速度	//移動速度にデルタタイムを掛ける
-	float finalMoveSpeed = m_moveSpeed * GameTime().GetFrameDeltaTime();
+	float finalMoveSpeed = m_moveSpeed * nsTimer::GameTime().GetFrameDeltaTime();
 	//ウェイポイント上の次の座標を計算する
 	m_onWayPosition = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
 	(GetRightWayPointIndex(), m_onWayPosition, finalMoveSpeed, m_leftOrRight, &nextIndex);
@@ -1040,7 +1057,7 @@ void CUFO::GetOnStage()
 	{
 		//メビウスの輪（ステージ）が見つかっていなかったら
 		//探してreturnする
-		m_mobius = FindGO<CMobius>("Mobius");
+		m_mobius = FindGO<nsMobius::CMobius>("Mobius");
 		return;
 	}
 }
@@ -1052,7 +1069,7 @@ void CUFO::GetOnStage()
 const Quaternion CUFO::Rotating()
 {
 	//UFOの回転の角度を増やす	//デルタタイムを掛けておく
-	m_ufoAngle += m_ufoAngleSpeed * GameTime().GetFrameDeltaTime();
+	m_ufoAngle += m_ufoAngleSpeed * nsTimer::GameTime().GetFrameDeltaTime();
 
 	//角度が360度より大きくか？
 	if (m_ufoAngle > 360.0f)
@@ -1100,4 +1117,7 @@ void CUFO::UpdateLight()
 	m_dbgSpotLigPos->SetPosition(m_position + upVec);
 	m_dbgSpotLigPos->SetRotation(m_rotation);
 #endif
+}
+}
+}
 }

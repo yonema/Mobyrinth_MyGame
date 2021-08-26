@@ -12,7 +12,7 @@ class RenderContext;
 /*!
 	*@brief	ゲームオブジェクト。
 	*/
-class IGameObject : private Noncopyable
+class IGameObject : private nsMobyrinth::Noncopyable
 {
 public:
 	/*!
@@ -55,6 +55,10 @@ public:
 		(void)renderContext;
 	}
 
+	virtual void FontRender(RenderContext& renderContext)
+	{
+		(void)renderContext;
+	}
 	
 public:
 	/*!
@@ -136,6 +140,14 @@ public:
 	{
 		if (m_isActive && m_isStart && !m_isDefferdRender && !m_isDead) {
 			ForwardRender(renderContext);
+		}
+	}
+
+	void FontRenderWrapper(RenderContext& renderContext)
+	{
+		if (m_isActive && m_isStart && !m_isDead)
+		{
+			FontRender(renderContext);
 		}
 	}
 	

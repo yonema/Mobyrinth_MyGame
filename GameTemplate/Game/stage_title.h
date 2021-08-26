@@ -1,20 +1,33 @@
 #pragma once
 #include "StageBase.h"
 
+
 /**
- * @brief タイトルステージクラス
+ * @brief メビリンス
 */
-class CStage_title : public IStageBase
+namespace nsMobyrinth
 {
-public:
-	bool StartSub() override final;
-	~CStage_title();
-	void RetryStage()override final
+	/**
+	 * @brief ステージ
+	*/
+	namespace nsStage
 	{
-		NewGO<CStage_title>(0);
+		/**
+		 * @brief タイトルステージクラス
+		*/
+		class CStage_title : public IStageBase
+		{
+		public:
+			bool StartSub() override final;
+			~CStage_title();
+			void RetryStage()override final
+			{
+				NewGO<CStage_title>(0);
+			}
+
+
+		private:	//データメンバ
+		};
+
 	}
-
-
-private:	//データメンバ
-};
-
+}

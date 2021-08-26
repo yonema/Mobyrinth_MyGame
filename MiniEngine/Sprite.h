@@ -29,9 +29,11 @@ struct SpriteInitData {
 	const char* m_ddsFilePath[MAX_TEXTURE]= {nullptr};		//DDSファイルのファイルパス。
 	Texture* m_textures[MAX_TEXTURE] = { nullptr };			//使用するテクスチャ。DDSファイルのパスが指定されている場合は、このパラメータは無視されます。
 	//頂点シェーダーのエントリーポイント。
-	const char* m_vsEntryPointFunc = spriteRenderConstData::ENTRY_POINT_FUNC_VS_DEFAULT;
+	const char* m_vsEntryPointFunc = 
+		nsMobyrinth::nsGraphic::nsSprite::spriteRenderConstData::ENTRY_POINT_FUNC_VS_DEFAULT;
 	//ピクセルシェーダーのエントリーポイント。
-	const char* m_psEntryPoinFunc = spriteRenderConstData::ENTRY_POINT_FUNC_PS_DEFAULT;
+	const char* m_psEntryPoinFunc = 
+		nsMobyrinth::nsGraphic::nsSprite::spriteRenderConstData::ENTRY_POINT_FUNC_PS_DEFAULT;
 	const char* m_fxFilePath = nullptr;						//.fxファイルのファイルパス。
 	UINT m_width = 0;										//スプライトの幅。
 	UINT m_height = 0;										//スプライトの高さ。

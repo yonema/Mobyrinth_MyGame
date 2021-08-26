@@ -18,11 +18,11 @@ enum EnModelUpAxis {
 struct ModelInitData {
 	const char* m_tkmFilePath = nullptr;							//tkmファイルパス。
 	//頂点シェーダーのエントリーポイント。
-	const char* m_vsEntryPointFunc = modelRenderConstData::ENTRY_POINT_FUNC_VS_DEFAULT;
+	const char* m_vsEntryPointFunc = nsMobyrinth::nsGraphic::nsModel::modelRenderConstData::ENTRY_POINT_FUNC_VS_DEFAULT;
 	//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
-	const char* m_vsSkinEntryPointFunc = modelRenderConstData::ENTRY_POINT_FUNC_VS_SKIN_DEFAULT;
+	const char* m_vsSkinEntryPointFunc = nsMobyrinth::nsGraphic::nsModel::modelRenderConstData::ENTRY_POINT_FUNC_VS_SKIN_DEFAULT;
 	//ピクセルシェーダーのエントリーポイント。
-	const char* m_psEntryPointFunc = modelRenderConstData::ENTRY_POINT_FUNC_PS_DEFAULT;
+	const char* m_psEntryPointFunc = nsMobyrinth::nsGraphic::nsModel::modelRenderConstData::ENTRY_POINT_FUNC_PS_DEFAULT;
 	const char* m_fxFilePath = nullptr;								//.fxファイルのファイルパス。
 	void* m_expandConstantBuffer[MeshParts::m_maxExCBNum] = { nullptr };	//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize[MeshParts::m_maxExCBNum] = { 0 };	//ユーザー拡張の定数バッファのサイズ。

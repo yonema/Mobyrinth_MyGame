@@ -2,22 +2,34 @@
 #include "physics/PhysicsStaticObject.h"
 #include "ModelRender.h"
 
-
-struct LevelObjectData;
-class CMapChip
+/**
+ * @brief メビリンス
+*/
+namespace nsMobyrinth
 {
-public://メンバ関数
-	/// <summary>
-	/// マップチップの作成
-	/// レベルのデータをもとに
-	/// モデルの表示と静的物理オブジェクトの初期化
-	/// </summary>
-	/// <param name="objData">レベルのオブジェクトのデータ</param>
-	CMapChip(const LevelObjectData& objData);
-	~CMapChip();
+	/**
+	 * @brief tkLevel
+	*/
+	namespace nsTkLevel
+	{
 
-private://データメンバ
-	PhysicsStaticObject m_physicsStaticObject;			//!<静的物理オブジェクト。
-	CModelRender* m_modelRender = nullptr;				//モデルレンダラー
-};
+		struct LevelObjectData;
+		class CMapChip
+		{
+		public://メンバ関数
+			/// <summary>
+			/// マップチップの作成
+			/// レベルのデータをもとに
+			/// モデルの表示と静的物理オブジェクトの初期化
+			/// </summary>
+			/// <param name="objData">レベルのオブジェクトのデータ</param>
+			CMapChip(const LevelObjectData& objData);
+			~CMapChip();
 
+		private://データメンバ
+			PhysicsStaticObject m_physicsStaticObject;			//!<静的物理オブジェクト。
+			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;				//モデルレンダラー
+		};
+
+	}
+}

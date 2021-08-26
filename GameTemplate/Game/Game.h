@@ -2,27 +2,33 @@
 #include "Title.h"
 #include "Tips.h"
 
-/// <summary>
-/// ゲームクラス
-/// </summary>
-class CGame : public IGameObject
+/**
+ * @brief メビリンス
+*/
+namespace nsMobyrinth
 {
-public:		//自動で呼ばれるメンバ関数
-	bool Start()override final;							//スタート関数
-	~CGame();											//デストラクタ
 
-	//デバック用
-	//後で消す
+	/// <summary>
+	/// ゲームクラス
+	/// </summary>
+	class CGame : public IGameObject
+	{
+	public:		//自動で呼ばれるメンバ関数
+		bool Start()override final;							//スタート関数
+		~CGame();											//デストラクタ
+
+		//デバック用
+		//後で消す
 #ifdef MY_DEBUG
-public:
-	//デバック用
-	//後で消す
-	void Update()override final;						//アップデート関数
+	public:
+		//デバック用
+		//後で消す
+		void Update()override final;						//アップデート関数
 
 
-private:	//データメンバ
-	std::vector<ILevelObjectBase*> m_lb;	//ILevelObjectBaseの情報を受け取る。
+	private:	//データメンバ
+		std::vector<ILevelObjectBase*> m_lb;	//ILevelObjectBaseの情報を受け取る。
 #endif
 
-};
-
+	};
+}

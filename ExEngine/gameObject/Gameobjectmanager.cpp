@@ -94,3 +94,13 @@ void GameObjectManager::ExecuteForwardRender(RenderContext& rc)
 	}
 
 }
+
+void GameObjectManager::ExecuteFontRender(RenderContext& rc)
+{
+	//レンダラーを変更するならここを改造していくと良い。
+	for (auto& goList : m_gameObjectListArray) {
+		for (auto& go : goList) {
+			go->FontRenderWrapper(rc);
+		}
+	}
+}

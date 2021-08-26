@@ -1,13 +1,26 @@
 #include "stdafx.h"
 #include "stage_title.h"
 
-bool CStage_title::StartSub()
+/**
+ * @brief メビリンス
+*/
+namespace nsMobyrinth
 {
-	LoadLevel("Assets/level/stage_title.tkl");
+	/**
+	 * @brief ステージ
+	*/
+	namespace nsStage
+	{
 
-	return true;
-}
-CStage_title::~CStage_title()
-{
+		bool CStage_title::StartSub()
+		{
+			LoadLevel("Assets/level/stage_title.tkl");
 
+			return true;
+		}
+		CStage_title::~CStage_title()
+		{
+
+		}
+	}
 }

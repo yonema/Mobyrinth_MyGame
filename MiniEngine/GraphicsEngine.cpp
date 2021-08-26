@@ -106,7 +106,8 @@ void GraphicsEngine::InitCopyToFrameBufferSprite()
 	spriteInitData.m_height = 720;
 
 	// モノクロ用のシェーダーを指定する
-	spriteInitData.m_fxFilePath = spriteRenderConstData::SHADER_FILEPATH_DEFAULT;
+	spriteInitData.m_fxFilePath = 
+		nsMobyrinth::nsGraphic::nsSprite::spriteRenderConstData::SHADER_FILEPATH_DEFAULT;
 
 	// 初期化オブジェクトを使って、スプライトを初期化する
 	m_copyToFrameBufferSprite.Init(spriteInitData);
@@ -246,7 +247,10 @@ void GraphicsEngine::InitDefferdRenderSprite()
 	defferdSpriteInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
 
 	m_defferdRenderSprite.Init(defferdSpriteInitData);
-	m_defferdRenderSprite.Update(g_VEC3_ZERO, g_QUAT_IDENTITY, spriteRenderConstData::SPRITE_SCALE_DEFAULT);
+	m_defferdRenderSprite.Update(
+		g_VEC3_ZERO, g_QUAT_IDENTITY,
+		nsMobyrinth::nsGraphic::nsSprite::spriteRenderConstData::SPRITE_SCALE_DEFAULT
+	);
 
 	return;
 }

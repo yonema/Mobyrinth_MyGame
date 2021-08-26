@@ -2,31 +2,43 @@
 #include "MapChip.h"
 #include "Level.h"
 
-
-CMapChip::CMapChip(const LevelObjectData& objData)
+/**
+ * @brief メビリンス
+*/
+namespace nsMobyrinth
 {
-	//wcharをcharに変換
-	char objName[256];
-	wcstombs(objName, objData.name, 256);
+	/**
+	 * @brief tkLevel
+	*/
+	namespace nsTkLevel
+	{
 
-	//ファイルパスを作成。
-	char filePath[256];
-	sprintf(filePath, "Assets/modelData/%s.tkm", objName);
+		CMapChip::CMapChip(const LevelObjectData& objData)
+		{
+			//wcharをcharに変換
+			char objName[256];
+			wcstombs(objName, objData.name, 256);
 
-	//モデルレンダラーを初期化
-	m_modelRender = NewGO<CModelRender>(0);
-	m_modelRender->Init(filePath);
-	m_modelRender->SetPosition(objData.position);
-	m_modelRender->SetRotation(objData.rotation);
-	m_modelRender->SetScale(objData.scale);
+			//ファイルパスを作成。
+			char filePath[256];
+			sprintf(filePath, "Assets/modelData/%s.tkm", objName);
 
-	//静的物理オブジェクトの初期化
-	m_physicsStaticObject.CreateFromModel
-	(m_modelRender->GetModel(), m_modelRender->GetModel().GetWorldMatrix());
-}
+			//モデルレンダラーを初期化
+			m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::PRIORITY_FIRST);
+			m_modelRender->Init(filePath);
+			m_modelRender->SetPosition(objData.position);
+			m_modelRender->SetRotation(objData.rotation);
+			m_modelRender->SetScale(objData.scale);
 
-CMapChip::~CMapChip()
-{
-	if (m_modelRender)
-		DeleteGO(m_modelRender);
+			//静的物理オブジェクトの初期化
+			m_physicsStaticObject.CreateFromModel
+			(m_modelRender->GetModel(), m_modelRender->GetModel().GetWorldMatrix());
+		}
+
+		CMapChip::~CMapChip()
+		{
+			if (m_modelRender)
+				DeleteGO(m_modelRender);
+		}
+	}
 }
