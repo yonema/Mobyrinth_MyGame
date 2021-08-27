@@ -255,13 +255,4 @@ float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal, float3
 	lig.xyz *= color.xyz;
 	return lig;
 
-
-	//リム
-	//輪郭を光らせる
-	//法線のZ成分が多いほどリムが弱くなる
-	float limPower = pow(1.0f - abs(viewNormal.z), 5.0f);
-	lig.xyz += color * limPower * 0.8f;
-
-	return lig;
-
 }
