@@ -169,10 +169,11 @@ namespace nsMobyrinth
 
 			/**
 			 * @brief 全てのレベルオブジェクトを調べて、衝突していないか調べる
-			 * @param [in] thisObject 自身のインスタンス
+			 * @param [in] thisObject 自身のインスタンス 
+			 * @param [out] hitObject 衝突したオブジェクト
 			 * @return 衝突しているか？
 			*/
-			bool IsHitAllLevelObjects(const ILevelObjectBase& thisObject);
+			bool IsHitAllLevelObjects(const ILevelObjectBase& thisObject, const ILevelObjectBase*** hitObject);
 
 
 			/// <summary>
@@ -338,11 +339,15 @@ namespace nsMobyrinth
 		/**
 		 * @brief 全てのレベルオブジェクトを調べて、衝突しているか調べる
 		 * @param [in] thisObject 自身のインスタンス
+		 * @param [out] hitObject 衝突したオブジェクト
 		 * @return 衝突しているか？
 		*/
-		static inline bool IsHitAllLOs(const ILevelObjectBase& thisObject)
+		static inline bool IsHitAllLOs(
+			const ILevelObjectBase& thisObject,
+			const ILevelObjectBase** hitObject = nullptr
+		)
 		{
-			return CLevelObjectManager::GetInstance()->IsHitAllLevelObjects(thisObject);
+			return CLevelObjectManager::GetInstance()->IsHitAllLevelObjects(thisObject, &hitObject);
 		}
 	}
 }

@@ -425,6 +425,7 @@ void GraphicsEngine::ReInitSkyCubeTexture(const nsMobyrinth::nsSky::SSkyIBLData&
 {
 	m_skyCubeTexture.InitFromDDSFile(skyIBLData.m_skyTextureFilepath);
 	m_skyIBLcb.m_luminance = skyIBLData.m_luminance;
+	m_skyIBLcb.m_IBLRate = skyIBLData.m_IBLRate;
 
 	InitDefferdRenderSprite();
 

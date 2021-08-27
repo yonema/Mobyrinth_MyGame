@@ -53,47 +53,58 @@ namespace nsMobyrinth
 				case EN_SKY_DAY_1:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapDay_Toon.dds";
 					skyIBLData.m_luminance = 1.1f;
+					skyIBLData.m_IBLRate = 0.6f;
 					break;
 				case EN_SKY_DAY_2:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapDay_Toon_02.dds";
 					skyIBLData.m_luminance = 1.1f;
+					skyIBLData.m_IBLRate = 0.6f;
 					break;
 				case EN_SKY_DAY_3:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapDay_Toon_03.dds";
-					skyIBLData.m_luminance = 1.185f;	//í≤êÆçœÇ›
+					skyIBLData.m_luminance = 1.1f;	//í≤êÆçœÇ›
+					skyIBLData.m_IBLRate = 0.4f;	//í≤êÆçœÇ›
 					break;
 				case EN_SKY_DAY_4:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapDay_Toon_04.dds";
-					skyIBLData.m_luminance = 1.7f;	//í≤êÆçœÇ›
+					skyIBLData.m_luminance = 1.6f;	//í≤êÆçœÇ›
+					skyIBLData.m_IBLRate = 0.9f;	//í≤êÆçœÇ›
 					break;
 				case EN_SKY_NIGHT_1:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapNight.dds";
 					skyIBLData.m_luminance = 1.1f;
+					skyIBLData.m_IBLRate = 0.6f;
 					break;
 				case EN_SKY_NIGHT_2:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapNight_Toon.dds";
-					skyIBLData.m_luminance = 1.4f;	//í≤êÆçœÇ›
+					skyIBLData.m_luminance = 1.2f;	//í≤êÆçœÇ›
+					skyIBLData.m_IBLRate = 0.4f;	//í≤êÆçœÇ›
 					break;
 				case EN_SKY_NIGHT_3:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapNight_Toon_02.dds";
-					skyIBLData.m_luminance = 4.0f;	//í≤êÆçœÇ›
+					skyIBLData.m_luminance = 3.0f;	//í≤êÆçœÇ›
+					skyIBLData.m_IBLRate = 0.8f;
 					break;
 				case EN_SKY_SPACE_1:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapSpace_Toon.dds";
-					skyIBLData.m_luminance = 1.3f;	//í≤êÆçœÇ›
+					skyIBLData.m_luminance = 1.2f;	//í≤êÆçœÇ›
+					skyIBLData.m_IBLRate = 0.6f;
 					break;
 				case EN_SKY_SPACE_2:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapSpace_Toon_2.dds";
-					skyIBLData.m_luminance = 1.1f;
+					skyIBLData.m_luminance = 1.3f;	//í≤êÆçœÇ›
+					skyIBLData.m_IBLRate = 0.4f;	//í≤êÆçœÇ›
 					break;
 				case EN_SKY_SUNRISE_1:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapSunrise_Toon.dds";
 					skyIBLData.m_luminance = 1.1f;
+					skyIBLData.m_IBLRate = 0.6f;
 					break;
 				case EN_SKY_DEFAULT:
 				default:
 					skyIBLData.m_skyTextureFilepath = L"Assets/modelData/preset/skyCubeMapDay_Toon.dds";
 					skyIBLData.m_luminance = 1.1f;
+					skyIBLData.m_IBLRate = 0.6f;
 					break;
 				}
 

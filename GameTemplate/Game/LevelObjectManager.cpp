@@ -230,15 +230,20 @@ namespace nsMobyrinth
 		/**
 		 * @brief 全てのレベルオブジェクトを調べて、衝突していないか調べる
 		 * @param [in] thisObject 自身のインスタンス
+		 * @param [out] hitObject 衝突したオブジェクト
 		 * @return 衝突しているか？
 		*/
-		bool CLevelObjectManager::IsHitAllLevelObjects(const ILevelObjectBase& thisObject)
+		bool CLevelObjectManager::IsHitAllLevelObjects(
+			const ILevelObjectBase& thisObject,
+			const ILevelObjectBase*** hitObject
+		)
 		{
-			for (auto lo : m_levelObjects) {
+			for (const auto lo : m_levelObjects) {
 				//自分自身じゃないとき
 				if (lo != &thisObject) {
 					//重なっているオブジェクトがある。
 					if (IsHitLevelObject(thisObject, *lo)) {
+						**hitObject = lo;
 						return true;
 					}
 				}

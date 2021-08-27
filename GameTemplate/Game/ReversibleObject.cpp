@@ -966,8 +966,9 @@ void CReversibleObject::Query()
 		//オーバーしていない
 		//通常のクエリの処理
 
-		//オーバーライドしてほしい関数QuerySub()
-		QuerySub();
+		if (m_overlapAction != EN_REPELLED)
+			//オーバーライドしてほしい関数QuerySub()
+			QuerySub();
 		//オーバーラップをチェックする状態へ
 		m_objectState = EN_OVERLAP;
 	}
@@ -1009,8 +1010,16 @@ void CReversibleObject::CheckObjectsOverlap()
 		return;
 	}
 
+
+
+	const ILevelObjectBase* hitObject = nullptr;
 	//何かと衝突していないか調べる
-	bool checkOverlap = IsHitAllLOs(*this);
+	bool checkOverlap = IsHitAllLOs(*this, &hitObject);
+	//右へのベクトル
+	Vector3 rightVec = g_VEC3_LEFT;
+	//衝突したオブジェクトから自身へのベクトル
+	Vector3 hitObjectToThisObject = g_VEC3_ZERO;
+	float inner = 0.0f;	//内積の結果
 
 	//衝突しているか？
 	if (checkOverlap == true) 
@@ -1031,6 +1040,28 @@ void CReversibleObject::CheckObjectsOverlap()
 		case EN_REPELLED:
 			//横に弾いた先で重なってたら、もう一回横に弾く
 			m_objectState = EN_REPELLED;
+			//左右どちらに弾くか決める
+			//衝突したオブジェクトから自身へのベクトル
+			hitObjectToThisObject = m_position - hitObject->GetPosition();
+			hitObjectToThisObject.Normalize();
+
+			//自身の回転で右へのベクトルを回す
+			m_rotation.Apply(rightVec);
+			//更新前から更新後の座標へのベクトルと
+			//右へのベクトルの内積を取る
+			inner = Dot(hitObjectToThisObject, rightVec);
+
+			//内積が正か負か
+			if (inner >= 0.0f)
+				//正
+				//オブジェクトは右側にあるから、右に弾く
+				m_leftOrRight = EN_RIGHT;
+			else
+				//負
+				//オブジェクトは左側にあるから、左に弾く
+				m_leftOrRight = EN_LEFT;
+
+
 			break;
 
 		default:

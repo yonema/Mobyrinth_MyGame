@@ -8,7 +8,8 @@ cbuffer cb : register(b0) {
 cbuffer IBLCb : register(b1)
 {
 	float3 eyePos;
-	float IBLluminance;
+	float IBLLuminance;
+	float IBLRate;
 }
 
 struct VSInput {
@@ -108,7 +109,7 @@ float4 PSMain(PSInput In) : SV_Target0
 	float4 viewNormal = viewNormalTexture.Sample(Sampler, In.uv);
 
 	//最終カラー
-	float4 finalColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 finalColor = albedo;
 
 	//ディザリングフラグがたっていないか？
 	//つまり透明ではないか？
@@ -120,7 +121,12 @@ float4 PSMain(PSInput In) : SV_Target0
 		toEye = normalize(toEye);
 
 		//ライティング処理を行う
-		finalColor = SpecialColor(albedo, viewNormal.xyz, normal.xyz, toEye);
+		float4 specialColor = SpecialColor(albedo, viewNormal.xyz, normal.xyz, toEye);
+
+		finalColor.xyz *= (1.0f - IBLRate);
+		specialColor.xyz *= IBLRate;
+		finalColor.xyz += specialColor.xyz;
+		finalColor.xyz *= IBLLuminance;
 		//自己発光カラーをテクスチャからサンプリング
 		float4 emissionColor = emissionColorTexture.Sample(Sampler, In.uv);
 		//自己発光色を加える
@@ -245,8 +251,8 @@ float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal, float3
 
 	float3 refV = reflect(toEye * -1.0f, normal);
 
-	float4 color = g_skyCubeMap.SampleLevel(Sampler, refV, 12) * IBLluminance;
-	lig.xyz *= color;
+	float4 color = g_skyCubeMap.SampleLevel(Sampler, refV, 12)/* * IBLLuminance*/;
+	lig.xyz *= color.xyz;
 	return lig;
 
 
