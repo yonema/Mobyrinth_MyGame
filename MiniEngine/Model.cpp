@@ -129,7 +129,7 @@ bool Model::InIntersectLine(const Vector3& start, const Vector3& end)
 		//まずは16ビット版から。
 		for (const auto& indexBuffer : mesh.indexBuffer16Array) {
 			//インデックスの数からポリゴンの数を計算する。
-			int numPolygon = indexBuffer.indices.size() / 3;
+			int numPolygon = static_cast<int>(indexBuffer.indices.size()) / 3;
 			for (int polygonNo = 0; polygonNo < numPolygon; polygonNo++) {
 				Vector3 vertPos[3];
 				//ポリゴンを構成する頂点番号をインデックスバッファから取得する。

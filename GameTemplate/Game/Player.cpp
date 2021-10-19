@@ -288,7 +288,7 @@ void Player::InitMyCharacterController()
 	//OBB初期化
 	//OBBの初期化用データ構造体
 	SInitOBBData initData;
-	//なんかいい感じのOBBの大きさにする
+	//Playerの大きさに合わせたのOBBの大きさにする
 	initData.width = OBB_SIZE_PLAYER.x;
 	initData.height = OBB_SIZE_PLAYER.y;
 	initData.length = OBB_SIZE_PLAYER.z;

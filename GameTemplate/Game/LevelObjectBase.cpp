@@ -180,7 +180,7 @@ namespace nsMobyrinth
 			//一番近いウェイポイントのベクターのインデックスを保持しておく用の変数
 			int index = 0;
 			//ウェイポイントのベクターのサイズを保持
-			int vecSize = (*wayPointPosVec).size();
+			int vecSize = static_cast<int>((*wayPointPosVec).size());
 
 			//一番近いウェイポイントを調べる
 			for (int i = 0; i < vecSize; i++)

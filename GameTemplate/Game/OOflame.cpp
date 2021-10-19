@@ -186,7 +186,7 @@ namespace nsMobyrinth
 						//m_hpが渡されるときに強制型変換が起きてfloat型になるから
 						//これがSetScale(g_VEC3_ONE * (m_hp / m_maxHp))
 						//だったらうまくいかない。
-					SetScale(g_VEC3_ONE * (m_hp + SIZE_COMPLEMENT_FLAME) / (HP_MAX + SIZE_COMPLEMENT_FLAME));
+					SetScale(g_VEC3_ONE * static_cast<float>((m_hp + SIZE_COMPLEMENT_FLAME) / (HP_MAX + SIZE_COMPLEMENT_FLAME)));
 				}
 
 				//エフェクト再生

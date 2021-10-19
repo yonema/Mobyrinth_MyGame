@@ -94,8 +94,8 @@ namespace nsMobyrinth
 			* しきい値が1加算する。
 			*/
 
-			m_frontOrBackSideThresholdSmall = m_wayPointPos.size() / 4 + 1;
-			m_frontOrBackSideThresholdBig = (m_wayPointPos.size() / 4) * 3;
+			m_frontOrBackSideThresholdSmall = static_cast<int>(m_wayPointPos.size()) / 4 + 1;
+			m_frontOrBackSideThresholdBig = (static_cast<int>(m_wayPointPos.size()) / 4) * 3;
 
 			return;
 		}
@@ -116,7 +116,7 @@ namespace nsMobyrinth
 			//左側のウェイポイントは右側のウェイポイントの1上
 			int lpIndex = rpIndex + 1;
 			//ウェイポイントの最大数はサイズの1下
-			const int maxWayPointIndex = m_wayPointPos.size() - 1;
+			const int maxWayPointIndex = static_cast<int>(m_wayPointPos.size()) - 1;
 			//左側のウェイポイントが最大値より大きかったら
 			if (lpIndex > maxWayPointIndex)
 			{
@@ -275,7 +275,7 @@ namespace nsMobyrinth
 
 
 			//ウェイポイントの最大値
-			const int maxWayPoint = m_wayPointPos.size() - 1;
+			const int maxWayPoint = static_cast<int>(m_wayPointPos.size()) - 1;
 			//プレイヤーのいるウェイポイント
 			int wayPoint = m_player->GetLeftPointIndex();
 			//ウェイポイント左のウェイポイント

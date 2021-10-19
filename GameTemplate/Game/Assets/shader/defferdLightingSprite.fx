@@ -38,7 +38,7 @@ sampler Sampler : register(s0);
 
 //関数宣言
 bool IsOnOutLine(float4 posInProj, float thickness, float outlineFlag);
-float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal, float3 toEye);
+float4 IBLColor(float4 albedoColor, float3 viewNormal, float3 normal, float3 toEye);
 
 
 static const int pattern[4][4] =
@@ -121,11 +121,11 @@ float4 PSMain(PSInput In) : SV_Target0
 		toEye = normalize(toEye);
 
 		//ライティング処理を行う
-		float4 specialColor = SpecialColor(albedo, viewNormal.xyz, normal.xyz, toEye);
+		float4 iblColor = IBLColor(albedo, viewNormal.xyz, normal.xyz, toEye);
 
 		finalColor.xyz *= (1.0f - IBLRate);
-		specialColor.xyz *= IBLRate;
-		finalColor.xyz += specialColor.xyz;
+		iblColor.xyz *= IBLRate;
+		finalColor.xyz += iblColor.xyz;
 		finalColor.xyz *= IBLLuminance;
 		//自己発光カラーをテクスチャからサンプリング
 		float4 emissionColor = emissionColorTexture.Sample(Sampler, In.uv);
@@ -243,7 +243,7 @@ bool IsOnOutLine(float4 posInProj, float thickness, float outlineFlag)
 	return false;
 }
 
-float4 SpecialColor(float4 albedoColor, float3 viewNormal, float3 normal, float3 toEye)
+float4 IBLColor(float4 albedoColor, float3 viewNormal, float3 normal, float3 toEye)
 {
 	float4 lig = albedoColor;
 

@@ -16,6 +16,7 @@ namespace nsMobyrinth
 		*/
 		enum EN_LEFT_OR_RIGHT
 		{
+			EN_LEFT_LIGHT_NONE = -1,
 			EN_LEFT = 0,			//ç∂
 			EN_RIGHT = 1,			//âE
 			EN_LEFT_AND_RIGHT_NUM,	//ç∂Ç∆âEÇÃêî
