@@ -35,7 +35,7 @@ namespace nsMobyrinth
 			int pos = (int)ddsFolderPath.rfind("/");
 			//0”Ô–Ú‚©‚çApos + 1 —v‘f‚Ì•¶š—ñ‚ğ–ß‚·
 			ddsFolderPath = ddsFolderPath.substr(0, pos + 1);
-			int ddsFolderPathCount = ddsFolderPath.length();
+			int ddsFolderPathCount = static_cast<int>(ddsFolderPath.length());
 
 			//‰æ‘œ‚Ì”‚ğæ“¾B
 			int numLevel = ReadInteger(fp);
@@ -164,7 +164,7 @@ namespace nsMobyrinth
 				}
 			}
 			//stringŒ^‚ğfloatŒ^‚É•ÏŠ·‚·‚éB
-			return atof(number.c_str());
+			return static_cast<float>(atof(number.c_str()));
 		}
 
 	}

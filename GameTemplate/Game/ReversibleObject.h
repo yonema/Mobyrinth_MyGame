@@ -299,7 +299,7 @@ namespace nsMobyrinth
 				* 弾かれている時関連
 				*/
 				Vector3 m_addPosition = g_VEC3_ZERO;	//ポジションに加えるベクトル
-				int m_leftOrRight = nsCommonData::EN_LEFT;			//右に弾かれるか、左に弾かれるか
+				int m_leftOrRight = nsCommonData::EN_LEFT_LIGHT_NONE;	//右に弾かれるか、左に弾かれるか
 
 				/*
 				* 全体で使うタイマー

@@ -892,6 +892,8 @@ void CReversibleObject::Repelled()
 		m_addPosition = CLevelObjectManager::GetInstance()->CalcWayPointNextPos
 		(GetRightWayPointIndex(), m_position, ADD_VECTOR_SCALE_HORIZONTAL_REPELLED, m_leftOrRight);
 
+		m_leftOrRight = EN_LEFT_LIGHT_NONE;
+
 		//自身の座標から次の座標へのベクトルにする
 		m_addPosition -= m_position;
 		//切り替え時間いっぱいで次の座標へ行けるようにする
@@ -1040,26 +1042,29 @@ void CReversibleObject::CheckObjectsOverlap()
 		case EN_REPELLED:
 			//横に弾いた先で重なってたら、もう一回横に弾く
 			m_objectState = EN_REPELLED;
-			//左右どちらに弾くか決める
-			//衝突したオブジェクトから自身へのベクトル
-			hitObjectToThisObject = m_position - hitObject->GetPosition();
-			hitObjectToThisObject.Normalize();
+			if (m_leftOrRight == EN_LEFT_LIGHT_NONE)
+			{
+				//左右どちらに弾くか決める
+				//衝突したオブジェクトから自身へのベクトル
+				hitObjectToThisObject = m_position - hitObject->GetPosition();
+				hitObjectToThisObject.Normalize();
 
-			//自身の回転で右へのベクトルを回す
-			m_rotation.Apply(rightVec);
-			//更新前から更新後の座標へのベクトルと
-			//右へのベクトルの内積を取る
-			inner = Dot(hitObjectToThisObject, rightVec);
+				//自身の回転で右へのベクトルを回す
+				m_rotation.Apply(rightVec);
+				//更新前から更新後の座標へのベクトルと
+				//右へのベクトルの内積を取る
+				inner = Dot(hitObjectToThisObject, rightVec);
 
-			//内積が正か負か
-			if (inner >= 0.0f)
-				//正
-				//オブジェクトは右側にあるから、右に弾く
-				m_leftOrRight = EN_RIGHT;
-			else
-				//負
-				//オブジェクトは左側にあるから、左に弾く
-				m_leftOrRight = EN_LEFT;
+				//内積が正か負か
+				if (inner >= 0.0f)
+					//正
+					//オブジェクトは右側にあるから、右に弾く
+					m_leftOrRight = EN_RIGHT;
+				else
+					//負
+					//オブジェクトは左側にあるから、左に弾く
+					m_leftOrRight = EN_LEFT;
+			}
 
 
 			break;

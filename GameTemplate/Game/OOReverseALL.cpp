@@ -269,9 +269,6 @@ namespace nsMobyrinth
 				{
 					//正、同じ向きなら
 
-					//レベルオブジェクトを取ってくる
-					std::vector<ILevelObjectBase*> levelObjects
-						= CLevelObjectManager::GetInstance()->GetLevelObjects();
 					//全てのレベルオブジェクトに検索
 					for (ILevelObjectBase* levelObject : CLevelObjectManager::GetInstance()->GetLevelObjects())
 					{

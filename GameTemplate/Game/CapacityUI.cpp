@@ -424,7 +424,7 @@ namespace nsMobyrinth
 				const float separationTime = actionTime / 4.0f;
 
 				//タイマーと分割されたタイムに応じた状態
-				const int state = m_timer[frontOrBackSide] / separationTime;
+				const int state = static_cast<int>(m_timer[frontOrBackSide] / separationTime);
 
 				//目的地への距離
 				const float destination = 10.0f;

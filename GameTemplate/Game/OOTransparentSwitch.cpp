@@ -317,7 +317,6 @@ namespace nsMobyrinth
 				{
 					//最初の待つ時間
 					//何もせずに待つ
-					//早期リターン
 					return;
 				}
 				else if (m_switchingTimer < TIME_FADE_OUT_START)
@@ -330,7 +329,7 @@ namespace nsMobyrinth
 					//フェードアウトさせる
 					FadeOut(timeScale);
 
-					//早期リターン
+
 					return;
 				}
 				else if (m_switchingTimer < TIME_FADE_WAIT_START)
@@ -343,7 +342,6 @@ namespace nsMobyrinth
 					//カメラをステージ全体を見渡す位置に移動させる処理
 					CameraSetStageView();
 
-					//早期リターン
 					return;
 				}
 				else if (m_switchingTimer < TIME_FADE_IN_START)
@@ -356,7 +354,6 @@ namespace nsMobyrinth
 					//フェードインさせる
 					FadeIn(timeScale);
 
-					//早期リターン
 					return;
 				}
 				else if (m_switchingTimer < TIME_SWITCHING)
@@ -366,7 +363,6 @@ namespace nsMobyrinth
 					//透明、実体化の切り替え時の処理
 					Switching();
 
-					//早期リターン
 					return;
 				}
 				else if (m_switchingTimer < TIME_FADE_OUT_END)
@@ -378,7 +374,6 @@ namespace nsMobyrinth
 					//フェードアウトさせる
 					FadeOut(timeScale);
 
-					//早期リターン
 					return;
 				}
 				else if (m_switchingTimer < TIME_FADE_WAIT_END)
@@ -391,7 +386,6 @@ namespace nsMobyrinth
 					//カメラがプレイヤーを見るようにする
 					CameraSetLookPlayer();
 
-					//早期リターン
 					return;
 				}
 				else if (m_switchingTimer < TIME_FADE_IN_END)
@@ -405,7 +399,6 @@ namespace nsMobyrinth
 					//タイマーのフォントの更新
 					UpdateTimerFR();
 
-					//早期リターン
 					return;
 				}
 				else

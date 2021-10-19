@@ -245,8 +245,8 @@
 
 		m_constantBufferCPU.screenParam.x = g_camera3D->GetNear();
 		m_constantBufferCPU.screenParam.y = g_camera3D->GetFar();
-		m_constantBufferCPU.screenParam.z = g_FRAME_BUFFER_W;
-		m_constantBufferCPU.screenParam.w = g_FRAME_BUFFER_H;
+		m_constantBufferCPU.screenParam.z = static_cast<float>(g_FRAME_BUFFER_W);
+		m_constantBufferCPU.screenParam.w = static_cast<float>(g_FRAME_BUFFER_H);
 
 		//定数バッファを更新。
 		m_constantBufferGPU.CopyToVRAM(&m_constantBufferCPU);
